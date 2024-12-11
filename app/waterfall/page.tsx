@@ -1,51 +1,11 @@
-// import React from "react";
-// import InfiniteScroll from "@/app/ui/waterfall/infinite-scroll";
-// interface PageProps {
-//     initialItems: number[];
-//     initialHasMore: boolean;
-// }
+import InfiniteScroll from "@/app/ui/waterfall/infinite-scroll-swr";
+import {fetchSeeds} from "@/app/lib/data";
 
-// export default function Page({ initialItems, initialHasMore }: PageProps) {
-//     return (
-//         <div className="container mx-auto p-4">
-//             <InfiniteScroll
-//                 initialItems={initialItems}
-//                 initialHasMore={initialHasMore}
-//             />
-//         </div>
-//     );
-// }
-
-// export const revalidate = 60;
-
-// export async function getStaticProps() {
-//     const res = await fetch(`http://localhost:3000/api/seeds?page=1`);
-//     const { items, hasMore } = await res.json();
-
-//     return {
-//         props: {
-//             initialItems: items,
-//             initialHasMore: hasMore,
-//         },
-//     };
-// }
-
-import InfiniteScroll from "@/app/ui/waterfall/infinite-scroll";
-
-export const revalidate = 60;
-
-async function fetchInitialData() {
-    const res = await fetch(`http://localhost:3000/api/seeds?page=1`, {
-        cache: "no-store", // Ensure fresh data on every request
-    });
-    const { items, hasMore } = await res.json();
-
-    return { items, hasMore };
-}
+// You don’t need to change the implementation of fetchSeeds. 
+export const revalidate = 3600; // Regenerate the page every 3600 seconds
 
 export default async function Page() {
-    const { items, hasMore } = await fetchInitialData();
-
+    const { items, hasMore } = await fetchSeeds(1);
     return (
         <div className="container mx-auto p-4">
             <InfiniteScroll initialItems={items} initialHasMore={hasMore} />
@@ -53,3 +13,27 @@ export default async function Page() {
     );
 }
 
+// generateStaticParams is used to pre-generate pages for dynamic routes like /seed/[id].
+
+// export const revalidate = 60;
+// export const dynamicParams = true // or false, to 404 on unknown paths
+
+// export async function generateStaticParams() {
+//     const { items, hasMore } = await fetchSeeds(1);
+//     return  { items, hasMore } 
+// }
+
+// export default async function Page({
+//     params,
+// }: {
+//     params: Promise<{ items: number[], hasMore: boolean }>
+// }) {
+//     const items = (await params).items
+//     const hasMore = (await params).hasMore
+//     console.log('build Page', items, hasMore)
+//     return (
+//         <div className="container mx-auto p-4">
+//             <InfiniteScroll initialItems={items} initialHasMore={hasMore} />
+//         </div>
+//     );
+// }
