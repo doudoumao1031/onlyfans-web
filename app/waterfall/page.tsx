@@ -13,12 +13,12 @@ export default function Page() {
 
     const fetchMoreItems = async (page: number) => {
         console.log('fetchMoreItems call, page: ', page)
-        
+
         // Simulate latency with a timeout
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         // Simulating an API call
-        const newItems = Array.from({ length: 30 }, (_, i) => i + (page - 1) * 30);
+        const newItems = Array.from({ length: 15 }, (_, i) => i + (page - 1) * 15);
         setItems((prev) => [...prev, ...newItems]);
 
         // Simulating an endpoint limit
@@ -41,7 +41,8 @@ export default function Page() {
 
     return (
         <div className="container mx-auto p-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {/* <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"> */}
+          <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
             {items.map((item, index) => (
               <div key={index} className="card shadow-lg">
                 <div className="card-body">

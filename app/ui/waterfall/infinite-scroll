@@ -1,0 +1,58 @@
+import { useState, useEffect } from "react";
+import useSWR from "swr";
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+export default function InfiniteScroll({ initialData, initialHasMore }) {
+  const [items, setItems] = useState(initialData);
+  const [hasMore, setHasMore] = useState(initialHasMore);
+  const [page, setPage] = useState(2);
+
+  const { data, error, isLoading } = useSWR(
+    hasMore ? `/api/data?page=${page}&limit=10` : null,
+    fetcher,
+    { revalidateOnFocus: false }
+  );
+
+  // Append new items when data is fetched
+  useEffect(() => {
+    if (data) {
+      setItems((prev) => [...prev, ...data.data]);
+      setHasMore(data.hasMore);
+    }
+  }, [data]);
+
+  const loadMore = () => {
+    if (hasMore) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 100
+    ) {
+      loadMore();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [hasMore]);
+
+  if (error) return <div className="text-red-500">Error loading data</div>;
+
+  return (
+    <div className="p-4">
+      {items.map((item) => (
+        <div key={item.id} className="p-2 border-b border-gray-300">
+          {item.text}
+        </div>
+      ))}
+      {isLoading && <div>Loading more...</div>}
+      {!hasMore && <div className="text-center">No more items</div>}
+    </div>
+  );
+}
