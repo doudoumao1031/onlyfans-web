@@ -88,7 +88,7 @@ export default function InfiniteScroll({ initialItems, initialHasMore }: Infinit
     return (
         <div
             ref={containerRef}
-            className="h-full overflow-y-auto"
+            className="h-full w-full overflow-scroll"
         >
             <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
                 {items.map((item, index) => (
