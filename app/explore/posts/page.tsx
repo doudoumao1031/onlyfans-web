@@ -1,5 +1,5 @@
-import InfiniteScroll from "@/app/ui/waterfall/infinite-scroll-swr";
-import {fetchSeeds} from "@/app/lib/data";
+import InfiniteScroll from "@/ui/explore/infinite-scroll-swr";
+import {fetchSeeds} from "@/lib/data";
 
 // You don’t need to change the implementation of fetchSeeds. 
 export const revalidate = 3600; // Regenerate the page every 3600 seconds
@@ -7,7 +7,7 @@ export const revalidate = 3600; // Regenerate the page every 3600 seconds
 export default async function Page() {
     const { items, hasMore } = await fetchSeeds(1);
     return (
-        <div className="container mx-auto p-4">
+        <div className="container h-full mx-auto p-4">
             <InfiniteScroll initialItems={items} initialHasMore={hasMore} />
         </div>
     );
