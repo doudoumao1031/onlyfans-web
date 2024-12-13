@@ -20,7 +20,7 @@ export default function InfiniteScroll({ initialItems, initialHasMore }: Infinit
     const containerRef = useRef<HTMLDivElement | null>(null); // Ref for the scrollable container
 
     const { data, isValidating, error } = useSWR<{ items: number[]; hasMore: boolean }>(
-        hasMore ? `/api/seeds?page=${page}` : null,
+        hasMore ? `/api/feeds?page=${page}` : null,
         fetcher,
         { revalidateOnFocus: false, keepPreviousData: true }
     );
@@ -28,7 +28,7 @@ export default function InfiniteScroll({ initialItems, initialHasMore }: Infinit
     // Preload the next page
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data: nextPageData } = useSWR<{ items: number[]; hasMore: boolean }>(
-        hasMore ? `/api/seeds?page=${page + 1}` : null,
+        hasMore ? `/api/feeds?page=${page + 1}` : null,
         fetcher,
         { revalidateOnFocus: false, keepPreviousData: true }
     );
