@@ -41,3 +41,5 @@ next-env.d.ts
 
 # repository
 push-all.sh
+
+.idea

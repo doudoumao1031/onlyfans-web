@@ -1,5 +1,5 @@
-import Header from '@/ui/common/header';
-import Nav from '@/ui/explore/nav'
+import Header from '@/components/common/header';
+import Nav from '@/components/explore/nav'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

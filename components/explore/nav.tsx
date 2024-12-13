@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import NavLinks from "@/ui/explore/nav-links"
+import NavLinks from "@/components/explore/nav-links"
 
 export default function Nav() {
     return (

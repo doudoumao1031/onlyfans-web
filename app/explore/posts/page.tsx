@@ -1,11 +1,11 @@
-import InfiniteScroll from "@/ui/explore/infinite-scroll-swr";
-import {fetchSeeds} from "@/lib/data";
+import InfiniteScroll from "@/components/explore/infinite-scroll-swr";
+import {fetchFeeds} from "@/lib/data";
 
-// You don’t need to change the implementation of fetchSeeds. 
+// You don’t need to change the implementation of fetchFeeds. 
 export const revalidate = 3600; // Regenerate the page every 3600 seconds
 
 export default async function Page() {
-    const { items, hasMore } = await fetchSeeds(1);
+    const { items, hasMore } = await fetchFeeds(1);
     return (
         <div className="container h-full w-full mx-auto">
             <InfiniteScroll initialItems={items} initialHasMore={hasMore} />
@@ -19,7 +19,7 @@ export default async function Page() {
 // export const dynamicParams = true // or false, to 404 on unknown paths
 
 // export async function generateStaticParams() {
-//     const { items, hasMore } = await fetchSeeds(1);
+//     const { items, hasMore } = await fetchFeeds(1);
 //     return  { items, hasMore } 
 // }
 
