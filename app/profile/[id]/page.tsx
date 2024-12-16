@@ -108,7 +108,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           <div className="mt-5 ">
             <div className="grid grid-cols-3 gap-y-4">
-              <button className="flex justify-center flex-col items-center gap-2">
+              <Link href={`/profile/${id}/order`} className="flex justify-center flex-col items-center gap-2">
                 <div>
                   <Image
                     src="/icons/profile/icon-subscription-management.png"
@@ -118,7 +118,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   />
                 </div>
                 <div>订阅管理</div>
-              </button>
+              </Link>
               <button className="flex justify-center flex-col items-center gap-2">
                 <div>
                   <Image
