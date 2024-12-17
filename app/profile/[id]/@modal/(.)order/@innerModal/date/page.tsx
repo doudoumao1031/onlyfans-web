@@ -9,8 +9,5 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 日期选择 modal: {id}
             </div>
         </SlideUpModal>
-        // <div className="h-[35vh] flex justify-center items-center text-black text-2xl">
-        //     日期选择 modal: {id}
-        // </div>
     );
 }
