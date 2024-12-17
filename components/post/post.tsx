@@ -64,7 +64,7 @@ function Action({ name, iconName }) {
         width={20}
         height={20}
         alt={name}
-        className=""
+        className="opacity-30"
       />
       <span className="text-xs">{name}</span>
     </div>
@@ -112,7 +112,7 @@ function Video({ src }) {
   const [isPlaying, setIsPlaying] = useState(false);
 
   return (
-    <div className="flex justify-center" onClick={handleClick}>
+    <div className="flex justify-center" onTouchEnd={togglePlay}>
       <video src={src} ref={ref} className="w-full rounded-lg" />
       {!isPlaying && (
         <Image
@@ -120,13 +120,13 @@ function Video({ src }) {
           width={32}
           height={32}
           alt="play"
-          className="absolute self-center bg-white"
+          className="absolute self-center bg-white opacity-75"
         />
       )}
     </div>
   );
 
-  function handleClick() {
+  function togglePlay() {
     if (!ref.current) return;
     if (isPlaying) {
       ref.current.pause();
