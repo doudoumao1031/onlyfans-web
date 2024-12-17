@@ -66,7 +66,7 @@ function ProfilePhoto({ src }) {
     <Image
       src={src}
       alt=""
-      style={{ borderRadius: "50%" }}
+      className="rounded-full border-2 border-white"
       width={50}
       height={50}
     />
