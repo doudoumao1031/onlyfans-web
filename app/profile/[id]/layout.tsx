@@ -9,6 +9,7 @@ export default function Layout(props: {
             {props.children}
             {props.modal}
             <div id="modal-root" />
+            <div id="modal-inner" />
         </>
     )
 }
