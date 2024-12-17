@@ -21,7 +21,7 @@ export function SlideUpModal({ children }: { children: React.ReactNode }) {
   return createPortal(
     <div
       className={`fixed inset-0 flex justify-center items-end bg-black bg-opacity-50 transition-opacity duration-300 ${
-        isOpen ? 'opacity-100' : 'opacity-0'
+        isOpen ? 'opacity-50' : 'opacity-0'
       }`}
       onClick={onDismiss}
     >
