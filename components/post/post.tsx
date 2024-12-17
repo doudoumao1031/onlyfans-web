@@ -20,11 +20,12 @@ export default function Post({ data }) {
           <SubscribeUser key={user.id} user={user} />
         ))}
       </div>
-      <div className="flex gap-4">
-        <Action name="likes" />
-        <Action name="comments" />
-        <Action name="shared" />
-        <Action name="saved" />
+      <div className="flex gap-4 justify-between">
+        <Action name="点赞" iconName="like" />
+        <Action name="留言" iconName="comment" />
+        <Action name="打赏" iconName="tip" />
+        <Action name="分享" iconName="share" />
+        <Action name="保存" iconName="save" />
       </div>
     </div>
   );
@@ -34,7 +35,9 @@ function SubscribeUser({ user }) {
   return (
     <div className="bg-amber-300 rounded-lg flex justify-between px-3 py-3">
       <UserProfile user={user} />
-      <button className="bg-white self-start">Subscribe</button>
+      <button className="bg-black text-white text-xs self-start px-1 py-1 rounded-lg">
+        免费/订阅
+      </button>
     </div>
   );
 }
@@ -53,10 +56,17 @@ function UserProfile({ user }) {
   );
 }
 
-function Action({ name }) {
+function Action({ name, iconName }) {
   return (
-    <div className="flex gap-1">
-      <button className="bg-neutral-300">{name}</button>
+    <div className="flex gap-1 items-center">
+      <Image
+        src={`/icons/${iconName}.png`}
+        width={20}
+        height={20}
+        alt={name}
+        className=""
+      />
+      <span className="text-xs">{name}</span>
     </div>
   );
 }
@@ -105,7 +115,13 @@ function Video({ src }) {
     <div className="flex justify-center" onClick={handleClick}>
       <video src={src} ref={ref} className="w-full rounded-lg" />
       {!isPlaying && (
-        <button className="absolute self-center bg-white w-16 h-8">Play</button>
+        <Image
+          src="/icons/play.png"
+          width={24}
+          height={24}
+          alt="play"
+          className="absolute self-center bg-black"
+        />
       )}
     </div>
   );

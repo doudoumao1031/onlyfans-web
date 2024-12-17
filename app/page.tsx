@@ -1,4 +1,4 @@
-import Post, { fakePostData } from "@/components/explore/post";
+import Post, { fakePostData } from "@/components/post/post";
 
 export default function Home() {
   return (
