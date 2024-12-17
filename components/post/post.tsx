@@ -117,10 +117,10 @@ function Video({ src }) {
       {!isPlaying && (
         <Image
           src="/icons/play.png"
-          width={24}
-          height={24}
+          width={32}
+          height={32}
           alt="play"
-          className="absolute self-center bg-black"
+          className="absolute self-center bg-white"
         />
       )}
     </div>
