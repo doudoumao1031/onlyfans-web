@@ -87,7 +87,7 @@ export default function Page() {
   const Blogs = () => {
     return <div className="p-4 pt-0 ">
       {bloggers.map((v: TBlogItem, i: number) => (<div key={i} className={`h-28 pt-1 text-white bg-slate-400  mb-4 bg-cover rounded-lg ${v.background} bg-blend-multiply`}>
-        <div className="text-xs  truncate ...">{v.topMsg}</div>
+        <div className="text-xs min-h-4  truncate ...">{v.topMsg}</div>
         <div className="pl-4 pr-4 pt-2 flex justify-start">
           <div className={`w-16 h-16 rounded-full mr-4 ${v.avtar} bg-cover border-2 border-white`}>
           </div>
@@ -120,9 +120,9 @@ export default function Page() {
        <div className="flex flex-col justify-between">
         <div className="">{v.msg}</div>
         <div className="flex items-center">
-        <div className={`w-8 h-8 rounded-full mr-2 ${v.avtar} bg-cover `}>
+        <div className={`w-6 h-6 rounded-full mr-2 ${v.avtar} bg-cover `}>
         </div>
-          <span className="text-main-pink">{v.name}</span>
+          <span className="text-main-pink text-xs">{v.name}</span>
         </div>
        </div>
       </div>))}
