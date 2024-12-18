@@ -16,7 +16,7 @@
             "request": "launch",
             "name": "Launch Canary",
             "runtimeExecutable": "canary",
-            "url": "http://localhost:3000/explore/posts",
+            "url": "http://localhost:3000/profile/1",
             "webRoot": "${workspaceFolder}",
             "runtimeArgs": [
             //   "--load-extension=${workspaceFolder}/dist/chrome",  // Path to your extension's output directory
