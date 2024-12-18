@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,19 +8,17 @@ export default function Post({ data }) {
   const { poster, description, video, mentioned, stats } = data;
 
   return (
-    <div className="w-full flex flex-col gap-4">
-      <UserProfile user={poster} />
+    <div className="w-full flex flex-col gap-2">
+      <UserBrief user={poster} />
       <Description text={description} />
       <UserHomePageLink userId={poster.id} />
-      <div>
-        <Video src={video.src} />
-      </div>
-      <div>
+      <Video src={video.src} placeholder={video.placeholder} />
+      <div className="px-3">
         {mentioned.map((user) => (
-          <SubscribeUser key={user.id} user={user} />
+          <UserCard key={user.id} user={user} />
         ))}
       </div>
-      <div className="flex gap-4 justify-between">
+      <div className="px-3 flex gap-4 justify-between opacity-30">
         <Action name="点赞" iconName="like" />
         <Action name="留言" iconName="comment" />
         <Action name="打赏" iconName="tip" />
@@ -31,22 +29,39 @@ export default function Post({ data }) {
   );
 }
 
-function SubscribeUser({ user }) {
+function UserCard({ user }) {
   return (
-    <div className="bg-amber-300 rounded-lg flex justify-between px-3 py-3">
-      <UserProfile user={user} />
-      <button className="bg-black text-white text-xs self-start px-1 py-1 rounded-lg">
-        免费/订阅
-      </button>
+    <div className="flex justify-center w-full bg-black rounded-lg">
+      <Image
+        src={user.backgroundImage}
+        width={280}
+        height={120}
+        alt=""
+        className="w-full rounded-lg opacity-50"
+      />
+      <div className="w-full absolute self-center flex justify-around">
+        <div className="flex gap-4 px-3 items-center">
+          <div>
+            <Avatar src={user.avatar} width="w-24" />
+          </div>
+          <div className="text-white">
+            <div>{user.name}</div>
+            <div>@{user.id}</div>
+          </div>
+        </div>
+        <button className="bg-black opacity-65 text-white text-xs self-start px-1 py-1 rounded-lg">
+          免费/订阅
+        </button>
+      </div>
     </div>
   );
 }
 
-function UserProfile({ user }) {
+function UserBrief({ user }) {
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 px-3">
       <div>
-        <ProfilePhoto src={user.profileImage} />
+        <Avatar src={user.avatar} />
       </div>
       <div>
         <div>{user.name}</div>
@@ -59,24 +74,18 @@ function UserProfile({ user }) {
 function Action({ name, iconName }) {
   return (
     <div className="flex gap-1 items-center">
-      <Image
-        src={`/icons/${iconName}.png`}
-        width={20}
-        height={20}
-        alt={name}
-        className="opacity-30"
-      />
+      <Image src={`/icons/${iconName}.png`} width={20} height={20} alt={name} />
       <span className="text-xs">{name}</span>
     </div>
   );
 }
 
-function ProfilePhoto({ src }) {
+function Avatar({ src, width = "w-18" }) {
   return (
     <Image
       src={src}
       alt=""
-      className="rounded-full border-2 border-white"
+      className={`rounded-full border-2 border-white ${width}`}
       width={50}
       height={50}
     />
@@ -86,7 +95,7 @@ function ProfilePhoto({ src }) {
 function Description({ text }) {
   const words = text.split(" ");
   return (
-    <div>
+    <div className="px-3">
       {words.map((w, i) => (
         <Word key={i} word={w} />
       ))}
@@ -107,40 +116,37 @@ function Word({ word }) {
   );
 }
 
-function Video({ src }) {
-  const ref = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+function Video({ src, placeholder }) {
+  const [showVideo, setShowVideo] = useState(false);
 
   return (
-    <div className="flex justify-center" onTouchEnd={togglePlay}>
-      <video src={src} ref={ref} className="w-full rounded-lg" />
-      {!isPlaying && (
-        <Image
-          src="/icons/play.png"
-          width={32}
-          height={32}
-          alt="play"
-          className="absolute self-center bg-white opacity-75"
-        />
+    <div className="w-full">
+      {showVideo ? (
+        <video src={src} className="w-full" controls autoPlay preload="none" />
+      ) : (
+        <div
+          onTouchEnd={() => setShowVideo(true)}
+          className="w-full flex justify-center"
+        >
+          <Image
+            src={placeholder}
+            width={320}
+            height={180}
+            alt="video thumbmail"
+            className="w-full"
+          />
+          <div className="absolute self-center bg-white opacity-75 w-20 h-20 rounded-full flex justify-center items-center">
+            <Image src="/icons/play.png" width={40} height={40} alt="play" />
+          </div>
+        </div>
       )}
     </div>
   );
-
-  function togglePlay() {
-    if (!ref.current) return;
-    if (isPlaying) {
-      ref.current.pause();
-      setIsPlaying(false);
-    } else {
-      ref.current.play();
-      setIsPlaying(true);
-    }
-  }
 }
 
 function UserHomePageLink({ userId }) {
   return (
-    <Link href={buildUserHomePagePath(userId)} className="text-sky-400">
+    <Link href={buildUserHomePagePath(userId)} className="px-3 text-sky-400">
       {buildUserHomePagePathForDisplay(userId)}
     </Link>
   );
@@ -166,18 +172,20 @@ export const fakePostData = {
   poster: {
     name: "Jamie Shon",
     id: "jamieshon",
-    profileImage: "https://randomuser.me/api/portraits/thumb/women/12.jpg",
+    avatar: "/mock/avatar.jpg",
   },
   description:
     "Jamie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon @luvjamxoxo 带您踏上文化之旅，展示韩国烧烤、香草护肤品、各种泡菜等等！您一定想错过这个充满动感的剧集！",
   video: {
-    src: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4",
+    placeholder: "/mock/video-preview.jpg",
+    src: "https://cdn2.onlyfans.com/files/c/cd/cde2b8e253806ace979d48cfe28d8343/0hvzbf835nlhf4y3o4cuk_source.mp4?Tag=2&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6XC9cL2NkbjIub25seWZhbnMuY29tXC9maWxlc1wvY1wvY2RcL2NkZTJiOGUyNTM4MDZhY2U5NzlkNDhjZmUyOGQ4MzQzXC8waHZ6YmY4MzVubGhmNHkzbzRjdWtfc291cmNlLm1wND9UYWc9MiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTczNDU2MDIzMX0sIklwQWRkcmVzcyI6eyJBV1M6U291cmNlSXAiOiIxMy4yMTQuMjMyLjIyMlwvMzIifX19XX0_&Signature=QebcUcZm1zi8EhLi17spfwaw9lKnlI-i75Fp5dpi9LhekAiSpsMTGvw~636LUj930PpGw~EXIWCgeoZyGCkmRDPdcZ3YpRHrxJxUvYWHCZ0eCcWgM6MHVe6mT42uK7r9U3pRlJsF2T~xwIjQ2AO7xB9uAqMls4thPPRDH5jQfi66j2MM7hTD040UXXRZR8C4GGVK-KSRx0jXxZtSztq-4zeFvIq-tKk24INxluqMivN5O8NLlL2T43QAdrJvxp3TDrUkWDIdVtXdnZrfwXkkl6BOhYCPjljebT2bXYYqFYcO~aG790y~5aeJs3SCHNQqTmdyn2orD4TySyWBWVAwew__&Key-Pair-Id=APKAUSX4CWPPATFK2DGD",
   },
   mentioned: [
     {
       name: "Jamie Shon",
       id: "jamieshon",
-      profileImage: "https://randomuser.me/api/portraits/thumb/women/12.jpg",
+      avatar: "/mock/avatar.jpg",
+      backgroundImage: "/mock/usercard-background.jpg",
     },
   ],
   stats: {
