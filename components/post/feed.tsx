@@ -34,7 +34,7 @@ export default function Feed({ data }) {
 function SubscribeCard({ user }) {
   return (
     <div
-      className="w-full h-32 rounded-lg bg-cover"
+      className="w-full rounded-lg bg-cover"
       style={{
         backgroundImage: `url(${user.backgroundImage})`,
       }}
@@ -120,7 +120,7 @@ function Video({ src, placeholder }) {
   const [showVideo, setShowVideo] = useState(false);
 
   return (
-    <div className="w-full rounded-lg">
+    <div className="w-full">
       {showVideo ? (
         <video
           src={src}
