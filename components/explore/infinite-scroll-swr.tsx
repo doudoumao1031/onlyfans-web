@@ -88,12 +88,6 @@ export default function InfiniteScroll({
     <div ref={containerRef} className="h-full w-full overflow-scroll">
       <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
         {items.map((item, index) => (
-          // <div key={index} className="card shadow-lg">
-          //     <div className="card-body">
-          //         <h2 className="card-title">Item {item}</h2>
-          //         <p>This is a description of item {item}.</p>
-          //     </div>
-          // </div>
           <Feed key={index} data={fakePostData} />
         ))}
       </div>

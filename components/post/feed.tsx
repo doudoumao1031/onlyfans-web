@@ -5,20 +5,20 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Feed({ data }) {
-  const { poster, description, video, mentioned } = data;
+  const { poster, description, video, subscribe } = data;
 
   return (
-    <div className="w-full flex flex-col gap-2">
-      <UserBrief user={poster} />
+    <div className="w-full flex flex-col gap-2 border-b border-black/5">
+      <UserTitle user={poster} />
       <Description text={description} />
       <UserHomePageLink userId={poster.id} />
       <Video src={video.src} placeholder={video.placeholder} />
-      <div className="px-3">
-        {mentioned.map((user) => (
-          <UserCard key={user.id} user={user} />
+      <div className="">
+        {subscribe.map((user) => (
+          <SubscribeCard key={user.id} user={user} />
         ))}
       </div>
-      <div className="px-3 flex gap-4 justify-between opacity-30">
+      <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
         <Action name="点赞" iconName="like" />
         <Action name="留言" iconName="comment" />
         <Link href={`/explore/tip/1`}>
@@ -31,7 +31,7 @@ export default function Feed({ data }) {
   );
 }
 
-function UserCard({ user }) {
+function SubscribeCard({ user }) {
   return (
     <div
       className="flex justify-center items-center w-full h-32 bg-black rounded-lg bg-cover"
@@ -57,15 +57,15 @@ function UserCard({ user }) {
   );
 }
 
-function UserBrief({ user }) {
+function UserTitle({ user }) {
   return (
     <div className="flex gap-4 px-3">
       <div>
         <Avatar src={user.avatar} />
       </div>
       <div>
-        <div>{user.name}</div>
-        <div>@{user.id}</div>
+        <div className="text-lg">{user.name}</div>
+        <div className="text-black/50 text-xs">@{user.id}</div>
       </div>
     </div>
   );
@@ -120,13 +120,19 @@ function Video({ src, placeholder }) {
   const [showVideo, setShowVideo] = useState(false);
 
   return (
-    <div className="w-full">
+    <div className="w-full rounded-lg">
       {showVideo ? (
-        <video src={src} className="w-full" controls autoPlay preload="none" />
+        <video
+          src={src}
+          className="w-full rounded-lg"
+          controls
+          autoPlay
+          preload="none"
+        />
       ) : (
         <div
           onTouchEnd={() => setShowVideo(true)}
-          className="w-full flex justify-center items-center w-full h-48 bg-cover"
+          className="w-full flex justify-center items-center w-full h-48 bg-cover rounded-lg"
           style={{
             backgroundImage: `url(${placeholder})`,
           }}
@@ -176,7 +182,7 @@ export const fakePostData = {
     placeholder: "/mock/video-preview.jpg",
     src: "https://cdn2.onlyfans.com/files/9/9d/9d411da609fa1fc0822f9f078e3f53aa/0hwpqw9hlk7lfm9esxbiv_720p.mp4?Tag=2&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6XC9cL2NkbjIub25seWZhbnMuY29tXC9maWxlc1wvOVwvOWRcLzlkNDExZGE2MDlmYTFmYzA4MjJmOWYwNzhlM2Y1M2FhXC8waHdwcXc5aGxrN2xmbTllc3hiaXZfNzIwcC5tcDQ~VGFnPTIiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3MzQ2OTg1NjN9LCJJcEFkZHJlc3MiOnsiQVdTOlNvdXJjZUlwIjoiMTMuMjE0LjIzMi4yMjJcLzMyIn19fV19&Signature=RwXHHF5knvYyMoI2w9Sq73avdpN~5BXPPNNTIyksu8kDlkccaa3N0MjU0L-IZZRhGzccniKbsHYq6nDa-aur8zaZBQ80bMQTTb6RlvIDBblKsS~aipcggkm43i~1aWvZ1Ac5v5nb-an-mof4LL-0ukPK0Wp~HaCoOHR3o9aEeRAhWBGwjnHqvaU7QK3GhTQd6wisZEcsV0RQdykf5biJYfo~vDQZ-FdHdAdzWAYFWxXZCrKjglbuYqzdJiP47rYZPbtPpW4PqBBt0i7FJJGTuRlezUzKKsN~bKL9y-4Q-fFnYO2jcwLJk66FFNyqUbNmU~EUOzceaISQyVD09A9luw__&Key-Pair-Id=APKAUSX4CWPPATFK2DGD",
   },
-  mentioned: [
+  subscribe: [
     {
       name: "Jamie Shon",
       id: "jamieshon",
