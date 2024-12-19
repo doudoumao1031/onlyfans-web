@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { debounce } from "lodash";
 import useSWR from "swr";
 import Feed, { fakePostData } from "@/components/post/feed";
@@ -44,43 +44,33 @@ export default function InfiniteScroll({ initialItems, initialHasMore }: Infinit
             setHasMore(data.hasMore);
             isFetchingRef.current = false;
         }
-    }, [data]);
+    }, [data, page]);
 
-    // const handleScroll = debounce(() => {
-    //     if (
-    //         window.innerHeight + document.documentElement.scrollTop >=
-    //         document.documentElement.offsetHeight - 10
-    //     ) {
-    //         if (hasMore && !isValidating) {
-    //             setPage((prev) => prev + 1);
-    //         }
-    //     }
-    // }, 200);
-
-    const handleScroll = debounce(() => {
-        const container = containerRef.current;
-        if (container) {
-            const { scrollTop, scrollHeight, clientHeight } = container;
-            if (scrollTop + clientHeight >= scrollHeight - 10) {
-                if (hasMore && !isValidating) {
-                    setPage((prev) => prev + 1);
+    const handleScroll = useCallback(
+        debounce(() => {
+            const container = containerRef.current;
+            if (container) {
+                const { scrollTop, scrollHeight, clientHeight } = container;
+                if (scrollTop + clientHeight >= scrollHeight - 10) {
+                    if (hasMore && !isValidating) {
+                        setPage((prev) => prev + 1);
+                    }
                 }
             }
-        }
-    }, 200);
-
-    // useEffect(() => {
-    //     window.addEventListener("scroll", handleScroll);
-    //     return () => window.removeEventListener("scroll", handleScroll);
-    // }, [hasMore, isValidating]);
+        }, 200),
+        [hasMore, isValidating]
+    );
 
     useEffect(() => {
         const container = containerRef.current;
         if (container) {
             container.addEventListener("scroll", handleScroll);
-            return () => container.removeEventListener("scroll", handleScroll);
+            return () => {
+                handleScroll.cancel(); // Cancel any pending debounced calls
+                container.removeEventListener("scroll", handleScroll);
+            };
         }
-    }, [hasMore, isValidating]);
+    }, [handleScroll]); // Now handleScroll is memoized, we can safely add it as a dependency
 
     if (error) {
         return <div className="text-center mt-4 text-red-500">Failed to load data. Please try again.</div>;
@@ -118,4 +108,3 @@ export default function InfiniteScroll({ initialItems, initialHasMore }: Infinit
         </div>
     );
 };
-

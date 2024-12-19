@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Feed({ data }) {
-  const { poster, description, video, mentioned, stats } = data;
+  const { poster, description, video, mentioned } = data;
 
   return (
     <div className="w-full flex flex-col gap-2">
