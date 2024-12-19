@@ -95,7 +95,7 @@ function UserCard({ user }: UserCardProps) {
   return (
     <div className="flex justify-center w-full bg-black rounded-lg">
       <Image
-        src={user.backgroundImage || "/demo/user_bg.png"}
+        src={user.backgroundImage || "/demo/user_bg.png"} 
         width={280}
         height={120}
         alt=""

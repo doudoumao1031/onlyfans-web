@@ -17,6 +17,7 @@ const links = [
       <div className="flex w-full border-b border-gray-300">
         {links.map((link) => (
           <Link
+              prefetch={true}
             key={link.name}
             href={link.href}
             className={clsx(
