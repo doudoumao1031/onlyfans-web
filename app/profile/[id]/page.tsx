@@ -1,4 +1,4 @@
-import Header from "@/components/profile/header";
+import Header from "@/components/common/header";
 import Image from "next/image";
 import Avatar from "@/components/profile/avatar";
 import PostsCard from "@/components/profile/posts-card";
@@ -21,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
               width={22}
               height={22}
           />
-        </>} title="My"/>
+        </>} title="My" backIconColor={'#fff'}/>
         <div className="text-xs pl-6 pr-6">
           各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折
         </div>

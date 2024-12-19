@@ -1,17 +1,18 @@
 "use client";
 
-import {SlideUpModal} from "@/components/common/slide-up-modal";
 import TabTitle, {iTabTitleOption} from "@/components/profile/tab-title";
-import {useState} from "react";
+import React, {useState} from "react";
 import IconWithImage from "@/components/profile/icon";
 import ManuscriptItem from "@/components/profile/manuscript/manuscript-item";
+import Header from "@/components/common/header";
+import Link from "next/link";
 
 enum ACTIVE_TYPE {
     POST = "POST",
     MEDIA = "MEDIA"
 }
 
-const ManuscriptPost = () =>{
+const ManuscriptPost = () => {
     const [timeSort, setTimeSort,] = useState<boolean>(false)
     return <section className="pl-4 pr-4 text-black">
         <section className="mt-5 flex gap-4 items-center">
@@ -55,32 +56,39 @@ const ManuscriptMedia = () => {
                 <section className="rounded-xl relative overflow-hidden text-xs">
                     <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5">
                         <section className="flex items-center gap-0.5">
-                            <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                         <section className="flex items-center gap-0.5">
-                            <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                     </section>
                     <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around">
                         <section className="flex items-center gap-0.5 flex-1">
-                            <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                         <section className="flex items-center gap-0.5 flex-1 justify-center">
-                            <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                         <section className="flex items-center gap-0.5 flex-1 justify-end">
-                            <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                     </section>
-                    <section className="w-full h-[220px] rounded bg-[url('/demo/user_bg.png')] bg-cover bg-center"></section>
+                    <section
+                        className="w-full h-[220px] rounded bg-[url('/demo/user_bg.png')] bg-cover bg-center"></section>
                 </section>
-                <button className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-main-pink border-2 text-main-pink w-full mt-2">
-                    <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"} />
+                <button
+                    className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-main-pink border-2 text-main-pink w-full mt-2">
+                    <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
                     <span>编辑</span>
                 </button>
             </section>
@@ -88,32 +96,39 @@ const ManuscriptMedia = () => {
                 <section className="rounded-xl relative overflow-hidden text-xs">
                     <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5">
                         <section className="flex items-center gap-0.5">
-                            <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                         <section className="flex items-center gap-0.5">
-                            <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                     </section>
                     <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around">
                         <section className="flex items-center gap-0.5 flex-1">
-                            <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                         <section className="flex items-center gap-0.5 flex-1 justify-center">
-                            <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                         <section className="flex items-center gap-0.5 flex-1 justify-end">
-                            <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                     </section>
-                    <section className="w-full h-[220px] rounded bg-[url('/demo/user_bg.png')] bg-cover bg-center"></section>
+                    <section
+                        className="w-full h-[220px] rounded bg-[url('/demo/user_bg.png')] bg-cover bg-center"></section>
                 </section>
-                <button className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-main-pink border-2 text-main-pink w-full mt-2">
-                    <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"} />
+                <button
+                    className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-main-pink border-2 text-main-pink w-full mt-2">
+                    <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
                     <span>编辑</span>
                 </button>
             </section>
@@ -121,32 +136,39 @@ const ManuscriptMedia = () => {
                 <section className="rounded-xl relative overflow-hidden text-xs">
                     <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5">
                         <section className="flex items-center gap-0.5">
-                            <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                         <section className="flex items-center gap-0.5">
-                            <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                     </section>
                     <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around">
                         <section className="flex items-center gap-0.5 flex-1">
-                            <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                         <section className="flex items-center gap-0.5 flex-1 justify-center">
-                            <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                         <section className="flex items-center gap-0.5 flex-1 justify-end">
-                            <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12} color={'#fff'} />
+                            <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12}
+                                           color={'#fff'}/>
                             <span>989</span>
                         </section>
                     </section>
-                    <section className="w-full h-[220px] rounded bg-[url('/demo/user_bg.png')] bg-cover bg-center"></section>
+                    <section
+                        className="w-full h-[220px] rounded bg-[url('/demo/user_bg.png')] bg-cover bg-center"></section>
                 </section>
-                <button className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-main-pink border-2 text-main-pink w-full mt-2">
-                    <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"} />
+                <button
+                    className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-main-pink border-2 text-main-pink w-full mt-2">
+                    <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
                     <span>编辑</span>
                 </button>
             </section>
@@ -160,14 +182,14 @@ export default function Page() {
         {label: "帖子", name: ACTIVE_TYPE.POST},
         {label: "媒体", name: ACTIVE_TYPE.MEDIA},
     ]
-    const control = () => {
-        return <button className="text-main-pink text-base">草稿</button>
-    }
+
     return (
-        <SlideUpModal title="稿件管理" portalId="modal-root" full headerRightControl={control} showPageHeader>
+        <div>
+            <Header title="稿件管理" titleColor={'#000'} right={<Link href={"./draft"} className="text-main-pink text-base">草稿</Link>}>
+            </Header>
             <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive}/>
-            {active === ACTIVE_TYPE.POST && <ManuscriptPost />}
-            {active === ACTIVE_TYPE.MEDIA && <ManuscriptMedia />}
-        </SlideUpModal>
+            {active === ACTIVE_TYPE.POST && <ManuscriptPost/>}
+            {active === ACTIVE_TYPE.MEDIA && <ManuscriptMedia/>}
+        </div>
     );
 }
