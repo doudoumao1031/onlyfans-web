@@ -19,13 +19,13 @@ export default function Feed({ data }) {
         ))}
       </div>
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
-        <Action name="点赞" iconName="like" />
-        <Action name="留言" iconName="comment" />
+        <Action name="999" iconName="like" />
+        <Action name="999" iconName="comment" />
         <Link href={`/explore/tip/1`}>
-          <Action name="打赏" iconName="tip" />
+          <Action name="999" iconName="tip" />
         </Link>
-        <Action name="分享" iconName="share" />
-        <Action name="保存" iconName="save" />
+        <Action name="999" iconName="share" />
+        <Action name="999" iconName="save" />
       </div>
     </div>
   );
@@ -39,14 +39,14 @@ function SubscribeCard({ user }) {
         backgroundImage: `url(${user.backgroundImage})`,
       }}
     >
-      <div className="w-full h-full flex justify-between bg-black/50 p-3">
+      <div className="w-full h-full flex justify-between bg-black/50 p-3 rounded-lg">
         <div className="flex gap-4 px-3 items-center">
           <div>
             <Avatar src={user.avatar} width="w-24" />
           </div>
           <div className="text-white">
-            <div>{user.name}</div>
-            <div>@{user.id}</div>
+            <div className="text-lg">{user.name}</div>
+            <div className="text-white/75 text-xs">@{user.id}</div>
           </div>
         </div>
         <button className="bg-black opacity-65 text-white text-xs self-start px-1 py-1 rounded-lg">
@@ -137,7 +137,7 @@ function Video({ src, placeholder }) {
             backgroundImage: `url(${placeholder})`,
           }}
         >
-          <div className="bg-white opacity-75 w-20 h-20 rounded-full flex justify-center items-center">
+          <div className="bg-black/50 w-20 h-20 rounded-full flex justify-center items-center">
             <Image src="/icons/play.png" width={40} height={40} alt="play" />
           </div>
         </div>
