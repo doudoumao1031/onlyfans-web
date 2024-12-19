@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import IconWithImage from "./icon";
-import {useRouter} from  "next/navigation"
+import {useRouter} from "next/navigation"
 
-export default function Header({right,title}: { right?: React.ReactNode,title:React.ReactNode }) {
+export default function Header({right, title}: { right?: React.ReactNode, title: React.ReactNode }) {
     const router = useRouter()
     return <section className="flex align-middle justify-between items-center h-[44px] pl-4 pr-4">
         <div className="flex justify-start shrink-0 w-[30%]">
