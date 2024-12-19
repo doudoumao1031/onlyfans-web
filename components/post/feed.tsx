@@ -4,7 +4,67 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Feed({ data }) {
+interface User {
+  name: string;
+  id: string;
+  avatar: string;
+  backgroundImage?: string;
+}
+
+interface Video {
+  src: string;
+  placeholder: string;
+}
+
+interface PostData {
+  poster: User;
+  description: string;
+  video: Video;
+  mentioned: User[];
+  stats?: {
+    likes: number;
+    comments: number;
+    shared: number;
+    saved: number;
+  };
+}
+
+interface FeedProps {
+  data: PostData;
+}
+
+interface UserCardProps {
+  user: User;
+}
+
+interface UserBriefProps {
+  user: User;
+}
+
+interface ActionProps {
+  name: string;
+  iconName: string;
+}
+
+interface AvatarProps {
+  src: string;
+  width?: string;
+}
+
+interface DescriptionProps {
+  text: string;
+}
+
+interface VideoProps {
+  src: string;
+  placeholder: string;
+}
+
+interface UserHomePageLinkProps {
+  userId: string;
+}
+
+export default function Feed({ data }: FeedProps) {
   const { poster, description, video, mentioned } = data;
 
   return (
@@ -31,11 +91,11 @@ export default function Feed({ data }) {
   );
 }
 
-function UserCard({ user }) {
+function UserCard({ user }: UserCardProps) {
   return (
     <div className="flex justify-center w-full bg-black rounded-lg">
       <Image
-        src={user.backgroundImage}
+        src={user.backgroundImage || "/demo/user_bg.png"}
         width={280}
         height={120}
         alt=""
@@ -59,7 +119,7 @@ function UserCard({ user }) {
   );
 }
 
-function UserBrief({ user }) {
+function UserBrief({ user }: UserBriefProps) {
   return (
     <div className="flex gap-4 px-3">
       <div>
@@ -73,7 +133,7 @@ function UserBrief({ user }) {
   );
 }
 
-function Action({ name, iconName }) {
+function Action({ name, iconName }: ActionProps) {
   return (
     <div className="flex gap-1 items-center">
       <Image src={`/icons/${iconName}.png`} width={20} height={20} alt={name} />
@@ -82,11 +142,11 @@ function Action({ name, iconName }) {
   );
 }
 
-function Avatar({ src, width = "w-18" }) {
+function Avatar({ src, width = "w-18" }: AvatarProps) {
   return (
     <Image
       src={src}
-      alt=""
+      alt="User avatar"
       className={`rounded-full border-2 border-white ${width}`}
       width={50}
       height={50}
@@ -94,7 +154,7 @@ function Avatar({ src, width = "w-18" }) {
   );
 }
 
-function Description({ text }) {
+function Description({ text }: DescriptionProps) {
   const words = text.split(" ");
   return (
     <div className="px-3">
@@ -105,7 +165,7 @@ function Description({ text }) {
   );
 }
 
-function Word({ word }) {
+function Word({ word }: { word: string }) {
   return isMention(word) ? (
     <Link
       href={buildUserHomePagePath(getUserIdFromMention(word))}
@@ -118,7 +178,7 @@ function Word({ word }) {
   );
 }
 
-function Video({ src, placeholder }) {
+function Video({ src, placeholder }: VideoProps) {
   const [showVideo, setShowVideo] = useState(false);
 
   return (
@@ -134,11 +194,11 @@ function Video({ src, placeholder }) {
             src={placeholder}
             width={320}
             height={180}
-            alt="video thumbmail"
+            alt="Video thumbnail"
             className="w-full"
           />
           <div className="absolute self-center bg-white opacity-75 w-20 h-20 rounded-full flex justify-center items-center">
-            <Image src="/icons/play.png" width={40} height={40} alt="play" />
+            <Image src="/icons/play.png" width={40} height={40} alt="Play video" />
           </div>
         </div>
       )}
@@ -146,7 +206,7 @@ function Video({ src, placeholder }) {
   );
 }
 
-function UserHomePageLink({ userId }) {
+function UserHomePageLink({ userId }: UserHomePageLinkProps) {
   return (
     <Link href={buildUserHomePagePath(userId)} className="px-3 text-sky-400">
       {buildUserHomePagePathForDisplay(userId)}
@@ -154,23 +214,23 @@ function UserHomePageLink({ userId }) {
   );
 }
 
-function buildUserHomePagePath(userId) {
+function buildUserHomePagePath(userId: string) {
   return `/${userId}`;
 }
 
-function buildUserHomePagePathForDisplay(userId) {
+function buildUserHomePagePathForDisplay(userId: string) {
   return `secretfans.com/${userId}`;
 }
 
-function isMention(word) {
+function isMention(word: string) {
   return word.length > 1 && word.charAt(0) === "@";
 }
 
-function getUserIdFromMention(mention) {
+function getUserIdFromMention(mention: string) {
   return mention.substring(1);
 }
 
-export const fakePostData = {
+export const fakePostData: PostData = {
   poster: {
     name: "Jamie Shon",
     id: "jamieshon",
