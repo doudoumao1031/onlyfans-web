@@ -1,7 +1,6 @@
 import InfiniteScroll from "@/components/explore/infinite-scroll-swr";
 import {fetchFeeds} from "@/lib/data";
 
-// You don’t need to change the implementation of fetchFeeds. 
 export const revalidate = 3600; // Regenerate the page every 3600 seconds
 
 export default async function Page() {
@@ -12,28 +11,3 @@ export default async function Page() {
         </div>
     );
 }
-
-// generateStaticParams is used to pre-generate pages for dynamic routes like /seed/[id].
-
-// export const revalidate = 60;
-// export const dynamicParams = true // or false, to 404 on unknown paths
-
-// export async function generateStaticParams() {
-//     const { items, hasMore } = await fetchFeeds(1);
-//     return  { items, hasMore } 
-// }
-
-// export default async function Page({
-//     params,
-// }: {
-//     params: Promise<{ items: number[], hasMore: boolean }>
-// }) {
-//     const items = (await params).items
-//     const hasMore = (await params).hasMore
-//     console.log('build Page', items, hasMore)
-//     return (
-//         <div className="container mx-auto p-4">
-//             <InfiniteScroll initialItems={items} initialHasMore={hasMore} />
-//         </div>
-//     );
-// }

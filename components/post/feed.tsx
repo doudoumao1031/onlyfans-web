@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Post({ data }) {
+export default function Feed({ data }) {
   const { poster, description, video, mentioned, stats } = data;
 
   return (
@@ -21,7 +21,9 @@ export default function Post({ data }) {
       <div className="px-3 flex gap-4 justify-between opacity-30">
         <Action name="点赞" iconName="like" />
         <Action name="留言" iconName="comment" />
-        <Action name="打赏" iconName="tip" />
+        <Link href={`/explore/tip/1`}>  
+          <Action name="打赏" iconName="tip" />
+        </Link>
         <Action name="分享" iconName="share" />
         <Action name="保存" iconName="save" />
       </div>
