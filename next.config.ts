@@ -17,5 +17,8 @@ const nextConfig: NextConfig = {
         ],
     },
 };
+module.exports = {
+    skipTrailingSlashRedirect: true,
+}
 
 export default nextConfig;
