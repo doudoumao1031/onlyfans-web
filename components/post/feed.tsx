@@ -34,12 +34,12 @@ export default function Feed({ data }) {
 function SubscribeCard({ user }) {
   return (
     <div
-      className="flex justify-center items-center w-full h-32 bg-black rounded-lg bg-cover"
+      className="w-full h-32 rounded-lg bg-cover"
       style={{
         backgroundImage: `url(${user.backgroundImage})`,
       }}
     >
-      <div className="w-full flex justify-around">
+      <div className="w-full h-full flex justify-between bg-black/50 p-3">
         <div className="flex gap-4 px-3 items-center">
           <div>
             <Avatar src={user.avatar} width="w-24" />
