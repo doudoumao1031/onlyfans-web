@@ -21,7 +21,7 @@ export default function Feed({ data }) {
       <div className="px-3 flex gap-4 justify-between opacity-30">
         <Action name="点赞" iconName="like" />
         <Action name="留言" iconName="comment" />
-        <Link href={`/explore/tip/1`}>  
+        <Link href={`/explore/tip/1`}>
           <Action name="打赏" iconName="tip" />
         </Link>
         <Action name="分享" iconName="share" />
@@ -33,15 +33,13 @@ export default function Feed({ data }) {
 
 function UserCard({ user }) {
   return (
-    <div className="flex justify-center w-full bg-black rounded-lg">
-      <Image
-        src={user.backgroundImage}
-        width={280}
-        height={120}
-        alt=""
-        className="w-full rounded-lg opacity-50"
-      />
-      <div className="w-full absolute self-center flex justify-around">
+    <div
+      className="flex justify-center items-center w-full h-32 bg-black rounded-lg bg-cover"
+      style={{
+        backgroundImage: `url(${user.backgroundImage})`,
+      }}
+    >
+      <div className="w-full flex justify-around">
         <div className="flex gap-4 px-3 items-center">
           <div>
             <Avatar src={user.avatar} width="w-24" />
@@ -128,16 +126,12 @@ function Video({ src, placeholder }) {
       ) : (
         <div
           onTouchEnd={() => setShowVideo(true)}
-          className="w-full flex justify-center"
+          className="w-full flex justify-center items-center w-full h-48 bg-cover"
+          style={{
+            backgroundImage: `url(${placeholder})`,
+          }}
         >
-          <Image
-            src={placeholder}
-            width={320}
-            height={180}
-            alt="video thumbmail"
-            className="w-full"
-          />
-          <div className="absolute self-center bg-white opacity-75 w-20 h-20 rounded-full flex justify-center items-center">
+          <div className="bg-white opacity-75 w-20 h-20 rounded-full flex justify-center items-center">
             <Image src="/icons/play.png" width={40} height={40} alt="play" />
           </div>
         </div>
@@ -180,7 +174,7 @@ export const fakePostData = {
     "Jamie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon @luvjamxoxo 带您踏上文化之旅，展示韩国烧烤、香草护肤品、各种泡菜等等！您一定想错过这个充满动感的剧集！",
   video: {
     placeholder: "/mock/video-preview.jpg",
-    src: "https://cdn2.onlyfans.com/files/c/cd/cde2b8e253806ace979d48cfe28d8343/0hvzbf835nlhf4y3o4cuk_source.mp4?Tag=2&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6XC9cL2NkbjIub25seWZhbnMuY29tXC9maWxlc1wvY1wvY2RcL2NkZTJiOGUyNTM4MDZhY2U5NzlkNDhjZmUyOGQ4MzQzXC8waHZ6YmY4MzVubGhmNHkzbzRjdWtfc291cmNlLm1wND9UYWc9MiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTczNDU2MDIzMX0sIklwQWRkcmVzcyI6eyJBV1M6U291cmNlSXAiOiIxMy4yMTQuMjMyLjIyMlwvMzIifX19XX0_&Signature=QebcUcZm1zi8EhLi17spfwaw9lKnlI-i75Fp5dpi9LhekAiSpsMTGvw~636LUj930PpGw~EXIWCgeoZyGCkmRDPdcZ3YpRHrxJxUvYWHCZ0eCcWgM6MHVe6mT42uK7r9U3pRlJsF2T~xwIjQ2AO7xB9uAqMls4thPPRDH5jQfi66j2MM7hTD040UXXRZR8C4GGVK-KSRx0jXxZtSztq-4zeFvIq-tKk24INxluqMivN5O8NLlL2T43QAdrJvxp3TDrUkWDIdVtXdnZrfwXkkl6BOhYCPjljebT2bXYYqFYcO~aG790y~5aeJs3SCHNQqTmdyn2orD4TySyWBWVAwew__&Key-Pair-Id=APKAUSX4CWPPATFK2DGD",
+    src: "https://cdn2.onlyfans.com/files/9/9d/9d411da609fa1fc0822f9f078e3f53aa/0hwpqw9hlk7lfm9esxbiv_720p.mp4?Tag=2&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6XC9cL2NkbjIub25seWZhbnMuY29tXC9maWxlc1wvOVwvOWRcLzlkNDExZGE2MDlmYTFmYzA4MjJmOWYwNzhlM2Y1M2FhXC8waHdwcXc5aGxrN2xmbTllc3hiaXZfNzIwcC5tcDQ~VGFnPTIiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3MzQ2OTg1NjN9LCJJcEFkZHJlc3MiOnsiQVdTOlNvdXJjZUlwIjoiMTMuMjE0LjIzMi4yMjJcLzMyIn19fV19&Signature=RwXHHF5knvYyMoI2w9Sq73avdpN~5BXPPNNTIyksu8kDlkccaa3N0MjU0L-IZZRhGzccniKbsHYq6nDa-aur8zaZBQ80bMQTTb6RlvIDBblKsS~aipcggkm43i~1aWvZ1Ac5v5nb-an-mof4LL-0ukPK0Wp~HaCoOHR3o9aEeRAhWBGwjnHqvaU7QK3GhTQd6wisZEcsV0RQdykf5biJYfo~vDQZ-FdHdAdzWAYFWxXZCrKjglbuYqzdJiP47rYZPbtPpW4PqBBt0i7FJJGTuRlezUzKKsN~bKL9y-4Q-fFnYO2jcwLJk66FFNyqUbNmU~EUOzceaISQyVD09A9luw__&Key-Pair-Id=APKAUSX4CWPPATFK2DGD",
   },
   mentioned: [
     {
