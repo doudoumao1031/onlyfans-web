@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { debounce } from "lodash";
 import useSWR from "swr";
+import Feed, { fakePostData } from "@/components/post/feed";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -92,11 +93,15 @@ export default function InfiniteScroll({ initialItems, initialHasMore }: Infinit
         >
             <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
                 {items.map((item, index) => (
-                    <div key={index} className="card shadow-lg">
-                        <div className="card-body">
-                            <h2 className="card-title">Item {item}</h2>
-                            <p>This is a description of item {item}.</p>
-                        </div>
+                    // <div key={index} className="card shadow-lg">
+                    //     <div className="card-body">
+                    //         <h2 className="card-title">Item {item}</h2>
+                    //         <p>This is a description of item {item}.</p>
+                    //     </div>
+                    // </div>
+                    <div key={index} className="w-full">
+                        <h2 className="card-title">Item {item}</h2>
+                        <Feed data={fakePostData} />
                     </div>
                 ))}
             </div>
