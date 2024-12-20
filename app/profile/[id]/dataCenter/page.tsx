@@ -57,15 +57,15 @@ export default function Page() {
           <span className="flex items-center text-[#777]">近30日   <IconWithImage url="/icons/profile/icon-bt.png" width={16} height={16} color={'#777'} /></span>
         </div>
         <div className="flex justify-between m-4">
-          <div className="w-32 h-16 flex justify-center flex-col items-center border border-[#FF8492] rounded-md">
+          <div className="w-32 h-16 flex justify-center flex-col items-center border border-[#FF8492] bg-[#FF8492] bg-opacity-20 rounded-xl">
             <span className="text-xl font-medium">9999</span>
             <span className="text-xs text-gray-400">播放量</span>
           </div>
-          <div className="w-32 h-16 flex justify-center flex-col items-center rounded-md">
+          <div className="w-32 h-16 flex justify-center flex-col items-center rounded-xl">
             <span className="text-xl font-medium">9.9W</span>
             <span className="text-xs text-gray-400">空间访客</span>
           </div>
-          <div className="w-32 h-16 flex justify-center flex-col items-center rounded-md">
+          <div className="w-32 h-16 flex justify-center flex-col items-center rounded-xl">
             <span className="text-xl font-medium">99.9W</span>
             <span className="text-xs text-gray-400">订阅量</span>
           </div>
@@ -81,15 +81,15 @@ export default function Page() {
           <span className="flex items-center text-[#777]">近30日   <IconWithImage url="/icons/profile/icon-bt.png" width={16} height={16} color={'#777'} /></span>
         </div>
         <div className="flex justify-between m-4">
-          <div className="w-32 h-16 flex justify-center flex-col items-center  rounded-md">
+          <div className="w-32 h-16 flex justify-center flex-col items-center  rounded-xl">
             <span className="text-xl font-medium">9999</span>
             <span className="text-xs text-gray-400">播放量</span>
           </div>
-          <div className="w-32 h-16 flex justify-center flex-col items-center rounded-md border border-[#FF8492]">
+          <div className="w-32 h-16 flex justify-center flex-col items-center rounded-xl border border-[#FF8492] bg-[#FF8492] bg-opacity-20">
             <span className="text-xl font-medium">9.9W</span>
             <span className="text-xs text-gray-400">空间访客</span>
           </div>
-          <div className="w-32 h-16 flex justify-center flex-col items-center rounded-md">
+          <div className="w-32 h-16 flex justify-center flex-col items-center rounded-xl">
             <span className="text-xl font-medium">99.9W</span>
             <span className="text-xs text-gray-400">订阅量</span>
           </div>
@@ -124,7 +124,7 @@ export default function Page() {
                   <span className="text-[#BBB] text-xs ml-2">9999</span>
                 </div>
                 <div className="text-[#BBB] flex items-center" onClick={() => { openPost(i) }}>
-                  <span>{v.isOpen?'收起':'详细'}</span>
+                  <span>{v.isOpen ? '收起' : '详细'}</span>
                   <IconWithImage url="/icons/profile/icon-bt.png" width={14} height={14} color={'#BBB'} />
                 </div>
               </div>
