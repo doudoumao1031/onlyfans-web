@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import {useState} from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -118,31 +118,31 @@ function Word({ word }: { word: string }) {
 function Video({ src, placeholder }: { src: string; placeholder: string }) {
   const [showVideo, setShowVideo] = useState(false);
 
-  return (
-    <div className="w-full">
-      {showVideo ? (
-        <video
-          src={src}
-          className="w-full rounded-lg"
-          controls
-          autoPlay
-          preload="none"
-        />
-      ) : (
-        <div
-          onTouchEnd={() => setShowVideo(true)}
-          className="w-full flex justify-center items-center w-full h-48 bg-cover rounded-lg"
-          style={{
-            backgroundImage: `url(${placeholder})`,
-          }}
-        >
-          <div className="bg-black/50 w-20 h-20 rounded-full flex justify-center items-center">
-            <Image src="/icons/play.png" width={40} height={40} alt="play" />
-          </div>
+    return (
+        <div className="w-full">
+            {showVideo ? (
+                <video
+                    src={src}
+                    className="w-full rounded-lg"
+                    controls
+                    autoPlay
+                    preload="none"
+                />
+            ) : (
+                <div
+                    onTouchEnd={() => setShowVideo(true)}
+                    className="w-full flex justify-center items-center w-full h-48 bg-cover rounded-lg"
+                    style={{
+                        backgroundImage: `url(${placeholder})`,
+                    }}
+                >
+                    <div className="bg-black/50 w-20 h-20 rounded-full flex justify-center items-center">
+                        <Image src="/icons/play.png" width={40} height={40} alt="play"/>
+                    </div>
+                </div>
+            )}
         </div>
-      )}
-    </div>
-  );
+    );
 }
 
 function UserHomePageLink({ userId }: { userId: string }) {

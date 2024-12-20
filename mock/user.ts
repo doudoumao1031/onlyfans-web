@@ -1,0 +1,52 @@
+export type User = {
+    name: string,
+    id: string,
+    avatar: string,
+    backgroundImage: string,
+    about?: string,
+    addNum?:number,
+    photo?:number,
+    video?:number,
+}
+
+export const users:User[] = [
+    {
+        name: "Jamie Shon",
+        id: "jamieshon",
+        avatar: "/mock/avatar.jpg",
+        backgroundImage: "/mock/usercard-background.jpg",
+        about: "各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折",
+        addNum: 36,
+        photo: 37,
+        video: 38,
+    },
+    {
+        name: "多米洛",
+        id: "duomiluogirl",
+        avatar: "/mock/avatar1.jpg",
+        backgroundImage: "/mock/header_image1.jpg",
+        about: "各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折",
+        addNum: 46,
+        photo: 47,
+        video: 48,
+    },
+    {
+        name: "Lin Lin",
+        id: "linlin",
+        avatar: "/mock/avatar2.jpg",
+        backgroundImage: "/mock/header_image2.jpg",
+        about: "各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折",
+        addNum: 56,
+        photo: 57,
+        video: 58,
+    },
+    {
+        name: "吐司女孩",
+        id: "tusibaby",
+        avatar: "/mock/avatar3.jpg",
+        backgroundImage: "/mock/header_image3.jpg",
+        addNum: 76,
+        photo: 77,
+        video: 78,
+    },
+]
