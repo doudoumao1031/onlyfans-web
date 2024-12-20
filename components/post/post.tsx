@@ -1,28 +1,28 @@
-"use client";
+"use client"
 
-import {useState} from "react";
-import Image from "next/image";
-import Link from "next/link";
+import React, { ReactElement, useState } from "react"
+import Image from "next/image"
+import Link from "next/link"
 
 export default function Post({ data }: { data: PostData }) {
   const {
     poster,
     description,
-    video,
+    media,
     subscribe,
     likeCount,
     commentCount,
     tipCount,
     shareCount,
     saveCount,
-  } = data;
+  } = data
 
   return (
     <div className="w-full flex flex-col gap-2 border-b border-black/5">
       <UserTitle user={poster} />
       <Description text={description} />
       <UserHomePageLink userId={poster.id} />
-      <Video src={video.src} placeholder={video.placeholder} />
+      <Media data={media} />
       <div className="">
         {subscribe.map((user) => (
           <SubscribeCard key={user.id} user={user} />
@@ -36,7 +36,7 @@ export default function Post({ data }: { data: PostData }) {
         <Save count={saveCount} />
       </div>
     </div>
-  );
+  )
 }
 
 function SubscribeCard({ user }: { user: User }) {
@@ -62,7 +62,7 @@ function SubscribeCard({ user }: { user: User }) {
         </button>
       </div>
     </div>
-  );
+  )
 }
 
 function UserTitle({ user }: { user: User }) {
@@ -76,7 +76,7 @@ function UserTitle({ user }: { user: User }) {
         <div className="text-black/50 text-xs">@{user.id}</div>
       </div>
     </div>
-  );
+  )
 }
 
 function Avatar({ src, width = "w-18" }: { src: string; width?: string }) {
@@ -88,18 +88,18 @@ function Avatar({ src, width = "w-18" }: { src: string; width?: string }) {
       width={50}
       height={50}
     />
-  );
+  )
 }
 
 function Description({ text }: { text: string }) {
-  const words = text.split(" ");
+  const words = text.split(" ")
   return (
     <div className="px-3">
       {words.map((w, i) => (
         <Word key={i} word={w} />
       ))}
     </div>
-  );
+  )
 }
 
 function Word({ word }: { word: string }) {
@@ -112,37 +112,105 @@ function Word({ word }: { word: string }) {
     </Link>
   ) : (
     <span>{word} </span>
-  );
+  )
 }
 
-function Video({ src, placeholder }: { src: string; placeholder: string }) {
-  const [showVideo, setShowVideo] = useState(false);
-
-    return (
-        <div className="w-full">
-            {showVideo ? (
-                <video
-                    src={src}
-                    className="w-full rounded-lg"
-                    controls
-                    autoPlay
-                    preload="none"
-                />
+function Media({ data }: { data: (VideoData | ImageData)[] }) {
+  return (
+    <div className="grid grid-cols-3 gap-2">
+      {data.map(({ src, type, thumbnail }, i) => (
+        <Thumbnail
+          key={i}
+          largeElement={
+            type === MediaType.Video ? (
+              <video src={src} controls autoPlay className="w-full" />
             ) : (
-                <div
-                    onTouchEnd={() => setShowVideo(true)}
-                    className="w-full flex justify-center items-center w-full h-48 bg-cover rounded-lg"
-                    style={{
-                        backgroundImage: `url(${placeholder})`,
-                    }}
-                >
-                    <div className="bg-black/50 w-20 h-20 rounded-full flex justify-center items-center">
-                        <Image src="/icons/play.png" width={40} height={40} alt="play"/>
-                    </div>
+              <Image
+                className="w-full"
+                src={src}
+                alt=""
+                width={900}
+                height={500}
+              />
+            )
+          }
+          thumbnailElement={
+            type === MediaType.Video ? (
+              <div
+                className="aspect-square flex justify-center items-center bg-cover rounded-md"
+                style={{
+                  backgroundImage: `url(${thumbnail})`,
+                }}
+              >
+                <div className="bg-black/50 w-10 h-10 rounded-full flex justify-center items-center">
+                  <Image
+                    src="/icons/play.png"
+                    width={20}
+                    height={20}
+                    alt="play"
+                  />
                 </div>
-            )}
-        </div>
-    );
+              </div>
+            ) : (
+              <Image
+                className="aspect-square rounded-md"
+                src={thumbnail}
+                alt=""
+                width={200}
+                height={200}
+              />
+            )
+          }
+        />
+      ))}
+    </div>
+  )
+}
+
+function Thumbnail({
+  largeElement,
+  thumbnailElement,
+}: {
+  largeElement: ReactElement
+  thumbnailElement: ReactElement
+}) {
+  const [showLarge, setShowLarge] = useState(false)
+
+  return (
+    <div>
+      {showLarge ? (
+        <FullScreen onExit={() => setShowLarge(false)}>
+          {largeElement}
+        </FullScreen>
+      ) : (
+        <div onTouchEnd={() => setShowLarge(true)}>{thumbnailElement}</div>
+      )}
+    </div>
+  )
+}
+
+function FullScreen({
+  children,
+  onExit,
+}: {
+  children: ReactElement
+  onExit: () => void
+}) {
+  return (
+    <div
+      className="fixed top-0 left-0 w-screen h-screen bg-black/90 z-50 flex items-center"
+      onTouchEnd={handleTouch}
+    >
+      {children}
+    </div>
+  )
+
+  function handleTouch(e: React.TouchEvent) {
+    e.preventDefault()
+    if (e.target === e.currentTarget) {
+      onExit()
+    }
+  }
 }
 
 function UserHomePageLink({ userId }: { userId: string }) {
@@ -150,15 +218,15 @@ function UserHomePageLink({ userId }: { userId: string }) {
     <Link href={buildUserHomePagePath(userId)} className="px-3 text-sky-400">
       {buildUserHomePagePathForDisplay(userId)}
     </Link>
-  );
+  )
 }
 
 function Like({ count }: { count: number }) {
-  return <Stats icon="/icons/like.png" value={count} />;
+  return <Stats icon="/icons/like.png" value={count} />
 }
 
 function Comment({ count }: { count: number }) {
-  return <Stats icon="/icons/comment.png" value={count} />;
+  return <Stats icon="/icons/comment.png" value={count} />
 }
 
 function Tip({ user, count }: { user: User; count: number }) {
@@ -166,15 +234,15 @@ function Tip({ user, count }: { user: User; count: number }) {
     <Link href={`/tip/${user.id}`} className="flex items-center">
       <Stats icon="/icons/tip.png" value={count} />
     </Link>
-  );
+  )
 }
 
 function Share({ count }: { count: number }) {
-  return <Stats icon="/icons/share.png" value={count} />;
+  return <Stats icon="/icons/share.png" value={count} />
 }
 
 function Save({ count }: { count: number }) {
-  return <Stats icon="/icons/save.png" value={count} />;
+  return <Stats icon="/icons/save.png" value={count} />
 }
 
 function Stats({ icon, value }: { icon: string; value: number }) {
@@ -183,74 +251,58 @@ function Stats({ icon, value }: { icon: string; value: number }) {
       <Image src={icon} width={20} height={20} alt="" />
       <span className="text-xs">{value}</span>
     </div>
-  );
+  )
 }
 
 function buildUserHomePagePath(userId: string) {
-  return `/${userId}`;
+  return `/${userId}`
 }
 
 function buildUserHomePagePathForDisplay(userId: string) {
-  return `secretfans.com/${userId}`;
+  return `secretfans.com/${userId}`
 }
 
 function isMention(word: string) {
-  return word.length > 1 && word.charAt(0) === "@";
+  return word.length > 1 && word.charAt(0) === "@"
 }
 
 function getUserIdFromMention(mention: string) {
-  return mention.substring(1);
+  return mention.substring(1)
 }
 
-export const fakeData = {
-  id: "123",
-  poster: {
-    name: "Jamie Shon",
-    id: "jamieshon",
-    avatar: "/mock/avatar.jpg",
-  },
-  description:
-    "Jamie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon @luvjamxoxo 带您踏上文化之旅，展示韩国烧烤、香草护肤品、各种泡菜等等！您一定想错过这个充满动感的剧集！",
-  video: {
-    placeholder: "/mock/video-preview.jpg",
-    src: "https://cdn2.onlyfans.com/files/9/9d/9d411da609fa1fc0822f9f078e3f53aa/0hwpqw9hlk7lfm9esxbiv_720p.mp4?Tag=2&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6XC9cL2NkbjIub25seWZhbnMuY29tXC9maWxlc1wvOVwvOWRcLzlkNDExZGE2MDlmYTFmYzA4MjJmOWYwNzhlM2Y1M2FhXC8waHdwcXc5aGxrN2xmbTllc3hiaXZfNzIwcC5tcDQ~VGFnPTIiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3MzQ2OTg1NjN9LCJJcEFkZHJlc3MiOnsiQVdTOlNvdXJjZUlwIjoiMTMuMjE0LjIzMi4yMjJcLzMyIn19fV19&Signature=RwXHHF5knvYyMoI2w9Sq73avdpN~5BXPPNNTIyksu8kDlkccaa3N0MjU0L-IZZRhGzccniKbsHYq6nDa-aur8zaZBQ80bMQTTb6RlvIDBblKsS~aipcggkm43i~1aWvZ1Ac5v5nb-an-mof4LL-0ukPK0Wp~HaCoOHR3o9aEeRAhWBGwjnHqvaU7QK3GhTQd6wisZEcsV0RQdykf5biJYfo~vDQZ-FdHdAdzWAYFWxXZCrKjglbuYqzdJiP47rYZPbtPpW4PqBBt0i7FJJGTuRlezUzKKsN~bKL9y-4Q-fFnYO2jcwLJk66FFNyqUbNmU~EUOzceaISQyVD09A9luw__&Key-Pair-Id=APKAUSX4CWPPATFK2DGD",
-  },
-  subscribe: [
-    {
-      name: "Jamie Shon",
-      id: "jamieshon",
-      avatar: "/mock/avatar.jpg",
-      background: "/mock/usercard-background.jpg",
-    },
-  ],
-  likeCount: 999,
-  commentCount: 999,
-  saveCount: 999,
-  shareCount: 999,
-  tipCount: 999,
-};
-
-interface PostData {
-  id: string;
-  poster: User;
-  description: string;
-  video: Video;
-  subscribe: User[];
-  likeCount: number;
-  commentCount: number;
-  saveCount: number;
-  shareCount: number;
-  tipCount: number;
+export interface PostData {
+  id: string
+  poster: User
+  description: string
+  media: (VideoData | ImageData)[]
+  subscribe: User[]
+  likeCount: number
+  commentCount: number
+  saveCount: number
+  shareCount: number
+  tipCount: number
 }
 
 interface User {
-  id: string;
-  name: string;
-  avatar: string;
-  background: string;
+  id: string
+  name: string
+  avatar: string
+  background: string
 }
 
-interface Video {
-  placeholder: string;
-  src: string;
+export enum MediaType {
+  Video,
+  Image,
+}
+
+interface VideoData {
+  src: string
+  thumbnail: string
+  type: MediaType.Video
+}
+
+interface ImageData {
+  src: string
+  thumbnail: string
+  type: MediaType.Image
 }
