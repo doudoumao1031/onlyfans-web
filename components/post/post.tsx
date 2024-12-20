@@ -4,8 +4,19 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Feed({ data }) {
-  const { poster, description, video, subscribe, actions } = data;
+export default function Post({ data }) {
+  const {
+    id,
+    poster,
+    description,
+    video,
+    subscribe,
+    likeCount,
+    commentCount,
+    tipCount,
+    shareCount,
+    saveCount,
+  } = data;
 
   return (
     <div className="w-full flex flex-col gap-2 border-b border-black/5">
@@ -19,9 +30,11 @@ export default function Feed({ data }) {
         ))}
       </div>
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
-        {actions.map(({ name, value, link }) => (
-          <Action key={name} name={name} value={value} link={link} />
-        ))}
+        <Like feedId={id} count={likeCount} />
+        <Comment feedId={id} count={commentCount} />
+        <Tip user={poster} count={tipCount} />
+        <Share feedId={id} count={shareCount} />
+        <Save feedId={id} count={saveCount} />
       </div>
     </div>
   );
@@ -63,15 +76,6 @@ function UserTitle({ user }) {
         <div className="text-lg">{user.name}</div>
         <div className="text-black/50 text-xs">@{user.id}</div>
       </div>
-    </div>
-  );
-}
-
-function Action({ name, value, link }) {
-  return (
-    <div className="flex gap-1 items-center">
-      <Image src={`/icons/${name}.png`} width={20} height={20} alt={name} />
-      <span className="text-xs">{value}</span>
     </div>
   );
 }
@@ -150,6 +154,39 @@ function UserHomePageLink({ userId }) {
   );
 }
 
+function Like({ feedId, count }) {
+  return <Stats icon="/icons/like.png" value={count} />;
+}
+
+function Comment({ feedId, count }) {
+  return <Stats icon="/icons/comment.png" value={count} />;
+}
+
+function Tip({ user, count }) {
+  return (
+    <Link href={`/tip/${user.id}`} className="flex items-center">
+      <Stats icon="/icons/tip.png" value={count} />
+    </Link>
+  );
+}
+
+function Share({ feedId, count }) {
+  return <Stats icon="/icons/share.png" value={count} />;
+}
+
+function Save({ feedId, count }) {
+  return <Stats icon="/icons/save.png" value={count} />;
+}
+
+function Stats({ icon, value }) {
+  return (
+    <div className="flex gap-1 items-center">
+      <Image src={icon} width={20} height={20} alt="" />
+      <span className="text-xs">{value}</span>
+    </div>
+  );
+}
+
 function buildUserHomePagePath(userId) {
   return `/${userId}`;
 }
@@ -186,11 +223,9 @@ export const fakeData = {
       backgroundImage: "/mock/usercard-background.jpg",
     },
   ],
-  actions: [
-    { name: "like", value: 999 },
-    { name: "comment", value: 999 },
-    { name: "tip", value: 999 },
-    { name: "share", value: 999 },
-    { name: "save", value: 999 },
-  ],
+  likeCount: 999,
+  commentCount: 999,
+  saveCount: 999,
+  shareCount: 999,
+  tipCount: 999,
 };

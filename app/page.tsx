@@ -1,4 +1,4 @@
-import Feed, { fakePostData } from "@/components/post/feed";
+import Feed, { fakePostData } from "@/components/post/post";
 
 export default function Home() {
   return (
