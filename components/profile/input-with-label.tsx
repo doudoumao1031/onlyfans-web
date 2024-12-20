@@ -1,5 +1,8 @@
-import {ReactNode, InputHTMLAttributes} from "react";
+"use client";
+import {ReactNode, InputHTMLAttributes, useState, useMemo, HTMLAttributes} from "react";
 import clsx from "clsx";
+import IconWithImage from "@/components/profile/icon";
+import SheetSelect, {ISelectOption} from "@/components/common/sheet-select";
 
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -7,17 +10,55 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     name: string,
     value: string,
     disabled?: boolean,
-    description?: ReactNode
+    description?: ReactNode,
+    options?: ISelectOption[],
+    onInputChange?: (value: string) => void,
 }
 
-export default function InputWithLabel({label, name, disabled, description, value, ...restProps}: InputProps) {
-    return <section className="relative pt-2.5">
+export default function InputWithLabel(props: InputProps) {
+    const {label, name, disabled, onInputChange, description, value, options} = props
+    const [val, setVal] = useState<string>(value ?? "")
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const isSelectInput = useMemo(() => {
+        return options !== undefined && Array.isArray(options)
+    }, [options])
+
+    const disableInput = useMemo(() => {
+        if (isSelectInput) return true
+        return disabled
+    }, [disabled, isSelectInput])
+
+    const handleInputTouch = () => {
+        if (!isSelectInput) return
+        setIsOpen(true)
+    }
+
+    return <section className={clsx(
+        "relative",
+        isSelectInput ? "pt-2.5" : "",
+        props.className
+    )}>
         <label className="absolute top-[4px] bg-white left-6 leading-none text-neutral-500"
                htmlFor={name}>{label}</label>
-        <input value={value} type="text" disabled={disabled} className={clsx(
-            "block w-full pt-[14px] pb-[14px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)]",
-            disabled ? "bg-[#F7F7F7]" : ""
-        )} {...restProps}/>
-        {description && <section className="text-neutral-500 text-xs pl-4 mt-1.5">{description}</section>}
+        <section className="flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)]">
+            <input value={val} onTouchEnd={handleInputTouch} onInput={event => {
+                const eventValue = (event.target as HTMLInputElement).value
+                setVal(eventValue)
+                onInputChange?.(eventValue)
+            }} type="text" disabled={disabled} readOnly={disableInput} className={clsx(
+                "flex-1 w-full",
+                disabled ? "bg-[#F7F7F7]" : ""
+            )} placeholder={props?.placeholder}/>
+            {isSelectInput &&
+              <SheetSelect
+                isOpen={isOpen}
+                setIsOpen={setIsOpen}
+                onInputChange={(v => {
+                    setVal(v)
+                    onInputChange?.(v)
+                })} options={options ?? []}><IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
+                                                           height={24} color={'#bbb'}/></SheetSelect>}
+        </section>
+        {description && <section className="text-neutral-500 text-xs px-4 mt-1.5">{description}</section>}
     </section>
 }
