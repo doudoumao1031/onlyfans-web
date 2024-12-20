@@ -130,12 +130,12 @@ export default function Page() {
 
     </div>
   }
-  return <SlideUpModal title="收藏夹" full showPageHeader>
-    {/* <Header title="收藏夹" /> */}
+  return <>
+    <Header title="收藏夹" />
     <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
     <div className="total-num p-4"><span className="text-gray-400">总数：</span>9999999</div>
     {active === 'blog' ? Blogs() : Posts()}
-  </SlideUpModal>
+  </>
 }
 
 
