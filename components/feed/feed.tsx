@@ -5,50 +5,44 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Feed({ data }) {
-  const { poster, description, video, mentioned, stats } = data;
+  const { poster, description, video, subscribe, actions } = data;
 
   return (
-    <div className="w-full flex flex-col gap-2">
-      <UserBrief user={poster} />
+    <div className="w-full flex flex-col gap-2 border-b border-black/5">
+      <UserTitle user={poster} />
       <Description text={description} />
       <UserHomePageLink userId={poster.id} />
       <Video src={video.src} placeholder={video.placeholder} />
-      <div className="px-3">
-        {mentioned.map((user) => (
-          <UserCard key={user.id} user={user} />
+      <div className="">
+        {subscribe.map((user) => (
+          <SubscribeCard key={user.id} user={user} />
         ))}
       </div>
-      <div className="px-3 flex gap-4 justify-between opacity-30">
-        <Action name="点赞" iconName="like" />
-        <Action name="留言" iconName="comment" />
-        <Link href={`/explore/tip/1`}>  
-          <Action name="打赏" iconName="tip" />
-        </Link>
-        <Action name="分享" iconName="share" />
-        <Action name="保存" iconName="save" />
+      <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
+        {actions.map(({ name, value, link }) => (
+          <Action key={name} name={name} value={value} link={link} />
+        ))}
       </div>
     </div>
   );
 }
 
-function UserCard({ user }) {
+function SubscribeCard({ user }) {
   return (
-    <div className="flex justify-center w-full bg-black rounded-lg">
-      <Image
-        src={user.backgroundImage}
-        width={280}
-        height={120}
-        alt=""
-        className="w-full rounded-lg opacity-50"
-      />
-      <div className="w-full absolute self-center flex justify-around">
+    <div
+      className="w-full rounded-lg bg-cover"
+      style={{
+        backgroundImage: `url(${user.backgroundImage})`,
+      }}
+    >
+      <div className="w-full h-full flex justify-between bg-black/50 p-3 rounded-lg">
         <div className="flex gap-4 px-3 items-center">
           <div>
             <Avatar src={user.avatar} width="w-24" />
           </div>
           <div className="text-white">
-            <div>{user.name}</div>
-            <div>@{user.id}</div>
+            <div className="text-lg">{user.name}</div>
+            <div className="text-white/75 text-xs">@{user.id}</div>
           </div>
         </div>
         <button className="bg-black opacity-65 text-white text-xs self-start px-1 py-1 rounded-lg">
@@ -59,25 +53,25 @@ function UserCard({ user }) {
   );
 }
 
-function UserBrief({ user }) {
+function UserTitle({ user }) {
   return (
     <div className="flex gap-4 px-3">
       <div>
         <Avatar src={user.avatar} />
       </div>
       <div>
-        <div>{user.name}</div>
-        <div>@{user.id}</div>
+        <div className="text-lg">{user.name}</div>
+        <div className="text-black/50 text-xs">@{user.id}</div>
       </div>
     </div>
   );
 }
 
-function Action({ name, iconName }) {
+function Action({ name, value, link }) {
   return (
     <div className="flex gap-1 items-center">
-      <Image src={`/icons/${iconName}.png`} width={20} height={20} alt={name} />
-      <span className="text-xs">{name}</span>
+      <Image src={`/icons/${name}.png`} width={20} height={20} alt={name} />
+      <span className="text-xs">{value}</span>
     </div>
   );
 }
@@ -124,20 +118,22 @@ function Video({ src, placeholder }) {
   return (
     <div className="w-full">
       {showVideo ? (
-        <video src={src} className="w-full" controls autoPlay preload="none" />
+        <video
+          src={src}
+          className="w-full rounded-lg"
+          controls
+          autoPlay
+          preload="none"
+        />
       ) : (
         <div
           onTouchEnd={() => setShowVideo(true)}
-          className="w-full flex justify-center"
+          className="w-full flex justify-center items-center w-full h-48 bg-cover rounded-lg"
+          style={{
+            backgroundImage: `url(${placeholder})`,
+          }}
         >
-          <Image
-            src={placeholder}
-            width={320}
-            height={180}
-            alt="video thumbmail"
-            className="w-full"
-          />
-          <div className="absolute self-center bg-white opacity-75 w-20 h-20 rounded-full flex justify-center items-center">
+          <div className="bg-black/50 w-20 h-20 rounded-full flex justify-center items-center">
             <Image src="/icons/play.png" width={40} height={40} alt="play" />
           </div>
         </div>
@@ -170,7 +166,7 @@ function getUserIdFromMention(mention) {
   return mention.substring(1);
 }
 
-export const fakePostData = {
+export const fakeData = {
   poster: {
     name: "Jamie Shon",
     id: "jamieshon",
@@ -180,9 +176,9 @@ export const fakePostData = {
     "Jamie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon @luvjamxoxo 带您踏上文化之旅，展示韩国烧烤、香草护肤品、各种泡菜等等！您一定想错过这个充满动感的剧集！",
   video: {
     placeholder: "/mock/video-preview.jpg",
-    src: "https://cdn2.onlyfans.com/files/c/cd/cde2b8e253806ace979d48cfe28d8343/0hvzbf835nlhf4y3o4cuk_source.mp4?Tag=2&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6XC9cL2NkbjIub25seWZhbnMuY29tXC9maWxlc1wvY1wvY2RcL2NkZTJiOGUyNTM4MDZhY2U5NzlkNDhjZmUyOGQ4MzQzXC8waHZ6YmY4MzVubGhmNHkzbzRjdWtfc291cmNlLm1wND9UYWc9MiIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTczNDU2MDIzMX0sIklwQWRkcmVzcyI6eyJBV1M6U291cmNlSXAiOiIxMy4yMTQuMjMyLjIyMlwvMzIifX19XX0_&Signature=QebcUcZm1zi8EhLi17spfwaw9lKnlI-i75Fp5dpi9LhekAiSpsMTGvw~636LUj930PpGw~EXIWCgeoZyGCkmRDPdcZ3YpRHrxJxUvYWHCZ0eCcWgM6MHVe6mT42uK7r9U3pRlJsF2T~xwIjQ2AO7xB9uAqMls4thPPRDH5jQfi66j2MM7hTD040UXXRZR8C4GGVK-KSRx0jXxZtSztq-4zeFvIq-tKk24INxluqMivN5O8NLlL2T43QAdrJvxp3TDrUkWDIdVtXdnZrfwXkkl6BOhYCPjljebT2bXYYqFYcO~aG790y~5aeJs3SCHNQqTmdyn2orD4TySyWBWVAwew__&Key-Pair-Id=APKAUSX4CWPPATFK2DGD",
+    src: "https://cdn2.onlyfans.com/files/9/9d/9d411da609fa1fc0822f9f078e3f53aa/0hwpqw9hlk7lfm9esxbiv_720p.mp4?Tag=2&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6XC9cL2NkbjIub25seWZhbnMuY29tXC9maWxlc1wvOVwvOWRcLzlkNDExZGE2MDlmYTFmYzA4MjJmOWYwNzhlM2Y1M2FhXC8waHdwcXc5aGxrN2xmbTllc3hiaXZfNzIwcC5tcDQ~VGFnPTIiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE3MzQ2OTg1NjN9LCJJcEFkZHJlc3MiOnsiQVdTOlNvdXJjZUlwIjoiMTMuMjE0LjIzMi4yMjJcLzMyIn19fV19&Signature=RwXHHF5knvYyMoI2w9Sq73avdpN~5BXPPNNTIyksu8kDlkccaa3N0MjU0L-IZZRhGzccniKbsHYq6nDa-aur8zaZBQ80bMQTTb6RlvIDBblKsS~aipcggkm43i~1aWvZ1Ac5v5nb-an-mof4LL-0ukPK0Wp~HaCoOHR3o9aEeRAhWBGwjnHqvaU7QK3GhTQd6wisZEcsV0RQdykf5biJYfo~vDQZ-FdHdAdzWAYFWxXZCrKjglbuYqzdJiP47rYZPbtPpW4PqBBt0i7FJJGTuRlezUzKKsN~bKL9y-4Q-fFnYO2jcwLJk66FFNyqUbNmU~EUOzceaISQyVD09A9luw__&Key-Pair-Id=APKAUSX4CWPPATFK2DGD",
   },
-  mentioned: [
+  subscribe: [
     {
       name: "Jamie Shon",
       id: "jamieshon",
@@ -190,10 +186,11 @@ export const fakePostData = {
       backgroundImage: "/mock/usercard-background.jpg",
     },
   ],
-  stats: {
-    likes: 99,
-    comments: 99,
-    shared: 99,
-    saved: 99,
-  },
+  actions: [
+    { name: "like", value: 999 },
+    { name: "comment", value: 999 },
+    { name: "tip", value: 999 },
+    { name: "share", value: 999 },
+    { name: "save", value: 999 },
+  ],
 };
