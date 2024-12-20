@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { debounce } from "lodash";
 import useSWR from "swr";
-import Feed, { fakePostData } from "@/components/post/feed";
+import Feed, { fakeData } from "@/components/feed/feed";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -88,7 +88,7 @@ export default function InfiniteScroll({
     <div ref={containerRef} className="h-full w-full overflow-scroll">
       <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
         {items.map((item, index) => (
-          <Feed key={index} data={fakePostData} />
+          <Feed key={index} data={fakeData} />
         ))}
       </div>
       {isValidating && (

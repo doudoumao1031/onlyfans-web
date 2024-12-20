@@ -170,7 +170,7 @@ function getUserIdFromMention(mention) {
   return mention.substring(1);
 }
 
-export const fakePostData = {
+export const fakeData = {
   poster: {
     name: "Jamie Shon",
     id: "jamieshon",
