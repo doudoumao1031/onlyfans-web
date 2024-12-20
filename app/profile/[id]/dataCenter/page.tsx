@@ -124,13 +124,13 @@ export default function Page() {
                   <span className="text-[#BBB] text-xs ml-2">9999</span>
                 </div>
                 <div className="text-[#BBB] flex items-center" onClick={() => { openPost(i) }}>
-                  <span>详细</span>
+                  <span>{v.isOpen?'收起':'详细'}</span>
                   <IconWithImage url="/icons/profile/icon-bt.png" width={14} height={14} color={'#BBB'} />
                 </div>
               </div>
             </div>
           </div>
-          <div className={`flex flex-wrap mt-3 mb-3 overflow-hidden ${v.isOpen ? 'h-auto' : 'h-0'}`}>
+          <div className={`flex flex-wrap mt-3 mb-3 overflow-hidden transition-all duration-1000 ${v.isOpen ? 'h-auto' : 'h-0'}`}>
             <div className="w-2/6 flex justify-center items-center flex-col mt-3 mb-3">
               <span className="text-[20px] font-medium">99999</span>
               <span className="text-xs text-[#959595]">播放</span>
@@ -162,10 +162,9 @@ export default function Page() {
     </div>
   }
   const openPost = (i: number) => {
-    console.log(i, 'i-------');
-
-    mockPosts[i].isOpen = !mockPosts[i].isOpen
-    setPosts(mockPosts)
+    const postData = JSON.parse(JSON.stringify(posts))
+    postData[i].isOpen = !postData[i].isOpen
+    setPosts(postData)
 
   }
   return <>
