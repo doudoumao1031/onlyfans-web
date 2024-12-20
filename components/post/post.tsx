@@ -10,11 +10,11 @@ export default function Post({ data }: { data: PostData }) {
     description,
     media,
     subscribe,
-    likeCount,
-    commentCount,
-    tipCount,
-    shareCount,
-    saveCount,
+    like,
+    comment,
+    tip,
+    share,
+    save,
   } = data
 
   return (
@@ -29,11 +29,11 @@ export default function Post({ data }: { data: PostData }) {
         ))}
       </div>
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
-        <Like count={likeCount} />
-        <Comment count={commentCount} />
-        <Tip user={poster} count={tipCount} />
-        <Share count={shareCount} />
-        <Save count={saveCount} />
+        <Like count={like.count} liked={like.liked} />
+        <Comment count={comment.count} />
+        <Tip user={poster} count={tip.count} />
+        <Share count={share.count} shared={share.shared} />
+        <Save count={save.count} saved={save.saved} />
       </div>
     </div>
   )
@@ -220,8 +220,8 @@ function UserHomePageLink({ userId }: { userId: string }) {
   )
 }
 
-function Like({ count }: { count: number }) {
-  return <Stats icon="/icons/like.png" value={count} />
+function Like({ count, liked }: { count: number; liked: boolean }) {
+  return <Stats icon="/icons/like.png" value={count} highlight={liked} />
 }
 
 function Comment({ count }: { count: number }) {
@@ -236,17 +236,25 @@ function Tip({ user, count }: { user: User; count: number }) {
   )
 }
 
-function Share({ count }: { count: number }) {
-  return <Stats icon="/icons/share.png" value={count} />
+function Share({ count, shared }: { count: number; shared: boolean }) {
+  return <Stats icon="/icons/share.png" value={count} highlight={shared} />
 }
 
-function Save({ count }: { count: number }) {
-  return <Stats icon="/icons/save.png" value={count} />
+function Save({ count, saved }: { count: number; saved: boolean }) {
+  return <Stats icon="/icons/save.png" value={count} highlight={saved} />
 }
 
-function Stats({ icon, value }: { icon: string; value: number }) {
+function Stats({
+  icon,
+  value,
+  highlight = false,
+}: {
+  icon: string
+  value: number
+  highlight?: boolean
+}) {
   return (
-    <div className="flex gap-1 items-center">
+    <div className={`flex gap-1 items-center ${highlight && "text-red-500"}`}>
       <Image src={icon} width={20} height={20} alt="" />
       <span className="text-xs">{value}</span>
     </div>
@@ -275,11 +283,11 @@ export interface PostData {
   description: string
   media: (VideoData | ImageData)[]
   subscribe: User[]
-  likeCount: number
-  commentCount: number
-  saveCount: number
-  shareCount: number
-  tipCount: number
+  like: { count: number; liked: boolean }
+  share: { count: number; shared: boolean }
+  save: { count: number; saved: boolean }
+  tip: { count: number }
+  comment: { count: number }
 }
 
 interface User {
