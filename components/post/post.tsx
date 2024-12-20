@@ -206,7 +206,6 @@ function FullScreen({
   )
 
   function handleTouch(e: React.TouchEvent) {
-    e.preventDefault()
     if (e.target === e.currentTarget) {
       onExit()
     }
