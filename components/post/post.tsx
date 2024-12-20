@@ -4,9 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Post({ data }) {
+export default function Post({ data }: { data: PostData }) {
   const {
-    id,
     poster,
     description,
     video,
@@ -30,22 +29,22 @@ export default function Post({ data }) {
         ))}
       </div>
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
-        <Like feedId={id} count={likeCount} />
-        <Comment feedId={id} count={commentCount} />
+        <Like count={likeCount} />
+        <Comment count={commentCount} />
         <Tip user={poster} count={tipCount} />
-        <Share feedId={id} count={shareCount} />
-        <Save feedId={id} count={saveCount} />
+        <Share count={shareCount} />
+        <Save count={saveCount} />
       </div>
     </div>
   );
 }
 
-function SubscribeCard({ user }) {
+function SubscribeCard({ user }: { user: User }) {
   return (
     <div
       className="w-full rounded-lg bg-cover"
       style={{
-        backgroundImage: `url(${user.backgroundImage})`,
+        backgroundImage: `url(${user.background})`,
       }}
     >
       <div className="w-full h-full flex justify-between bg-black/50 p-3 rounded-lg">
@@ -66,7 +65,7 @@ function SubscribeCard({ user }) {
   );
 }
 
-function UserTitle({ user }) {
+function UserTitle({ user }: { user: User }) {
   return (
     <div className="flex gap-4 px-3">
       <div>
@@ -80,7 +79,7 @@ function UserTitle({ user }) {
   );
 }
 
-function Avatar({ src, width = "w-18" }) {
+function Avatar({ src, width = "w-18" }: { src: string; width?: string }) {
   return (
     <Image
       src={src}
@@ -92,7 +91,7 @@ function Avatar({ src, width = "w-18" }) {
   );
 }
 
-function Description({ text }) {
+function Description({ text }: { text: string }) {
   const words = text.split(" ");
   return (
     <div className="px-3">
@@ -103,7 +102,7 @@ function Description({ text }) {
   );
 }
 
-function Word({ word }) {
+function Word({ word }: { word: string }) {
   return isMention(word) ? (
     <Link
       href={buildUserHomePagePath(getUserIdFromMention(word))}
@@ -116,7 +115,7 @@ function Word({ word }) {
   );
 }
 
-function Video({ src, placeholder }) {
+function Video({ src, placeholder }: { src: string; placeholder: string }) {
   const [showVideo, setShowVideo] = useState(false);
 
   return (
@@ -146,7 +145,7 @@ function Video({ src, placeholder }) {
   );
 }
 
-function UserHomePageLink({ userId }) {
+function UserHomePageLink({ userId }: { userId: string }) {
   return (
     <Link href={buildUserHomePagePath(userId)} className="px-3 text-sky-400">
       {buildUserHomePagePathForDisplay(userId)}
@@ -154,15 +153,15 @@ function UserHomePageLink({ userId }) {
   );
 }
 
-function Like({ feedId, count }) {
+function Like({ count }: { count: number }) {
   return <Stats icon="/icons/like.png" value={count} />;
 }
 
-function Comment({ feedId, count }) {
+function Comment({ count }: { count: number }) {
   return <Stats icon="/icons/comment.png" value={count} />;
 }
 
-function Tip({ user, count }) {
+function Tip({ user, count }: { user: User; count: number }) {
   return (
     <Link href={`/tip/${user.id}`} className="flex items-center">
       <Stats icon="/icons/tip.png" value={count} />
@@ -170,15 +169,15 @@ function Tip({ user, count }) {
   );
 }
 
-function Share({ feedId, count }) {
+function Share({ count }: { count: number }) {
   return <Stats icon="/icons/share.png" value={count} />;
 }
 
-function Save({ feedId, count }) {
+function Save({ count }: { count: number }) {
   return <Stats icon="/icons/save.png" value={count} />;
 }
 
-function Stats({ icon, value }) {
+function Stats({ icon, value }: { icon: string; value: number }) {
   return (
     <div className="flex gap-1 items-center">
       <Image src={icon} width={20} height={20} alt="" />
@@ -187,23 +186,24 @@ function Stats({ icon, value }) {
   );
 }
 
-function buildUserHomePagePath(userId) {
+function buildUserHomePagePath(userId: string) {
   return `/${userId}`;
 }
 
-function buildUserHomePagePathForDisplay(userId) {
+function buildUserHomePagePathForDisplay(userId: string) {
   return `secretfans.com/${userId}`;
 }
 
-function isMention(word) {
+function isMention(word: string) {
   return word.length > 1 && word.charAt(0) === "@";
 }
 
-function getUserIdFromMention(mention) {
+function getUserIdFromMention(mention: string) {
   return mention.substring(1);
 }
 
 export const fakeData = {
+  id: "123",
   poster: {
     name: "Jamie Shon",
     id: "jamieshon",
@@ -220,7 +220,7 @@ export const fakeData = {
       name: "Jamie Shon",
       id: "jamieshon",
       avatar: "/mock/avatar.jpg",
-      backgroundImage: "/mock/usercard-background.jpg",
+      background: "/mock/usercard-background.jpg",
     },
   ],
   likeCount: 999,
@@ -229,3 +229,28 @@ export const fakeData = {
   shareCount: 999,
   tipCount: 999,
 };
+
+interface PostData {
+  id: string;
+  poster: User;
+  description: string;
+  video: Video;
+  subscribe: User[];
+  likeCount: number;
+  commentCount: number;
+  saveCount: number;
+  shareCount: number;
+  tipCount: number;
+}
+
+interface User {
+  id: string;
+  name: string;
+  avatar: string;
+  background: string;
+}
+
+interface Video {
+  placeholder: string;
+  src: string;
+}
