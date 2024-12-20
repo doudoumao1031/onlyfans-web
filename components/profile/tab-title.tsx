@@ -9,6 +9,7 @@ export interface iTabTitleOption {
 export default function TabTitle({tabOptions, active, activeChange}: {
     tabOptions: iTabTitleOption[], active: string, activeChange: (value: string) => void
 }) {
+
     const activeClass = useCallback((name: string) => {
         if (active === name) {
             return `font-bold text-black `

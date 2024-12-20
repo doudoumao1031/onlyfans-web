@@ -1,33 +1,27 @@
-import Header from "@/components/profile/header";
+import Header from "@/components/common/header";
 import Image from "next/image";
 import Avatar from "@/components/profile/avatar";
 import PostsCard from "@/components/profile/posts-card";
 import IconWithImage from "@/components/profile/icon";
 import Link from "next/link";
 
-function HeaderRight() {
-  return (
-    <>
-      <IconWithImage
-        url="/icons/profile/icon-user-qr-code.png"
-        width={22}
-        height={22}
-      />
-      <IconWithImage
-        url="/icons/profile/icon-user-share.png"
-        width={22}
-        height={22}
-      />
-    </>
-  );
-}
-
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   return (
     <div>
       <div className="profile-content bg-[url('/demo/user_bg.png')]">
-        <Header right={HeaderRight()} title="My"/>
+        <Header right={<>
+          <IconWithImage
+              url="/icons/profile/icon_nav_code@3x.png"
+              width={22}
+              height={22}
+          />
+          <IconWithImage
+              url="/icons/profile/icon_fans_share@3x.png"
+              width={22}
+              height={22}
+          />
+        </>} title="My" backIconColor={'#fff'}/>
         <div className="text-xs pl-6 pr-6">
           各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折
         </div>
