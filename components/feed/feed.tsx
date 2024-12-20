@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function Feed({ data }) {
-  const { poster, description, video, subscribe } = data;
+  const { poster, description, video, subscribe, actions } = data;
 
   return (
     <div className="w-full flex flex-col gap-2 border-b border-black/5">
@@ -19,13 +19,9 @@ export default function Feed({ data }) {
         ))}
       </div>
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
-        <Action name="999" iconName="like" />
-        <Action name="999" iconName="comment" />
-        <Link href={`/explore/tip/1`}>
-          <Action name="999" iconName="tip" />
-        </Link>
-        <Action name="999" iconName="share" />
-        <Action name="999" iconName="save" />
+        {actions.map(({ name, value, link }) => (
+          <Action key={name} name={name} value={value} link={link} />
+        ))}
       </div>
     </div>
   );
@@ -71,11 +67,11 @@ function UserTitle({ user }) {
   );
 }
 
-function Action({ name, iconName }) {
+function Action({ name, value, link }) {
   return (
     <div className="flex gap-1 items-center">
-      <Image src={`/icons/${iconName}.png`} width={20} height={20} alt={name} />
-      <span className="text-xs">{name}</span>
+      <Image src={`/icons/${name}.png`} width={20} height={20} alt={name} />
+      <span className="text-xs">{value}</span>
     </div>
   );
 }
@@ -190,10 +186,11 @@ export const fakeData = {
       backgroundImage: "/mock/usercard-background.jpg",
     },
   ],
-  stats: {
-    likes: 99,
-    comments: 99,
-    shared: 99,
-    saved: 99,
-  },
+  actions: [
+    { name: "like", value: 999 },
+    { name: "comment", value: 999 },
+    { name: "tip", value: 999 },
+    { name: "share", value: 999 },
+    { name: "save", value: 999 },
+  ],
 };
