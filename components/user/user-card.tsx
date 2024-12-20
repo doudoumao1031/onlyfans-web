@@ -9,6 +9,7 @@ import {User} from "@/mock/user";
  * @constructor
  */
 export default function UserCard({user, subscribe}: { user: User, subscribe: boolean }) {
+
     return (
         <div className="flex justify-center w-full bg-black rounded-lg h-[120px]">
             <Image
