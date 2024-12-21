@@ -10,17 +10,17 @@ export default function Post({ data }: { data: PostData }) {
     description,
     media,
     subscribe,
-    likeCount,
-    commentCount,
-    tipCount,
-    shareCount,
-    saveCount,
+    like,
+    comment,
+    tip,
+    share,
+    save,
   } = data
 
   return (
     <div className="w-full flex flex-col gap-2 border-b border-black/5">
       <UserTitle user={poster} />
-      <Description text={description} />
+      <Description content={description} />
       <UserHomePageLink userId={poster.id} />
       <Media data={media} />
       <div className="">
@@ -29,11 +29,11 @@ export default function Post({ data }: { data: PostData }) {
         ))}
       </div>
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
-        <Like count={likeCount} />
-        <Comment count={commentCount} />
-        <Tip user={poster} count={tipCount} />
-        <Share count={shareCount} />
-        <Save count={saveCount} />
+        <Like count={like.count} liked={like.liked} />
+        <Comment count={comment.count} />
+        <Tip user={poster} count={tip.count} />
+        <Share count={share.count} shared={share.shared} />
+        <Save count={save.count} saved={save.saved} />
       </div>
     </div>
   )
@@ -91,27 +91,29 @@ function Avatar({ src, width = "w-18" }: { src: string; width?: string }) {
   )
 }
 
-function Description({ text }: { text: string }) {
-  const words = text.split(" ")
+function Description({ content }: { content: string }) {
+  const mentionRegex = /(\B@\w+)/g
+  const segments = content.split(mentionRegex)
+  console.log(segments)
   return (
     <div className="px-3">
-      {words.map((w, i) => (
-        <Word key={i} word={w} />
+      {segments.map((s, i) => (
+        <DescriptionSegment key={i} content={s} />
       ))}
     </div>
   )
 }
 
-function Word({ word }: { word: string }) {
-  return isMention(word) ? (
+function DescriptionSegment({ content }: { content: string }) {
+  return isMention(content) ? (
     <Link
-      href={buildUserHomePagePath(getUserIdFromMention(word))}
+      href={buildUserHomePagePath(getUserIdFromMention(content))}
       className="text-sky-400"
     >
-      {word}{" "}
+      {content}{" "}
     </Link>
   ) : (
-    <span>{word} </span>
+    <span>{content} </span>
   )
 }
 
@@ -206,7 +208,6 @@ function FullScreen({
   )
 
   function handleTouch(e: React.TouchEvent) {
-    e.preventDefault()
     if (e.target === e.currentTarget) {
       onExit()
     }
@@ -221,8 +222,8 @@ function UserHomePageLink({ userId }: { userId: string }) {
   )
 }
 
-function Like({ count }: { count: number }) {
-  return <Stats icon="/icons/like.png" value={count} />
+function Like({ count, liked }: { count: number; liked: boolean }) {
+  return <Stats icon="/icons/like.png" value={count} highlight={liked} />
 }
 
 function Comment({ count }: { count: number }) {
@@ -237,17 +238,25 @@ function Tip({ user, count }: { user: User; count: number }) {
   )
 }
 
-function Share({ count }: { count: number }) {
-  return <Stats icon="/icons/share.png" value={count} />
+function Share({ count, shared }: { count: number; shared: boolean }) {
+  return <Stats icon="/icons/share.png" value={count} highlight={shared} />
 }
 
-function Save({ count }: { count: number }) {
-  return <Stats icon="/icons/save.png" value={count} />
+function Save({ count, saved }: { count: number; saved: boolean }) {
+  return <Stats icon="/icons/save.png" value={count} highlight={saved} />
 }
 
-function Stats({ icon, value }: { icon: string; value: number }) {
+function Stats({
+  icon,
+  value,
+  highlight = false,
+}: {
+  icon: string
+  value: number
+  highlight?: boolean
+}) {
   return (
-    <div className="flex gap-1 items-center">
+    <div className={`flex gap-1 items-center ${highlight && "text-red-500"}`}>
       <Image src={icon} width={20} height={20} alt="" />
       <span className="text-xs">{value}</span>
     </div>
@@ -276,11 +285,11 @@ export interface PostData {
   description: string
   media: (VideoData | ImageData)[]
   subscribe: User[]
-  likeCount: number
-  commentCount: number
-  saveCount: number
-  shareCount: number
-  tipCount: number
+  like: { count: number; liked: boolean }
+  share: { count: number; shared: boolean }
+  save: { count: number; saved: boolean }
+  tip: { count: number }
+  comment: { count: number }
 }
 
 interface User {
