@@ -20,7 +20,7 @@ export default function Post({ data }: { data: PostData }) {
   return (
     <div className="w-full flex flex-col gap-2 border-b border-black/5">
       <UserTitle user={poster} />
-      <Description text={description} />
+      <Description content={description} />
       <UserHomePageLink userId={poster.id} />
       <Media data={media} />
       <div className="">
@@ -91,27 +91,29 @@ function Avatar({ src, width = "w-18" }: { src: string; width?: string }) {
   )
 }
 
-function Description({ text }: { text: string }) {
-  const words = text.split(" ")
+function Description({ content }: { content: string }) {
+  const mentionRegex = /(\B@\w+)/g
+  const segments = content.split(mentionRegex)
+  console.log(segments)
   return (
     <div className="px-3">
-      {words.map((w, i) => (
-        <Word key={i} word={w} />
+      {segments.map((s, i) => (
+        <DescriptionSegment key={i} content={s} />
       ))}
     </div>
   )
 }
 
-function Word({ word }: { word: string }) {
-  return isMention(word) ? (
+function DescriptionSegment({ content }: { content: string }) {
+  return isMention(content) ? (
     <Link
-      href={buildUserHomePagePath(getUserIdFromMention(word))}
+      href={buildUserHomePagePath(getUserIdFromMention(content))}
       className="text-sky-400"
     >
-      {word}{" "}
+      {content}{" "}
     </Link>
   ) : (
-    <span>{word} </span>
+    <span>{content} </span>
   )
 }
 
