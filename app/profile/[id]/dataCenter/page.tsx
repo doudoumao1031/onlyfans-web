@@ -1,5 +1,6 @@
 "use client";
-import Header from "@/components/profile/header";
+import Header from "@/components/common/header";
+
 import IconWithImage from "@/components/profile/icon";
 import TabTitle, { iTabTitleOption } from "@/components/profile/tab-title";
 import ChartsLine from "@/components/profile/chart-line";
@@ -168,7 +169,7 @@ export default function Page() {
 
   }
   return <>
-    <Header title="数据中心" />
+    <Header title="数据中心" titleColor="#000" />
     <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
     {active === 'views' ? Views() : Posts()}
   </>

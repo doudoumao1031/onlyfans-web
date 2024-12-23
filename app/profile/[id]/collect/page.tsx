@@ -1,5 +1,6 @@
 "use client";
-import Header from "@/components/profile/header";
+import Header from "@/components/common/header";
+
 import TabTitle, { iTabTitleOption } from "@/components/profile/tab-title";
 import { useState } from "react";
 import IconWithImage from "@/components/profile/icon";
@@ -131,7 +132,7 @@ export default function Page() {
     </div>
   }
   return <>
-    <Header title="收藏夹" />
+    <Header title="收藏夹" titleColor="#000" />
     <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
     <div className="total-num p-4"><span className="text-gray-400">总数：</span>9999999</div>
     {active === 'blog' ? Blogs() : Posts()}
