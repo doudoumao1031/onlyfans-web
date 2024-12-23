@@ -9,14 +9,16 @@ import {
 } from "@/components/ui/drawer";
 import ModalHeader from "@/components/common/modal-header";
 import React, {useState} from "react";
+import {clsx} from "clsx";
 
 
-export default function FormDrawer({children, headerRight, headerLeft, trigger, title}: {
+export default function FormDrawer({children, headerRight, headerLeft, trigger, title, className}: {
     children: React.ReactNode,
     title?: React.ReactNode,
     headerLeft?: (close: () => void) => React.ReactNode,
     headerRight?: (close: () => void) => React.ReactNode,
     trigger: React.ReactNode,
+    className?: string
 }) {
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const handleClose = () => setIsOpen(false)
@@ -24,7 +26,10 @@ export default function FormDrawer({children, headerRight, headerLeft, trigger, 
         <DrawerTrigger asChild>
             {trigger}
         </DrawerTrigger>
-        <DrawerContent className={"h-[95vh] bg-white"}>
+        <DrawerContent className={clsx(
+            "h-[95vh] bg-white",
+            className ?? ""
+        )}>
             <section className={"flex-1"}>
                 <DrawerHeader className={"hidden"}>
                     <DrawerTitle></DrawerTitle>
