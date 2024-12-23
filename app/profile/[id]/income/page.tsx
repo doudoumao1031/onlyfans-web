@@ -50,6 +50,7 @@ export default function Page() {
         </div>
         <div className="p-4">
             <ChartsLine />
+            <div></div>
         </div>
 
     </>
