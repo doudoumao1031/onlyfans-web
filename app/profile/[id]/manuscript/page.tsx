@@ -51,7 +51,7 @@ const ManuscriptMedia = () => {
                 <span className="text-main-pink text-xs">创建时间</span>
             </button>
         </div>
-        <section className="grid grid-cols-2 gap-3">
+        <section className="grid grid-cols-2 gap-3 mt-2">
             <section>
                 <section className="rounded-xl relative overflow-hidden text-xs">
                     <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5">
@@ -185,7 +185,7 @@ export default function Page() {
 
     return (
         <div>
-            <Header title="稿件管理" titleColor={'#000'} right={<Link href={"./draft"} className="text-main-pink text-base">草稿</Link>}>
+            <Header title="稿件管理" titleColor={'#000'} right={<Link href={"/profile/123/manuscript/draft"} className="text-main-pink text-base">草稿</Link>}>
             </Header>
             <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive}/>
             {active === ACTIVE_TYPE.POST && <ManuscriptPost/>}
