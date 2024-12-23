@@ -36,7 +36,7 @@ export default function UserCard({user, subscribe}: { user: User, subscribe: boo
                             {subscribe && (
                             <div className="flex justify-between items-center gap-24">
                                 <div className="flex items-center gap-4">
-                                    <div className="bg-black opacity-65 px-2 py-1 rounded-full flex items-start">
+                                    <div className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-center">
                                         <Image
                                             src="/icons/explore/icon_fans_info_photo_white@3x.png"
                                             width={14}
@@ -45,7 +45,7 @@ export default function UserCard({user, subscribe}: { user: User, subscribe: boo
                                         />
                                         <span className="text-white text-xs ml-1">{user.photo}</span>
                                     </div>
-                                    <div className="bg-black opacity-65 px-2 py-1 rounded-full flex items-start">
+                                    <div className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-start">
                                         <Image
                                             src="/icons/explore/icon_fans_info_video_white@3x.png"
                                             width={14}
@@ -55,8 +55,8 @@ export default function UserCard({user, subscribe}: { user: User, subscribe: boo
                                         <span className="text-white text-xs ml-1">{user.video}</span>
                                     </div>
                                 </div>
-                                <button className="bg-black opacity-65 text-white text-xs self-start px-2 py-1 rounded-full text-nowrap">
-                                    免费/订阅
+                                <button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full">
+                                    <span className="text-white text-xs text-nowrap">免费/订阅</span>
                                 </button>
                             </div>
                             )}
