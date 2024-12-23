@@ -1,4 +1,4 @@
-import { MediaType, PostData } from "./post"
+import { MediaType, PostData } from "./type"
 
 const videoSrc =
   "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
@@ -72,6 +72,26 @@ export const postData: PostData = {
       background: backgroundSrc,
     },
   ],
+  vote: {
+    options: [
+      {
+        name: "选项1",
+        votes: 999,
+      },
+      {
+        name: "选项2",
+        votes: 999,
+      },
+      {
+        name: "选项3",
+        votes: 999,
+      },
+      {
+        name: "选项4",
+        votes: 999,
+      },
+    ],
+  },
   like: { count: 999, liked: true },
   share: { count: 999, shared: false },
   save: { count: 999, saved: true },
