@@ -7,15 +7,15 @@ import {cva, type VariantProps} from "class-variance-authority"
 import {cn} from "@/lib/utils"
 
 const toggleVariants = cva(
-    "flex items-center justify-center bg-white rounded-lg px-4 py-5 hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-main-pink data-[state=on]:text-white [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+    "flex items-center justify-center bg-white border border-main-pink text-main-pink rounded-full px-5 py-1 hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-main-pink data-[state=on]:text-white [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
     {
         variants: {
             variant: {
-                default: "flex items-center justify-center bg-white rounded-lg px-4 py-5",
+                default: "flex items-center justify-center bg-white border border-main-pink text-main-pink rounded-full px-5 py-1",
                 outline: "border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
             },
             size: {
-                default: "px-4 py-5 min-w-9",
+                default: "px-5 py-1 min-w-9",
                 sm: "h-8 px-1.5 min-w-8",
                 lg: "h-10 px-2.5 min-w-10",
             },
@@ -27,7 +27,7 @@ const toggleVariants = cva(
     }
 )
 
-const Toggle = React.forwardRef<
+const ToggleRecom = React.forwardRef<
     React.ElementRef<typeof TogglePrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &
     VariantProps<typeof toggleVariants>
@@ -39,6 +39,6 @@ const Toggle = React.forwardRef<
     />
 ))
 
-Toggle.displayName = TogglePrimitive.Root.displayName
+ToggleRecom.displayName = TogglePrimitive.Root.displayName
 
-export {Toggle, toggleVariants}
+export {ToggleRecom, toggleVariants}

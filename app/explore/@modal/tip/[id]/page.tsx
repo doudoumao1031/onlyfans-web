@@ -14,7 +14,7 @@ export default function Page() {
         setAmount(Number(value));
     }
     return (
-        <SlideUpModal>
+        <SlideUpModal hasCloseButton={false}>
             <form action="">
                 <input hidden={true} name="id" value={id}/>
                 <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50">
@@ -36,21 +36,19 @@ export default function Page() {
                     <ToggleGroup type="single" variant="default" defaultValue="1" id="select_amount"
                                  className="w-full flex justify-around mt-[20px]"
                                  onValueChange={(value) => {
-                                     if (value) setAmount(Number(value))
+                                     if (value) {
+                                         setAmount(Number(value));
+                                     } else {
+                                         setAmount(0);
+                                     }
                                  }}>
-                        <ToggleGroupItem value="1"  onTouchEnd={() => {
-                            setAmount(1)
-                        }}>
+                        <ToggleGroupItem value="1">
                             <span className="text-nowrap">1 USDT</span>
                         </ToggleGroupItem>
-                        <ToggleGroupItem value="2" onTouchEnd={() => {
-                            setAmount(2)
-                        }}>
+                        <ToggleGroupItem value="2">
                             <span className="text-nowrap">2 USDT</span>
                         </ToggleGroupItem>
-                        <ToggleGroupItem value="3" onTouchEnd={() => {
-                            setAmount(3)
-                        }}>
+                        <ToggleGroupItem value="3">
                             <span className="text-nowrap">3 USDT</span>
                         </ToggleGroupItem>
                     </ToggleGroup>

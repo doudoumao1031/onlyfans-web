@@ -38,21 +38,19 @@ export default function UserCard({user, subscribe}: { user: User, subscribe: boo
                                 <div className="flex items-center gap-4">
                                     <div className="bg-black opacity-65 px-2 py-1 rounded-full flex items-start">
                                         <Image
-                                            src="/icons/main/icon_info_photo.png"
+                                            src="/icons/explore/icon_fans_info_photo_white@3x.png"
                                             width={14}
                                             height={14}
                                             alt="photo"
-                                            className="opacity-100 backdrop-opacity-60"
                                         />
                                         <span className="text-white text-xs ml-1">{user.photo}</span>
                                     </div>
                                     <div className="bg-black opacity-65 px-2 py-1 rounded-full flex items-start">
                                         <Image
-                                            src="/icons/main/icon_info_video.png"
+                                            src="/icons/explore/icon_fans_info_video_white@3x.png"
                                             width={14}
                                             height={14}
                                             alt="video"
-                                            className="opacity-100"
                                         />
                                         <span className="text-white text-xs ml-1">{user.video}</span>
                                     </div>
