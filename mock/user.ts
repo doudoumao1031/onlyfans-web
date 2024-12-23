@@ -7,6 +7,7 @@ export type User = {
     addNum?:number,
     photo?:number,
     video?:number,
+    vlog?:boolean,
 }
 
 export const users:User[] = [
@@ -19,6 +20,7 @@ export const users:User[] = [
         addNum: 36,
         photo: 37,
         video: 38,
+        vlog: true,
     },
     {
         name: "多米洛",
