@@ -4,9 +4,15 @@ import IconWithImage from "@/components/profile/icon";
 import { useState } from "react";
 import ChartsLine from "@/components/profile/chart-line";
 import FormDrawer from "@/components/common/form-drawer";
+import { Input } from "@/components/ui/input"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
 export default function Page() {
     const [active, setActive] = useState<number>(2)
     const [dateActive, setDateActive] = useState<number>(1)
+    const pathname = usePathname()
+
     const tabs = [
         { label: '1月1日', value: 1 },
         { label: '近30日', value: 2 },
@@ -26,12 +32,36 @@ export default function Page() {
                     <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={'#000'} />
                 </button>
             }}
-            headerRight={(close => {
-                return <button onTouchEnd={close} className={"text-base text-main-pink"}>明细</button>
+            headerRight={(() => {
+                return <Link href={`${pathname}/wthdrawalInfo`}>
+                    <button className={"text-base text-main-pink"}>明细</button>
+                </Link>
             })}
             trigger={children}
+            className='h-[47vh] border-0'
         >
-            <div>123</div>
+            <div className="p-8">
+                <div className="flex justify-between mt-4">
+                    <div className="flex flex-col items-center">
+                        <span className="text-xs text-[#777] mb-2">可提现余额</span>
+                        <span className="text-[20px]">999.99 USDT</span>
+                    </div>
+                    <div className="flex flex-col items-center">
+                        <span className="text-xs text-[#777] mb-2">审核中的余额</span>
+                        <span className="text-[20px]">999.99 USDT</span>
+                    </div>
+                </div>
+                <div className="flex justify-between items-center mt-10">
+                    <span className="font-bold text-base">提现</span>
+                    <span className="flex items-center">
+                        <Input id="price" placeholder="0.00" className="border-0 w-16 text-[#BBB]" />
+                        <span>USDT</span>
+                    </span>
+                </div>
+                <div className="flex justify-center">
+                    <div className="w-72 h-12 rounded-full bg-main-pink text-white flex justify-center items-center mt-10">提现</div>
+                </div>
+            </div>
         </FormDrawer>
     }
 
