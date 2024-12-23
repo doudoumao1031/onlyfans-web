@@ -36,6 +36,7 @@ async function postData(url: string, data: any) {
         if (response.ok) {
             const PostResult = await response.json();
             console.log('Success:', PostResult);
+            return PostResult;
         } else {
             console.error('Error:', response.status, response.statusText);
         }
@@ -87,4 +88,11 @@ export async function recomBlogger() {
  */
 export async function systemPost() {
     return await postData('/index/systemPost', {});
+}
+
+/**
+ * 搜索
+ */
+export async function searchBlog() {
+    return await postData('/index/systemPost', {query: "123"});
 }
