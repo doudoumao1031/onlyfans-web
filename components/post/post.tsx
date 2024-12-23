@@ -72,7 +72,6 @@ function Vote({ data }: { data: VoteData }) {
       {data.options.map(({ name, votes }, i) => (
         <div key={i}>
           <div>{name}</div>
-          <div>{votes}</div>
         </div>
       ))}
     </div>
