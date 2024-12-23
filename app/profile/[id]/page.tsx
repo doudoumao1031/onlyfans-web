@@ -119,7 +119,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </div>
                 <div>订阅管理</div>
               </Link>
-              <button className="flex justify-center flex-col items-center gap-2">
+              <Link href={`/profile/${id}/manuscript`}  className="flex justify-center flex-col items-center gap-2">
                 <div>
                   <Image
                     src="/icons/profile/icon-manuscript-management.png"
@@ -129,7 +129,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   />
                 </div>
                 <div>稿件管理</div>
-              </button>
+              </Link>
               <button className="flex justify-center flex-col items-center gap-2">
                 <div>
                   <Image
