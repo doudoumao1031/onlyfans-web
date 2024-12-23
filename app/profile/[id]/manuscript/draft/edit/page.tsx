@@ -5,6 +5,8 @@ import IconWithImage from "@/components/profile/icon";
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {Switch} from "@/components/ui/switch";
 import {useRouter} from "next/navigation";
+import FormDrawer from "@/components/common/form-drawer";
+import InputWithLabel from "@/components/profile/input-with-label";
 
 const ItemEditTitle = ({title, showIcon = true}: { title: React.ReactNode, showIcon?: boolean }) => {
     return <div className="flex gap-2.5 items-center">
@@ -13,6 +15,37 @@ const ItemEditTitle = ({title, showIcon = true}: { title: React.ReactNode, showI
     </div>
 }
 
+
+const AddVoteModal = ({children}: { children: React.ReactNode }) => {
+    return <FormDrawer
+        title={"发起投票"}
+        headerLeft={(close) => {
+            return <button onTouchEnd={close} className={"text-base text-[#777]"}>
+                <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={'#000'}/>
+            </button>
+        }}
+        headerRight={(close => {
+            return <button onTouchEnd={close} className={"text-base text-main-pink"}>确定</button>
+        })}
+        trigger={children}
+    >
+        <section className={"py-5 px-4 border-b border-[#ddd]"}>
+            <InputWithLabel name={""} value={""} label={"投票标题"}/>
+        </section>
+        <section className={"py-5 px-4 border-b border-[#ddd]"}>
+            <h3 className="font-medium text-base mb-2">投票内容</h3>
+            <section className="flex flex-col gap-5">
+                <InputWithLabel name={""} value={""} label={"选项1"} placeholder={'选项内容，最多20字'}/>
+                <InputWithLabel name={""} value={""} label={"选项2"} placeholder={'选项内容，最多20字'}/>
+                <button
+                    className="flex gap-1.5 w-full rounded-xl border border-main-pink justify-center items-center py-2.5 text-main-pink">
+                    <IconWithImage url={"/icons/profile/icon_add@3x.png"} color={'#FF8492'} width={20} height={20}/>
+                    添加选项
+                </button>
+            </section>
+        </section>
+    </FormDrawer>
+}
 
 export default function Page() {
     const [disabledSubmit] = useState<boolean>(true)
@@ -37,7 +70,13 @@ export default function Page() {
         </section>
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
             <section className="flex justify-between">
-                <ItemEditTitle title={"发起了一个投票:"}/>
+                <div className="flex gap-2.5 items-center">
+                    <div className="font-bold text-base">发起了一个投票:</div>
+                    <AddVoteModal>
+                        <button><IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20}
+                                               color={'#bbb'}/></button>
+                    </AddVoteModal>
+                </div>
                 <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={'#000'}/>
             </section>
             <section className="mt-2.5 rounded-xl bg-[#F4F5F5] px-3 py-2">
@@ -68,6 +107,14 @@ export default function Page() {
                 <div>订阅者</div>
                 <Switch></Switch>
             </section>
+        </section>
+        <section className="text-center">
+            <button
+                className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-main-pink py-2 text-main-pink text-base">
+                <IconWithImage url={"/icons/profile/icon_fans_vote@3x.png"} width={20} height={20}
+                               color={'#FF8492'}/>
+                投票
+            </button>
         </section>
     </div>
 }

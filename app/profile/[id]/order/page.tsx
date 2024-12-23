@@ -14,7 +14,6 @@ import {
 import ModalHeader from "@/components/common/modal-header";
 import React from "react";
 import {ISelectOption} from "@/components/common/sheet-select";
-import {divide} from "lodash";
 
 const AddSubscriptionModal = ({children}: { children: React.ReactNode }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false)

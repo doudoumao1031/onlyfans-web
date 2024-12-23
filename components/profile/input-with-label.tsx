@@ -1,5 +1,14 @@
 "use client";
-import {ReactNode, InputHTMLAttributes, useState, useMemo, HTMLAttributes} from "react";
+import {
+    ReactNode,
+    InputHTMLAttributes,
+    useState,
+    useMemo,
+    HTMLAttributes,
+    useCallback,
+    FocusEventHandler,
+    useRef
+} from "react";
 import clsx from "clsx";
 import IconWithImage from "@/components/profile/icon";
 import SheetSelect, {ISelectOption} from "@/components/common/sheet-select";
@@ -19,6 +28,7 @@ export default function InputWithLabel(props: InputProps) {
     const {label, name, disabled, onInputChange, description, value, options} = props
     const [val, setVal] = useState<string>(value ?? "")
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const inputRef = useRef<HTMLInputElement>(null)
     const isSelectInput = useMemo(() => {
         return options !== undefined && Array.isArray(options)
     }, [options])
@@ -33,22 +43,54 @@ export default function InputWithLabel(props: InputProps) {
         setIsOpen(true)
     }
 
+    const [positionInCenter, setPositionInCenter] = useState<boolean>(true)
+
+    const labelTouch = useCallback(() => {
+        if (!positionInCenter) return
+        setPositionInCenter(false)
+        setTimeout(()=>{
+            inputRef?.current?.focus?.()
+        },100)
+    }, [positionInCenter])
+
+
+    const inputBlur = useCallback(() => {
+        if (val) return
+        if (positionInCenter) return;
+        setPositionInCenter(true)
+    }, [positionInCenter, val])
+
+    const inputFocus = useCallback(() => {
+        if (positionInCenter) {
+            setPositionInCenter(false)
+        }
+    }, [
+        positionInCenter
+    ])
+
     return <section className={clsx(
         "relative",
         isSelectInput ? "pt-2.5" : "",
         props.className
     )}>
-        <label className="absolute top-[4px] bg-white left-6 leading-none text-neutral-500"
+        <label style={{
+            transition: "top .1s",
+            top: positionInCenter ? 16 : -7
+        }} onTouchEnd={labelTouch} className={clsx(
+            "absolute bg-white left-4 leading-none text-neutral-500 z-30 transition",
+        )}
                htmlFor={name}>{label}</label>
-        <section className="flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)]">
-            <input value={val} onTouchEnd={handleInputTouch} onInput={event => {
-                const eventValue = (event.target as HTMLInputElement).value
-                setVal(eventValue)
-                onInputChange?.(eventValue)
-            }} type="text" disabled={disabled} readOnly={disableInput} className={clsx(
+        <section
+            className="flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20">
+            <input ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={val} onTouchEnd={handleInputTouch}
+                   onInput={event => {
+                       const eventValue = (event.target as HTMLInputElement).value
+                       setVal(eventValue)
+                       onInputChange?.(eventValue)
+                   }} type="text" disabled={disabled} readOnly={disableInput} className={clsx(
                 "flex-1 w-full",
                 disabled ? "bg-[#F7F7F7]" : ""
-            )} placeholder={props?.placeholder}/>
+            )} placeholder={positionInCenter ? "" : props?.placeholder}/>
             {isSelectInput &&
               <SheetSelect
                 isOpen={isOpen}
