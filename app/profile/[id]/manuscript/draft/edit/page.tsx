@@ -120,7 +120,7 @@ export default function Page() {
             <button onTouchEnd={router.back}>
                 <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={'#000'}/>
             </button>
-            <button type="button" className={clsx(disabledSubmit ? "text-[#bbb]" : "#000")}>发布</button>
+            <ConfirmModal content={"未发布的内容是否保存到草稿中"} trigger={<button type="button" className={clsx(disabledSubmit ? "text-[#bbb]" : "#000")}>发布</button>} />
         </section>
         <ConfirmModal content={"确定取消？"} confirm={()=>{console.log("confirm")}} cancel={()=>{console.log("cancel")}}/>
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">

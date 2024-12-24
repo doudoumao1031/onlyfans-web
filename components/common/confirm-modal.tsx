@@ -10,19 +10,20 @@ import {
 import React, {useState} from "react";
 
 
-export default function ConfirmModal({confirm, cancel}: {
+export default function ConfirmModal({confirm, cancel, trigger, content}: {
     confirm?: () => void,
     cancel?: () => void,
-    content: React.ReactNode
+    content: React.ReactNode,
+    trigger?: React.ReactNode
 }) {
     const [openState, setOpenState] = useState<boolean>(false)
     return <Dialog open={openState} onOpenChange={setOpenState}>
         <DialogTrigger asChild>
-            <button>trigger</button>
+            {trigger}
         </DialogTrigger>
-        <DialogContent className={"hide-modal-close border-none"}>
+        <DialogContent className={"hide-modal-close border-none bg-transparent"}>
             <div className={"bg-white rounded-xl"}>
-                <div className="py-7 px-4 text-center">123123</div>
+                <div className="py-7 px-4 text-center">{content}</div>
                 <div className="grid grid-cols-2 text-base border-t border-[#ddd]">
                     <button onTouchEnd={() => {
                         cancel?.()
