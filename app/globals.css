@@ -72,6 +72,10 @@ body {
   }
 }
 
+input {
+  outline: none;
+}
+
 input,textarea {
   outline: none;
 }

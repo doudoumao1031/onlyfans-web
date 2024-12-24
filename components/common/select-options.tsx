@@ -9,7 +9,6 @@ export interface ModalOption {
 }
 
 export default function SelectOptions({
-  value,
   options,
   onChange,
 }: {
