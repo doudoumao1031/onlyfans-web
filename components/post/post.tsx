@@ -3,8 +3,31 @@
 import React, { ReactElement, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import {
+  MediaType,
+  PostData,
+  User,
+  VideoData,
+  ImageData,
+  Vote as VoteData,
+} from "./type"
+import {
+  isMention,
+  buildUserHomePagePath,
+  getUserIdFromMention,
+  buildUserHomePagePathForDisplay,
+  buildMention,
+} from "./util"
 
-export default function Post({ data }: { data: PostData }) {
+export default function Post({
+  data,
+  showSubscribe,
+  showVote,
+}: {
+  data: PostData
+  showSubscribe: boolean
+  showVote: boolean
+}) {
   const {
     poster,
     description,
@@ -15,6 +38,7 @@ export default function Post({ data }: { data: PostData }) {
     tip,
     share,
     save,
+    vote,
   } = data
 
   return (
@@ -23,11 +47,14 @@ export default function Post({ data }: { data: PostData }) {
       <Description content={description} />
       <UserHomePageLink userId={poster.id} />
       <Media data={media} />
-      <div className="">
-        {subscribe.map((user) => (
-          <SubscribeCard key={user.id} user={user} />
-        ))}
-      </div>
+      {showSubscribe && (
+        <div>
+          {subscribe.map((user) => (
+            <SubscribeCard key={user.id} user={user} />
+          ))}
+        </div>
+      )}
+      {showVote && vote && <Vote data={vote} />}
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
         <Like count={like.count} liked={like.liked} />
         <Comment count={comment.count} />
@@ -35,6 +62,16 @@ export default function Post({ data }: { data: PostData }) {
         <Share count={share.count} shared={share.shared} />
         <Save count={save.count} saved={save.saved} />
       </div>
+    </div>
+  )
+}
+
+function Vote({ data }: { data: VoteData }) {
+  return (
+    <div>
+      {data.options.map((o, i) => (
+        <div key={i}>{o.name}</div>
+      ))}
     </div>
   )
 }
@@ -54,7 +91,7 @@ function SubscribeCard({ user }: { user: User }) {
           </div>
           <div className="text-white">
             <div className="text-lg">{user.name}</div>
-            <div className="text-white/75 text-xs">@{user.id}</div>
+            <div className="text-white/75 text-xs">{buildMention(user.id)}</div>
           </div>
         </div>
         <button className="bg-black opacity-65 text-white text-xs self-start px-1 py-1 rounded-lg">
@@ -73,7 +110,7 @@ function UserTitle({ user }: { user: User }) {
       </div>
       <div>
         <div className="text-lg">{user.name}</div>
-        <div className="text-black/50 text-xs">@{user.id}</div>
+        <div className="text-black/50 text-xs">{buildMention(user.id)}</div>
       </div>
     </div>
   )
@@ -94,7 +131,6 @@ function Avatar({ src, width = "w-18" }: { src: string; width?: string }) {
 function Description({ content }: { content: string }) {
   const mentionRegex = /(\B@\w+)/g
   const segments = content.split(mentionRegex)
-  console.log(segments)
   return (
     <div className="px-3">
       {segments.map((s, i) => (
@@ -232,7 +268,7 @@ function Comment({ count }: { count: number }) {
 
 function Tip({ user, count }: { user: User; count: number }) {
   return (
-    <Link href={`/explore/tip/${user.id}`} className="flex items-center">
+    <Link scroll={false} href={`/explore/tip/${user.id}`} className="flex items-center">
       <Stats icon="/icons/tip.png" value={count} />
     </Link>
   )
@@ -261,57 +297,4 @@ function Stats({
       <span className="text-xs">{value}</span>
     </div>
   )
-}
-
-function buildUserHomePagePath(userId: string) {
-  return `/${userId}`
-}
-
-function buildUserHomePagePathForDisplay(userId: string) {
-  return `secretfans.com/${userId}`
-}
-
-function isMention(word: string) {
-  return word.length > 1 && word.charAt(0) === "@"
-}
-
-function getUserIdFromMention(mention: string) {
-  return mention.substring(1)
-}
-
-export interface PostData {
-  id: string
-  poster: User
-  description: string
-  media: (VideoData | ImageData)[]
-  subscribe: User[]
-  like: { count: number; liked: boolean }
-  share: { count: number; shared: boolean }
-  save: { count: number; saved: boolean }
-  tip: { count: number }
-  comment: { count: number }
-}
-
-interface User {
-  id: string
-  name: string
-  avatar: string
-  background: string
-}
-
-export enum MediaType {
-  Video,
-  Image,
-}
-
-interface VideoData {
-  src: string
-  thumbnail: string
-  type: MediaType.Video
-}
-
-interface ImageData {
-  src: string
-  thumbnail: string
-  type: MediaType.Image
 }

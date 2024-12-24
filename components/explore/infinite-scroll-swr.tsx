@@ -90,7 +90,7 @@ export default function InfiniteScroll({
     <div ref={containerRef} className="h-full w-full overflow-scroll">
       <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
         {items.map((item, index) => (
-          <Post key={index} data={postData} />
+          <Post key={index} data={postData} showSubscribe showVote />
         ))}
       </div>
       {isValidating && (

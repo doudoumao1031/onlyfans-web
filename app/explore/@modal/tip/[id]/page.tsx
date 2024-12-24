@@ -10,13 +10,10 @@ export default function Page() {
     const params = useParams();
     const id = params.id; // Access the dynamic route parameter
     const [amount, setAmount] = useState<number>(0);
-    const handleSearch = (value: string) => {
-        setAmount(Number(value));
-    }
     return (
         <SlideUpModal hasCloseButton={false}>
             <form action="">
-                <input hidden={true} name="id" value={id}/>
+                <input hidden={true} name="id" defaultValue={id}/>
                 <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50">
                     <div className="w-full flex justify-between px-4 py-2 bg-white">
                         <div className="font-semibold text-lg">
@@ -33,7 +30,10 @@ export default function Page() {
                             <span className="font-normal text-base ml-2">同时点赞</span>
                         </div>
                     </div>
-                    <ToggleGroup type="single" variant="default" defaultValue="1" id="select_amount"
+                    <ToggleGroup type="single"
+                                 variant="default"
+                                 defaultValue="1"
+                                 id="select_amount"
                                  className="w-full flex justify-around mt-[20px]"
                                  onValueChange={(value) => {
                                      if (value) {
@@ -54,13 +54,12 @@ export default function Page() {
                     </ToggleGroup>
 
                     <div className="w-full flex items-center mt-[20px] px-4 relative">
-                        <input id="amount" type="number"
+                        <input id="amount"
+                               type="number"
                                className="w-full py-2 px-16 border-0 bg-white rounded-lg text-right h-[49px] placeholder:text-gray-400"
                                placeholder="0.00"
                                max={999}
-                               onChange={(e) => {
-                                   handleSearch(e.target.value);
-                               }}
+                               onChange={(e) => setAmount(parseFloat(e.target.value) || 0)}
                         />
                         <Label htmlFor="amount"
                                className="absolute left-6 top-1/2 transform -translate-y-1/2 text-left font-medium text-lg pointer-events-none pr-12">
@@ -74,7 +73,11 @@ export default function Page() {
 
                     <div className="my-[40px]  self-center">
                         <button
-                            className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full">确认支付{amount}USDT
+                            className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
+                        onTouchEnd={(e) => {
+                            e.preventDefault();
+                            console.log(`confirm payment of ${amount}`)
+                        }}>确认支付{amount}USDT
                         </button>
                     </div>
                 </div>
