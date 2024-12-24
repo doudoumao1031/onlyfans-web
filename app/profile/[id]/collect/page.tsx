@@ -96,7 +96,7 @@ export default function Page() {
           <div>
             <div className="text-sm">{v.name}</div>
             <div className="text-xs">{v.account}</div>
-            <div className="flex justify-start mt-1">
+            <div className="flex justify-start mt-1 text-xs">
               <div className="bg-black rounded-full bg-opacity-50 p-1 pl-2 pr-2 mr-4 text-xs flex"> <IconWithImage
                 url="/icons/profile/icon-photo.png"
                 width={14}
@@ -107,7 +107,7 @@ export default function Page() {
                 width={14}
                 height={14}
               /><span className="ml-1">9999</span></div>
-              <div className="bg-black rounded-full bg-opacity-50 p-1 pl-2 pr-2 ml-8 text-xs">免费/订阅</div>
+              <div className="bg-black rounded-full bg-opacity-50 p-1 pl-2 pr-2 ml-2 text-xs">免费/订阅</div>
             </div>
           </div>
         </div>
