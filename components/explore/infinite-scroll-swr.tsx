@@ -51,6 +51,7 @@ export default function InfiniteScroll({
     }
   }, [data, page])
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleScroll = useCallback(
     debounce(() => {
       const container = containerRef.current
