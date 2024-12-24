@@ -8,7 +8,7 @@ import {useRouter} from "next/navigation";
 
 export default function Header({handleBack, title, right, titleColor,backIconColor}: {
     handleBack?: () => void,
-    title: React.ReactNode,
+    title?: React.ReactNode,
     titleColor?: string,
     backIconColor?: string,
     right?: React.ReactNode

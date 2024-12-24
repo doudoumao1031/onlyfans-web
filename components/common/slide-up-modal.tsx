@@ -4,23 +4,16 @@ import React, {useState, useEffect, useRef} from 'react';
 import {createPortal} from 'react-dom';
 import {useRouter} from 'next/navigation';
 import clsx from "clsx"
-import ModalHeader from "@/components/common/modal-header";
 
 export function SlideUpModal({
                                  children,
                                  portalId = 'modal-root',
                                  full,
-                                 title,
-                                 showPageHeader,
-                                 headerRightControl,
                                  closeBtn = true,
                              }: {
     children: React.ReactNode,
     portalId?: string,
-    showPageHeader?: boolean,
-    title?: React.ReactNode,
     full?: boolean,
-    headerRightControl?: (close: () => void) => React.ReactNode,
     closeBtn?: boolean
 }) {
     const router = useRouter();
@@ -61,9 +54,7 @@ export function SlideUpModal({
                 ref={sheetRef}
                 onTouchEnd={(e) => e.stopPropagation()} // Prevent click propagation to the backdrop
             >
-                {showPageHeader &&
-                    <ModalHeader closeModal={onDismiss} title={title} right={headerRightControl?.(onDismiss)}/>}
-                {!showPageHeader && closeBtn && <button
+                {closeBtn && <button
                     onTouchEnd={onDismiss}
                     className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
                 >
