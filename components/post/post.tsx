@@ -270,7 +270,7 @@ function Comment({ count }: { count: number }) {
 
 function Tip({ user, count }: { user: User; count: number }) {
   return (
-    <Link href={`/explore/tip/${user.id}`} className="flex items-center">
+    <Link scroll={false} href={`/explore/tip/${user.id}`} className="flex items-center">
       <Stats icon="/icons/tip.png" value={count} />
     </Link>
   )
