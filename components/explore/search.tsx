@@ -9,14 +9,11 @@ export default function Search({placeholder}: { placeholder: string }) {
     const pathname = usePathname();
     const {replace, back} = useRouter();
     const handleSearch = useDebouncedCallback((term) => {
-        console.log(`Searching... ${term}`);
-
         const params = new URLSearchParams(searchParams);
-        params.set('page', '1');
         if (term) {
-            params.set('query', term);
+            params.set('search', term);
         } else {
-            params.delete('query');
+            params.delete('search');
         }
         replace(`${pathname}?${params.toString()}`);
     }, 300);
@@ -27,7 +24,7 @@ export default function Search({placeholder}: { placeholder: string }) {
                    onChange={(e) => {
                        handleSearch(e.target.value);
                    }}
-                   defaultValue={searchParams.get('query')?.toString()}/>
+                   defaultValue={searchParams.get('search')?.toString()}/>
             <Image src="/icons/explore/icon_search_s@3x.png" alt="search"
                    width={18}
                    height={18}

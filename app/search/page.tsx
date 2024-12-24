@@ -1,18 +1,16 @@
 import Image from "next/image";
 import Search from "@/components/explore/search";
-import {searchBlog} from "@/lib/data";
 export default async function Page(
     props: {
         searchParams?: Promise<{
-            query?: string;
+            search?: string;
         }>;
     }
 ) {
     const searchParams = await props.searchParams;
-    const query = searchParams?.query || '';
-    console.log("===>page search val :", query)
+    const query = searchParams?.search || '';
     // 搜索结果
-    const result = "999";
+    const result = "";
     // const result = await searchBlog();
     return (
         /** 搜索 */
