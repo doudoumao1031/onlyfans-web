@@ -3,7 +3,7 @@ import {
     SheetContent, SheetDescription, SheetFooter, SheetTitle,
     SheetTrigger,
 } from "@/components/ui/sheet"
-import React from "react";
+import React, {useState} from "react";
 import clsx from "clsx";
 
 export interface ISelectOption {
@@ -13,21 +13,26 @@ export interface ISelectOption {
 }
 
 
-export default function SheetSelect({children, options, onInputChange, isOpen, setIsOpen}: {
+export default function SheetSelect({children, options, onInputChange, isOpen, setIsOpen, outerControl = true}: {
     children: React.ReactNode, options: ISelectOption[],
     onInputChange?: (value: string) => void,
-    isOpen: boolean,
-    setIsOpen: (v: boolean) => void
+    isOpen?: boolean,
+    setIsOpen?: (v: boolean) => void,
+    outerControl?: boolean
 }) {
+    const [sheetState, setSheetState] = useState<boolean>(false)
+    const openState = outerControl ? isOpen : sheetState
+    const changeState = outerControl ? setIsOpen : setSheetState
+
     // const [isOpen,setIsOpen] = useState<boolean>(false)
     return <>
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <Sheet open={openState} onOpenChange={changeState}>
             <SheetTrigger asChild>
                 <button onTouchEnd={() => {
-                    setIsOpen(true)
+                    changeState?.(true)
                 }}>{children}</button>
             </SheetTrigger>
-            <SheetContent side={"bottom"} className={"px-2.5 py-0 pb-2.5 border-none sheet-select"}>
+            <SheetContent side={"bottom"} className={"px-2.5 py-0 pb-2.5 border-none hide-modal-close"}>
                 <SheetTitle className={"hidden"}></SheetTitle>
                 <SheetDescription className={"hidden"}></SheetDescription>
                 <div className="bg-white rounded-2xl overflow-hidden">
@@ -43,7 +48,7 @@ export default function SheetSelect({children, options, onInputChange, isOpen, s
                                 key={index}
                                 onTouchEnd={() => {
                                     onInputChange?.(item.value);
-                                    setIsOpen(false)
+                                    changeState?.(false)
                                 }}
                             >
                                 {item.label}
