@@ -28,11 +28,13 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
       </div>
       <section className="mt-[-47px] rounded-t-3xl bg-white relative  pt-12 text-black pb-8">
         <section className="pl-4 pr-4 pb-3 border-b border-b-gray-100">
-          <Avatar />
+          <Avatar showLive/>
           <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
             <span>多米洛</span>
             <Link href={`/profile/${id}/edit`}>
-              <button className="w-5 h-5 bg-[url('/icons/profile/icon-edit.png')] bg-contain"></button>
+              <button>
+                <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={'#ddd'}/>
+              </button>
             </Link>
           </h1>
           <div className="text-center text-gray-400 text-xs">@duomilougirl</div>

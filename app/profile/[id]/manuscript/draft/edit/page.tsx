@@ -179,7 +179,7 @@ export default function Page() {
                 <Switch></Switch>
             </section>
         </section>
-        <section className="text-center">
+        <section className="text-center pb-5">
             <button
                 className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-main-pink py-2 text-main-pink text-base">
                 <IconWithImage url={"/icons/profile/icon_fans_vote@3x.png"} width={20} height={20}
