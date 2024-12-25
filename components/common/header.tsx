@@ -1,6 +1,3 @@
-// import Link from 'next/link';
-// import Image from 'next/image';
-// import NavLinks from "@/components/explore/nav-links"
 "use client";
 import IconWithImage from "@/components/profile/icon";
 import React from "react";
@@ -27,12 +24,4 @@ export default function Header({handleBack, title, right, titleColor,backIconCol
         </section>
     )
 }
-=========
-export default function Header() {
-  return (
-    <div className="flex flex-row w-full h-11 justify-center items-center">
-      <span className="text-2xl">Fans</span>
-    </div>
-  );
-}
->>>>>>>>> Temporary merge branch 2
+
