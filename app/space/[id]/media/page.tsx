@@ -9,7 +9,8 @@ export default function Page() {
             duration: 99.99,
             type: 'video',
             subFees: 99.99,
-            isClick: false
+            isClick: false,
+            src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
         },
         {
             bg: "bg-[url('/demo/girl2.jpeg')]",
@@ -19,7 +20,9 @@ export default function Page() {
             duration: 99.99,
             type: 'video',
             subFees: 99.99,
-            isClick: false
+            isClick: false,
+            src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+
         },
         {
             bg: "bg-[url('/demo/girl3.jpeg')]",
@@ -29,7 +32,9 @@ export default function Page() {
             duration: 99.99,
             type: 'video',
             subFees: 99.99,
-            isClick: false
+            isClick: false,
+            src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+
         },
         {
             bg: "bg-[url('/demo/girl4.jpeg')]",
@@ -39,7 +44,9 @@ export default function Page() {
             duration: 99.99,
             type: 'video',
             subFees: 99.99,
-            isClick: false
+            isClick: false,
+            src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+
         },
         {
             bg: "bg-[url('/demo/girl5.jpeg')]",
@@ -49,7 +56,9 @@ export default function Page() {
             duration: 99.99,
             type: 'video',
             subFees: 99.99,
-            isClick: false
+            isClick: false,
+            src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+
         },
         {
             bg: "bg-[url('/demo/girl6.jpeg')]",
@@ -59,7 +68,9 @@ export default function Page() {
             duration: 99.99,
             type: 'video',
             subFees: 99.99,
-            isClick: false
+            isClick: false,
+            src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+
         },
         {
             bg: "bg-[url('/demo/girl7.jpeg')]",
@@ -69,7 +80,9 @@ export default function Page() {
             duration: 99.99,
             type: 'video',
             subFees: 99.99,
-            isClick: false
+            isClick: false,
+            src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+
         },
         {
             bg: "bg-[url('/demo/girl8.jpeg')]",
@@ -79,7 +92,9 @@ export default function Page() {
             duration: 99.99,
             type: 'video',
             subFees: 99.99,
-            isClick: false
+            isClick: false,
+            src:'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+
         },
     ]
     return (

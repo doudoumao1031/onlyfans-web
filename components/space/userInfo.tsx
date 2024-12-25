@@ -1,8 +1,11 @@
 
 import Header from "@/components/common/header";
 import Image from 'next/image';
+import Attention from '@/components/space/attention'
 import IconWithImage from "@/components/profile/icon";
 import Directions from '@/components/space/directions'
+import Avatar from "@/components/space/avatar";
+import SubColumn from '@/components/space/subColumn'
 export default function UserInfo({ id }: { id: string }) {
     const tabs = [
         { icon: '/icons/icon_info_video.png', num: 9999 },
@@ -31,19 +34,11 @@ export default function UserInfo({ id }: { id: string }) {
             </div>
             <section className="mt-[-47px] rounded-t-3xl bg-white relative  pt-12 text-black ">
                 <section className="pl-4 pr-4 pb-3 ">
-                    <div className="absolute rounded-full p-0.5 bg-white w-[90px] h-[90px] top-[-47px] left-[50%] ml-[-45px]">
-                        <Image
-                            src="/demo/avtar1.jpeg"
-                            alt="User avatar"
-                            width={90}
-                            height={90}
-                            className="rounded-full w-full h-full object-cover"
-                            priority
-                        />
-                    </div>
+                    <Avatar />
                     <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
                         <span>多米洛</span>
                     </h1>
+                    <Attention />
                     <div className="text-center text-gray-400 text-xs">@duomilougirl</div>
                     <div className="flex justify-center mt-1">
                         <IconWithImage
@@ -69,6 +64,7 @@ export default function UserInfo({ id }: { id: string }) {
 
                     </div>
                     <Directions />
+                    <SubColumn />
                 </section>
             </section>
         </div>
