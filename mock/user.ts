@@ -52,3 +52,35 @@ export const users:User[] = [
         video: 78,
     },
 ]
+
+export type UserSubscribePayment = {
+    id: string,
+    time: string,
+    amount: number,
+    price: number,
+    discount: number,
+}
+
+export const subscribePayments:UserSubscribePayment[] = [
+    {
+        id: "1",
+        time: "1个月",
+        amount: 9.99,
+        price: 9.99,
+        discount: 0.0,
+    },
+    {
+        id: "2",
+        time: "3个月",
+        amount: 29.37,
+        price: 29.97,
+        discount: 0.98,
+    },
+    {
+        id: "3",
+        time: "99个月",
+        amount: 882.09,
+        price: 980.1,
+        discount: 0.9,
+    },
+]
