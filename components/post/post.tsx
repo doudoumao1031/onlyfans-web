@@ -247,6 +247,7 @@ function FullScreen({
 
   function handleTouch(e: React.TouchEvent) {
     if (e.target === e.currentTarget) {
+      e.preventDefault() // prevent triggering click/touch event on elements behind
       onExit()
     }
   }
@@ -270,7 +271,11 @@ function Comment({ count }: { count: number }) {
 
 function Tip({ user, count }: { user: User; count: number }) {
   return (
-    <Link scroll={false} href={`/explore/tip/${user.id}`} className="flex items-center">
+    <Link
+      scroll={false}
+      href={`/explore/tip/${user.id}`}
+      className="flex items-center"
+    >
       <Stats icon="/icons/tip.png" value={count} />
     </Link>
   )
