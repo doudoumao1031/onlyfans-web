@@ -135,7 +135,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                 </div>
                 <div>粉丝管理</div>
               </Link>
-              <button className="flex justify-center flex-col items-center gap-2">
+              <Link href={`/profile/${id}/income`} className="flex justify-center flex-col items-center gap-2">
                 <div>
                   <Image
                     src="/icons/profile/icon-revenue-center.png"
@@ -145,8 +145,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   />
                 </div>
                 <div>收益中心</div>
-              </button>
-              <button className="flex justify-center flex-col items-center gap-2">
+              </Link>
+              <Link href={`/profile/${id}/dataCenter`} className="flex justify-center flex-col items-center gap-2">
                 <div>
                   <Image
                     src="/icons/profile/icon-data-analysis.png"
@@ -156,7 +156,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
                   />
                 </div>
                 <div>数据分析</div>
-              </button>
+              </Link>
             </div>
           </div>
         </div>
