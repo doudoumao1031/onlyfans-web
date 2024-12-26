@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-type TModaProps = {
-    visible: boolean,
+export type TModaProps = {
+    visible?: boolean,
     children?: React.ReactNode
     closeModal?: boolean,
     type?: string
