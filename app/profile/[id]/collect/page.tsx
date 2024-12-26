@@ -4,7 +4,8 @@ import Header from "@/components/common/header";
 import TabTitle, { iTabTitleOption } from "@/components/profile/tab-title";
 import { useState } from "react";
 import IconWithImage from "@/components/profile/icon";
-import { SlideUpModal } from "@/components/common/slide-up-modal";
+import {useSearchParams} from "next/navigation";
+
 export type TBlogItem = {
   topMsg: string
   avtar: string
@@ -79,7 +80,8 @@ const mockPosts: TPostItem[] = [
   },
 ]
 export default function Page() {
-  const [active, setActive] = useState<string>("blog")
+  const queryParams = useSearchParams()
+  const [active, setActive] = useState<string>(queryParams.get('type') ?? "blog")
   const [bloggers, setBloggers] = useState<TBlogItem[]>(mockBlogs)
   const [posts, setPosts] = useState<TPostItem[]>(mockPosts)
   const tabOptions: iTabTitleOption[] = [

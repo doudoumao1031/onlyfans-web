@@ -4,9 +4,7 @@ import {
     InputHTMLAttributes,
     useState,
     useMemo,
-    HTMLAttributes,
     useCallback,
-    FocusEventHandler,
     useRef
 } from "react";
 import clsx from "clsx";
@@ -43,7 +41,9 @@ export default function InputWithLabel(props: InputProps) {
         setIsOpen(true)
     }
 
-    const [positionInCenter, setPositionInCenter] = useState<boolean>(true)
+    const [positionInCenter, setPositionInCenter] = useState<boolean>(()=>{
+        return value === ""
+    })
 
     const labelTouch = useCallback(() => {
         if (!positionInCenter) return
@@ -69,8 +69,9 @@ export default function InputWithLabel(props: InputProps) {
     ])
 
     return <section className={clsx(
-        "relative",
+        "relative rounded-xl",
         isSelectInput ? "pt-2.5" : "",
+        disabled ? "bg-[#F7F7F7]" : "",
         props.className
     )}>
         <label style={{
@@ -89,8 +90,8 @@ export default function InputWithLabel(props: InputProps) {
                        onInputChange?.(eventValue)
                    }} type="text" disabled={disabled} readOnly={disableInput} className={clsx(
                 "flex-1 w-full",
-                disabled ? "bg-[#F7F7F7]" : ""
-            )} placeholder={positionInCenter ? "" : props?.placeholder}/>
+
+            )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}/>
             {isSelectInput &&
               <SheetSelect
                 isOpen={isOpen}

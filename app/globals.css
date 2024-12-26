@@ -72,14 +72,10 @@ body {
   }
 }
 
-input {
-  outline: none;
-}
-
 input,textarea {
   outline: none;
 }
 
-.sheet-select button.absolute {
+.hide-modal-close button.absolute {
   @apply hidden
 }
