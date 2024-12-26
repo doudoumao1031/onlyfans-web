@@ -18,6 +18,11 @@ export default function UserInfo({ id }: { id: string }) {
             <div className="bg-slate-400 h-[200px] bg-[url('/demo/blog-bg2.jpeg')] bg-cover bg-blend-multiply">
                 <Header right={<>
                     <IconWithImage
+                        url="/icons/space/icon_nav_search_white.png"
+                        width={22}
+                        height={22}
+                    />
+                    <IconWithImage
                         url="/icons/profile/icon_nav_code@3x.png"
                         width={22}
                         height={22}
