@@ -223,7 +223,7 @@ function Thumbnail({
           {largeElement}
         </FullScreen>
       ) : (
-        <div onTouchEnd={() => setShowLarge(true)}>{thumbnailElement}</div>
+        <div onClick={() => setShowLarge(true)}>{thumbnailElement}</div>
       )}
     </div>
   )
@@ -239,15 +239,14 @@ function FullScreen({
   return (
     <div
       className="fixed top-0 left-0 w-screen h-screen bg-black/90 z-50 flex items-center"
-      onTouchEnd={handleTouch}
+      onClick={handleClick}
     >
       {children}
     </div>
   )
 
-  function handleTouch(e: React.TouchEvent) {
+  function handleClick(e: React.MouseEvent<HTMLElement>) {
     if (e.target === e.currentTarget) {
-      e.preventDefault() // prevent triggering click/touch event on elements behind
       onExit()
     }
   }

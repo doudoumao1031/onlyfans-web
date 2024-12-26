@@ -19,25 +19,3 @@ export function getUserIdFromMention(mention: string) {
 export function buildMention(userId: string) {
   return `@${userId}`
 }
-
-export function useScroll() {
-  const [isScrolling, setIsScrolling] = useState(false)
-
-  useEffect(() => {
-    document.addEventListener("scroll", handleScroll)
-    document.addEventListener("scrollend", handleScrollEnd)
-    return () => {
-      document.removeEventListener("scroll", handleScroll)
-      document.removeEventListener("scrollend", handleScrollEnd)
-    }
-
-    function handleScroll() {
-      setIsScrolling(true)
-    }
-    function handleScrollEnd() {
-      setIsScrolling(false)
-    }
-  }, [])
-
-  return isScrolling
-}
