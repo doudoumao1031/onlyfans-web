@@ -1,6 +1,3 @@
-// import Link from 'next/link';
-// import Image from 'next/image';
-// import NavLinks from "@/components/explore/nav-links"
 "use client";
 import IconWithImage from "@/components/profile/icon";
 import React from "react";
@@ -19,7 +16,7 @@ export default function Header({handleBack, title, right, titleColor,backIconCol
         <section className="flex align-middle justify-between items-center h-11 pl-4 pr-4 text-black">
             <div className="flex justify-start shrink-0 w-[30%]">
                 <button onTouchEnd={handleClickBack}>
-                    <IconWithImage url="/icons/profile/icon-back.png" width={22} height={22} color={`${backIconColor ?? "#000"}`}/>
+                    <IconWithImage url="/icons/profile/icon_nav_back@3x.png" width={22} height={22} color={`${backIconColor ?? "#000"}`}/>
                 </button>
             </div>
             <div className={`text-center flex-1 text-[18px]`} style={{color: titleColor ?? "#fff"}}>{title}</div>
@@ -27,3 +24,4 @@ export default function Header({handleBack, title, right, titleColor,backIconCol
         </section>
     )
 }
+

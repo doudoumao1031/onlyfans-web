@@ -41,7 +41,9 @@ export default function InputWithLabel(props: InputProps) {
         setIsOpen(true)
     }
 
-    const [positionInCenter, setPositionInCenter] = useState<boolean>(true)
+    const [positionInCenter, setPositionInCenter] = useState<boolean>(()=>{
+        return value === ""
+    })
 
     const labelTouch = useCallback(() => {
         if (!positionInCenter) return
@@ -67,15 +69,17 @@ export default function InputWithLabel(props: InputProps) {
     ])
 
     return <section className={clsx(
-        "relative",
+        "relative rounded-xl",
         isSelectInput ? "pt-2.5" : "",
+        disabled ? "bg-[#F7F7F7]" : "",
         props.className
     )}>
         <label style={{
             transition: "top .1s",
             top: positionInCenter ? 16 : -7
         }} onTouchEnd={labelTouch} className={clsx(
-            "absolute bg-white left-4 leading-none text-neutral-500 z-30 transition",
+            "absolute bg-white left-4 leading-none font-normal z-30 transition",
+            (disabled || disableInput) ? "text-[#222]" :"text-[#6D7781]"
         )}
                htmlFor={name}>{label}</label>
         <section
@@ -86,9 +90,9 @@ export default function InputWithLabel(props: InputProps) {
                        setVal(eventValue)
                        onInputChange?.(eventValue)
                    }} type="text" disabled={disabled} readOnly={disableInput} className={clsx(
-                "flex-1 w-full",
-                disabled ? "bg-[#F7F7F7]" : ""
-            )} placeholder={positionInCenter ? "" : props?.placeholder}/>
+                "flex-1 w-full font-medium",
+
+            )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}/>
             {isSelectInput &&
               <SheetSelect
                 isOpen={isOpen}
@@ -99,6 +103,6 @@ export default function InputWithLabel(props: InputProps) {
                 })} options={options ?? []}><IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
                                                            height={24} color={'#bbb'}/></SheetSelect>}
         </section>
-        {description && <section className="text-neutral-500 text-xs px-4 mt-1.5">{description}</section>}
+        {description && <section className="text-[#6D7781] text-xs px-4 mt-1.5">{description}</section>}
     </section>
 }
