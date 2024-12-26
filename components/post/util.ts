@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react"
-
 export function buildUserHomePagePath(userId: string) {
   return `/${userId}`
 }
