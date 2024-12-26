@@ -3,15 +3,14 @@ import Avatar from "@/components/profile/avatar";
 import InputWithLabel from "@/components/profile/input-with-label";
 import IconWithImage from "@/components/profile/icon";
 
-export default function Page (){
-
+export default function Page() {
     return <>
-    <div className="profile-content bg-[url('/demo/user_bg.png')]">
-        <Header right={<button>保存</button>} title="编辑个人信息" />
-        {/* <div className="text-xs pl-6 pr-6">
+        <div className="profile-content bg-[url('/demo/user_bg.png')]">
+            <Header right={<button>保存</button>} title="编辑个人信息"/>
+            {/* <div className="text-xs pl-6 pr-6">
           各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折
         </div> */}
-      </div>
+        </div>
         <section className="mt-[-47px] rounded-t-3xl bg-white relative pt-12 text-black pb-8">
             <section className="pl-4 pr-4 pb-3 ">
                 <Avatar showEdit/>
@@ -26,13 +25,13 @@ export default function Page (){
                                         description={"https://secretfans.com/duomilougirl"}/>
                     </section>
                     <section>
-                        <InputWithLabel name={"description"} value={""} placeholder={"介绍"}/>
+                        <InputWithLabel name={"description"} value={""} label={"介绍"}/>
                     </section>
                     <section>
-                        <InputWithLabel name={"top_info"} value={""} placeholder={"顶部信息"}/>
+                        <InputWithLabel name={"top_info"} value={""} label={"顶部信息"}/>
                     </section>
                     <section>
-                        <InputWithLabel name={"position"} value={""} placeholder={"地理位置"}/>
+                        <InputWithLabel name={"position"} value={""} label={"地理位置"}/>
                     </section>
                 </section>
                 <section className="border-t border-gray-100 mt-5 pl-4 pr-4">

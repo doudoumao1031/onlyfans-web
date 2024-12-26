@@ -12,20 +12,35 @@ import React, {useState} from "react";
 import {clsx} from "clsx";
 
 
-export default function FormDrawer({children, headerRight, headerLeft, trigger, title, className}: {
+export default function FormDrawer({
+                                       children,
+                                       headerRight,
+                                       headerLeft,
+                                       trigger,
+                                       title,
+                                       className,
+                                       isOpen,
+                                       setIsOpen,
+                                       outerControl
+                                   }: {
     children: React.ReactNode,
     title?: React.ReactNode,
     headerLeft?: (close: () => void) => React.ReactNode,
     headerRight?: (close: () => void) => React.ReactNode,
     trigger: React.ReactNode,
-    className?: string
+    className?: string,
+    outerControl?: boolean,
+    isOpen?: boolean,
+    setIsOpen?: (val: boolean) => void
 }) {
-    const [isOpen, setIsOpen] = useState<boolean>(false)
-    const handleClose = () => setIsOpen(false)
-    return <Drawer open={isOpen} onOpenChange={setIsOpen}>
-        <DrawerTrigger asChild>
+    const [innerIsOpen, setInnerIsOpen] = useState<boolean>(false)
+    const openState = outerControl ? isOpen : innerIsOpen
+    const openChange = (outerControl && setIsOpen) ? setIsOpen : setInnerIsOpen
+    const handleClose = () => openChange(false)
+    return <Drawer open={openState} onOpenChange={openChange}>
+        {!outerControl && <DrawerTrigger asChild>
             {trigger}
-        </DrawerTrigger>
+        </DrawerTrigger>}
         <DrawerContent className={clsx(
             "h-[95vh] bg-white",
             className ?? ""
