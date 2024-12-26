@@ -32,12 +32,10 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
             <span>多米洛</span>
             <Link href={`/profile/${id}/edit`}>
-              <button>
-                <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={'#ddd'}/>
-              </button>
+                <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={'#bbb'}/>
             </Link>
           </h1>
-          <div className="text-center text-gray-400 text-xs">@duomilougirl</div>
+          <div className="text-center text-[#6D7781] text-xs">@duomilougirl</div>
           <div className="flex justify-center mt-2">
             <button className="pt-0.5 pb-0.5 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
               进入空间
@@ -52,19 +50,19 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="grid-cols-4 grid text-center">
             <div className="border-r border-gray-100">
               <div className="text-2xl">9999</div>
-              <div className="text-xs text-gray-400">帖子</div>
+              <div className="text-xs text-[#333]">帖子</div>
             </div>
             <div className="border-r border-gray-100">
               <div className="text-2xl">9999</div>
-              <div className="text-xs text-gray-400">媒体</div>
+              <div className="text-xs text-[#333]">媒体</div>
             </div>
             <div className="border-r border-gray-100">
               <div className="text-2xl">9999</div>
-              <div className="text-xs text-gray-400">粉丝</div>
+              <div className="text-xs text-[#333]">粉丝</div>
             </div>
             <div>
               <div className="text-2xl">9999</div>
-              <div className="text-xs text-gray-400">订阅</div>
+              <div className="text-xs text-[#333]">订阅</div>
             </div>
           </div>
         </div>
@@ -79,12 +77,12 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
 
           <div className="grid grid-cols-2 gap-3">
             <Link href={`/profile/${id}/collect?type=blog`} className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-blogger.png')] bg-cover">
-              <div className="text-xs text-gray-400">博主</div>
-              <div className="font-medium text-[34px] ">9999</div>
+              <div className="text-xs text-[rgba(34,34,34,0.70)]">博主</div>
+              <div className="font-medium text-[#2b2b2b] text-[34px] ">9999</div>
             </Link>
             <Link href={`/profile/${id}/collect?type=post`} className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-posts.png')] bg-cover">
-              <div className="text-xs text-gray-400">帖子</div>
-              <div className="font-medium text-[34px] ">9999</div>
+              <div className="text-xs text-[rgba(34,34,34,0.70)]">帖子</div>
+              <div className="font-medium text-[#2b2b2b] text-[34px] ">9999</div>
             </Link>
           </div>
 
@@ -105,7 +103,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           />
 
           <div className="mt-5 ">
-            <div className="grid grid-cols-3 gap-y-4">
+            <div className="grid grid-cols-3 gap-y-4 text-[#222]">
               <Link href={`/profile/${id}/order`} className="flex justify-center flex-col items-center gap-2">
                 <div>
                   <Image

@@ -78,7 +78,8 @@ export default function InputWithLabel(props: InputProps) {
             transition: "top .1s",
             top: positionInCenter ? 16 : -7
         }} onTouchEnd={labelTouch} className={clsx(
-            "absolute bg-white left-4 leading-none text-neutral-500 z-30 transition",
+            "absolute bg-white left-4 leading-none font-normal z-30 transition",
+            (disabled || disableInput) ? "text-[#222]" :"text-[#6D7781]"
         )}
                htmlFor={name}>{label}</label>
         <section
@@ -89,7 +90,7 @@ export default function InputWithLabel(props: InputProps) {
                        setVal(eventValue)
                        onInputChange?.(eventValue)
                    }} type="text" disabled={disabled} readOnly={disableInput} className={clsx(
-                "flex-1 w-full",
+                "flex-1 w-full font-medium",
 
             )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}/>
             {isSelectInput &&
@@ -102,6 +103,6 @@ export default function InputWithLabel(props: InputProps) {
                 })} options={options ?? []}><IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
                                                            height={24} color={'#bbb'}/></SheetSelect>}
         </section>
-        {description && <section className="text-neutral-500 text-xs px-4 mt-1.5">{description}</section>}
+        {description && <section className="text-[#6D7781] text-xs px-4 mt-1.5">{description}</section>}
     </section>
 }
