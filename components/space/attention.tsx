@@ -1,6 +1,6 @@
 "use client";
 import IconWithImage from '@/components/profile/icon';
-import Modal, { TModaProps } from '@/components/space/modal'
+import Modal, { TModaProps } from '@/components/common/modal'
 import { useState } from 'react';
 export default function Page() {
     const [isFocus, setIsFocus] = useState<boolean>(false)
