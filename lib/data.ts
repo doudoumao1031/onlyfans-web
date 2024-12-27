@@ -1,15 +1,24 @@
+import { postData as MockPostData } from "@/components/post/mock"
+import { PostData } from "@/components/post/type"
+
 export async function fetchFeeds(
     currentPage: number,
 ) {
-    // console.log('process env', process.env)
-    // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/feeds?page=${currentPage}`, {
-    const res = await fetch(`http://localhost:3000/api/feeds?page=${currentPage}`, {
-    // const res = await fetch(`https://onlyfans-demo.vercel.app/api/feeds?page=${currentPage}`, {
-        cache: "no-store", // Ensure fresh data on every request
-    });
-    const {items, hasMore} = await res.json();
+    // Mock data generation
+    const mockItems: PostData[] = Array(10).fill(null).map((_, index) => ({
+        ...MockPostData,
+        id: `post-${index + (currentPage - 1) * 10}`,
+        poster: {
+            ...MockPostData.poster,
+            name: `Creator ${index + 1}`,
+            id: `creator${index + 1}`,
+        }
+    }));
 
-    return {items, hasMore};
+    return {
+        items: mockItems,
+        hasMore: currentPage < 6, // Mock 6 pages of content
+    };
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
