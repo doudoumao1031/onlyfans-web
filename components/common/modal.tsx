@@ -21,7 +21,7 @@ export default function Page({ children = null, visible = false, closeModal = tr
             <div onClick={() => { confirm() }} className="flex-1 text-center text-main-pink">{okText || '确定'}</div>
         </div>
     }
-    return <div onClick={() => { closeModal && cancel() }} className="fixed top-0 left-0 w-screen h-screen bg-black/50 z-10 flex justify-center items-center">
+    return <div onClick={() => { closeModal && cancel() }} className="fixed top-0 left-0 w-screen h-screen bg-black/50 z-50 flex justify-center items-center">
         {children}
         {type === 'modal' && <div className="w-10/12 p-2 rounded-lg bg-white" onClick={(e) => { e.stopPropagation() }}>
             {title && <div className="p-4 font-bold flex justify-center">{title}</div>}
