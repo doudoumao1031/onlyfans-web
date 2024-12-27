@@ -69,8 +69,10 @@ export default function Post({
 function Vote({ data }: { data: VoteData }) {
   return (
     <div>
-      {data.options.map((o, i) => (
-        <div key={i}>{o.name}</div>
+      {data.options.map(({ name, votes }, i) => (
+        <div key={i}>
+          <div>{name}</div>
+        </div>
       ))}
     </div>
   )
@@ -221,7 +223,7 @@ function Thumbnail({
           {largeElement}
         </FullScreen>
       ) : (
-        <div onTouchEnd={() => setShowLarge(true)}>{thumbnailElement}</div>
+        <div onClick={() => setShowLarge(true)}>{thumbnailElement}</div>
       )}
     </div>
   )
@@ -237,13 +239,13 @@ function FullScreen({
   return (
     <div
       className="fixed top-0 left-0 w-screen h-screen bg-black/90 z-50 flex items-center"
-      onTouchEnd={handleTouch}
+      onClick={handleClick}
     >
       {children}
     </div>
   )
 
-  function handleTouch(e: React.TouchEvent) {
+  function handleClick(e: React.MouseEvent<HTMLElement>) {
     if (e.target === e.currentTarget) {
       onExit()
     }
@@ -268,7 +270,11 @@ function Comment({ count }: { count: number }) {
 
 function Tip({ user, count }: { user: User; count: number }) {
   return (
-    <Link scroll={false} href={`/explore/tip/${user.id}`} className="flex items-center">
+    <Link
+      scroll={false}
+      href={`/explore/tip/${user.id}`}
+      className="flex items-center"
+    >
       <Stats icon="/icons/tip.png" value={count} />
     </Link>
   )

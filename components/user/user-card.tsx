@@ -1,6 +1,7 @@
 import Avatar from "@/components/user/avatar";
 import Image from "next/image";
 import {User} from "@/mock/user";
+import Link from "next/link"
 
 /**
  * 博主名片
@@ -55,9 +56,11 @@ export default function UserCard({user, subscribe}: { user: User, subscribe: boo
                                         <span className="text-white text-xs ml-1">{user.video}</span>
                                     </div>
                                 </div>
-                                <button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full">
-                                    <span className="text-white text-xs text-nowrap">免费/订阅</span>
-                                </button>
+                                <Link scroll={false} href={`/explore/subscribedPayment/${user.id}?name=${user.name}`} className="flex items-center">
+                                    <div className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full">
+                                        <span className="text-white text-xs text-nowrap">免费/订阅</span>
+                                    </div>
+                                </Link>
                             </div>
                             )}
                         </div>
