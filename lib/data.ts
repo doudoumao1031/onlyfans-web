@@ -1,4 +1,4 @@
-import { postData as MockPostData } from "@/components/post/mock"
+import { getPostData } from "@/components/post/mock"
 import { PostData } from "@/components/post/type"
 
 export async function fetchFeeds(
@@ -6,10 +6,10 @@ export async function fetchFeeds(
 ) {
     // Mock data generation
     const mockItems: PostData[] = Array(10).fill(null).map((_, index) => ({
-        ...MockPostData,
+        ...getPostData(),
         id: `post-${index + (currentPage - 1) * 10}`,
         poster: {
-            ...MockPostData.poster,
+            ...getPostData().poster,
             name: `Creator ${index + 1}`,
             id: `creator${index + 1}`,
         }
