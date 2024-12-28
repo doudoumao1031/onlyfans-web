@@ -40,7 +40,6 @@ export default function Page() {
                     <ToggleGroupSubscribed
                         type="single"
                         variant="default"
-                        defaultValue="1"
                         id="select_pirce"
                         className="w-full flex justify-around mt-[20px] px-4"
                         onValueChange={(value) => {
@@ -52,13 +51,13 @@ export default function Page() {
                             }
                         }}>
                         {subscribePayments.map(item => (
-                            <ToggleGroupSubscribedItem key={item.id} value={item.id} variant="outline">
+                            <ToggleGroupSubscribedItem key={item.id} value={item.id}>
                                 <div className="relative h-full">
                                     <div
                                         className="h-full flex flex-col justify-center items-center text-black">
                                         <span className="text-nowrap text-xs">{item.time}</span>
                                         <span
-                                            className="text-nowrap text-xl my-4 data-[state=on]:text-main-pink">${item.amount}</span>
+                                            className={`text-nowrap text-xl my-4 ${payment.id === item.id ? "text-main-pink": "text-black"}`}>${item.amount}</span>
                                         <span className="text-nowrap text-xs">{
                                             item.price && (
                                                 <s className="text-xs text-gray-500">${item.price}</s>)
