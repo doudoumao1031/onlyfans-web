@@ -37,7 +37,11 @@ export interface ImageData {
 }
 
 export interface Vote {
+  name: string
+  complete: boolean
   options: VoteOption[]
+  participantAmount: number
+  hoursToEnd: number
 }
 
 export interface VoteOption {

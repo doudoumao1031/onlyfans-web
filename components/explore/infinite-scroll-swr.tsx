@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react"
 import { debounce } from "lodash"
 import useSWR from "swr"
 import Post from "@/components/post/post"
-import { postData } from "../post/mock"
+import { getPostData } from "../post/mock"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -90,7 +90,7 @@ export default function InfiniteScroll({
     <div ref={containerRef} className="h-full w-full overflow-scroll">
       <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
         {items.map((item, index) => (
-          <Post key={index} data={postData} showSubscribe showVote />
+          <Post key={index} data={getPostData()} showSubscribe showVote />
         ))}
       </div>
       {isValidating && (

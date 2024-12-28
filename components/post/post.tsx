@@ -67,13 +67,80 @@ export default function Post({
 }
 
 function Vote({ data }: { data: VoteData }) {
+  const [showOptions, setShowOptions] = useState(false)
+  const [showOptionAmount, setShowOptionAmount] = useState(3)
+  const [selectedVoteIndex, setSelectedVoteIndex] = useState(-1)
+  const totalVotes = data.options.reduce((t, o) => t + o.votes, 0)
+
   return (
-    <div>
-      {data.options.map(({ name, votes }, i) => (
-        <div key={i}>
-          <div>{name}</div>
+    <div className="flex flex-col gap-2">
+      <div
+        className="flex gap-2 items-end"
+        onClick={() => setShowOptions((pre) => !pre)}
+      >
+        <Image src="/icons/vote.png" alt="" width={20} height={20} />
+        <div className="text-red-500 text-sm">{data.name}</div>
+        {showOptions ? (
+          <Image src="/icons/arrow_up.png" alt="" width={20} height={20} />
+        ) : (
+          <Image src="/icons/arrow_down.png" alt="" width={20} height={20} />
+        )}
+      </div>
+      {showOptions && (
+        <div className="flex flex-col gap-1">
+          {data.options.slice(0, showOptionAmount).map(({ name, votes }, i) =>
+            data.complete ? (
+              <div
+                key={i}
+                className="w-full h-11 border rounded-md px-2 flex justify-between items-center bg-no-repeat"
+                style={{
+                  backgroundImage: `${
+                    selectedVoteIndex === i
+                      ? "url(/icons/pink.png)"
+                      : "url(/icons/silver.png)"
+                  }`,
+                  backgroundSize: `${(votes / totalVotes) * 100}% 100%`,
+                  borderColor: `${
+                    selectedVoteIndex === i ? "#FF8492" : "#DDDDDD"
+                  }`,
+                }}
+                onClick={() => setSelectedVoteIndex(i)}
+              >
+                <div className="flex gap-1 h-full items-center">
+                  {selectedVoteIndex === i && (
+                    <Image
+                      src="/icons/select.png"
+                      alt=""
+                      width={20}
+                      height={20}
+                    />
+                  )}
+                  <div>{name}</div>
+                </div>
+                <div className="pr-3">{votes}票</div>
+              </div>
+            ) : (
+              <div
+                key={i}
+                className="w-full h-11 border border-[#DDDDDD] rounded-md flex justify-center items-center"
+              >
+                <div>{name}</div>
+              </div>
+            )
+          )}
+          {showOptionAmount < data.options.length && (
+            <div
+              className="w-full h-11 border border-[#DDDDDD] rounded-md flex justify-center items-center"
+              onClick={() => setShowOptionAmount(data.options.length)}
+            >
+              <div>查看全部选项</div>
+            </div>
+          )}
+          <div className="text-[#999999]">
+            {data.participantAmount}人参与 还有{data.hoursToEnd}小时结束
+          </div>
         </div>
-      ))}
+      )}
     </div>
   )
 }
@@ -182,7 +249,7 @@ function Media({ data }: { data: (VideoData | ImageData)[] }) {
                   backgroundImage: `url(${thumbnail})`,
                 }}
               >
-                <div className="bg-black/50 w-10 h-10 rounded-full flex justify-center items-center">
+                <div className="bg-black/50 w-12 h-12 rounded-full flex justify-center items-center">
                   <Image
                     src="/icons/play.png"
                     width={20}
