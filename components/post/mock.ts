@@ -1,76 +1,78 @@
 import { MediaType, PostData } from "./type"
 
-const videoSrc =
+const video =
   "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-
-const imageSrc = "/mock/avatar.jpg"
-
-const backgroundSrc = "/mock/usercard-background.jpg"
+const avatar = "/mock/avatar.jpg"
+const background = "/mock/usercard-background.jpg"
+const userName = "Jamie Shon"
+const commentContent =
+  "这个产品我用过，超级好用。这个产品我用过，超级好用。这个产品我用过，超级好用。"
+const commentTime = "12月22日 22:22"
 
 export function getPostData(): PostData {
   return {
     id: "123",
     poster: {
-      name: "Jamie Shon",
+      name: userName,
       id: "jamieshon",
-      avatar: imageSrc,
-      background: backgroundSrc,
+      avatar,
+      background,
     },
     description:
       "Jamie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon @luvjamxoxo 带您踏上文化之旅，展示韩国烧烤、香草护肤品、各种泡菜等等！您一定想错过这个充满动感的剧集！",
     media: [
       {
         type: MediaType.Image,
-        src: imageSrc,
-        thumbnail: imageSrc,
+        src: avatar,
+        thumbnail: avatar,
       },
       {
         type: MediaType.Image,
-        src: imageSrc,
-        thumbnail: imageSrc,
+        src: avatar,
+        thumbnail: avatar,
       },
       {
         type: MediaType.Image,
-        src: imageSrc,
-        thumbnail: imageSrc,
+        src: avatar,
+        thumbnail: avatar,
       },
       {
         type: MediaType.Image,
-        src: imageSrc,
-        thumbnail: imageSrc,
+        src: avatar,
+        thumbnail: avatar,
       },
       {
         type: MediaType.Image,
-        src: imageSrc,
-        thumbnail: imageSrc,
+        src: avatar,
+        thumbnail: avatar,
       },
       {
         type: MediaType.Video,
         thumbnail: "/mock/video-preview.jpg",
-        src: videoSrc,
+        src: video,
       },
       {
         type: MediaType.Video,
         thumbnail: "/mock/video-preview.jpg",
-        src: videoSrc,
+        src: video,
       },
       {
         type: MediaType.Video,
         thumbnail: "/mock/video-preview.jpg",
-        src: videoSrc,
+        src: video,
       },
       {
         type: MediaType.Video,
         thumbnail: "/mock/video-preview.jpg",
-        src: videoSrc,
+        src: video,
       },
     ],
     subscribe: [
       {
-        name: "Jamie Shon",
+        name: userName,
         id: "jamieshon",
-        avatar: imageSrc,
-        background: backgroundSrc,
+        avatar,
+        background,
       },
     ],
     vote: {
@@ -97,11 +99,60 @@ export function getPostData(): PostData {
         },
       ],
     },
-    like: { count: 999, liked: true },
-    share: { count: 999, shared: false },
-    save: { count: 999, saved: true },
-    tip: { count: 999 },
-    comment: { count: 999 },
+    likedAmount: 999,
+    likedByMe: true,
+    sharedAmount: 999,
+    sharedByMe: false,
+    savedAmount: 999,
+    savedByMe: true,
+    tippedAmount: 999,
+    tippedByMe: false,
+    commentAmount: 99,
+    commentedByMe: true,
+    comments: [
+      {
+        userName,
+        avatar,
+        content: commentContent,
+        likes: 99,
+        time: commentTime,
+        replies: [
+          {
+            userName,
+            avatar,
+            content: commentContent,
+            likes: 99,
+            time: commentTime,
+            replies: [],
+          },
+          {
+            userName,
+            avatar,
+            content: commentContent,
+            likes: 99,
+            time: commentTime,
+            replies: [],
+          },
+        ],
+      },
+      {
+        userName,
+        avatar,
+        content: commentContent,
+        likes: 99,
+        time: commentTime,
+        replies: [
+          {
+            userName,
+            avatar,
+            content: commentContent,
+            likes: 99,
+            time: commentTime,
+            replies: [],
+          },
+        ],
+      },
+    ],
   }
 }
 

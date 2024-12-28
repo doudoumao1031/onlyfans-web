@@ -4,12 +4,27 @@ export interface PostData {
   description: string
   media: (VideoData | ImageData)[]
   subscribe: User[]
-  like: { count: number; liked: boolean }
-  share: { count: number; shared: boolean }
-  save: { count: number; saved: boolean }
-  tip: { count: number }
-  comment: { count: number }
+  likedAmount: number
+  likedByMe: boolean
+  savedAmount: number
+  savedByMe: boolean
+  sharedAmount: number
+  sharedByMe: boolean
+  tippedAmount: number
+  tippedByMe: boolean
+  commentAmount: number
+  commentedByMe: boolean
+  comments: Comment[]
   vote?: Vote
+}
+
+export interface Comment {
+  userName: string
+  avatar: string
+  content: string
+  time: string
+  likes: number
+  replies: Comment[]
 }
 
 export interface User {
