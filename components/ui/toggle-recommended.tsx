@@ -11,7 +11,7 @@ const toggleVariants = cva(
     {
         variants: {
             variant: {
-                default: "flex items-center justify-center bg-white border border-main-pink text-main-pink rounded-full px-5 py-1",
+                default: "flex items-center justify-center bg-white border border-main-pink text-main-pink rounded-full px-5 py-1 data-[state=off]:text-main-pink",
                 outline: "border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
             },
             size: {

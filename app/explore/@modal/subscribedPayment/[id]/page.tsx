@@ -1,6 +1,6 @@
 "use client"
 import {SlideUpModal} from "@/components/common/slide-up-modal";
-import {useState, useEffect} from "react";
+import {useState, useMemo} from "react";
 import {useParams, useRouter, useSearchParams} from "next/navigation";
 import {subscribePayments, UserSubscribePayment} from "@/mock/user";
 import {ToggleGroupSubscribed, ToggleGroupSubscribedItem} from "@/components/ui/toggle-group-subcribed";
@@ -14,7 +14,7 @@ export default function Page() {
     const [amount, setAmount] = useState<number>(0);
     const [payment, setPayment] = useState<UserSubscribePayment>(subscribePayments[0]);
     const [diff, setDiff] = useState<number>(0);
-    useEffect(() => {
+    useMemo(() => {
         const diff = (payment.price - payment.amount).toFixed(2);
         setDiff(parseFloat(diff));
     }, [payment]);
@@ -40,8 +40,8 @@ export default function Page() {
                     <ToggleGroupSubscribed
                         type="single"
                         variant="default"
-                        defaultValue="1"
                         id="select_pirce"
+                        defaultValue={payment.id}
                         className="w-full flex justify-around mt-[20px] px-4"
                         onValueChange={(value) => {
                             if (value) {
@@ -52,13 +52,13 @@ export default function Page() {
                             }
                         }}>
                         {subscribePayments.map(item => (
-                            <ToggleGroupSubscribedItem key={item.id} value={item.id} variant="outline">
+                            <ToggleGroupSubscribedItem key={item.id} value={item.id}>
                                 <div className="relative h-full">
                                     <div
                                         className="h-full flex flex-col justify-center items-center text-black">
                                         <span className="text-nowrap text-xs">{item.time}</span>
                                         <span
-                                            className="text-nowrap text-xl my-4 data-[state=on]:text-main-pink">${item.amount}</span>
+                                            className={`text-nowrap text-xl my-4 ${item.amount === amount ? "text-main-pink": "text-black"}`}>${item.amount}</span>
                                         <span className="text-nowrap text-xs">{
                                             item.price && (
                                                 <s className="text-xs text-gray-500">${item.price}</s>)
