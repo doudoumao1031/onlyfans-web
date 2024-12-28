@@ -2,18 +2,18 @@
 
 import React, { Fragment } from "react"
 import Post from "@/components/post/post"
-import { postData } from "../post/mock"
 import InfiniteScroll from "../common/infinite-scroll"
 import { ListError, ListLoading, ListEnd } from "./list-states"
+import { PostData } from "@/components/post/type"
 
 interface FeedListProps {
-  initialItems: typeof postData[]
+  initialItems: PostData[]
   initialHasMore: boolean
 }
 
 export default function FeedList({ initialItems, initialHasMore }: FeedListProps) {
   return (
-    <InfiniteScroll<typeof postData>
+    <InfiniteScroll<PostData>
       url="/api/feeds"
       initialItems={initialItems}
       initialHasMore={initialHasMore}
