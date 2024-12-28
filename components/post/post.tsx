@@ -10,6 +10,7 @@ import {
   VideoData,
   ImageData,
   Vote as VoteData,
+  Comment as CommentData,
 } from "./type"
 import {
   isMention,
@@ -33,16 +34,22 @@ export default function Post({
     description,
     media,
     subscribe,
-    like,
-    comment,
-    tip,
-    share,
-    save,
+    likedAmount,
+    likedByMe,
+    commentAmount,
+    commentedByMe,
+    comments,
+    tippedAmount,
+    tippedByMe,
+    sharedAmount,
+    sharedByMe,
+    savedAmount,
+    savedByMe,
     vote,
   } = data
 
   return (
-    <div className="w-full flex flex-col gap-2 border-b border-black/5">
+    <div className="w-full flex flex-col gap-2 mb-8">
       <UserTitle user={poster} />
       <Description content={description} />
       <UserHomePageLink userId={poster.id} />
@@ -55,25 +62,141 @@ export default function Post({
         </div>
       )}
       {showVote && vote && <Vote data={vote} />}
-      <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
-        <Like count={like.count} liked={like.liked} />
-        <Comment count={comment.count} />
-        <Tip user={poster} count={tip.count} />
-        <Share count={share.count} shared={share.shared} />
-        <Save count={save.count} saved={save.saved} />
+      <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6 border-b border-black/5">
+        <Like count={likedAmount} liked={likedByMe} />
+        <CommentStats count={commentAmount} />
+        <Tip user={poster} count={tippedAmount} tipped={tippedByMe} />
+        <Share count={sharedAmount} shared={sharedByMe} />
+        <Save count={savedAmount} saved={savedByMe} />
+      </div>
+      <Comments comments={comments} />
+    </div>
+  )
+}
+
+function Comments({ comments }: { comments: CommentData[] }) {
+  return (
+    <div className="flex flex-col gap-4">
+      {comments.map((c, i) => (
+        <div key={i} className="flex flex-col gap-2">
+          <Comment comment={c} />
+          {c.replies.length && (
+            <div className="pl-11 flex flex-col gap-2">
+              {c.replies.map((r, j) => (
+                <Comment comment={r} key={j} />
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Comment({ comment }: { comment: CommentData }) {
+  const { avatar, userName, content, likes, time } = comment
+  return (
+    <div className="flex justify-between">
+      <div className="flex gap-2">
+        <Avatar src={avatar} width={10} />
+        <div className="flex flex-col gap-1">
+          <div className="text-xs text-[#FF8492]">{userName}</div>
+          <div className="text-sm">{content}</div>
+          <div className="flex gap-4 text-xs text-[#6D7781]">
+            <div>{time}</div>
+            <div>回复</div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col items-center ml-2">
+        <Image
+          src="/icons/thumbup.png"
+          width={20}
+          height={20}
+          alt=""
+          className="max-w-4"
+        />
+        <div className="text-[10px] text-[#6D7781]">{likes}</div>
       </div>
     </div>
   )
 }
 
 function Vote({ data }: { data: VoteData }) {
+  const [showOptions, setShowOptions] = useState(false)
+  const [showOptionAmount, setShowOptionAmount] = useState(3)
+  const [selectedVoteIndex, setSelectedVoteIndex] = useState(-1)
+  const totalVotes = data.options.reduce((t, o) => t + o.votes, 0)
+
   return (
-    <div>
-      {data.options.map(({ name, votes }, i) => (
-        <div key={i}>
-          <div>{name}</div>
+    <div className="flex flex-col gap-2">
+      <div
+        className="flex gap-2 items-end"
+        onClick={() => setShowOptions((pre) => !pre)}
+      >
+        <Image src="/icons/vote.png" alt="" width={20} height={20} />
+        <div className="text-red-500 text-sm">{data.name}</div>
+        {showOptions ? (
+          <Image src="/icons/arrow_up.png" alt="" width={20} height={20} />
+        ) : (
+          <Image src="/icons/arrow_down.png" alt="" width={20} height={20} />
+        )}
+      </div>
+      {showOptions && (
+        <div className="flex flex-col gap-1">
+          {data.options.slice(0, showOptionAmount).map(({ name, votes }, i) =>
+            data.complete ? (
+              <div
+                key={i}
+                className="w-full h-11 border rounded-md px-2 flex justify-between items-center bg-no-repeat"
+                style={{
+                  backgroundImage: `${
+                    selectedVoteIndex === i
+                      ? "url(/icons/pink.png)"
+                      : "url(/icons/silver.png)"
+                  }`,
+                  backgroundSize: `${(votes / totalVotes) * 100}% 100%`,
+                  borderColor: `${
+                    selectedVoteIndex === i ? "#FF8492" : "#DDDDDD"
+                  }`,
+                }}
+                onClick={() => setSelectedVoteIndex(i)}
+              >
+                <div className="flex gap-1 h-full items-center">
+                  {selectedVoteIndex === i && (
+                    <Image
+                      src="/icons/select.png"
+                      alt=""
+                      width={20}
+                      height={20}
+                    />
+                  )}
+                  <div>{name}</div>
+                </div>
+                <div className="pr-3">{votes}票</div>
+              </div>
+            ) : (
+              <div
+                key={i}
+                className="w-full h-11 border border-[#DDDDDD] rounded-md flex justify-center items-center"
+              >
+                <div>{name}</div>
+              </div>
+            )
+          )}
+          {showOptionAmount < data.options.length && (
+            <div
+              className="w-full h-11 border border-[#DDDDDD] rounded-md flex justify-center items-center"
+              onClick={() => setShowOptionAmount(data.options.length)}
+            >
+              <div>查看全部选项</div>
+            </div>
+          )}
+          <div className="text-[#999999]">
+            {data.participantAmount}人参与 还有{data.hoursToEnd}小时结束
+          </div>
         </div>
-      ))}
+      )}
     </div>
   )
 }
@@ -89,16 +212,18 @@ function SubscribeCard({ user }: { user: User }) {
       <div className="w-full h-full flex justify-between bg-black/50 p-3 rounded-lg">
         <div className="flex gap-4 px-3 items-center">
           <div>
-            <Avatar src={user.avatar} width="w-24" />
+            <Avatar src={user.avatar} width={24} />
           </div>
           <div className="text-white">
             <div className="text-lg">{user.name}</div>
             <div className="text-white/75 text-xs">{buildMention(user.id)}</div>
           </div>
         </div>
-        <button className="bg-black opacity-65 text-white text-xs self-start px-1 py-1 rounded-lg">
-          免费/订阅
-        </button>
+        <Link scroll={false} href={`/explore/subscribedPayment/${user.id}?name=${user.name}`}>
+          <button className="bg-black bg-opacity-65 text-white text-xs self-start px-1 py-1 rounded-lg">
+            免费/订阅
+          </button>
+        </Link>
       </div>
     </div>
   )
@@ -118,12 +243,12 @@ function UserTitle({ user }: { user: User }) {
   )
 }
 
-function Avatar({ src, width = "w-18" }: { src: string; width?: string }) {
+function Avatar({ src, width = 16 }: { src: string; width?: number }) {
   return (
     <Image
       src={src}
       alt=""
-      className={`rounded-full border-2 border-white ${width}`}
+      className={`rounded-full border-2 border-white w-${width} h-${width}`}
       width={50}
       height={50}
     />
@@ -182,7 +307,7 @@ function Media({ data }: { data: (VideoData | ImageData)[] }) {
                   backgroundImage: `url(${thumbnail})`,
                 }}
               >
-                <div className="bg-black/50 w-10 h-10 rounded-full flex justify-center items-center">
+                <div className="bg-black/50 w-12 h-12 rounded-full flex justify-center items-center">
                   <Image
                     src="/icons/play.png"
                     width={20}
@@ -264,18 +389,26 @@ function Like({ count, liked }: { count: number; liked: boolean }) {
   return <Stats icon="/icons/like.png" value={count} highlight={liked} />
 }
 
-function Comment({ count }: { count: number }) {
+function CommentStats({ count }: { count: number }) {
   return <Stats icon="/icons/comment.png" value={count} />
 }
 
-function Tip({ user, count }: { user: User; count: number }) {
+function Tip({
+  user,
+  count,
+  tipped,
+}: {
+  user: User
+  count: number
+  tipped: boolean
+}) {
   return (
     <Link
       scroll={false}
       href={`/explore/tip/${user.id}`}
       className="flex items-center"
     >
-      <Stats icon="/icons/tip.png" value={count} />
+      <Stats icon="/icons/tip.png" value={count} highlight={tipped} />
     </Link>
   )
 }

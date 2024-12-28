@@ -6,8 +6,8 @@ export default function Page() {
         /** 已订阅 */
         <>
             {users.map((user) => (
-                <div key={user.id} className="w-full mb-[10px]">
-                    <Card user={user} subscribe={false}/>
+                <div key={user.user.id} className="w-full mb-[10px]">
+                    <Card card={user} subscribe={false}/>
                 </div>
             ))}
         </>
