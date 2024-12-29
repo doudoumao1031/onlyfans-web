@@ -4,14 +4,17 @@ import { PostData } from "@/components/post/type"
 export async function fetchFeeds(
     currentPage: number,
 ) {
+    // Add artificial latency
+    await new Promise(resolve => setTimeout(resolve, 1000))
+
     // Mock data generation
-    const mockItems: PostData[] = Array(10).fill(null).map((_, index) => ({
+    const mockItems: PostData[] = Array(5).fill(null).map((_, index) => ({
         ...getPostData(),
-        id: `post-${index + (currentPage - 1) * 10}`,
+        id: `post-${index + (currentPage - 1) * 5}`,
         poster: {
             ...getPostData().poster,
-            name: `Creator ${index + 1}`,
-            id: `creator${index + 1}`,
+            name: `Creator ${index + 1 + (currentPage - 1) * 5}`,
+            id: `creator${index + 1 + (currentPage - 1) * 5}`,
         }
     }));
 
