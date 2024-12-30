@@ -19,6 +19,7 @@ export default function TabLinks({ id }: { id: string }) {
     <div className="w-full text-center grid grid-cols-2 border-b border-gray-100">
       {links.map((link) => (
         <Link
+          prefetch={true}
           key={link.name}
           href={link.href}
           className={clsx("pt-3.5 pb-3.5 text-[20px] relative", pathNameClass(link.href))}
