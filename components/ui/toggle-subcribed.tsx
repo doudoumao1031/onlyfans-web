@@ -7,15 +7,15 @@ import {cva, type VariantProps} from "class-variance-authority"
 import {cn} from "@/lib/utils"
 
 const toggleVariants = cva(
-    "flex items-center justify-center bg-white border border-main-pink text-main-pink rounded-full px-5 py-1 hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-main-pink data-[state=on]:text-white [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+    "bg-white rounded-lg hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-rose-100 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
     {
         variants: {
             variant: {
-                default: "flex items-center justify-center bg-white border border-main-pink text-main-pink rounded-full px-5 py-1 data-[state=off]:text-main-pink",
-                outline: "border border-input bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
+                default: "data-[state=off]:bg-white",
+                pink: "data-[state=on]:text-main-pink",
             },
             size: {
-                default: "px-5 py-1 min-w-9",
+                default: "h-36 w-[30%]",
                 sm: "h-8 px-1.5 min-w-8",
                 lg: "h-10 px-2.5 min-w-10",
             },
@@ -27,7 +27,7 @@ const toggleVariants = cva(
     }
 )
 
-const ToggleRecom = React.forwardRef<
+const ToggleSubscribed = React.forwardRef<
     React.ElementRef<typeof TogglePrimitive.Root>,
     React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &
     VariantProps<typeof toggleVariants>
@@ -39,6 +39,6 @@ const ToggleRecom = React.forwardRef<
     />
 ))
 
-ToggleRecom.displayName = TogglePrimitive.Root.displayName
+ToggleSubscribed.displayName = TogglePrimitive.Root.displayName
 
-export {ToggleRecom, toggleVariants}
+export {ToggleSubscribed, toggleVariants}

@@ -25,7 +25,7 @@ export default function Search({placeholder}: { placeholder: string }) {
                        handleSearch(e.target.value);
                    }}
                    defaultValue={searchParams.get('search')?.toString()}/>
-            <Image src="/icons/explore/icon_search_s@3x.png" alt="search"
+            <Image src="/icons/icon_search_s@3x.png" alt="search"
                    width={18}
                    height={18}
                    className="absolute top-1/3 left-6"
