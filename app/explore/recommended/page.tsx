@@ -1,11 +1,11 @@
 "use client"
-import {User, users} from "@/mock/user";
+import {UserCardInfo, users} from "@/mock/user";
 import {useState} from "react";
 import {ToggleGroupRecom, ToggleGroupRecomItem} from "@/components/ui/toggle-group-recommended";
 import UserCard from "@/components/user/user-card";
 
 export default function Page() {
-    const [userList, setUserList] = useState<User[]>(users);
+    const [userList, setUserList] = useState<UserCardInfo[]>(users);
     return (
         /** 推荐博主 */
         <>
@@ -31,8 +31,8 @@ export default function Page() {
                 </ToggleGroupRecomItem>
             </ToggleGroupRecom>
             {userList.map((user) => (
-                <div key={user.id} className="w-full mb-[10px]">
-                    <UserCard user={user} subscribe={true}/>
+                <div key={user.user.id} className="w-full mb-[10px]">
+                    <UserCard card={user} subscribe={true}/>
                 </div>
             ))}
         </>
