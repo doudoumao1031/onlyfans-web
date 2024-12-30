@@ -1,7 +1,8 @@
+"use client"
 import Avatar from "@/components/user/avatar";
 import Image from "next/image";
-import {UserCardInfo} from "@/mock/user";
-import Link from "next/link"
+import { UserCardInfo} from "@/mock/user";
+import SubscribedDrawer from "@/components/explore/subscribed-drawer";
 
 /**
  * 博主名片
@@ -11,6 +12,7 @@ import Link from "next/link"
  */
 export default function UserCard({card, subscribe}: {card: UserCardInfo, subscribe: boolean }) {
     const {user, postMetric, addNum} = card;
+
     return (
         <div className="flex justify-center w-full bg-black rounded-lg h-[100px]">
             <Image
@@ -35,33 +37,35 @@ export default function UserCard({card, subscribe}: {card: UserCardInfo, subscri
                                 <div className="font-normal">@{user.id}</div>
                             </div>
                             {subscribe && (
-                            <div className="flex justify-between items-center gap-24">
-                                <div className="flex items-center gap-4">
-                                    <div className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-center">
-                                        <Image
-                                            src="/icons/explore/icon_fans_info_photo_white@3x.png"
-                                            width={14}
-                                            height={14}
-                                            alt="photo"
-                                        />
-                                        <span className="text-white text-xs ml-1">{postMetric.collection_count}</span>
+                                <div className="flex justify-between items-center gap-24">
+                                    <div className="flex items-center gap-4">
+                                        <div
+                                            className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-center">
+                                            <Image
+                                                src="/icons/explore/icon_fans_info_photo_white@3x.png"
+                                                width={14}
+                                                height={14}
+                                                alt="photo"
+                                            />
+                                            <span
+                                                className="text-white text-xs ml-1">{postMetric.collection_count}</span>
+                                        </div>
+                                        <div className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-start">
+                                            <Image
+                                                src="/icons/explore/icon_fans_info_video_white@3x.png"
+                                                width={14}
+                                                height={14}
+                                                alt="video"
+                                            />
+                                            <span className="text-white text-xs ml-1">{postMetric.play_count}</span>
+                                        </div>
                                     </div>
-                                    <div className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-start">
-                                        <Image
-                                            src="/icons/explore/icon_fans_info_video_white@3x.png"
-                                            width={14}
-                                            height={14}
-                                            alt="video"
-                                        />
-                                        <span className="text-white text-xs ml-1">{postMetric.play_count}</span>
-                                    </div>
+                                    <SubscribedDrawer name={user.first_name} userId={user.id}>
+                                        <div className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full">
+                                            <span className="text-white text-xs text-nowrap">免费/订阅</span>
+                                        </div>
+                                    </SubscribedDrawer>
                                 </div>
-                                <Link scroll={false} href={`/explore/subscribedPayment/${user.id}?name=${user.username}`} className="flex items-center">
-                                    <div className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full">
-                                        <span className="text-white text-xs text-nowrap">免费/订阅</span>
-                                    </div>
-                                </Link>
-                            </div>
                             )}
                         </div>
                     </div>

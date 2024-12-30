@@ -103,8 +103,8 @@ export async function systemPost() {
 }
 
 /**
- * 搜索
+ * 搜索帖子
  */
-export async function searchBlog() {
-    return await postData('/index/systemPost', {query: "123"});
+export async function searchPost(query: string) {
+    return await postData('/post/search', {query: query});
 }
