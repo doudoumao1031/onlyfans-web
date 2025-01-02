@@ -18,11 +18,13 @@ export type User = {
 }
 
 export type postMetric = {
+
         collection_count: number,
         comment_count: number,
         play_count: number,
         share_count: number,
         thumbs_up_count: number,
+    // 打赏费用
         tip_count: number
 }
 
@@ -51,12 +53,12 @@ export const users:UserCardInfo[] = [
             location: "中国",
         },
         postMetric: {
-            collection_count: 0,
-            comment_count: 0,
-            play_count: 0,
-            share_count: 0,
-            thumbs_up_count: 0,
-            tip_count: 0
+            collection_count: 11,
+            comment_count: 22,
+            play_count:33,
+            share_count: 44,
+            thumbs_up_count: 55,
+            tip_count: 66
         },
         addNum: 99,
     },
@@ -75,12 +77,12 @@ export const users:UserCardInfo[] = [
             location: "中国",
         },
         postMetric: {
-            collection_count: 0,
-            comment_count: 0,
-            play_count: 0,
-            share_count: 0,
-            thumbs_up_count: 0,
-            tip_count: 0
+            collection_count: 11,
+            comment_count: 22,
+            play_count:33,
+            share_count: 44,
+            thumbs_up_count: 55,
+            tip_count: 66
         },
         addNum: 109,
     },
@@ -99,12 +101,12 @@ export const users:UserCardInfo[] = [
             location: "中国",
         },
         postMetric: {
-            collection_count: 0,
-            comment_count: 0,
-            play_count: 0,
-            share_count: 0,
-            thumbs_up_count: 0,
-            tip_count: 0
+            collection_count: 11,
+            comment_count: 22,
+            play_count:33,
+            share_count: 44,
+            thumbs_up_count: 55,
+            tip_count: 66
         },
         addNum: 99,
     },
@@ -123,12 +125,12 @@ export const users:UserCardInfo[] = [
             location: "中国",
         },
         postMetric: {
-            collection_count: 0,
-            comment_count: 0,
-            play_count: 0,
-            share_count: 0,
-            thumbs_up_count: 0,
-            tip_count: 0
+            collection_count: 11,
+            comment_count: 22,
+            play_count:33,
+            share_count: 44,
+            thumbs_up_count: 55,
+            tip_count: 66
         },
         addNum: 99,
     }

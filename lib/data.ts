@@ -1,15 +1,27 @@
+import { getPostData } from "@/components/post/mock"
+import { PostData } from "@/components/post/type"
+
 export async function fetchFeeds(
     currentPage: number,
 ) {
-    // console.log('process env', process.env)
-    // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/feeds?page=${currentPage}`, {
-    const res = await fetch(`http://localhost:3000/api/feeds?page=${currentPage}`, {
-    // const res = await fetch(`https://onlyfans-demo.vercel.app/api/feeds?page=${currentPage}`, {
-        cache: "no-store", // Ensure fresh data on every request
-    });
-    const {items, hasMore} = await res.json();
+    // Add artificial latency
+    await new Promise(resolve => setTimeout(resolve, 1000))
 
-    return {items, hasMore};
+    // Mock data generation
+    const mockItems: PostData[] = Array(5).fill(null).map((_, index) => ({
+        ...getPostData(),
+        id: `post-${index + (currentPage - 1) * 5}`,
+        poster: {
+            ...getPostData().poster,
+            name: `Creator ${index + 1 + (currentPage - 1) * 5}`,
+            id: `creator${index + 1 + (currentPage - 1) * 5}`,
+        }
+    }));
+
+    return {
+        items: mockItems,
+        hasMore: currentPage < 6, // Mock 6 pages of content
+    };
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -91,8 +103,8 @@ export async function systemPost() {
 }
 
 /**
- * 搜索
+ * 搜索帖子
  */
-export async function searchBlog() {
-    return await postData('/index/systemPost', {query: "123"});
+export async function searchPost(query: string) {
+    return await postData('/post/search', {query: query});
 }
