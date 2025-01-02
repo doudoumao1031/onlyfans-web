@@ -1,5 +1,5 @@
-import { getPostData } from "@/components/post/mock"
-import { PostData } from "@/components/post/type"
+import {getPostData} from "@/components/post/mock"
+import {PostData} from "@/components/post/type"
 
 export async function fetchFeeds(
     currentPage: number,
@@ -29,17 +29,16 @@ export type PostResult = {
     message: string,
 }
 
-async function postData(url: string, data: unknown) {
+export async function postData(url: string, data: unknown) {
     console.log("=====>post url:", url)
+    const isFormData = data && data instanceof FormData
     try {
         const response = await fetch(apiUrl + url, {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-Token': '20241400',
+                'X-Token': '1',
             },
-            body: JSON.stringify(data),
+            body: isFormData ? data : JSON.stringify(data),
         });
 
         if (response.ok) {
@@ -104,4 +103,16 @@ export async function systemPost() {
  */
 export async function searchBlog() {
     return await postData('/index/systemPost', {query: "123"});
+}
+
+// 文件上传
+// export const mediaUpload = (data: FormData) => postData('/media/upload', data)
+export const mediaUpload = (data: FormData) => {
+    return fetch(apiUrl + "/media/upload", {
+        headers: {
+            'X-Token': '1',
+        },
+        method: "post",
+        body: data
+    }).then(res => res.json())
 }

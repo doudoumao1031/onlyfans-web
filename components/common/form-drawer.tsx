@@ -21,7 +21,8 @@ export default function FormDrawer({
                                        className,
                                        isOpen,
                                        setIsOpen,
-                                       outerControl
+                                       outerControl,
+    handleSubmit
                                    }: {
     children: React.ReactNode,
     title?: React.ReactNode,
@@ -31,7 +32,8 @@ export default function FormDrawer({
     className?: string,
     outerControl?: boolean,
     isOpen?: boolean,
-    setIsOpen?: (val: boolean) => void
+    setIsOpen?: (val: boolean) => void,
+    handleSubmit?: () => void
 }) {
     const [innerIsOpen, setInnerIsOpen] = useState<boolean>(false)
     const openState = outerControl ? isOpen : innerIsOpen
@@ -45,7 +47,7 @@ export default function FormDrawer({
             "h-[95vh] bg-white",
             className ?? ""
         )}>
-            <section className={"flex-1"}>
+            <form className={"flex-1"} onSubmit={handleSubmit}>
                 <DrawerHeader className={"hidden"}>
                     <DrawerTitle></DrawerTitle>
                     <DrawerDescription></DrawerDescription>
@@ -53,7 +55,7 @@ export default function FormDrawer({
                 <ModalHeader title={title} left={headerLeft?.(handleClose)}
                              right={headerRight?.(handleClose)}></ModalHeader>
                 {children}
-            </section>
+            </form>
         </DrawerContent>
     </Drawer>
 }

@@ -11,20 +11,22 @@ import clsx from "clsx";
 import IconWithImage from "@/components/profile/icon";
 import SheetSelect, {ISelectOption} from "@/components/common/sheet-select";
 
+type InputValueType = string | number | readonly string[] | undefined
+
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: ReactNode,
-    name: string,
-    value: string,
+    name?: string,
+    value: InputValueType,
     disabled?: boolean,
     description?: ReactNode,
     options?: ISelectOption[],
-    onInputChange?: (value: string) => void,
+    onInputChange?: (value: InputValueType) => void,
 }
 
 export default function InputWithLabel(props: InputProps) {
     const {label, name, disabled, onInputChange, description, value, options} = props
-    const [val, setVal] = useState<string>(value ?? "")
+    const [val, setVal] = useState<InputValueType>(value ?? "")
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const inputRef = useRef<HTMLInputElement>(null)
     const isSelectInput = useMemo(() => {
