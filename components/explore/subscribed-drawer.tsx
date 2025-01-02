@@ -5,7 +5,7 @@ import {subscribePayments, UserSubscribePayment} from "@/mock/user";
 import {useState, useMemo} from "react";
 
 export default function SubscribedDrawer({userId, name, children}: {
-    userId: string,
+    userId: number,
     name: string,
     children: React.ReactNode
 }) {

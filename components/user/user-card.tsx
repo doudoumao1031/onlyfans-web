@@ -1,8 +1,8 @@
 "use client"
 import Avatar from "@/components/user/avatar";
 import Image from "next/image";
-import { UserCardInfo} from "@/mock/user";
 import SubscribedDrawer from "@/components/explore/subscribed-drawer";
+import {BloggerInfo} from "@/lib/struct";
 
 /**
  * 博主名片
@@ -10,13 +10,13 @@ import SubscribedDrawer from "@/components/explore/subscribed-drawer";
  * @param subscribe 是否订阅
  * @constructor
  */
-export default function UserCard({card, subscribe}: {card: UserCardInfo, subscribe: boolean }) {
-    const {user, postMetric, addNum} = card;
+export default function UserCard({user, subscribe}: {user: BloggerInfo, subscribe: boolean }) {
 
     return (
         <div className="flex justify-center w-full bg-black rounded-lg h-[100px]">
             <Image
-                src={user.back_img}
+                src={`https://imfanstest.potato.im/api/v1/media/img/${user.back_img}` || "/mock/header_image1.jpg"}
+                // src="/mock/header_image1.jpg"
                 width={280}
                 height={100}
                 alt=""
@@ -29,7 +29,7 @@ export default function UserCard({card, subscribe}: {card: UserCardInfo, subscri
                 <div className="w-full">
                     <div className="flex gap-4 px-3 items-center justify-start">
                         <div className="w-1/4">
-                            <Avatar src={user.photo} vlog={user.live_certification} width="w-[66px]"/>
+                            <Avatar src={`https://imfanstest.potato.im/api/v1/media/img/${user.photo}` || "/mock/avatar1.jpg"} vlog={user.live_certification} width="w-[66px]"/>
                         </div>
                         <div className="flex-col w-3/4">
                             <div className="text-white">
@@ -48,7 +48,7 @@ export default function UserCard({card, subscribe}: {card: UserCardInfo, subscri
                                                 alt="photo"
                                             />
                                             <span
-                                                className="text-white text-xs ml-1">{postMetric.collection_count}</span>
+                                                className="text-white text-xs ml-1">{user.img_count}</span>
                                         </div>
                                         <div className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-start">
                                             <Image
@@ -57,7 +57,7 @@ export default function UserCard({card, subscribe}: {card: UserCardInfo, subscri
                                                 height={14}
                                                 alt="video"
                                             />
-                                            <span className="text-white text-xs ml-1">{postMetric.play_count}</span>
+                                            <span className="text-white text-xs ml-1">{user.video_count}</span>
                                         </div>
                                     </div>
                                     <SubscribedDrawer name={user.first_name} userId={user.id}>
@@ -72,7 +72,7 @@ export default function UserCard({card, subscribe}: {card: UserCardInfo, subscri
                     {
                         !subscribe && (
                             <div className="text-white text-xs absolute right-7 bottom-3">
-                                今日新增: {addNum ?? 0}
+                                今日新增: {user.today_add_count ?? 0}
                             </div>)
                     }
                 </div>

@@ -1,5 +1,8 @@
-import { getPostData } from "@/components/post/mock"
-import { PostData } from "@/components/post/type"
+import {getPostData} from "@/components/post/mock"
+import {PostData} from "@/components/post/type"
+import {HttpsProxyAgent} from 'https-proxy-agent';
+import fetch, { RequestInit } from 'node-fetch';
+import {BloggerInfo} from "@/lib/struct";
 
 export async function fetchFeeds(
     currentPage: number,
@@ -22,15 +25,82 @@ export async function fetchFeeds(
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-
+const proxyUrl = process.env.NEXT_PROXY_URL || "http://127.0.0.1:8889";
 export type PostResult = {
     code: number,
     data: unknown,
     message: string,
 }
 
+/**
+ * 分页公共请求
+ */
+export type CommonPageReq = {
+    from_id: number | 0,
+    page: number | 1,
+    pageSize: number | 10
+}
+/**
+* list 返回结果
+*/
+export type PageResponse<T> = {
+    list: T[],
+    total: number,
+}
+/**
+ * 搜索用户请求
+ */
+export type SearchUserReq = CommonPageReq & {
+    name: string
+}
+/**
+ * 搜索帖子请求
+ */
+export type SearchPostReq = CommonPageReq & {
+    title: string
+}
+
+export type LoginReq = {
+    user_id: number
+}
+
+export async function callApi<T, R>(
+    url: string,
+    data: T,
+    transformResponse: (response: PostResult) => R
+): Promise<R | null> {
+    const agent  = new HttpsProxyAgent(proxyUrl);
+    const options: RequestInit = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'X-Token': '1',
+        },
+        body: JSON.stringify(data),
+        agent: agent,
+    };
+    try {
+        const response = await fetch(apiUrl + url, options);
+
+        if (response.ok) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const postResult: PostResult = await response.json();
+            // console.log('Success:', postResult);
+            return transformResponse(postResult);
+        } else {
+            console.error('Error-01:', response.status, response.statusText);
+            const errorText = await response.text();
+            console.error('Error details:', errorText);
+        }
+    } catch (error) {
+        console.error('Error-catch:', error);
+    }
+    return null;
+}
+
 async function postData(url: string, data: unknown) {
-    console.log("=====>post url:", url)
     try {
         const response = await fetch(apiUrl + url, {
             method: 'POST',
@@ -60,7 +130,12 @@ async function postData(url: string, data: unknown) {
  */
 export async function login(userId: number) {
     console.log("login user-id :", userId)
-    return await postData('/auth/login', {});
+    const req = {
+        "user_id": userId
+    }
+    return await callApi<LoginReq, string>('/auth/login', req, (response) => {
+        return response.data as string;
+    });
 }
 
 export type FollowUserPostReq = {
@@ -88,8 +163,10 @@ export async function followUserUpdate() {
 /**
  * 推荐博主
  */
-export async function recomBlogger() {
-    return await postData('/index/recomBlogger', {});
+export async function recomBlogger(req: CommonPageReq): Promise<PageResponse<BloggerInfo> | null> {
+    return await callApi<CommonPageReq, PageResponse<BloggerInfo>>('/index/recomBlogger', req, (response) => {
+        return response.data as PageResponse<BloggerInfo>;
+    });
 }
 
 /**
@@ -99,9 +176,29 @@ export async function systemPost() {
     return await postData('/index/systemPost', {});
 }
 
+//
+/**
+ * 已订阅博主列表
+ */
+export async function userCollectionUsers(req: CommonPageReq): Promise<PageResponse<BloggerInfo> | null> {
+    return await callApi<CommonPageReq, PageResponse<BloggerInfo>>('/user/userCollectionUsers', req, (response) => {
+        return response.data as PageResponse<BloggerInfo>;
+    });
+}
+
+/**
+ * 搜索用户
+ */
+export async function searchUser(req: SearchUserReq): Promise<PageResponse<BloggerInfo> | null> {
+    return await callApi<SearchUserReq, PageResponse<BloggerInfo>>('/user/search', req, (response) => {
+        return response.data as PageResponse<BloggerInfo>;
+    });
+}
 /**
  * 搜索帖子
  */
-export async function searchPost(query: string) {
-    return await postData('/post/search', {query: query});
+export async function searchPost(req: SearchPostReq): Promise<PostData[] | null> {
+    return await callApi<SearchPostReq, PostData[]>('/post/search', req, (response) => {
+        return response.data as PostData[];
+    });
 }
