@@ -13,8 +13,7 @@ interface FeedListProps {
 
 export default function FeedList({ initialItems, initialHasMore }: FeedListProps) {
   return (
-    <InfiniteScroll<PostData>
-      url="/api/feeds"
+    <InfiniteScroll
       initialItems={initialItems}
       initialHasMore={initialHasMore}
     >

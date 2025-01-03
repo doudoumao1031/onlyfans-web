@@ -1,13 +1,15 @@
-import {users} from "@/mock/user";
 import Card from "@/components/user/user-card";
+import {userCollectionUsers} from "@/lib/data";
 
-export default function Page() {
+export default async function Page() {
+    const bloggers = await userCollectionUsers({from_id: 1, page: 1, pageSize: 10});
+    console.log("=====> bloggers", bloggers);
     return (
         /** 已订阅 */
         <>
-            {users.map((user) => (
-                <div key={user.user.id} className="w-full mb-[10px]">
-                    <Card card={user} subscribe={false}/>
+            {bloggers && bloggers?.total > 0 && bloggers?.list.map((info) => (
+                <div key={info.id} className="w-full mb-[10px]">
+                    <Card user={info} subscribe={false}/>
                 </div>
             ))}
         </>
