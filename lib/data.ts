@@ -135,7 +135,7 @@ export type DiscountInfo = {
 export type SubscribeSetting = {
     id: number,
     user_id: number,
-    price: string,
+    price: number,
     items: DiscountInfo[]
 }
 

@@ -3,7 +3,7 @@ import FormDrawer from "@/components/common/form-drawer";
 import IconWithImage from "@/components/profile/icon";
 import {ToggleGroupSubscribed, ToggleGroupSubscribedItem} from "@/components/ui/toggle-group-subcribed";
 import {useState, useMemo, useEffect} from "react";
-import {DiscountInfo, SubscribeSetting, viewUserSubscribeSetting} from "@/lib/data";
+import {DiscountInfo, viewUserSubscribeSetting} from "@/lib/data";
 
 interface SubscribedDrawerProps {
     userId: number;
@@ -15,26 +15,39 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({userId, name, childr
 
     const [items, setItems] = useState<DiscountInfo[]>([]);
     const [discount, setDiscount] = useState<DiscountInfo>();
-    const [setting, setSetting] = useState<SubscribeSetting | null>();
+    const [price, setPrice] = useState<number>(0);
+    const [amount, setAmount] = useState<number>(0);
     useEffect(() => {
         const fetchSubscribeSettings = async () => {
             try {
                 const settings = await viewUserSubscribeSetting({user_id: userId});
-                console.log("userid = ", userId, "===> setting", settings);
-                setSetting(settings);
-                if (settings?.items) setItems(settings.items)
+                if (settings?.items){
+                    const list:DiscountInfo[] = [];
+                    list.push({
+                        id: 1,
+                        month_count: 1,
+                        price: settings?.price ?? 0,
+                        discount_per: 0,
+                        discount_price: 0,
+                        discount_start_time: 0,
+                        discount_end_time: 0,
+                        discount_status: false,
+                        user_id: userId,
+                    })
+                    list.push(...settings.items);
+                    if (settings?.items) setItems(list);
+                }
+                if (settings?.price) setPrice(settings.price);
             } finally {
             }
         };
         fetchSubscribeSettings();
     }, [userId]);
-    const [amount, setAmount] = useState<number>(0);
-
     const [diff, setDiff] = useState<number>(0);
     useMemo(() => {
-        const diff = discount ? (discount?.price - discount?.discount_price).toFixed(2):"0";
+        const diff = discount ? (price * discount.month_count - discount?.price).toFixed(2):"0";
         setDiff(parseFloat(diff));
-    }, [discount]);
+    }, [discount, price]);
 
     return <FormDrawer
         title={<div>
@@ -61,7 +74,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({userId, name, childr
                     onValueChange={(value) => {
                         if (value) {
                             setDiscount(items.find((item) => item.id === Number(value))?? items[0]);
-                            setAmount(items.find((item) => item.id === Number(value))?.discount_price ?? 0);
+                            setAmount(items.find((item) => item.id === Number(value))?.price ?? 0);
                         } else {
                             setAmount(0);
                         }
@@ -71,21 +84,22 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({userId, name, childr
                             <div className="relative h-full">
                                 <div
                                     className="h-full flex flex-col justify-center items-center text-black">
-                                    <span className="text-nowrap text-xs">{item.month_count}</span>
+                                    <span className="text-nowrap text-xs">{item.month_count}个月</span>
                                     <span
-                                        className={`text-nowrap text-xl my-4 ${item.discount_price === amount ? "text-main-pink" : "text-black"}`}>${item.discount_price}</span>
-                                    <span className="text-nowrap text-xs">{
-                                        item.price && (
-                                            <s className="text-xs text-gray-500">${item.price}</s>)
-                                    }
-                                        </span>
+                                        className={`text-nowrap text-xl my-4 ${item.price === amount ? "text-main-pink" : "text-black"}`}>${item.price}</span>
+                                    <span className="text-nowrap text-xs block">
+                                        {
+                                        item.month_count > 1 && (
+                                            <s className="text-xs text-gray-500">${price * item.month_count}</s>)
+                                        }
+                                    </span>
                                 </div>
                                 {
                                     item.discount_per > 0 && (
                                         <div
                                             className="absolute bg-main-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center">
                                                 <span
-                                                    className="text-white text-xs text-center">{item.discount_per * 100}% off</span>
+                                                    className="text-white text-xs text-center">{item.discount_per}% off</span>
                                         </div>
                                     )
                                 }
