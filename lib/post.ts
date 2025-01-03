@@ -6,11 +6,10 @@ export interface iPostAttachment {
     id?: string
 }
 
-export enum iPostUserType {
-    ALL = "0", // 所有
-    SUB = "1", //订阅
-    UNSUB = "2" // 非订阅
-}
+//     ALL = "0", // 所有
+//     SUB = "1", //订阅
+//     UNSUB = "2" // 非订阅
+export type iPostUserType = 0 | 1 | 2
 
 type iPostVoteItem = {
     content: string
@@ -56,7 +55,7 @@ export const postVoteValidation =  z.object({
 export const postPriceValidation = z.array(z.object({
     id: z.string().optional(),
     price: z.number().max(999, '不能大于999').min(0, "不能小于0").optional(),
-    user_type: z.enum(["0", "1", "2"]),
+    user_type: z.number(),
     visibility: z.boolean()
 }))
 

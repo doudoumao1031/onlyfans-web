@@ -1,5 +1,5 @@
 "use client"
-import React, {HTMLAttributes, useCallback, useEffect, useRef, useState} from "react";
+import React, {HTMLAttributes, useEffect, useRef, useState} from "react";
 import clsx from "clsx";
 import IconWithImage from "@/components/profile/icon";
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
@@ -14,8 +14,7 @@ import {Controller, FormProvider, useFieldArray, useForm, useFormContext,} from 
 import {
     addPost,
     iPost,
-    iPostAttachment,
-    iPostPrice, iPostUserType,
+    iPostPrice,
     iPostVote,
     postPriceValidation,
     postValidation,
@@ -105,26 +104,24 @@ const AddVoteModal = ({children, initFormData, updateVoteData}: {
                 </button>
             }}
             headerRight={(() => {
-                return <button type={"submit"} className={"text-base text-main-pink"}>确定</button>
+                return <button type={"button"} onTouchEnd={()=>{
+                    trigger().then((valid) => {
+                        if (valid) {
+                            const values = getValues()
+                            const optionCheck = values.items.filter(item => !!item.content)
+                            if (optionCheck.length < 2) {
+                                alert("完善选项")
+                                return
+                            }
+                            saveVote({
+                                ...values,
+                                items: optionCheck
+                            })
+                        }
+                    })
+                }} className={"text-base text-main-pink"}>确定</button>
             })}
             trigger={children}
-            handleSubmit={event => {
-                trigger().then((valid) => {
-                    if (valid) {
-                        const values = getValues()
-                        const optionCheck = values.items.filter(item => !!item.content)
-                        if (optionCheck.length < 2) {
-                            alert("完善选项")
-                            return
-                        }
-                        saveVote({
-                            ...values,
-                            items: optionCheck
-                        })
-                    }
-                })
-                event.preventDefault()
-            }}
         >
             <section className={"py-5 px-4 border-b border-[#ddd] relative"}>
                 <Controller control={control} render={({field}) => {
@@ -191,9 +188,9 @@ const ReadSettings = ({children, initFormData, updatePrice}: {
 }) => {
     const [open, setIsOpen] = useState<boolean>(false)
     const selectOptions = [
-        {label: "所有人", value: "0"},
-        {label: "订阅", value: "1"},
-        {label: "非订阅", value: "2"}
+        {label: "所有人", value: 0},
+        {label: "订阅", value: 1},
+        {label: "非订阅", value: 2}
     ]
     const priceForm = useForm<{ priceList: iPostPrice[] }>({
         mode: "all",
@@ -212,7 +209,7 @@ const ReadSettings = ({children, initFormData, updatePrice}: {
 
     useEffect(() => {
         if (getValues().priceList.length === 0) {
-            append({price: 0, user_type: iPostUserType.ALL, visibility: true})
+            append({price: 0, user_type: 0, visibility: true})
         }
     }, [])
 
@@ -237,19 +234,17 @@ const ReadSettings = ({children, initFormData, updatePrice}: {
                 </button>
             }}
             headerRight={(() => {
-                return <button type={"submit"} className={"text-base text-main-pink"}>确定</button>
+                return <button type={"button"} onTouchEnd={()=>{
+                    trigger().then((valid) => {
+                        if (valid) {
+                            const data = getValues()
+                            updatePrice(data.priceList)
+                            setIsOpen(false)
+                        }
+                    })
+                }} className={"text-base text-main-pink"}>确定</button>
             })}
             trigger={children}
-            handleSubmit={(event) => {
-                trigger().then((valid) => {
-                    if (valid) {
-                        const data = getValues()
-                        updatePrice(data.priceList)
-                        setIsOpen(false)
-                    }
-                })
-                event.preventDefault()
-            }}
         >
             {
                 priceList.map((item, index) => {
@@ -313,20 +308,13 @@ const getUploadMediaFileType = (file: File) => {
 const IMAGE_PREFIX = `${process.env.NEXT_PUBLIC_API_URL}/media/img/`
 
 const UploadMedia = () => {
-    const {setValue,watch} = useFormContext<iPost>()
+    const {control} = useFormContext<iPost>()
     const ref = useRef<HTMLInputElement>(null)
-    const formValues = watch()
-    const addAttachments = useCallback((data: iPostAttachment) => {
-        if (Array.isArray(formValues.post_attachment) && formValues.post_attachment.length) {
-            setValue("post_attachment", [
-                ...formValues.post_attachment,
-                data
-            ])
-        } else {
-            setValue("post_attachment", [data])
-        }
-    }, [formValues, setValue])
 
+    const {fields: itemsList, append, remove,} = useFieldArray({
+        control,
+        name: "post_attachment"
+    })
     const handleUpload = (file: File) => {
         const fd = new FormData()
         const {size} = file
@@ -337,7 +325,7 @@ const UploadMedia = () => {
         fd.append("file", file)
         mediaUpload(fd).then(({code, data}) => {
             if (code === 0) {
-                addAttachments({
+                append({
                     file_id: data.file_id
                 })
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -347,11 +335,21 @@ const UploadMedia = () => {
         })
     }
     return <>
-        {formValues.post_attachment?.map(item => <div
-            key={item.file_id}
-            className={"relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "}>
-            <Image src={`${IMAGE_PREFIX}${item.file_id}`} alt={"attachment"} width={100} height={100}/>
-        </div>)}
+        {itemsList?.map((item, index) => {
+            return <Controller control={control} key={item.file_id} render={({field}) => {
+                return <div
+                    key={item.file_id}
+                    className={"relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "}>
+                    <Image className={"rounded-xl"} src={`${IMAGE_PREFIX}${field.value}`} alt={"attachment"} width={100}
+                           height={100}/>
+                    <button className={"absolute right-[-4px] top-[-4px]"} onTouchEnd={() => {
+                        remove(index)
+                    }}>
+                        <img alt={"delete"} src={"/icons/profile/icon-delete.png"} width={16} height={16}/>
+                    </button>
+                </div>
+            }} name={`post_attachment.${index}.file_id`}/>
+        })}
         <div className="relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded ">
             <input ref={ref} type="file" multiple={false}
                    className="block w-full h-full absolute left-0 top-0 opacity-0 z-10" onChange={(event) => {
@@ -374,7 +372,7 @@ const initPostFormData: iPost = {
     post_price: [
         {
             "price": 0,
-            "user_type": iPostUserType.ALL,
+            "user_type": 0,
             "visibility": true
         }
     ],
@@ -386,7 +384,9 @@ export default function Page() {
     const router = useRouter()
     const onFormSubmit = (formData: iPost) => {
         addPost(formData).then((data) => {
-            console.log(data)
+            if (data.code === 0) {
+                router.back()
+            }
         })
     }
 
@@ -395,11 +395,11 @@ export default function Page() {
         resolver: zodResolver(postValidation),
         defaultValues: {...initPostFormData}
     })
-    const {register, watch, formState, getValues, setValue, handleSubmit} = postForm
+    const {register, watch, formState, setValue, handleSubmit} = postForm
 
     const noticeRegister = register("post.notice")
 
-    const formValues = getValues()
+    const formValues = watch()
 
     return <FormProvider {...postForm}>
         <form onSubmit={handleSubmit(onFormSubmit)}>
@@ -419,7 +419,7 @@ export default function Page() {
             </section>
 
             <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">
-                <UploadMedia />
+                <UploadMedia/>
             </section>
             <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 relative">
             <textarea {...register("post.title")} className="resize-none block w-full" maxLength={999}

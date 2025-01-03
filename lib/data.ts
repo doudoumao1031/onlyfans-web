@@ -183,14 +183,14 @@ export async function callApi<T, R>(
     return null;
 }
 
-async function postData(url: string, data: unknown) {
+export async function postData(url: string, data: unknown) {
     try {
         const response = await fetch(apiUrl + url, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'X-Token': '20241400',
+                'X-Token': '1',
             },
             body: JSON.stringify(data),
         });
