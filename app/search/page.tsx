@@ -59,12 +59,13 @@ export default async function Page(
                             </div>
                         </div>
                         {
-                            posts && posts.length > 0 && (
+                            query !== "" && posts && posts.total > 0 && (
                                 <>
                                     <hr className="border-t border-gray-200 w-full my-[20px]"></hr>
                                     <div className="flex flex-col justify-start px-4">
                                         <span className="font-medium text-left text-[#6D7781]">博文</span>
                                     </div>
+                                     {/*todo: 帖子内容*/}
                                 </>
                             )
                         }

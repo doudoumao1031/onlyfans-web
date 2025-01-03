@@ -1,7 +1,7 @@
 import {getPostData} from "@/components/post/mock"
 import {PostData} from "@/components/post/type"
-import {HttpsProxyAgent} from 'https-proxy-agent';
-import fetch, { RequestInit } from 'node-fetch';
+// import {HttpsProxyAgent} from 'https-proxy-agent';
+// import fetch, { RequestInit } from 'node-fetch';
 import {BloggerInfo} from "@/lib/struct";
 
 export async function fetchFeeds(
@@ -28,7 +28,7 @@ export async function fetchFeeds(
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-const proxyUrl = process.env.NEXT_PROXY_URL || "http://127.0.0.1:8889";
+// const proxyUrl = process.env.NEXT_PROXY_URL || "http://127.0.0.1:8889";
 export type PostResult = {
     code: number,
     data: unknown,
@@ -63,8 +63,80 @@ export type SearchPostReq = CommonPageReq & {
     title: string
 }
 
-export type LoginReq = {
+/**
+ * 帖子内容列表
+ */
+export type PostResp = {
+    collection: boolean,
+    mention_user: BloggerInfo[],
+    post: PostData,
+    post_attachment: {
+        file_id: string,
+        file_name: string,
+        file_size: number,
+        file_type: number,
+        id: number,
+        post_id: number,
+        thumb_id: string,
+        user_id: number
+    },
+    post_metric: {
+        collection_count: number,
+        comment_count: number,
+        play_count: number,
+        share_count: number,
+        thumbs_up_count: number,
+        tip_count: number
+    },
+    post_price: {
+        id: number,
+        price: number,
+        user_type: number,
+        visibility: boolean
+    }[],
+    post_vote: {
+        id: number,
+        items: {
+            content: string,
+            id: number,
+            vote_count: number,
+            vote_id: number
+        }[],
+        mu_select: boolean,
+        stop_time: number,
+        title: string
+    },
+    star: boolean,
+    user: BloggerInfo
+}
+
+
+export type UserReq = {
     user_id: number
+}
+
+/**
+ * 订阅折扣
+ */
+export type DiscountInfo = {
+    discount_end_time: number,
+    discount_per: number,
+    discount_price: number,
+    discount_start_time: number,
+    discount_status: boolean,
+    id: number,
+    month_count: number,
+    price: number,
+    user_id: number
+}
+/**
+ * 订阅设置
+ */
+export type SubscribeSetting = {
+    id: number,
+    user_id: number,
+    price: string,
+    items: DiscountInfo[]
 }
 
 export async function callApi<T, R>(
@@ -72,7 +144,7 @@ export async function callApi<T, R>(
     data: T,
     transformResponse: (response: PostResult) => R
 ): Promise<R | null> {
-    const agent  = new HttpsProxyAgent(proxyUrl);
+    /*const agent  = new HttpsProxyAgent(proxyUrl);
     const options: RequestInit = {
         method: 'POST',
         headers: {
@@ -81,10 +153,18 @@ export async function callApi<T, R>(
             'X-Token': '1',
         },
         body: JSON.stringify(data),
-        agent: agent,
-    };
+        // agent: agent,
+    };*/
     try {
-        const response = await fetch(apiUrl + url, options);
+        const response = await fetch(apiUrl + url, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-Token': '20241400',
+            },
+            body: JSON.stringify(data),
+        });
 
         if (response.ok) {
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -136,7 +216,7 @@ export async function login(userId: number) {
     const req = {
         "user_id": userId
     }
-    return await callApi<LoginReq, string>('/auth/login', req, (response) => {
+    return await callApi<UserReq, string>('/auth/login', req, (response) => {
         return response.data as string;
     });
 }
@@ -200,8 +280,17 @@ export async function searchUser(req: SearchUserReq): Promise<PageResponse<Blogg
 /**
  * 搜索帖子
  */
-export async function searchPost(req: SearchPostReq): Promise<PostData[] | null> {
-    return await callApi<SearchPostReq, PostData[]>('/post/search', req, (response) => {
-        return response.data as PostData[];
+export async function searchPost(req: SearchPostReq): Promise<PageResponse<PostResp[]> | null> {
+    return await callApi<SearchPostReq, PageResponse<PostResp[]>>('/post/search', req, (response) => {
+        return response.data as PageResponse<PostResp[]>;
+    });
+}
+
+/**
+ * 查看用户订阅设置
+ */
+export async function viewUserSubscribeSetting(req: UserReq): Promise<SubscribeSetting | null> {
+    return await callApi<UserReq, SubscribeSetting>('/user/viewUserSubscribeSetting', req, (response) => {
+        return response.data as SubscribeSetting;
     });
 }

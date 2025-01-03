@@ -4,7 +4,7 @@ export default function Avatar({src, vlog = false, width = "w-16"}: { src: strin
     return (
         <div className={`relative ${width}`}>
             <Image
-                src={src ?? "/mock/avatar1.jpg"}
+                src={src}
                 alt=""
                 className={`rounded-full border-2 border-white ${width}`}
                 width={50}

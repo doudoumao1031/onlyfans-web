@@ -15,7 +15,7 @@ export default function UserCard({user, subscribe}: {user: BloggerInfo, subscrib
     return (
         <div className="flex justify-center w-full bg-black rounded-lg h-[100px]">
             <Image
-                src={`https://imfanstest.potato.im/api/v1/media/img/${user.back_img}` || "/mock/header_image1.jpg"}
+                src={user.back_img ? `https://imfanstest.potato.im/api/v1/media/img/${user.back_img}` : "/mock/header_image1.jpg"}
                 // src="/mock/header_image1.jpg"
                 width={280}
                 height={100}
@@ -29,12 +29,12 @@ export default function UserCard({user, subscribe}: {user: BloggerInfo, subscrib
                 <div className="w-full">
                     <div className="flex gap-4 px-3 items-center justify-start">
                         <div className="w-1/4">
-                            <Avatar src={`https://imfanstest.potato.im/api/v1/media/img/${user.photo}` || "/mock/avatar1.jpg"} vlog={user.live_certification} width="w-[66px]"/>
+                            <Avatar src={user.photo?`https://imfanstest.potato.im/api/v1/media/img/${user.photo}` : "/mock/avatar1.jpg"} vlog={user.live_certification} width="w-[66px]"/>
                         </div>
                         <div className="flex-col w-3/4">
                             <div className="text-white">
                                 <div className="font-medium">{user.first_name}</div>
-                                <div className="font-normal">@{user.id}</div>
+                                <div className="font-normal">{user.username ? `@${user.username}` : `@${user.first_name}`}</div>
                             </div>
                             {subscribe && (
                                 <div className="flex justify-between items-center gap-24">

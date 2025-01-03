@@ -1,21 +1,40 @@
+"use client"
 import FormDrawer from "@/components/common/form-drawer";
 import IconWithImage from "@/components/profile/icon";
 import {ToggleGroupSubscribed, ToggleGroupSubscribedItem} from "@/components/ui/toggle-group-subcribed";
-import {subscribePayments, UserSubscribePayment} from "@/mock/user";
-import {useState, useMemo} from "react";
+import {useState, useMemo, useEffect} from "react";
+import {DiscountInfo, SubscribeSetting, viewUserSubscribeSetting} from "@/lib/data";
 
-export default function SubscribedDrawer({userId, name, children}: {
-    userId: number,
+interface SubscribedDrawerProps {
+    userId: number;
     name: string,
     children: React.ReactNode
-}) {
+}
+
+const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({userId, name, children}) => {
+
+    const [items, setItems] = useState<DiscountInfo[]>([]);
+    const [discount, setDiscount] = useState<DiscountInfo>();
+    const [setting, setSetting] = useState<SubscribeSetting | null>();
+    useEffect(() => {
+        const fetchSubscribeSettings = async () => {
+            try {
+                const settings = await viewUserSubscribeSetting({user_id: userId});
+                console.log("userid = ", userId, "===> setting", settings);
+                setSetting(settings);
+                if (settings?.items) setItems(settings.items)
+            } finally {
+            }
+        };
+        fetchSubscribeSettings();
+    }, [userId]);
     const [amount, setAmount] = useState<number>(0);
-    const [payment, setPayment] = useState<UserSubscribePayment>(subscribePayments[0]);
+
     const [diff, setDiff] = useState<number>(0);
     useMemo(() => {
-        const diff = (payment.price - payment.amount).toFixed(2);
+        const diff = discount ? (discount?.price - discount?.discount_price).toFixed(2):"0";
         setDiff(parseFloat(diff));
-    }, [payment]);
+    }, [discount]);
 
     return <FormDrawer
         title={<div>
@@ -37,24 +56,24 @@ export default function SubscribedDrawer({userId, name, children}: {
                     type="single"
                     variant="default"
                     id="select_pirce"
-                    defaultValue={payment.id}
+                    defaultValue={discount?.id+Math.random().toString(36).substring(2, 9)}
                     className="w-full flex justify-around mt-[20px] px-4"
                     onValueChange={(value) => {
                         if (value) {
-                            setAmount(Number(subscribePayments.find((item) => item.id === value)?.amount));
-                            setPayment(subscribePayments.find((item) => item.id === value) ?? subscribePayments[0])
+                            setDiscount(items.find((item) => item.id === Number(value))?? items[0]);
+                            setAmount(items.find((item) => item.id === Number(value))?.discount_price ?? 0);
                         } else {
                             setAmount(0);
                         }
                     }}>
-                    {subscribePayments.map(item => (
-                        <ToggleGroupSubscribedItem key={item.id} value={item.id}>
+                    {items.map(item => (
+                        <ToggleGroupSubscribedItem key={item.id} value={String(item.id)}>
                             <div className="relative h-full">
                                 <div
                                     className="h-full flex flex-col justify-center items-center text-black">
-                                    <span className="text-nowrap text-xs">{item.time}</span>
+                                    <span className="text-nowrap text-xs">{item.month_count}</span>
                                     <span
-                                        className={`text-nowrap text-xl my-4 ${item.amount === amount ? "text-main-pink" : "text-black"}`}>${item.amount}</span>
+                                        className={`text-nowrap text-xl my-4 ${item.discount_price === amount ? "text-main-pink" : "text-black"}`}>${item.discount_price}</span>
                                     <span className="text-nowrap text-xs">{
                                         item.price && (
                                             <s className="text-xs text-gray-500">${item.price}</s>)
@@ -62,11 +81,11 @@ export default function SubscribedDrawer({userId, name, children}: {
                                         </span>
                                 </div>
                                 {
-                                    item.discount > 0 && (
+                                    item.discount_per > 0 && (
                                         <div
                                             className="absolute bg-main-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center">
                                                 <span
-                                                    className="text-white text-xs text-center">{item.discount * 100}% off</span>
+                                                    className="text-white text-xs text-center">{item.discount_per * 100}% off</span>
                                         </div>
                                     )
                                 }
@@ -85,7 +104,7 @@ export default function SubscribedDrawer({userId, name, children}: {
                             }}>确认支付 {amount} USDT
                         </button>
                         {
-                            payment.discount > 0 && (
+                            discount && discount.discount_per > 0 && (
                                 <div
                                     className="absolute bg-main-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center">
                                                 <span
@@ -99,3 +118,5 @@ export default function SubscribedDrawer({userId, name, children}: {
         </form>
     </FormDrawer>
 }
+
+export default SubscribedDrawer;
