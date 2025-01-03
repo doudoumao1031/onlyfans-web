@@ -8,7 +8,7 @@ import {
     DrawerTrigger
 } from "@/components/ui/drawer";
 import ModalHeader from "@/components/common/modal-header";
-import React, {useState} from "react";
+import React, {FormEvent, useState} from "react";
 import {clsx} from "clsx";
 
 
@@ -33,7 +33,7 @@ export default function FormDrawer({
     outerControl?: boolean,
     isOpen?: boolean,
     setIsOpen?: (val: boolean) => void,
-    handleSubmit?: () => void
+    handleSubmit?: (event:FormEvent) => void
 }) {
     const [innerIsOpen, setInnerIsOpen] = useState<boolean>(false)
     const openState = outerControl ? isOpen : innerIsOpen

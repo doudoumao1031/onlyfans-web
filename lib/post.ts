@@ -7,9 +7,9 @@ export interface iPostAttachment {
 }
 
 export enum iPostUserType {
-    ALL = 0, // 所有
-    SUB = 1, //订阅
-    UNSUB = 2 // 非订阅
+    ALL = "0", // 所有
+    SUB = "1", //订阅
+    UNSUB = "2" // 非订阅
 }
 
 type iPostVoteItem = {
@@ -53,6 +53,13 @@ export const postVoteValidation =  z.object({
     title: z.string({message: "请输入投票标题"}).min(2,"标题最少2个字")
 })
 
+export const postPriceValidation = z.array(z.object({
+    id: z.string().optional(),
+    price: z.number().max(999, '不能大于999').min(0, "不能小于0").optional(),
+    user_type: z.enum(["0", "1", "2"]),
+    visibility: z.boolean()
+}))
+
 export const postValidation = z.object({
     post: z.object({
         id: z.number().optional(),
@@ -63,12 +70,7 @@ export const postValidation = z.object({
         file_id: z.string(),
         id: z.string().optional()
     })).optional(),
-    post_price: z.array(z.object({
-        id: z.string().optional(),
-        price: z.number().max(999, '不能大于999').min(0, "不能小于0").optional(),
-        user_type: z.enum(["0", "1", "2"]),
-        visibility: z.boolean()
-    })).min(1),
+    post_price: postPriceValidation.min(1),
     post_vote: postVoteValidation.optional()
 })
 
