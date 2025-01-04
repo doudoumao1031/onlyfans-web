@@ -65,7 +65,7 @@ export default function Post({
       {showVote && vote && <Vote data={vote} />}
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6 border-b border-black/5">
         <Like count={likedAmount} liked={likedByMe} />
-        <CommentStats count={commentAmount} />
+        <CommentStats count={commentAmount} commented={commentedByMe} />
         <Tip user={poster} count={tippedAmount} tipped={tippedByMe} />
         <Share count={sharedAmount} shared={sharedByMe} />
         <Save count={savedAmount} saved={savedByMe} />
@@ -390,8 +390,14 @@ function Like({ count, liked }: { count: number; liked: boolean }) {
   return <Stats icon="/icons/like.png" value={count} highlight={liked} />
 }
 
-function CommentStats({ count }: { count: number }) {
-  return <Stats icon="/icons/comment.png" value={count} />
+function CommentStats({
+  count,
+  commented,
+}: {
+  count: number
+  commented: boolean
+}) {
+  return <Stats icon="/icons/comment.png" value={count} highlight={commented} />
 }
 
 function Tip({
