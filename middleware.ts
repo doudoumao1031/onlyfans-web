@@ -5,8 +5,7 @@ export function middleware(request: NextRequest) {
     // Clone the request headers and set a new header `x-hello-from-middleware1`
     const requestHeaders = new Headers(request.headers)
     // userId
-    requestHeaders.set('X-Token', '20241400');
-
+    requestHeaders.set('X-Token', '20240990');
     // You can also set request headers in NextResponse.next
     const response = NextResponse.next({
         request: {
