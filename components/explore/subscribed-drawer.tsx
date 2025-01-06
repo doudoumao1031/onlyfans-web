@@ -21,6 +21,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({userId, name, childr
         const fetchSubscribeSettings = async () => {
             try {
                 const settings = await viewUserSubscribeSetting({user_id: userId});
+                console.log("=====>settings", settings);
                 if (settings?.items){
                     const list:DiscountInfo[] = [];
                     list.push({
@@ -89,8 +90,9 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({userId, name, childr
                                         className={`text-nowrap text-xl my-4 ${item.price === amount ? "text-main-pink" : "text-black"}`}>${item.price}</span>
                                     <span className="text-nowrap text-xs block">
                                         {
-                                        item.month_count > 1 && (
-                                            <s className="text-xs text-gray-500">${price * item.month_count}</s>)
+                                        item.month_count > 1 ? (
+                                            <s className="text-xs text-gray-500">${price * item.month_count}</s>) :
+                                            (<span>&nbsp;</span>)
                                         }
                                     </span>
                                 </div>
