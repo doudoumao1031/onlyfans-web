@@ -1,21 +1,24 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  skipTrailingSlashRedirect: true,
   images: {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "picsum.photos",
+        hostname: "imfanstest.potato.im",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "imfanstest.potato.im",
         port: "",
         pathname: "/**",
         search: "",
       },
     ],
-  },
+  }
 };
-module.exports = {
-    skipTrailingSlashRedirect: true,
-}
 
 export default nextConfig;

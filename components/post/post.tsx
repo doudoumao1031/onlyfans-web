@@ -19,6 +19,7 @@ import {
   buildUserHomePagePathForDisplay,
   buildMention,
 } from "./util"
+import SubscribedDrawer from "../explore/subscribed-drawer"
 
 export default function Post({
   data,
@@ -219,11 +220,11 @@ function SubscribeCard({ user }: { user: User }) {
             <div className="text-white/75 text-xs">{buildMention(user.id)}</div>
           </div>
         </div>
-        <Link scroll={false} href={`/explore/subscribedPayment/${user.id}?name=${user.name}`}>
+        <SubscribedDrawer name={user.name} userId={Number(user.id)}>
           <button className="bg-black bg-opacity-65 text-white text-xs self-start px-1 py-1 rounded-lg">
             免费/订阅
           </button>
-        </Link>
+        </SubscribedDrawer>
       </div>
     </div>
   )
