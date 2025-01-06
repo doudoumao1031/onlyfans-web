@@ -4,7 +4,7 @@ import {useSearchParams, usePathname, useRouter} from 'next/navigation';
 import {useDebouncedCallback} from 'use-debounce';
 import Image from "next/image";
 
-export default function Search({placeholder}: { placeholder: string }) {
+export default function SearchInput({placeholder}: { placeholder: string }) {
     const searchParams = useSearchParams();
     const pathname = usePathname();
     const {replace, back} = useRouter();

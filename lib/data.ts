@@ -43,6 +43,10 @@ export type CommonPageReq = {
     page: number | 1,
     pageSize: number | 10
 }
+export type recomBloggerReq = CommonPageReq & {
+    // 0 热门 1 新人 2人气
+    type: number,
+}
 /**
 * list 返回结果
 */
@@ -246,8 +250,8 @@ export async function followUserUpdate() {
 /**
  * 推荐博主
  */
-export async function recomBlogger(req: CommonPageReq): Promise<PageResponse<BloggerInfo> | null> {
-    return await callApi<CommonPageReq, PageResponse<BloggerInfo>>('/index/recomBlogger', req, (response) => {
+export async function recomBlogger(req: recomBloggerReq): Promise<PageResponse<BloggerInfo> | null> {
+    return await callApi<recomBloggerReq, PageResponse<BloggerInfo>>('/index/recomBlogger', req, (response) => {
         return response.data as PageResponse<BloggerInfo>;
     });
 }

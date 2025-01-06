@@ -70,7 +70,7 @@ export function getPostData(): PostData {
     subscribe: [
       {
         name: userName,
-        id: "jamieshon",
+        id: "1",
         avatar,
         background,
       },
