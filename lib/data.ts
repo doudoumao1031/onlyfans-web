@@ -83,7 +83,7 @@ export type DiscountInfo = {
 export type SubscribeSetting = {
   id: number
   user_id: number
-  price: string
+  price: number
   items: DiscountInfo[]
 }
 
@@ -248,12 +248,12 @@ export async function searchUser(
  */
 export async function searchPost(
   req: SearchPostReq
-): Promise<PageResponse<PostData[]> | null> {
-  return await callApi<SearchPostReq, PageResponse<PostData[]>>(
+): Promise<PageResponse<PostData> | null> {
+  return await callApi<SearchPostReq, PageResponse<PostData>>(
     "/post/search",
     req,
     (response) => {
-      return response.data as PageResponse<PostData[]>
+      return response.data as PageResponse<PostData>
     }
   )
 }

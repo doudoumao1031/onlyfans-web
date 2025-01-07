@@ -54,15 +54,15 @@ export default function Post({
       <UserTitle user={user} />
       <Description content={post.title} />
       <UserHomePageLink userId={user.username} />
-      <Media data={post_attachment} />
-      {showSubscribe && (
+      {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} />}
+      {showSubscribe && mention_user && mention_user.length > 0 && (
         <div>
           {mention_user.map((user) => (
             <SubscribeCard key={user.id} user={user} />
           ))}
         </div>
       )}
-      {showVote && <Vote data={post_vote} />}
+      {showVote && post_vote && <Vote data={post_vote} />}
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} />
         <CommentStats count={comment_count} />
@@ -70,7 +70,7 @@ export default function Post({
         <Share count={share_count} />
         <Save count={collection_count} saved={collection} />
       </div>
-      <Comments comments={comments} />
+      {comments && comments.length > 0 && <Comments comments={comments} />}
     </div>
   )
 }
@@ -336,7 +336,7 @@ function Media({ data }: { data: Attachment[] }) {
             ) : (
               <Image
                 className="aspect-square rounded-md"
-                src={buildFileUrl(thumb_id)}
+                src={buildFileUrl(file_id)}
                 alt=""
                 width={200}
                 height={200}

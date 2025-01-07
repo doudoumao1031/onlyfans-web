@@ -2,6 +2,7 @@ import Image from "next/image";
 import UserCard from "@/components/user/user-card";
 import {searchPost, searchUser} from "@/lib/data";
 import SearchInput from "@/components/explore/search-input";
+import Post from "@/components/post/post";
 
 export default async function Page(
     props: {
@@ -15,16 +16,16 @@ export default async function Page(
     console.log(query)
     // 用户搜索
     let users;
-    if (query !== ""){
+    if (query !== "") {
         users = await searchUser({from_id: 0, page: 1, pageSize: 10, name: query});
-        console.log("===> users",users)
+        console.log("===> users", users)
     }
 
     // 帖子搜索
     let posts;
-    if (query !== ""){
+    if (query !== "") {
         posts = await searchPost({from_id: 0, page: 1, pageSize: 10, title: query});
-        console.log("===> posts",posts)
+        console.log("===> posts", posts)
     }
     return (
         /** 搜索 */
@@ -47,16 +48,16 @@ export default async function Page(
             }
             {
                 query !== "" && users && users.total > 0 && (
-                        <div className="flex flex-col justify-start px-4 pt-[20px]">
-                            <span className="font-medium text-left text-[#6D7781]">用户</span>
-                            <div className="w-full mt-[10px]">
-                                {users.list.map((item, index) => (
-                                    <div key={index} className="w-full mb-[10px]">
-                                        <UserCard key={index} user={item} subscribe={true}/>
-                                    </div>
-                                ))}
-                            </div>
+                    <div className="flex flex-col justify-start px-4 pt-[20px]">
+                        <span className="font-medium text-left text-[#6D7781]">用户</span>
+                        <div className="w-full mt-[10px]">
+                            {users.list.map((item, index) => (
+                                <div key={index} className="w-full mb-[10px]">
+                                    <UserCard key={index} user={item} subscribe={true}/>
+                                </div>
+                            ))}
                         </div>
+                    </div>
                 )
             }
             {
@@ -70,7 +71,13 @@ export default async function Page(
                         <div className="flex flex-col justify-start px-4">
                             <span className="font-medium text-left text-[#6D7781]">博文</span>
                         </div>
-                        {/*todo: 帖子内容*/}
+                        <div className="w-full mt-[10px]">
+                            {posts.list.map((item, index) => (
+                                <div key={index} className="max-w-lg mx-auto grid grid-cols-1 gap-4 px-4">
+                                    <Post data={item} showSubscribe={false} showVote={false}/>
+                                </div>
+                            ))}
+                        </div>
                     </>
                 )
             }
