@@ -9,7 +9,8 @@ import clsx from "clsx";
 export interface ISelectOption {
     label: React.ReactNode,
     value: unknown,
-    description?: React.ReactNode
+    description?: React.ReactNode,
+    extend?: unknown
 }
 
 

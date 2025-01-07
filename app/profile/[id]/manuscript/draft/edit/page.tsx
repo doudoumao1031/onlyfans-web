@@ -1,8 +1,7 @@
 "use client"
-import React, {HTMLAttributes, useEffect, useRef, useState} from "react";
+import React, {HTMLAttributes, useEffect, useMemo, useRef, useState} from "react";
 import clsx from "clsx";
 import IconWithImage from "@/components/profile/icon";
-import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 import {Switch} from "@/components/ui/switch";
 import {useRouter} from "next/navigation";
 import FormDrawer from "@/components/common/form-drawer";
@@ -104,7 +103,7 @@ const AddVoteModal = ({children, initFormData, updateVoteData}: {
                 </button>
             }}
             headerRight={(() => {
-                return <button type={"button"} onTouchEnd={()=>{
+                return <button type={"button"} onTouchEnd={() => {
                     trigger().then((valid) => {
                         if (valid) {
                             const values = getValues()
@@ -181,6 +180,35 @@ const AddVoteModal = ({children, initFormData, updateVoteData}: {
     </>
 }
 
+
+const transformPriceSettingOption = (value: number) => {
+    if (value < 3) {
+        return {
+            user_type: value,
+            visibility: true
+        }
+    }
+    if (value === 3) {
+        return {
+            user_type: 2,
+            visibility: false
+        }
+    }
+}
+
+const revertPriceSettingOption = (list: iPostPrice[]) => {
+    return list.map(item => {
+        if (item.user_type < 2) {
+            return item
+        } else {
+            return {
+                ...item,
+                user_type: item.visibility ? 2 : 3
+            }
+        }
+    }) ?? []
+}
+
 const ReadSettings = ({children, initFormData, updatePrice}: {
     children: React.ReactNode,
     initFormData?: iPostPrice[],
@@ -189,8 +217,8 @@ const ReadSettings = ({children, initFormData, updatePrice}: {
     const [open, setIsOpen] = useState<boolean>(false)
     const selectOptions = [
         {label: "所有人", value: 0},
-        {label: "订阅", value: 1},
-        {label: "非订阅", value: 2}
+        {label: "订阅者", value: 1},
+        // {label: "非订阅", value: 2}
     ]
     const priceForm = useForm<{ priceList: iPostPrice[] }>({
         mode: "all",
@@ -198,20 +226,53 @@ const ReadSettings = ({children, initFormData, updatePrice}: {
             priceList: postPriceValidation
         })),
         defaultValues: {
-            priceList: initFormData ?? []
+            priceList: revertPriceSettingOption(initFormData ?? []) ?? []
         }
     })
+    const {watch} = priceForm
     const {formState, trigger, getValues, control} = priceForm
-    const {fields: priceList, append,} = useFieldArray({
+    const {fields: priceList, append,remove,} = useFieldArray({
         control,
         name: "priceList"
     })
+    const formValues = watch()
+    const userType = watch(`priceList.${0}.user_type`)
+
+    const disableOption2 = userType === 0
+
+    const settings2SelectOptions = useMemo(() => {
+        if (userType === 0) {
+            return []
+        }
+        if (userType === 1) {
+            return [
+                {label: "非订阅者", value: 2},
+                {label: "非订阅者无法浏览", value: 3}, // 特殊处理
+            ]
+        }
+        return []
+    }, [userType])
 
     useEffect(() => {
-        if (getValues().priceList.length === 0) {
+        if (formValues.priceList.length === 0) {
             append({price: 0, user_type: 0, visibility: true})
         }
     }, [])
+
+    useEffect(() => {
+        if (userType === 1 && formValues.priceList.length === 1) {
+            append({
+                price: 0,
+                user_type: 2,
+                visibility: true
+            })
+        }
+
+        if (userType === 0 && formValues.priceList.length === 2) {
+            remove(1)
+        }
+
+    }, [userType])
 
     const {errors} = formState
 
@@ -234,11 +295,17 @@ const ReadSettings = ({children, initFormData, updatePrice}: {
                 </button>
             }}
             headerRight={(() => {
-                return <button type={"button"} onTouchEnd={()=>{
+                return <button type={"button"} onTouchEnd={() => {
                     trigger().then((valid) => {
                         if (valid) {
                             const data = getValues()
-                            updatePrice(data.priceList)
+                            updatePrice(data.priceList.map(item => {
+                                return {
+                                    ...item,
+                                    price: Number(item.price),
+                                    ...transformPriceSettingOption(item.user_type)
+                                } as iPostPrice
+                            }))
                             setIsOpen(false)
                         }
                     })
@@ -248,11 +315,13 @@ const ReadSettings = ({children, initFormData, updatePrice}: {
         >
             {
                 priceList.map((item, index) => {
-                    return <section className={"px-4 mt-5"} key={item.id}>
-                        <h3>付费设置{index + 1}</h3>
+                    return <section className={clsx("px-4 mt-5", disableOption2 && index === 1 ? "opacity-40" : "")}
+                                    key={item.id}>
+                        <h3>付费设置{index + 1} {disableOption2 && index === 1 ? "(无效)" : ""}</h3>
                         <Controller render={({field}) => {
                             return <FormItemWithSelect label={"付费对象"} value={field.value}
-                                                       onValueChange={field.onChange} options={selectOptions}/>
+                                                       onValueChange={field.onChange}
+                                                       options={index === 0 ? selectOptions : settings2SelectOptions as ISelectOption[]}/>
                         }} control={control} name={`priceList.${index}.user_type`}/>
                         {/*<FormItemWithSelect label={"付费金额"} value={"0"} options={[{label: "0", value: "0"}, {label: "2", value: "2"}]}/>*/}
                         <section className={"relative"}>
@@ -261,8 +330,10 @@ const ReadSettings = ({children, initFormData, updatePrice}: {
                                 <Controller control={control} render={({field}) => {
                                     return <input className="flex-1 text-right" min={0} value={field.value}
                                                   onChange={event => {
-                                                      field.onChange(Number(event.target.value))
-                                                  }}/>
+                                                      field.onChange(event.target.value.replace(/^0+(?=\d)/, ''))
+                                                  }} onBlur={event => {
+                                        field.onChange(Number(event.target.value).toFixed(2))
+                                    }}/>
                                 }} name={`priceList.${index}.price`}/>
                                 <div className={"flex items-center justify-center gap-1.5 text-[#777]"}>
                                     <IconWithImage url={"/icons/profile/icon_arrow_right@3x.png"} width={16} height={16}
@@ -276,14 +347,6 @@ const ReadSettings = ({children, initFormData, updatePrice}: {
                     </section>
                 })
             }
-            {/*<section className={"px-4 mt-5 opacity-40"}>*/}
-            {/*    <h3>付费设置2(无效)</h3>*/}
-            {/*    <FormItemWithSelect label={"付费对象"} value={"1"}*/}
-            {/*                        options={[{label: "所有人", value: "1"}, {label: "2", value: "2"}]}/>*/}
-            {/*    <FormItemWithSelect label={"付费金额"} value={"0"}*/}
-            {/*                        options={[{label: "0", value: "0"}, {label: "2", value: "2"}]}/>*/}
-            {/*    <section className={"text-xs text-[#777] mt-1.5"}>金额0时，为免费</section>*/}
-            {/*</section>*/}
         </FormDrawer>
     </>
 }
@@ -379,6 +442,21 @@ const initPostFormData: iPost = {
     post_vote: undefined
 }
 
+const ReadingSettingsDisplay = ({postPrice}: { postPrice: iPostPrice }) => {
+    const selectOptions = [
+        {label: "所有人", value: 0, visibility: true},
+        {label: "订阅者", value: 1, visibility: true},
+        {label: "非订阅者", value: 2, visibility: true},
+        {label: "非订阅者无法浏览", value: 2, visibility: false}
+    ]
+    const {price, user_type, visibility} = postPrice
+    const option = selectOptions.find(item => item.value === user_type && item.visibility === visibility)
+    return <section className="flex items-center space-x-2">
+        <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20} color={'#FF8492'}/>
+        <label className={"text-main-pink"}>{option?.label}{Number(price) === 0 ? "免费" : price}</label>
+    </section>
+}
+
 
 export default function Page() {
     const router = useRouter()
@@ -454,7 +532,9 @@ export default function Page() {
                                                color={'#FF8492'}/>
                                 <span className="font-bold text-main-pink text-base">{formValues.post_vote?.title}</span>
                             </div>
-                            <div className="text-xs text-[#999] mt-1.5">截止：{formValues.post_vote?.stop_time} 结束</div>
+                            <div
+                                className="text-xs text-[#999] mt-1.5">截止：{formValues.post_vote?.stop_time ? dayjs(formValues.post_vote?.stop_time).format("YYYY-MM-DD HH:mm") : ""} 结束
+                            </div>
                         </section>
                     </section>
                 )
@@ -470,16 +550,15 @@ export default function Page() {
                                        color={'#bbb'}/>
                     </ReadSettings>
                 </div>
-                <RadioGroup defaultValue="option-one" className="mt-2.5">
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="option-one" id="option-one" className="text-main-pink border-main-pink"/>
-                        <label htmlFor="option-one" className={"text-main-pink"}>免费订阅</label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="option-two" id="option-two"/>
-                        <label htmlFor="option-two" className={"text-main-pink"}>无法浏览-订阅者</label>
-                    </div>
-                </RadioGroup>
+                <section className="mt-2.5">
+                    {formValues.post_price?.map((price, index) => <ReadingSettingsDisplay postPrice={price}
+                                                                                          key={index}/>)}
+                    {/*<div className="flex items-center space-x-2">*/}
+                    {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
+                    {/*                   color={'#FF8492'}/>*/}
+                    {/*    <label className={"text-main-pink"}>免费订阅</label>*/}
+                    {/*</div>*/}
+                </section>
             </section>
             <section className="pt-5 pb-5 pl-4 pr-4 ">
                 <ItemEditTitle showIcon={false} title={'发布通知'}/>
