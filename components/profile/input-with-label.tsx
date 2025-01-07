@@ -11,20 +11,22 @@ import clsx from "clsx";
 import IconWithImage from "@/components/profile/icon";
 import SheetSelect, {ISelectOption} from "@/components/common/sheet-select";
 
+type InputValueType = string | number | readonly string[] | undefined
+
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: ReactNode,
-    name: string,
-    value: string,
+    name?: string,
+    value: InputValueType,
     disabled?: boolean,
     description?: ReactNode,
     options?: ISelectOption[],
-    onInputChange?: (value: string) => void,
+    onInputChange?: (value: InputValueType) => void,
 }
 
 export default function InputWithLabel(props: InputProps) {
     const {label, name, disabled, onInputChange, description, value, options} = props
-    const [val, setVal] = useState<string>(value ?? "")
+    // const [val, setVal] = useState<InputValueType>(value ?? "")
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const inputRef = useRef<HTMLInputElement>(null)
     const isSelectInput = useMemo(() => {
@@ -55,10 +57,10 @@ export default function InputWithLabel(props: InputProps) {
 
 
     const inputBlur = useCallback(() => {
-        if (val) return
+        if (value) return
         if (positionInCenter) return;
         setPositionInCenter(true)
-    }, [positionInCenter, val])
+    }, [positionInCenter, value])
 
     const inputFocus = useCallback(() => {
         if (positionInCenter) {
@@ -67,6 +69,7 @@ export default function InputWithLabel(props: InputProps) {
     }, [
         positionInCenter
     ])
+
 
     return <section className={clsx(
         "relative rounded-xl",
@@ -84,10 +87,10 @@ export default function InputWithLabel(props: InputProps) {
                htmlFor={name}>{label}</label>
         <section
             className="flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20">
-            <input ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={val} onTouchEnd={handleInputTouch}
-                   onInput={event => {
+            <input ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
+                   onChange={event => {
                        const eventValue = (event.target as HTMLInputElement).value
-                       setVal(eventValue)
+                       // setVal(eventValue)
                        onInputChange?.(eventValue)
                    }} type="text" disabled={disabled} readOnly={disableInput} className={clsx(
                 "flex-1 w-full font-medium",
@@ -98,7 +101,7 @@ export default function InputWithLabel(props: InputProps) {
                 isOpen={isOpen}
                 setIsOpen={setIsOpen}
                 onInputChange={(v => {
-                    setVal(v)
+                    // setVal(v)
                     onInputChange?.(v)
                 })} options={options ?? []}><IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
                                                            height={24} color={'#bbb'}/></SheetSelect>}

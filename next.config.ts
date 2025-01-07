@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "imfanstest.potato.im",
+        port: "",
+        pathname: "/**",
+        search: "",
+      },
     ],
   }
 };
