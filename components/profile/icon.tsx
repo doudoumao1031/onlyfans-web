@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 export default function IconWithImage({
   url,
@@ -21,5 +21,5 @@ export default function IconWithImage({
         backgroundColor: color ?? "#fff"
       }}
     ></div>
-  );
+  )
 }

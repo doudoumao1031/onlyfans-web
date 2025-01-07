@@ -1,5 +1,5 @@
 export default function Page() {
-    return (
-        <div>explore</div>
-    );
+  return (
+    <div>explore</div>
+  )
 }

@@ -1,44 +1,48 @@
-import Header from "@/components/common/header";
-import Image from "next/image";
-import Avatar from "@/components/profile/avatar";
-import PostsCard from "@/components/profile/posts-card";
-import IconWithImage from "@/components/profile/icon";
-import Link from "next/link";
-import {userProfile} from "@/lib/data";
+import Header from "@/components/common/header"
+import Image from "next/image"
+import Avatar from "@/components/profile/avatar"
+import PostsCard from "@/components/profile/posts-card"
+import IconWithImage from "@/components/profile/icon"
+import Link from "next/link"
+import { userProfile } from "@/lib/data"
 
-const displayNumber = (data: number) =>{
+const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
     return data
   }
   if (data > 9999 && data < 100000) {
-    return Math.ceil(data / 10000) + 'W'
+    return Math.ceil(data / 10000) + "W"
   }
-  return Math.ceil(data / 100000) + 'W+'
+  return Math.ceil(data / 100000) + "W+"
 }
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+  const { id } = await params
   const data = await userProfile()
   if (!data) {
     throw new Error()
   }
   return (
     <div>
-      <div className={`profile-content`} style={{
+      <div className={"profile-content"} style={{
         // backgroundImage: `url('${process.env.NEXT_PUBLIC_API_URL}/media/img/${data.back_img}')`
-      }}>
-        <Header right={<>
-          <IconWithImage
+      }}
+      >
+        <Header right={(
+          <>
+            <IconWithImage
               url="/icons/profile/icon_nav_code@3x.png"
               width={22}
               height={22}
-          />
-          <IconWithImage
+            />
+            <IconWithImage
               url="/icons/profile/icon_fans_share@3x.png"
               width={22}
               height={22}
-          />
-        </>} title="My" backIconColor={'#fff'}/>
+            />
+          </>
+        )} title="My" backIconColor={"#fff"}
+        />
         <div className="text-xs pl-6 pr-6 text-white">
           各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折
         </div>
@@ -49,7 +53,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
             <span>{data.first_name} {data.last_name}</span>
             <Link href={`/profile/${id}/edit`}>
-                <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={'#bbb'}/>
+              <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#bbb"}/>
             </Link>
           </h1>
           <div className="text-center text-[#6D7781] text-xs">@{data.username}</div>
@@ -63,7 +67,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
             {data.about && <button className="text-main-pink mt-1">更多信息</button>}
           </div>
           <div className={"flex text-xs gap-1 mt-1.5 text-[#6D7781]"}>
-            <IconWithImage url={"/icons/profile/icon-address.png"} width={16} height={16} color={'#222'}/>
+            <IconWithImage url={"/icons/profile/icon-address.png"} width={16} height={16} color={"#222"}/>
             <span>{data.location || "北京"}</span>
           </div>
         </section>
@@ -92,7 +96,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
           <div className="flex justify-between items-center pt-2.5 pb-2.5">
             <h3 className="text-[15px] font-bold">收藏夹</h3>
             <Link href={`/profile/${id}/collect?type=blog`} className="text-gray-300">
-              <IconWithImage url={"/icons/profile/icon_arrow_right@3x.png"} width={16} height={16} color={'#ddd'} />
+              <IconWithImage url={"/icons/profile/icon_arrow_right@3x.png"} width={16} height={16} color={"#ddd"} />
             </Link>
           </div>
 
@@ -185,5 +189,5 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         </div>
       </section>
     </div>
-  );
+  )
 }
