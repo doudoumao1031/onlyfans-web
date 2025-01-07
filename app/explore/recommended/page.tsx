@@ -1,12 +1,12 @@
 "use client";
 import {recomBlogger} from "@/lib/data";
-import {ToggleGroupRecom, ToggleGroupRecomItem} from "@/components/ui/toggle-group-recommended";
-import Card from "@/components/user/user-card";
 import {BloggerInfo} from "@/lib/struct";
 import {useState, useEffect} from "react";
+import UserCard from "@/components/user/user-card";
 
 /** 推荐博主 */
 export default function Page() {
+    const tabs = [{val: 0, label: "热门推荐"}, {val: 1, label: "新人推荐"}, {val: 2, label: "🔥人气博主"}]
     const [type, setType] = useState<number>(0);
     const [info, setInfo] = useState<BloggerInfo[]>([]);
     useEffect(() => {
@@ -23,24 +23,19 @@ export default function Page() {
     }, [type]);
     return (
         <>
-            <ToggleGroupRecom type="single" variant="default" defaultValue="1" id="select_type"
-                              className="w-full flex justify-between mb-[10px]"
-                              onValueChange={(val)=>{
-                                  setType(Number(val));
-                              }}>
-                <ToggleGroupRecomItem value="0">
-                    <span className="text-nowrap font-medium text-base">热门推荐</span>
-                </ToggleGroupRecomItem>
-                <ToggleGroupRecomItem value="1">
-                    <span className="text-nowrap font-medium text-base">新人推荐</span>
-                </ToggleGroupRecomItem>
-                <ToggleGroupRecomItem value="2">
-                    <span className="text-nowrap font-medium text-base">🔥人气博主</span>
-                </ToggleGroupRecomItem>
-            </ToggleGroupRecom>
+            <div className="gap-3 flex justify-around mb-4">
+                {tabs.map((tab) => (
+                    <div key={tab.val}
+                        className={`flex items-center justify-center ${type === tab.val ? 'bg-main-pink text-white' : 'bg-white'} border border-main-pink text-main-pink rounded-full px-5 py-1`}
+                         onClick={() => setType(tab.val)}
+                    >
+                        <span className="text-nowrap font-medium text-base">{tab.label}</span>
+                    </div>
+                ))}
+            </div>
             {info.map((item) => (
                 <div key={item.id} className="w-full mb-[10px]">
-                    <Card user={item} subscribe={true}/>
+                    <UserCard user={item} subscribe={true}/>
                 </div>
             ))}
         </>

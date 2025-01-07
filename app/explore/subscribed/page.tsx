@@ -4,7 +4,6 @@ import Link from "next/link";
 import UserCard from "@/components/user/user-card";
 export default async function Page() {
     const bloggers = await userCollectionUsers({from_id: 0, page: 1, pageSize: 10});
-    console.log("=====> bloggers", bloggers);
     return (
         /** 已订阅 */
         <>
@@ -31,5 +30,4 @@ export default async function Page() {
             }
         </>
     )
-        ;
 }

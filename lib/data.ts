@@ -169,19 +169,19 @@ export async function login(userId: number) {
   })
 }
 
-export type FollowUserPostReq = {
-  from_id: number
-  page: number
-  pageSize: number
-}
-
 /**
  * 关注用户帖子
- * @param data
  */
-export async function followUserPosts(data: FollowUserPostReq) {
-  console.log("followUserPosts data:", data)
-  return await postData("/index/followUserPosts", data)
+export async function followUserPosts(
+    req: CommonPageReq
+): Promise<PageResponse<PostData> | null> {
+  return await callApi<CommonPageReq, PageResponse<PostData>>(
+      "/index/followUserPosts",
+      req,
+      (response) => {
+        return response.data as PageResponse<PostData>
+      }
+  )
 }
 
 /**
@@ -195,7 +195,7 @@ export async function followUserUpdate() {
  * 推荐博主
  */
 export async function recomBlogger(
-  req: CommonPageReq
+  req: recomBloggerReq
 ): Promise<PageResponse<BloggerInfo> | null> {
   return await callApi<CommonPageReq, PageResponse<BloggerInfo>>(
     "/index/recomBlogger",
@@ -209,11 +209,18 @@ export async function recomBlogger(
 /**
  * 热门贴子
  */
-export async function systemPost() {
-  return await postData("/index/systemPost", {})
+export async function systemPost(
+    req: CommonPageReq
+): Promise<PageResponse<PostData> | null> {
+  return await callApi<CommonPageReq, PageResponse<PostData>>(
+      "/index/systemPost",
+      req,
+      (response) => {
+        return response.data as PageResponse<PostData>
+      }
+  )
 }
 
-//
 /**
  * 已订阅博主列表
  */
