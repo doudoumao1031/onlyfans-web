@@ -1,20 +1,20 @@
-"use client";
-import Link from 'next/link';
-import clsx from 'clsx';
-import { useCallback } from 'react';
-import { usePathname } from 'next/navigation';
+"use client"
+import Link from "next/link"
+import clsx from "clsx"
+import { useCallback } from "react"
+import { usePathname } from "next/navigation"
 export default function TabLinks({ id }: { id: string }) {
   const pathName = usePathname()
   const pathNameClass = useCallback((href: string) => {
     if (pathName === href) {
-      return `font-bold text-black `
+      return "font-bold text-black "
     }
-    return 'text-[#777] font-normal'
+    return "text-[#777] font-normal"
   }, [pathName])
   const links = [
-    { name: '帖子', href: `/space/${id}/feed`, num: 9999 },
-    { name: '媒体', href: `/space/${id}/media`, num: 9999 },
-  ];
+    { name: "帖子", href: `/space/${id}/feed`, num: 9999 },
+    { name: "媒体", href: `/space/${id}/media`, num: 9999 }
+  ]
   return (
     <div className="w-full text-center grid grid-cols-2 border-b border-gray-100">
       {links.map((link) => (
@@ -28,5 +28,5 @@ export default function TabLinks({ id }: { id: string }) {
         </Link>
       ))}
     </div>
-  );
+  )
 }

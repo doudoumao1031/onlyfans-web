@@ -9,21 +9,21 @@ import {
   PostData,
   User,
   Attachment,
-  FileType,
+  FileType
 } from "./type"
 import {
   isMention,
   buildUserHomePagePath,
   getUserIdFromMention,
   buildUserHomePagePathForDisplay,
-  buildMention,
+  buildMention
 } from "./util"
 import SubscribedDrawer from "../explore/subscribed-drawer"
 
 export default function Post({
   data,
   showSubscribe,
-  showVote,
+  showVote
 }: {
   data: PostData
   showSubscribe: boolean
@@ -38,7 +38,7 @@ export default function Post({
     mention_user,
     collection,
     star,
-    comments,
+    comments
   } = data
 
   const {
@@ -46,7 +46,7 @@ export default function Post({
     comment_count,
     share_count,
     thumbs_up_count,
-    tip_count,
+    tip_count
   } = post_metric
 
   return (
@@ -162,7 +162,7 @@ function Vote({ data }: { data: VoteData }) {
                   backgroundSize: `${(vote_count / totalVotes) * 100}% 100%`,
                   borderColor: `${
                     selectedVoteIndex === i ? "#FF8492" : "#DDDDDD"
-                  }`,
+                  }`
                 }}
                 onClick={() => setSelectedVoteIndex(i)}
               >
@@ -211,7 +211,7 @@ function SubscribeCard({ user }: { user: User }) {
     <div
       className="w-full rounded-lg bg-cover"
       style={{
-        backgroundImage: `url(${buildFileUrl(back_img)})`,
+        backgroundImage: `url(${buildFileUrl(back_img)})`
       }}
     >
       <div className="w-full h-full flex justify-between bg-black/50 p-3 rounded-lg">
@@ -321,7 +321,7 @@ function Media({ data }: { data: Attachment[] }) {
               <div
                 className="aspect-square flex justify-center items-center bg-cover rounded-md"
                 style={{
-                  backgroundImage: `url(${buildFileUrl(thumb_id)})`,
+                  backgroundImage: `url(${buildFileUrl(thumb_id)})`
                 }}
               >
                 <div className="bg-black/50 w-12 h-12 rounded-full flex justify-center items-center">
@@ -351,7 +351,7 @@ function Media({ data }: { data: Attachment[] }) {
 
 function Thumbnail({
   largeElement,
-  thumbnailElement,
+  thumbnailElement
 }: {
   largeElement: ReactElement
   thumbnailElement: ReactElement
@@ -373,7 +373,7 @@ function Thumbnail({
 
 function FullScreen({
   children,
-  onExit,
+  onExit
 }: {
   children: ReactElement
   onExit: () => void
@@ -433,7 +433,7 @@ function Save({ count, saved }: { count: number; saved: boolean }) {
 function Stats({
   icon,
   value,
-  highlight = false,
+  highlight = false
 }: {
   icon: string
   value: number

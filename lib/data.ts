@@ -15,7 +15,7 @@ export async function fetchFeeds(currentPage: number) {
 
   return {
     items: mockItems,
-    hasMore: currentPage < 6, // Mock 6 pages of content
+    hasMore: currentPage < 6 // Mock 6 pages of content
   }
 }
 
@@ -130,43 +130,43 @@ export type UpdateUserBaseReq = {
 }
 
 
-export async function callApiUseGet<Req, Res>({url, data, transformResponse}: {
+export async function callApiUseGet<Req, Res>({ url, data, transformResponse }: {
     url: string,
     data?: Req,
     transformResponse: (response: PostResult<Res>) => Res
 }): Promise<Res | null> {
-    try {
-        const qs = new URLSearchParams(data ?? {})
-        const response = await fetch(`${apiUrl}${url}?${qs.toString()}`, {
-            method: "GET",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-Token': '1',
-            },
-        });
-        if (response.ok) {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            const postResult: PostResult = await response.json();
-            // console.log('Success:', postResult);
-            return transformResponse(postResult);
-        } else {
-            console.error('Error-GET-01:', response.status, response.statusText);
-            const errorText = await response.text();
-            console.error('Error-GET-details:', errorText);
-        }
-    } catch (error) {
-        console.error('Error-GET-catch:', error);
+  try {
+    const qs = new URLSearchParams(data ?? {})
+    const response = await fetch(`${apiUrl}${url}?${qs.toString()}`, {
+      method: "GET",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "X-Token": "1"
+      }
+    })
+    if (response.ok) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const postResult: PostResult = await response.json()
+      // console.log('Success:', postResult);
+      return transformResponse(postResult)
+    } else {
+      console.error("Error-GET-01:", response.status, response.statusText)
+      const errorText = await response.text()
+      console.error("Error-GET-details:", errorText)
     }
-    return null;
+  } catch (error) {
+    console.error("Error-GET-catch:", error)
+  }
+  return null
 }
 
 
 export async function callApi<T, R>(
-    url: string,
-    data: T,
-    transformResponse: (response: PostResult<R>) => R,
+  url: string,
+  data: T,
+  transformResponse: (response: PostResult<R>) => R,
 ): Promise<R | null> {
   /*const agent  = new HttpsProxyAgent(proxyUrl);
     const options: RequestInit = {
@@ -185,9 +185,9 @@ export async function callApi<T, R>(
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        "X-Token": "20241400",
+        "X-Token": "20241400"
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     })
 
     if (response.ok) {
@@ -214,9 +214,9 @@ async function postData(url: string, data: unknown) {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        "X-Token": "20241400",
+        "X-Token": "20241400"
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     })
 
     if (response.ok) {
@@ -238,7 +238,7 @@ async function postData(url: string, data: unknown) {
 export async function login(userId: number) {
   console.log("login user-id :", userId)
   const req = {
-    user_id: userId,
+    user_id: userId
   }
   return await callApi<UserReq, string>("/auth/login", req, (response) => {
     return response.data as string
@@ -360,25 +360,25 @@ export async function viewUserSubscribeSetting(
 // 文件上传
 // export const mediaUpload = (data: FormData) => postData('/media/upload', data)
 export const mediaUpload = (data: FormData) => {
-    return fetch(apiUrl + "/media/upload", {
-        headers: {
-            'X-Token': '1',
-        },
-        method: "post",
-        body: data
-    }).then(res => res.json())
+  return fetch(apiUrl + "/media/upload", {
+    headers: {
+      "X-Token": "1"
+    },
+    method: "post",
+    body: data
+  }).then(res => res.json())
 }
 
 
 export const userProfile = () => callApiUseGet<undefined, UserProfile>({
-    url: "/user/me",
-    transformResponse: response => response.data,
+  url: "/user/me",
+  transformResponse: response => response.data
 })
 
 export const setReply = (data: ReplyForm) => callApiUseGet<ReplyForm, unknown>({
-    url: '/user/getUserExtend',
-    data,
-    transformResponse: response => response.data
+  url: "/user/getUserExtend",
+  data,
+  transformResponse: response => response.data
 })
 
 export const updateUserBaseInfo = (data: UpdateUserBaseReq) => callApi<UpdateUserBaseReq, unknown>("/user/updateUserBase", data, response => response.data)

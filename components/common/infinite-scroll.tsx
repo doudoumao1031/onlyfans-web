@@ -21,7 +21,7 @@ export interface InfiniteScrollProps {
 export default function InfiniteScroll({
   initialItems,
   initialHasMore,
-  children,
+  children
 }: InfiniteScrollProps) {
   const [items, setItems] = useState(initialItems)
   const [page, setPage] = useState(1)
@@ -40,7 +40,7 @@ export default function InfiniteScroll({
     hasMore ? page.toString() : null,
     async (pageStr) => fetchFeeds(parseInt(pageStr)),
     {
-      keepPreviousData: true,
+      keepPreviousData: true
     }
   )
 
@@ -70,7 +70,7 @@ export default function InfiniteScroll({
     if (!container) return
 
     container.addEventListener("scroll", handleScroll)
-    
+
     return () => {
       handleScroll.cancel()
       container.removeEventListener("scroll", handleScroll)
@@ -103,8 +103,8 @@ export default function InfiniteScroll({
     const container = containerRef.current
     if (!container) return
 
-    container.style.transition = 'transform 0.3s ease-out'
-    container.style.transform = 'translateY(0)'
+    container.style.transition = "transform 0.3s ease-out"
+    container.style.transform = "translateY(0)"
 
     if (pullDistance.current > 70 && !isRefreshing) {
       setIsRefreshing(true)
@@ -123,7 +123,7 @@ export default function InfiniteScroll({
 
     setTimeout(() => {
       if (container) {
-        container.style.transition = ''
+        container.style.transition = ""
       }
     }, 300)
 
@@ -137,7 +137,7 @@ export default function InfiniteScroll({
     container.addEventListener("touchstart", handleTouchStart)
     container.addEventListener("touchmove", handleTouchMove, { passive: false })
     container.addEventListener("touchend", handleTouchEnd)
-    
+
     return () => {
       container.removeEventListener("touchstart", handleTouchStart)
       container.removeEventListener("touchmove", handleTouchMove)
@@ -156,10 +156,10 @@ export default function InfiniteScroll({
   )
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="h-full w-full overflow-scroll relative"
-      style={{ touchAction: 'pan-x pan-y' }}
+      style={{ touchAction: "pan-x pan-y" }}
     >
       {isRefreshing && (
         <div className="sticky top-0 left-0 right-0 flex justify-center py-2 bg-gray-100/80 z-10">
