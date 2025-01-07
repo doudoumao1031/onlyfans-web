@@ -1,37 +1,77 @@
+"use client"
 import Header from "@/components/profile/header";
 import Avatar from "@/components/profile/avatar";
 import InputWithLabel from "@/components/profile/input-with-label";
 import IconWithImage from "@/components/profile/icon";
+import {UserProfile, userProfile} from "@/lib/data";
+import {Controller, useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {z} from "zod";
+import {useEffect, useState} from "react";
+
+
+type EditUserProfile = Pick<UserProfile, "about" | "username" | "location" | "back_img">
 
 export default function Page() {
-    return <>
+    const {handleSubmit, control,setValue,watch} = useForm<EditUserProfile>({
+        mode: "all",
+        resolver: zodResolver(z.object({
+            username: z.string({message: "请输入昵称"}),
+            about: z.string().optional(),
+            location: z.string().optional()
+        })),
+        defaultValues: {}
+    })
+    const [userOrigin, setUserOrigin] = useState<UserProfile>()
+    useEffect(() => {
+        userProfile().then((data) => {
+            if (data) {
+                setUserOrigin(data)
+                console.log(data)
+                setValue("username",data.username)
+                setValue("about",data.about)
+                setValue("location",data.location)
+                setValue("back_img",data.back_img)
+            }
+        })
+    }, [])
+
+    const formValues = watch()
+
+    return <form onSubmit={handleSubmit(data => {
+        console.log(data)
+    })}>
         <div className="profile-content bg-[url('/demo/user_bg.png')]">
-            <Header right={<button>保存</button>} title="编辑个人信息"/>
+            <Header right={<button type={"submit"}>保存</button>} title="编辑个人信息"/>
             {/* <div className="text-xs pl-6 pr-6">
           各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折
         </div> */}
         </div>
         <section className="mt-[-47px] rounded-t-3xl bg-white relative pt-12 text-black pb-8">
             <section className="pl-4 pr-4 pb-3 ">
-                <Avatar showEdit/>
+                <Avatar showEdit fileId={formValues.back_img}/>
             </section>
-            <form className="mt-5">
+            <section className="mt-5">
                 <section className="pl-4 pr-4 flex flex-col gap-5 ">
                     <section>
-                        <InputWithLabel name={"nickname"} label={"昵称"} value={"123123"} disabled/>
+                        <InputWithLabel label={"昵称"} value={`${userOrigin?.first_name ?? ""} ${userOrigin?.last_name ?? ""}`} disabled/>
                     </section>
                     <section>
-                        <InputWithLabel name={"username"} label={"用户名"} value={"123123"}
-                                        description={"https://secretfans.com/duomilougirl"}/>
+                        <Controller control={control} render={({field}) => <InputWithLabel onInputChange={field.onChange} label={`用户名`} value={field.value}
+                                                                                           description={`https://secretfans.com/${field.value ?? ""}`}/>}
+                                    name={"username"}/>
                     </section>
                     <section>
-                        <InputWithLabel name={"description"} value={""} label={"介绍"}/>
+                        <Controller control={control} render={({field}) => <InputWithLabel onInputChange={field.onChange} value={field.value} label={"介绍"}/>}
+                                    name={"about"}/>
                     </section>
                     <section>
-                        <InputWithLabel name={"top_info"} value={""} label={"顶部信息"}/>
+                        <Controller control={control} render={({field}) => <InputWithLabel onInputChange={field.onChange} value={field.value} label={"顶部信息"}/>}
+                                    name={"about"}/>
                     </section>
                     <section>
-                        <InputWithLabel name={"position"} value={""} label={"地理位置"}/>
+                        <Controller control={control} render={({field}) => <InputWithLabel onInputChange={field.onChange} value={field.value} label={"地理位置"}/>}
+                                    name={"location"}/>
                     </section>
                 </section>
                 <section className="border-t border-gray-100 mt-5 pl-4 pr-4">
@@ -51,7 +91,7 @@ export default function Page() {
                         </button>
                     </section>
                 </section>
-            </form>
+            </section>
         </section>
-    </>
+    </form>
 }

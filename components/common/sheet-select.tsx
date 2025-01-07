@@ -8,14 +8,15 @@ import clsx from "clsx";
 
 export interface ISelectOption {
     label: React.ReactNode,
-    value: string,
-    description?: React.ReactNode
+    value: unknown,
+    description?: React.ReactNode,
+    extend?: unknown
 }
 
 
 export default function SheetSelect({children, options, onInputChange, isOpen, setIsOpen, outerControl = true}: {
     children: React.ReactNode, options: ISelectOption[],
-    onInputChange?: (value: string) => void,
+    onInputChange?: (value: string | number | readonly string[] | undefined) => void,
     isOpen?: boolean,
     setIsOpen?: (v: boolean) => void,
     outerControl?: boolean
@@ -47,7 +48,7 @@ export default function SheetSelect({children, options, onInputChange, isOpen, s
                                 }
                                 key={index}
                                 onTouchEnd={() => {
-                                    onInputChange?.(item.value);
+                                    onInputChange?.(item.value as never);
                                     changeState?.(false)
                                 }}
                             >

@@ -22,7 +22,7 @@ export default function ConfirmModal({confirm, cancel, trigger, content}: {
             {trigger}
         </DialogTrigger>
         <DialogContent className={"hide-modal-close border-none bg-transparent"}>
-            <div className={"bg-white rounded-xl"}>
+            <div className={"bg-white rounded-xl w-[270px] ml-auto mr-auto"}>
                 <div className="py-7 px-4 text-center">{content}</div>
                 <div className="grid grid-cols-2 text-base border-t border-[#ddd]">
                     <button onTouchEnd={() => {

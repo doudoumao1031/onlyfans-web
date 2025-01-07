@@ -13,7 +13,7 @@ enum ACTIVE_TYPE {
 }
 
 const ManuscriptPost = () => {
-    const [timeSort, setTimeSort,] = useState<boolean>(false)
+    const [timeSort, setTimeSort] = useState<boolean>(false)
     return <section className="pl-4 pr-4 text-black">
         <section className="mt-5 flex gap-4 items-center">
             <div className={"flex-1 pt-2 pb-2 pl-3 pr-3 bg-[#F4F5F5] rounded-full flex items-center"}>
