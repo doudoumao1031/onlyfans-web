@@ -83,14 +83,14 @@ const AddVoteModal = ({ children, initFormData, updateVoteData }: {
   }
   useEffect(() => {
     if (open) reset()
-  }, [open])
+  }, [open, reset])
 
   useEffect(() => {
     if (voteForm.getValues().items.length === 0) {
       append({ content: "" })
       append({ content: "" })
     }
-  }, [])
+  }, [append, voteForm])
 
   return (
     <>
@@ -289,7 +289,7 @@ const ReadSettings = ({ children, initFormData, updatePrice }: {
     if (formValues.priceList.length === 0) {
       append({ price: 0, user_type: 0, visibility: true })
     }
-  }, [])
+  }, [append, formValues.priceList.length])
 
   useEffect(() => {
     if (userType === 1 && formValues.priceList.length === 1) {
@@ -304,13 +304,10 @@ const ReadSettings = ({ children, initFormData, updatePrice }: {
       remove(1)
     }
 
-  }, [userType])
+  }, [append, formValues.priceList.length, remove, userType])
 
   const { errors } = formState
 
-  useEffect(() => {
-    if (open) console.log(initFormData)
-  }, [open])
 
   return (
     <>
@@ -527,8 +524,10 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
 export default function Page() {
   const router = useRouter()
   const onFormSubmit = (formData: iPost) => {
-    addPost(formData).then((data) => {
-      if (data.code === 0) {
+    addPost(formData).then((data:unknown) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (data?.code === 0) {
         router.back()
       }
     })
