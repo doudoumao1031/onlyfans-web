@@ -1,65 +1,57 @@
 export interface PostData {
-  id: string
-  poster: User
-  description: string
-  media: (VideoData | ImageData)[]
-  subscribe: User[]
-  likedAmount: number
-  likedByMe: boolean
-  savedAmount: number
-  savedByMe: boolean
-  sharedAmount: number
-  sharedByMe: boolean
-  tippedAmount: number
-  tippedByMe: boolean
-  commentAmount: number
-  commentedByMe: boolean
+  collection: boolean
+  star: boolean
+  mention_user: User[]
+  post: {
+    id: number
+    title: string
+  }
+  post_attachment: Attachment[]
+  post_metric: {
+    collection_count: number
+    comment_count: number
+    share_count: number
+    thumbs_up_count: number
+    tip_count: number
+  }
+  post_vote: Vote
+  user: User
   comments: Comment[]
-  vote?: Vote
 }
-
 export interface Comment {
-  userName: string
-  avatar: string
   content: string
-  time: string
-  likes: number
-  replies: Comment[]
+  id: number
+  reply_arr?: Comment[]
+  reply_count?: number
+  thumbs_up_count: number
+  user: User
 }
-
-export interface User {
-  id: string
-  name: string
-  avatar: string
-  background: string
-}
-
-export enum MediaType {
-  Video,
-  Image,
-}
-
-export interface VideoData {
-  src: string
-  thumbnail: string
-  type: MediaType.Video
-}
-
-export interface ImageData {
-  src: string
-  thumbnail: string
-  type: MediaType.Image
-}
-
 export interface Vote {
-  name: string
-  complete: boolean
-  options: VoteOption[]
-  participantAmount: number
-  hoursToEnd: number
+  items: VoteItem[]
+  title: string
+  stop_time: number
+}
+export interface VoteItem {
+  content: string
+  id: number
+  vote_count: number
+}
+export interface Attachment {
+  file_id: string
+  file_type: FileType
+  thumb_id: string
 }
 
-export interface VoteOption {
-  name: string
-  votes: number
+export enum FileType {
+  Image = 1,
+  Video = 2,
+  Other = 3,
+}
+export interface User {
+  back_img: string
+  first_name: string
+  id: number
+  last_name: string
+  photo: string
+  username: string
 }
