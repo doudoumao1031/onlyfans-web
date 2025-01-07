@@ -9,7 +9,8 @@ export default async function Page() {
     const { items, hasMore } = await fetchFeeds(1);
     return (
         <div className="container h-full w-full mx-auto">
-            <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
+                   <FeedList initialItems={items} initialHasMore={hasMore} />
+                   {/* <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
                 {items.map((item, index) => (
                     <Post
                         key={`${item.id}-${index}`}
@@ -19,7 +20,7 @@ export default async function Page() {
                     />
                 ))}
             </div>
-            {!hasMore && <ListEnd />}
+            {!hasMore && <ListEnd />} */}
         </div>
     );
 }
