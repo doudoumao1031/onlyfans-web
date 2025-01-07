@@ -1,161 +1,105 @@
-import { MediaType, PostData } from "./type"
+import { FileType, PostData } from "./type"
 
-const video =
-  "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-const avatar = "/mock/avatar.jpg"
-const background = "/mock/usercard-background.jpg"
-const userName = "Jamie Shon"
+const photo = "5902a7d0-8561-4cfb-8f58-e767e9b2e04f"
+const back_img = "63b4312b-932b-409c-9339-fff685514fdc"
+const first_name = "Jamie"
+const last_name = "Shon"
+const username = "jamieshon"
 const commentContent =
   "这个产品我用过，超级好用。这个产品我用过，超级好用。这个产品我用过，超级好用。"
-const commentTime = "12月22日 22:22"
 
-export function getPostData(): PostData {
+export function getMockPostData(): PostData {
   return {
-    id: "123",
-    poster: {
-      name: userName,
-      id: "jamieshon",
-      avatar,
-      background,
+    collection: true,
+    star: true,
+    mention_user: [
+      {
+        back_img,
+        first_name,
+        id: 0,
+        last_name,
+        photo,
+        username
+      }
+    ],
+    post: {
+      id: 1,
+      title:
+        "Jamie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon @luvjamxoxo 带您踏上文化之旅，展示韩国烧烤、香草护肤品、各种泡菜等等！您一定想错过这个充满动感的剧集！"
     },
-    description:
-      "Jamie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon @luvjamxoxo 带您踏上文化之旅，展示韩国烧烤、香草护肤品、各种泡菜等等！您一定想错过这个充满动感的剧集！",
-    media: [
+    post_attachment: [
       {
-        type: MediaType.Image,
-        src: avatar,
-        thumbnail: avatar,
+        file_id: photo,
+        file_type: FileType.Image,
+        thumb_id: photo
       },
       {
-        type: MediaType.Image,
-        src: avatar,
-        thumbnail: avatar,
-      },
-      {
-        type: MediaType.Image,
-        src: avatar,
-        thumbnail: avatar,
-      },
-      {
-        type: MediaType.Image,
-        src: avatar,
-        thumbnail: avatar,
-      },
-      {
-        type: MediaType.Image,
-        src: avatar,
-        thumbnail: avatar,
-      },
-      {
-        type: MediaType.Video,
-        thumbnail: "/mock/video-preview.jpg",
-        src: video,
-      },
-      {
-        type: MediaType.Video,
-        thumbnail: "/mock/video-preview.jpg",
-        src: video,
-      },
-      {
-        type: MediaType.Video,
-        thumbnail: "/mock/video-preview.jpg",
-        src: video,
-      },
-      {
-        type: MediaType.Video,
-        thumbnail: "/mock/video-preview.jpg",
-        src: video,
-      },
+        file_id: photo,
+        file_type: FileType.Image,
+        thumb_id: photo
+      }
     ],
-    subscribe: [
-      {
-        name: userName,
-        id: "jamieshon",
-        avatar,
-        background,
-      },
-    ],
-    vote: {
-      name: "投票标题",
-      complete: getRandomInt(2) === 0,
-      participantAmount: 89,
-      hoursToEnd: 3,
-      options: [
+    post_metric: {
+      collection_count: 2,
+      comment_count: 4,
+      share_count: 6,
+      thumbs_up_count: 9,
+      tip_count: 55
+    },
+    post_vote: {
+      items: [
         {
-          name: "选项1",
-          votes: 10,
+          content: "选项0",
+          id: 0,
+          vote_count: 0
         },
         {
-          name: "选项2",
-          votes: 5,
-        },
-        {
-          name: "选项3",
-          votes: 1,
-        },
-        {
-          name: "选项4",
-          votes: 0,
-        },
+          content: "选项1",
+          id: 1,
+          vote_count: 1
+        }
       ],
+      title: "投票名称",
+      stop_time: 1724317440
     },
-    likedAmount: 999,
-    likedByMe: true,
-    sharedAmount: 999,
-    sharedByMe: false,
-    savedAmount: 999,
-    savedByMe: true,
-    tippedAmount: 999,
-    tippedByMe: false,
-    commentAmount: 99,
-    commentedByMe: true,
+    user: {
+      back_img,
+      first_name,
+      id: 0,
+      last_name,
+      photo,
+      username
+    },
     comments: [
       {
-        userName,
-        avatar,
         content: commentContent,
-        likes: 99,
-        time: commentTime,
-        replies: [
+        id: 0,
+        reply_arr: [
           {
-            userName,
-            avatar,
             content: commentContent,
-            likes: 99,
-            time: commentTime,
-            replies: [],
-          },
-          {
-            userName,
-            avatar,
-            content: commentContent,
-            likes: 99,
-            time: commentTime,
-            replies: [],
-          },
+            id: 0,
+            thumbs_up_count: 3,
+            user: {
+              back_img,
+              first_name,
+              id: 0,
+              last_name,
+              photo,
+              username
+            }
+          }
         ],
-      },
-      {
-        userName,
-        avatar,
-        content: commentContent,
-        likes: 99,
-        time: commentTime,
-        replies: [
-          {
-            userName,
-            avatar,
-            content: commentContent,
-            likes: 99,
-            time: commentTime,
-            replies: [],
-          },
-        ],
-      },
-    ],
+        reply_count: 1,
+        thumbs_up_count: 2,
+        user: {
+          back_img,
+          first_name,
+          id: 0,
+          last_name,
+          photo,
+          username
+        }
+      }
+    ]
   }
-}
-
-function getRandomInt(max: number) {
-  return Math.floor(Math.random() * max)
 }

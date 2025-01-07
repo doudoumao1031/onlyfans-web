@@ -1,68 +1,70 @@
-'use client';
+"use client"
 
-import React, {useState, useEffect, useRef} from 'react';
-import {createPortal} from 'react-dom';
-import {useRouter} from 'next/navigation';
+import React, { useState, useEffect, useRef } from "react"
+import { createPortal } from "react-dom"
+import { useRouter } from "next/navigation"
 import clsx from "clsx"
 
 export function SlideUpModal({
-                                 children,
-                                 portalId = 'modal-root',
-                                 full,
-                                 closeBtn = true,
-                             }: {
+  children,
+  portalId = "modal-root",
+  full,
+  closeBtn = true
+}: {
     children: React.ReactNode,
     portalId?: string,
     full?: boolean,
     closeBtn?: boolean
 }) {
-    const router = useRouter();
-    const [isOpen, setIsOpen] = useState(false);
-    const sheetRef = useRef<HTMLDivElement>(null);
+  const router = useRouter()
+  const [isOpen, setIsOpen] = useState(false)
+  const sheetRef = useRef<HTMLDivElement>(null)
 
-    useEffect(() => {
-        setIsOpen(true); // Trigger the enter animation when the component mounts
-    }, []);
+  useEffect(() => {
+    setIsOpen(true) // Trigger the enter animation when the component mounts
+  }, [])
 
-    function onDismiss() {
-        setIsOpen(false); // Trigger the leave animation
-        setTimeout(() => router.back(), 300); // Wait for the animation to finish before navigating back
-    }
+  function onDismiss() {
+    setIsOpen(false) // Trigger the leave animation
+    setTimeout(() => router.back(), 300) // Wait for the animation to finish before navigating back
+  }
 
-    const portalElement = document.getElementById(portalId); // Dynamic portal ID
+  const portalElement = document.getElementById(portalId) // Dynamic portal ID
 
-    // Early return if portal element is not found
-    if (!portalElement) {
-        console.error(`Portal element with ID '${portalId}' not found`);
-        return null;
-    }
+  // Early return if portal element is not found
+  if (!portalElement) {
+    console.error(`Portal element with ID '${portalId}' not found`)
+    return null
+  }
 
-    return createPortal(
-        <div
-            className={clsx(
-                "fixed inset-0 flex justify-center items-end bg-black bg-opacity-50 transition-opacity duration-300",
-                isOpen ? 'opacity-100' : 'opacity-0'
-            )}
+  return createPortal(
+    <div
+      className={clsx(
+        "fixed inset-0 flex justify-center items-end bg-black bg-opacity-50 transition-opacity duration-300",
+        isOpen ? "opacity-100" : "opacity-0"
+      )}
+      onTouchEnd={onDismiss}
+    >
+      <div
+        className={clsx(
+          "bg-white w-full max-w-lg rounded-t-lg shadow-lg transform transition-transform duration-300",
+          isOpen ? "translate-y-0" : "translate-y-full",
+          full ? "h-[100vh]" : ""
+        )}
+        ref={sheetRef}
+        onTouchEnd={(e) => e.stopPropagation()} // Prevent click propagation to the backdrop
+      >
+        {closeBtn && (
+          <button
             onTouchEnd={onDismiss}
-        >
-            <div
-                className={clsx(
-                    "bg-white w-full max-w-lg rounded-t-lg shadow-lg transform transition-transform duration-300",
-                    isOpen ? 'translate-y-0' : 'translate-y-full',
-                    full ? "h-[100vh]" : ""
-                )}
-                ref={sheetRef}
-                onTouchEnd={(e) => e.stopPropagation()} // Prevent click propagation to the backdrop
-            >
-                {closeBtn && <button
-                    onTouchEnd={onDismiss}
-                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
-                >
-                    Close
-                </button>}
-                {children}
-            </div>
-        </div>,
-        portalElement
-    );
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+          >
+            Close
+          </button>
+        )}
+        {children}
+      </div>
+    </div>,
+    portalElement
+  )
 }

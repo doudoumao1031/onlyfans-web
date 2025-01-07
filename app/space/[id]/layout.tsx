@@ -1,6 +1,5 @@
-import TabLink from '@/components/space/tab-link'
-import UserInfo from '@/components/space/userInfo';
-
+import TabLink from "@/components/space/tab-link"
+import UserInfo from "@/components/space/userInfo"
 export default async function Layout(
   props: {
     children: React.ReactNode;
@@ -20,5 +19,5 @@ export default async function Layout(
       </div>
       <div id="modal-root" />
     </>
-  );
+  )
 }
