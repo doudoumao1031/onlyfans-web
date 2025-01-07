@@ -27,7 +27,7 @@ export default function UserCard({user, subscribe}: {user: BloggerInfo, subscrib
                     {user.about}
                 </div>
                 <div className="w-full">
-                    <div className="flex gap-4 px-3 items-center justify-start">
+                    <div className="flex px-3 items-center justify-start">
                         <div className="w-1/4">
                             <Avatar src={user.photo?`https://imfanstest.potato.im/api/v1/media/img/${user.photo}` : "/mock/avatar1.jpg"} vlog={user.live_certification} width="w-[66px]"/>
                         </div>

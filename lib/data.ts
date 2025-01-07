@@ -35,6 +35,10 @@ export type CommonPageReq = {
   page: number | 1
   pageSize: number | 10
 }
+export type recomBloggerReq = CommonPageReq & {
+    // 0 热门 1 新人 2人气
+    type: number,
+}
 /**
  * list 返回结果
  */
