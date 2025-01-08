@@ -10,3 +10,11 @@ export interface ApiResponse<T> {
   message?: string;
   status: number;
 }
+
+
+export type FetchTransformResponse<Res> = (response: ApiResponse<Res>) => Res
+
+export type FetchOptions<Res> = {
+  headers: Record<string, unknown>,
+  transformResponse?: FetchTransformResponse<Res>,
+}
