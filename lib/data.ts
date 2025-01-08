@@ -356,6 +356,25 @@ export async function viewUserSubscribeSetting(
     }
   )
 }
+export type PostId = {
+    post_id: number
+}
+/**
+ * 添加帖子分享记录
+ * @param req
+ */
+export async function postSharLog(
+    req: PostId
+): Promise<any | null> {
+    return await callApi<PostId, PostResult<any>>(
+        "/post/postSharLog",
+        req,
+        (response) => {
+            return response.data
+        }
+    )
+}
+
 
 // 文件上传
 // export const mediaUpload = (data: FormData) => postData('/media/upload', data)

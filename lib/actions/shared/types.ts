@@ -8,7 +8,15 @@ export interface PaginationParams {
 export interface ApiResponse<T> {
   data: T;
   message?: string;
-  status: number;
+  code: number;
+}
+
+/**
+ * list 返回结果
+ */
+export type PageResponse<T> = {
+  list: T[]
+  total: number
 }
 
 

@@ -19,6 +19,7 @@ import {
   buildMention
 } from "./util"
 import SubscribedDrawer from "../explore/subscribed-drawer"
+import {postSharLog} from "@/lib/data";
 
 export default function Post({
   data,
@@ -67,7 +68,7 @@ export default function Post({
         <Like count={thumbs_up_count} liked={star} />
         <CommentStats count={comment_count} />
         <Tip userId={user.id} count={tip_count} />
-        <Share count={share_count} />
+        <Share count={share_count} postId={post.id}/>
         <Save count={collection_count} saved={collection} />
       </div>
       {comments && comments.length > 0 && <Comments comments={comments} />}
@@ -407,7 +408,9 @@ function Like({ count, liked }: { count: number; liked: boolean }) {
 }
 
 function CommentStats({ count }: { count: number }) {
-  return <Stats icon="/icons/comment.png" value={count} />
+  return <button onClick={() => {}}>
+    <Stats icon="/icons/comment.png" value={count} />
+  </button>
 }
 
 function Tip({ userId, count }: { userId: number; count: number }) {
@@ -422,8 +425,15 @@ function Tip({ userId, count }: { userId: number; count: number }) {
   )
 }
 
-function Share({ count }: { count: number }) {
-  return <Stats icon="/icons/share.png" value={count} />
+
+const shareBtn = async (postId: number) => {
+  await postSharLog({post_id: postId})
+}
+
+function Share({ count, postId }: { count: number, postId: number }) {
+  return <button onClick={() => {shareBtn(postId)}}>
+    <Stats icon="/icons/share.png" value={count} />
+  </button>
 }
 
 function Save({ count, saved }: { count: number; saved: boolean }) {
