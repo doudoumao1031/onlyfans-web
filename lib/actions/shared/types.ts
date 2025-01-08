@@ -8,7 +8,7 @@ export interface PaginationParams {
 export interface ApiResponse<T> {
   data: T;
   message?: string;
-  status: number;
+  code: number;
 }
 
 
