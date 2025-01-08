@@ -11,6 +11,14 @@ export interface ApiResponse<T> {
   code: number;
 }
 
+/**
+ * list 返回结果
+ */
+export type PageResponse<T> = {
+  list: T[]
+  total: number
+}
+
 
 export type FetchTransformResponse<Res> = (response: ApiResponse<Res>) => Res
 

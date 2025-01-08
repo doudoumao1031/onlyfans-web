@@ -1,9 +1,9 @@
 // Recom related types and interfaces
 
 export interface PageInfo {
-  page: number
-  limit: number
-  lastId?: string
+  from_id: number | 0
+  page: number | 1
+  pageSize: number | 10
 }
 
 export interface PostInfoVo {

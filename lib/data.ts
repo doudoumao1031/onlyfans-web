@@ -83,7 +83,7 @@ export type DiscountInfo = {
 export type SubscribeSetting = {
   id: number
   user_id: number
-  price: string
+  price: number
   items: DiscountInfo[]
 }
 
@@ -207,7 +207,7 @@ export async function callApi<T, R>(
   return null
 }
 
-async function postData(url: string, data: unknown) {
+export async function postData(url: string, data: unknown) {
   try {
     const response = await fetch(apiUrl + url, {
       method: "POST",
@@ -245,19 +245,19 @@ export async function login(userId: number) {
   })
 }
 
-export type FollowUserPostReq = {
-  from_id: number
-  page: number
-  pageSize: number
-}
-
 /**
  * 关注用户帖子
- * @param data
  */
-export async function followUserPosts(data: FollowUserPostReq) {
-  console.log("followUserPosts data:", data)
-  return await postData("/index/followUserPosts", data)
+export async function followUserPosts(
+    req: CommonPageReq
+): Promise<PageResponse<PostData> | null> {
+  return await callApi<CommonPageReq, PageResponse<PostData>>(
+      "/index/followUserPosts",
+      req,
+      (response) => {
+        return response.data as PageResponse<PostData>
+      }
+  )
 }
 
 /**
@@ -271,7 +271,7 @@ export async function followUserUpdate() {
  * 推荐博主
  */
 export async function recomBlogger(
-  req: CommonPageReq
+  req: recomBloggerReq
 ): Promise<PageResponse<BloggerInfo> | null> {
   return await callApi<CommonPageReq, PageResponse<BloggerInfo>>(
     "/index/recomBlogger",
@@ -285,11 +285,18 @@ export async function recomBlogger(
 /**
  * 热门贴子
  */
-export async function systemPost() {
-  return await postData("/index/systemPost", {})
+export async function systemPost(
+    req: CommonPageReq
+): Promise<PageResponse<PostData> | null> {
+  return await callApi<CommonPageReq, PageResponse<PostData>>(
+      "/index/systemPost",
+      req,
+      (response) => {
+        return response.data as PageResponse<PostData>
+      }
+  )
 }
 
-//
 /**
  * 已订阅博主列表
  */
@@ -325,12 +332,12 @@ export async function searchUser(
  */
 export async function searchPost(
   req: SearchPostReq
-): Promise<PageResponse<PostData[]> | null> {
-  return await callApi<SearchPostReq, PageResponse<PostData[]>>(
+): Promise<PageResponse<PostData> | null> {
+  return await callApi<SearchPostReq, PageResponse<PostData>>(
     "/post/search",
     req,
     (response) => {
-      return response.data as PageResponse<PostData[]>
+      return response.data as PageResponse<PostData>
     }
   )
 }
@@ -349,6 +356,25 @@ export async function viewUserSubscribeSetting(
     }
   )
 }
+export type PostId = {
+    post_id: number
+}
+/**
+ * 添加帖子分享记录
+ * @param req
+ */
+export async function postSharLog(
+    req: PostId
+): Promise<any | null> {
+    return await callApi<PostId, PostResult<any>>(
+        "/post/postSharLog",
+        req,
+        (response) => {
+            return response.data
+        }
+    )
+}
+
 
 // 文件上传
 // export const mediaUpload = (data: FormData) => postData('/media/upload', data)

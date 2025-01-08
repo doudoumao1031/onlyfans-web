@@ -16,7 +16,7 @@ export function getMockPostData(): PostData {
       {
         back_img,
         first_name,
-        id: 0,
+        id: 1,
         last_name,
         photo,
         username
