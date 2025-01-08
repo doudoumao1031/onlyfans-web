@@ -15,6 +15,6 @@ export interface ApiResponse<T> {
 export type FetchTransformResponse<Res> = (response: ApiResponse<Res>) => Res
 
 export type FetchOptions<Res> = {
-  headers: Record<string, unknown>,
+  headers?: Record<string, unknown>,
   transformResponse?: FetchTransformResponse<Res>,
 }

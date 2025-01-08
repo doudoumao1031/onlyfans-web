@@ -44,7 +44,7 @@ async function fetchResultHandle<T>(method: string, response: Response, transfor
 
 export async function fetchWithGet<Req, Res>(url: string, data: Req, options?: FetchOptions<Res>): Promise<ApiResponse<Res> | null | Res> {
   try {
-    const { headers, transformResponse } = options ?? {}
+    const { headers = {}, transformResponse } = options ?? {}
     const qs = new URLSearchParams(data ?? {})
     const response = await fetch(`${apiUrl}${url}?${qs.toString()}`, {
       method: "GET",
@@ -62,7 +62,7 @@ export async function fetchWithGet<Req, Res>(url: string, data: Req, options?: F
 
 export async function fetchWithPost<Req, Res>(url: string, data: Req, options?: FetchOptions<Res>): Promise<ApiResponse<Res> | null | Res> {
   try {
-    const { headers, transformResponse } = options ?? {}
+    const { headers = {}, transformResponse } = options ?? {}
     const isFormData = data instanceof FormData
     const response = await fetch(`${apiUrl}${url}`, {
       method: "POST",
