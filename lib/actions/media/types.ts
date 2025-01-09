@@ -1,10 +1,5 @@
 // Media related types and interfaces
-
-export enum FileType {
-  Image = "1",
-  Video = "2",
-  Other = "3"
-}
+import type { FileType } from "../shared/types"
 
 export interface FileInfo {
   id: string
@@ -24,6 +19,13 @@ export interface UploadReq {
   fileCount: number
   fileSize: number
   fileType: FileType
+}
+
+export interface UploadRes {
+  "ext": string,
+  "file_id": string,
+  "file_name": string,
+  "file_type": FileType
 }
 
 export interface UploadPartReq {

@@ -3,11 +3,11 @@ import Header from "@/components/profile/header"
 import Avatar from "@/components/profile/avatar"
 import InputWithLabel from "@/components/profile/input-with-label"
 import IconWithImage from "@/components/profile/icon"
-import { UserProfile, userProfile } from "@/lib/data"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { useEffect, useState } from "react"
+import { userProfile, UserProfile } from "@/lib/actions/profile"
 
 
 type EditUserProfile = Pick<UserProfile, "about" | "username" | "location" | "back_img">
@@ -22,19 +22,19 @@ export default function Page() {
     })),
     defaultValues: {}
   })
-  const [userOrigin, setUserOrigin] = useState<UserProfile>()
+  const [userOrigin, setUserOrigin] = useState<UserProfile | undefined>(undefined)
   useEffect(() => {
-    userProfile().then((data) => {
+    userProfile().then((response) => {
+      const data = response?.data
       if (data) {
         setUserOrigin(data)
-        console.log(data)
         setValue("username",data.username)
         setValue("about",data.about)
         setValue("location",data.location)
         setValue("back_img",data.back_img)
       }
     })
-  }, [setValue])
+  })
 
   const formValues = watch()
 

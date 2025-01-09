@@ -1,5 +1,6 @@
 // Post related types and interfaces
-import type { PageInfo } from "../recom/types"
+import type { PageInfo } from "@/lib"
+import { FileType, PostInfoVo } from "../shared/types"
 
 export interface PostInfoReq {
   title?: string
@@ -61,39 +62,55 @@ export interface UserVoteReq {
   optionId: string
 }
 
-export interface PostInfoVo {
-  id: string
-  userId: string
-  content: string
-  title?: string
-  postType: number
-  postStatus: number
-  mediaCount: number
-  commentCount: number
-  starCount: number
-  viewCount: number
-  shareCount: number
-  createdAt: string
-  updatedAt: string
-  files?: {
-    id: string
-    url: string
-    type: string
-    size: number
-    width?: number
-    height?: number
-    duration?: number
-  }[]
-  vote?: {
-    id: string
+export interface PostData {
+  collection: boolean
+  star: boolean
+  mention_user: User[]
+  post: {
+    id: number
     title: string
-    options: {
-      id: string
-      content: string
-      count: number
-    }[]
-    totalCount: number
-    isVoted: boolean
-    myVoteOptionId?: string
   }
+  post_attachment: Attachment[]
+  post_metric: {
+    collection_count: number
+    comment_count: number
+    share_count: number
+    thumbs_up_count: number
+    tip_count: number
+  }
+  post_vote: Vote
+  user: User
+  comments: Comment[]
+}
+export interface Comment {
+  content: string
+  id: number
+  reply_arr?: Comment[]
+  reply_count?: number
+  thumbs_up_count: number
+  user: User
+}
+export interface Vote {
+  items: VoteItem[]
+  title: string
+  stop_time: number
+}
+export interface VoteItem {
+  content: string
+  id: number
+  vote_count: number
+}
+export interface Attachment {
+  file_id: string
+  file_type: FileType
+  thumb_id: string
+}
+
+export interface User {
+  back_img: string
+  first_name: string
+  id: number
+  last_name: string
+  photo: string
+  username: string
 }

@@ -1,18 +1,20 @@
 "use server"
 
-import { ENDPOINTS } from "../shared/constants"
+import { ENDPOINTS, fetchWithPost, PageResponse, PostData } from "@/lib"
 import type {
   PageInfo,
   FollowUserPostsResp,
   FollowUserUpdateResp,
   RecomBloggerResp,
   SystemPostResp
-} from "./types"
+} from "@/lib"
+import { iPost } from "@/lib/post"
+import { CommonPageReq } from "@/lib/data"
 
-export async function getFollowUserPosts(params: PageInfo): Promise<FollowUserPostsResp> {
-  // Implementation
-  throw new Error("Not implemented")
-}
+/**
+ * 关注用户帖子
+ */
+export const getFollowUserPosts = (data: PageInfo) => fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.RECOM.FOLLOW_USER_POSTS, data)
 
 export async function getFollowUserUpdate(): Promise<FollowUserUpdateResp> {
   // Implementation

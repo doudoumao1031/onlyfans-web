@@ -13,9 +13,9 @@ import type {
   PostSearchReq,
   PostStarReq,
   UserPostsReq,
-  UserVoteReq,
-  PostInfoVo
+  UserVoteReq
 } from "./types"
+import type { PostInfoVo } from "../shared/types"
 
 export async function addPost(params: PostInfoReq): Promise<PostInfoVo> {
   // Implementation

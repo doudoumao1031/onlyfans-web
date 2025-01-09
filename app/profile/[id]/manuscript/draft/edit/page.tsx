@@ -8,23 +8,15 @@ import FormDrawer from "@/components/common/form-drawer"
 import InputWithLabel from "@/components/profile/input-with-label"
 import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
 import ConfirmModal from "@/components/common/confirm-modal"
-import { mediaUpload } from "@/lib/data"
 import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from "react-hook-form"
-import {
-  addPost,
-  iPost,
-  iPostPrice,
-  iPostVote,
-  postPriceValidation,
-  postValidation,
-  postVoteValidation
-} from "@/lib/post"
 import { zodResolver } from "@hookform/resolvers/zod"
 import DatePickerModal from "@/components/common/date-picker-modal"
 import dayjs from "dayjs"
 import { z } from "zod"
 import Image from "next/image"
 import * as process from "process"
+import { postVoteSchema, iPostVote, iPostPrice, postPriceSchema, iPost, postSchema, addPost } from "@/lib/actions/profile"
+import { uploadMediaFile } from "@/lib"
 
 const ItemEditTitle = ({ title, showIcon = true }: { title: React.ReactNode, showIcon?: boolean }) => {
   return (
@@ -64,7 +56,7 @@ const AddVoteModal = ({ children, initFormData, updateVoteData }: {
   const [open, setIsOpen] = useState<boolean>(false)
   const voteForm = useForm<iPostVote>({
     mode: "all",
-    resolver: zodResolver(postVoteValidation),
+    resolver: zodResolver(postVoteSchema),
     defaultValues: initFormData ?? {
       items: [],
       title: "",
@@ -90,7 +82,7 @@ const AddVoteModal = ({ children, initFormData, updateVoteData }: {
       append({ content: "" })
       append({ content: "" })
     }
-  }, [append, voteForm])
+  }, [])
 
   return (
     <>
@@ -255,7 +247,7 @@ const ReadSettings = ({ children, initFormData, updatePrice }: {
   const priceForm = useForm<{ priceList: iPostPrice[] }>({
     mode: "all",
     resolver: zodResolver(z.object({
-      priceList: postPriceValidation
+      priceList: postPriceSchema
     })),
     defaultValues: {
       priceList: revertPriceSettingOption(initFormData ?? []) ?? []
@@ -436,10 +428,10 @@ const UploadMedia = () => {
     fd.append("file_size", String(size))
     fd.append("file_type", fileType)
     fd.append("file", file)
-    mediaUpload(fd).then(({ code, data }) => {
-      if (code === 0) {
+    uploadMediaFile(fd).then((data) => {
+      if (data?.data) {
         append({
-          file_id: data.file_id
+          file_id: data.data.file_id
         })
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
@@ -524,9 +516,7 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
 export default function Page() {
   const router = useRouter()
   const onFormSubmit = (formData: iPost) => {
-    addPost(formData).then((data:unknown) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
+    addPost(formData).then((data) => {
       if (data?.code === 0) {
         router.back()
       }
@@ -535,7 +525,7 @@ export default function Page() {
 
   const postForm = useForm<iPost>({
     mode: "onTouched",
-    resolver: zodResolver(postValidation),
+    resolver: zodResolver(postSchema),
     defaultValues: { ...initPostFormData }
   })
   const { register, watch, formState, setValue, handleSubmit } = postForm

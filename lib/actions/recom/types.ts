@@ -1,25 +1,10 @@
 // Recom related types and interfaces
+import { PostInfoVo } from "../shared/types"
 
 export interface PageInfo {
-  page: number
-  limit: number
-  lastId?: string
-}
-
-export interface PostInfoVo {
-  id: string
-  userId: string
-  content: string
-  title?: string
-  postType: number
-  postStatus: number
-  mediaCount: number
-  commentCount: number
-  starCount: number
-  viewCount: number
-  shareCount: number
-  createdAt: string
-  updatedAt: string
+  from_id: number | 0
+  page: number | 1
+  pageSize: number | 10
 }
 
 export interface UserInfoVo {

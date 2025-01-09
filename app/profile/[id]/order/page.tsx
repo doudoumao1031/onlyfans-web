@@ -42,7 +42,7 @@ const AddSubscriptionModal = ({ children }: { children: React.ReactNode }) => {
           ></ModalHeader>
 
           <form className={"mt-5 block px-4"}>
-            <InputWithLabel placeholder={"订阅时限"} onInputChange={setTimeLimit}
+            <InputWithLabel placeholder={"订阅时限"} onInputChange={(value) => setTimeLimit(value?.toString() ?? "")}
               options={[{ label: "1", value: "1" }, { label: "2", value: "2" }]}
               name={""} value={timeLimit}
             />
@@ -140,7 +140,7 @@ export default function Page() {
           {baseFee}
           <h1 className="text-base font-medium">基本订阅</h1>
           <section className="mt-2.5">
-            <InputWithLabel onInputChange={setBaseFee}
+            <InputWithLabel onInputChange={(value) => setBaseFee(value?.toString() ?? "")}
               options={[{ label: "免费", value: "1" }, { label: "自定义", value: "custom" }]}
               name={""} value={baseFee} label={"每月价格"} description={(
                 <>
