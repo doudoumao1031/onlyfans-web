@@ -10,7 +10,7 @@ export default async function Layout(
   return (
     <>
       <div className="flex h-screen flex-col w-full justify-start items-center">
-        <UserInfo id={id} />
+        <UserInfo />
         <TabLink id={id} />
         <div className="grow px-4 py-3 w-full h-3/4">{props.children}</div>
       </div>
