@@ -249,14 +249,14 @@ export async function login(userId: number) {
  * 关注用户帖子
  */
 export async function followUserPosts(
-    req: CommonPageReq
+  req: CommonPageReq
 ): Promise<PageResponse<PostData> | null> {
   return await callApi<CommonPageReq, PageResponse<PostData>>(
-      "/index/followUserPosts",
-      req,
-      (response) => {
-        return response.data as PageResponse<PostData>
-      }
+    "/index/followUserPosts",
+    req,
+    (response) => {
+      return response.data as PageResponse<PostData>
+    }
   )
 }
 
@@ -286,14 +286,14 @@ export async function recomBlogger(
  * 热门贴子
  */
 export async function systemPost(
-    req: CommonPageReq
+  req: CommonPageReq
 ): Promise<PageResponse<PostData> | null> {
   return await callApi<CommonPageReq, PageResponse<PostData>>(
-      "/index/systemPost",
-      req,
-      (response) => {
-        return response.data as PageResponse<PostData>
-      }
+    "/index/systemPost",
+    req,
+    (response) => {
+      return response.data as PageResponse<PostData>
+    }
   )
 }
 
@@ -364,15 +364,15 @@ export type PostId = {
  * @param req
  */
 export async function postSharLog(
-    req: PostId
-): Promise<any | null> {
-    return await callApi<PostId, PostResult<any>>(
-        "/post/postSharLog",
-        req,
-        (response) => {
-            return response.data
-        }
-    )
+  req: PostId
+): Promise<unknown | null> {
+  return await callApi<PostId, PostResult<unknown>>(
+    "/post/postSharLog",
+    req,
+    (response) => {
+      return response.data
+    }
+  )
 }
 
 

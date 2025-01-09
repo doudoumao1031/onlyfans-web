@@ -1,10 +1,5 @@
 // Media related types and interfaces
-
-export enum FileType {
-  Image = "1",
-  Video = "2",
-  Other = "3"
-}
+import type { FileType } from "../shared/types"
 
 export interface FileInfo {
   id: string

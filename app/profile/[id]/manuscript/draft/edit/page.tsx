@@ -83,7 +83,7 @@ const AddVoteModal = ({ children, initFormData, updateVoteData }: {
   }
   useEffect(() => {
     if (open) reset()
-  }, [open])
+  }, [open, reset])
 
   useEffect(() => {
     if (voteForm.getValues().items.length === 0) {
@@ -289,7 +289,7 @@ const ReadSettings = ({ children, initFormData, updatePrice }: {
     if (formValues.priceList.length === 0) {
       append({ price: 0, user_type: 0, visibility: true })
     }
-  }, [])
+  })
 
   useEffect(() => {
     if (userType === 1 && formValues.priceList.length === 1) {
@@ -310,7 +310,7 @@ const ReadSettings = ({ children, initFormData, updatePrice }: {
 
   useEffect(() => {
     if (open) console.log(initFormData)
-  }, [open])
+  }, [open, initFormData])
 
   return (
     <>
@@ -528,7 +528,7 @@ export default function Page() {
   const router = useRouter()
   const onFormSubmit = (formData: iPost) => {
     addPost(formData).then((data) => {
-      if (data.code === 0) {
+      if (data && data.code === 0) {
         router.back()
       }
     })

@@ -34,7 +34,7 @@ export default function Page() {
         setValue("back_img",data.back_img)
       }
     })
-  }, [])
+  })
 
   const formValues = watch()
 

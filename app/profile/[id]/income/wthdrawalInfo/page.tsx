@@ -32,7 +32,7 @@ const mockData: TWthdrawal[] = [
 ]
 
 export default function Page() {
-  const [list, setLIst] = useState<TWthdrawal[]>(mockData)
+  const [list, _setLIst] = useState<TWthdrawal[]>(mockData)
   return (
     <>
       <Header title="明细" titleColor="#000" />

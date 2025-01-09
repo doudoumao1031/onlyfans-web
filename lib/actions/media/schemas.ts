@@ -1,5 +1,5 @@
 import { z } from "zod"
-import { FileType } from "./types"
+import { FileType } from "../shared/types"
 
 export const uploadReqSchema = z.object({
   fileHash: z.string().optional(),

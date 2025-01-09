@@ -1,5 +1,6 @@
 // Post related types and interfaces
 import type { PageInfo } from "@/lib"
+import { FileType, PostInfoVo } from "../shared/types"
 
 export interface PostInfoReq {
   title?: string
@@ -61,43 +62,6 @@ export interface UserVoteReq {
   optionId: string
 }
 
-export interface PostInfoVo {
-  id: string
-  userId: string
-  content: string
-  title?: string
-  postType: number
-  postStatus: number
-  mediaCount: number
-  commentCount: number
-  starCount: number
-  viewCount: number
-  shareCount: number
-  createdAt: string
-  updatedAt: string
-  files?: {
-    id: string
-    url: string
-    type: string
-    size: number
-    width?: number
-    height?: number
-    duration?: number
-  }[]
-  vote?: {
-    id: string
-    title: string
-    options: {
-      id: string
-      content: string
-      count: number
-    }[]
-    totalCount: number
-    isVoted: boolean
-    myVoteOptionId?: string
-  }
-}
-
 export interface PostData {
   collection: boolean
   star: boolean
@@ -142,11 +106,6 @@ export interface Attachment {
   thumb_id: string
 }
 
-export enum FileType {
-  Image = 1,
-  Video = 2,
-  Other = 3,
-}
 export interface User {
   back_img: string
   first_name: string
@@ -155,4 +114,3 @@ export interface User {
   photo: string
   username: string
 }
-

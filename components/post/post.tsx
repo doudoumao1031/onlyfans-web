@@ -19,7 +19,7 @@ import {
   buildMention
 } from "./util"
 import SubscribedDrawer from "../explore/subscribed-drawer"
-import {postSharLog} from "@/lib/data";
+import { postSharLog } from "@/lib/data"
 
 export default function Post({
   data,
@@ -408,9 +408,11 @@ function Like({ count, liked }: { count: number; liked: boolean }) {
 }
 
 function CommentStats({ count }: { count: number }) {
-  return <button onClick={() => {}}>
-    <Stats icon="/icons/comment.png" value={count} />
-  </button>
+  return (
+    <button onClick={() => {}}>
+      <Stats icon="/icons/comment.png" value={count} />
+    </button>
+  )
 }
 
 function Tip({ userId, count }: { userId: number; count: number }) {
@@ -427,13 +429,15 @@ function Tip({ userId, count }: { userId: number; count: number }) {
 
 
 const shareBtn = async (postId: number) => {
-  await postSharLog({post_id: postId})
+  await postSharLog({ post_id: postId })
 }
 
 function Share({ count, postId }: { count: number, postId: number }) {
-  return <button onClick={() => {shareBtn(postId)}}>
-    <Stats icon="/icons/share.png" value={count} />
-  </button>
+  return (
+    <button onClick={() => {shareBtn(postId)}}>
+      <Stats icon="/icons/share.png" value={count} />
+    </button>
+  )
 }
 
 function Save({ count, saved }: { count: number; saved: boolean }) {
