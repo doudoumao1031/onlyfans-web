@@ -11,7 +11,7 @@ const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants>
 >({
   size: "default",
-  variant: "default",
+  variant: "default"
 })
 
 const ToggleGroupSubscribed = React.forwardRef<
@@ -45,7 +45,7 @@ const ToggleGroupSubscribedItem = React.forwardRef<
       className={cn(
         toggleVariants({
           variant: context.variant || variant,
-          size: context.size || size,
+          size: context.size || size
         }),
         className
       )}

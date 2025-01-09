@@ -9,21 +9,22 @@ import {
   PostData,
   User,
   Attachment,
-  FileType,
+  FileType
 } from "./type"
 import {
   isMention,
   buildUserHomePagePath,
   getUserIdFromMention,
   buildUserHomePagePathForDisplay,
-  buildMention,
+  buildMention
 } from "./util"
 import SubscribedDrawer from "../explore/subscribed-drawer"
+import { postSharLog } from "@/lib"
 
 export default function Post({
   data,
   showSubscribe,
-  showVote,
+  showVote
 }: {
   data: PostData
   showSubscribe: boolean
@@ -38,7 +39,7 @@ export default function Post({
     mention_user,
     collection,
     star,
-    comments,
+    comments
   } = data
 
   const {
@@ -46,7 +47,7 @@ export default function Post({
     comment_count,
     share_count,
     thumbs_up_count,
-    tip_count,
+    tip_count
   } = post_metric
 
   return (
@@ -54,23 +55,23 @@ export default function Post({
       <UserTitle user={user} />
       <Description content={post.title} />
       <UserHomePageLink userId={user.username} />
-      <Media data={post_attachment} />
-      {showSubscribe && (
+      {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} />}
+      {showSubscribe && mention_user && mention_user.length > 0 && (
         <div>
           {mention_user.map((user) => (
             <SubscribeCard key={user.id} user={user} />
           ))}
         </div>
       )}
-      {showVote && <Vote data={post_vote} />}
+      {showVote && post_vote && <Vote data={post_vote} />}
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} />
         <CommentStats count={comment_count} />
         <Tip userId={user.id} count={tip_count} />
-        <Share count={share_count} />
+        <Share count={share_count} postId={post.id}/>
         <Save count={collection_count} saved={collection} />
       </div>
-      <Comments comments={comments} />
+      {comments && comments.length > 0 && <Comments comments={comments} />}
     </div>
   )
 }
@@ -162,7 +163,7 @@ function Vote({ data }: { data: VoteData }) {
                   backgroundSize: `${(vote_count / totalVotes) * 100}% 100%`,
                   borderColor: `${
                     selectedVoteIndex === i ? "#FF8492" : "#DDDDDD"
-                  }`,
+                  }`
                 }}
                 onClick={() => setSelectedVoteIndex(i)}
               >
@@ -211,7 +212,7 @@ function SubscribeCard({ user }: { user: User }) {
     <div
       className="w-full rounded-lg bg-cover"
       style={{
-        backgroundImage: `url(${buildFileUrl(back_img)})`,
+        backgroundImage: `url(${buildFileUrl(back_img)})`
       }}
     >
       <div className="w-full h-full flex justify-between bg-black/50 p-3 rounded-lg">
@@ -321,7 +322,7 @@ function Media({ data }: { data: Attachment[] }) {
               <div
                 className="aspect-square flex justify-center items-center bg-cover rounded-md"
                 style={{
-                  backgroundImage: `url(${buildFileUrl(thumb_id)})`,
+                  backgroundImage: `url(${buildFileUrl(thumb_id)})`
                 }}
               >
                 <div className="bg-black/50 w-12 h-12 rounded-full flex justify-center items-center">
@@ -336,7 +337,7 @@ function Media({ data }: { data: Attachment[] }) {
             ) : (
               <Image
                 className="aspect-square rounded-md"
-                src={buildFileUrl(thumb_id)}
+                src={buildFileUrl(file_id)}
                 alt=""
                 width={200}
                 height={200}
@@ -351,7 +352,7 @@ function Media({ data }: { data: Attachment[] }) {
 
 function Thumbnail({
   largeElement,
-  thumbnailElement,
+  thumbnailElement
 }: {
   largeElement: ReactElement
   thumbnailElement: ReactElement
@@ -373,7 +374,7 @@ function Thumbnail({
 
 function FullScreen({
   children,
-  onExit,
+  onExit
 }: {
   children: ReactElement
   onExit: () => void
@@ -403,11 +404,15 @@ function UserHomePageLink({ userId }: { userId: string }) {
 }
 
 function Like({ count, liked }: { count: number; liked: boolean }) {
-  return <Stats icon="/icons/like.png" value={count} highlight={liked} />
+  return <Stats icon="icon_fans_like" value={count} highlight={liked} />
 }
 
 function CommentStats({ count }: { count: number }) {
-  return <Stats icon="/icons/comment.png" value={count} />
+  return (
+    <button onClick={() => {}}>
+      <Stats icon="icon_fans_comment" value={count} />
+    </button>
+  )
 }
 
 function Tip({ userId, count }: { userId: number; count: number }) {
@@ -417,23 +422,32 @@ function Tip({ userId, count }: { userId: number; count: number }) {
       href={`/explore/tip/${userId}`}
       className="flex items-center"
     >
-      <Stats icon="/icons/tip.png" value={count} />
+      <Stats icon="icon_fans_reward" value={count} />
     </Link>
   )
 }
 
-function Share({ count }: { count: number }) {
-  return <Stats icon="/icons/share.png" value={count} />
+
+const shareBtn = async (postId: number) => {
+  await postSharLog({ post_id: postId })
+}
+
+function Share({ count, postId }: { count: number, postId: number }) {
+  return (
+    <button onClick={() => {shareBtn(postId)}}>
+      <Stats icon="icon_fans_share" value={count} />
+    </button>
+  )
 }
 
 function Save({ count, saved }: { count: number; saved: boolean }) {
-  return <Stats icon="/icons/save.png" value={count} highlight={saved} />
+  return <Stats icon="icon_fans_collect" value={count} highlight={saved} />
 }
 
 function Stats({
   icon,
   value,
-  highlight = false,
+  highlight = false
 }: {
   icon: string
   value: number
@@ -441,7 +455,7 @@ function Stats({
 }) {
   return (
     <div className={`flex gap-1 items-center ${highlight && "text-red-500"}`}>
-      <Image src={icon} width={20} height={20} alt="" />
+      <Image src={highlight ? "/icons/"+icon+"_highlight@3x.png" : "/icons/"+icon+"_normal@3x.png"} width={20} height={20} alt="" />
       <span className="text-xs">{value}</span>
     </div>
   )

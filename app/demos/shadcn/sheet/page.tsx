@@ -11,7 +11,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
+  SheetTrigger
 } from "@/components/ui/sheet"
 
 const SHEET_SIDES = ["top", "right", "bottom", "left"] as const

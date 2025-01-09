@@ -15,7 +15,7 @@ interface InfiniteScrollProps {
 
 export default function InfiniteScroll({
   initialItems,
-  initialHasMore,
+  initialHasMore
 }: InfiniteScrollProps) {
   const [items, setItems] = useState<number[]>(initialItems)
   const [page, setPage] = useState(1)
@@ -28,7 +28,7 @@ export default function InfiniteScroll({
     hasMore: boolean
   }>(hasMore ? `/api/feeds?page=${page}` : null, fetcher, {
     revalidateOnFocus: false,
-    keepPreviousData: true,
+    keepPreviousData: true
   })
 
   // Preload the next page
