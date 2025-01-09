@@ -48,10 +48,14 @@ export interface PostSearchReq extends PageInfo {
   keyword: string
 }
 
+/**
+ * 帖子点赞
+ */
 export interface PostStarReq {
-  postId: string
-  star: boolean
+  deleted: boolean //0-点赞 1-点踩
+  post_id: number
 }
+
 
 export interface UserPostsReq extends PageInfo {
   userId: string

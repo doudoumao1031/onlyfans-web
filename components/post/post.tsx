@@ -19,7 +19,7 @@ import {
   buildMention
 } from "./util"
 import SubscribedDrawer from "../explore/subscribed-drawer"
-import { postSharLog } from "@/lib"
+import { postSharLog, starPost, userCollectionPost } from "@/lib"
 
 export default function Post({
   data,
@@ -65,11 +65,11 @@ export default function Post({
       )}
       {showVote && post_vote && <Vote data={post_vote} />}
       <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6 border-b border-black/5">
-        <Like count={thumbs_up_count} liked={star} />
+        <Like count={thumbs_up_count} liked={star} postId={post.id}/>
         <CommentStats count={comment_count} />
         <Tip userId={user.id} count={tip_count} />
         <Share count={share_count} postId={post.id}/>
-        <Save count={collection_count} saved={collection} />
+        <Save count={collection_count} saved={collection} postId={post.id}/>
       </div>
       {comments && comments.length > 0 && <Comments comments={comments} />}
     </div>
@@ -403,8 +403,39 @@ function UserHomePageLink({ userId }: { userId: string }) {
   )
 }
 
-function Like({ count, liked }: { count: number; liked: boolean }) {
-  return <Stats icon="icon_fans_like" value={count} highlight={liked} />
+function Like({ count, liked, postId }: { count: number; liked: boolean, postId: number }) {
+  // 添加点赞状态
+  const [likes, setLikes] = useState(count)
+  const [isLiked, setIsLiked] = useState(liked)
+
+  const handleLike = async () => {
+    if (isLiked) {
+      // 如果已经点赞，取消点赞
+      setLikes(prevLikes => prevLikes - 1)
+      setIsLiked(false)
+    } else {
+      // 如果未点赞，增加点赞
+      setLikes(prevLikes => prevLikes + 1)
+      setIsLiked(true)
+    }
+    // 静默提交点赞操作
+    try {
+      await starPost({ post_id: postId, deleted: !isLiked })
+    } catch (error) {
+      console.error("Error liking post:", error)
+      // 如果点赞失败，恢复之前的点赞状态
+      setLikes(prevLikes => (isLiked ? prevLikes + 1 : prevLikes - 1))
+      setIsLiked(isLiked)
+    }
+  }
+  return (
+    <button onClick={() => {
+      handleLike()
+    }}
+    >
+      <Stats icon="icon_fans_like" value={likes} highlight={isLiked}/>
+    </button>
+  )
 }
 
 function CommentStats({ count }: { count: number }) {
@@ -440,8 +471,36 @@ function Share({ count, postId }: { count: number, postId: number }) {
   )
 }
 
-function Save({ count, saved }: { count: number; saved: boolean }) {
-  return <Stats icon="icon_fans_collect" value={count} highlight={saved} />
+function Save({ count, saved, postId }: { count: number; saved: boolean, postId: number }) {
+  const [saves, setSaves] = useState(count)
+  const [isSaved, setIsSaved] = useState(saved)
+
+  const handleSave = async () => {
+    if (isSaved) {
+      setSaves(prevLikes => prevLikes - 1)
+      setIsSaved(false)
+    } else {
+      // 如果未点赞，增加点赞
+      setSaves(prevLikes => prevLikes + 1)
+      setIsSaved(true)
+    }
+    try {
+      await userCollectionPost({ post_id: postId, collection: !isSaved, user_id: 1 })
+    } catch (error) {
+      console.error("Error saved post:", error)
+      // 如果点赞失败，恢复之前的点赞状态
+      setSaves(prevLikes => (isSaved ? prevLikes + 1 : prevLikes - 1))
+      setIsSaved(isSaved)
+    }
+  }
+  return (
+    <button onClick={() => {
+      handleSave()
+    }}
+    >
+      <Stats icon="icon_fans_collect" value={saves} highlight={isSaved}/>
+    </button>
+  )
 }
 
 function Stats({

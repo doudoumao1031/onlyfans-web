@@ -65,10 +65,12 @@ export async function searchPosts(params: PostSearchReq): Promise<PostInfoVo[]> 
   throw new Error("Not implemented")
 }
 
-export async function starPost(params: PostStarReq): Promise<void> {
-  // Implementation
-  throw new Error("Not implemented")
-}
+export const starPost = (
+  params: PostStarReq
+) => fetchWithPost<PostStarReq, unknown>(ENDPOINTS.POST.STAR, params)
+  .then((res) => {
+    return !!(res && res.code === 0)
+  })
 
 export async function getUserPosts(params: UserPostsReq): Promise<PostInfoVo[]> {
   // Implementation
@@ -114,3 +116,4 @@ export const searchPost = (
       return null
     }
   })
+

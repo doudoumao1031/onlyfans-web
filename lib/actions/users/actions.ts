@@ -1,5 +1,5 @@
 import {
-  BloggerInfo, CommonPageReq,
+  BloggerInfo, CollectionPostReq, CommonPageReq,
   ENDPOINTS,
   fetchWithPost,
   PageResponse
@@ -42,4 +42,14 @@ export const viewUserSubscribeSetting =
       } else {
         return null
       }
+    })
+
+/**
+ * 收藏文章/帖子
+ * @param params
+ */
+export const userCollectionPost =
+  (params: CollectionPostReq) => fetchWithPost<CollectionPostReq, unknown>(ENDPOINTS.USERS.COLLECTION_POST, params)
+    .then((res) => {
+      return !!(res && res.code === 0)
     })

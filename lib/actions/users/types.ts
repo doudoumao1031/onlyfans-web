@@ -34,3 +34,12 @@ export type SubscribeSetting = {
   price: number
   items: DiscountInfo[]
 }
+
+/**
+ * 收藏文章/帖子请求
+ */
+export interface CollectionPostReq {
+  collection: boolean // 0-取消收藏 1-收藏
+  post_id: number
+  user_id: number
+}
