@@ -4,7 +4,7 @@ import Avatar from "@/components/profile/avatar"
 import PostsCard from "@/components/profile/posts-card"
 import IconWithImage from "@/components/profile/icon"
 import Link from "next/link"
-import { userProfile } from "@/lib/data"
+import { userProfile } from "@/lib/actions/profile"
 
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
@@ -18,7 +18,8 @@ const displayNumber = (data: number) => {
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const data = await userProfile()
+  const response = await userProfile()
+  const data = response?.data
   if (!data) {
     throw new Error()
   }
