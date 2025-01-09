@@ -1,5 +1,6 @@
 import { z } from "zod"
-import { postData } from "@/lib/data"
+import { fetchWithPost } from "@/lib/actions/shared"
+import { ApiResponse } from "@/lib/actions/shared/types"
 
 export interface iPostAttachment {
     file_id: string,
@@ -75,4 +76,4 @@ export const postValidation = z.object({
 })
 
 
-export const addPost = (data: iPost) => postData("/post/add", data)
+export const addPost = (data:iPost) => fetchWithPost<iPost, ApiResponse<{ code: number }>>("/post/add",data)

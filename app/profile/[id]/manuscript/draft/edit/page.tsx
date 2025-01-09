@@ -90,7 +90,7 @@ const AddVoteModal = ({ children, initFormData, updateVoteData }: {
       append({ content: "" })
       append({ content: "" })
     }
-  }, [append, voteForm])
+  }, [])
 
   return (
     <>
@@ -524,10 +524,8 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
 export default function Page() {
   const router = useRouter()
   const onFormSubmit = (formData: iPost) => {
-    addPost(formData).then((data:unknown) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
-      if (data?.code === 0) {
+    addPost(formData).then((data) => {
+      if (data && data.code === 0) {
         router.back()
       }
     })

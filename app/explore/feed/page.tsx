@@ -7,7 +7,7 @@ export default async function Page() {
   const { items, hasMore } = await fetchFeeds(1)
   return (
     <div className="container h-full w-full mx-auto">
-      <FeedList initialItems={items} initialHasMore={hasMore} />
+      <FeedList initialItems={items} initialHasMore={hasMore}/>
     </div>
   )
 }
