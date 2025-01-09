@@ -1,3 +1,31 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": ["next/core-web-vitals", "next/typescript"],
+  "rules": {
+    "indent": ["error", 2],
+    "semi": ["error", "never"],
+    "quotes": ["error", "double"],
+    "no-trailing-spaces": "error",
+    "object-curly-spacing": ["error", "always"],
+    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "keyword-spacing": ["error", { "before": true, "after": true }],
+    "space-before-blocks": ["error", "always"],
+    "@typescript-eslint/no-unused-vars": ["warn", {
+      "argsIgnorePattern": "^_",
+      "varsIgnorePattern": "^_"
+    }],
+    "comma-dangle": ["error", "never"],
+    "jsx-quotes": ["error", "prefer-double"],
+    "react/jsx-indent": ["error", 2],
+    "react/jsx-indent-props": ["error", 2],
+    "react/jsx-closing-bracket-location": 1,
+    "react/jsx-wrap-multilines": ["error", {
+      "declaration": "parens-new-line",
+      "assignment": "parens-new-line",
+      "return": "parens-new-line",
+      "arrow": "parens-new-line",
+      "condition": "parens-new-line",
+      "logical": "parens-new-line",
+      "prop": "parens-new-line"
+    }]
+  }
 }

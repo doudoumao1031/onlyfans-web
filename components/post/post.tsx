@@ -4,124 +4,264 @@ import React, { ReactElement, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import {
-  MediaType,
+  Vote as VoteData,
+  Comment as CommentData,
   PostData,
   User,
-  VideoData,
-  ImageData,
-  Vote as VoteData,
+  Attachment,
+  FileType
 } from "./type"
 import {
   isMention,
   buildUserHomePagePath,
   getUserIdFromMention,
   buildUserHomePagePathForDisplay,
-  buildMention,
+  buildMention
 } from "./util"
+import SubscribedDrawer from "../explore/subscribed-drawer"
+import { postSharLog } from "@/lib/data"
 
 export default function Post({
   data,
   showSubscribe,
-  showVote,
+  showVote
 }: {
   data: PostData
   showSubscribe: boolean
   showVote: boolean
 }) {
   const {
-    poster,
-    description,
-    media,
-    subscribe,
-    like,
-    comment,
-    tip,
-    share,
-    save,
-    vote,
+    user,
+    post,
+    post_attachment,
+    post_metric,
+    post_vote,
+    mention_user,
+    collection,
+    star,
+    comments
   } = data
 
+  const {
+    collection_count,
+    comment_count,
+    share_count,
+    thumbs_up_count,
+    tip_count
+  } = post_metric
+
   return (
-    <div className="w-full flex flex-col gap-2 border-b border-black/5">
-      <UserTitle user={poster} />
-      <Description content={description} />
-      <UserHomePageLink userId={poster.id} />
-      <Media data={media} />
-      {showSubscribe && (
+    <div className="w-full flex flex-col gap-2 mb-8">
+      <UserTitle user={user} />
+      <Description content={post.title} />
+      <UserHomePageLink userId={user.username} />
+      {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} />}
+      {showSubscribe && mention_user && mention_user.length > 0 && (
         <div>
-          {subscribe.map((user) => (
+          {mention_user.map((user) => (
             <SubscribeCard key={user.id} user={user} />
           ))}
         </div>
       )}
-      {showVote && vote && <Vote data={vote} />}
-      <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6">
-        <Like count={like.count} liked={like.liked} />
-        <Comment count={comment.count} />
-        <Tip user={poster} count={tip.count} />
-        <Share count={share.count} shared={share.shared} />
-        <Save count={save.count} saved={save.saved} />
+      {showVote && post_vote && <Vote data={post_vote} />}
+      <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6 border-b border-black/5">
+        <Like count={thumbs_up_count} liked={star} />
+        <CommentStats count={comment_count} />
+        <Tip userId={user.id} count={tip_count} />
+        <Share count={share_count} postId={post.id}/>
+        <Save count={collection_count} saved={collection} />
+      </div>
+      {comments && comments.length > 0 && <Comments comments={comments} />}
+    </div>
+  )
+}
+
+function Comments({ comments }: { comments: CommentData[] }) {
+  return (
+    <div className="flex flex-col gap-4">
+      {comments.map((c, i) => (
+        <div key={i} className="flex flex-col gap-2">
+          <Comment comment={c} />
+          {c.reply_arr?.length && (
+            <div className="pl-11 flex flex-col gap-2">
+              {c.reply_arr.map((r, j) => (
+                <Comment comment={r} key={j} />
+              ))}
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Comment({ comment }: { comment: CommentData }) {
+  const { user, content, thumbs_up_count } = comment
+  const { photo, username } = user
+
+  return (
+    <div className="flex justify-between">
+      <div className="flex gap-2">
+        <Avatar fileId={photo} width={10} />
+        <div className="flex flex-col gap-1">
+          <div className="text-xs text-[#FF8492]">{username}</div>
+          <div className="text-sm">{content}</div>
+          <div className="flex gap-4 text-xs text-[#6D7781]">
+            <div>回复</div>
+          </div>
+        </div>
+      </div>
+      <div className="flex flex-col items-center ml-2">
+        <Image
+          src="/icons/thumbup.png"
+          width={20}
+          height={20}
+          alt=""
+          className="max-w-4"
+        />
+        <div className="text-[10px] text-[#6D7781]">{thumbs_up_count}</div>
       </div>
     </div>
   )
 }
 
 function Vote({ data }: { data: VoteData }) {
+  const { title, items, stop_time } = data
+  const secondsToExpire = Math.floor((stop_time * 1000 - Date.now()) / 1000)
+  const [showOptions, setShowOptions] = useState(false)
+  const [showOptionAmount, setShowOptionAmount] = useState(3)
+  const [selectedVoteIndex, setSelectedVoteIndex] = useState(-1)
+  const totalVotes = items.reduce((t, o) => t + o.vote_count, 0)
+
   return (
-    <div>
-      {data.options.map((o, i) => (
-        <div key={i}>{o.name}</div>
-      ))}
+    <div className="flex flex-col gap-2">
+      <div
+        className="flex gap-2 items-end"
+        onClick={() => setShowOptions((pre) => !pre)}
+      >
+        <Image src="/icons/vote.png" alt="" width={20} height={20} />
+        <div className="text-red-500 text-sm">{title}</div>
+        {showOptions ? (
+          <Image src="/icons/arrow_up.png" alt="" width={20} height={20} />
+        ) : (
+          <Image src="/icons/arrow_down.png" alt="" width={20} height={20} />
+        )}
+      </div>
+      {showOptions && (
+        <div className="flex flex-col gap-1">
+          {items.slice(0, showOptionAmount).map(({ content, vote_count }, i) =>
+            secondsToExpire < 0 ? (
+              <div
+                key={i}
+                className="w-full h-11 border rounded-md px-2 flex justify-between items-center bg-no-repeat"
+                style={{
+                  backgroundImage: `${
+                    selectedVoteIndex === i
+                      ? "url(/icons/pink.png)"
+                      : "url(/icons/silver.png)"
+                  }`,
+                  backgroundSize: `${(vote_count / totalVotes) * 100}% 100%`,
+                  borderColor: `${
+                    selectedVoteIndex === i ? "#FF8492" : "#DDDDDD"
+                  }`
+                }}
+                onClick={() => setSelectedVoteIndex(i)}
+              >
+                <div className="flex gap-1 h-full items-center">
+                  {selectedVoteIndex === i && (
+                    <Image
+                      src="/icons/select.png"
+                      alt=""
+                      width={20}
+                      height={20}
+                    />
+                  )}
+                  <div>{content}</div>
+                </div>
+                <div className="pr-3">{vote_count}票</div>
+              </div>
+            ) : (
+              <div
+                key={i}
+                className="w-full h-11 border border-[#DDDDDD] rounded-md flex justify-center items-center"
+              >
+                <div>{content}</div>
+              </div>
+            )
+          )}
+          {showOptionAmount < items.length && (
+            <div
+              className="w-full h-11 border border-[#DDDDDD] rounded-md flex justify-center items-center"
+              onClick={() => setShowOptionAmount(items.length)}
+            >
+              <div>查看全部选项</div>
+            </div>
+          )}
+          <div className="text-[#999999]">
+            {totalVotes}人参与 还有{(secondsToExpire / 3600).toFixed(2)}小时结束
+          </div>
+        </div>
+      )}
     </div>
   )
 }
 
 function SubscribeCard({ user }: { user: User }) {
+  const { back_img, photo, id, first_name, last_name, username } = user
   return (
     <div
       className="w-full rounded-lg bg-cover"
       style={{
-        backgroundImage: `url(${user.background})`,
+        backgroundImage: `url(${buildFileUrl(back_img)})`
       }}
     >
       <div className="w-full h-full flex justify-between bg-black/50 p-3 rounded-lg">
         <div className="flex gap-4 px-3 items-center">
           <div>
-            <Avatar src={user.avatar} width="w-24" />
+            <Avatar fileId={photo} width={24} />
           </div>
           <div className="text-white">
-            <div className="text-lg">{user.name}</div>
-            <div className="text-white/75 text-xs">{buildMention(user.id)}</div>
+            <div className="text-lg">
+              {first_name} {last_name}
+            </div>
+            <div className="text-white/75 text-xs">
+              {buildMention(username)}
+            </div>
           </div>
         </div>
-        <button className="bg-black opacity-65 text-white text-xs self-start px-1 py-1 rounded-lg">
-          免费/订阅
-        </button>
+        <SubscribedDrawer name={first_name} userId={Number(id)}>
+          <button className="bg-black bg-opacity-65 text-white text-xs self-start px-1 py-1 rounded-lg">
+            免费/订阅
+          </button>
+        </SubscribedDrawer>
       </div>
     </div>
   )
 }
 
 function UserTitle({ user }: { user: User }) {
+  const { photo, first_name, last_name, username } = user
   return (
     <div className="flex gap-4 px-3">
       <div>
-        <Avatar src={user.avatar} />
+        <Avatar fileId={photo} />
       </div>
       <div>
-        <div className="text-lg">{user.name}</div>
-        <div className="text-black/50 text-xs">{buildMention(user.id)}</div>
+        <div className="text-lg">
+          {first_name} {last_name}
+        </div>
+        <div className="text-black/50 text-xs">{buildMention(username)}</div>
       </div>
     </div>
   )
 }
 
-function Avatar({ src, width = "w-18" }: { src: string; width?: string }) {
+function Avatar({ fileId, width = 16 }: { fileId: string; width?: number }) {
   return (
     <Image
-      src={src}
+      src={buildFileUrl(fileId)}
       alt=""
-      className={`rounded-full border-2 border-white ${width}`}
+      className={`rounded-full border-2 border-white w-${width} h-${width}`}
       width={50}
       height={50}
     />
@@ -153,19 +293,24 @@ function DescriptionSegment({ content }: { content: string }) {
   )
 }
 
-function Media({ data }: { data: (VideoData | ImageData)[] }) {
+function Media({ data }: { data: Attachment[] }) {
   return (
     <div className="grid grid-cols-3 gap-2">
-      {data.map(({ src, type, thumbnail }, i) => (
+      {data.map(({ file_id, file_type, thumb_id }, i) => (
         <Thumbnail
           key={i}
           largeElement={
-            type === MediaType.Video ? (
-              <video src={src} controls autoPlay className="w-full" />
+            file_type === FileType.Video ? (
+              <video
+                src={buildFileUrl(file_id)}
+                controls
+                autoPlay
+                className="w-full"
+              />
             ) : (
               <Image
                 className="w-full"
-                src={src}
+                src={buildFileUrl(file_id)}
                 alt=""
                 width={900}
                 height={500}
@@ -173,14 +318,14 @@ function Media({ data }: { data: (VideoData | ImageData)[] }) {
             )
           }
           thumbnailElement={
-            type === MediaType.Video ? (
+            file_type === FileType.Video ? (
               <div
                 className="aspect-square flex justify-center items-center bg-cover rounded-md"
                 style={{
-                  backgroundImage: `url(${thumbnail})`,
+                  backgroundImage: `url(${buildFileUrl(thumb_id)})`
                 }}
               >
-                <div className="bg-black/50 w-10 h-10 rounded-full flex justify-center items-center">
+                <div className="bg-black/50 w-12 h-12 rounded-full flex justify-center items-center">
                   <Image
                     src="/icons/play.png"
                     width={20}
@@ -192,7 +337,7 @@ function Media({ data }: { data: (VideoData | ImageData)[] }) {
             ) : (
               <Image
                 className="aspect-square rounded-md"
-                src={thumbnail}
+                src={buildFileUrl(file_id)}
                 alt=""
                 width={200}
                 height={200}
@@ -207,7 +352,7 @@ function Media({ data }: { data: (VideoData | ImageData)[] }) {
 
 function Thumbnail({
   largeElement,
-  thumbnailElement,
+  thumbnailElement
 }: {
   largeElement: ReactElement
   thumbnailElement: ReactElement
@@ -221,7 +366,7 @@ function Thumbnail({
           {largeElement}
         </FullScreen>
       ) : (
-        <div onTouchEnd={() => setShowLarge(true)}>{thumbnailElement}</div>
+        <div onClick={() => setShowLarge(true)}>{thumbnailElement}</div>
       )}
     </div>
   )
@@ -229,7 +374,7 @@ function Thumbnail({
 
 function FullScreen({
   children,
-  onExit,
+  onExit
 }: {
   children: ReactElement
   onExit: () => void
@@ -237,13 +382,13 @@ function FullScreen({
   return (
     <div
       className="fixed top-0 left-0 w-screen h-screen bg-black/90 z-50 flex items-center"
-      onTouchEnd={handleTouch}
+      onClick={handleClick}
     >
       {children}
     </div>
   )
 
-  function handleTouch(e: React.TouchEvent) {
+  function handleClick(e: React.MouseEvent<HTMLElement>) {
     if (e.target === e.currentTarget) {
       onExit()
     }
@@ -262,20 +407,37 @@ function Like({ count, liked }: { count: number; liked: boolean }) {
   return <Stats icon="/icons/like.png" value={count} highlight={liked} />
 }
 
-function Comment({ count }: { count: number }) {
-  return <Stats icon="/icons/comment.png" value={count} />
+function CommentStats({ count }: { count: number }) {
+  return (
+    <button onClick={() => {}}>
+      <Stats icon="/icons/comment.png" value={count} />
+    </button>
+  )
 }
 
-function Tip({ user, count }: { user: User; count: number }) {
+function Tip({ userId, count }: { userId: number; count: number }) {
   return (
-    <Link scroll={false} href={`/explore/tip/${user.id}`} className="flex items-center">
+    <Link
+      scroll={false}
+      href={`/explore/tip/${userId}`}
+      className="flex items-center"
+    >
       <Stats icon="/icons/tip.png" value={count} />
     </Link>
   )
 }
 
-function Share({ count, shared }: { count: number; shared: boolean }) {
-  return <Stats icon="/icons/share.png" value={count} highlight={shared} />
+
+const shareBtn = async (postId: number) => {
+  await postSharLog({ post_id: postId })
+}
+
+function Share({ count, postId }: { count: number, postId: number }) {
+  return (
+    <button onClick={() => {shareBtn(postId)}}>
+      <Stats icon="/icons/share.png" value={count} />
+    </button>
+  )
 }
 
 function Save({ count, saved }: { count: number; saved: boolean }) {
@@ -285,7 +447,7 @@ function Save({ count, saved }: { count: number; saved: boolean }) {
 function Stats({
   icon,
   value,
-  highlight = false,
+  highlight = false
 }: {
   icon: string
   value: number
@@ -297,4 +459,8 @@ function Stats({
       <span className="text-xs">{value}</span>
     </div>
   )
+}
+
+function buildFileUrl(fileId: string) {
+  return `https://imfanstest.potato.im/api/v1/media/img/${fileId}`
 }

@@ -72,6 +72,10 @@ body {
   }
 }
 
-input {
+input,textarea {
   outline: none;
+}
+
+.hide-modal-close button.absolute {
+  @apply hidden
 }

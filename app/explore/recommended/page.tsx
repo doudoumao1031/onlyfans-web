@@ -1,40 +1,43 @@
 "use client"
-import {User, users} from "@/mock/user";
-import Card from "@/components/user/user-card";
-import {useState} from "react";
-import {ToggleGroupRecom, ToggleGroupRecomItem} from "@/components/ui/toggle-group-recommended";
+import { recomBlogger } from "@/lib/data"
+import { BloggerInfo } from "@/lib/struct"
+import { useState, useEffect } from "react"
+import UserCard from "@/components/user/user-card"
 
+/** 推荐博主 */
 export default function Page() {
-    const [userList, setUserList] = useState<User[]>(users);
-    return (
-        /** 推荐博主 */
-        <>
-            <ToggleGroupRecom type="single" variant="default" defaultValue="1" id="select_type"
-                              className="w-full flex justify-between mb-[10px]"
-                              onValueChange={(val) => {
-                                  if ("1" === val) {
-                                      setUserList(users);
-                                  } else if ("2" === val) {
-                                      setUserList(users.slice(0, 2));
-                                  } else if ("3" === val) {
-                                      setUserList(users.slice(0, 3));
-                                  }
-                              }}>
-                <ToggleGroupRecomItem value="1">
-                    <span className="text-nowrap font-medium text-base">热门推荐</span>
-                </ToggleGroupRecomItem>
-                <ToggleGroupRecomItem value="2">
-                    <span className="text-nowrap font-medium text-base">新人推荐</span>
-                </ToggleGroupRecomItem>
-                <ToggleGroupRecomItem value="3">
-                    <span className="text-nowrap font-medium text-base">🔥人气博主</span>
-                </ToggleGroupRecomItem>
-            </ToggleGroupRecom>
-            {userList.map((user) => (
-                <div key={user.id} className="w-full mb-[10px]">
-                    <Card user={user} subscribe={true}/>
-                </div>
-            ))}
-        </>
-    );
+  const tabs = [{ val: 0, label: "热门推荐" }, { val: 1, label: "新人推荐" }, { val: 2, label: "🔥人气博主" }]
+  const [type, setType] = useState<number>(0)
+  const [info, setInfo] = useState<BloggerInfo[]>([])
+  useEffect(() => {
+    const bloggerList = async () => {
+      try {
+        const bloggers = await recomBlogger({ from_id: 0, page: 1, pageSize: 20, type: type })
+        console.log("=====>type, 推荐博主",type, bloggers)
+        setInfo(bloggers?.list||[])
+      } catch (error) {
+        console.error("Error fetching recommended bloggers:", error)
+      }
+    }
+    bloggerList()
+  }, [type])
+  return (
+    <>
+      <div className="gap-3 flex justify-around mb-4">
+        {tabs.map((tab) => (
+          <div key={tab.val}
+            className={`flex items-center justify-center ${type === tab.val ? "bg-main-pink text-white" : "bg-white"} border border-main-pink text-main-pink rounded-full px-5 py-1`}
+            onClick={() => setType(tab.val)}
+          >
+            <span className="text-nowrap font-medium text-base">{tab.label}</span>
+          </div>
+        ))}
+      </div>
+      {info.map((item) => (
+        <div key={item.id} className="w-full mb-[10px]">
+          <UserCard user={item} subscribe={true}/>
+        </div>
+      ))}
+    </>
+  )
 }

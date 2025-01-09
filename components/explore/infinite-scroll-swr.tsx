@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef, useCallback } from "react"
 import { debounce } from "lodash"
 import useSWR from "swr"
 import Post from "@/components/post/post"
-import { postData } from "../post/mock"
+import { getMockPostData } from "../post/mock"
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
@@ -15,7 +15,7 @@ interface InfiniteScrollProps {
 
 export default function InfiniteScroll({
   initialItems,
-  initialHasMore,
+  initialHasMore
 }: InfiniteScrollProps) {
   const [items, setItems] = useState<number[]>(initialItems)
   const [page, setPage] = useState(1)
@@ -28,7 +28,7 @@ export default function InfiniteScroll({
     hasMore: boolean
   }>(hasMore ? `/api/feeds?page=${page}` : null, fetcher, {
     revalidateOnFocus: false,
-    keepPreviousData: true,
+    keepPreviousData: true
   })
 
   // Preload the next page
@@ -90,7 +90,7 @@ export default function InfiniteScroll({
     <div ref={containerRef} className="h-full w-full overflow-scroll">
       <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
         {items.map((item, index) => (
-          <Post key={index} data={postData} showSubscribe showVote />
+          <Post key={index} data={getMockPostData()} showSubscribe showVote />
         ))}
       </div>
       {isValidating && (

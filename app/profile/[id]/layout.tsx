@@ -1,15 +1,23 @@
-import React from "react";
+import React from "react"
 import "./profile.scss"
-export default function Layout(props: { 
-    children: React.ReactNode;
-    modal: React.ReactNode; 
+import { redirect } from "next/navigation"
+import { isNumber } from "lodash"
+
+export default async function Layout({
+  children,
+  params
+}: {
+  children: React.ReactNode,
+  params: Promise<{ id: string }>
 }) {
-    return (
-        <>
-            {props.children}
-            {props.modal}
-            <div id="modal-root" />
-            <div id="modal-inner" />
-        </>
-    )
+  const { id } = await params
+  const numberId = Number(id)
+  if (!isNumber(numberId) || isNaN(numberId) || numberId < 1) {
+    redirect("/")
+  }
+  return (
+    <>
+      {children}
+    </>
+  )
 }
