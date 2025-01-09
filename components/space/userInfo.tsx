@@ -3,7 +3,7 @@ import Header from "@/components/common/header"
 import Image from "next/image"
 import IconWithImage from "@/components/profile/icon"
 import Directions from "@/components/space/directions"
-export default function UserInfo({ id }: { id: string }) {
+export default function UserInfo() {
   const tabs = [
     { icon: "/icons/icon_info_video.png", num: 9999 },
     { icon: "/icons/icon_info_photo.png", num: 9999 },

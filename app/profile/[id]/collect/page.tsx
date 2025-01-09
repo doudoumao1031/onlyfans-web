@@ -82,8 +82,8 @@ const mockPosts: TPostItem[] = [
 export default function Page() {
   const queryParams = useSearchParams()
   const [active, setActive] = useState<string>(queryParams.get("type") ?? "blog")
-  const [bloggers, setBloggers] = useState<TBlogItem[]>(mockBlogs)
-  const [posts, setPosts] = useState<TPostItem[]>(mockPosts)
+  const [bloggers ] = useState<TBlogItem[]>(mockBlogs)
+  const [posts ] = useState<TPostItem[]>(mockPosts)
   const tabOptions: iTabTitleOption[] = [
     { label: "博主", name: "blog" },
     { label: "帖子", name: "post" }
