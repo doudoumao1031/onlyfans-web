@@ -73,7 +73,7 @@ export const ENDPOINTS = {
     GET_FOLLOWED_USERS: "/user/getFollowedUsers",
     GET_FOLLOWING_USERS: "/user/getFollowingUsers",
 
-    // Basic user operations
+    // Basic users operations
     GET_USER_EXTEND: "/user/getUserExtend",
     ME: "/user/me",
     SEARCH: "/user/search",

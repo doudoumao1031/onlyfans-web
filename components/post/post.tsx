@@ -19,7 +19,7 @@ import {
   buildMention
 } from "./util"
 import SubscribedDrawer from "../explore/subscribed-drawer"
-import { postSharLog } from "@/lib/data"
+import { postSharLog } from "@/lib"
 
 export default function Post({
   data,
@@ -404,13 +404,13 @@ function UserHomePageLink({ userId }: { userId: string }) {
 }
 
 function Like({ count, liked }: { count: number; liked: boolean }) {
-  return <Stats icon="/icons/like.png" value={count} highlight={liked} />
+  return <Stats icon="icon_fans_like" value={count} highlight={liked} />
 }
 
 function CommentStats({ count }: { count: number }) {
   return (
     <button onClick={() => {}}>
-      <Stats icon="/icons/comment.png" value={count} />
+      <Stats icon="icon_fans_comment" value={count} />
     </button>
   )
 }
@@ -422,7 +422,7 @@ function Tip({ userId, count }: { userId: number; count: number }) {
       href={`/explore/tip/${userId}`}
       className="flex items-center"
     >
-      <Stats icon="/icons/tip.png" value={count} />
+      <Stats icon="icon_fans_reward" value={count} />
     </Link>
   )
 }
@@ -435,13 +435,13 @@ const shareBtn = async (postId: number) => {
 function Share({ count, postId }: { count: number, postId: number }) {
   return (
     <button onClick={() => {shareBtn(postId)}}>
-      <Stats icon="/icons/share.png" value={count} />
+      <Stats icon="icon_fans_share" value={count} />
     </button>
   )
 }
 
 function Save({ count, saved }: { count: number; saved: boolean }) {
-  return <Stats icon="/icons/save.png" value={count} highlight={saved} />
+  return <Stats icon="icon_fans_collect" value={count} highlight={saved} />
 }
 
 function Stats({
@@ -455,7 +455,7 @@ function Stats({
 }) {
   return (
     <div className={`flex gap-1 items-center ${highlight && "text-red-500"}`}>
-      <Image src={icon} width={20} height={20} alt="" />
+      <Image src={highlight ? "/icons/"+icon+"_highlight@3x.png" : "/icons/"+icon+"_normal@3x.png"} width={20} height={20} alt="" />
       <span className="text-xs">{value}</span>
     </div>
   )

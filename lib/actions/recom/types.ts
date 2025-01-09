@@ -1,10 +1,57 @@
 // Recom related types and interfaces
 import { PostInfoVo } from "../shared/types"
 
+/**
+ * 分页公共请求
+ */
+export type CommonPageReq = {
+  from_id: number | 0
+  page: number | 1
+  pageSize: number | 10
+}
+
+export type RecomBloggerReq = CommonPageReq & {
+  // 0 热门 1 新人 2人气
+  type: number,
+}
+
 export interface PageInfo {
   from_id: number | 0
   page: number | 1
   pageSize: number | 10
+}
+
+/**
+ * 博主信息
+ */
+export type BloggerInfo = {
+  id: number;
+  pt_user_id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
+  status: number;
+  photo: string;
+  back_img: string;
+  about: string;
+  location: string;
+  live_certification: boolean;
+  blogger: boolean;
+  post_count: number;
+  media_count: number;
+  video_count: number;
+  img_count: number;
+  fans_count: number;
+  subscribe_count: number;
+  following_count: number;
+  collection_post_count: number;
+  today_add_count: number;
+  access_count: number;
+  play_count: number;
+  sub: boolean;
+  sub_end_time: number;
+  collection: boolean;
+  following: boolean;
 }
 
 export interface UserInfoVo {

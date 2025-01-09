@@ -1,6 +1,6 @@
 // Post related types and interfaces
-import type { PageInfo } from "@/lib"
-import { FileType, PostInfoVo } from "../shared/types"
+import type { CommonPageReq, PageInfo } from "@/lib"
+import { FileType, PostInfoVo } from "@/lib"
 
 export interface PostInfoReq {
   title?: string
@@ -114,3 +114,15 @@ export interface User {
   photo: string
   username: string
 }
+
+export interface PostId {
+  post_id: number
+}
+
+/**
+ * 搜索帖子请求
+ */
+export type SearchPostReq = CommonPageReq & {
+  title: string
+}
+
