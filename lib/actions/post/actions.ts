@@ -1,7 +1,5 @@
-"use server"
-
-import { ENDPOINTS } from "../shared/constants"
-import type {
+import { ENDPOINTS } from "@/lib"
+import {
   PostInfoReq,
   DeletePostFileReq,
   DeleteVoteReq,
@@ -13,9 +11,9 @@ import type {
   PostSearchReq,
   PostStarReq,
   UserPostsReq,
-  UserVoteReq
-} from "./types"
-import type { PostInfoVo } from "../shared/types"
+  UserVoteReq, fetchWithPost, PostId, SearchPostReq, PageResponse, PostData
+} from "@/lib"
+import type { PostInfoVo } from "@/lib"
 
 export async function addPost(params: PostInfoReq): Promise<PostInfoVo> {
   // Implementation
@@ -86,3 +84,33 @@ export async function getPost(id: string): Promise<PostInfoVo> {
   // Implementation
   throw new Error("Not implemented")
 }
+
+
+/**
+ * 添加帖子分享记录
+ * @param params
+ */
+export const postSharLog = (
+  params: PostId
+) => fetchWithPost<PostId, unknown>(ENDPOINTS.POST.SHARE_LOG, params)
+  .then((res) => {
+    if (res && res.code === 0) {
+      return true
+    } else {
+      return false
+    }
+  })
+
+/**
+ * 搜索帖子
+ */
+export const searchPost = (
+  params: SearchPostReq
+) => fetchWithPost<SearchPostReq, PageResponse<PostData>>(ENDPOINTS.POST.SEARCH, params)
+  .then((res) => {
+    if (res && res.code === 0) {
+      return res.data
+    } else {
+      return null
+    }
+  })

@@ -36,7 +36,7 @@ export interface ApiResponse<T = unknown> {
 /**
  * list 返回结果
  */
-export type PageResponse<T> = {
+export interface PageResponse<T> {
   list: T[]
   total: number
 }
@@ -44,6 +44,6 @@ export type PageResponse<T> = {
 
 export type FetchTransformResponse<Res> = (response: ApiResponse<Res>) => Res
 
-export type FetchOptions<Res> = {
+export interface FetchOptions<Res> {
   headers?: Record<string, unknown>,
 }
