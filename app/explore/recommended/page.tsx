@@ -22,21 +22,12 @@ export default function Page() {
   }, [type])
   return (
     <>
-      <div className="gap-3 flex justify-around mb-4">
-        {tabs.map((tab) => (
-          <div key={tab.val}
-            className={`flex items-center justify-center ${type === tab.val ? "bg-main-pink text-white" : "bg-white"} border border-main-pink text-main-pink rounded-full px-5 py-1`}
-            onClick={() => setType(tab.val)}
-          >
-            <span className="text-nowrap font-medium text-base">{tab.label}</span>
-          </div>
-        ))}
-      </div>
-      {info.map((item) => (
+      {/* {info.map((item) => (
         <div key={item.id} className="w-full mb-[10px]">
           <UserCard user={item} subscribe={true}/>
         </div>
-      ))}
+      ))} */}
+      blank
     </>
   )
 }
