@@ -1,6 +1,6 @@
 // Auth related types and interfaces
 export interface LoginReq {
-  userId: string  // pt的user_id
+  user_id: string  // pt的user_id
 }
 
 export interface LoginResp {
@@ -19,5 +19,5 @@ export interface UserVo {
   id: string
   username: string
   name: string
-  // Add other user fields based on API response
+  // Add other users fields based on API response
 }

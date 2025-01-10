@@ -3,7 +3,7 @@ import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { ToggleGroupSubscribed, ToggleGroupSubscribedItem } from "@/components/ui/toggle-group-subcribed"
 import { useState, useMemo, useEffect } from "react"
-import { DiscountInfo, viewUserSubscribeSetting } from "@/lib/data"
+import { DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 
 interface SubscribedDrawerProps {
     userId: number;
@@ -21,7 +21,6 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, child
     const fetchSubscribeSettings = async () => {
       try {
         const settings = await viewUserSubscribeSetting({ user_id: userId })
-        console.log("=====>settings", settings)
         if (settings?.items) {
           const list:DiscountInfo[] = []
           list.push({

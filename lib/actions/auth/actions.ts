@@ -1,13 +1,17 @@
-"use server"
 
-import type { LoginReq, LoginResp, UsersReq, UserVo } from "./types"
+import type { LoginReq, LoginResp } from "@/lib"
+import { ENDPOINTS, fetchWithPost } from "@/lib"
 
-export async function login(_params: LoginReq): Promise<LoginResp> {
-  // Implementation
-  throw new Error("Not implemented")
-}
-
-export async function getUsers(_params: UsersReq): Promise<UserVo[]> {
-  // Implementation
-  throw new Error("Not implemented")
-}
+/**
+ * 登陆
+ * @param userId
+ */
+export const login = (params: LoginReq) =>
+  fetchWithPost<LoginReq, LoginResp>(ENDPOINTS.AUTH.LOGIN, params)
+    .then((res) => {
+      if (res && res.code === 0) {
+        return res.data
+      } else {
+        return null
+      }
+    })

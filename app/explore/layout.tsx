@@ -5,9 +5,9 @@ import { useRouter } from "next/navigation"
 
 export default function Layout(
   props: {
-        children: React.ReactNode;
-        modal: React.ReactNode;
-    }
+    children: React.ReactNode;
+    modal: React.ReactNode;
+  }
 ) {
   const router = useRouter()
   return (
