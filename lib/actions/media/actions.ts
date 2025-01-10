@@ -1,17 +1,21 @@
 "use server"
 
-import { ENDPOINTS } from "../shared/constants"
+import { ENDPOINTS, UploadRes } from "@/lib"
 import type {
-  UploadReq,
   UploadPartReq,
   CompleteFileReq,
-  UploadResp,
   UploadPartResp
-} from "./types"
+} from "@/lib"
+import { fetchWithPost } from "@/lib"
 
-export async function uploadFile(params: UploadReq): Promise<UploadResp> {
-  // Implementation
-  throw new Error("Not implemented")
+
+// file: File
+// file_hash?: string
+// file_count: string
+// file_size: string
+// file_type: FileType
+export async function uploadMediaFile(params: FormData) {
+  return fetchWithPost<FormData, UploadRes>(ENDPOINTS.MEDIA.UPLOAD, params)
 }
 
 export async function uploadPart(params: UploadPartReq): Promise<UploadPartResp> {
