@@ -7,7 +7,7 @@ const links = [
   { name: "已订阅", href: "/explore/subscribed" },
   { name: "关注", href: "/explore/followed" },
   { name: "精彩贴文", href: "/explore/feed" },
-  { name: "推荐博主", href: "/explore/recommended" }
+  { name: "推荐博主", href: "/explore/recommended/hot" }
 ]
 
 export default function NavLinks() {
