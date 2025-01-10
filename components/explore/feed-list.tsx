@@ -4,7 +4,7 @@ import React, { Fragment } from "react"
 import Post from "@/components/post/post"
 import InfiniteScroll from "../common/infinite-scroll"
 import { ListError, ListLoading, ListEnd } from "./list-states"
-import { PostData } from "@/components/post/type"
+import { PostData } from "@/lib"
 
 interface FeedListProps {
   initialItems: PostData[]

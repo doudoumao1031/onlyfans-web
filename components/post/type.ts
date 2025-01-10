@@ -54,4 +54,5 @@ export interface User {
   last_name: string
   photo: string
   username: string
+  sub: boolean //是否订阅
 }

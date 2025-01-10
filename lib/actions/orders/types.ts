@@ -11,10 +11,13 @@ export interface PostTipReq {
   payType: number
 }
 
+/**
+ * 订阅请求
+  */
 export interface SubOrderReq {
-  userId: string
-  settingId: string
-  payType: number
+  user_id: number //订阅用户id
+  price: number //价格
+  id: number //折扣属性id
 }
 
 export interface WalletDownOrderReq {

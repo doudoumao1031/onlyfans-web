@@ -2,7 +2,7 @@ import {
   BloggerInfo, CollectionPostReq, CommonPageReq,
   ENDPOINTS,
   fetchWithPost,
-  PageResponse
+  PageResponse, SubscribeUserInfo
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
 
@@ -20,7 +20,7 @@ export const searchUser =
     })
 
 /**
- * 已订阅博主列表
+ * 已收藏博主列表
  */
 export const userCollectionUsers =
   (params: CommonPageReq) => fetchWithPost<CommonPageReq, PageResponse<BloggerInfo>>(ENDPOINTS.USERS.COLLECTION_USERS, params)
@@ -52,4 +52,18 @@ export const userCollectionPost =
   (params: CollectionPostReq) => fetchWithPost<CollectionPostReq, unknown>(ENDPOINTS.USERS.COLLECTION_POST, params)
     .then((res) => {
       return !!(res && res.code === 0)
+    })
+
+/**
+ * 订阅博主列表
+ * @param params
+ */
+export const getSubscribeUsers =
+  (params: CommonPageReq) => fetchWithPost<CommonPageReq, PageResponse<SubscribeUserInfo>>(ENDPOINTS.USERS.GET_SUBSCRIBE_USERS, params)
+    .then((res) => {
+      if (res && res.code === 0) {
+        return res.data
+      } else {
+        return null
+      }
     })

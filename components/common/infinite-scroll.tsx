@@ -4,7 +4,7 @@ import React, { useEffect, useState, useRef } from "react"
 import { debounce } from "lodash"
 import useSWR from "swr"
 import { fetchFeeds } from "@/lib/data"
-import { PostData } from "@/components/post/type"
+import { PostData } from "@/lib"
 
 export interface InfiniteScrollProps {
   initialItems: PostData[]

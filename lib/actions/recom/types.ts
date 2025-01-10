@@ -54,6 +54,15 @@ export type BloggerInfo = {
   following: boolean;
 }
 
+/**
+ * 已订阅博主列表返回结果
+ */
+export interface SubscribeUserInfo {
+  user: BloggerInfo //博主信息
+  start_time: number //开始时间
+  end_time: number // 结束时间
+}
+
 export interface UserInfoVo {
   id: string
   username: string

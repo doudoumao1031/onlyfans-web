@@ -52,6 +52,7 @@ export const ENDPOINTS = {
     ADD_SUBSCRIBE_SETTING: "/user/addUserSubscribeSetting",
     ADD_SUBSCRIBE_SETTING_ITEM: "/user/addUserSubscribeSettingItem",
     DELETE_SUBSCRIBE_SETTING_ITEM: "/user/deleteUserSubscribeSettingItem",
+    // 获取我的订阅博主
     GET_SUBSCRIBE_USERS: "/user/getSubscribeUsers",
     GET_SUBSCRIBED_USERS: "/user/getSubscribedUsers",
     GET_SUBSCRIBE_SETTING: "/user/getUserSubscribeSetting",

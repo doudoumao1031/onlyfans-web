@@ -19,7 +19,7 @@ import {
   buildMention
 } from "./util"
 import SubscribedDrawer from "../explore/subscribed-drawer"
-import { postSharLog } from "@/lib"
+import { postSharLog, starPost, userCollectionPost } from "@/lib"
 
 export default function Post({
   data,
@@ -209,7 +209,7 @@ function Vote({ data }: { data: VoteData }) {
 }
 
 function SubscribeCard({ user }: { user: User }) {
-  const { back_img, photo, id, first_name, last_name, username } = user
+  const { back_img, photo, id, first_name, last_name, username, sub } = user
   return (
     <div
       className="w-full rounded-lg bg-cover h-[100px]"
@@ -233,7 +233,7 @@ function SubscribeCard({ user }: { user: User }) {
         </div>
         <SubscribedDrawer name={first_name} userId={Number(id)}>
           <button className="bg-black/50 text-white text-xs self-start px-1 py-1 rounded-lg">
-            免费/订阅
+            {sub?"已订阅":"免费/订阅"}
           </button>
         </SubscribedDrawer>
       </div>
@@ -422,7 +422,7 @@ function Like({ count, liked, postId }: { count: number; liked: boolean, postId:
     }
     // 静默提交点赞操作
     try {
-      await starPost({ post_id: postId, deleted: !isLiked })
+      await starPost({ post_id: postId, deleted: isLiked })
     } catch (error) {
       console.error("Error liking post:", error)
       // 如果点赞失败，恢复之前的点赞状态
@@ -431,10 +431,7 @@ function Like({ count, liked, postId }: { count: number; liked: boolean, postId:
     }
   }
   return (
-    <button onClick={() => {
-      handleLike()
-    }}
-    >
+    <button onClick={handleLike}>
       <Stats icon="icon_fans_like" value={likes} highlight={isLiked}/>
     </button>
   )
@@ -482,11 +479,11 @@ function Save({ count, saved, postId }: { count: number; saved: boolean, postId:
 
   const handleSave = async () => {
     if (isSaved) {
-      setSaves(prevLikes => prevLikes - 1)
+      setSaves(prevSaves => prevSaves - 1)
       setIsSaved(false)
     } else {
       // 如果未点赞，增加点赞
-      setSaves(prevLikes => prevLikes + 1)
+      setSaves(prevSaves => prevSaves + 1)
       setIsSaved(true)
     }
     try {
@@ -494,7 +491,7 @@ function Save({ count, saved, postId }: { count: number; saved: boolean, postId:
     } catch (error) {
       console.error("Error saved post:", error)
       // 如果点赞失败，恢复之前的点赞状态
-      setSaves(prevLikes => (isSaved ? prevLikes + 1 : prevLikes - 1))
+      setSaves(prevSaves => (isSaved ? prevSaves + 1 : prevSaves - 1))
       setIsSaved(isSaved)
     }
   }
