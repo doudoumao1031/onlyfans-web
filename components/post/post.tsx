@@ -19,7 +19,7 @@ import {
   buildMention
 } from "./util"
 import SubscribedDrawer from "../explore/subscribed-drawer"
-import { postSharLog, starPost, userCollectionPost } from "@/lib"
+import { postSharLog } from "@/lib"
 
 export default function Post({
   data,
@@ -55,7 +55,9 @@ export default function Post({
       <UserTitle user={user} />
       <Description content={post.title} />
       <UserHomePageLink userId={user.username} />
-      {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} />}
+      {post_attachment && post_attachment.length > 0 && (
+        <Media data={post_attachment} />
+      )}
       {showSubscribe && mention_user && mention_user.length > 0 && (
         <div>
           {mention_user.map((user) => (
@@ -64,12 +66,12 @@ export default function Post({
         </div>
       )}
       {showVote && post_vote && <Vote data={post_vote} />}
-      <div className="flex gap-4 justify-between opacity-30 pt-4 pb-6 border-b border-black/5">
-        <Like count={thumbs_up_count} liked={star} postId={post.id}/>
+      <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
+        <Like count={thumbs_up_count} liked={star} postId={post.id} />
         <CommentStats count={comment_count} />
         <Tip userId={user.id} count={tip_count} />
-        <Share count={share_count} postId={post.id}/>
-        <Save count={collection_count} saved={collection} postId={post.id}/>
+        <Share count={share_count} postId={post.id} />
+        <Save count={collection_count} saved={collection} postId={post.id} />
       </div>
       {comments && comments.length > 0 && <Comments comments={comments} />}
     </div>
@@ -210,7 +212,7 @@ function SubscribeCard({ user }: { user: User }) {
   const { back_img, photo, id, first_name, last_name, username } = user
   return (
     <div
-      className="w-full rounded-lg bg-cover"
+      className="w-full rounded-lg bg-cover h-[100px]"
       style={{
         backgroundImage: `url(${buildFileUrl(back_img)})`
       }}
@@ -230,7 +232,7 @@ function SubscribeCard({ user }: { user: User }) {
           </div>
         </div>
         <SubscribedDrawer name={first_name} userId={Number(id)}>
-          <button className="bg-black bg-opacity-65 text-white text-xs self-start px-1 py-1 rounded-lg">
+          <button className="bg-black/50 text-white text-xs self-start px-1 py-1 rounded-lg">
             免费/订阅
           </button>
         </SubscribedDrawer>
@@ -284,7 +286,7 @@ function DescriptionSegment({ content }: { content: string }) {
   return isMention(content) ? (
     <Link
       href={buildUserHomePagePath(getUserIdFromMention(content))}
-      className="text-sky-400"
+      className="text-[#FF8492]"
     >
       {content}{" "}
     </Link>
@@ -397,7 +399,7 @@ function FullScreen({
 
 function UserHomePageLink({ userId }: { userId: string }) {
   return (
-    <Link href={buildUserHomePagePath(userId)} className="px-3 text-sky-400">
+    <Link href={buildUserHomePagePath(userId)} className="px-3 text-[#FF8492]">
       {buildUserHomePagePathForDisplay(userId)}
     </Link>
   )
@@ -458,14 +460,17 @@ function Tip({ userId, count }: { userId: number; count: number }) {
   )
 }
 
-
 const shareBtn = async (postId: number) => {
   await postSharLog({ post_id: postId })
 }
 
-function Share({ count, postId }: { count: number, postId: number }) {
+function Share({ count, postId }: { count: number; postId: number }) {
   return (
-    <button onClick={() => {shareBtn(postId)}}>
+    <button
+      onClick={() => {
+        shareBtn(postId)
+      }}
+    >
       <Stats icon="icon_fans_share" value={count} />
     </button>
   )
@@ -513,8 +518,17 @@ function Stats({
   highlight?: boolean
 }) {
   return (
-    <div className={`flex gap-1 items-center ${highlight && "text-red-500"}`}>
-      <Image src={highlight ? "/icons/"+icon+"_highlight@3x.png" : "/icons/"+icon+"_normal@3x.png"} width={20} height={20} alt="" />
+    <div className={`flex gap-1 items-center ${highlight && "text-[#FF8492]"}`}>
+      <Image
+        src={
+          highlight
+            ? "/icons/" + icon + "_highlight@3x.png"
+            : "/icons/" + icon + "_normal@3x.png"
+        }
+        width={20}
+        height={20}
+        alt=""
+      />
       <span className="text-xs">{value}</span>
     </div>
   )
