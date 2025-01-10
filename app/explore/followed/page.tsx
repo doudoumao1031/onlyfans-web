@@ -1,10 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
-import { followUserPosts } from "@/lib/data"
 import FeedList from "@/components/explore/feed-list"
+import { getFollowUserPosts } from "@/lib"
 
 export default async function Page() {
-  const followers = await followUserPosts({ from_id: 0, page: 1, pageSize: 10 })
+  const followers = await getFollowUserPosts({ from_id: 0, page: 1, pageSize: 10 })
   return (
     <>
       {

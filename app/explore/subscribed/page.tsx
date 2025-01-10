@@ -1,7 +1,7 @@
-import { userCollectionUsers } from "@/lib/data"
 import Image from "next/image"
 import Link from "next/link"
 import UserCard from "@/components/user/user-card"
+import { userCollectionUsers } from "@/lib"
 
 export default async function Page() {
   const bloggers = await userCollectionUsers({ from_id: 0, page: 1, pageSize: 10 })

@@ -1,8 +1,8 @@
 import Image from "next/image"
 import UserCard from "@/components/user/user-card"
-import { searchPost, searchUser } from "@/lib/data"
 import SearchInput from "@/components/explore/search-input"
 import Post from "@/components/post/post"
+import { searchPost, searchUser } from "@/lib"
 
 export default async function Page(
   props: {

@@ -1,7 +1,7 @@
 "use client"
 import Header from "@/components/common/header"
-import Nav from "@/components/explore/nav"
 import Link from "next/link"
+import Nav from "@/components/explore/nav"
 
 export default function Layout(
   props: {
@@ -12,8 +12,10 @@ export default function Layout(
   return (
     <>
       {props.modal}
-      <Header title="Fans" titleColor="#000" right={
-        <Link href="/profile/1" className="text-main-pink text-base">我的</Link> }
+      <Header title="Fans" titleColor="#000"
+        right={
+          <Link href="/profile/1" className="text-main-pink text-base">我的</Link>
+        }
       />
       <div className="flex h-screen flex-col w-full justify-start items-center">
         <Nav />
