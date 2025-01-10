@@ -21,6 +21,13 @@ export interface UploadReq {
   fileType: FileType
 }
 
+export interface UploadRes {
+  "ext": string,
+  "file_id": string,
+  "file_name": string,
+  "file_type": FileType
+}
+
 export interface UploadPartReq {
   fileId: string
   partNo: number

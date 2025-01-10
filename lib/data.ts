@@ -159,26 +159,26 @@ export async function callApi<T, R>(
 
 // 文件上传
 // export const mediaUpload = (data: FormData) => postData('/media/upload', data)
-export const mediaUpload = (data: FormData) => {
-  return fetch(apiUrl + "/media/upload", {
-    headers: {
-      "X-Token": "1"
-    },
-    method: "post",
-    body: data
-  }).then(res => res.json())
-}
+// export const mediaUpload = (data: FormData) => {
+//   return fetch(apiUrl + "/media/upload", {
+//     headers: {
+//       "X-Token": "1"
+//     },
+//     method: "post",
+//     body: data
+//   }).then(res => res.json())
+// }
 
-
-export const userProfile = () => callApiUseGet<undefined, UserProfile>({
-  url: "/user/me",
-  transformResponse: response => response.data
-})
-
-export const setReply = (data: ReplyForm) => callApiUseGet<ReplyForm, unknown>({
-  url: "/user/getUserExtend",
-  data,
-  transformResponse: response => response.data
-})
-
-export const updateUserBaseInfo = (data: UpdateUserBaseReq) => callApi<UpdateUserBaseReq, unknown>("/user/updateUserBase", data, response => response.data)
+//
+// export const userProfile = () => callApiUseGet<undefined, UserProfile>({
+//   url: "/user/me",
+//   transformResponse: response => response.data
+// })
+//
+// export const setReply = (data: ReplyForm) => callApiUseGet<ReplyForm, unknown>({
+//   url: "/user/getUserExtend",
+//   data,
+//   transformResponse: response => response.data
+// })
+//
+// export const updateUserBaseInfo = (data: UpdateUserBaseReq) => callApi<UpdateUserBaseReq, unknown>("/user/updateUserBase", data, response => response.data)
