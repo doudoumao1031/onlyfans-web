@@ -46,6 +46,11 @@ export const getRecomBlogger =
 /**
  * 热门贴子
  */
+/**
+ * 获取热门贴子
+ * @param params 分页参数
+ * @returns 热门贴子列表
+ */
 export const getSystemPosts =
   (params: CommonPageReq) => fetchWithPost<CommonPageReq, PageResponse<PostData>>(ENDPOINTS.RECOM.SYSTEM_POST, params)
     .then((res) => {
@@ -55,3 +60,27 @@ export const getSystemPosts =
         return null
       }
     })
+
+export const fetchFeeds = async (page: number, fromId: number = 0) => {
+  const pageSize = 3
+  const response = await getSystemPosts({
+    from_id: fromId,
+    page,
+    pageSize: pageSize
+  })
+
+  if (!response) {
+    return {
+      items: [],
+      hasMore: false
+    }
+  }
+
+  const { list, total } = response
+
+  const hasMore = page * pageSize < total
+  return {
+    items: list,
+    hasMore
+  }
+}

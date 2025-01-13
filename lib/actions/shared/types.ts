@@ -28,19 +28,17 @@ export interface PaginationParams {
 }
 
 export interface ApiResponse<T = unknown> {
-  data: T;
-  message?: string;
-  code: number;
+  data: T
+  code: number
+  message?: string
 }
 
-/**
- * list 返回结果
- */
 export interface PageResponse<T> {
   list: T[]
   total: number
 }
 
+// export type PageResponse<T> = ApiResponse<PaginatedData<T>>
 
 export type FetchTransformResponse<Res> = (response: ApiResponse<Res>) => Res
 
