@@ -29,6 +29,7 @@ export function calculatePagination(
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
+const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
 const getAuthToken = () => {
   return "1"
@@ -95,4 +96,12 @@ export async function fetchWithPost<Req, Res = unknown>(
     console.error("Error-POST-catch:", error)
   }
   return null
+}
+
+/**
+ * 获取媒体地址
+ * @param fileId
+ */
+export function buildMediaUrl(fileId: string) {
+  return `${mediaUrl}${fileId}`
 }

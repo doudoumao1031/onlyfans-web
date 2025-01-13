@@ -69,7 +69,7 @@ export default function Post({
       <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} postId={post.id} />
         <CommentStats count={comment_count} />
-        <Tip userId={user.id} count={tip_count} />
+        <Tip userId={user.id} count={tip_count} postId={post.id} />
         <Share count={share_count} postId={post.id} />
         <Save count={collection_count} saved={collection} postId={post.id} />
       </div>
@@ -231,11 +231,7 @@ function SubscribeCard({ user }: { user: User }) {
             </div>
           </div>
         </div>
-        <SubscribedDrawer name={first_name} userId={Number(id)}>
-          <button className="bg-black/50 text-white text-xs self-start px-1 py-1 rounded-lg">
-            {sub?"已订阅":"免费/订阅"}
-          </button>
-        </SubscribedDrawer>
+        <SubscribedDrawer name={first_name} userId={Number(id)} />
       </div>
     </div>
   )
@@ -445,11 +441,11 @@ function CommentStats({ count }: { count: number }) {
   )
 }
 
-function Tip({ userId, count }: { userId: number; count: number }) {
+function Tip({ userId, count, postId }: { userId: number, count: number, postId: number }) {
   return (
     <Link
       scroll={false}
-      href={`/explore/tip/${userId}`}
+      href={`/explore/tip/${postId}`}
       className="flex items-center"
     >
       <Stats icon="icon_fans_reward" value={count} />
