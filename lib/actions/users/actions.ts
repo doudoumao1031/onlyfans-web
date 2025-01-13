@@ -1,6 +1,6 @@
 import {
   BloggerInfo, CollectionPostReq, CommonPageReq,
-  ENDPOINTS,
+  ENDPOINTS, FansPageReq,
   fetchWithPost,
   PageResponse, SubscribeUserInfo
 } from "@/lib"
@@ -67,3 +67,27 @@ export const getSubscribeUsers =
         return null
       }
     })
+
+/**
+ * 获取关注我的用户
+ * @param params
+ */
+export const getFollowedUsers = (params: FansPageReq) => fetchWithPost<FansPageReq, PageResponse<SubscribeUserInfo>>(ENDPOINTS.USERS.GET_FOLLOWED_USERS, params).then(response => {
+  if (response && response.code === 0) {
+    return response.data
+  } else {
+    return null
+  }
+})
+
+/**
+ * 订阅我的用户
+ * @param params
+ */
+export const getSubscribedUsers = (params: FansPageReq) => fetchWithPost<FansPageReq, PageResponse<SubscribeUserInfo>>(ENDPOINTS.USERS.GET_SUBSCRIBED_USERS, params).then(response => {
+  if (response && response.code === 0) {
+    return response.data
+  } else {
+    return null
+  }
+})

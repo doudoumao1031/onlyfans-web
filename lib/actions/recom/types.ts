@@ -21,6 +21,10 @@ export interface PageInfo {
   pageSize: number | 10
 }
 
+export type FansPageReq = CommonPageReq & {
+  desc?: boolean
+}
+
 /**
  * 博主信息
  */

@@ -56,3 +56,8 @@ export async function commonUploadFile(file: File) {
   //   }
   // })
 }
+
+
+export const buildImageFileUrl = (fileId: string) => {
+  return `https://imfanstest.potato.im/api/v1/media/img/${fileId}`
+}
