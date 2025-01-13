@@ -1,5 +1,3 @@
-"use server"
-
 import { ENDPOINTS } from "../shared/constants"
 import type {
   PostPayOrderReq,
@@ -10,7 +8,8 @@ import type {
   OrderCallbackReq,
   DeleteOrderReq,
   OrderInfo
-} from "./types"
+} from "@/lib"
+import { fetchWithPost } from "@/lib"
 
 export async function addPostPayOrder(params: PostPayOrderReq): Promise<OrderInfo> {
   // Implementation
@@ -22,10 +21,12 @@ export async function addPostTip(params: PostTipReq): Promise<OrderInfo> {
   throw new Error("Not implemented")
 }
 
-export async function addSubOrder(params: SubOrderReq): Promise<OrderInfo> {
-  // Implementation
-  throw new Error("Not implemented")
-}
+/**
+ * 增加订阅
+ * @param params
+ */
+export const addSubOrder = (params: SubOrderReq) => fetchWithPost<SubOrderReq, unknown>(ENDPOINTS.ORDERS.ADD_SUB, params)
+
 
 export async function addWalletDownOrder(params: WalletDownOrderReq): Promise<OrderInfo> {
   // Implementation

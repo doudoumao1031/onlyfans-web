@@ -1,4 +1,5 @@
-import { FileType, PostData } from "./type"
+import { FileType } from "./type"
+import { PostData } from "@/lib"
 
 const photo = "5902a7d0-8561-4cfb-8f58-e767e9b2e04f"
 const back_img = "63b4312b-932b-409c-9339-fff685514fdc"
@@ -19,7 +20,8 @@ export function getMockPostData(): PostData {
         id: 1,
         last_name,
         photo,
-        username
+        username,
+        sub: false
       }
     ],
     post: {
@@ -68,7 +70,8 @@ export function getMockPostData(): PostData {
       id: 0,
       last_name,
       photo,
-      username
+      username,
+      sub: false
     },
     comments: [
       {
@@ -85,7 +88,8 @@ export function getMockPostData(): PostData {
               id: 0,
               last_name,
               photo,
-              username
+              username,
+              sub: false
             }
           }
         ],
@@ -97,7 +101,8 @@ export function getMockPostData(): PostData {
           id: 0,
           last_name,
           photo,
-          username
+          username,
+          sub: false
         }
       }
     ]

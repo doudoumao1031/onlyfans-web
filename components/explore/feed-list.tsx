@@ -4,7 +4,8 @@ import React, { Fragment } from "react"
 import Post from "@/components/post/post"
 import InfiniteScroll from "../common/infinite-scroll"
 import { ListError, ListLoading, ListEnd } from "./list-states"
-import { PostData } from "@/components/post/type"
+import { PostData } from "@/lib"
+import { fetchFeeds } from "@/lib/data"
 
 interface FeedListProps {
   initialItems: PostData[]
@@ -13,9 +14,10 @@ interface FeedListProps {
 
 export default function FeedList({ initialItems, initialHasMore }: FeedListProps) {
   return (
-    <InfiniteScroll
+    <InfiniteScroll<PostData>
       initialItems={initialItems}
       initialHasMore={initialHasMore}
+      fetcherFn={fetchFeeds}
     >
       {({ items, isLoading, hasMore, error }) => (
         <Fragment>
@@ -31,7 +33,7 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
             ))}
           </div>
           {isLoading && <ListLoading />}
-          {!hasMore && <ListEnd />}
+          {!hasMore && items.length > 0 && <ListEnd />}
         </Fragment>
       )}
     </InfiniteScroll>

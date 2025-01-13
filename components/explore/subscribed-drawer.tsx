@@ -3,7 +3,7 @@ import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { ToggleGroupSubscribed, ToggleGroupSubscribedItem } from "@/components/ui/toggle-group-subcribed"
 import { useState, useMemo, useEffect } from "react"
-import { DiscountInfo, viewUserSubscribeSetting } from "@/lib"
+import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 
 interface SubscribedDrawerProps {
     userId: number;
@@ -50,25 +50,25 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, child
   }, [discount, price])
 
   return (
-    <FormDrawer
-      title={(
-        <div>
-          <span className="text-lg font-semibold">订阅</span>
-          <span className="text-main-pink font-normal text-[15px] t">{name}</span>
-        </div>
-      )}
-      headerLeft={(close) => {
-        return (
-          <button onTouchEnd={close} className={"text-base text-[#777]"}>
-            <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"}/>
-          </button>
-        )
-      }}
-      trigger={children}
-      className="h-[43vh] border-0"
-    >
-      <form action="">
-        <input hidden={true} name="id" defaultValue={userId}/>
+    <>
+      <FormDrawer
+        title={(
+          <div>
+            <span className="text-lg font-semibold">订阅</span>
+            <span className="text-main-pink font-normal text-[15px] t">{name}</span>
+          </div>
+        )}
+        headerLeft={(close) => {
+          return (
+            <button onTouchEnd={close} className={"text-base text-[#777]"}>
+              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"}/>
+            </button>
+          )
+        }}
+        trigger={children}
+        className="h-[43vh] border-0"
+      >
+        <input hidden={true} name="user_id" defaultValue={userId}/>
         <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50">
           <ToggleGroupSubscribed
             type="single"
@@ -125,7 +125,15 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, child
                 className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
                 onTouchEnd={(e) => {
                   e.preventDefault()
-                  console.log(`confirm payment of ${amount}`)
+                  addSubOrder({ user_id: userId, price: Number(amount), id: discount?.id ?? 1 })
+                    .then((result) => {
+                      console.log("addSubOrder result:", result)
+                      if (result && result.code === 0) {
+                        console.log("订阅成功")
+                      } else {
+                        console.log("订阅失败:",result?.message)
+                      }
+                    })
                 }}
               >确认支付 {amount} USDT
               </button>
@@ -143,8 +151,9 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, child
             </div>
           </div>
         </div>
-      </form>
-    </FormDrawer>
+      </FormDrawer>
+      )
+    </>
   )
 }
 

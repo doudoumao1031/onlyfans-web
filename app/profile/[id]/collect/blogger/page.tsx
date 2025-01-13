@@ -1,109 +1,28 @@
-"use client"
-import Header from "@/components/common/header"
-
-import TabTitle, { iTabTitleOption } from "@/components/profile/tab-title"
-import { useState } from "react"
 import IconWithImage from "@/components/profile/icon"
-import { useSearchParams } from "next/navigation"
+import { userCollectionUsers } from "@/lib"
+import { buildImageFileUrl } from "@/lib/utils"
+import Image from "next/image"
 
-export type TBlogItem = {
-  topMsg: string
-  avtar: string
-  name: string
-  account: string
-  isVideo: boolean
-  num: number
-  background: string
-}
-
-const mockBlogs: TBlogItem[] = [
-  {
-    topMsg:
-      "各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折",
-    avtar: "bg-[url('/demo/avtar1.jpeg')]",
-    name: "多米洛",
-    account: "@duomiluo",
-    isVideo: true,
-    num: 9999,
-    background: "bg-[url('/demo/blog-bg1.jpeg')]",
-  },
-  {
-    topMsg:
-      "各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折",
-    avtar: "bg-[url('/demo/avtar2.jpeg')]",
-    name: "Jamie Shon",
-    account: "@luvjamxoxo",
-    isVideo: false,
-    num: 9999,
-    background: "bg-[url('/demo/blog-bg2.jpeg')]",
-  },
-  {
-    topMsg:
-      "各位亲爱的粉丝：感谢有你们的陪伴，今日起订阅老用户一律5折，新用户8折",
-    avtar: "bg-[url('/demo/avtar3.jpeg')]",
-    name: "Lin Lin",
-    account: "@linlin9246",
-    isVideo: false,
-    num: 9999,
-    background: "bg-[url('/demo/blog-bg3.jpeg')]",
-  },
-  {
-    topMsg: "",
-    avtar: "bg-[url('/demo/avtar4.jpeg')]",
-    name: "吐司女孩",
-    account: "@tusibaby",
-    isVideo: false,
-    num: 9999,
-    background: "bg-[url('/demo/blog-bg4.jpeg')]",
-  },
-]
-const mockPosts: TPostItem[] = [
-  {
-    avtar: "bg-[url('/demo/avtar1.jpeg')]",
-    name: "Jamie Shon",
-    msg: "Jamie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon @luvjamxoxo带您踏上文化之旅，展示韩国烧烤…",
-    background: "bg-[url('/demo/blog-bg1.jpeg')]",
-  },
-  {
-    avtar: "bg-[url('/demo/avtar2.jpeg')]",
-    name: "Rita Leite",
-    msg: "Jamie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon @luvjamxoxo带您踏上文化之旅，展示韩国烧烤…",
-    background: "bg-[url('/demo/blog-bg2.jpeg')]",
-  },
-  {
-    avtar: "bg-[url('/demo/avtar4.jpeg')]",
-    name: "Virendra Sana",
-    msg: "Jamie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon @luvjamxoxo带您踏上文化之旅，展示韩国烧烤…",
-    background: "bg-[url('/demo/blog-bg4.jpeg')]",
-  },
-]
-export default function Page() {
-  const queryParams = useSearchParams()
-  const [active, setActive] = useState<string>(
-    queryParams.get("type") ?? "blog"
-  )
-  const [bloggers] = useState<TBlogItem[]>(mockBlogs)
-  const [posts] = useState<TPostItem[]>(mockPosts)
-  const tabOptions: iTabTitleOption[] = [
-    { label: "博主", name: "blog" },
-    { label: "帖子", name: "post" },
-  ]
-  const Blogs = () => {
-    return (
+export default async function Page() {
+  const bloggerData = await userCollectionUsers({ page: 1, pageSize: 10, from_id: 0 })
+  if (!bloggerData) {
+    throw new Error("error")
+  }
+  return (
+    <>
+      <div className="total-num p-4"><span className="text-gray-400">总数：</span>{bloggerData?.total ?? 0}</div>
       <div className="p-4 pt-0 ">
-        {bloggers.map((v: TBlogItem, i: number) => (
-          <div
-            key={i}
-            className={`h-28 pt-1 text-white bg-slate-400  mb-4 bg-cover rounded-lg ${v.background} bg-blend-multiply`}
+        {bloggerData?.list?.map((v, i) => (
+          <div key={i} className={"h-28 pt-1 text-white bg-slate-400  mb-4 bg-cover rounded-lg bg-blend-multiply"} style={{
+            backgroundImage: `url(${buildImageFileUrl(v.photo)})`
+          }}
           >
-            <div className="text-xs min-h-4  truncate ...">{v.topMsg}</div>
+            <div className="text-xs min-h-4  truncate ...">{v.top_info}</div>
             <div className="pl-4 pr-4 pt-2 flex justify-start">
-              <div
-                className={`w-16 h-16 rounded-full mr-4 ${v.avtar} bg-cover border-2 border-white`}
-              ></div>
+              <Image src={buildImageFileUrl(v.photo)} width={112} height={112} alt={"blogger photo"} className={"w-16 h-16 rounded-full mr-4 border-2 border-white"} />
               <div>
-                <div className="text-sm">{v.name}</div>
-                <div className="text-xs">{v.account}</div>
+                <div className="text-sm">{v.username}</div>
+                <div className="text-xs">{v.username}</div>
                 <div className="flex justify-start mt-1 text-xs">
                   <div className="bg-black rounded-full bg-opacity-50 p-1 pl-2 pr-2 mr-4 text-xs flex">
                     <IconWithImage
@@ -111,7 +30,7 @@ export default function Page() {
                       width={14}
                       height={14}
                     />
-                    <span className="ml-1">9999</span>
+                    <span className="ml-1">{v.img_count}</span>
                   </div>
                   <div className="bg-black rounded-full bg-opacity-50 p-1 pl-2 pr-2 mr-4 text-xs flex">
                     <IconWithImage
@@ -119,53 +38,17 @@ export default function Page() {
                       width={14}
                       height={14}
                     />
-                    <span className="ml-1">9999</span>
+                    <span className="ml-1">{v.media_count}</span>
                   </div>
-                  <div className="bg-black rounded-full bg-opacity-50 p-1 pl-2 pr-2 ml-2 text-xs">
-                    免费/订阅
-                  </div>
+                  <div className="bg-black rounded-full bg-opacity-50 p-1 pl-2 pr-2 ml-2 text-xs">免费/订阅</div>
                 </div>
               </div>
             </div>
           </div>
         ))}
+
+        {!bloggerData?.list?.length && <div className={"text-secondary text-center py-2"}>暂无数据</div>}
       </div>
-    )
-  }
-  const Posts = () => {
-    return (
-      <div className="p-4 pt-0 ">
-        {posts.map((v: TPostItem, i: number) => (
-          <div key={i} className={"h-28   mb-4 flex justify-between"}>
-            <div
-              className={`h-28 w-28 ${v.avtar} bg-cover mr-2 shrink-0 rounded-md border border-slate-600`}
-            ></div>
-            <div className="flex flex-col justify-between">
-              <div className="">{v.msg}</div>
-              <div className="flex items-center">
-                <div
-                  className={`w-6 h-6 rounded-full mr-2 ${v.avtar} bg-cover `}
-                ></div>
-                <span className="text-main-pink text-xs">{v.name}</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    )
-  }
-  return (
-    <>
-      <Header title="收藏夹" titleColor="#000" />
-      <TabTitle
-        tabOptions={tabOptions}
-        active={active}
-        activeChange={setActive}
-      />
-      <div className="total-num p-4">
-        <span className="text-gray-400">总数：</span>9999999
-      </div>
-      {active === "blog" ? Blogs() : Posts()}
     </>
   )
 }

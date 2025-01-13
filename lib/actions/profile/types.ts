@@ -41,12 +41,8 @@ export interface iPost {
 }
 
 
-export type UpdateUserBaseReq = {
+export type UpdateUserBaseReq = Pick<UserProfile, "about" | "photo" | "back_img" | "location" | "top_info"> & {
   flags: number,
-  about: string,
-  photo: string,
-  back_img: string,
-  location: string,
 }
 
 
@@ -78,6 +74,7 @@ export type UserProfile = {
   today_add_count: number //当日新增帖子数量
   username: string
   video_count: number //媒体数量
+  top_info: string
 }
 
 export interface ReplyForm {
