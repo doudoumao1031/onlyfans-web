@@ -56,6 +56,7 @@ export type BloggerInfo = {
   sub_end_time: number;
   collection: boolean;
   following: boolean;
+  top_info: string
 }
 
 /**

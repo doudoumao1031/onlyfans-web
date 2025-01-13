@@ -2,7 +2,7 @@ import {
   BloggerInfo, CollectionPostReq, CommonPageReq,
   ENDPOINTS, FansPageReq,
   fetchWithPost,
-  PageResponse, SubscribeUserInfo
+  PageResponse, PostData, SubscribeUserInfo
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
 
@@ -52,6 +52,12 @@ export const userCollectionPost =
   (params: CollectionPostReq) => fetchWithPost<CollectionPostReq, unknown>(ENDPOINTS.USERS.COLLECTION_POST, params)
     .then((res) => {
       return !!(res && res.code === 0)
+    })
+
+export const userCollectionPosts = (params:CommonPageReq) =>
+  fetchWithPost<CommonPageReq,PageResponse<PostData>>(ENDPOINTS.USERS.COLLECTION_POSTS,params)
+    .then((response) => {
+      return response?.code == 0 ? response?.data : null
     })
 
 /**
