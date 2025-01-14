@@ -2,14 +2,13 @@
 
 import React from "react"
 import { PostData } from "./type"
-
 import Comments from "./comment"
 import Vote from "./vote"
 import Subscribe from "./subscribe"
 import UserTitle from "./user-title"
 import Description from "./description"
 import Media from "./media"
-import UserHomePageLink from "./UserHomepageLink"
+import UserHomePageLink from "./user-homepage-link"
 import Like from "./like"
 import CommentStats from "./comment-stats"
 import Tip from "./tip"
