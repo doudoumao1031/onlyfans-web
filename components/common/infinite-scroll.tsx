@@ -3,7 +3,8 @@
 import React, { useRef, useEffect } from "react"
 import { debounce } from "lodash"
 import { useInfiniteScroll } from "@/hooks/use-infinite-scroll"
-import { PostData } from "@/lib"
+
+export type FetchFn<T> = (page: number) => Promise<{ items: T[], hasMore: boolean }>
 
 export interface InfiniteScrollProps<T> {
   initialItems: T[]
