@@ -16,10 +16,7 @@ export async function addPostPayOrder(params: PostPayOrderReq): Promise<OrderInf
   throw new Error("Not implemented")
 }
 
-export async function addPostTip(params: PostTipReq): Promise<OrderInfo> {
-  // Implementation
-  throw new Error("Not implemented")
-}
+export const addPostTip = (params: PostTipReq) => fetchWithPost<PostTipReq, string>(ENDPOINTS.ORDERS.ADD_POST_TIP, params)
 
 /**
  * 增加订阅

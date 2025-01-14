@@ -2,47 +2,46 @@
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { ToggleGroupSubscribed, ToggleGroupSubscribedItem } from "@/components/ui/toggle-group-subcribed"
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 
 interface SubscribedDrawerProps {
     userId: number;
     name: string,
-    children: React.ReactNode
+    settingItems?: DiscountInfo[],
+    settingPrice?: number,
+    children?: React.ReactNode
 }
 
-const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, children }) => {
+const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, settingItems, settingPrice,children }) => {
 
-  const [items, setItems] = useState<DiscountInfo[]>([])
+  const [items, setItems] = useState<DiscountInfo[]>(settingItems ?? [])
   const [discount, setDiscount] = useState<DiscountInfo>()
-  const [price, setPrice] = useState<number>(0)
+  const [price, setPrice] = useState<number>(settingPrice?? 0)
   const [amount, setAmount] = useState<number>(0)
-  useEffect(() => {
-    const fetchSubscribeSettings = async () => {
-      try {
-        const settings = await viewUserSubscribeSetting({ user_id: userId })
-        if (settings?.items) {
-          const list:DiscountInfo[] = []
-          list.push({
-            id: 1,
-            month_count: 1,
-            price: settings?.price ?? 0,
-            discount_per: 0,
-            discount_price: 0,
-            discount_start_time: 0,
-            discount_end_time: 0,
-            discount_status: false,
-            user_id: userId
-          })
-          list.push(...settings.items)
-          if (settings?.items) setItems(list)
-        }
-        if (settings?.price) setPrice(settings.price)
-      } finally {
+  const getSettingData = async () => {
+    try {
+      const settings = await viewUserSubscribeSetting({ user_id: userId })
+      if (settings?.items) {
+        const list:DiscountInfo[] = []
+        list.push({
+          id: 1,
+          month_count: 1,
+          price: settings?.price ?? 0,
+          discount_per: 0,
+          discount_price: 0,
+          discount_start_time: 0,
+          discount_end_time: 0,
+          discount_status: false,
+          user_id: userId
+        })
+        list.push(...settings.items)
+        if (settings?.items) setItems(list)
       }
+      if (settings?.price) setPrice(settings.price)
+    } finally {
     }
-    fetchSubscribeSettings()
-  }, [userId])
+  }
   const [diff, setDiff] = useState<number>(0)
   useMemo(() => {
     const diff = discount ? (price * discount.month_count - discount?.price).toFixed(2):"0"
@@ -65,7 +64,11 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, child
             </button>
           )
         }}
-        trigger={children}
+        trigger={<button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white"
+          onClick={getSettingData}
+        >
+          <span className="text-xs text-nowrap">免费/订阅</span>
+        </button>}
         className="h-[43vh] border-0"
       >
         <input hidden={true} name="user_id" defaultValue={userId}/>
@@ -152,7 +155,6 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, child
           </div>
         </div>
       </FormDrawer>
-      )
     </>
   )
 }

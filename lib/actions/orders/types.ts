@@ -6,9 +6,8 @@ export interface PostPayOrderReq {
 }
 
 export interface PostTipReq {
-  postId: string
-  amount: number
-  payType: number
+  post_id: number
+  amount: number // 打赏金额
 }
 
 /**
