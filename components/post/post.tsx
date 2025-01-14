@@ -1,6 +1,6 @@
 "use client"
 
-import React, { ReactElement, useState } from "react"
+import React, { ReactElement, useState, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import {
@@ -20,6 +20,7 @@ import {
 } from "./util"
 import SubscribedDrawer from "../explore/subscribed-drawer"
 import { postSharLog, starPost, userCollectionPost } from "@/lib"
+import { buildImageUrl } from "@/lib/utils"
 
 export default function Post({
   data,
@@ -214,7 +215,7 @@ function SubscribeCard({ user }: { user: User }) {
     <div
       className="w-full rounded-lg bg-cover h-[100px]"
       style={{
-        backgroundImage: `url(${buildFileUrl(back_img)})`
+        backgroundImage: `url(${buildImageUrl(back_img)})`
       }}
     >
       <div className="w-full h-full flex justify-between bg-black/50 p-3 rounded-lg">
@@ -257,7 +258,7 @@ function UserTitle({ user }: { user: User }) {
 function Avatar({ fileId, width = 16 }: { fileId: string; width?: number }) {
   return (
     <Image
-      src={buildFileUrl(fileId)}
+      src={buildImageUrl(fileId)}
       alt=""
       className={`rounded-full border-2 border-white w-${width} h-${width}`}
       width={50}
@@ -295,54 +296,37 @@ function Media({ data }: { data: Attachment[] }) {
   return (
     <div className="grid grid-cols-3 gap-2">
       {data.map(({ file_id, file_type, thumb_id }, i) => (
-        <Thumbnail
+        <Link
           key={i}
-          largeElement={
-            file_type === FileType.Video ? (
-              <video
-                src={buildFileUrl(file_id)}
-                controls
-                autoPlay
-                className="w-full"
-              />
-            ) : (
-              <Image
-                className="w-full"
-                src={buildFileUrl(file_id)}
-                alt=""
-                width={900}
-                height={500}
-              />
-            )
-          }
-          thumbnailElement={
-            file_type === FileType.Video ? (
-              <div
-                className="aspect-square flex justify-center items-center bg-cover rounded-md"
-                style={{
-                  backgroundImage: `url(${buildFileUrl(thumb_id)})`
-                }}
-              >
-                <div className="bg-black/50 w-12 h-12 rounded-full flex justify-center items-center">
-                  <Image
-                    src="/icons/play.png"
-                    width={20}
-                    height={20}
-                    alt="play"
-                  />
-                </div>
+          href={`/media/${file_type === FileType.Video ? "video" : "image"}/${file_id}`}
+          className="block"
+        >
+          {file_type === FileType.Video ? (
+            <div
+              className="aspect-square flex justify-center items-center bg-cover rounded-md"
+              style={{
+                backgroundImage: `url(${buildImageUrl(thumb_id || file_id)})`
+              }}
+            >
+              <div className="bg-black/50 w-12 h-12 rounded-full flex justify-center items-center">
+                <Image
+                  src="/icons/play.png"
+                  width={20}
+                  height={20}
+                  alt="play"
+                />
               </div>
-            ) : (
-              <Image
-                className="aspect-square rounded-md"
-                src={buildFileUrl(file_id)}
-                alt=""
-                width={200}
-                height={200}
-              />
-            )
-          }
-        />
+            </div>
+          ) : (
+            <Image
+              className="aspect-square rounded-md"
+              src={buildImageUrl(file_id)}
+              alt=""
+              width={200}
+              height={200}
+            />
+          )}
+        </Link>
       ))}
     </div>
   )
@@ -525,8 +509,4 @@ function Stats({
       <span className="text-xs">{value}</span>
     </div>
   )
-}
-
-function buildFileUrl(fileId: string) {
-  return `https://imfanstest.potato.im/api/v1/media/img/${fileId}`
 }

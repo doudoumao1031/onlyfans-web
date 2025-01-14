@@ -2,7 +2,7 @@
 
 import React, { useRef, useEffect } from "react"
 import { debounce } from "lodash"
-import { useInfiniteScroll } from "@/hooks/use-infinite-scroll"
+import { useInfiniteScroll } from "@/lib/hooks/use-infinite-scroll"
 import { PostData } from "@/lib"
 
 export interface InfiniteScrollProps<T> {

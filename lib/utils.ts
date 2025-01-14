@@ -56,3 +56,11 @@ export async function commonUploadFile(file: File) {
   //   }
   // })
 }
+
+export function buildImageUrl(fileId: string) {
+  return `https://imfanstest.potato.im/api/v1/media/img/${fileId}`
+}
+
+export function buildVideoUrl(fileId: string, quality: string) {
+  return `https://imfanstest.potato.im/api/v1/media/videocut/${fileId}/${quality}`
+}
