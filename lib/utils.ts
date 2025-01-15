@@ -97,7 +97,7 @@ export async function uploadFile(file: File) {
       const start = i * CHUNK_SIZE
       const end = Math.min(start + CHUNK_SIZE, file.size)
       const chunk = file.slice(start, end)
-      await uploadFilePart(fileId, String(i+1), chunk) // 上传分片
+      await uploadFilePart(fileId, String(i + 1), chunk) // 上传分片
       console.log("handleUploadFile upload part", i)
     }
     await completeFile({ file_id: fileId }) // 完成上传

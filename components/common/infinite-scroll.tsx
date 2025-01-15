@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from "react"
 import { debounce } from "lodash"
 import { useInfiniteScroll } from "@/lib/hooks/use-infinite-scroll"
 import { PostData } from "@/lib"
+import clsx from "clsx"
 
 export interface InfiniteScrollProps<T> {
   initialItems: T[]
@@ -15,14 +16,16 @@ export interface InfiniteScrollProps<T> {
     hasMore: boolean
     error: unknown
     isRefreshing: boolean
-  }) => React.ReactNode
+  }) => React.ReactNode,
+  className?: string
 }
 
 export default function InfiniteScroll<T>({
   initialItems,
   initialHasMore,
   fetcherFn,
-  children
+  children,
+  className
 }: InfiniteScrollProps<T>) {
   const containerRef = useRef<HTMLDivElement>(null)
   const touchStartY = useRef(0)
@@ -103,7 +106,10 @@ export default function InfiniteScroll<T>({
   return (
     <div
       ref={containerRef}
-      className="h-screen overflow-y-auto relative"
+      className={clsx(
+        "h-screen overflow-y-auto relative",
+        className
+      )}
       style={{ transition: "transform 0.2s ease-out" }}
     >
       {isRefreshing && (

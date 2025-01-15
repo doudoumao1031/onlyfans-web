@@ -119,7 +119,7 @@ export default async function Page({
           <div className="flex justify-between items-center pt-2.5 pb-2.5">
             <h3 className="text-[15px] font-bold">收藏夹</h3>
             <Link
-              href={`/profile/${id}/collect?type=blog`}
+              href={`/profile/${id}/collect/posts`}
               className="text-gray-300"
             >
               <IconWithImage
@@ -133,7 +133,7 @@ export default async function Page({
 
           <div className="grid grid-cols-2 gap-3">
             <Link
-              href={`/profile/${id}/collect?type=blog`}
+              href={`/profile/${id}/collect/blogger`}
               className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-blogger.png')] bg-cover"
             >
               <div className="text-xs text-[rgba(34,34,34,0.70)]">博主</div>
@@ -142,7 +142,7 @@ export default async function Page({
               </div>
             </Link>
             <Link
-              href={`/profile/${id}/collect?type=post`}
+              href={`/profile/${id}/collect/posts`}
               className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-posts.png')] bg-cover"
             >
               <div className="text-xs text-[rgba(34,34,34,0.70)]">帖子</div>

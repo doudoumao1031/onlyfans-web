@@ -1,8 +1,8 @@
 import {
   BloggerInfo, CollectionPostReq, CommonPageReq,
-  ENDPOINTS,
+  ENDPOINTS, FansPageReq,
   fetchWithPost,
-  PageResponse, SubscribeUserInfo
+  PageResponse, PostData, SubscribeUserInfo
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
 
@@ -54,6 +54,12 @@ export const userCollectionPost =
       return !!(res && res.code === 0)
     })
 
+export const userCollectionPosts = (params:CommonPageReq) =>
+  fetchWithPost<CommonPageReq,PageResponse<PostData>>(ENDPOINTS.USERS.COLLECTION_POSTS,params)
+    .then((response) => {
+      return response?.code == 0 ? response?.data : null
+    })
+
 /**
  * 订阅博主列表
  * @param params
@@ -67,3 +73,35 @@ export const getSubscribeUsers =
         return null
       }
     })
+
+/**
+ * 获取关注我的用户
+ * @param params
+ */
+export const getFollowedUsers = (params: FansPageReq) => fetchWithPost<FansPageReq, PageResponse<SubscribeUserInfo>>(ENDPOINTS.USERS.GET_FOLLOWED_USERS, params).then(response => {
+  if (response && response.code === 0) {
+    return response.data
+  } else {
+    return null
+  }
+})
+
+export const infiniteGetFollowedUsers = async (page:number) => {
+  const data = await getFollowedUsers({ page, pageSize: 10, from_id: 0 })
+  return {
+    items: data?.list || [],
+    hasMore: !data?.list ? false : page < Math.ceil(data.total / page)
+  }
+}
+
+/**
+ * 订阅我的用户
+ * @param params
+ */
+export const getSubscribedUsers = (params: FansPageReq) => fetchWithPost<FansPageReq, PageResponse<SubscribeUserInfo>>(ENDPOINTS.USERS.GET_SUBSCRIBED_USERS, params).then(response => {
+  if (response && response.code === 0) {
+    return response.data
+  } else {
+    return null
+  }
+})

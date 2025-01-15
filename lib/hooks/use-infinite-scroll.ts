@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect } from "react"
+import { PageResponse } from "@/lib"
+import { useCallback, useEffect, useRef, useState } from "react"
 import useSWR from "swr"
 
 interface UseInfiniteScrollOptions<T> {
@@ -76,4 +77,24 @@ export function useInfiniteScroll<T>({
     loadMore,
     refresh
   }
+}
+
+
+
+interface UseInfinitePostsOptions<Req, Res> {
+  fetchFn: (params: Req) => Promise<PageResponse<Res> | null>
+  defaultPageSize?: number
+  params?: Partial<Req>
+}
+
+export const useInfiniteFetch = <Req extends Record<string, unknown> & {page: number}, Res>(options: UseInfinitePostsOptions<Req, Res>) => {
+  const { fetchFn, params = {} as Partial<Req> } = options
+
+  return useCallback(async (page: number) => {
+    const data = await fetchFn({ page, ...params } as Req)
+    return {
+      items: data?.list || [],
+      hasMore: !data?.list ? false : page < Math.ceil(data.total / page)
+    }
+  }, [fetchFn, params])
 }

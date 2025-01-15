@@ -137,11 +137,9 @@ export default function Page() {
       />
       <section className="mt-5 text-black">
         <section className="pl-4 pr-4 pb-5 border-b border-gray-100">
-          {baseFee}
           <h1 className="text-base font-medium">基本订阅</h1>
           <section className="mt-2.5">
             <InputWithLabel onInputChange={(value) => setBaseFee(value?.toString() ?? "")}
-              options={[{ label: "免费", value: "1" }, { label: "自定义", value: "custom" }]}
               name={""} value={baseFee} label={"每月价格"} description={(
                 <>
                   <div>最小价格$1.99 USDT 或免费</div>

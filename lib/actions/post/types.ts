@@ -79,6 +79,7 @@ export interface PostData {
     share_count: number
     thumbs_up_count: number
     tip_count: number
+    play_count: number
   }
   post_vote: Vote
   user: User
@@ -143,6 +144,7 @@ export interface PostData {
     share_count: number
     thumbs_up_count: number
     tip_count: number
+    play_count: number
   }
   post_vote: Vote
   user: User
