@@ -23,8 +23,8 @@ export interface PostInfoVo {
 }
 
 export interface PaginationParams {
-  page: number;
-  limit: number;
+  page: number
+  limit: number
 }
 
 export interface ApiResponse<T = unknown> {
@@ -43,5 +43,5 @@ export interface PageResponse<T> {
 export type FetchTransformResponse<Res> = (response: ApiResponse<Res>) => Res
 
 export interface FetchOptions<Res> {
-  headers?: Record<string, unknown>,
+  headers?: Record<string, unknown>
 }

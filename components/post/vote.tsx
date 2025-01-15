@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Image from "next/image"
-import { Vote as VoteData } from "./type"
+import { Vote as VoteData } from "./types"
 
 export default function Vote({ data }: { data: VoteData }) {
   const { title, items, stop_time } = data

@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from "next/image"
-import { Attachment, FileType } from "./type"
+import { Attachment, FileType } from "./types"
 import { buildImageUrl } from "@/lib/utils"
 
 export default function Media({ data }: { data: Attachment[] }) {
