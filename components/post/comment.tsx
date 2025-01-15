@@ -1,10 +1,30 @@
 import Image from "next/image"
 import Avatar from "./avatar"
-import { CommentInfo, CommentReplyInfo } from "@/lib"
+import { addComment, CommentInfo, CommentReplyInfo, fetchPostComments } from "@/lib"
+import { useEffect, useState } from "react"
 
-export default function Comments({ comments }: { comments: CommentInfo[] }) {
+export default function Comments({ post_id }: { post_id: number }) {
+  const [comments, setComments] = useState<CommentInfo[]>([])
+  const [input, setInput] = useState("")
+
+  useEffect(() => {
+    fetchComments()
+    async function fetchComments() {
+      setComments(await fetchPostComments(post_id))
+    }
+  }, [post_id])
+
   return (
-    <div className="flex flex-col gap-4 p-4">
+    <div className="flex flex-col gap-6 p-4">
+      <div className="flex gap-2">
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          className="grow"
+          placeholder="发表评论,文明发言"
+        />
+        <button onClick={handleSendComment}>发送评论</button>
+      </div>
       {comments.map((c, i) => (
         <div key={i} className="flex flex-col gap-2">
           <Comment comment={c} />
@@ -19,6 +39,14 @@ export default function Comments({ comments }: { comments: CommentInfo[] }) {
       ))}
     </div>
   )
+
+  async function handleSendComment() {
+    const success = await addComment({ post_id, content: input })
+    if (success) {
+      setComments(await fetchPostComments(post_id))
+      setInput("")
+    }
+  }
 }
 
 function Comment({ comment }: { comment: CommentInfo | CommentReplyInfo }) {
@@ -28,7 +56,7 @@ function Comment({ comment }: { comment: CommentInfo | CommentReplyInfo }) {
   return (
     <div className="flex justify-between">
       <div className="flex gap-2">
-        <Avatar fileId={photo} width={10} />
+        <Avatar fileId={photo} width={9} />
         <div className="flex flex-col gap-1">
           <div className="text-xs text-[#FF8492]">{username}</div>
           <div className="text-sm">{content}</div>

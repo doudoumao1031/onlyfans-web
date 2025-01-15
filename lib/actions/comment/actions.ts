@@ -1,6 +1,6 @@
 "use server"
 
-import { fetchWithPost, PageResponse } from "@/lib"
+import { ApiResponse, fetchWithPost, PageResponse } from "@/lib"
 import { ENDPOINTS } from "../shared/constants"
 import type {
   CommentReq,
@@ -13,9 +13,9 @@ import type {
   CommentReplyInfo
 } from "./types"
 
-export async function addComment(params: CommentReq): Promise<void> {
-  // Implementation
-  throw new Error("Not implemented")
+export async function addComment(params: CommentReq): Promise<boolean> {
+  const res = await fetchWithPost<CommentReq, ApiResponse>(ENDPOINTS.COMMENT.ADD, params)
+  return !!res && res.code === 0
 }
 
 export async function replyComment(params: CommentReplyReq): Promise<void> {
@@ -49,7 +49,7 @@ export async function fetchPostComments(post_id: number) {
     page_size: 100
   })
 
-  return res ? res.list : []
+  return res?.list || []
 }
 
 export async function getCommentReplies(params: CommentReplayPageReq): Promise<CommentReplyInfo[]> {

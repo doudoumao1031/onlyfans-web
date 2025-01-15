@@ -3,9 +3,8 @@
 import { User } from "@/lib"
 
 export interface CommentReq {
-  postId: string
+  post_id: number
   content: string
-  replyUserId?: string
 }
 
 export interface CommentReplyReq {

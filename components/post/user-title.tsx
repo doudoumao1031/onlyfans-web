@@ -1,5 +1,5 @@
 import Avatar from "./avatar"
-import { User } from "./types"
+import { User } from "@/lib"
 import { buildMention } from "./utils"
 
 export default function UserTitle({ user }: { user: User }) {
