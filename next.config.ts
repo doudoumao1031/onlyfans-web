@@ -1,24 +1,29 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "2048mb"
+    }
+  },
   images: {
     remotePatterns: [
       {
         protocol: "https",
         hostname: "imfanstest.potato.im",
         port: "",
-        pathname: "/**",
+        pathname: "/**"
       },
       {
         protocol: "https",
         hostname: "imfanstest.potato.im",
         port: "",
         pathname: "/**",
-        search: "",
-      },
-    ],
+        search: ""
+      }
+    ]
   }
-};
+}
 
-export default nextConfig;
+export default nextConfig
