@@ -1,43 +1,48 @@
-import Image from "next/image";
+"use client"
 
-export type TModaProps = {
-    visible?: boolean,
-    children?: React.ReactNode
-    closeModal?: boolean,
-    type?: string
-    title?: React.ReactNode
-    content?: React.ReactNode
-    footer?: React.ReactNode
-    cancelText?: React.ReactNode
-    okText?: React.ReactNode
-    cancel?: () => void
-    confirm?: () => void
-}
-export default function Page({ children = null, visible = false, closeModal = true, type, cancelText, okText, title, content, footer, cancel = () => { }, confirm = () => { } }: TModaProps) {
-    if (!visible) return null
-    const DefaultFooter = () => {
-        return <div className="w-full flex justify-center text-[16px]">
-            <div onClick={() => { cancel() }} className="flex-1 text-center text-[#6D7781]">{cancelText || '取消'}</div>
-            <div onClick={() => { confirm() }} className="flex-1 text-center text-main-pink">{okText || '确定'}</div>
-        </div>
+import { useEffect, useRef } from "react"
+import { useRouter } from "next/navigation"
+import { createPortal } from "react-dom"
+
+export function Modal({ children }: { children: React.ReactNode }) {
+  const router = useRouter()
+  const dialogRef = useRef<HTMLDialogElement>(null)
+
+  useEffect(() => {
+    if (!dialogRef.current?.open) {
+      dialogRef.current?.showModal()
     }
-    return <div onClick={() => { closeModal && cancel() }} className="fixed top-0 left-0 w-screen h-screen bg-black/50 z-50 flex justify-center items-center">
+  }, [])
+
+  function onDismiss() {
+    router.back()
+  }
+
+  return createPortal(
+    <div className="modal-backdrop">
+      <dialog ref={dialogRef} className="modal" onClose={onDismiss}>
         {children}
-        {type === 'modal' && <div className="w-10/12 p-2 rounded-lg bg-white" onClick={(e) => { e.stopPropagation() }}>
-            {title && <div className="p-4 font-bold flex justify-center">{title}</div>}
-            {content && <div className="p-4 min-h-16 flex justify-center">{content}</div>}
-            <div className="p-2 flex">
-                {footer || DefaultFooter()}
-            </div>
-        </div>}
-        {type === 'toast' && <div className="bg-black bg-opacity-50 p-6 pt-4 pb-4 rounded-full flex items-center">
-            <Image
-                src="/icons/checkbox_select_white.png"
-                alt="checkbox_select_white"
-                width={20}
-                height={20}
-            />
-            {content && <span className="text-white text-[16px] font-medium ml-2">{content}</span>}
-        </div>}
-    </div>
+        <button
+          onClick={onDismiss}
+          className="absolute top-4 right-4 text-white p-2 rounded-full bg-black/50 hover:bg-black/70"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M18 6 6 18" />
+            <path d="m6 6 12 12" />
+          </svg>
+        </button>
+      </dialog>
+    </div>,
+    document.getElementById("modal-root")!
+  )
 }

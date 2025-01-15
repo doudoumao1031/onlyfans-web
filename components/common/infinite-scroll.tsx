@@ -2,10 +2,8 @@
 
 import React, { useRef, useEffect } from "react"
 import { debounce } from "lodash"
-import { useInfiniteScroll } from "@/hooks/use-infinite-scroll"
-import { clsx } from "clsx"
-
-export type FetchFn<T> = (page: number) => Promise<{ items: T[], hasMore: boolean }>
+import { useInfiniteScroll } from "@/lib/hooks/use-infinite-scroll"
+import { PostData } from "@/lib"
 
 export interface InfiniteScrollProps<T> {
   initialItems: T[]

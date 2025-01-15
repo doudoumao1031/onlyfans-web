@@ -47,7 +47,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
     const diff = discount ? (price * discount.month_count - discount?.price).toFixed(2):"0"
     setDiff(parseFloat(diff))
   }, [discount, price])
-
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   return (
     <>
       <FormDrawer
@@ -65,11 +65,16 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
           )
         }}
         trigger={<button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white"
-          onClick={getSettingData}
+          onClick={() => {
+            getSettingData()
+            setDrawerOpen(true)
+          }}
         >
           <span className="text-xs text-nowrap">免费/订阅</span>
         </button>}
         className="h-[43vh] border-0"
+        setIsOpen={setDrawerOpen}
+        isOpen={drawerOpen}
       >
         <input hidden={true} name="user_id" defaultValue={userId}/>
         <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50">
@@ -133,6 +138,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
                       console.log("addSubOrder result:", result)
                       if (result && result.code === 0) {
                         console.log("订阅成功")
+                        setDrawerOpen(false)
                       } else {
                         console.log("订阅失败:",result?.message)
                       }

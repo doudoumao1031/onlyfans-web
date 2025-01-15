@@ -18,14 +18,12 @@ export async function uploadMediaFile(params: FormData) {
   return fetchWithPost<FormData, UploadRes>(ENDPOINTS.MEDIA.UPLOAD, params)
 }
 
-export async function uploadPart(params: UploadPartReq): Promise<UploadPartResp> {
-  // Implementation
-  throw new Error("Not implemented")
+export async function uploadPart(params: FormData) {
+  return fetchWithPost<FormData, UploadRes>(ENDPOINTS.MEDIA.UPLOAD_PART, params)
 }
 
-export async function completeFile(params: CompleteFileReq): Promise<void> {
-  // Implementation
-  throw new Error("Not implemented")
+export async function completeFile(params: CompleteFileReq) {
+  return fetchWithPost<CompleteFileReq, string>(ENDPOINTS.MEDIA.COMPLETE_FILE, params)
 }
 
 export async function downloadRangeFile(fileId: string, range?: string): Promise<Blob> {

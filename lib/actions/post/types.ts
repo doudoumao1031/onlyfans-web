@@ -55,7 +55,6 @@ export interface PostStarReq {
   post_id: number
 }
 
-
 export interface UserPostsReq extends PageInfo {
   userId: string
 }
@@ -184,4 +183,3 @@ export interface User {
   username: string
   sub: boolean //是否订阅
 }
-
