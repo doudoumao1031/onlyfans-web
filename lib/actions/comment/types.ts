@@ -1,5 +1,7 @@
 // Comment related types and interfaces
 
+import { User } from "@/lib"
+
 export interface CommentReq {
   postId: string
   content: string
@@ -23,9 +25,10 @@ export interface CommentDelReq {
 }
 
 export interface CommentPageReq {
-  postId: string
+  post_id: number
+  from_id: number
   page: number
-  limit: number
+  page_size: number
 }
 
 export interface CommentReplayPageReq {
@@ -35,39 +38,20 @@ export interface CommentReplayPageReq {
 }
 
 export interface CommentInfo {
-  id: string
-  postId: string
-  userId: string
   content: string
-  upCount: number
-  replyCount: number
-  isUp: boolean
-  createdAt: string
-  user: {
-    id: string
-    username: string
-    name: string
-    photoUrl?: string
-  }
+  id: number
+  postId: number
+  reply_arr: CommentReplyInfo[]
+  replay_count: number
+  thumbs_up_count: number
+  user: User
 }
 
 export interface CommentReplyInfo {
-  id: string
-  commentId: string
-  userId: string
+  comment_id: number
   content: string
-  replyUserId: string
-  createdAt: string
-  user: {
-    id: string
-    username: string
-    name: string
-    photoUrl?: string
-  }
-  replyUser: {
-    id: string
-    username: string
-    name: string
-    photoUrl?: string
-  }
+  id: number
+  reply_user: User
+  thumbs_up_count: number
+  user: User
 }

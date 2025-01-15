@@ -1,6 +1,6 @@
 import Avatar from "./avatar"
-import { User } from "./type"
-import { buildMention } from "./util"
+import { User } from "./types"
+import { buildMention } from "./utils"
 
 export default function UserTitle({ user }: { user: User }) {
   const { photo, first_name, last_name, username } = user

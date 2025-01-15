@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { buildUserHomePagePath, buildUserHomePagePathForDisplay } from "./util"
+import { buildUserHomePagePath, buildUserHomePagePathForDisplay } from "./utils"
 
 export default function UserHomePageLink({ userId }: { userId: string }) {
   return (

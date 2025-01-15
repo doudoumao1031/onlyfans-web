@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { buildUserHomePagePath, getUserIdFromMention, isMention } from "./util"
+import { buildUserHomePagePath, getUserIdFromMention, isMention } from "./utils"
 
 export default function Description({ content }: { content: string }) {
   const mentionRegex = /(\B@\w+)/g

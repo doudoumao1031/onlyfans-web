@@ -1,7 +1,7 @@
 import { buildImageUrl } from "@/lib/utils"
-import { User } from "./type"
+import { User } from "./types"
 import Avatar from "./avatar"
-import { buildMention } from "./util"
+import { buildMention } from "./utils"
 import SubscribedDrawer from "../explore/subscribed-drawer"
 
 export default function Subscribe({ user }: { user: User }) {

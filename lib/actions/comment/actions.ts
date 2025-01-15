@@ -1,5 +1,6 @@
 "use server"
 
+import { fetchWithPost, PageResponse } from "@/lib"
 import { ENDPOINTS } from "../shared/constants"
 import type {
   CommentReq,
@@ -32,9 +33,23 @@ export async function deleteComment(params: CommentDelReq): Promise<void> {
   throw new Error("Not implemented")
 }
 
-export async function getPostComments(params: CommentPageReq): Promise<CommentInfo[]> {
-  // Implementation
-  throw new Error("Not implemented")
+export async function getPostComments(params: CommentPageReq) {
+  const res = await fetchWithPost<CommentPageReq, PageResponse<CommentInfo>>(
+    ENDPOINTS.COMMENT.GET_COMMENTS,
+    params
+  )
+  return res && res.code === 0 ? res.data : null
+}
+
+export async function fetchPostComments(post_id: number) {
+  const res = await getPostComments({
+    post_id,
+    from_id: 0,
+    page: 1,
+    page_size: 100
+  })
+
+  return res ? res.list : []
 }
 
 export async function getCommentReplies(params: CommentReplayPageReq): Promise<CommentReplyInfo[]> {

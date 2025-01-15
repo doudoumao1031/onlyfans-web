@@ -1,10 +1,10 @@
 import Image from "next/image"
-import { Comment as CommentData } from "./type"
 import Avatar from "./avatar"
+import { CommentInfo, CommentReplyInfo } from "@/lib"
 
-export default function Comments({ comments }: { comments: CommentData[] }) {
+export default function Comments({ comments }: { comments: CommentInfo[] }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 p-4">
       {comments.map((c, i) => (
         <div key={i} className="flex flex-col gap-2">
           <Comment comment={c} />
@@ -21,7 +21,7 @@ export default function Comments({ comments }: { comments: CommentData[] }) {
   )
 }
 
-function Comment({ comment }: { comment: CommentData }) {
+function Comment({ comment }: { comment: CommentInfo | CommentReplyInfo }) {
   const { user, content, thumbs_up_count } = comment
   const { photo, username } = user
 

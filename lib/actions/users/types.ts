@@ -43,3 +43,19 @@ export interface CollectionPostReq {
   post_id: number
   user_id: number
 }
+
+export interface User {
+  about: string
+  back_img: string
+  blogger: boolean
+  first_name: string
+  id: number
+  last_name: string
+  live_certification: boolean
+  location: string
+  photo: string
+  pt_user_id: number
+  status: number
+  top_info: string
+  username: string
+}

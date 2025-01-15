@@ -1,4 +1,4 @@
-import { FileType } from "./type"
+import { FileType } from "./types"
 import { PostData } from "@/lib"
 
 const photo = "5902a7d0-8561-4cfb-8f58-e767e9b2e04f"
