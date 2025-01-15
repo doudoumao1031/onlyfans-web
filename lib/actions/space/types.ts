@@ -1,6 +1,5 @@
 // Recom related types and interfaces
 
-import { PostData } from "../post"
 
 /**
  * 分页公共请求
