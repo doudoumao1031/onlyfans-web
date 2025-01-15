@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getUserReply, ReplyForm, setUserReply } from "@/lib/actions/profile"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import useCommonMessage from "@/components/common/common-message"
 import { useRouter } from "next/navigation"
 // import { ReplyForm, setReply } from "@/lib/data"
@@ -17,6 +17,7 @@ const formValidation = z.object({
 
 export default function Page() {
   const { showMessage,renderNode } = useCommonMessage()
+  const [originData,setOriginData] = useState<string>("")
   const router = useRouter()
   const replyForm = useForm<ReplyForm>({
     mode: "all",
@@ -24,7 +25,9 @@ export default function Page() {
   })
   useEffect(() => {
     getUserReply().then((data) => {
-      replyForm.setValue("sub_reply",data?.data?.sub_reply ?? "")
+      const value = data?.data?.sub_reply ?? ""
+      setOriginData(value)
+      replyForm.setValue("sub_reply",value)
     })
   },[])
 
@@ -32,7 +35,7 @@ export default function Page() {
     setUserReply(data).then(response => {
       if (response?.code === 0) {
         showMessage("修改成功")
-        setTimeout(router.back,700)
+        setTimeout(router.back,500)
       }
     })
   })
@@ -48,7 +51,7 @@ export default function Page() {
         </section>
         <section className={"min-h-[120px] bg-[#90bb89] relative py-2 px-4 flex flex-col justify-end"}>
           <div className={"bg-white relative min-h-5 px-4 py-2 rounded-2xl"}>
-            <div>Hi，我是用户的昵称，感谢您的订阅</div>
+            <div>{originData}</div>
             <div className={"text-right text-[#b2b2b2]"}>9:00</div>
             <span className={"message-box-tail"}></span>
           </div>

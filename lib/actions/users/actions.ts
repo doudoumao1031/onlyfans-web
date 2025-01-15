@@ -86,6 +86,14 @@ export const getFollowedUsers = (params: FansPageReq) => fetchWithPost<FansPageR
   }
 })
 
+export const infiniteGetFollowedUsers = async (page:number) => {
+  const data = await getFollowedUsers({ page, pageSize: 10, from_id: 0 })
+  return {
+    items: data?.list || [],
+    hasMore: !data?.list ? false : page < Math.ceil(data.total / page)
+  }
+}
+
 /**
  * 订阅我的用户
  * @param params

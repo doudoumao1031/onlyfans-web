@@ -1,11 +1,43 @@
-import React from "react"
+"use client"
+import React, { Fragment, useEffect, useState } from "react"
 import TimeSort from "@/components/profile/time-sort"
+import { getFollowedUsers, infiniteGetFollowedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
+import InfiniteScroll, { FetchFn } from "@/components/common/infinite-scroll"
+import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import FansListItem from "@/components/profile/fans/fans-list-item"
-import { getFollowedUsers } from "@/lib"
 
+function FollowedUsers({ initialItems,initialHasMore }:{
+  initialItems: SubscribeUserInfo[]
+  initialHasMore: boolean,
+  fetchData: FetchFn<SubscribeUserInfo>
+}) {
 
-export default async function Page() {
-  const data = await getFollowedUsers({ page:1,pageSize: 10,from_id:0 })
+  return (
+    <InfiniteScroll<SubscribeUserInfo>
+      initialItems={initialItems}
+      initialHasMore={initialHasMore}
+      fetcherFn={infiniteGetFollowedUsers}
+    >
+      {({ items, isLoading, hasMore, error }) => (
+        <Fragment>
+          {Boolean(error) && <ListError/>}
+          {items?.map(item => <FansListItem data={item} key={item.user.id}/>)}
+          {isLoading && <ListLoading/>}
+          {!hasMore && items.length > 0 && <ListEnd/>}
+        </Fragment>
+      )}
+    </InfiniteScroll>
+  )
+}
+
+export default function Page() {
+  const [data,setData] = useState<PageResponse<SubscribeUserInfo> | null>(null)
+  useEffect(() => {
+    getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 }).then(setData)
+  },[])
+
+  if (!data) return null
+
   return (
     <div className={"px-4"}>
       <div className="flex justify-between py-4 items-center">
@@ -15,10 +47,7 @@ export default async function Page() {
         </span>
         <TimeSort sortDesc={false}>关注时间升序</TimeSort>
       </div>
-      {data?.list.length && (
-        data.list.map(item => <FansListItem data={item} key={item.user.id}/>)
-      )}
-      {!data?.list?.length && <div className={"text-center py-2 text-secondary"}>暂无数据</div>}
+      {data && <FollowedUsers initialHasMore={Number(data?.total) > Number(data?.list?.length)} initialItems={data?.list ?? []} fetchData={infiniteGetFollowedUsers}/>}
     </div>
   )
 }
