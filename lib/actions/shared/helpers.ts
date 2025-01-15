@@ -32,7 +32,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL
 const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
 const getAuthToken = () => {
-  return "1"
+  return "26"
 }
 
 async function fetchResultHandle<T>(method: string, response: Response) {
