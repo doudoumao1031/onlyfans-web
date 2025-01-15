@@ -10,7 +10,7 @@ const DraftItem = () => {
   const pathname = usePathname()
   return (
     <Link href={`${pathname}/edit`} className="pt-2.5 pb-2.5 border-b border-gray-100 flex gap-2.5">
-      <Image src={"https://picsum.photos/100/100"} alt={"img"} width={100} height={100} className="rounded"/>
+      <Image src={""} alt={"img"} width={100} height={100} className="rounded"/>
       <div className="flex-col justify-between flex flex-1 w-0">
         <div className="text-[#333] line-clamp-[2] ">amie Shon 的韩国文化 | Foxy Spots 与 Jamie
           Shon@luvjamxoxluvjamxoxoluvjamxoxoluvjamxoxo

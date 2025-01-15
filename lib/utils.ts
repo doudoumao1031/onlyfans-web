@@ -1,7 +1,9 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { uploadMediaFile } from "./actions/media"
+import { completeFile, uploadMediaFile, uploadPart } from "./actions/media"
 
+// 文件分片大小2M
+const CHUNK_SIZE = 1024 * 1024 * 2
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -55,6 +57,56 @@ export async function commonUploadFile(file: File) {
   //     ref.current.value = null
   //   }
   // })
+}
+
+export async function uploadFilePart(fileId: string, part_no: string, file: Blob) {
+  const formData = new FormData()
+  formData.append("file_id", fileId)
+  formData.append("part_no", part_no)
+  formData.append("file", file)
+  formData.append("file_hash", "")
+  const response = await uploadPart(formData)
+  if (response?.data) {
+    return response.data?.file_id
+  }
+  return null
+}
+
+const uploadFirstPart = async (size: string, file: Blob, type: string, count?: string) => {
+  const fd = new FormData()
+  fd.append("file_count", count ?? "1")
+  fd.append("file_size", size)
+  fd.append("file_type", type)
+  fd.append("file", file)
+  return uploadMediaFile(fd).then((data) => {
+    if (data?.data) {
+      return data.data.file_id
+    } else {
+      return ""
+    }
+  })
+}
+export async function uploadFile(file: File) {
+  console.log("handleUploadFile", file.name, file.size)
+  const totalChunks = Math.ceil(file.size / CHUNK_SIZE) // 计算分片总数
+  console.log("handleUploadFile multi", totalChunks)
+  if (totalChunks > 1) {
+    const fileId = await uploadFirstPart(String(file.size), file.slice(0, CHUNK_SIZE), getUploadMediaFileType(file), totalChunks.toString())
+    console.log("handleUploadFile totalChunks", totalChunks)
+    for (let i = 1; i < totalChunks; i++) {
+      const start = i * CHUNK_SIZE
+      const end = Math.min(start + CHUNK_SIZE, file.size)
+      const chunk = file.slice(start, end)
+      await uploadFilePart(fileId, String(i + 1), chunk) // 上传分片
+      console.log("handleUploadFile upload part", i)
+    }
+    await completeFile({ file_id: fileId }) // 完成上传
+    console.log("handleUploadFile complete file")
+    return fileId
+  } else {
+    console.log("handleUploadFile once")
+    return await commonUploadFile(file)
+  }
 }
 
 export function buildImageUrl(fileId: string) {

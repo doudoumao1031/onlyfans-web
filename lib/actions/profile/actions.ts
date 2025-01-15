@@ -19,7 +19,7 @@ export async function getUserReply() {
 }
 
 export async function setUserReply(params: ReplyForm) {
-  return fetchWithPost<ReplyForm>(ENDPOINTS.USERS.GET_USER_EXTEND, params)
+  return fetchWithPost<ReplyForm>(ENDPOINTS.USERS.UPDATE_SUB_REPLAY, params)
 }
 
 export async function updateUserBaseInfo(params: UpdateUserBaseReq) {

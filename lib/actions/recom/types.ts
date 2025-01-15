@@ -21,6 +21,10 @@ export interface PageInfo {
   pageSize: number | 10
 }
 
+export type FansPageReq = CommonPageReq & {
+  desc?: boolean
+}
+
 /**
  * 博主信息
  */
@@ -52,6 +56,7 @@ export type BloggerInfo = {
   sub_end_time: number;
   collection: boolean;
   following: boolean;
+  top_info: string
 }
 
 /**

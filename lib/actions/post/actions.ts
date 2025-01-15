@@ -1,4 +1,4 @@
-import { ENDPOINTS } from "@/lib"
+import { CommonPageReq, ENDPOINTS } from "@/lib"
 import {
   PostInfoReq,
   DeletePostFileReq,
@@ -117,3 +117,28 @@ export const searchPost = (
     }
   })
 
+
+/**
+ * 我的帖子
+ * @param params
+ */
+export const myPosts = (
+  params: SearchPostReq
+) => fetchWithPost<SearchPostReq, PageResponse<PostData>>(ENDPOINTS.POST.ME_POSTS, params)
+  .then((res) => {
+    if (res && res.code === 0) {
+      return res.data
+    }
+    return null
+  })
+
+/**
+ * 待定
+ * @param params
+ */
+export const myMediaPosts = (params:CommonPageReq) => fetchWithPost<CommonPageReq,PageResponse<unknown>>(ENDPOINTS.POST.ME_MEDIAS,params).then(response => {
+  if (response?.code === 0) {
+    return response.data
+  }
+  return null
+})

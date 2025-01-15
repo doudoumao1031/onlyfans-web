@@ -29,18 +29,14 @@ export interface UploadRes {
 }
 
 export interface UploadPartReq {
-  fileId: string
-  partNo: number
-  fileHash: string
+  file_id: string
+  part_no: number
+  file_hash: string
   file: File
 }
 
 export interface CompleteFileReq {
-  fileId: string
-  fileHash: string
-  totalSize: number
-  mimeType: string
-  originalName: string
+  file_id: string
 }
 
 // Response types
