@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from "react"
 import { debounce } from "lodash"
 import { useInfiniteScroll } from "@/lib/hooks/use-infinite-scroll"
 import { PostData } from "@/lib"
+import clsx from "clsx"
 
 export interface InfiniteScrollProps<T> {
   initialItems: T[]
