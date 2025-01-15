@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
@@ -8,17 +8,23 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "imfanstest.potato.im",
         port: "",
-        pathname: "/**",
+        pathname: "/**"
       },
       {
         protocol: "https",
         hostname: "imfanstest.potato.im",
         port: "",
         pathname: "/**",
-        search: "",
-      },
-    ],
+        search: ""
+      }
+    ]
+  },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: "2000mb"
+    }
   }
-};
+}
 
-export default nextConfig;
+
+export default nextConfig

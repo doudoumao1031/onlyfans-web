@@ -25,7 +25,7 @@ import {
   addPost
 } from "@/lib/actions/profile"
 import { uploadMediaFile } from "@/lib"
-import { getUploadMediaFileType } from "@/lib/utils"
+import { getUploadMediaFileType, uploadFile } from "@/lib/utils"
 
 const ItemEditTitle = ({
   title,
@@ -536,17 +536,11 @@ const UploadMedia = () => {
     name: "post_attachment"
   })
   const handleUpload = (file: File) => {
-    const fd = new FormData()
-    const { size } = file
-    const fileType = getUploadMediaFileType(file)
-    fd.append("file_count", "1")
-    fd.append("file_size", String(size))
-    fd.append("file_type", fileType)
-    fd.append("file", file)
-    uploadMediaFile(fd).then((data) => {
-      if (data?.data) {
+    uploadFile(file).then((data) => {
+      console.log("upload file result: ",data)
+      if (data) {
         append({
-          file_id: data.data.file_id
+          file_id: data
         })
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error

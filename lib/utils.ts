@@ -59,27 +59,27 @@ export async function commonUploadFile(file: File) {
   // })
 }
 
-export async function uploadFilePart(fileId: string, part_no: string, file: Blob) {
+export async function uploadFileChunk(fileId: string, part_no: string, file: Blob) {
   const formData = new FormData()
   formData.append("file_id", fileId)
   formData.append("part_no", part_no)
   formData.append("file", file)
-  formData.append("file_hash", "")
+  formData.append("file_hash", "file_hash")
   const response = await uploadPart(formData)
-  if (response?.data) {
+  if (response && response.code == 0) {
     return response.data?.file_id
   }
   return null
 }
 
-const uploadFirstPart = async (size: string, file: Blob, type: string, count?: string) => {
+const uploadFirstChunk = async (size: string, file: Blob, type: string, count?: string) => {
   const fd = new FormData()
   fd.append("file_count", count ?? "1")
   fd.append("file_size", size)
   fd.append("file_type", type)
   fd.append("file", file)
   return uploadMediaFile(fd).then((data) => {
-    if (data?.data) {
+    if (data && data.code == 0) {
       return data.data.file_id
     } else {
       return ""
@@ -90,23 +90,75 @@ export async function uploadFile(file: File) {
   console.log("handleUploadFile", file.name, file.size)
   const totalChunks = Math.ceil(file.size / CHUNK_SIZE) // 计算分片总数
   console.log("handleUploadFile multi", totalChunks)
+
   if (totalChunks > 1) {
-    const fileId = await uploadFirstPart(String(file.size), file.slice(0, CHUNK_SIZE), getUploadMediaFileType(file), totalChunks.toString())
+    const fileId = await uploadFirstChunk(String(file.size), file.slice(0, CHUNK_SIZE), getUploadMediaFileType(file), totalChunks.toString())
     console.log("handleUploadFile totalChunks", totalChunks)
-    for (let i = 1; i < totalChunks; i++) {
-      const start = i * CHUNK_SIZE
-      const end = Math.min(start + CHUNK_SIZE, file.size)
-      const chunk = file.slice(start, end)
-      await uploadFilePart(fileId, String(i+1), chunk) // 上传分片
-      console.log("handleUploadFile upload part", i)
+
+    if (!fileId) {
+      console.log("upload file part first chunk failed")
+      return ""
     }
-    await completeFile({ file_id: fileId }) // 完成上传
+
+    const batchSize = 10 // 每次并发上传的分片数量
+    let failedChunks = await uploadChunksInBatches(fileId, file, totalChunks, batchSize)
+
+    // 重试失败的分片
+    while (failedChunks.length > 0) {
+      console.log("handleUploadFile retrying failed chunks")
+      const retryResults: { part_no: string; success: boolean }[] = []
+      for (const { part_no, chunk } of failedChunks) {
+        const result = await uploadFileChunk(fileId, part_no, chunk)
+        retryResults.push({ part_no, success: !!result })
+      }
+
+      failedChunks = failedChunks.filter(({ part_no }) => !retryResults.some(r => r.part_no === part_no && r.success))
+
+      if (failedChunks.length > 0) {
+        console.error("handleUploadFile retry failed", failedChunks)
+      }
+    }
+
+    // 完成上传
+    const completeResponse = await completeFile({ file_id: fileId })
+    if (completeResponse && completeResponse.code !== 0) {
+      console.log("handleUploadFile complete file failed:", completeResponse.message)
+      return ""
+    }
     console.log("handleUploadFile complete file")
     return fileId
   } else {
-    console.log("handleUploadFile once")
     return await commonUploadFile(file)
   }
+}
+
+const uploadChunksInBatches = async (fileId: string, file: File, totalChunks: number, batchSize: number) => {
+  const failedChunks: { part_no: string; chunk: Blob }[] = []
+
+  for (let i = 1; i < totalChunks; i += batchSize) {
+    console.log("handleUploadFile batch", i, batchSize)
+    const batchPromises = []
+    for (let j = i; j < i + batchSize && j < totalChunks; j++) {
+      const start = j * CHUNK_SIZE
+      const end = Math.min(start + CHUNK_SIZE, file.size)
+      const chunk = file.slice(start, end)
+      batchPromises.push(uploadFileChunk(fileId, String(j + 1), chunk).then(result => {
+        if (!result) {
+          failedChunks.push({ part_no: String(j + 1), chunk })
+        }
+      }))
+      console.log("handleUploadFile batchPromises", batchPromises.length)
+    }
+
+    try {
+      await Promise.all(batchPromises)
+    } catch (error) {
+      console.error("handleUploadFile part failed", error)
+      return failedChunks
+    }
+  }
+
+  return failedChunks
 }
 
 export function buildImageUrl(fileId: string) {
