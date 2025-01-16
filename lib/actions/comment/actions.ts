@@ -18,14 +18,14 @@ export async function addComment(params: CommentReq): Promise<boolean> {
   return !!res && res.code === 0
 }
 
-export async function replyComment(params: CommentReplyReq): Promise<void> {
-  // Implementation
-  throw new Error("Not implemented")
+export async function replyComment(params: CommentReplyReq): Promise<boolean> {
+  const res = await fetchWithPost<CommentReplyReq, ApiResponse>(ENDPOINTS.COMMENT.REPLY, params)
+  return !!res && res.code === 0
 }
 
-export async function upComment(params: CommentUpVo): Promise<void> {
-  // Implementation
-  throw new Error("Not implemented")
+export async function upComment(params: CommentUpVo): Promise<boolean> {
+  const res = await fetchWithPost<CommentUpVo, ApiResponse>(ENDPOINTS.COMMENT.UP, params)
+  return !!res && res.code === 0
 }
 
 export async function deleteComment(params: CommentDelReq): Promise<void> {
