@@ -3,9 +3,10 @@ import IconWithImage from '@/components/profile/icon';
 import Modal, { TModaProps } from '@/components/space/modal'
 import { useState } from 'react';
 import SubScribeConfirm from '@/components/space/subscribe-confirm'
-
-export default function Page() {
-    const [isFocus, setIsFocus] = useState<boolean>(false)
+import { userDelFollowing, userFollowing } from '@/lib/actions/space/actions';
+import { UserProfile } from '@/lib/actions/profile';
+export default function Page({ data }: { data: UserProfile | undefined }) {
+    const [isFocus, setIsFocus] = useState<boolean>(data?.following || false)
     const [visible, setVisible] = useState<boolean>(false)
     const [modalType, setModalType] = useState<number>(0)
     const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false)
@@ -42,16 +43,46 @@ export default function Page() {
             type: 'toast',
             content: '订阅成功',
 
+        },
+        {
+            type: 'toast',
+            content: '关注成功',
+
+        },
+        {
+            type: 'toast',
+            content: '取消成功',
+
         }
     ]
 
+    const handleFllowing = async () => {
+        try {
+            const res = isFocus ? await userDelFollowing({
+                follow_id: 1,
+                following_type: 0
+            }) : await userFollowing({
+                follow_id: 1,
+                following_type: 0
+            })
+            if (res && res.code === 0) {
+                setIsFocus(!isFocus)
+                setVisible(true)
+                setModalType(isFocus ? 5 : 4)
+                setTimeout(() => {
+                    setVisible(false)
+                }, 1500);
+            }
+        } catch (error) {
+
+        }
+
+    }
 
 
     return <div className='absolute top-4 right-4 flex flex-col items-end '>
         <div onClick={() => {
-            setIsFocus(!isFocus)
-            setVisible(isFocus ? false : true)
-            setModalType(0)
+            handleFllowing()
         }} className={`w-20 h-8 rounded-full border border-[#ff8492] flex justify-center items-center  ${isFocus ? '' : 'bg-[#ff8492]'}`}>
             <IconWithImage
                 url={isFocus ? '/icons/icon_info_followed_white.png' : '/icons/icon_info_follow_white.png'}

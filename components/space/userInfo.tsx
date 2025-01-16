@@ -30,7 +30,7 @@ export default async function UserInfo({ data }: { data: UserProfile | undefined
                     <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
                         <span>{data.first_name} {data.last_name}</span>
                     </h1>
-                    <Attention />
+                    <Attention data={data} />
                     <div className="text-center text-gray-400 text-xs">@{data.username}</div>
                     <div className="flex justify-center mt-1">
                         <IconWithImage
