@@ -1,6 +1,6 @@
 "use client";
 import IconWithImage from '@/components/profile/icon';
-import Modal, { TModaProps } from '@/components/common/modal'
+import Modal, { TModaProps } from '@/components/space/modal'
 import { useState } from 'react';
 import SubScribeConfirm from '@/components/space/subscribe-confirm'
 
@@ -12,7 +12,7 @@ export default function Page() {
     const handleFocus = () => {
         setVisible(false)
         setIsOpenDrawer(true)
-     
+
     }
     const handleTopUp = () => {
         setVisible(false)

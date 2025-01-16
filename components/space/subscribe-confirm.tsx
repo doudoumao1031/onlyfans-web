@@ -34,7 +34,7 @@ export default function SubScribeConfirm({ children, isOpen, setIsOpen }: {
 }) {
     const openInner = () => {
         const [active, setActive] = useState<number>(0)
-        return <div className="py-8 px-4">
+        return <div className="py-8 px-4 pb-20">
             <div className='flex justify-between items-center '>
                 {
                     mockPrices.map((v, i) => {
@@ -50,7 +50,7 @@ export default function SubScribeConfirm({ children, isOpen, setIsOpen }: {
 
             </div>
             <div className="flex justify-center">
-                <div className=" relative w-72 h-[50px] rounded-full bg-main-pink text-white flex justify-center items-center mt-16 text-[15px] font-semibold">确认并支付 999.99 USDT
+                <div className=" relative w-72 h-[50px] rounded-full bg-main-pink text-white flex justify-center items-center mt-10 text-[15px] font-semibold">确认并支付 999.99 USDT
 
                     <div className=' absolute top-[-14px] right-6 py-1 px-2 bg-[#F7B500] flex justify-center items-center text-xs rounded-full'>已省 $99.99</div>
                 </div>
@@ -68,7 +68,7 @@ export default function SubScribeConfirm({ children, isOpen, setIsOpen }: {
         outerControl={setIsOpen ? true : false}
         isOpen={isOpen}
         setIsOpen={setIsOpen}
-        className='h-[47vh] border-0'
+        className='h-[50vh] border-0'
     >
         {openInner()}
     </FormDrawer>
