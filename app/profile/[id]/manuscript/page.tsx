@@ -9,7 +9,7 @@ import Link from "next/link"
 import { myMediaPosts, myPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
-import { useInfiniteFetch } from "@/hooks/use-infinite-scroll"
+import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 
 enum ACTIVE_TYPE {
     POST = "POST",

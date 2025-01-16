@@ -98,6 +98,27 @@ export async function fetchWithPost<Req, Res = unknown>(
   return null
 }
 
+export function uploadFetch<Req, Res = unknown>(
+  url: string,
+  data: Req,
+  options?: FetchOptions<Res>
+) {
+  const { headers = {} } = options ?? {}
+  const isFormData = data instanceof FormData
+  const fullPath = `${apiUrl}${url}`
+  console.log("POST-url:", fullPath)
+  console.log("POST-data:", data)
+  return fetch(fullPath, {
+    method: "POST",
+    headers: {
+      "X-Token": getAuthToken(),
+      ...headers
+    },
+    body: isFormData ? data : JSON.stringify(data)
+  })
+
+}
+
 /**
  * 获取媒体地址
  * @param fileId

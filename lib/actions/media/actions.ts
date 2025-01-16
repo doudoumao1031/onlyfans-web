@@ -19,6 +19,7 @@ export async function uploadMediaFile(params: FormData) {
 }
 
 export async function uploadPart(params: FormData) {
+  console.log("===>uploadPart start:", params, "date:", new Date().toString())
   return fetchWithPost<FormData, UploadRes>(ENDPOINTS.MEDIA.UPLOAD_PART, params)
 }
 

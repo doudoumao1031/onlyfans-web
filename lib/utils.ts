@@ -1,9 +1,12 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { completeFile, uploadMediaFile, uploadPart } from "./actions/media"
+import { ENDPOINTS, uploadFetch } from "@/lib/actions/shared"
+import { PromiseConcurrency } from "@/lib/promise-curr"
 
 // 文件分片大小2M
 const CHUNK_SIZE = 1024 * 1024 * 2
+const BATCH_SIZE = 10
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -92,33 +95,16 @@ export async function uploadFile(file: File) {
   console.log("handleUploadFile multi", totalChunks)
 
   if (totalChunks > 1) {
-    const fileId = await uploadFirstChunk(String(file.size), file.slice(0, CHUNK_SIZE), getUploadMediaFileType(file), totalChunks.toString())
+    const chunks = createChunks(file)
+    const firstChunk = chunks.shift() as Blob
+    const fileId = await uploadFirstChunk(String(file.size), firstChunk, getUploadMediaFileType(file), totalChunks.toString())
     console.log("handleUploadFile totalChunks", totalChunks)
 
     if (!fileId) {
       console.log("upload file part first chunk failed")
       return ""
     }
-
-    const batchSize = 10 // 每次并发上传的分片数量
-    let failedChunks = await uploadChunksInBatches(fileId, file, totalChunks, batchSize)
-
-    // 重试失败的分片
-    while (failedChunks.length > 0) {
-      console.log("handleUploadFile retrying failed chunks")
-      const retryResults: { part_no: string; success: boolean }[] = []
-      for (const { part_no, chunk } of failedChunks) {
-        const result = await uploadFileChunk(fileId, part_no, chunk)
-        retryResults.push({ part_no, success: !!result })
-      }
-
-      failedChunks = failedChunks.filter(({ part_no }) => !retryResults.some(r => r.part_no === part_no && r.success))
-
-      if (failedChunks.length > 0) {
-        console.error("handleUploadFile retry failed", failedChunks)
-      }
-    }
-
+    await uploadBatch(fileId, chunks)
     // 完成上传
     const completeResponse = await completeFile({ file_id: fileId })
     if (completeResponse && completeResponse.code !== 0) {
@@ -130,6 +116,24 @@ export async function uploadFile(file: File) {
   } else {
     return await commonUploadFile(file)
   }
+}
+
+const uploadBatch = async (fileId: string, chunks: Blob[]) => {
+  const chunksFormData = chunks.map((chunk, index) => {
+    const formData = new FormData()
+    formData.append("file_id", fileId)
+    formData.append("part_no", String(index + 2))
+    formData.append("file", chunk)
+    formData.append("file_hash", "file_hash")
+    return formData
+  })
+  const rcl = new PromiseConcurrency({ limit: BATCH_SIZE, retry: 3 }) // 最大请求并发数为10，重试次数3
+  // 将所有的切片请求append到rcl控制器中
+  const requestList = chunksFormData.map(
+    (data) => rcl.append(() => uploadFetch(ENDPOINTS.MEDIA.UPLOAD_PART, data))
+  )
+  // 上传所有切片
+  await Promise.all(requestList)
 }
 
 const uploadChunksInBatches = async (fileId: string, file: File, totalChunks: number, batchSize: number) => {
@@ -159,6 +163,17 @@ const uploadChunksInBatches = async (fileId: string, file: File, totalChunks: nu
   }
 
   return failedChunks
+}
+
+function createChunks(file:File) {
+  const chunkList = [] // 收集所有的切片
+  let offset = 0 // 收集的切片总大小
+  const size = file.size
+  while (offset < size) { // 当切片总大小小于文件大小时还需要继续分片
+    chunkList.push(file.slice(offset, Math.min(offset + CHUNK_SIZE, size)))
+    offset += CHUNK_SIZE
+  }
+  return chunkList
 }
 
 export function buildImageUrl(fileId: string) {
