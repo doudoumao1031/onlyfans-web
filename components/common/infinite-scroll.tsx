@@ -107,7 +107,7 @@ export default function InfiniteScroll<T>({
     <div
       ref={containerRef}
       className={clsx(
-        "h-screen overflow-y-auto relative",
+        "w-full h-full overflow-y-auto relative",
         className
       )}
       style={{ transition: "transform 0.2s ease-out" }}
