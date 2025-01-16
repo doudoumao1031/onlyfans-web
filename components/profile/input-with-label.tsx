@@ -20,12 +20,13 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     value: InputValueType,
     disabled?: boolean,
     description?: ReactNode,
+    errorMessage?: ReactNode,
     options?: ISelectOption[],
     onInputChange?: (value: InputValueType) => void,
 }
 
 export default function InputWithLabel(props: InputProps) {
-  const { label, name, disabled, onInputChange, description, value, options } = props
+  const { label, name, disabled, onInputChange, description, value, options,errorMessage } = props
   // const [val, setVal] = useState<InputValueType>(value ?? "")
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -56,11 +57,14 @@ export default function InputWithLabel(props: InputProps) {
   }, [positionInCenter])
 
 
-  const inputBlur = useCallback(() => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const inputBlur = useCallback((event) => {
+    props?.onBlur?.(event)
     if (value) return
     if (positionInCenter) return
     setPositionInCenter(true)
-  }, [positionInCenter, value])
+  }, [positionInCenter, value,props])
 
   const inputFocus = useCallback(() => {
     if (positionInCenter) {
@@ -70,6 +74,11 @@ export default function InputWithLabel(props: InputProps) {
     positionInCenter
   ])
 
+  const optionShowLabel = useMemo(() => {
+    if (!isSelectInput) return ""
+    const option = options?.find(item => item.value === value)
+    return  option?.label ?? ""
+  },[isSelectInput,value,options])
 
   return (
     <section className={clsx(
@@ -92,34 +101,40 @@ export default function InputWithLabel(props: InputProps) {
         {label}
       </label>
       <section
-        className="flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20"
+        className="flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center"
       >
-        <input ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
-          onChange={event => {
-            const eventValue = (event.target as HTMLInputElement).value
-            // setVal(eventValue)
-            onInputChange?.(eventValue)
-          }} type="text" disabled={disabled} readOnly={disableInput} className={clsx(
-            "flex-1 w-full font-medium",
+        {!isSelectInput && (
+          <input ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
+            onChange={event => {
+              const eventValue = (event.target as HTMLInputElement).value
+              // setVal(eventValue)
+              onInputChange?.(eventValue)
+            }} type="text" disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
+              "flex-1 w-full font-medium",
 
-          )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
-        />
+            )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
+          />
+        )}
         {isSelectInput && (
-          <SheetSelect
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            onInputChange={(v => {
-              // setVal(v)
-              onInputChange?.(v)
-            })} options={options ?? []}
-          >
-            <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
-              height={24} color={"#bbb"}
-            />
-          </SheetSelect>
+          <>
+            <div className={clsx("flex-1 w-full font-medium", !optionShowLabel ? "text-gray-300" : "")}>{optionShowLabel || props?.placeholder}</div>
+            <SheetSelect
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              onInputChange={(v => {
+                // setVal(v)
+                onInputChange?.(v)
+              })} options={options ?? []}
+            >
+              <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
+                height={24} color={"#bbb"}
+              />
+            </SheetSelect>
+          </>
         )}
       </section>
-      {description && <section className="text-[#6D7781] text-xs px-4 mt-1.5">{description}</section>}
+      {errorMessage && <div className="text-red-600 text-xs px-4 mt-1.5">{errorMessage}</div>}
+      {description && !errorMessage && <section className="text-[#6D7781] text-xs px-4 mt-1.5">{description}</section>}
     </section>
   )
 }

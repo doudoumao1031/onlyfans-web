@@ -19,12 +19,15 @@ export type DiscountInfo = {
   discount_per: number
   discount_price: number
   discount_start_time: number
-  discount_status: boolean
+  discount_status: boolean // 促销开关状态
+  item_status: boolean // 捆绑开关状态
   id: number
   month_count: number
   price: number
   user_id: number
 }
+
+export type AddBundleDiscount = Pick<DiscountInfo, "month_count" | "price" | "user_id"> & { id?: number }
 /**
  * 订阅设置
  */
