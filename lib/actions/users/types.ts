@@ -26,6 +26,8 @@ export type DiscountInfo = {
   price: number
   user_id: number
 }
+
+export type AddBundleDiscount = Pick<DiscountInfo, "month_count" | "price" | "user_id"> & { id?: number }
 /**
  * 订阅设置
  */
