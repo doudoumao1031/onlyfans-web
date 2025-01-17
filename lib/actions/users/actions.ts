@@ -1,8 +1,10 @@
 import {
-  BloggerInfo, CollectionPostReq, CommonPageReq,
-  ENDPOINTS, FansPageReq,
+  AddBundleDiscount,
+  BloggerInfo, CollectionPostReq, CommonPageReq, DiscountInfo,
+  ENDPOINTS, FansPageReq, fetchWithGet,
   fetchWithPost,
   PageResponse, PostData, SubscribeUserInfo
+
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
 
@@ -44,6 +46,34 @@ export const viewUserSubscribeSetting =
       }
     })
 
+export const getSubscribeSetting = () => fetchWithGet<unknown, SubscribeSetting>(ENDPOINTS.USERS.GET_SUBSCRIBE_SETTING, {}).then(response => {
+  if (response?.code === 0) {
+    return response.data
+  }
+  return null
+})
+
+export const addSubscribeSettingItem = (params: AddBundleDiscount) => fetchWithPost<AddBundleDiscount>(ENDPOINTS.USERS.ADD_SUBSCRIBE_SETTING_ITEM, params)
+
+export const updateSubscribeSettingItem = (params: Partial<DiscountInfo>) => fetchWithPost<Partial<DiscountInfo>>(ENDPOINTS.USERS.ADD_SUBSCRIBE_SETTING_ITEM, params).then(response => {
+  if (response?.code === 0) {
+    return response.data
+  }
+  return null
+})
+
+export const addSubscribeSetting = (params: { price: number | string, id?: number }) => fetchWithPost<{
+  price: number | string,
+  id?: number
+}>(ENDPOINTS.USERS.ADD_SUBSCRIBE_SETTING, params).then(response => {
+  if (response?.code === 0) {
+    return response.data
+  }
+  return null
+})
+
+// export const add
+
 /**
  * 收藏文章/帖子
  * @param params
@@ -54,8 +84,8 @@ export const userCollectionPost =
       return !!(res && res.code === 0)
     })
 
-export const userCollectionPosts = (params:CommonPageReq) =>
-  fetchWithPost<CommonPageReq,PageResponse<PostData>>(ENDPOINTS.USERS.COLLECTION_POSTS,params)
+export const userCollectionPosts = (params: CommonPageReq) =>
+  fetchWithPost<CommonPageReq, PageResponse<PostData>>(ENDPOINTS.USERS.COLLECTION_POSTS, params)
     .then((response) => {
       return response?.code == 0 ? response?.data : null
     })
@@ -86,7 +116,7 @@ export const getFollowedUsers = (params: FansPageReq) => fetchWithPost<FansPageR
   }
 })
 
-export const infiniteGetFollowedUsers = async (page:number) => {
+export const infiniteGetFollowedUsers = async (page: number) => {
   const data = await getFollowedUsers({ page, pageSize: 10, from_id: 0 })
   return {
     items: data?.list || [],
