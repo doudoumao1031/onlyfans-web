@@ -28,9 +28,9 @@ export async function upComment(params: CommentUpVo): Promise<boolean> {
   return !!res && res.code === 0
 }
 
-export async function deleteComment(params: CommentDelReq): Promise<void> {
-  // Implementation
-  throw new Error("Not implemented")
+export async function deleteComment(params: CommentDelReq): Promise<boolean> {
+  const res = await fetchWithPost<CommentDelReq, ApiResponse>(ENDPOINTS.COMMENT.DELETE, params)
+  return !!res && res.code === 0
 }
 
 export async function getPostComments(params: CommentPageReq) {

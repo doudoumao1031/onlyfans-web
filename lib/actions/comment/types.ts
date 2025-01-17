@@ -10,16 +10,19 @@ export interface CommentReq {
 export interface CommentReplyReq {
   comment_id: number
   content: string
-  parent_reply_id: number
+  parent_reply_id?: number
 }
 
 export interface CommentUpVo {
   comment_id: number
   post_id: number
+  comment_type: boolean
 }
 
 export interface CommentDelReq {
-  commentId: string
+  id: number
+  post_id: number
+  comment_type: boolean
 }
 
 export interface CommentPageReq {
@@ -38,6 +41,7 @@ export interface CommentReplayPageReq {
 export interface CommentInfo {
   content: string
   id: number
+  comment_id: number
   post_id: number
   reply_arr: CommentReplyInfo[]
   reply_count: number

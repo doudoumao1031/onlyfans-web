@@ -1,6 +1,14 @@
 import Image from "next/image"
 import Avatar from "./avatar"
-import { addComment, CommentInfo, fetchPostComments, replyComment, upComment } from "@/lib"
+import {
+  addComment,
+  CommentInfo,
+  CommentReplyReq,
+  deleteComment,
+  fetchPostComments,
+  replyComment,
+  upComment
+} from "@/lib"
 import { useEffect, useState } from "react"
 
 export default function Comments({ post_id }: { post_id: number }) {
@@ -25,16 +33,17 @@ export default function Comments({ post_id }: { post_id: number }) {
         />
         <button onClick={sendComment}>发送评论</button>
       </div>
-      {comments.map((comment, i) => (
-        <div key={i} className="flex flex-col gap-2">
-          <Comment comment={comment} handleReplySucceed={handleReplySucceed} />
+      {comments.map((comment) => (
+        <div key={comment.id} className="flex flex-col gap-2">
+          <Comment comment={comment} refreshComments={refreshComments} />
           {comment.reply_arr?.length && (
             <div className="pl-11 flex flex-col gap-2">
-              {comment.reply_arr.map((reply, j) => (
+              {comment.reply_arr.map((reply) => (
                 <Comment
                   comment={{ ...reply, post_id, reply_arr: [], reply_count: 0 }}
-                  key={j}
-                  handleReplySucceed={handleReplySucceed}
+                  key={reply.id}
+                  refreshComments={refreshComments}
+                  isReply
                 />
               ))}
             </div>
@@ -44,7 +53,7 @@ export default function Comments({ post_id }: { post_id: number }) {
     </div>
   )
 
-  async function handleReplySucceed() {
+  async function refreshComments() {
     setComments(await fetchPostComments(post_id))
   }
 
@@ -59,15 +68,19 @@ export default function Comments({ post_id }: { post_id: number }) {
 
 function Comment({
   comment,
-  handleReplySucceed
+  refreshComments,
+  isReply = false
 }: {
   comment: CommentInfo
-  handleReplySucceed: () => void
+  refreshComments: () => void
+  isReply?: boolean
 }) {
-  const { user, content, thumbs_up_count, id, post_id } = comment
+  const { user, content, thumbs_up_count, id, comment_id, post_id } = comment
   const { photo, username } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
+  const [thumbupCount, setThumbupCount] = useState(thumbs_up_count)
+  const [isThumbupped, setIsThumbupped] = useState(false) // FIX: use data as initial value
 
   return (
     <div className="flex flex-col gap-2">
@@ -79,12 +92,21 @@ function Comment({
             <div className="text-sm">{content}</div>
             <div className="flex gap-4 text-xs text-[#6D7781]">
               <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
+              <div onClick={removeComment}>删除</div>
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-center ml-2" onClick={upVoteComment}>
-          <Image src="/icons/thumbup.png" width={20} height={20} alt="" className="max-w-4" />
-          <div className="text-[10px] text-[#6D7781]">{thumbs_up_count}</div>
+        <div className="flex flex-col items-center ml-2" onClick={thumbup}>
+          <Image
+            src={`${isThumbupped ? "/icons/thumbup.png" : "/icons/thumbup.png"}`}
+            width={20}
+            height={20}
+            alt=""
+            className="max-w-4"
+          />
+          <div className={`text-[10px] ${isThumbupped ? "text-[#FF8492]" : "text-[#6D7781]"}`}>
+            {thumbupCount}
+          </div>
         </div>
       </div>
       {showReplyInput && (
@@ -101,24 +123,50 @@ function Comment({
     </div>
   )
 
-  async function upVoteComment() {
-    const success = await upComment({
-      comment_id: id,
-      post_id
+  async function removeComment() {
+    const success = await deleteComment({
+      id,
+      post_id,
+      comment_type: !isReply
     })
     if (success) {
-      handleReplySucceed()
+      refreshComments()
+    }
+  }
+
+  async function thumbup() {
+    toggleThumbup()
+
+    const success = await upComment({
+      comment_id: id,
+      post_id,
+      comment_type: !isReply
+    })
+
+    if (!success) {
+      toggleThumbup()
+    }
+  }
+
+  function toggleThumbup() {
+    if (isThumbupped) {
+      setIsThumbupped(false)
+      setThumbupCount((pre) => pre - 1)
+    } else {
+      setIsThumbupped(true)
+      setThumbupCount((pre) => pre + 1)
     }
   }
 
   async function sendReply() {
-    const success = await replyComment({
+    const params: CommentReplyReq = {
       comment_id: id,
-      content: replyInput,
-      parent_reply_id: id
-    })
+      content: replyInput
+    }
+    if (isReply) params.parent_reply_id = comment_id
+    const success = await replyComment(params)
     if (success) {
-      await handleReplySucceed()
+      await refreshComments()
       setShowReplyInput(false)
       setReplyInput("")
     }
