@@ -23,8 +23,12 @@ import {
 import { Switch } from "@/components/ui/switch"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { baseSubscribe, bundleSubscribe } from "@/lib/actions/users/schemas"
+import { addDiscount, baseSubscribe, bundleSubscribe } from "@/lib/actions/users/schemas"
 import useCommonMessage from "@/components/common/common-message"
+import dayjs from "dayjs"
+import DateTimePicker from "@/components/common/date-time-picker"
+
+const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 
 const AddSubscriptionModal = ({ children, refresh }: { children: React.ReactNode, refresh: () => void }) => {
   const { showMessage, renderNode } = useCommonMessage()
@@ -128,24 +132,31 @@ const AddSubscriptionModal = ({ children, refresh }: { children: React.ReactNode
   )
 }
 
-const PromotionalActivities = ({ children }: { children: React.ReactNode }) => {
+const AddPromotionalActivities = ({ children,unsubList }: { children: React.ReactNode,unsubList: DiscountInfo[] }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const handleClose = () => setIsOpen(false)
+  const addForm = useForm<DiscountInfo>({
+    mode:"all",
+    resolver:zodResolver(addDiscount),
+    defaultValues: {}
+  })
 
-  const priceOptions: ISelectOption[] = [
-    {
-      label: <div>$6.66 2个月 <span className={"text-[#bbb]"}>（平均约$3.33/月）</span></div>,
-      value: "2"
-    },
-    {
-      label: <div>$9.99 3个月 <span className={"text-[#bbb]"}>（平均约$3.33/月）</span></div>,
-      value: "3"
-    },
-    {
-      label: <div>$6.66 6个月 <span className={"text-[#bbb]"}>（平均约$3.33/月）</span></div>,
-      value: "6"
+  const priceOptions: ISelectOption[] = useMemo(() => {
+    return unsubList.map(item => {
+      return {
+        label: <div className={"text-left"}>${item.discount_price} {item.month_count}个月 <span className={"text-[#bbb]"}>（平均约${calcAvg(item.discount_price,item.month_count)}/月）</span></div>,
+        value: item.id
+      }
+    })
+  },[unsubList])
+
+  useEffect(() => {
+    if (isOpen) {
+      addForm.reset()
     }
-  ]
+  },[isOpen,addForm])
+
+  const id = addForm.watch("id")
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -158,34 +169,96 @@ const PromotionalActivities = ({ children }: { children: React.ReactNode }) => {
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>
-          <ModalHeader title={"促销活动"}
-            left={<button onTouchEnd={handleClose} className={"text-base text-[#777]"}>取消</button>}
-            right={(
-              <button onTouchEnd={handleClose}
-                className={"text-base text-main-pink"}
-              >保存</button>
-            )}
-          ></ModalHeader>
+          <form onSubmit={addForm.handleSubmit(data => {
+            const old = unsubList.find(item => item.id === data.id)
+            const newValues = {
+              ...old,
+              ...data
+            }
+            updateSubscribeSettingItem({
+              ...newValues,
+              discount_per: Number(newValues.discount_per),
+              discount_price: Number(newValues.discount_price)
+            }).then((response) => {
+              console.log(response)
+            })
+          })}
+          >
+            <ModalHeader title={"促销活动"}
+              left={<button onTouchEnd={handleClose} className={"text-base text-[#777]"}>取消</button>}
+              right={(
+                <button type={"submit"}
+                  className={"text-base text-main-pink"}
+                >保存</button>
+              )}
+            ></ModalHeader>
 
-          <form className={"mt-5 block px-4"}>
-            <section>
-              <InputWithLabel description={"在基本订阅和捆绑订阅中已经设定好的价格"} placeholder={"促销价格选择"}
-                value={""}
-                options={priceOptions}
-                name={""}
-              />
-            </section>
-            <section className={"mt-[30px]"}>
-              <InputWithLabel name={""} value={""} placeholder={"促销折扣"}
-                description={"百分比，最高不超过90%，请保留正整数"}
-              />
-            </section>
-            <section className={"mt-[30px]"}>
-              <InputWithLabel name={""} value={""} placeholder={"促销开始时间"}/>
-            </section>
-            <section className={"mt-[30px]"}>
-              <InputWithLabel name={""} value={""} placeholder={"促销结束时间"}/>
-            </section>
+            <div className={"mt-5 block px-4"}>
+              <section>
+                <Controller render={({ field,fieldState }) => {
+                  return  (
+                    <InputWithLabel
+                      errorMessage={fieldState.error?.message}
+                      description={"在基本订阅和捆绑订阅中已经设定好的价格"}
+                      label={"促销价格选择"}
+                      value={field.value}
+                      onInputChange={field.onChange}
+                      options={priceOptions}
+                    />
+                  )
+                }} name={"id"} control={addForm.control}
+                />
+
+              </section>
+              <section className={"mt-[30px]"}>
+                <Controller control={addForm.control} render={({ field,fieldState }) => {
+                  return (
+                    <InputWithLabel
+                      disabled={!id}
+                      errorMessage={fieldState.error?.message}
+                      value={field.value} label={"促销折扣"} max={90}
+                      onInputChange={field.onChange}
+                      onBlur={event => {
+                        const value = event.target.value
+                        if (value !== "" && value !== undefined && value !== null) {
+                          const numberVal = parseInt(value)
+                          field.onChange(`${numberVal > 90 ? 90 : numberVal}`)
+                        }
+                      }}
+                      description={"百分比，最高不超过90%"}
+                    />
+                  )
+                }} name="discount_per"
+                />
+              </section>
+              <section className={"mt-[30px]"}>
+                <Controller render={({ field }) => {
+                  // <InputWithLabel value={field.value} onInputChange={field.onChange} label={"促销开始时间"}/>
+                  return (
+                    <TopLabelWrapper label="促销开始时间">
+                      <DateTimePicker disabled={!id} value={field.value * 1000} dateChange={value => {
+                        field.onChange(value / 1000)
+                      }}
+                      />
+                    </TopLabelWrapper>
+                  )
+                }} name={"discount_start_time"} control={addForm.control}
+                />
+              </section>
+              <section className={"mt-[30px]"}>
+                <Controller render={({ field }) => {
+                  return (
+                    <TopLabelWrapper label="促销结束时间">
+                      <DateTimePicker disabled={!id} value={field.value * 1000} dateChange={value => {
+                        field.onChange(value / 1000)
+                      }}
+                      />
+                    </TopLabelWrapper>
+                  )
+                }} name={"discount_end_time"} control={addForm.control}
+                />
+              </section>
+            </div>
           </form>
         </section>
       </DrawerContent>
@@ -228,19 +301,18 @@ function SubscribeBundle({ refresh, initSettings }: {
   })
   return (
     <section className={"pt-5 pb-5 border-b border-gray-100"}>
-      <form onSubmit={bundleForm.handleSubmit((data) => {
-        console.log(data)
-      })}
-      >
+      <form>
         <section className="pl-4 pr-4">
           <section className="flex justify-between items-center">
             <h1 className="text-base font-medium">捆绑订阅</h1>
-            <AddSubscriptionModal refresh={refresh}>
-              <button
-                className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
-              >添加
-              </button>
-            </AddSubscriptionModal>
+            {fields.length < 6 && (
+              <AddSubscriptionModal refresh={refresh}>
+                <button
+                  className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
+                >添加
+                </button>
+              </AddSubscriptionModal>
+            )}
           </section>
           {fields.length === 0 && (
             <section className={"text-xs text-[#777]"}>
@@ -275,6 +347,60 @@ function SubscribeBundle({ refresh, initSettings }: {
   )
 }
 
+function PromotionalActivities({ initDiscountList,unsubList }:{initDiscountList :DiscountInfo[], unsubList: DiscountInfo[]}) {
+  const form = useForm<{list:DiscountInfo[]}>({
+    mode:"all"
+  })
+  useEffect(() => {
+    form.setValue("list",initDiscountList)
+  },[initDiscountList,form])
+
+  const { fields:discountList } = useFieldArray({
+    name:"list",
+    control: form.control
+  })
+  return (
+    <section className={"pt-5 pb-5 border-b border-gray-100"}>
+      <section className="pl-4 pr-4">
+        <section className="flex justify-between items-center">
+          <h1 className="text-base font-medium">促销活动</h1>
+          { unsubList.length > 0 && (
+            <AddPromotionalActivities unsubList={unsubList}>
+              <button
+                className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
+              >添加
+              </button>
+            </AddPromotionalActivities>
+          )}
+        </section>
+        {discountList.length === 0 && (
+          <section className={"text-xs text-[#777]"}>
+            为用户提供订阅的促销活动，可以为您吸引更多的订阅用户
+          </section>
+        )}
+        {discountList.map((discount, index) => (
+          <Controller key={discount.id} control={form.control} render={({ field }) => {
+            return (
+              <TopLabelWrapper label={`促销${index + 1}`}>
+                <div className={"flex-1"}>
+                  <div>
+                    {discount.discount_price}&nbsp;&nbsp;{discount.month_count}个月&nbsp;&nbsp;<span className="text-[#6D7781]">(平均${calcAvg(discount.discount_price,discount.month_count)}/月)</span>
+                  </div>
+                  <div className="text-[#6D7781]">
+                    {dayjs(discount.discount_start_time*1000).format(DATE_TIME_FORMAT)} {dayjs(discount.discount_end_time*1000).format(DATE_TIME_FORMAT)}
+                  </div>
+                </div>
+                <Switch checked={field.value.discount_status}></Switch>
+              </TopLabelWrapper>
+            )
+          }} name={`list.${index}`}
+          />
+        ))}
+      </section>
+    </section>
+  )
+}
+
 
 export default function Page() {
   const router = useRouter()
@@ -286,12 +412,19 @@ export default function Page() {
 
   useEffect(refreshDefaultSettings, [])
 
-  const discountPriceList = useMemo(() => {
+  const discountConfig = useMemo(() => {
     if (defaultSettings) {
-      return defaultSettings.items.filter(item => item.discount_per > 0)
+      return {
+        initList: defaultSettings.items.filter(item => item.discount_per > 0), // 已有促销
+        unsubList: defaultSettings.items.filter(item => item.discount_per === 0) // 未促销
+      }
     }
-    return []
-  }, [defaultSettings])
+    return {
+      initList: [],
+      unsubList: []
+    }
+  },[defaultSettings])
+
   const baseFeeForm = useForm<Pick<SubscribeSetting, "price" | "id" | "user_id">>({
     mode: "all",
     resolver: zodResolver(baseSubscribe),
@@ -355,32 +488,7 @@ export default function Page() {
           </form>
         </section>
         <SubscribeBundle initSettings={defaultSettings?.items || []} refresh={refreshDefaultSettings}/>
-        <section className={"pt-5 pb-5 border-b border-gray-100"}>
-          <section className="pl-4 pr-4">
-            <section className="flex justify-between items-center">
-              <h1 className="text-base font-medium">促销活动</h1>
-              <PromotionalActivities>
-                <button
-                  className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
-                >添加
-                </button>
-              </PromotionalActivities>
-            </section>
-            {discountPriceList.length === 0 && (
-              <section className={"text-xs text-[#777]"}>
-                为用户提供订阅的促销活动，可以为您吸引更多的订阅用户
-              </section>
-            )}
-            {discountPriceList.map((price, index) => (
-              <section key={index} className="mt-6 relative">
-                <InputWithLabel readOnly name={""} value={price.price} label={`促销${index + 1}`}/>
-                <Switch checked={price.discount_status}
-                  className={"absolute right-4 top-3 z-30 data-[state=checked]:bg-green"}
-                ></Switch>
-              </section>
-            ))}
-          </section>
-        </section>
+        <PromotionalActivities initDiscountList={discountConfig.initList} unsubList={discountConfig.unsubList}/>
       </section>
     </div>
   )

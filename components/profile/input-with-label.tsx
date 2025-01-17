@@ -83,8 +83,7 @@ export default function InputWithLabel(props: InputProps) {
   return (
     <section className={clsx(
       "relative rounded-xl",
-      isSelectInput ? "pt-2.5" : "",
-      disabled ? "bg-[#F7F7F7]" : "",
+      // isSelectInput ? "pt-2.5" : "",
       props.className
     )}
     >
@@ -93,15 +92,17 @@ export default function InputWithLabel(props: InputProps) {
           transition: "top .1s",
           top: positionInCenter ? 16 : -7
         }} onTouchEnd={labelTouch} className={clsx(
-          "absolute bg-white left-4 leading-none font-normal z-30 transition",
-          (disabled || disableInput) ? "text-[#222]" :"text-[#6D7781]"
+          "absolute bg-white left-4 leading-none font-normal z-30 transition text-[#6D7781]",
         )}
         htmlFor={name}
       >
         {label}
       </label>
       <section
-        className="flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center"
+        className={
+          clsx("flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center",
+            disabled ? "bg-[#F7F7F7]" : "",)
+        }
       >
         {!isSelectInput && (
           <input ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
