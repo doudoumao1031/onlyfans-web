@@ -1,5 +1,5 @@
-import { CommonPageReq, ENDPOINTS, fetchWithGet, fetchWithPost, PageResponse, PostData } from "@/lib";
-import { TFeeListItem } from "./types";
+import { CommonPageReq, ENDPOINTS, fetchWithPost, PageResponse, PostData } from "@/lib";
+// import { TFeeListItem } from "./types";
 
 //我的帖子
 export const getMyFeeds = (params: CommonPageReq) => fetchWithPost<CommonPageReq, PageResponse<PostData>>(ENDPOINTS.POST.ME_POSTS, params).then((res) => {
