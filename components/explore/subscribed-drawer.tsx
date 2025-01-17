@@ -9,188 +9,187 @@ import useCommonMessage from "@/components/common/common-message"
 interface SubscribedDrawerProps {
     userId: number;
     name: string,
-    settingItems?: DiscountInfo[],
-    settingPrice?: number,
     children?: React.ReactNode,
     trigger?: (envent: () => void) => React.ReactNode
-
 }
 
-const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, settingItems, settingPrice, children, trigger }) => {
+const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, children, trigger }) => {
 
-    const { showMessage, renderNode } = useCommonMessage()
-    const [items, setItems] = useState<DiscountInfo[]>(settingItems ?? [])
-    const [discount, setDiscount] = useState<DiscountInfo>()
-    const [amount, setAmount] = useState<number>(0)
-    const getSettingData = async () => {
-        try {
-            const settings = await viewUserSubscribeSetting({ user_id: userId })
-            if (settings?.items) {
-                const list: DiscountInfo[] = []
-                list.push({
-                    id: 0,
-                    item_status: false,
-                    month_count: 1,
-                    price: settings?.price ?? 0,
-                    discount_per: 0,
-                    discount_price: settings?.price ?? 0,
-                    discount_start_time: 0,
-                    discount_end_time: 0,
-                    discount_status: true,
-                    user_id: userId
-                })
-                list.push(...settings.items.filter((t) => !t.item_status))
-                if (settings?.items) setItems(list)
-            }
-        } finally {
-        }
+  const { showMessage, renderNode } = useCommonMessage()
+  const [items, setItems] = useState<DiscountInfo[]>([])
+  const [discount, setDiscount] = useState<DiscountInfo>()
+  const [amount, setAmount] = useState<number>(0)
+  const getSettingData = async () => {
+    try {
+      const settings = await viewUserSubscribeSetting({ user_id: userId })
+      if (settings?.items) {
+        const list: DiscountInfo[] = []
+        list.push({
+          id: 0,
+          item_status: false,
+          month_count: 1,
+          price: settings?.price ?? 0,
+          discount_per: 0,
+          discount_price: settings?.price ?? 0,
+          discount_start_time: 0,
+          discount_end_time: 0,
+          discount_status: true,
+          user_id: userId
+        })
+        list.push(...settings.items.filter((t) => !t.item_status))
+        if (settings?.items) setItems(list)
+      }
+    } finally {
     }
-    const showDiscount = (discount: DiscountInfo | undefined) => {
-        if (!discount) return false
-        const now = Date.now()
-        return !discount.discount_status && discount.discount_start_time * 1000 <= now && discount.discount_end_time * 1000 >= now
+  }
+  const showDiscount = (discount: DiscountInfo | undefined) => {
+    if (!discount) return false
+    const now = Date.now()
+    return !discount.discount_status && discount.discount_start_time * 1000 <= now && discount.discount_end_time * 1000 >= now
+  }
+  const [diff, setDiff] = useState<number>(0)
+  useMemo(() => {
+    const diff = discount ? (discount.price - discount?.discount_price).toFixed(2) : "0"
+    setDiff(parseFloat(diff))
+  }, [discount])
+  useMemo(() => {
+    if (discount && !discount.item_status) {
+      if (showDiscount(discount)) {
+        setAmount(discount?.discount_price ?? 0)
+      } else {
+        setAmount(discount?.price ?? 0)
+      }
     }
-    const [diff, setDiff] = useState<number>(0)
-    useMemo(() => {
-        const diff = discount ? (discount.price - discount?.discount_price).toFixed(2) : "0"
-        setDiff(parseFloat(diff))
-    }, [discount])
-    useMemo(() => {
-        if (discount && !discount.item_status) {
-            if (showDiscount(discount)) {
-                setAmount(discount?.discount_price ?? 0)
-            } else {
-                setAmount(discount?.price ?? 0)
-            }
-        }
-    }, [discount])
-    const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-    return (
-        <>
-            {renderNode}
-            <FormDrawer
-                title={(
-                    <div>
-                        <span className="text-lg font-semibold">订阅</span>
-                        <span className="text-main-pink font-normal text-[15px] t">{name}</span>
-                    </div>
-                )}
-                headerLeft={(close) => {
-                    return (
-                        <button onTouchEnd={close} className={"text-base text-[#777]"}>
-                            <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
-                        </button>
+  }, [discount])
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  return (
+    <>
+      {renderNode}
+      <FormDrawer
+        title={(
+          <div>
+            <span className="text-lg font-semibold">订阅</span>
+            <span className="text-main-pink font-normal text-[15px] t">{name}</span>
+          </div>
+        )}
+        headerLeft={(close) => {
+          return (
+            <button onTouchEnd={close} className={"text-base text-[#777]"}>
+              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
+            </button>
+          )
+        }}
+        trigger={trigger ? trigger(() => {
+          getSettingData()
+          setDrawerOpen(true)
+        }) : (
+          <button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white"
+            onClick={() => {
+              getSettingData()
+              setDrawerOpen(true)
+            }}
+          >
+            <span className="text-xs text-nowrap">免费/订阅</span>
+          </button>
+        )}
+        className="h-[43vh] border-0"
+        setIsOpen={setDrawerOpen}
+        isOpen={drawerOpen}
+      >
+        <input hidden={true} name="user_id" defaultValue={userId} />
+        <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50">
+          <ToggleGroupSubscribed
+            type="single"
+            variant="default"
+            id="select_pirce"
+            defaultValue={discount?.id + Math.random().toString(36).substring(2, 9)}
+            className="w-full flex justify-around mt-[20px] px-4"
+            onValueChange={(value) => {
+              if (value) {
+                setDiscount(items.find((item) => item.id === Number(value)) ?? items[0])
+              } else {
+                setDiscount(undefined)
+              }
+            }}
+          >
+            {items.map(item => (
+              <ToggleGroupSubscribedItem key={item.id} value={String(item.id)}>
+                <div className="relative h-full">
+                  <div
+                    className="h-full flex flex-col justify-center items-center text-black"
+                  >
+                    <span className="text-nowrap text-xs">{item.month_count}个月</span>
+                    <span
+                      className={`text-nowrap text-xl my-4 ${item.id === discount?.id ? "text-main-pink" : "text-black"}`}
+                    >${item.discount_price}</span>
+                    <span className="text-nowrap text-xs block">
+                      {
+                        showDiscount(item) ? (
+                          <s className="text-xs text-gray-500">${item.price}</s>) :
+                          (<span>&nbsp;</span>)
+                      }
+                    </span>
+                  </div>
+                  {
+                    showDiscount(item) && (
+                      <div
+                        className="absolute bg-main-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center"
+                      >
+                        <span
+                          className="text-white text-xs text-center"
+                        >{item.discount_per}% off</span>
+                      </div>
                     )
-                }}
-                trigger={trigger ? trigger(() => {
-                    getSettingData()
-                    setDrawerOpen(true)
-                }) : <button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white"
-                    onClick={() => {
-                        getSettingData()
-                        setDrawerOpen(true)
-                    }}
-                >
-                    <span className="text-xs text-nowrap">免费/订阅</span>
-                </button>}
-                className="h-[43vh] border-0"
-                setIsOpen={setDrawerOpen}
-                isOpen={drawerOpen}
-            >
-                <input hidden={true} name="user_id" defaultValue={userId} />
-                <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50">
-                    <ToggleGroupSubscribed
-                        type="single"
-                        variant="default"
-                        id="select_pirce"
-                        defaultValue={discount?.id + Math.random().toString(36).substring(2, 9)}
-                        className="w-full flex justify-around mt-[20px] px-4"
-                        onValueChange={(value) => {
-                            if (value) {
-                                setDiscount(items.find((item) => item.id === Number(value)) ?? items[0])
-                            } else {
-                                setDiscount(undefined)
-                            }
-                        }}
-                    >
-                        {items.map(item => (
-                            <ToggleGroupSubscribedItem key={item.id} value={String(item.id)}>
-                                <div className="relative h-full">
-                                    <div
-                                        className="h-full flex flex-col justify-center items-center text-black"
-                                    >
-                                        <span className="text-nowrap text-xs">{item.month_count}个月</span>
-                                        <span
-                                            className={`text-nowrap text-xl my-4 ${item.discount_price === amount ? "text-main-pink" : "text-black"}`}
-                                        >${item.discount_price}</span>
-                                        <span className="text-nowrap text-xs block">
-                                            {
-                                                showDiscount(item) ? (
-                                                    <s className="text-xs text-gray-500">${item.price}</s>) :
-                                                    (<span>&nbsp;</span>)
-                                            }
-                                        </span>
-                                    </div>
-                                    {
-                                        showDiscount(item) && (
-                                            <div
-                                                className="absolute bg-main-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center"
-                                            >
-                                                <span
-                                                    className="text-white text-xs text-center"
-                                                >{item.discount_per}% off</span>
-                                            </div>
-                                        )
-                                    }
-                                </div>
-                            </ToggleGroupSubscribedItem>
-                        ))}
-                    </ToggleGroupSubscribed>
-                    <div className="my-[40px]  self-center">
-                        <div className="relative">
-                            <button
-                                disabled={amount === 0}
-                                className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
-                                onTouchEnd={(e) => {
-                                    e.preventDefault()
-                                    addSubOrder({ user_id: userId, price: Number(amount), id: discount?.id ?? 0 })
-                                        .then((result) => {
-                                            console.log("addSubOrder result:", result)
-                                            if (result && result.code === 0) {
-                                                console.log("订阅成功")
-                                                setDrawerOpen(false)
-                                                showMessage(<div className={"w-36 h-12 flex justify-center items-center"}>
-                                                    <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20} />
-                                                    <span className={"text-white font-medium"}>订阅成功</span>
-                                                </div>)
-                                            } else {
-                                                console.log("订阅失败:", result?.message)
-                                                showMessage(<div className={"w-36 h-12 flex justify-center items-center"}>
-                                                    <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20} />
-                                                    <span className={"text-white font-medium text-base"}>订阅失败</span>
-                                                </div>)
-                                            }
-                                        })
-                                }}
-                            >确认支付 {amount} USDT
-                            </button>
-                            {
-                                showDiscount(discount) && (
-                                    <div
-                                        className="absolute bg-main-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center"
-                                    >
-                                        <span
-                                            className="text-white text-xs text-center text-nowrap"
-                                        >已省 ${diff}</span>
-                                    </div>
-                                )
-                            }
-                        </div>
-                    </div>
+                  }
                 </div>
-            </FormDrawer>
-        </>
-    )
+              </ToggleGroupSubscribedItem>
+            ))}
+          </ToggleGroupSubscribed>
+          <div className="my-[40px]  self-center">
+            <div className="relative">
+              <button
+                disabled={amount === 0}
+                className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
+                onTouchEnd={(e) => {
+                  e.preventDefault()
+                  addSubOrder({ user_id: userId, price: Number(amount), id: discount?.id ?? 0 })
+                    .then((result) => {
+                      console.log("addSubOrder result:", result)
+                      if (result && result.code === 0) {
+                        console.log("订阅成功")
+                        setDrawerOpen(false)
+                        showMessage(<div className={"w-36 h-12 flex justify-center items-center"}>
+                          <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20} />
+                          <span className={"text-white font-medium"}>订阅成功</span>
+                        </div>)
+                      } else {
+                        console.log("订阅失败:", result?.message)
+                        showMessage(<div className={"w-36 h-12 flex justify-center items-center"}>
+                          <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20} />
+                          <span className={"text-white font-medium text-base"}>订阅失败</span>
+                        </div>)
+                      }
+                    })
+                }}
+              >确认支付 {amount} USDT
+              </button>
+              {
+                showDiscount(discount) && (
+                  <div
+                    className="absolute bg-main-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center"
+                  >
+                    <span
+                      className="text-white text-xs text-center text-nowrap"
+                    >已省 ${diff}</span>
+                  </div>
+                )
+              }
+            </div>
+          </div>
+        </div>
+      </FormDrawer>
+    </>
+  )
 }
 
 export default SubscribedDrawer
