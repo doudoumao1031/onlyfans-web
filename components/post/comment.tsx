@@ -98,7 +98,7 @@ function Comment({
         </div>
         <div className="flex flex-col items-center ml-2" onClick={thumbup}>
           <Image
-            src={`${isThumbupped ? "/icons/thumbup.png" : "/icons/thumbup.png"}`}
+            src={`${isThumbupped ? "/icons/thumbup_active.png" : "/icons/thumbup.png"}`}
             width={20}
             height={20}
             alt=""
