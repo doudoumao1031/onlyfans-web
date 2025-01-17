@@ -87,7 +87,6 @@ export default function Page() {
       {mockData.map((v, i) => {
         return <MediaItem item={v} key={i} />
       })}
-
     </div>
   )
 }
