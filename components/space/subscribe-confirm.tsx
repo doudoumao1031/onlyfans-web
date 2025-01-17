@@ -1,7 +1,8 @@
 "use client";
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import FormDrawer from "../common/form-drawer"
 import IconWithImage from "../profile/icon"
+import { UserProfile } from "@/lib/actions/profile";
 
 export type TFeeItem = {
     month: number
@@ -28,12 +29,21 @@ const mockPrices: TFeeItem[] = [
         percentage: '90%'
     },
 ]
-export default function SubScribeConfirm({ children, isOpen, setIsOpen }: {
+export default function SubScribeConfirm({ data, children, isOpen, setIsOpen }: {
+    data: UserProfile | undefined,
     children: React.ReactNode, isOpen?: boolean,
     setIsOpen?: (val: boolean) => void
 }) {
+
+    const [active, setActive] = useState<number>(0)
+    const [infos, setInfos] = useState<UserProfile | undefined>(data)
+    // useEffect(() => {
+    //     if (!data) return
+    //     setInfos(data)
+
+    // }, [data])
     const openInner = () => {
-        const [active, setActive] = useState<number>(0)
+
         return <div className="py-8 px-4 pb-20">
             <div className='flex justify-between items-center '>
                 {
@@ -58,7 +68,7 @@ export default function SubScribeConfirm({ children, isOpen, setIsOpen }: {
         </div>
     }
     return <FormDrawer
-        title={<div>订阅 <span className='ml-1 text-[15px] text-main-pink'>用户的昵称</span></div>}
+        title={<div>订阅 <span className='ml-1 text-[15px] text-main-pink'>{infos?.first_name}</span></div>}
         headerLeft={(close) => {
             return <button onTouchEnd={close} className={"text-base text-[#777]"}>
                 <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={'#000'} />

@@ -1,6 +1,5 @@
 
-import Header from "@/components/common/header"
-import Image from "next/image"
+
 import Avatar from "@/components/profile/avatar"
 import IconWithImage from "@/components/profile/icon"
 import Directions from "@/components/space/directions"
@@ -8,6 +7,8 @@ import { UserProfile, userProfile } from "@/lib/actions/profile"
 import SpaceHeader from "./space-header"
 import Attention from "./attention"
 import SubColumn from "./subColumn"
+import { data } from '../profile/chart-line';
+import SubscribedDrawer from "../explore/subscribed-drawer"
 export default async function UserInfo({ data }: { data: UserProfile | undefined }) {
     // const response = await userProfile()
     // const data = response?.data
@@ -20,6 +21,7 @@ export default async function UserInfo({ data }: { data: UserProfile | undefined
         { icon: "/icons/space/icon_info_like@3x.png", num: data.fans_count },
         { icon: "/icons/space/icon_info_follownumber@3x.png", num: data.following_count }
     ]
+
     return (
         <div className="w-full">
             <SpaceHeader data={data} />
@@ -56,7 +58,7 @@ export default async function UserInfo({ data }: { data: UserProfile | undefined
 
                     </div>
                     <Directions about={data.about} />
-                    <SubColumn />
+                    <SubColumn data={data} />
                 </section>
             </section>
         </div>

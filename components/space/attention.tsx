@@ -2,7 +2,7 @@
 import IconWithImage from '@/components/profile/icon';
 import Modal, { TModaProps } from '@/components/space/modal'
 import { useState } from 'react';
-import SubScribeConfirm from '@/components/space/subscribe-confirm'
+// import SubScribeConfirm from '@/components/space/subscribe-confirm'
 import { userDelFollowing, userFollowing } from '@/lib/actions/space/actions';
 import { UserProfile } from '@/lib/actions/profile';
 export default function Page({ data }: { data: UserProfile | undefined }) {
@@ -57,6 +57,7 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
     ]
 
     const handleFllowing = async () => {
+        setIsFocus(!isFocus)
         try {
             const res = isFocus ? await userDelFollowing({
                 follow_id: 1,
@@ -65,16 +66,14 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
                 follow_id: 1,
                 following_type: 0
             })
-            if (res && res.code === 0) {
-                setIsFocus(!isFocus)
-                setVisible(true)
-                setModalType(isFocus ? 5 : 4)
-                setTimeout(() => {
-                    setVisible(false)
-                }, 1500);
-            }
+            if (!res || res.code !== 0) return setIsFocus(!isFocus)
+            setVisible(true)
+            setModalType(isFocus ? 5 : 4)
+            setTimeout(() => {
+                setVisible(false)
+            }, 1500);
         } catch (error) {
-
+            console.log('FETCH_ERROR,', error)
         }
 
     }
@@ -103,6 +102,6 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
         </div>
         <Modal visible={visible} cancel={() => { setVisible(false) }} {...models[modalType]}>
         </Modal>
-        <SubScribeConfirm isOpen={isOpenDrawer} setIsOpen={setIsOpenDrawer}> </SubScribeConfirm>
+        {/* <SubScribeConfirm data={data} isOpen={isOpenDrawer} setIsOpen={setIsOpenDrawer}> </SubScribeConfirm> */}
     </div>
 }

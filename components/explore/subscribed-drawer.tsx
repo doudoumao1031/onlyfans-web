@@ -6,24 +6,26 @@ import { useState, useMemo } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 
 interface SubscribedDrawerProps {
-    userId: number;
-    name: string,
-    settingItems?: DiscountInfo[],
-    settingPrice?: number,
-    children?: React.ReactNode
+  userId: number;
+  name: string,
+  settingItems?: DiscountInfo[],
+  settingPrice?: number,
+  children?: React.ReactNode,
+  trigger?: (envent: () => void) => React.ReactNode
+
 }
 
-const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, settingItems, settingPrice,children }) => {
+const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, settingItems, settingPrice, children, trigger }) => {
 
   const [items, setItems] = useState<DiscountInfo[]>(settingItems ?? [])
   const [discount, setDiscount] = useState<DiscountInfo>()
-  const [price, setPrice] = useState<number>(settingPrice?? 0)
+  const [price, setPrice] = useState<number>(settingPrice ?? 0)
   const [amount, setAmount] = useState<number>(0)
   const getSettingData = async () => {
     try {
       const settings = await viewUserSubscribeSetting({ user_id: userId })
       if (settings?.items) {
-        const list:DiscountInfo[] = []
+        const list: DiscountInfo[] = []
         list.push({
           id: 1,
           month_count: 1,
@@ -44,7 +46,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
   }
   const [diff, setDiff] = useState<number>(0)
   useMemo(() => {
-    const diff = discount ? (price * discount.month_count - discount?.price).toFixed(2):"0"
+    const diff = discount ? (price * discount.month_count - discount?.price).toFixed(2) : "0"
     setDiff(parseFloat(diff))
   }, [discount, price])
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
@@ -60,11 +62,14 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
         headerLeft={(close) => {
           return (
             <button onTouchEnd={close} className={"text-base text-[#777]"}>
-              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"}/>
+              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
             </button>
           )
         }}
-        trigger={<button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white"
+        trigger={trigger ? trigger(() => {
+          getSettingData()
+          setDrawerOpen(true)
+        }) : <button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white"
           onClick={() => {
             getSettingData()
             setDrawerOpen(true)
@@ -76,17 +81,17 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
         setIsOpen={setDrawerOpen}
         isOpen={drawerOpen}
       >
-        <input hidden={true} name="user_id" defaultValue={userId}/>
+        <input hidden={true} name="user_id" defaultValue={userId} />
         <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50">
           <ToggleGroupSubscribed
             type="single"
             variant="default"
             id="select_pirce"
-            defaultValue={discount?.id+Math.random().toString(36).substring(2, 9)}
+            defaultValue={discount?.id + Math.random().toString(36).substring(2, 9)}
             className="w-full flex justify-around mt-[20px] px-4"
             onValueChange={(value) => {
               if (value) {
-                setDiscount(items.find((item) => item.id === Number(value))?? items[0])
+                setDiscount(items.find((item) => item.id === Number(value)) ?? items[0])
                 setAmount(items.find((item) => item.id === Number(value))?.price ?? 0)
               } else {
                 setAmount(0)
@@ -140,7 +145,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
                         console.log("订阅成功")
                         setDrawerOpen(false)
                       } else {
-                        console.log("订阅失败:",result?.message)
+                        console.log("订阅失败:", result?.message)
                       }
                     })
                 }}
