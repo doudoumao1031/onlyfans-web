@@ -4,6 +4,7 @@ import IconWithImage from "@/components/profile/icon"
 import { ToggleGroupSubscribed, ToggleGroupSubscribedItem } from "@/components/ui/toggle-group-subcribed"
 import { useState, useMemo } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
+import useCommonMessage from "@/components/common/common-message"
 
 interface SubscribedDrawerProps {
     userId: number;
@@ -15,9 +16,9 @@ interface SubscribedDrawerProps {
 
 const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, settingItems, settingPrice,children }) => {
 
+  const { showMessage,renderNode } = useCommonMessage()
   const [items, setItems] = useState<DiscountInfo[]>(settingItems ?? [])
   const [discount, setDiscount] = useState<DiscountInfo>()
-  const [price, setPrice] = useState<number>(settingPrice?? 0)
   const [amount, setAmount] = useState<number>(0)
   const getSettingData = async () => {
     try {
@@ -25,31 +26,46 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
       if (settings?.items) {
         const list:DiscountInfo[] = []
         list.push({
-          id: 1,
+          id: 0,
+          item_status: false,
           month_count: 1,
           price: settings?.price ?? 0,
           discount_per: 0,
-          discount_price: 0,
+          discount_price: settings?.price ?? 0,
           discount_start_time: 0,
           discount_end_time: 0,
-          discount_status: false,
+          discount_status: true,
           user_id: userId
         })
-        list.push(...settings.items)
+        list.push(...settings.items.filter((t) => !t.item_status))
         if (settings?.items) setItems(list)
       }
-      if (settings?.price) setPrice(settings.price)
     } finally {
     }
   }
+  const showDiscount = (discount: DiscountInfo | undefined) => {
+    if (!discount) return false
+    const now = Date.now()
+    return !discount.discount_status && discount.discount_start_time * 1000 <= now && discount.discount_end_time * 1000 >= now
+  }
   const [diff, setDiff] = useState<number>(0)
   useMemo(() => {
-    const diff = discount ? (price * discount.month_count - discount?.price).toFixed(2):"0"
+    const diff = discount ? (discount.price - discount?.discount_price).toFixed(2):"0"
     setDiff(parseFloat(diff))
-  }, [discount, price])
+  }, [discount])
+  useMemo(() => {
+    if (discount && !discount.item_status) {
+      if (showDiscount(discount)) {
+        setAmount(discount?.discount_price ?? 0)
+      } else {
+        setAmount(discount?.price ?? 0)
+      }
+    }
+  }, [discount])
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   return (
     <>
+      {renderNode}
       <FormDrawer
         title={(
           <div>
@@ -87,9 +103,8 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
             onValueChange={(value) => {
               if (value) {
                 setDiscount(items.find((item) => item.id === Number(value))?? items[0])
-                setAmount(items.find((item) => item.id === Number(value))?.price ?? 0)
               } else {
-                setAmount(0)
+                setDiscount(undefined)
               }
             }}
           >
@@ -101,18 +116,18 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
                   >
                     <span className="text-nowrap text-xs">{item.month_count}个月</span>
                     <span
-                      className={`text-nowrap text-xl my-4 ${item.price === amount ? "text-main-pink" : "text-black"}`}
-                    >${item.price}</span>
+                      className={`text-nowrap text-xl my-4 ${item.discount_price === amount ? "text-main-pink" : "text-black"}`}
+                    >${item.discount_price}</span>
                     <span className="text-nowrap text-xs block">
                       {
-                        item.month_count > 1 ? (
-                          <s className="text-xs text-gray-500">${price * item.month_count}</s>) :
+                        showDiscount(item) ? (
+                          <s className="text-xs text-gray-500">${item.price}</s>) :
                           (<span>&nbsp;</span>)
                       }
                     </span>
                   </div>
                   {
-                    item.discount_per > 0 && (
+                    showDiscount(item) && (
                       <div
                         className="absolute bg-main-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center"
                       >
@@ -133,21 +148,29 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, setti
                 className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
                 onTouchEnd={(e) => {
                   e.preventDefault()
-                  addSubOrder({ user_id: userId, price: Number(amount), id: discount?.id ?? 1 })
+                  addSubOrder({ user_id: userId, price: Number(amount), id: discount?.id ?? 0 })
                     .then((result) => {
                       console.log("addSubOrder result:", result)
                       if (result && result.code === 0) {
                         console.log("订阅成功")
                         setDrawerOpen(false)
+                        showMessage(<div className={"w-36 h-12 flex justify-center items-center"}>
+                          <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20} />
+                          <span className={"text-white font-medium"}>订阅成功</span>
+                        </div>)
                       } else {
                         console.log("订阅失败:",result?.message)
+                        showMessage(<div className={"w-36 h-12 flex justify-center items-center"}>
+                          <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20} />
+                          <span className={"text-white font-medium text-base"}>订阅失败</span>
+                        </div>)
                       }
                     })
                 }}
               >确认支付 {amount} USDT
               </button>
               {
-                discount && discount.discount_per > 0 && (
+                showDiscount(discount) && (
                   <div
                     className="absolute bg-main-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center"
                   >

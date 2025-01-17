@@ -2,8 +2,9 @@
 import Avatar from "@/components/user/avatar"
 import Image from "next/image"
 import SubscribedDrawer from "@/components/explore/subscribed-drawer"
-import { BloggerInfo, buildMediaUrl } from "@/lib"
+import { BloggerInfo } from "@/lib"
 import IconWithImage from "@/components/profile/icon"
+import { buildMediaUrl } from "@/lib/utils"
 
 /**
  * 博主名片

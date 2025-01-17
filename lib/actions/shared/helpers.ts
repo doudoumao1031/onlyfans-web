@@ -118,11 +118,3 @@ export function uploadFetch<Req, Res = unknown>(
   })
 
 }
-
-/**
- * 获取媒体地址
- * @param fileId
- */
-export function buildMediaUrl(fileId: string) {
-  return `${mediaUrl}${fileId}`
-}
