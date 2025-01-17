@@ -75,12 +75,12 @@ function Comment({
   refreshComments: () => void
   isReply?: boolean
 }) {
-  const { user, content, thumbs_up_count, id, comment_id, post_id } = comment
+  const { user, content, thumbs_up_count, thumb_up, id, comment_id, post_id } = comment
   const { photo, username } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
   const [thumbupCount, setThumbupCount] = useState(thumbs_up_count)
-  const [isThumbupped, setIsThumbupped] = useState(false) // FIX: use data as initial value
+  const [isThumbupped, setIsThumbupped] = useState(thumb_up)
 
   return (
     <div className="flex flex-col gap-2">

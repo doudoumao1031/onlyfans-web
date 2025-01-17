@@ -46,6 +46,7 @@ export interface CommentInfo {
   reply_arr: CommentReplyInfo[]
   reply_count: number
   thumbs_up_count: number
+  thumb_up: boolean
   user: User
 }
 
