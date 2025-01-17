@@ -1,6 +1,6 @@
 import IconWithImage from "@/components/profile/icon"
 import { userCollectionUsers } from "@/lib"
-import { buildImageFileUrl } from "@/lib/utils"
+import { buildImageUrl } from "@/lib/utils"
 import Image from "next/image"
 
 export default async function Page() {
@@ -14,12 +14,12 @@ export default async function Page() {
       <div className="p-4 pt-0 ">
         {bloggerData?.list?.map((v, i) => (
           <div key={i} className={"h-28 pt-1 text-white bg-slate-400  mb-4 bg-cover rounded-lg bg-blend-multiply"} style={{
-            backgroundImage: `url(${buildImageFileUrl(v.photo)})`
+            backgroundImage: `url(${buildImageUrl(v.photo)})`
           }}
           >
             <div className="text-xs min-h-4  truncate ...">{v.top_info}</div>
             <div className="pl-4 pr-4 pt-2 flex justify-start">
-              <Image src={buildImageFileUrl(v.photo)} width={112} height={112} alt={"blogger photo"} className={"w-16 h-16 rounded-full mr-4 border-2 border-white"} />
+              <Image src={buildImageUrl(v.photo)} width={112} height={112} alt={"blogger photo"} className={"w-16 h-16 rounded-full mr-4 border-2 border-white"} />
               <div>
                 <div className="text-sm">{v.username}</div>
                 <div className="text-xs">{v.username}</div>

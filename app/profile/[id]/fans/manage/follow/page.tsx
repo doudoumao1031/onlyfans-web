@@ -2,15 +2,11 @@
 import React, { Fragment, useEffect, useState } from "react"
 import TimeSort from "@/components/profile/time-sort"
 import { getFollowedUsers, infiniteGetFollowedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
-import InfiniteScroll, { FetchFn } from "@/components/common/infinite-scroll"
+import InfiniteScroll, { InfiniteScrollProps } from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import FansListItem from "@/components/profile/fans/fans-list-item"
 
-function FollowedUsers({ initialItems,initialHasMore }:{
-  initialItems: SubscribeUserInfo[]
-  initialHasMore: boolean,
-  fetchData: FetchFn<SubscribeUserInfo>
-}) {
+function FollowedUsers({ initialItems, initialHasMore }: InfiniteScrollProps<SubscribeUserInfo>) {
 
   return (
     <InfiniteScroll<SubscribeUserInfo>

@@ -32,8 +32,9 @@ export default function SubScribeConfirm({ children, isOpen, setIsOpen }: {
     children: React.ReactNode, isOpen?: boolean,
     setIsOpen?: (val: boolean) => void
 }) {
-  const openInner = () => {
-    const [active, setActive] = useState<number>(0)
+  const [active, setActive] = useState<number>(0)
+
+  const renderContent = () => {
     return (
       <div className="py-8 px-4">
         <div className="flex justify-between items-center ">
@@ -77,7 +78,7 @@ export default function SubScribeConfirm({ children, isOpen, setIsOpen }: {
       setIsOpen={setIsOpen}
       className="h-[47vh] border-0"
     >
-      {openInner()}
+      {renderContent()}
     </FormDrawer>
   )
 }

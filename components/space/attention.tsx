@@ -1,8 +1,18 @@
 "use client"
 import IconWithImage from "@/components/profile/icon"
-import Modal, { TModaProps } from "@/components/common/modal"
+import { Modal } from "@/components/common/modal"
 import { useState } from "react"
 import SubScribeConfirm from "@/components/space/subscribe-confirm"
+
+type TModalProps = {
+  type: string;
+  closeModal: boolean;
+  title?: string;
+  content?: string | React.ReactElement;
+  onConfirm?: () => void;
+  onCancel?: () => void;
+  okText?: string;
+}
 
 export default function Page() {
   const [isFocus, setIsFocus] = useState<boolean>(false)
@@ -17,31 +27,31 @@ export default function Page() {
   const handleTopUp = () => {
     setVisible(false)
   }
-  const models: TModaProps[] = [
+  const models: TModalProps[] = [
     {
       type: "modal",
       closeModal: false,
       content: <div className="p-4 pb-6" >订阅博主与Ta畅谈</div>,
       okText: "免费/订阅",
-      confirm: () => handleFocus()
+      onConfirm: () => handleFocus()
     },
     {
       type: "modal",
       closeModal: false,
       content: <div className="p-4 pb-6" >订阅博主与Ta畅谈</div>,
-      confirm: () => handleFocus()
+      onConfirm: () => handleFocus()
     },
     {
       type: "modal",
       closeModal: false,
       content: <div className="p-4 pb-6" >余额不足</div>,
       okText: "充值",
-      confirm: () => handleTopUp()
+      onConfirm: () => handleTopUp()
     },
     {
       type: "toast",
-      content: "订阅成功"
-
+      content: "订阅成功",
+      closeModal: false
     }
   ]
 

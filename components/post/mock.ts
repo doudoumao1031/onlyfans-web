@@ -46,7 +46,8 @@ export function getMockPostData(): PostData {
       comment_count: 4,
       share_count: 6,
       thumbs_up_count: 9,
-      tip_count: 55
+      tip_count: 55,
+      play_count: 0
     },
     post_vote: {
       items: [
