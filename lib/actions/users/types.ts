@@ -19,12 +19,15 @@ export type DiscountInfo = {
   discount_per: number
   discount_price: number
   discount_start_time: number
-  discount_status: boolean
+  discount_status: boolean //折扣信息状态（false可用｜true不可用）
   id: number
+  item_status: boolean  //捆绑信息状态（false可用｜true不可用）
   month_count: number
   price: number
   user_id: number
 }
+
+export type AddBundleDiscount = Pick<DiscountInfo, "month_count" | "price" | "user_id"> & { id?: number }
 /**
  * 订阅设置
  */

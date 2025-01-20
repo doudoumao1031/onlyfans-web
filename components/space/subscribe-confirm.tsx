@@ -2,12 +2,13 @@
 import { useState } from "react"
 import FormDrawer from "../common/form-drawer"
 import IconWithImage from "../profile/icon"
+import { UserProfile } from "@/lib/actions/profile"
 
 export type TFeeItem = {
-    month: number
-    price: number
-    discount?: number
-    percentage?: string
+  month: number
+  price: number
+  discount?: number
+  percentage?: string
 }
 
 const mockPrices: TFeeItem[] = [
@@ -28,34 +29,59 @@ const mockPrices: TFeeItem[] = [
     percentage: "90%"
   }
 ]
-export default function SubScribeConfirm({ children, isOpen, setIsOpen }: {
-    children: React.ReactNode, isOpen?: boolean,
-    setIsOpen?: (val: boolean) => void
+export default function SubScribeConfirm({
+  data,
+  children,
+  isOpen,
+  setIsOpen
+}: {
+  data: UserProfile | undefined
+  children: React.ReactNode
+  isOpen?: boolean
+  setIsOpen?: (val: boolean) => void
 }) {
+  const [active, setActive] = useState<number>(0)
+  // const [infos, setInfos] = useState<UserProfile | undefined>(data)
+  // useEffect(() => {
+  //     if (!data) return
+  //     setInfos(data)
+
+  // }, [data])
   const openInner = () => {
-    const [active, setActive] = useState<number>(0)
     return (
-      <div className="py-8 px-4">
+      <div className="py-8 px-4 pb-20">
         <div className="flex justify-between items-center ">
-          {
-            mockPrices.map((v, i) => {
-              return (
-                <div onClick={() => setActive(i)} key={i} className={`relative w-[32%] h-36 rounded-lg border-main-pink flex flex-col justify-center items-center ${active === i && "border"}`}>
-                  <span className={`text-xs text-[#6D7781] ${active === i && "text-[#222222]"}`}>{`${v.month}个月`}</span>
-                  <span className={`text-[20px] font-bold my-4] ${active === i ? "text-main-pink" : "text-[#222222"}`}>{`$${v.price}`}</span>
-                  <span className="text-[#6D7781] text-xs">{v.discount ? `$${v.discount}` : ""}</span>
-                  {v.percentage && <div className=" flex justify-center items-center absolute left-0 top-0 w-1/2 h-[18px] mt-[-9px] bg-[#F7B500] rounded-full rounded-bl-none text-xs text-white">{`${v.percentage} off`}</div>}
-                </div>
-              )
-
-            })
-          }
-
+          {mockPrices.map((v, i) => {
+            return (
+              <div
+                onClick={() => setActive(i)}
+                key={i}
+                className={`relative w-[32%] h-36 rounded-lg border-main-pink flex flex-col justify-center items-center ${
+                  active === i && "border"
+                }`}
+              >
+                <span
+                  className={`text-xs text-[#6D7781] ${active === i && "text-[#222222]"}`}
+                >{`${v.month}个月`}</span>
+                <span
+                  className={`text-[20px] font-bold my-4] ${
+                    active === i ? "text-main-pink" : "text-[#222222"
+                  }`}
+                >{`$${v.price}`}</span>
+                <span className="text-[#6D7781] text-xs">{v.discount ? `$${v.discount}` : ""}</span>
+                {v.percentage && (
+                  <div className=" flex justify-center items-center absolute left-0 top-0 w-1/2 h-[18px] mt-[-9px] bg-[#F7B500] rounded-full rounded-bl-none text-xs text-white">{`${v.percentage} off`}</div>
+                )}
+              </div>
+            )
+          })}
         </div>
         <div className="flex justify-center">
-          <div className=" relative w-72 h-[50px] rounded-full bg-main-pink text-white flex justify-center items-center mt-16 text-[15px] font-semibold">确认并支付 999.99 USDT
-
-            <div className=" absolute top-[-14px] right-6 py-1 px-2 bg-[#F7B500] flex justify-center items-center text-xs rounded-full">已省 $99.99</div>
+          <div className=" relative w-72 h-[50px] rounded-full bg-main-pink text-white flex justify-center items-center mt-10 text-[15px] font-semibold">
+            确认并支付 999.99 USDT
+            <div className=" absolute top-[-14px] right-6 py-1 px-2 bg-[#F7B500] flex justify-center items-center text-xs rounded-full">
+              已省 $99.99
+            </div>
           </div>
         </div>
       </div>
@@ -63,11 +89,20 @@ export default function SubScribeConfirm({ children, isOpen, setIsOpen }: {
   }
   return (
     <FormDrawer
-      title={<div>订阅 <span className="ml-1 text-[15px] text-main-pink">用户的昵称</span></div>}
+      title={
+        <div>
+          订阅 <span className="ml-1 text-[15px] text-main-pink">{data?.first_name}</span>
+        </div>
+      }
       headerLeft={(close) => {
         return (
           <button onTouchEnd={close} className={"text-base text-[#777]"}>
-            <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
+            <IconWithImage
+              url={"/icons/profile/icon_close@3x.png"}
+              width={24}
+              height={24}
+              color={"#000"}
+            />
           </button>
         )
       }}
@@ -75,7 +110,7 @@ export default function SubScribeConfirm({ children, isOpen, setIsOpen }: {
       outerControl={setIsOpen ? true : false}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
-      className="h-[47vh] border-0"
+      className="h-[50vh] border-0"
     >
       {openInner()}
     </FormDrawer>

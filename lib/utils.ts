@@ -176,10 +176,24 @@ function createChunks(file:File) {
   return chunkList
 }
 
+const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 export function buildImageUrl(fileId: string) {
   return `https://imfanstest.potato.im/api/v1/media/img/${fileId}`
 }
 
 export function buildVideoUrl(fileId: string, quality: string) {
   return `https://imfanstest.potato.im/api/v1/media/videocut/${fileId}/${quality}`
+}
+
+/**
+ * 获取媒体地址
+ * @param fileId 文件id
+ * @param quality 分辨率
+ */
+export function buildMediaUrl(fileId: string, quality?: string) {
+  if (quality) {
+    return `${mediaUrl}videocut/${fileId}/${quality}`
+  } else {
+    return `${mediaUrl}${fileId}`
+  }
 }

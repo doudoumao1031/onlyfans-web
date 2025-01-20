@@ -3,18 +3,14 @@ import React, { useEffect, useState } from "react"
 import TimeSort from "@/components/profile/time-sort"
 import FansListItem from "@/components/profile/fans/fans-list-item"
 import { getSubscribedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
-import InfiniteScroll, { FetchFn } from "@/components/common/infinite-scroll"
+import InfiniteScroll, { InfiniteScrollProps } from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 
-function SubscribeUsers ({ initialItems,initialHasMore,fetchData }:{
-  initialItems: SubscribeUserInfo[]
-  initialHasMore: boolean,
-  fetchData: FetchFn<SubscribeUserInfo>
-}) {
+function SubscribeUsers ({ initialItems, initialHasMore, fetcherFn }: InfiniteScrollProps<SubscribeUserInfo>) {
   return (
     <InfiniteScroll<SubscribeUserInfo> initialItems={initialItems}
       initialHasMore={initialHasMore}
-      fetcherFn={fetchData}
+      fetcherFn={fetcherFn}
     >
       {({ items, isLoading, hasMore, error }) => (
         <div>

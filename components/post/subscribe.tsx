@@ -1,5 +1,5 @@
 import { buildImageUrl } from "@/lib/utils"
-import { User } from "./types"
+import { User } from "@/lib/actions/users/types"
 import Avatar from "./avatar"
 import { buildMention } from "./utils"
 import SubscribedDrawer from "../explore/subscribed-drawer"

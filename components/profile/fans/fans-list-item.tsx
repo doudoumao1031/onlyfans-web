@@ -1,7 +1,7 @@
 import Image from "next/image"
 import IconWithImage from "@/components/profile/icon"
 import { SubscribeUserInfo } from "@/lib"
-import { buildImageFileUrl } from "@/lib/utils"
+import { buildImageUrl } from "@/lib/utils"
 import dayjs from "dayjs"
 
 
@@ -19,7 +19,7 @@ export default function FansListItem({ isSubscribe, data }: {
 }) {
   return (
     <div className={"flex gap-4 items-center"}>
-      <Image src={buildImageFileUrl(data.user.photo)} alt={"avatar"} width={40} height={40}
+      <Image src={buildImageUrl(data.user.photo)} alt={"avatar"} width={40} height={40}
         className={"rounded-full shrink-0"}
       />
       <div className={"flex-1 flex justify-between border-b border-[#ddd] py-3 "}>
