@@ -8,19 +8,21 @@ export interface CommentReq {
 }
 
 export interface CommentReplyReq {
-  postId: string
-  commentId: string
+  comment_id: number
   content: string
-  replyUserId: string
+  parent_reply_id?: number
 }
 
 export interface CommentUpVo {
-  commentId: string
-  up: boolean
+  comment_id: number
+  post_id: number
+  comment_type: boolean
 }
 
 export interface CommentDelReq {
-  commentId: string
+  id: number
+  post_id: number
+  comment_type: boolean
 }
 
 export interface CommentPageReq {
@@ -30,27 +32,32 @@ export interface CommentPageReq {
   page_size: number
 }
 
-export interface CommentReplayPageReq {
+export interface CommentReplyPageReq {
   commentId: string
   page: number
   limit: number
 }
 
 export interface CommentInfo {
-  content: string
   id: number
-  postId: number
-  reply_arr: CommentReplyInfo[]
-  replay_count: number
+  comment_id: number
+  content: string
   thumbs_up_count: number
+  thumb_up: boolean
   user: User
+  is_self: boolean
+  post_id: number
+  reply_arr: CommentReplyInfo[]
+  reply_count: number
 }
 
 export interface CommentReplyInfo {
+  id: number
   comment_id: number
   content: string
-  id: number
-  reply_user: User
   thumbs_up_count: number
+  thumb_up: boolean
+  reply_user: User
+  is_self: boolean
   user: User
 }
