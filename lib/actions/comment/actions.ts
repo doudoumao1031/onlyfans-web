@@ -8,7 +8,7 @@ import type {
   CommentUpVo,
   CommentDelReq,
   CommentPageReq,
-  CommentReplayPageReq,
+  CommentReplyPageReq,
   CommentInfo,
   CommentReplyInfo
 } from "./types"
@@ -52,7 +52,7 @@ export async function fetchPostComments(post_id: number) {
   return res?.list || []
 }
 
-export async function getCommentReplies(params: CommentReplayPageReq): Promise<CommentReplyInfo[]> {
+export async function getCommentReplies(params: CommentReplyPageReq): Promise<CommentReplyInfo[]> {
   // Implementation
   throw new Error("Not implemented")
 }

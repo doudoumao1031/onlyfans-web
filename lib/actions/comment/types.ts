@@ -32,7 +32,7 @@ export interface CommentPageReq {
   page_size: number
 }
 
-export interface CommentReplayPageReq {
+export interface CommentReplyPageReq {
   commentId: string
   page: number
   limit: number
