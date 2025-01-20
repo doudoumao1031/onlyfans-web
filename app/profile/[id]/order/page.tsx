@@ -162,6 +162,7 @@ const AddPromotionalActivities = ({ children, unsubList }: { children: React.Rea
   const id = addForm.watch("id")
 
   const { showMessage,renderNode } = useCommonMessage()
+  const minTime = new Date()
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
@@ -247,10 +248,12 @@ const AddPromotionalActivities = ({ children, unsubList }: { children: React.Rea
                   // <InputWithLabel value={field.value} onInputChange={field.onChange} label={"促销开始时间"}/>
                   return (
                     <TopLabelWrapper label="促销开始时间">
-                      <DateTimePicker disabled={!id} value={field.value * 1000} dateChange={value => {
+                      <DateTimePicker min={minTime} disabled={!id} value={field.value * 1000} dateChange={value => {
                         field.onChange(value / 1000)
                       }}
-                      />
+                      >
+                        <div className={field.value ? "" : "text-gray-500"}>{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
+                      </DateTimePicker>
                     </TopLabelWrapper>
                   )
                 }} name={"discount_start_time"} control={addForm.control}
@@ -260,10 +263,12 @@ const AddPromotionalActivities = ({ children, unsubList }: { children: React.Rea
                 <Controller render={({ field,fieldState }) => {
                   return (
                     <TopLabelWrapper label="促销结束时间" errorMessage={fieldState.error?.message}>
-                      <DateTimePicker disabled={!id} value={field.value * 1000} dateChange={value => {
+                      <DateTimePicker min={minTime} disabled={!id} value={field.value * 1000} dateChange={value => {
                         field.onChange(value / 1000)
                       }}
-                      />
+                      >
+                        <div className={field.value ? "" : "text-gray-500"}>{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
+                      </DateTimePicker>
                     </TopLabelWrapper>
                   )
                 }} name={"discount_end_time"} control={addForm.control}

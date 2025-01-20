@@ -30,7 +30,7 @@ export default function SheetSelect({ children, options, onInputChange, isOpen, 
     <>
       <Sheet open={openState} onOpenChange={changeState}>
         <SheetTrigger asChild>
-          <button onTouchEnd={() => {
+          <button className={"w-full"} onTouchEnd={() => {
             changeState?.(true)
           }}
           >{children}</button>

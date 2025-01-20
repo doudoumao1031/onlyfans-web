@@ -7,6 +7,11 @@ body {
   font-size: 14px;
 }
 
+/*antd mobile override*/
+:root:root {
+  --adm-color-primary: #000;
+}
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     --background: 0 0% 100%;

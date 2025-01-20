@@ -118,7 +118,7 @@ export default function InputWithLabel(props: InputProps) {
         )}
         {isSelectInput && (
           <>
-            <div className={clsx("flex-1 w-full font-medium", !optionShowLabel ? "text-gray-300" : "")}>{optionShowLabel || props?.placeholder}</div>
+
             <SheetSelect
               isOpen={isOpen}
               setIsOpen={setIsOpen}
@@ -127,9 +127,12 @@ export default function InputWithLabel(props: InputProps) {
                 onInputChange?.(v)
               })} options={options ?? []}
             >
-              <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
-                height={24} color={"#bbb"}
-              />
+              <div className={"flex w-full items-center"}>
+                <div className={clsx("flex-1 font-medium text-left", !optionShowLabel ? "text-gray-300" : "")}>{optionShowLabel || props?.placeholder}</div>
+                <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
+                  height={24} color={"#bbb"}
+                />
+              </div>
             </SheetSelect>
           </>
         )}
