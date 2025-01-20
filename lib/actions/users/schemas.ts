@@ -21,4 +21,9 @@ export const addDiscount = z.object({
   discount_per: z.string({ message:"请输入" }).refine(d => Number(d) >= 1,"不能小于1").refine(d => Number(d) <= 90,"不能超过90"),
   discount_start_time: z.number({ message:"请选择开始时间" }),
   discount_end_time: z.number({ message:"请选择结束时间" })
+}).refine((data) => {
+  return data.discount_end_time > data.discount_start_time
+}, {
+  message: "结束时间必须大于开始时间",
+  path: ["discount_end_time"]
 })
