@@ -44,7 +44,7 @@ export default function Page(params: Promise<{ id: string }>) {
               {Boolean(error) && <ListError />}
               <div className="w-full flex justify-between flex-wrap">
                 {items?.map((item, index) => (
-                  <MediaItem id={id} item={item} key={index} />
+                  <MediaItem item={item} key={index} />
                 ))}
               </div>
               {isLoading && <ListLoading />}
