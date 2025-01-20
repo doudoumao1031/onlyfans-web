@@ -3,7 +3,7 @@ import {
   BloggerInfo, CollectionPostReq, CommonPageReq, DiscountInfo,
   ENDPOINTS, FansPageReq, fetchWithGet,
   fetchWithPost,
-  PageResponse, PostData, SubscribeUserInfo
+  PageResponse, PostData, SubscribeUserInfo, WalletInfo
 
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
@@ -135,3 +135,10 @@ export const getSubscribedUsers = (params: FansPageReq) => fetchWithPost<FansPag
     return null
   }
 })
+
+/**
+ * 获取钱包信息
+ */
+export async function userWallet() {
+  return fetchWithPost<undefined, WalletInfo>(ENDPOINTS.USERS.WALLET, undefined)
+}

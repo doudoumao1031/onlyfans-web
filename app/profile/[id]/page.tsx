@@ -5,6 +5,8 @@ import PostsCard from "@/components/profile/posts-card"
 import IconWithImage from "@/components/profile/icon"
 import Link from "next/link"
 import { userProfile } from "@/lib/actions/profile"
+import RechangeDrawer from "@/components/profile/rechange-drawer"
+import { userWallet } from "@/lib"
 
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
@@ -24,6 +26,11 @@ export default async function Page({
   const { id } = await params
   const response = await userProfile()
   const data = response?.data
+  if (!data) {
+    throw new Error()
+  }
+  const wallet = await userWallet()
+  const walletInfo = wallet?.data
   if (!data) {
     throw new Error()
   }
@@ -112,6 +119,18 @@ export default async function Page({
               </div>
               <div className="text-xs text-[#333]">订阅</div>
             </div>
+          </div>
+        </div>
+        <div className={"p-4"}>
+          <div className={"bg-[url('/icons/profile/bg_wallet.png')] bg-cover rounded-xl text-white flex justify-between items-center w-full px-[20px] pt-[10px] pb-[20px]"}>
+            <div className={"flx flex-col justify-start"}>
+              <span className={"text-xs"}>唯粉余额</span>
+              <div className={"flex items-baseline font-medium"}>
+                <span className={"text-[32px]"}>{walletInfo?.amount || 0.00}</span>
+                <span className={"text-[15px]"}>&nbsp;&nbsp;USDT</span>
+              </div>
+            </div>
+            <RechangeDrawer />
           </div>
         </div>
 
