@@ -136,7 +136,7 @@ export const myPosts = (
  * 待定
  * @param params
  */
-export const myMediaPosts = (params:CommonPageReq) => fetchWithPost<CommonPageReq,PageResponse<unknown>>(ENDPOINTS.POST.ME_MEDIAS,params).then(response => {
+export const myMediaPosts = (params:CommonPageReq) => fetchWithPost<CommonPageReq,PageResponse<PostData>>(ENDPOINTS.POST.ME_MEDIAS,params).then(response => {
   if (response?.code === 0) {
     return response.data
   }
