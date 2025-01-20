@@ -1,32 +1,62 @@
-import { InputHTMLAttributes, useEffect, useState } from "react"
-import { clsx } from "clsx"
-import dayjs from "dayjs"
+"use client"
+import React, { ReactNode, useEffect, useState } from "react"
+import { DatePickerView } from "antd-mobile"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle
+} from "@/components/ui/drawer"
 
 export default function DateTimePicker(props: {
   className?: string,
   value: number,
   dateChange: (value: number) => void,
-  disabled?: boolean
-} & InputHTMLAttributes<HTMLInputElement>) {
-  const { className, value, dateChange } = props
-  // const [value,setValue] = useState<number>()
-  const [inputValue, setInputValue] = useState<string>("")
+  disabled?: boolean,
+  children: ReactNode,
+  max?: Date,
+  min?: Date
+} ) {
+  const [visible,setVisible] = useState<boolean>(false)
+  const {  value, dateChange ,children,max,min } = props
+  const [inputValue, setInputValue] = useState<Date>()
   useEffect(() => {
     if (value > 0) {
-      setInputValue(new Date(value).toString())
+      setInputValue(new Date(value))
     }
   }, [value])
 
   return (
-    <input
-      {...props}
-      className={
-        clsx("w-full", className)
-      } type={"datetime-local"}
-      value={inputValue} onChange={(event) => {
-        setInputValue(event.target.value)
-        dateChange(dayjs(event.target.value).valueOf())
+    <>
+      <button type={"button"} className={"block w-full text-left"} onTouchEnd={() => {
+        setVisible(true)
       }}
-    />
+      >{children}</button>
+      <Drawer open={visible} onOpenChange={setVisible}>
+        <DrawerContent className={"bg-white"}>
+          <section className={"flex-1"}>
+            <DrawerHeader className={"hidden"}>
+              <DrawerTitle></DrawerTitle>
+              <DrawerDescription></DrawerDescription>
+            </DrawerHeader>
+            <section className={"flex justify-between px-4"}>
+              <button type={"button"} onTouchEnd={() => {
+                setVisible(false)
+              }}
+              >取消</button>
+              <button className={"text-main-pink"} type={"button"} onTouchEnd={() => {
+                setVisible(false)
+                if (inputValue) {
+                  dateChange(inputValue.valueOf())
+                }
+              }}
+              >确定</button>
+            </section>
+            <DatePickerView precision={"minute"} value={inputValue} onChange={setInputValue} max={max} min={min}/>
+          </section>
+        </DrawerContent>
+      </Drawer>
+    </>
   )
 }
