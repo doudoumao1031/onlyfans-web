@@ -45,6 +45,7 @@ export interface CommentInfo {
   thumbs_up_count: number
   thumb_up: boolean
   user: User
+  is_self: boolean
   post_id: number
   reply_arr: CommentReplyInfo[]
   reply_count: number
@@ -54,8 +55,9 @@ export interface CommentReplyInfo {
   id: number
   comment_id: number
   content: string
-  reply_user: User
   thumbs_up_count: number
   thumb_up: boolean
+  reply_user: User
+  is_self: boolean
   user: User
 }

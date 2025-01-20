@@ -6,7 +6,6 @@ import {
   CommentReplyReq,
   deleteComment,
   fetchPostComments,
-  getAuthToken,
   replyComment,
   upComment
 } from "@/lib"
@@ -15,6 +14,7 @@ import { useEffect, useState } from "react"
 export default function Comments({ post_id }: { post_id: number }) {
   const [comments, setComments] = useState<CommentInfo[]>([])
   const [input, setInput] = useState("")
+  const [showReplies, setShowReplies] = useState<number[]>([])
 
   useEffect(() => {
     fetchComments()
@@ -36,8 +36,12 @@ export default function Comments({ post_id }: { post_id: number }) {
       </div>
       {comments.map((comment) => (
         <div key={comment.id} className="flex flex-col gap-2">
-          <Comment comment={comment} refreshComments={refreshComments} />
-          {comment.reply_arr?.length && (
+          <Comment
+            comment={comment}
+            refreshComments={refreshComments}
+            showReplies={() => setShowReplies([...showReplies, comment.id])}
+          />
+          {comment.reply_arr?.length && showReplies.includes(comment.id) && (
             <div className="pl-11 flex flex-col gap-2">
               {comment.reply_arr.map((reply) => (
                 <Comment
@@ -70,14 +74,26 @@ export default function Comments({ post_id }: { post_id: number }) {
 function Comment({
   comment,
   refreshComments,
-  isReply = false
+  isReply = false,
+  showReplies = () => {}
 }: {
   comment: CommentInfo
   refreshComments: () => void
   isReply?: boolean
+  showReplies?: () => void
 }) {
-  const { user, content, thumbs_up_count, thumb_up, id, comment_id, post_id } = comment
-  const { photo, username, id: userId } = user
+  const {
+    user,
+    content,
+    thumbs_up_count,
+    thumb_up,
+    id,
+    comment_id,
+    post_id,
+    is_self,
+    reply_count
+  } = comment
+  const { photo, username } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
   const [thumbupCount, setThumbupCount] = useState(thumbs_up_count)
@@ -92,8 +108,13 @@ function Comment({
             <div className="text-xs text-[#FF8492]">{username}</div>
             <div className="text-sm">{content}</div>
             <div className="flex gap-4 text-xs text-[#6D7781]">
+              {reply_count > 0 && (
+                <div onClick={showReplies} className="text-[#FF8492]">
+                  {reply_count}条回复
+                </div>
+              )}
               <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
-              {userId === Number(getAuthToken()) && <div onClick={removeComment}>删除</div>}
+              {is_self && <div onClick={removeComment}>删除</div>}
             </div>
           </div>
         </div>
