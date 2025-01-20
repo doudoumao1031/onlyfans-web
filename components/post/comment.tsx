@@ -6,6 +6,7 @@ import {
   CommentReplyReq,
   deleteComment,
   fetchPostComments,
+  getAuthToken,
   replyComment,
   upComment
 } from "@/lib"
@@ -76,7 +77,7 @@ function Comment({
   isReply?: boolean
 }) {
   const { user, content, thumbs_up_count, thumb_up, id, comment_id, post_id } = comment
-  const { photo, username } = user
+  const { photo, username, id: userId } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
   const [thumbupCount, setThumbupCount] = useState(thumbs_up_count)
@@ -92,7 +93,7 @@ function Comment({
             <div className="text-sm">{content}</div>
             <div className="flex gap-4 text-xs text-[#6D7781]">
               <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
-              <div onClick={removeComment}>删除</div>
+              {userId === Number(getAuthToken()) && <div onClick={removeComment}>删除</div>}
             </div>
           </div>
         </div>

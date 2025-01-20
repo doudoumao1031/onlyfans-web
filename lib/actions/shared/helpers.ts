@@ -31,7 +31,7 @@ export function calculatePagination(
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
-const getAuthToken = () => {
+export const getAuthToken = () => {
   return "26"
 }
 
@@ -116,5 +116,4 @@ export function uploadFetch<Req, Res = unknown>(
     },
     body: isFormData ? data : JSON.stringify(data)
   })
-
 }
