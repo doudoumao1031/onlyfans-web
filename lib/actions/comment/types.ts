@@ -39,22 +39,23 @@ export interface CommentReplyPageReq {
 }
 
 export interface CommentInfo {
-  content: string
   id: number
   comment_id: number
-  post_id: number
-  reply_arr: CommentReplyInfo[]
-  reply_count: number
+  content: string
   thumbs_up_count: number
   thumb_up: boolean
   user: User
+  post_id: number
+  reply_arr: CommentReplyInfo[]
+  reply_count: number
 }
 
 export interface CommentReplyInfo {
+  id: number
   comment_id: number
   content: string
-  id: number
   reply_user: User
   thumbs_up_count: number
+  thumb_up: boolean
   user: User
 }
