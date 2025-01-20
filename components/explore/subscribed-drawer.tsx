@@ -10,7 +10,7 @@ interface SubscribedDrawerProps {
     userId: number;
     name: string,
     children?: React.ReactNode,
-    trigger?: (envent: () => void) => React.ReactNode
+    trigger?: (event: () => void) => React.ReactNode
 }
 
 const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, children, trigger }) => {

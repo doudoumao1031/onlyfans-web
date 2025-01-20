@@ -62,3 +62,14 @@ export interface User {
   top_info: string
   username: string
 }
+
+/**
+ * 钱包信息
+ */
+export interface WalletInfo {
+  id: number
+  user_id: number
+  amount: number
+  freeze: number
+  pt_wallet: string
+}
