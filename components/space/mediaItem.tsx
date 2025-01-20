@@ -1,9 +1,9 @@
 import { useState } from "react"
 import IconWithImage from "../profile/icon"
-import { FileType } from "@/lib"
+import { FileType, PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
 import Link from "next/link"
-export default function Page({ item }: { item: any }) {
+export default function Page({ item }: { item: PostData }) {
   if (!item) return null
   const { post_attachment, post_price, user, post, post_metric } = item
   const [isClick, setIsClick] = useState<boolean>(false)
