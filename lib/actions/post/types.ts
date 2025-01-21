@@ -71,6 +71,7 @@ export interface PostData {
   post: {
     id: number
     title: string
+    visibility:number
   }
   post_attachment: Attachment[]
   post_metric: {
@@ -84,6 +85,12 @@ export interface PostData {
   post_vote: Vote
   user: User
   comments: Comment[]
+  post_price:{
+    id:number
+    price:number
+    user_type:number
+    visibility:boolean
+  }[]
 }
 export interface Comment {
   content: string
@@ -136,6 +143,7 @@ export interface PostData {
   post: {
     id: number
     title: string
+    visibility:number
   }
   post_attachment: Attachment[]
   post_metric: {
@@ -149,6 +157,12 @@ export interface PostData {
   post_vote: Vote
   user: User
   comments: Comment[]
+  post_price:{
+    id:number
+    price:number
+    user_type:number
+    visibility:boolean
+  }[]
 }
 export interface Comment {
   content: string

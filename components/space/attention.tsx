@@ -56,14 +56,8 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
     setIsFocus(!isFocus)
     try {
       const res = isFocus
-        ? await userDelFollowing({
-            follow_id: 1,
-            following_type: 0
-          })
-        : await userFollowing({
-            follow_id: 1,
-            following_type: 0
-          })
+        ? await userDelFollowing({ follow_id: 1, following_type: 0 })
+        : await userFollowing({ follow_id: 1, following_type: 0 })
       if (!res || res.code !== 0) return setIsFocus(!isFocus)
       setVisible(true)
       setModalType(isFocus ? 5 : 4)
