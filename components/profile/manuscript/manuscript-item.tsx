@@ -14,7 +14,7 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
   )
 }
 
-const ManuscriptActions = () => {
+const ManuscriptActions = ({ id }:{id:number}) => {
   return (
     <section className="flex">
       <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
@@ -29,7 +29,7 @@ const ManuscriptActions = () => {
         <IconWithImage url={"/icons/profile/icon_fans_data@3x.png"} width={20} height={20} color={"#222"}/>
         <span>数据</span>
       </button>
-      <Link href={"/profile/123/manuscript/draft/edit"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink">
+      <Link href={`/profile/123/manuscript/draft/edit?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink">
         <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
         <span>编辑</span>
       </Link>
@@ -87,7 +87,7 @@ export default function ManuscriptItem({ data }: { data: PostData }) {
           </section>
         </section>
       </button>
-      <ManuscriptActions/>
+      <ManuscriptActions id={data.post.id}/>
     </section>
   )
 }

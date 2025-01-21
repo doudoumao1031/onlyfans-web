@@ -153,21 +153,23 @@ export default async function Page({
           </div>
 
           <PostsCard
+            link={`/profile/${id}/manuscript/draft/edit`}
+            description={"通过订阅、打赏都可以赚取现金"}
+            title={"发布你的帖子"}
+            actionButton={"发布帖子"}
+          />
+          <PostsCard
+            link={`/profile/${id}/order`}
             description={"成为唯粉博主，启航个人新旅途"}
             title={"开启的唯粉创作之路"}
             actionButton={"开启订阅"}
           />
           <PostsCard
+            link={`/profile/${id}/manuscript/draft/edit`}
             description={"分享你的帖子，赚取真金白银"}
             title={"发布你的第一个帖子"}
             actionButton={"立即参与"}
           />
-          <PostsCard
-            description={"通过订阅、打赏都可以赚取现金"}
-            title={"发布你的帖子"}
-            actionButton={"发布帖子"}
-          />
-
           <div className="mt-5 ">
             <div className="grid grid-cols-3 gap-y-4 text-[#222]">
               <Link

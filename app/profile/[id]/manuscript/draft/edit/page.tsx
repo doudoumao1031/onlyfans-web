@@ -3,7 +3,7 @@ import React, { HTMLAttributes, useEffect, useMemo, useRef, useState } from "rea
 import clsx from "clsx"
 import IconWithImage from "@/components/profile/icon"
 import { Switch } from "@/components/ui/switch"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import FormDrawer from "@/components/common/form-drawer"
 import InputWithLabel from "@/components/profile/input-with-label"
 import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
@@ -22,10 +22,11 @@ import {
   postPriceSchema,
   iPost,
   postSchema,
-  addPost
+  addPost, postDetail
 } from "@/lib/actions/profile"
 import { uploadMediaFile } from "@/lib"
 import { getUploadMediaFileType } from "@/lib/utils"
+import { isNumber } from "lodash"
 
 const ItemEditTitle = ({
   title,
@@ -665,6 +666,8 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
 
 export default function Page() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const postId = Number(searchParams.get("id"))
   const onFormSubmit = (formData: iPost) => {
     addPost(formData).then((data) => {
       if (data?.code === 0) {
@@ -676,8 +679,16 @@ export default function Page() {
   const postForm = useForm<iPost>({
     mode: "onTouched",
     resolver: zodResolver(postSchema),
-    defaultValues: { ...initPostFormData }
+    defaultValues: (isNumber(postId) && postId > 0) ? () => {
+      return postDetail(postId).then(data => {
+        if (data) {
+          return data.data
+        }
+        return initPostFormData
+      })
+    } : { ...initPostFormData }
   })
+
   const { register, watch, formState, setValue, handleSubmit } = postForm
 
   const noticeRegister = register("post.notice")
