@@ -4,15 +4,15 @@ import { FileType, PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
 import Link from "next/link"
 export default function Page({ item }: { item: PostData }) {
+  const [isClick, setIsClick] = useState<boolean>(false)
   if (!item) return null
   const { post_attachment, post_price, user, post, post_metric } = item
-  const [isClick, setIsClick] = useState<boolean>(false)
   return (
     <Link
       className="w-[calc(50%_-_8px)] h-[220px]"
       href={
         post.visibility === 1 && !user.sub
-          ? `javascript:void(0);`
+          ? "javascript:void(0);"
           : `/space/112/media/${
               post_attachment[0].file_type === FileType.Video ? "video" : "image"
             }/${post_attachment[0].file_id}`
@@ -27,7 +27,7 @@ export default function Page({ item }: { item: PostData }) {
             post_attachment[0].thumb_id || post_attachment[0].file_id
           )})`
         }}
-        className={`relative rounded-lg p-2 text-xs  text-white flex flex-col justify-between bg-white w-full h-full mb-4 bg-cover`}
+        className="relative rounded-lg p-2 text-xs  text-white flex flex-col justify-between bg-white w-full h-full mb-4 bg-cover"
       >
         <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
           <div className="p-2">

@@ -21,9 +21,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
   //   isTop !== value && setIsTop(value)
   // }
   return (
-    <div
-      className={`bg-slate-400 h-[200px] bg-[url('/demo/blog-bg2.jpeg')] bg-cover bg-blend-multiply `}
-    >
+    <div className="bg-slate-400 h-[200px] bg-[url('/demo/blog-bg2.jpeg')] bg-cover bg-blend-multiply ">
       <div className={`w-full fixed top-0 left-0 z-50 ${isTop ? "bg-[#fff]" : "auto"}`}>
         <Header
           leftTitle={
