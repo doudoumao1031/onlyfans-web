@@ -134,6 +134,7 @@ export interface PostId {
  */
 export type SearchPostReq = CommonPageReq & {
   title: string
+  user_id?:string
 }
 
 export interface PostData {

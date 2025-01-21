@@ -6,9 +6,12 @@ import MediaItem from "@/components/space/mediaItem"
 import { myMediaPosts, PageResponse, PostData } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { Fragment, useEffect, useState } from "react"
+import { useParams } from "next/navigation"
 
 export default function Page(params: Promise<{ id: string }>) {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
+  const { id } = useParams()
+  console.log(id, "route-----")
   useEffect(() => {
     myMediaPosts({
       page: 1,
@@ -28,10 +31,6 @@ export default function Page(params: Promise<{ id: string }>) {
   })
   return (
     <div className="">
-      {/* {mockData.map((v, i) => {
-        return <MediaItem item={v} key={i} />
-      })} */}
-
       {initData && (
         <InfiniteScroll<PostData>
           className={"h-full w-full mx-auto"}
