@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-export type TModaProps = {
+export type TModalProps = {
   visible?: boolean
   children?: React.ReactNode
   closeModal?: boolean
@@ -25,7 +25,7 @@ export default function Page({
   footer,
   cancel = () => {},
   confirm = () => {}
-}: TModaProps) {
+}: TModalProps) {
   if (!visible) return null
   const DefaultFooter = () => {
     return (
@@ -52,9 +52,11 @@ export default function Page({
   return (
     <div
       onClick={() => {
-        closeModal && cancel()
+        if (closeModal) {
+          cancel()
+        }
       }}
-      className="fixed top-0 left-0 w-screen h-screen bg-black/50 z-50 flex justify-center items-center"
+      className="fixed top-0 left-0 w-screen h-screen bg-black/50 z-[100] flex justify-center items-center"
     >
       {children}
       {type === "modal" && (

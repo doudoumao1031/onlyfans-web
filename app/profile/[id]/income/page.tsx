@@ -37,7 +37,7 @@ export default function Page() {
         }}
         headerRight={(() => {
           return (
-            <Link href={`${pathname}/wthdrawalInfo`}>
+            <Link href={`${pathname}/withdrawalInfo`}>
               <button className={"text-base text-main-pink"}>明细</button>
             </Link>
           )

@@ -5,8 +5,9 @@ import PostsCard from "@/components/profile/posts-card"
 import IconWithImage from "@/components/profile/icon"
 import Link from "next/link"
 import { userProfile } from "@/lib/actions/profile"
-import RechangeDrawer from "@/components/profile/rechange-drawer"
 import { userWallet } from "@/lib"
+import RechargeDrawer from "@/components/profile/recharge-drawer"
+import TipDrawer from "@/components/post/tip-drawer"
 
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
@@ -78,11 +79,13 @@ export default async function Page({
           <div className="text-center text-[#6D7781] text-xs">
             @{data.username}
           </div>
-          <div className="flex justify-center mt-2">
-            <button className="pt-0.5 pb-0.5 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
-              进入空间
-            </button>
-          </div>
+          <Link href={`/space/${id}/feed`}>
+            <div className="flex justify-center mt-2">
+              <button className="pt-0.5 pb-0.5 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
+                进入空间
+              </button>
+            </div>
+          </Link>
           <div className="text-xs mt-2.5">
             <section>{data.about || "暂无信息"}</section>
             {data.about && (
@@ -130,7 +133,7 @@ export default async function Page({
                 <span className={"text-[15px]"}>&nbsp;&nbsp;USDT</span>
               </div>
             </div>
-            <RechangeDrawer />
+            <RechargeDrawer />
           </div>
         </div>
 

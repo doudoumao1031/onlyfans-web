@@ -3,14 +3,14 @@ import Header from "@/components/common/header"
 import IconWithImage from "@/components/profile/icon"
 import { useState } from "react"
 import Empty from "@/components/common/empty"
-type TWthdrawal = {
+type TWithdrawal = {
     time: string
     num: number
     balance: number
     status: number
 
 }
-const mockData: TWthdrawal[] = [
+const mockData: TWithdrawal[] = [
   {
     time: "2020-01-01 16:24:32",
     num: 9999.99,
@@ -32,7 +32,7 @@ const mockData: TWthdrawal[] = [
 ]
 
 export default function Page() {
-  const [list ] = useState<TWthdrawal[]>(mockData)
+  const [list ] = useState<TWithdrawal[]>(mockData)
   return (
     <>
       <Header title="明细" titleColor="#000" />
