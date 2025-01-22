@@ -5,6 +5,7 @@ import {
   CommentInfo,
   CommentReplyReq,
   deleteComment,
+  fetchCommentReplies,
   fetchPostComments,
   replyComment,
   upComment
@@ -14,7 +15,9 @@ import { useEffect, useState } from "react"
 export default function Comments({ post_id }: { post_id: number }) {
   const [comments, setComments] = useState<CommentInfo[]>([])
   const [input, setInput] = useState("")
-  const [showReplies, setShowReplies] = useState<number[]>([])
+  const [replies, setReplies] = useState<{
+    [commendId: number]: { show: boolean; replies: CommentInfo[] }
+  }>({})
 
   useEffect(() => {
     fetchComments()
@@ -35,15 +38,24 @@ export default function Comments({ post_id }: { post_id: number }) {
         <button onClick={sendComment}>发送评论</button>
       </div>
       {comments.map((comment) => (
-        <div key={comment.id} className="flex flex-col gap-2">
+        <div key={comment.id} className="flex flex-col gap-4">
           <Comment
             comment={comment}
             refreshComments={refreshComments}
-            showReplies={() => setShowReplies([...showReplies, comment.id])}
+            showReplies={async () => {
+              if (replies[comment.id]?.show) {
+                setReplies({ ...replies, [comment.id]: { ...replies[comment.id], show: false } })
+              } else {
+                const repliesFetched = await fetchCommentReplies(comment.id, post_id)
+                if (repliesFetched && repliesFetched.length) {
+                  setReplies({ ...replies, [comment.id]: { show: true, replies: repliesFetched } })
+                }
+              }
+            }}
           />
-          {comment.reply_arr?.length && showReplies.includes(comment.id) && (
+          {replies[comment.id]?.show && (
             <div className="pl-11 flex flex-col gap-2">
-              {comment.reply_arr.map((reply) => (
+              {replies[comment.id].replies.map((reply) => (
                 <Comment
                   comment={{ ...reply, post_id, reply_arr: [], reply_count: 0 }}
                   key={reply.id}

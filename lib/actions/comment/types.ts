@@ -33,9 +33,11 @@ export interface CommentPageReq {
 }
 
 export interface CommentReplyPageReq {
-  commentId: string
+  comment_id: number
+  from_id: number
   page: number
-  limit: number
+  pageSize: number
+  post_id: number
 }
 
 export interface CommentInfo {
