@@ -7,7 +7,6 @@ import Link from "next/link"
 import { userProfile } from "@/lib/actions/profile"
 import { userWallet } from "@/lib"
 import RechargeDrawer from "@/components/profile/recharge-drawer"
-import { getSubscribeSetting, myPosts } from "@/lib"
 
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
@@ -26,26 +25,15 @@ export default async function Page({
 }) {
   const { id } = await params
   const response = await userProfile()
-  const subscribeSettings = await getSubscribeSetting()
-  const posts = await myPosts({
-    title:"",
-    page: 1,
-    pageSize: 1,
-    from_id: 0
-  })
   const data = response?.data
-  if (!data || !subscribeSettings || !posts) {
+  if (!data) {
     throw new Error()
   }
   const wallet = await userWallet()
   const walletInfo = wallet?.data
-  if (!data) {
+  if (!walletInfo) {
     throw new Error()
   }
-
-  const totalPosts = posts.total
-  const noSettings = (subscribeSettings?.items?.length ?? 0) === 0
-
   return (
     <div>
       <div
@@ -90,7 +78,7 @@ export default async function Page({
           <div className="text-center text-[#6D7781] text-xs">
             @{data.username}
           </div>
-          <Link href={`/space/${id}_1/feed`}>
+          <Link href={`/space/${id}/feed`}>
             <div className="flex justify-center mt-2">
               <button className="pt-0.5 pb-0.5 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
                 进入空间
@@ -185,35 +173,25 @@ export default async function Page({
             </Link>
           </div>
 
-          {/* 已发布过帖子 */}
-          {
-            totalPosts > 0 && (
-              <PostsCard
-                link={`/profile/${id}/manuscript/draft/edit`}
-                description={"通过订阅、打赏都可以赚取现金"}
-                title={"发布你的帖子"}
-                actionButton={"发布帖子"}
-              />
-            )
-          }
-          {/* 未开启订阅 */}
-          {noSettings && (
-            <PostsCard
-              link={`/profile/${id}/order`}
-              description={"成为唯粉博主，启航个人新旅途"}
-              title={"开启的唯粉创作之路"}
-              actionButton={"开启订阅"}
-            />
-          )}
-          {/*已开启订阅，但未发布帖子*/}
-          {!noSettings && totalPosts === 0 && (
-            <PostsCard
-              link={`/profile/${id}/manuscript/draft/edit`}
-              description={"分享你的帖子，赚取真金白银"}
-              title={"发布你的第一个帖子"}
-              actionButton={"立即参与"}
-            />
-          )}
+          <PostsCard
+            description={"成为唯粉博主，启航个人新旅途"}
+            title={"开启的唯粉创作之路"}
+            actionButton={"开启订阅"}
+            link={""}
+          />
+          <PostsCard
+            description={"分享你的帖子，赚取真金白银"}
+            title={"发布你的第一个帖子"}
+            actionButton={"立即参与"}
+            link={""}
+          />
+          <PostsCard
+            description={"通过订阅、打赏都可以赚取现金"}
+            title={"发布你的帖子"}
+            actionButton={"发布帖子"}
+            link={""}
+          />
+
           <div className="mt-5 ">
             <div className="grid grid-cols-3 gap-y-4 text-[#222]">
               <Link

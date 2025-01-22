@@ -4,7 +4,7 @@ import {
   ENDPOINTS, FansPageReq, fetchWithGet,
   fetchWithPost,
   PageResponse, PostData, SubscribeUserInfo, UserMetricDay, UserMetricDayReq, WalletInfo
-  PageResponse, PostData, PtWalletInfo, SubscribeUserInfo, WalletInfo, StatementReq, StatementResp
+  , PtWalletInfo, StatementReq, StatementResp
 
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
