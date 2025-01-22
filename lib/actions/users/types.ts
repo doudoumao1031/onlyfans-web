@@ -46,3 +46,20 @@ export interface CollectionPostReq {
   post_id: number
   user_id: number
 }
+
+export interface UserMetricDayReq {
+  start: string
+  end: string
+}
+export interface UserMetricDay {
+  access_count:number
+  day: string
+  following_all_count: number
+  following_count: number
+  following_del_count: number
+  income: number
+  play_count: number
+  post_count: number
+  subscribe_count: number
+  user_id: number
+}

@@ -82,6 +82,7 @@ export const ENDPOINTS = {
     GET_BY_USERNAME: "/user/username",
     POST_VIEW_LOG: "/user/userPostViewLog",
     STAT_DAY_METRIC: "/user/userStatDayUserMetric",
+    STAT_INCOME: "/user/userStatIncome",
     SUB_ME_LOG: "/user/userSubMeLog",
     VIEW_LOG: "/user/userViewLog",
     VIEW_LOGS: "/user/userViewLogs",
