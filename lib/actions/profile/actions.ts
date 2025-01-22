@@ -10,6 +10,10 @@ export async function addPost(params: iPost) {
   return fetchWithPost<iPost, ApiResponse<unknown>>(ENDPOINTS.POST.ADD, params)
 }
 
+export async function postDetail(id: number) {
+  return fetchWithGet<unknown,iPost>(`${ENDPOINTS.POST.VIEW}/${id}`,null)
+}
+
 export async function userProfile() {
   return fetchWithGet<undefined, UserProfile>(ENDPOINTS.USERS.ME, undefined)
 }

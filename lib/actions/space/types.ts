@@ -4,7 +4,7 @@
 /**
  * 分页公共请求
  */
-export type CommonPageReq = {
+export type PageInfo = {
   from_id: number | 0
   page: number | 1
   pageSize: number | 10

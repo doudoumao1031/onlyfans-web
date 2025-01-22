@@ -1,9 +1,9 @@
-import { CommonPageReq } from "@/lib"
+import { PageInfo } from "@/lib"
 
 /**
  * 搜索用户请求
  */
-export type SearchUserReq = CommonPageReq & {
+export type SearchUserReq = PageInfo & {
   name: string
 }
 
@@ -72,4 +72,52 @@ export interface WalletInfo {
   amount: number
   freeze: number
   pt_wallet: string
+}
+
+/**
+ * pt钱包信息返回
+ */
+export interface PtWalletInfo extends WalletInfo
+{
+  proportion: string
+}
+
+/**
+ * 收支明细请求
+ */
+export interface StatementReq extends PageInfo {
+  change_type?: number  // 1 充值 2购买会员 3 打赏 4 帖子付费 5 提现
+  start_time?: number
+  end_time?: number
+}
+
+/**
+ * 收支明细返回
+ */
+export interface StatementResp {
+  balance_snapshot: number //资金快照
+  change_amount: number // 变动金额
+  change_type: number // 1 充值 2购买会员 3 打赏 4 帖子付费 5 提现
+  id: number
+  reason: string // 变动原因
+  user_id: number
+  trade_time: number // 交易时间
+  trade_status: number // 0 成功 1 审核中 2 失败
+}
+
+export interface UserMetricDayReq {
+  start: string
+  end: string
+}
+export interface UserMetricDay {
+  access_count:number
+  day: string
+  following_all_count: number
+  following_count: number
+  following_del_count: number
+  income: number
+  play_count: number
+  post_count: number
+  subscribe_count: number
+  user_id: number
 }

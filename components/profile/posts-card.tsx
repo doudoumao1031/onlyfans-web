@@ -1,22 +1,20 @@
 "use client"
 import React from "react"
+import Link from "next/link"
 
-export default function PostsCard({ description, title, actionButton, action }: {
+export default function PostsCard({ description, title, actionButton ,link }: {
     description: React.ReactNode,
     title: React.ReactNode,
     actionButton: React.ReactNode,
-    action?: () => void
+    link: string
 }) {
   return (
-    <div className="mt-2.5 subscription-item rounded-xl flex justify-between items-center h-[74px] p-4">
+    <Link href={link} className="mt-2.5 subscription-item rounded-xl flex justify-between items-center h-[74px] p-4">
       <div className="text-white">
         <div className="text-[16px]">{title}</div>
         <div className="text-xs">{description}</div>
       </div>
-      <button className="rounded-2xl bg-white pt-1.5 pb-1.5 pl-4 pr-4 text-main-pink" onClick={() => {
-        action?.()
-      }}
-      >{actionButton}</button>
-    </div>
+      <span className="rounded-2xl bg-white pt-1.5 pb-1.5 pl-4 pr-4 text-main-pink">{actionButton}</span>
+    </Link>
   )
 }

@@ -68,7 +68,7 @@ const AddSubscriptionModal = ({ children, refresh }: { children: React.ReactNode
               user_id: 1
             }).then((result) => {
               if (result?.code === 0) {
-                showMessage("添加成功", {
+                showMessage("添加成功", "default", {
                   afterDuration: () => {
                     setIsOpen(false)
                   }
@@ -187,7 +187,7 @@ const AddPromotionalActivities = ({ children, unsubList }: { children: React.Rea
               discount_per: Number(newValues.discount_per)
             }).then((response) => {
               if (response) {
-                showMessage("保存成功",{
+                showMessage("保存成功","default",{
                   afterDuration: () => {
                     setIsOpen(false)
                   }
@@ -481,7 +481,7 @@ export default function Page() {
                 id: defaultSettings?.id
               }).then(data => {
                 if (data) {
-                  showMessage("修改成功", {
+                  showMessage("修改成功", "default", {
                     afterDuration: router.back
                   })
                 }

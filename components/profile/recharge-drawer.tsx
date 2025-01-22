@@ -2,48 +2,59 @@
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { useState } from "react"
-import { addWalletOrder, handleRechargeOrderCallback } from "@/lib"
+import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 
-const SubscribedDrawer: React.FC = () => {
+const RechargeDrawer: React.FC = () => {
+  const pathname = usePathname()
   const { showMessage, renderNode } = useCommonMessage()
   const [amount, setAmount] = useState<number>(0)
+  const [ptBalance, setPtBalance] = useState<number>(0)
+  const [wfBalance, setWfBalance] = useState<number>(0)
+  const [rate, setRate] = useState<string>("1:1")
+
   const getSettingData = async () => {
-    // todo: 充值配置
+    setAmount(0)
+    await userPtWallet().then((result) => {
+      if (result && result.code === 0) {
+        setPtBalance(Number(result.data.pt_wallet))
+        setWfBalance(result.data.amount)
+        setRate(result.data.proportion)
+      }
+    })
   }
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-
   const columns:{title: string, desc: string}[] = [
     { title: "服务", desc: "唯粉充值" },
-    { title: "钱包余额", desc: "61.09 USDT" },
-    { title: "唯粉余额", desc: "6 USDT" },
-    { title: "总的比例", desc: "1:1" }
+    { title: "钱包余额", desc: ptBalance.toFixed(2).toString() + " USDT" },
+    { title: "唯粉余额", desc: wfBalance.toFixed(2).toString() + " USDT" },
+    { title: "总的比例", desc: rate }
   ]
 
   async function handleRecharge(amount: number) {
+    if (!amount || amount <= 0) {
+      showMessage("请输入充值金额")
+      return
+    }
     const tradeNo = await addWalletOrder({ amount: Number(amount) })
       .then((result) => {
         if (result && result.code === 0) {
           return result.data.trade_no
-        } else {
-          return ""
         }
+        throw Error()
       })
-    console.log("tradeNo:", tradeNo)
     // todo: 调用pt钱包支付
     await handleRechargeOrderCallback({ trade_no: tradeNo })
       .then((result) => {
         if (result && result.code === 0) {
-          showMessage(<div className={"w-36 h-12 flex justify-center items-center"}>
-            <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20}/>
-            <span className={"text-white font-medium"}>充值成功</span>
-          </div>)
+          showMessage("充值成功", "success")
+          getSettingData()
+          setAmount(0)
         } else {
-          showMessage(<div className={"w-36 h-12 flex justify-center items-center"}>
-            <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20}/>
-            <span className={"text-white font-medium text-base"}>充值失败</span>
-          </div>)
+          console.log("充值失败:", result?.message)
+          showMessage("充值失败")
         }
       })
   }
@@ -62,7 +73,7 @@ const SubscribedDrawer: React.FC = () => {
         }}
         headerRight={(() => {
           return (
-            <Link href={"/rechargeInfo"}>
+            <Link href={`${pathname}/income/withdrawalInfo?changeType=1`} prefetch={false}>
               <button className={"text-base text-main-pink"}>明细</button>
             </Link>
           )
@@ -99,24 +110,30 @@ const SubscribedDrawer: React.FC = () => {
               type="number"
               className="w-full py-2 pl-4 pr-16 border-0 bg-white rounded-lg text-left h-[49px] placeholder:text-gray-400 text-base"
               placeholder="请输入充值金额"
+              value={amount == 0 ? "" : amount.toString()}
               onChange={(event) => {
                 const money = event.target.value.replace(/[^0-9.]/g, "")
                 setAmount(parseFloat(money) || 0)
               }}
               onBlur={(event) => {
-                Number(event.target.value).toFixed(2)
+                const formattedAmount = parseFloat(event.target.value).toFixed(2)
+                setAmount(parseFloat(formattedAmount) || 0)
               }}
             />
             <button
-              className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal pointer-events-none z-0 text-main-pink text-base"
+              className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal text-main-pink text-base"
+              onTouchEnd={(e) => {
+                e.preventDefault()
+                setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
+              }}
             >
               全部
             </button>
           </div>
           <div className="my-[40px] self-center">
             <button
-              disabled={amount === 0}
-              className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
+              disabled={!amount || amount === 0}
+              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${amount === 0 || !amount ? "bg-gray-300" : "bg-main-pink"}`}
               onTouchEnd={(e) => {
                 e.preventDefault()
                 handleRecharge(amount)
@@ -130,4 +147,4 @@ const SubscribedDrawer: React.FC = () => {
   )
 }
 
-export default SubscribedDrawer
+export default RechargeDrawer
