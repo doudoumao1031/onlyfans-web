@@ -10,9 +10,7 @@ export default async function Layout(props: {
   const { id } = await props.params
   const [userId, slefId] = id.split("_")
 
-  const response = !!slefId
-    ? await userProfile()
-    : await getUserById({ user_id: userId, username: "123" })
+  const response = !!slefId ? await userProfile() : await getUserById({ id: userId })
   const data = response?.data
   if (!data) {
     throw new Error()

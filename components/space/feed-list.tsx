@@ -16,8 +16,8 @@ interface FeedListProps {
 }
 
 export default function FeedList({ initialItems, initialHasMore, isSelf, id }: FeedListProps) {
-  const infiniteFetchPosts = useInfiniteFetch<SearchPostReq, PostData>({
-    fetchFn: isSelf ? getMyFeeds : getUserPosts,
+  const infiniteFetchPosts = useInfiniteFetch({
+    fetchFn: !isSelf ? getMyFeeds : getUserPosts,
     params: {
       pageSize: 10,
       from_id: 0,

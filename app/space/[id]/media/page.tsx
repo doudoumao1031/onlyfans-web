@@ -7,26 +7,33 @@ import { myMediaPosts, PageResponse, PostData } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { Fragment, useEffect, useState } from "react"
 import { useParams } from "next/navigation"
+import { userMediaPosts } from "@/lib/actions/space"
 
-export default function Page(params: Promise<{ id: string }>) {
+export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const { id } = useParams()
-  console.log(id, "route-----")
+  const [userId, selfId] = (id as string).split("_")
+  console.log("userId", userId)
+
   useEffect(() => {
-    myMediaPosts({
+    getInitData()
+  }, [])
+  const getInitData = async () => {
+    const params = {
       page: 1,
       pageSize: 10,
-      from_id: 0
-    }).then((response) => {
-      console.log(response)
-      setInitData(response)
-    })
-  }, [])
+      from_id: 0,
+      user_id: Number(userId)
+    }
+    const res = selfId ? await myMediaPosts(params) : await userMediaPosts(params)
+    setInitData(res)
+  }
   const infiniteFetchMedia = useInfiniteFetch({
-    fetchFn: myMediaPosts,
+    fetchFn: selfId ? myMediaPosts : userMediaPosts,
     params: {
       pageSize: 10,
-      from_id: 0
+      from_id: 0,
+      user_id: Number(userId)
     }
   })
   return (
@@ -43,7 +50,7 @@ export default function Page(params: Promise<{ id: string }>) {
               {Boolean(error) && <ListError />}
               <div className="w-full flex justify-between flex-wrap">
                 {items?.map((item, index) => (
-                  <MediaItem item={item} key={index} />
+                  <MediaItem id={id} item={item} key={index} />
                 ))}
               </div>
               {isLoading && <ListLoading />}
