@@ -6,9 +6,8 @@ export const postPayOrderReqSchema = z.object({
 })
 
 export const postTipReqSchema = z.object({
-  postId: z.string(),
-  amount: z.number().min(0),
-  payType: z.number()
+  post_id: z.number().optional(),
+  amount: z.number().min(0.01, "最小0.01")
 })
 
 export const subOrderReqSchema = z.object({

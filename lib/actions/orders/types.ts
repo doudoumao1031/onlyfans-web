@@ -6,9 +6,8 @@ export interface PostPayOrderReq {
 }
 
 export interface PostTipReq {
-  postId: string
-  amount: number
-  payType: number
+  post_id: number
+  amount: number // 打赏金额
 }
 
 /**
@@ -29,15 +28,22 @@ export interface WalletDownOrderReq {
 
 export interface WalletOrderReq {
   amount: number
-  payType: number
 }
 
-export interface OrderCallbackReq {
-  orderId: string
-  status: number
+/**
+ * 充值下单返回
+ */
+export interface PayOrderResp {
+  id: number
+  user_id: number
   amount: number
-  payType: number
-  transactionId: string
+  trade_no: string
+  trade_type: number
+  trade_status: boolean
+}
+
+export interface OrderCallBackReq {
+  trade_no: string
 }
 
 export interface DeleteOrderReq {

@@ -5,7 +5,7 @@ import Post from "@/components/post/post"
 import InfiniteScroll from "../common/infinite-scroll"
 import { ListError, ListLoading, ListEnd } from "./list-states"
 import { PostData } from "@/lib"
-import { fetchFeeds } from "@/lib/data"
+import { recomActions } from "@/lib/actions"
 
 interface FeedListProps {
   initialItems: PostData[]
@@ -17,7 +17,7 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
     <InfiniteScroll<PostData>
       initialItems={initialItems}
       initialHasMore={initialHasMore}
-      fetcherFn={fetchFeeds}
+      fetcherFn={recomActions.fetchFeeds}
     >
       {({ items, isLoading, hasMore, error }) => (
         <Fragment>

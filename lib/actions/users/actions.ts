@@ -3,8 +3,7 @@ import {
   BloggerInfo, CollectionPostReq, CommonPageReq, DiscountInfo,
   ENDPOINTS, FansPageReq, fetchWithGet,
   fetchWithPost,
-  PageResponse, PostData, SubscribeUserInfo, UserMetricDay, UserMetricDayReq
-
+  PageResponse, PostData, SubscribeUserInfo, UserMetricDay, UserMetricDayReq, WalletInfo
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
 
@@ -135,6 +134,14 @@ export const getSubscribedUsers = (params: FansPageReq) => fetchWithPost<FansPag
     return null
   }
 })
+
+/**
+ * 获取钱包信息
+ */
+export async function userWallet() {
+  return fetchWithPost<undefined, WalletInfo>(ENDPOINTS.USERS.WALLET, undefined)
+}
+
 
 export const getUserMetricDay = (params: UserMetricDayReq) => fetchWithPost<UserMetricDayReq, PageResponse<UserMetricDay>>(ENDPOINTS.USERS.STAT_DAY_METRIC, params).then(response => {
   return response?.code === 0 ? response.data : null

@@ -5,6 +5,9 @@ import PostsCard from "@/components/profile/posts-card"
 import IconWithImage from "@/components/profile/icon"
 import Link from "next/link"
 import { userProfile } from "@/lib/actions/profile"
+import { userWallet } from "@/lib"
+import RechargeDrawer from "@/components/profile/recharge-drawer"
+import TipDrawer from "@/components/post/tip-drawer"
 import { getSubscribeSetting, myPosts } from "@/lib"
 
 const displayNumber = (data: number) => {
@@ -33,6 +36,11 @@ export default async function Page({
   })
   const data = response?.data
   if (!data || !subscribeSettings || !posts) {
+    throw new Error()
+  }
+  const wallet = await userWallet()
+  const walletInfo = wallet?.data
+  if (!data) {
     throw new Error()
   }
 
@@ -83,11 +91,13 @@ export default async function Page({
           <div className="text-center text-[#6D7781] text-xs">
             @{data.username}
           </div>
-          <div className="flex justify-center mt-2">
-            <Link href={`/space/${id}_1/feed`} className="pt-0.5 pb-0.5 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
-              进入空间
-            </Link>
-          </div>
+          <Link href={`/space/${id}_1/feed`}>
+            <div className="flex justify-center mt-2">
+              <button className="pt-0.5 pb-0.5 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
+                进入空间
+              </button>
+            </div>
+          </Link>
           <div className="text-xs mt-2.5">
             <section>{data.about || "暂无信息"}</section>
             {data.about && (
@@ -124,6 +134,18 @@ export default async function Page({
               </div>
               <div className="text-xs text-[#333]">订阅</div>
             </div>
+          </div>
+        </div>
+        <div className={"p-4"}>
+          <div className={"bg-[url('/icons/profile/bg_wallet.png')] bg-cover rounded-xl text-white flex justify-between items-center w-full px-[20px] pt-[10px] pb-[20px]"}>
+            <div className={"flx flex-col justify-start"}>
+              <span className={"text-xs"}>唯粉余额</span>
+              <div className={"flex items-baseline font-medium"}>
+                <span className={"text-[32px]"}>{walletInfo?.amount || 0.00}</span>
+                <span className={"text-[15px]"}>&nbsp;&nbsp;USDT</span>
+              </div>
+            </div>
+            <RechargeDrawer />
           </div>
         </div>
 

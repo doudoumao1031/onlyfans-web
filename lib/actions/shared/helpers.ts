@@ -29,9 +29,10 @@ export function calculatePagination(
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
+const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
-const getAuthToken = () => {
-  return "1"
+export const getAuthToken = () => {
+  return "26"
 }
 
 async function fetchResultHandle<T>(method: string, response: Response) {
@@ -95,4 +96,24 @@ export async function fetchWithPost<Req, Res = unknown>(
     console.error("Error-POST-catch:", error)
   }
   return null
+}
+
+export function uploadFetch<Req, Res = unknown>(
+  url: string,
+  data: Req,
+  options?: FetchOptions<Res>
+) {
+  const { headers = {} } = options ?? {}
+  const isFormData = data instanceof FormData
+  const fullPath = `${apiUrl}${url}`
+  console.log("POST-url:", fullPath)
+  console.log("POST-data:", data)
+  return fetch(fullPath, {
+    method: "POST",
+    headers: {
+      "X-Token": getAuthToken(),
+      ...headers
+    },
+    body: isFormData ? data : JSON.stringify(data)
+  })
 }

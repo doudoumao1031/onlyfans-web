@@ -55,7 +55,6 @@ export interface PostStarReq {
   post_id: number
 }
 
-
 export interface UserPostsReq extends PageInfo {
   userId: string
 }
@@ -72,6 +71,7 @@ export interface PostData {
   post: {
     id: number
     title: string
+    visibility:number
   }
   post_attachment: Attachment[]
   post_metric: {
@@ -85,6 +85,12 @@ export interface PostData {
   post_vote: Vote
   user: User
   comments: Comment[]
+  post_price:{
+    id:number
+    price:number
+    user_type:number
+    visibility:boolean
+  }[]
 }
 export interface Comment {
   content: string
@@ -137,6 +143,7 @@ export interface PostData {
   post: {
     id: number
     title: string
+    visibility:number
   }
   post_attachment: Attachment[]
   post_metric: {
@@ -150,6 +157,12 @@ export interface PostData {
   post_vote: Vote
   user: User
   comments: Comment[]
+  post_price:{
+    id:number
+    price:number
+    user_type:number
+    visibility:boolean
+  }[]
 }
 export interface Comment {
   content: string
@@ -184,4 +197,3 @@ export interface User {
   username: string
   sub: boolean //是否订阅
 }
-

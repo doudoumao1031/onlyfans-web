@@ -19,9 +19,9 @@ export type DiscountInfo = {
   discount_per: number
   discount_price: number
   discount_start_time: number
-  discount_status: boolean // 促销开关状态
-  item_status: boolean // 捆绑开关状态
+  discount_status: boolean //折扣信息状态（false可用｜true不可用）
   id: number
+  item_status: boolean  //捆绑信息状态（false可用｜true不可用）
   month_count: number
   price: number
   user_id: number
@@ -45,6 +45,33 @@ export interface CollectionPostReq {
   collection: boolean // 0-取消收藏 1-收藏
   post_id: number
   user_id: number
+}
+
+export interface User {
+  about: string
+  back_img: string
+  blogger: boolean
+  first_name: string
+  id: number
+  last_name: string
+  live_certification: boolean
+  location: string
+  photo: string
+  pt_user_id: number
+  status: number
+  top_info: string
+  username: string
+}
+
+/**
+ * 钱包信息
+ */
+export interface WalletInfo {
+  id: number
+  user_id: number
+  amount: number
+  freeze: number
+  pt_wallet: string
 }
 
 export interface UserMetricDayReq {
