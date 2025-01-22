@@ -3,6 +3,7 @@ import {
   BloggerInfo, CollectionPostReq, PageInfo, DiscountInfo,
   ENDPOINTS, FansPageReq, fetchWithGet,
   fetchWithPost,
+  PageResponse, PostData, SubscribeUserInfo, UserMetricDay, UserMetricDayReq, WalletInfo
   PageResponse, PostData, PtWalletInfo, SubscribeUserInfo, WalletInfo, StatementReq, StatementResp
 
 } from "@/lib"
@@ -157,3 +158,10 @@ export async function userStatement(params: StatementReq) {
   return fetchWithPost<StatementReq, PageResponse<StatementResp>>(ENDPOINTS.USERS.STATEMENT, params)
 }
 
+
+
+export const getUserMetricDay = (params: UserMetricDayReq) => fetchWithPost<UserMetricDayReq, PageResponse<UserMetricDay>>(ENDPOINTS.USERS.STAT_DAY_METRIC, params).then(response => {
+  return response?.code === 0 ? response.data : null
+})
+
+export const getUserStatIncome = (params :UserMetricDayReq) => fetchWithPost<UserMetricDayReq,number>(ENDPOINTS.USERS.STAT_INCOME,params).then(response => response?.code === 0 ? response.data : null)

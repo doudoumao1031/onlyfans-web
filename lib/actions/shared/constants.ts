@@ -83,6 +83,7 @@ export const ENDPOINTS = {
     POST_VIEW_LOG: "/user/userPostViewLog",
     STAT_DAY_METRIC: "/user/userStatDayUserMetric",  //用户每日统计
     STATEMENT: "/user/userStatement",  // 查询用户收支明细
+    STAT_INCOME: "/user/userStatIncome",
     SUB_ME_LOG: "/user/userSubMeLog",  // 我的订阅记录
     VIEW_LOG: "/user/userViewLog",
     VIEW_LOGS: "/user/userViewLogs",

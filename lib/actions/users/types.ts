@@ -104,3 +104,20 @@ export interface StatementResp {
   trade_time: number // 交易时间
   trade_status: number // 0 成功 1 审核中 2 失败
 }
+
+export interface UserMetricDayReq {
+  start: string
+  end: string
+}
+export interface UserMetricDay {
+  access_count:number
+  day: string
+  following_all_count: number
+  following_count: number
+  following_del_count: number
+  income: number
+  play_count: number
+  post_count: number
+  subscribe_count: number
+  user_id: number
+}
