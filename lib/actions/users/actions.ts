@@ -1,9 +1,9 @@
 import {
   AddBundleDiscount,
-  BloggerInfo, CollectionPostReq, CommonPageReq, DiscountInfo,
+  BloggerInfo, CollectionPostReq, PageInfo, DiscountInfo,
   ENDPOINTS, FansPageReq, fetchWithGet,
   fetchWithPost,
-  PageResponse, PostData, SubscribeUserInfo, WalletInfo
+  PageResponse, PostData, PtWalletInfo, SubscribeUserInfo, WalletInfo, StatementReq, StatementResp
 
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
@@ -25,7 +25,7 @@ export const searchUser =
  * 已收藏博主列表
  */
 export const userCollectionUsers =
-  (params: CommonPageReq) => fetchWithPost<CommonPageReq, PageResponse<BloggerInfo>>(ENDPOINTS.USERS.COLLECTION_USERS, params)
+  (params: PageInfo) => fetchWithPost<PageInfo, PageResponse<BloggerInfo>>(ENDPOINTS.USERS.COLLECTION_USERS, params)
     .then((res) => {
       if (res && res.code === 0) {
         return res.data
@@ -84,8 +84,8 @@ export const userCollectionPost =
       return !!(res && res.code === 0)
     })
 
-export const userCollectionPosts = (params: CommonPageReq) =>
-  fetchWithPost<CommonPageReq, PageResponse<PostData>>(ENDPOINTS.USERS.COLLECTION_POSTS, params)
+export const userCollectionPosts = (params: PageInfo) =>
+  fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.USERS.COLLECTION_POSTS, params)
     .then((response) => {
       return response?.code == 0 ? response?.data : null
     })
@@ -95,7 +95,7 @@ export const userCollectionPosts = (params: CommonPageReq) =>
  * @param params
  */
 export const getSubscribeUsers =
-  (params: CommonPageReq) => fetchWithPost<CommonPageReq, PageResponse<SubscribeUserInfo>>(ENDPOINTS.USERS.GET_SUBSCRIBE_USERS, params)
+  (params: PageInfo) => fetchWithPost<PageInfo, PageResponse<SubscribeUserInfo>>(ENDPOINTS.USERS.GET_SUBSCRIBE_USERS, params)
     .then((res) => {
       if (res && res.code === 0) {
         return res.data
@@ -142,3 +142,18 @@ export const getSubscribedUsers = (params: FansPageReq) => fetchWithPost<FansPag
 export async function userWallet() {
   return fetchWithPost<undefined, WalletInfo>(ENDPOINTS.USERS.WALLET, undefined)
 }
+
+/**
+ * 获取pt钱包信息（充值时使用）
+ */
+export async function userPtWallet() {
+  return fetchWithPost<undefined, PtWalletInfo>(ENDPOINTS.USERS.PT_WALLET, undefined)
+}
+
+/**
+ * 收支明细
+ */
+export async function userStatement(params: StatementReq) {
+  return fetchWithPost<StatementReq, PageResponse<StatementResp>>(ENDPOINTS.USERS.STATEMENT, params)
+}
+

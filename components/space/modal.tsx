@@ -56,7 +56,7 @@ export default function Page({
           cancel()
         }
       }}
-      className="fixed top-0 left-0 w-screen h-screen bg-black/50 z-[100] flex justify-center items-center"
+      className="fixed top-0 left-0 w-screen h-screen bg-black/50 z-50 flex justify-center items-center"
     >
       {children}
       {type === "modal" && (

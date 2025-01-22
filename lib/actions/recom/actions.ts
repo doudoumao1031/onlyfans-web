@@ -1,6 +1,6 @@
 import {
   BloggerInfo,
-  CommonPageReq,
+  PageInfo,
   ENDPOINTS,
   fetchWithPost,
   PageResponse,
@@ -8,7 +8,6 @@ import {
   RecomBloggerReq
 } from "@/lib"
 import type {
-  PageInfo,
   FollowUserUpdateResp
 } from "@/lib"
 
@@ -52,7 +51,7 @@ export const getRecomBlogger =
  * @returns 热门贴子列表
  */
 export const getSystemPosts =
-  (params: CommonPageReq) => fetchWithPost<CommonPageReq, PageResponse<PostData>>(ENDPOINTS.RECOM.SYSTEM_POST, params)
+  (params: PageInfo) => fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.RECOM.SYSTEM_POST, params)
     .then((res) => {
       if (res && res.code === 0) {
         return res.data

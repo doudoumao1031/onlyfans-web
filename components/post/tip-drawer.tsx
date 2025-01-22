@@ -1,6 +1,6 @@
 "use client"
 import { Label } from "@/components/ui/label"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import CheckboxLabel from "@/components/user/checkbox-label"
 import { addPostTip, starPost } from "@/lib"
@@ -13,7 +13,7 @@ interface TipDrawerProps {
 }
 const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
   const [amount, setAmount] = useState<number>(0)
-  const [check, setCheck] = useState<boolean>(false)
+  const [check, setCheck] = useState<boolean>(true)
   const [visible, setVisible] = useState<boolean>(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   const { showMessage,renderNode } = useCommonMessage()
@@ -26,11 +26,7 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
             await starPost({ post_id: Number(postId), deleted: false })
             console.log("star success")
           }
-          showMessage("打赏成功", {
-            afterDuration: () => {
-              setDrawerOpen(false)
-            }
-          })
+          showMessage("打赏成功", "success")
         } else if (res?.message == "NOT_ENOUGH_BALANCE") {
           setVisible(true)
         } else {
@@ -48,6 +44,7 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
   }
   return (
     <>
+      {renderNode}
       <Modal
         visible={visible}
         cancel={() => {
@@ -69,19 +66,18 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
         }}
         headerRight={(() => {
           return (
-            <div>
+            <>
               <CheckboxLabel label="同时点赞" checked={check} change={(val) => {
                 setCheck(val)
               }}
               />
-            </div>
+            </>
           )
         })}
         className="h-[40vh] border-0"
         setIsOpen={setDrawerOpen}
         isOpen={drawerOpen}
       >
-        {renderNode}
         <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50 rounded-t-lg">
           <ToggleGroup type="single"
             variant="default"

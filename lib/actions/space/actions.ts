@@ -1,8 +1,8 @@
-import { CommonPageReq, ENDPOINTS, fetchWithPost, PageResponse, PostData } from "@/lib"
+import { PageInfo, ENDPOINTS, fetchWithPost, PageResponse, PostData } from "@/lib"
 
 //我的帖子
-export const getMyFeeds = (params: CommonPageReq) =>
-  fetchWithPost<CommonPageReq, PageResponse<PostData>>(ENDPOINTS.POST.ME_POSTS, params).then(
+export const getMyFeeds = (params: PageInfo) =>
+  fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.POST.ME_POSTS, params).then(
     (res) => {
       if (res && res.code === 0) {
         return res.data

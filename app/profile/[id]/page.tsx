@@ -7,7 +7,6 @@ import Link from "next/link"
 import { userProfile } from "@/lib/actions/profile"
 import { userWallet } from "@/lib"
 import RechargeDrawer from "@/components/profile/recharge-drawer"
-import TipDrawer from "@/components/post/tip-drawer"
 
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {

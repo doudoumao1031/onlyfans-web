@@ -81,13 +81,15 @@ export const ENDPOINTS = {
     GET_BY_ID: "/user/uid",
     GET_BY_USERNAME: "/user/username",
     POST_VIEW_LOG: "/user/userPostViewLog",
-    STAT_DAY_METRIC: "/user/userStatDayUserMetric",
-    SUB_ME_LOG: "/user/userSubMeLog",
+    STAT_DAY_METRIC: "/user/userStatDayUserMetric",  //用户每日统计
+    STATEMENT: "/user/userStatement",  // 查询用户收支明细
+    SUB_ME_LOG: "/user/userSubMeLog",  // 我的订阅记录
     VIEW_LOG: "/user/userViewLog",
     VIEW_LOGS: "/user/userViewLogs",
     VIEW_ME_LOGS: "/user/userViewMeLogs",
     WALLET_STATEMENT: "/user/userWalletStatement",
-    WALLET: "/user/wallet",
+    WALLET: "/user/wallet",  // 我的钱包（余额信息）
+    PT_WALLET: "/user/ptWallet",  // pt钱包信息（充值配置）
 
     // Collection related
     COLLECTION_POST: "/user/userCollectionPost",

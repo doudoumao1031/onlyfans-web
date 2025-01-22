@@ -1,8 +1,10 @@
 import { useTimeout } from "@/lib/hooks/useTimeout"
 import React,{ useEffect, useMemo, useRef, useState } from "react"
+import IconWithImage from "@/components/profile/icon"
 
 export default function useCommonMessage() {
   const [content, setContent] = useState<React.ReactNode>()
+  const [type, setType] = useState<string | "default" | "success" | "fail">("default")
   const [openState, setOpenState] = useState<boolean>(false)
   const [isVisible, setIsVisible] = useState<boolean>(false)
   const [delay, setDelay] = useState<number>(3000)
@@ -26,7 +28,7 @@ export default function useCommonMessage() {
     }
   }, [openState, start])
 
-  const showMessage = (content: React.ReactNode, options?: {
+  const showMessage = (content: React.ReactNode, type?: string, options?: {
     duration?: number,
     afterDuration?: () => void
   }) => {
@@ -34,6 +36,7 @@ export default function useCommonMessage() {
     if (duration) setDelay(duration)
     setContent(content)
     setOpenState(true)
+    setType(type || "default")
     afterDelay.current = afterDuration ?? null
   }
 
@@ -45,7 +48,19 @@ export default function useCommonMessage() {
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
           }`}
         >
-          <div>{content}</div>
+          {
+            type === "default" && (
+              <div>{content}</div>
+            )
+          }
+          {
+            type === "success" && (
+              <div className={"w-36 h-12 flex justify-center items-center"}>
+                <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20}/>
+                <span className={"text-white font-medium text-base"}>{content}</span>
+              </div>
+            )
+          }
         </div>
       )
     }
