@@ -13,8 +13,12 @@ export function formatDate(date: string | Date, locale: string = "en-US"): strin
 }
 
 // 分页计算
-export function calculatePagination(total: number, currentPage: number, limit: number): {
-  hasNext: boolean;
+export function calculatePagination(
+  total: number,
+  currentPage: number,
+  limit: number
+): {
+  hasNext: boolean
   hasPrev: boolean
 } {
   const totalPages = Math.ceil(total / limit)
@@ -25,14 +29,16 @@ export function calculatePagination(total: number, currentPage: number, limit: n
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
+const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
-const getAuthToken = () => {
-  return "1"
+export const getAuthToken = () => {
+  return "26"
 }
 
-async function fetchResultHandle<T>(method: string, response: Response, ) {
+async function fetchResultHandle<T>(method: string, response: Response) {
   if (response.ok) {
     const result: ApiResponse<T> = await response.json()
+    console.log(`Success-${method.toUpperCase()}-response:`, result)
     return result
   } else {
     console.error(`Error-${method.toUpperCase()}-response:`, response.status, response.statusText)
@@ -42,11 +48,17 @@ async function fetchResultHandle<T>(method: string, response: Response, ) {
   return null
 }
 
-export async function fetchWithGet<Req, Res = unknown>(url: string, data: Req, options?: FetchOptions<Res>) {
+export async function fetchWithGet<Req, Res = unknown>(
+  url: string,
+  data: Req,
+  options?: FetchOptions<Res>
+) {
   try {
-    const { headers = {}  } = options ?? {}
+    const { headers = {} } = options ?? {}
     const qs = new URLSearchParams(data ?? {})
-    const response = await fetch(`${apiUrl}${url}?${qs.toString()}`, {
+    const urlWithParams = `${apiUrl}${url}?${qs.toString()}`
+    console.log("GET-url:", urlWithParams)
+    const response = await fetch(urlWithParams, {
       method: "GET",
       headers: {
         "X-Token": getAuthToken(),
@@ -60,11 +72,18 @@ export async function fetchWithGet<Req, Res = unknown>(url: string, data: Req, o
   return null
 }
 
-export async function fetchWithPost<Req, Res = unknown>(url: string, data: Req, options?: FetchOptions<Res>) {
+export async function fetchWithPost<Req, Res = unknown>(
+  url: string,
+  data: Req,
+  options?: FetchOptions<Res>
+) {
   try {
-    const { headers = {}  } = options ?? {}
+    const { headers = {} } = options ?? {}
     const isFormData = data instanceof FormData
-    const response = await fetch(`${apiUrl}${url}`, {
+    const fullPath = `${apiUrl}${url}`
+    console.log("POST-url:", fullPath)
+    console.log("POST-data:", data)
+    const response = await fetch(fullPath, {
       method: "POST",
       headers: {
         "X-Token": getAuthToken(),
@@ -74,7 +93,27 @@ export async function fetchWithPost<Req, Res = unknown>(url: string, data: Req, 
     })
     return fetchResultHandle<Res>("POST", response)
   } catch (error) {
-    console.error("Error-GET-catch:", error)
+    console.error("Error-POST-catch:", error)
   }
   return null
+}
+
+export function uploadFetch<Req, Res = unknown>(
+  url: string,
+  data: Req,
+  options?: FetchOptions<Res>
+) {
+  const { headers = {} } = options ?? {}
+  const isFormData = data instanceof FormData
+  const fullPath = `${apiUrl}${url}`
+  console.log("POST-url:", fullPath)
+  console.log("POST-data:", data)
+  return fetch(fullPath, {
+    method: "POST",
+    headers: {
+      "X-Token": getAuthToken(),
+      ...headers
+    },
+    body: isFormData ? data : JSON.stringify(data)
+  })
 }

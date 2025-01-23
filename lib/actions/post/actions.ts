@@ -1,4 +1,4 @@
-import { ENDPOINTS } from "@/lib"
+import { PageInfo, ENDPOINTS } from "@/lib"
 import {
   PostInfoReq,
   DeletePostFileReq,
@@ -65,10 +65,12 @@ export async function searchPosts(params: PostSearchReq): Promise<PostInfoVo[]> 
   throw new Error("Not implemented")
 }
 
-export async function starPost(params: PostStarReq): Promise<void> {
-  // Implementation
-  throw new Error("Not implemented")
-}
+export const starPost = (
+  params: PostStarReq
+) => fetchWithPost<PostStarReq, unknown>(ENDPOINTS.POST.STAR, params)
+  .then((res) => {
+    return !!(res && res.code === 0)
+  })
 
 export async function getUserPosts(params: UserPostsReq): Promise<PostInfoVo[]> {
   // Implementation
@@ -114,3 +116,29 @@ export const searchPost = (
       return null
     }
   })
+
+
+/**
+ * 我的帖子
+ * @param params
+ */
+export const myPosts = (
+  params: SearchPostReq
+) => fetchWithPost<SearchPostReq, PageResponse<PostData>>(ENDPOINTS.POST.ME_POSTS, params)
+  .then((res) => {
+    if (res && res.code === 0) {
+      return res.data
+    }
+    return null
+  })
+
+/**
+ * 待定
+ * @param params
+ */
+export const myMediaPosts = (params:PageInfo) => fetchWithPost<PageInfo,PageResponse<PostData>>(ENDPOINTS.POST.ME_MEDIAS,params).then(response => {
+  if (response?.code === 0) {
+    return response.data
+  }
+  return null
+})

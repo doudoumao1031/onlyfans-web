@@ -1,8 +1,11 @@
 import {
-  BloggerInfo, CommonPageReq,
-  ENDPOINTS,
+  AddBundleDiscount,
+  BloggerInfo, CollectionPostReq, PageInfo, DiscountInfo,
+  ENDPOINTS, FansPageReq, fetchWithGet,
   fetchWithPost,
-  PageResponse
+  PageResponse, PostData, SubscribeUserInfo, UserMetricDay, UserMetricDayReq, WalletInfo
+  , PtWalletInfo, StatementReq, StatementResp
+
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
 
@@ -20,10 +23,10 @@ export const searchUser =
     })
 
 /**
- * 已订阅博主列表
+ * 已收藏博主列表
  */
 export const userCollectionUsers =
-  (params: CommonPageReq) => fetchWithPost<CommonPageReq, PageResponse<BloggerInfo>>(ENDPOINTS.USERS.COLLECTION_USERS, params)
+  (params: PageInfo) => fetchWithPost<PageInfo, PageResponse<BloggerInfo>>(ENDPOINTS.USERS.COLLECTION_USERS, params)
     .then((res) => {
       if (res && res.code === 0) {
         return res.data
@@ -43,3 +46,131 @@ export const viewUserSubscribeSetting =
         return null
       }
     })
+
+export const getSubscribeSetting = () => fetchWithGet<unknown, SubscribeSetting>(ENDPOINTS.USERS.GET_SUBSCRIBE_SETTING, {}).then(response => {
+  if (response?.code === 0) {
+    return response.data
+  }
+  return null
+})
+
+export const addSubscribeSettingItem = (params: AddBundleDiscount) => fetchWithPost<AddBundleDiscount>(ENDPOINTS.USERS.ADD_SUBSCRIBE_SETTING_ITEM, params)
+
+export const updateSubscribeSettingItem = (params: Partial<DiscountInfo>) => fetchWithPost<Partial<DiscountInfo>>(ENDPOINTS.USERS.ADD_SUBSCRIBE_SETTING_ITEM, params).then(response => {
+  if (response?.code === 0) {
+    return response.data
+  }
+  return null
+})
+
+export const addSubscribeSetting = (params: { price: number | string, id?: number }) => fetchWithPost<{
+  price: number | string,
+  id?: number
+}>(ENDPOINTS.USERS.ADD_SUBSCRIBE_SETTING, params).then(response => {
+  if (response?.code === 0) {
+    return response.data
+  }
+  return null
+})
+
+// export const add
+
+/**
+ * 收藏文章/帖子
+ * @param params
+ */
+export const userCollectionPost =
+  (params: CollectionPostReq) => fetchWithPost<CollectionPostReq, unknown>(ENDPOINTS.USERS.COLLECTION_POST, params)
+    .then((res) => {
+      return !!(res && res.code === 0)
+    })
+
+export const userCollectionPosts = (params: PageInfo) =>
+  fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.USERS.COLLECTION_POSTS, params)
+    .then((response) => {
+      return response?.code == 0 ? response?.data : null
+    })
+
+/**
+ * 订阅博主列表
+ * @param params
+ */
+export const getSubscribeUsers =
+  (params: PageInfo) => fetchWithPost<PageInfo, PageResponse<SubscribeUserInfo>>(ENDPOINTS.USERS.GET_SUBSCRIBE_USERS, params)
+    .then((res) => {
+      if (res && res.code === 0) {
+        return res.data
+      } else {
+        return null
+      }
+    })
+
+/**
+ * 获取关注我的用户
+ * @param params
+ */
+export const getFollowedUsers = (params: FansPageReq) => fetchWithPost<FansPageReq, PageResponse<SubscribeUserInfo>>(ENDPOINTS.USERS.GET_FOLLOWED_USERS, params).then(response => {
+  if (response && response.code === 0) {
+    return response.data
+  } else {
+    return null
+  }
+})
+
+export const infiniteGetFollowedUsers = async (page: number) => {
+  const data = await getFollowedUsers({ page, pageSize: 10, from_id: 0 })
+  return {
+    items: data?.list || [],
+    hasMore: !data?.list ? false : page < Math.ceil(data.total / page)
+  }
+}
+
+/**
+ * 订阅我的用户
+ * @param params
+ */
+export const getSubscribedUsers = (params: FansPageReq) => fetchWithPost<FansPageReq, PageResponse<SubscribeUserInfo>>(ENDPOINTS.USERS.GET_SUBSCRIBED_USERS, params).then(response => {
+  if (response && response.code === 0) {
+    return response.data
+  } else {
+    return null
+  }
+})
+
+/**
+ * 获取钱包信息
+ */
+export async function userWallet() {
+  return fetchWithPost<undefined, WalletInfo>(ENDPOINTS.USERS.WALLET, undefined)
+}
+
+/**
+ * 获取pt钱包信息（充值时使用）
+ */
+export async function userPtWallet() {
+  return fetchWithPost<undefined, PtWalletInfo>(ENDPOINTS.USERS.PT_WALLET, undefined)
+}
+
+/**
+ * 收支明细
+ */
+export async function userStatement(params: StatementReq) {
+  return fetchWithPost<StatementReq, PageResponse<StatementResp>>(ENDPOINTS.USERS.STATEMENT, params)
+}
+
+/**
+ * 成为博主
+ * @param params
+ */
+export async function userApplyBlogger() {
+  return fetchWithPost(ENDPOINTS.USERS.APPLY_BLOGGER, undefined)
+}
+
+
+
+
+export const getUserMetricDay = (params: UserMetricDayReq) => fetchWithPost<UserMetricDayReq, PageResponse<UserMetricDay>>(ENDPOINTS.USERS.STAT_DAY_METRIC, params).then(response => {
+  return response?.code === 0 ? response.data : null
+})
+
+export const getUserStatIncome = (params :UserMetricDayReq) => fetchWithPost<UserMetricDayReq,number>(ENDPOINTS.USERS.STAT_INCOME,params).then(response => response?.code === 0 ? response.data : null)

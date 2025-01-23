@@ -1,93 +1,65 @@
+"use client"
+import Empty from "@/components/common/empty"
+import InfiniteScroll from "@/components/common/infinite-scroll"
+import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import MediaItem from "@/components/space/mediaItem"
-export default function Page() {
-  const mockData = [
-    {
-      bg: "bg-[url('/demo/girl1.jpeg')]",
-      msg: "视频简介内容...",
-      subscribe: true,
-      isSub: false,
-      duration: 99.99,
-      type: "video",
-      subFees: 99.99,
-      isClick: false
-    },
-    {
-      bg: "bg-[url('/demo/girl2.jpeg')]",
-      msg: "视频简介内容...",
-      subscribe: false,
-      isSub: false,
-      duration: 99.99,
-      type: "video",
-      subFees: 99.99,
-      isClick: false
-    },
-    {
-      bg: "bg-[url('/demo/girl3.jpeg')]",
-      msg: "视频简介内容...",
-      subscribe: true,
-      isSub: false,
-      duration: 99.99,
-      type: "video",
-      subFees: 99.99,
-      isClick: false
-    },
-    {
-      bg: "bg-[url('/demo/girl4.jpeg')]",
-      msg: "视频简介内容...",
-      subscribe: true,
-      isSub: false,
-      duration: 99.99,
-      type: "video",
-      subFees: 99.99,
-      isClick: false
-    },
-    {
-      bg: "bg-[url('/demo/girl5.jpeg')]",
-      msg: "视频简介内容...",
-      subscribe: true,
-      isSub: false,
-      duration: 99.99,
-      type: "video",
-      subFees: 99.99,
-      isClick: false
-    },
-    {
-      bg: "bg-[url('/demo/girl6.jpeg')]",
-      msg: "视频简介内容...",
-      subscribe: false,
-      isSub: false,
-      duration: 99.99,
-      type: "video",
-      subFees: 99.99,
-      isClick: false
-    },
-    {
-      bg: "bg-[url('/demo/girl7.jpeg')]",
-      msg: "视频简介内容...",
-      subscribe: true,
-      isSub: false,
-      duration: 99.99,
-      type: "video",
-      subFees: 99.99,
-      isClick: false
-    },
-    {
-      bg: "bg-[url('/demo/girl8.jpeg')]",
-      msg: "视频简介内容...",
-      subscribe: true,
-      isSub: false,
-      duration: 99.99,
-      type: "video",
-      subFees: 99.99,
-      isClick: false
-    }
-  ]
-  return (
-    <div className="flex justify-between flex-wrap">
-      {mockData.map((v, i) => {
-        return <MediaItem item={v} key={i}/>
-      })}
+import { myMediaPosts, PageResponse, PostData } from "@/lib"
+import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
+import { Fragment, useEffect, useState } from "react"
+import { useParams } from "next/navigation"
+import { userMediaPosts } from "@/lib/actions/space"
 
+export default function Page() {
+  const [initData, setInitData] = useState<PageResponse<PostData> | null>()
+  const { id } = useParams()
+  const [userId, selfId] = (id as string).split("_")
+  console.log("userId", userId)
+
+  useEffect(() => {
+    getInitData()
+  }, [])
+  const getInitData = async () => {
+    const params = {
+      page: 1,
+      pageSize: 10,
+      from_id: 0,
+      user_id: Number(userId)
+    }
+    const res = selfId ? await myMediaPosts(params) : await userMediaPosts(params)
+    setInitData(res)
+  }
+  const infiniteFetchMedia = useInfiniteFetch({
+    fetchFn: selfId ? myMediaPosts : userMediaPosts,
+    params: {
+      pageSize: 10,
+      from_id: 0,
+      user_id: Number(userId)
+    }
+  })
+  return (
+    <div className="">
+      {initData && (
+        <InfiniteScroll<PostData>
+          className={"h-full w-full mx-auto"}
+          fetcherFn={infiniteFetchMedia}
+          initialItems={initData.list}
+          initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}
+        >
+          {({ items, isLoading, hasMore, error }) => (
+            <Fragment>
+              {Boolean(error) && <ListError />}
+              <div className="w-full flex justify-between flex-wrap">
+                {items?.map((item, index) => (
+                  <MediaItem id={id} item={item} key={index} />
+                ))}
+              </div>
+              {isLoading && <ListLoading />}
+              {!hasMore && items?.length > 0 && <ListEnd />}
+              {(!items || !items.length) && <Empty top={20} />}
+            </Fragment>
+          )}
+        </InfiniteScroll>
+      )}
     </div>
   )
 }

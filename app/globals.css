@@ -7,6 +7,11 @@ body {
   font-size: 14px;
 }
 
+/*antd mobile override*/
+:root:root {
+  --adm-color-primary: #000;
+}
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     --background: 0 0% 100%;
@@ -78,4 +83,27 @@ input,textarea {
 
 .hide-modal-close button.absolute {
   @apply hidden
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.modal::backdrop {
+  display: none;
 }

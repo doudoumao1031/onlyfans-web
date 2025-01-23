@@ -3,6 +3,7 @@ import Image from "next/image"
 import IconWithImage from "@/components/profile/icon"
 import Link from "next/link"
 import { clsx } from "clsx"
+import { PostData } from "@/lib"
 
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
   return (
@@ -13,7 +14,7 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
   )
 }
 
-const ManuscriptActions = () => {
+const ManuscriptActions = ({ id }:{id:number}) => {
   return (
     <section className="flex">
       <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
@@ -28,7 +29,7 @@ const ManuscriptActions = () => {
         <IconWithImage url={"/icons/profile/icon_fans_data@3x.png"} width={20} height={20} color={"#222"}/>
         <span>数据</span>
       </button>
-      <Link href={"/profile/123/manuscript/draft/edit"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink">
+      <Link href={`/profile/123/manuscript/draft/edit?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink">
         <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
         <span>编辑</span>
       </Link>
@@ -52,31 +53,41 @@ const ManuscriptItemState = ({ state }: { state: "AUDITING" | "REJECT" | "PASS" 
     >{map[state]}</span>
   )
 }
-
-export default function ManuscriptItem() {
+export default function ManuscriptItem({ data }: { data: PostData }) {
   return (
-    <section className="border-b border-gray-100">
-      <button className={"flex gap-2.5 text-left h-[100px] relative"}>
+    <section className="border-b border-gray-100 pt-4">
+      <button className={"flex gap-2.5 text-left h-[100px] relative w-full"}>
         {/*<ManuscriptItemState state={"REJECT"}/>*/}
         <ManuscriptItemState state={"AUDITING"}/>
         <Image src={"/demo/user_bg.png"} alt={""} width={100} height={100}
           className={"shrink-0 w-[100px] h-full rounded"}
         />
         <section className={"flex-1 h-full flex flex-col justify-between "}>
-          <h3 className="line-clamp-[2]">amie Shon 的韩国文化 | Foxy Spots 与 Jamie Shon@luvjamxoxo
-            luvjamxoxoluvjamxoxoluvjamxoxo</h3>
+          <h3 className="line-clamp-[2]">{data.post.title}</h3>
           <section className={"flex-1 flex items-center text-[#bbb]"}>2022-02-02 12:12:12</section>
-          <section className="flex gap-4 text-xs">
-            <ShowNumberWithIcon number={999} icon={"/icons/profile/icon_fans_like@3x.png"}/>
-            <ShowNumberWithIcon number={999} icon={"/icons/profile/icon_fans_comment@3x.png"}/>
-            <ShowNumberWithIcon number={999} icon={"/icons/profile/icon_fans_reward@3x.png"}/>
-            <ShowNumberWithIcon number={999} icon={"/icons/profile/icon_fans_share@3x.png"}/>
-            <ShowNumberWithIcon number={999} icon={"/icons/profile/icon_fans_collect@3x.png"}/>
-            <ShowNumberWithIcon number={999} icon={"/icons/profile/icon_fans_money_s@3x.png"}/>
+          <section className="flex gap-4 text-xs justify-around">
+            <ShowNumberWithIcon number={data.post_metric?.thumbs_up_count ?? 0}
+              icon={"/icons/profile/icon_fans_like@3x.png"}
+            />
+            <ShowNumberWithIcon number={data.post_metric?.comment_count ?? 0}
+              icon={"/icons/profile/icon_fans_comment@3x.png"}
+            />
+            <ShowNumberWithIcon number={data.post_metric?.play_count ?? 0}
+              icon={"/icons/profile/icon_fans_reward@3x.png"}
+            />
+            <ShowNumberWithIcon number={data.post_metric?.share_count ?? 0}
+              icon={"/icons/profile/icon_fans_share@3x.png"}
+            />
+            <ShowNumberWithIcon number={data.post_metric?.collection_count ?? 0}
+              icon={"/icons/profile/icon_fans_collect@3x.png"}
+            />
+            <ShowNumberWithIcon number={data.post_metric?.tip_count ?? 0}
+              icon={"/icons/profile/icon_fans_money_s@3x.png"}
+            />
           </section>
         </section>
       </button>
-      <ManuscriptActions/>
+      <ManuscriptActions id={data.post.id}/>
     </section>
   )
 }

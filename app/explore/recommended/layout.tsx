@@ -1,4 +1,3 @@
-"use client"
 import Header from "@/components/explore/recommended/header"
 
 export default function Layout({

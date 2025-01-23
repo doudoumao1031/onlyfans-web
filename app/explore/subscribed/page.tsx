@@ -1,16 +1,16 @@
 import Image from "next/image"
 import Link from "next/link"
 import UserCard from "@/components/user/user-card"
-import { userCollectionUsers } from "@/lib"
+import { getSubscribeUsers } from "@/lib"
 
 export default async function Page() {
-  const bloggers = await userCollectionUsers({ from_id: 0, page: 1, pageSize: 10 })
+  const bloggers = await getSubscribeUsers({ from_id: 0, page: 1, pageSize: 10 })
   return (
   /** 已订阅 */
     <>
       {bloggers && bloggers?.total > 0 && bloggers?.list.map((info) => (
-        <div key={info.id} className="w-full mb-[10px]">
-          <UserCard user={info} subscribe={false}/>
+        <div key={info.user.id} className="w-full mb-[10px]">
+          <UserCard user={info.user} subscribe={false}/>
         </div>
       ))}
       {!bloggers || bloggers?.total === 0 && (
@@ -26,10 +26,8 @@ export default async function Page() {
             </Link>
             吧</span>
         </div>
-
       )
       }
     </>
   )
-
 }

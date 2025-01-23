@@ -1,73 +1,66 @@
 // Comment related types and interfaces
 
+import { User } from "@/lib"
+
 export interface CommentReq {
-  postId: string
+  post_id: number
   content: string
-  replyUserId?: string
 }
 
 export interface CommentReplyReq {
-  postId: string
-  commentId: string
+  comment_id: number
   content: string
-  replyUserId: string
+  parent_reply_id?: number
 }
 
 export interface CommentUpVo {
-  commentId: string
-  up: boolean
+  comment_id: number
+  post_id: number
+  comment_type: boolean
 }
 
 export interface CommentDelReq {
-  commentId: string
+  id: number
+  post_id: number
+  comment_type: boolean
 }
 
 export interface CommentPageReq {
-  postId: string
+  post_id: number
+  from_id: number
   page: number
-  limit: number
+  page_size: number
 }
 
-export interface CommentReplayPageReq {
-  commentId: string
+export interface CommentReplyPageReq {
+  comment_id: number
+  from_id: number
   page: number
-  limit: number
+  pageSize: number
+  post_id: number
 }
 
 export interface CommentInfo {
-  id: string
-  postId: string
-  userId: string
   content: string
-  upCount: number
-  replyCount: number
-  isUp: boolean
-  createdAt: string
-  user: {
-    id: string
-    username: string
-    name: string
-    photoUrl?: string
-  }
+  id: number
+  is_self: boolean
+  post_id: number
+  reply_arr: CommentReplyInfo[]
+  reply_count: number
+  thumb_down: boolean
+  thumb_up: boolean
+  thumbs_up_count: number
+  user: User
 }
 
 export interface CommentReplyInfo {
-  id: string
-  commentId: string
-  userId: string
+  comment_id: number
   content: string
-  replyUserId: string
-  createdAt: string
-  user: {
-    id: string
-    username: string
-    name: string
-    photoUrl?: string
-  }
-  replyUser: {
-    id: string
-    username: string
-    name: string
-    photoUrl?: string
-  }
+  id: number
+  is_self: boolean
+  reply_user: User
+  thumb_down: boolean
+  thumb_up: boolean
+  thumbs_up_count: number
+  user: User
 }

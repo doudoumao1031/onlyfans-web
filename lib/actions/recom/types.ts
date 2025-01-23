@@ -1,24 +1,21 @@
-// Recom related types and interfaces
-import { PostInfoVo } from "../shared/types"
+import { PostInfoVo } from "@/lib"
 
 /**
  * 分页公共请求
  */
-export type CommonPageReq = {
+export type PageInfo = {
   from_id: number | 0
   page: number | 1
   pageSize: number | 10
 }
 
-export type RecomBloggerReq = CommonPageReq & {
+export interface RecomBloggerReq extends PageInfo {
   // 0 热门 1 新人 2人气
   type: number,
 }
 
-export interface PageInfo {
-  from_id: number | 0
-  page: number | 1
-  pageSize: number | 10
+export type FansPageReq = PageInfo & {
+  desc?: boolean
 }
 
 /**
@@ -52,6 +49,16 @@ export type BloggerInfo = {
   sub_end_time: number;
   collection: boolean;
   following: boolean;
+  top_info: string
+}
+
+/**
+ * 已订阅博主列表返回结果
+ */
+export interface SubscribeUserInfo {
+  user: BloggerInfo //博主信息
+  start_time: number //开始时间
+  end_time: number // 结束时间
 }
 
 export interface UserInfoVo {
