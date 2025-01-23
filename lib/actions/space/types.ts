@@ -12,4 +12,4 @@ export type PageInfo = {
 export type TFeeListItem = {
   name: string
 }
-export type TcommonPageReq = CommonPageReq & { user_id?: string }
+export type TcommonPageReq = PageInfo & { user_id?: string }
