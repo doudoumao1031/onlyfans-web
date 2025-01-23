@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
-import { PostData } from "@/lib"
+import { CommentInfo, fetchPostComments, PostData } from "@/lib"
 import Comments from "./comment"
 import Vote from "./vote"
 import Subscribe from "./subscribe"
@@ -28,6 +28,7 @@ export default function Post({
     data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
   const [showComments, setShowComments] = useState(false)
+  const [comments, setComments] = useState<CommentInfo[] | undefined>()
 
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
@@ -45,12 +46,34 @@ export default function Post({
       {showVote && post_vote && <Vote data={post_vote} />}
       <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} postId={post.id} />
-        <CommentStats count={comment_count} onClick={() => setShowComments(!showComments)} />
+        <CommentStats count={comment_count} onClick={toggleComments} />
         <Tip count={tip_count} postId={post.id} />
         <Share count={share_count} postId={post.id} />
         <Save count={collection_count} saved={collection} postId={post.id} />
       </div>
-      {showComments && <Comments post_id={post.id} />}
+      {showComments && comments && (
+        <Comments
+          post_id={post.id}
+          comments={comments}
+          removeComment={removeComment}
+          fetchComments={async () => setComments(await fetchPostComments(post.id))}
+        />
+      )}
     </div>
   )
+
+  function removeComment(id: number) {
+    setComments(comments?.filter((c) => c.id !== id))
+  }
+
+  async function toggleComments() {
+    if (!showComments) {
+      if (!comments) {
+        setComments(await fetchPostComments(post.id))
+      }
+      setShowComments(true)
+    } else {
+      setShowComments(false)
+    }
+  }
 }

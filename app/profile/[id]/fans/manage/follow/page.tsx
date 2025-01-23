@@ -6,7 +6,12 @@ import InfiniteScroll, { InfiniteScrollProps } from "@/components/common/infinit
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import FansListItem from "@/components/profile/fans/fans-list-item"
 
-function FollowedUsers({ initialItems, initialHasMore }: InfiniteScrollProps<SubscribeUserInfo>) {
+interface FollowedUsersProps {
+  initialItems: SubscribeUserInfo[];
+  initialHasMore: boolean;
+}
+
+function FollowedUsers({ initialItems, initialHasMore }: FollowedUsersProps) {
 
   return (
     <InfiniteScroll<SubscribeUserInfo>
@@ -43,7 +48,7 @@ export default function Page() {
         </span>
         <TimeSort sortDesc={false}>关注时间升序</TimeSort>
       </div>
-      {data && <FollowedUsers initialHasMore={Number(data?.total) > Number(data?.list?.length)} initialItems={data?.list ?? []} fetchData={infiniteGetFollowedUsers}/>}
+      {data && <FollowedUsers initialHasMore={Number(data?.total) > Number(data?.list?.length)} initialItems={data?.list ?? []}/>}
     </div>
   )
 }

@@ -11,18 +11,20 @@ import {
   replyComment,
   upComment
 } from "@/lib"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
-export default function Comments({ post_id }: { post_id: number }) {
-  const [comments, setComments] = useState<CommentInfo[]>([])
+export default function Comments({
+  post_id,
+  comments,
+  removeComment,
+  fetchComments
+}: {
+  post_id: number
+  comments: CommentInfo[]
+  removeComment: (id: number) => void
+  fetchComments: () => void
+}) {
   const [input, setInput] = useState("")
-
-  useEffect(() => {
-    fetchComments()
-    async function fetchComments() {
-      setComments(await fetchPostComments(post_id))
-    }
-  }, [post_id])
 
   return (
     <div className="flex flex-col gap-6 p-4">
@@ -43,14 +45,10 @@ export default function Comments({ post_id }: { post_id: number }) {
     </div>
   )
 
-  function removeComment(commentId: number) {
-    setComments(comments.filter((c) => c.id !== commentId))
-  }
-
   async function sendComment() {
     const success = await addComment({ post_id, content: input })
     if (success) {
-      setComments(await fetchPostComments(post_id))
+      fetchComments()
       setInput("")
     }
   }
@@ -243,9 +241,9 @@ function Reply({
 
   async function sendReply() {
     const params: CommentReplyReq = {
-      comment_id: id,
+      comment_id,
       content: replyInput,
-      parent_reply_id: comment_id
+      parent_reply_id: id
     }
     const success = await replyComment(params)
     if (success) {

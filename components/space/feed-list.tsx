@@ -21,7 +21,7 @@ export default function FeedList({ initialItems, initialHasMore, isSelf, id }: F
     params: {
       pageSize: 10,
       from_id: 0,
-      user_id: id
+      user_id: Number(id)
     }
   })
   return (

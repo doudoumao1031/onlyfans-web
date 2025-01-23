@@ -25,7 +25,7 @@ const Withdrawal = ({ children }: { children: React.ReactNode }) => {
       }}
       headerRight={(() => {
         return (
-          <Link href={`${pathname}/withdrawalInfo`}>
+          <Link href={`${pathname}/withdrawalInfo?changeType=5`}>
             <button className={"text-base text-main-pink"}>明细</button>
           </Link>
         )
