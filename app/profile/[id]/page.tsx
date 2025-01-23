@@ -5,6 +5,8 @@ import PostsCard from "@/components/profile/posts-card"
 import IconWithImage from "@/components/profile/icon"
 import Link from "next/link"
 import { userProfile } from "@/lib/actions/profile"
+import { userWallet } from "@/lib"
+import RechargeDrawer from "@/components/profile/recharge-drawer"
 
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
@@ -25,6 +27,11 @@ export default async function Page({
   const response = await userProfile()
   const data = response?.data
   if (!data) {
+    throw new Error()
+  }
+  const wallet = await userWallet()
+  const walletInfo = wallet?.data
+  if (!walletInfo) {
     throw new Error()
   }
   return (
@@ -71,11 +78,13 @@ export default async function Page({
           <div className="text-center text-[#6D7781] text-xs">
             @{data.username}
           </div>
-          <div className="flex justify-center mt-2">
-            <button className="pt-0.5 pb-0.5 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
-              进入空间
-            </button>
-          </div>
+          <Link href={`/space/${id}/feed`}>
+            <div className="flex justify-center mt-2">
+              <button className="pt-0.5 pb-0.5 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
+                进入空间
+              </button>
+            </div>
+          </Link>
           <div className="text-xs mt-2.5">
             <section>{data.about || "暂无信息"}</section>
             {data.about && (
@@ -112,6 +121,18 @@ export default async function Page({
               </div>
               <div className="text-xs text-[#333]">订阅</div>
             </div>
+          </div>
+        </div>
+        <div className={"p-4"}>
+          <div className={"bg-[url('/icons/profile/bg_wallet.png')] bg-cover rounded-xl text-white flex justify-between items-center w-full px-[20px] pt-[10px] pb-[20px]"}>
+            <div className={"flx flex-col justify-start"}>
+              <span className={"text-xs"}>唯粉余额</span>
+              <div className={"flex items-baseline font-medium"}>
+                <span className={"text-[32px]"}>{walletInfo?.amount || 0.00}</span>
+                <span className={"text-[15px]"}>&nbsp;&nbsp;USDT</span>
+              </div>
+            </div>
+            <RechargeDrawer />
           </div>
         </div>
 
@@ -156,16 +177,19 @@ export default async function Page({
             description={"成为唯粉博主，启航个人新旅途"}
             title={"开启的唯粉创作之路"}
             actionButton={"开启订阅"}
+            link={""}
           />
           <PostsCard
             description={"分享你的帖子，赚取真金白银"}
             title={"发布你的第一个帖子"}
             actionButton={"立即参与"}
+            link={""}
           />
           <PostsCard
             description={"通过订阅、打赏都可以赚取现金"}
             title={"发布你的帖子"}
             actionButton={"发布帖子"}
+            link={""}
           />
 
           <div className="mt-5 ">

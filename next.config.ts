@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "2048mb"
     }
   },
+  transpilePackages: ["antd-mobile"],
   images: {
     remotePatterns: [
       {

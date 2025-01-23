@@ -80,6 +80,7 @@ export default function Page() {
                 className="w-full py-2 px-16 border-0 bg-white rounded-lg text-right h-[49px] placeholder:text-gray-400"
                 placeholder="0.00"
                 max={999}
+                value={amount == 0 ? "" : amount.toString()}
                 onChange={(event) => {
                   const money =event.target.value.replace(/[^0-9.]/g, "")
                   setAmount(parseFloat(money) || 0)

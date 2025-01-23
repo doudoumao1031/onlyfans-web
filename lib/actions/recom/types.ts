@@ -1,27 +1,20 @@
-// Recom related types and interfaces
-import { PostInfoVo } from "../shared/types"
+import { PostInfoVo } from "@/lib"
 
 /**
  * 分页公共请求
  */
-export type CommonPageReq = {
+export type PageInfo = {
   from_id: number | 0
   page: number | 1
   pageSize: number | 10
 }
 
-export type RecomBloggerReq = CommonPageReq & {
+export interface RecomBloggerReq extends PageInfo {
   // 0 热门 1 新人 2人气
   type: number,
 }
 
-export interface PageInfo {
-  from_id: number | 0
-  page: number | 1
-  pageSize: number | 10
-}
-
-export type FansPageReq = CommonPageReq & {
+export type FansPageReq = PageInfo & {
   desc?: boolean
 }
 

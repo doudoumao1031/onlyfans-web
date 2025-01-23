@@ -1,27 +1,18 @@
-import {
-  CommonPageReq,
-  ENDPOINTS,
-  fetchWithGet,
-  fetchWithPost,
-  PageResponse,
-  PostData
-} from "@/lib"
-import { UserProfile } from "../profile/types"
+import { PageInfo, ENDPOINTS, fetchWithPost, PageResponse, PostData, fetchWithGet } from "@/lib"
+import { UserProfile } from "../profile"
 
 //我的帖子
-export const getMyFeeds = (params: CommonPageReq) =>
-  fetchWithPost<CommonPageReq, PageResponse<PostData>>(ENDPOINTS.POST.ME_POSTS, params).then(
-    (res) => {
-      if (res && res.code === 0) {
-        return res.data
-      } else {
-        return null
-      }
+export const getMyFeeds = (params: PageInfo) =>
+  fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.POST.ME_POSTS, params).then((res) => {
+    if (res && res.code === 0) {
+      return res.data
+    } else {
+      return null
     }
-  )
+  })
 //用户的帖子
-export const getUserPosts = (params: CommonPageReq & { user_id?: number }) =>
-  fetchWithPost<CommonPageReq & { user_id?: number }, PageResponse<PostData>>(
+export const getUserPosts = (params: PageInfo & { user_id?: number }) =>
+  fetchWithPost<PageInfo & { user_id?: number }, PageResponse<PostData>>(
     ENDPOINTS.POST.USER_POSTS,
     params
   ).then((res) => {
@@ -107,8 +98,8 @@ export async function getUserById(params: { id?: string; username?: string }) {
  * 用户的媒体
  * @param params
  */
-export const userMediaPosts = (params: CommonPageReq & { user_id?: number }) =>
-  fetchWithPost<CommonPageReq & { user_id?: number }, PageResponse<PostData>>(
+export const userMediaPosts = (params: PageInfo & { user_id?: number }) =>
+  fetchWithPost<PageInfo & { user_id?: number }, PageResponse<PostData>>(
     ENDPOINTS.POST.USER_MEDIAS,
     params
   ).then((response) => {

@@ -10,7 +10,7 @@ interface SubscribedDrawerProps {
     userId: number;
     name: string,
     children?: React.ReactNode,
-    trigger?: (envent: () => void) => React.ReactNode
+    trigger?: (event: () => void) => React.ReactNode
 }
 
 const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, children, trigger }) => {
@@ -158,16 +158,10 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, child
                       if (result && result.code === 0) {
                         console.log("订阅成功")
                         setDrawerOpen(false)
-                        showMessage(<div className={"w-36 h-12 flex justify-center items-center"}>
-                          <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20} />
-                          <span className={"text-white font-medium"}>订阅成功</span>
-                        </div>)
+                        showMessage("订阅成功", "success")
                       } else {
                         console.log("订阅失败:", result?.message)
-                        showMessage(<div className={"w-36 h-12 flex justify-center items-center"}>
-                          <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20} />
-                          <span className={"text-white font-medium text-base"}>订阅失败</span>
-                        </div>)
+                        showMessage("订阅失败")
                       }
                     })
                 }}

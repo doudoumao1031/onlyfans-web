@@ -1,22 +1,5 @@
-import { getMockPostData } from "@/components/post/mock"
-import { PostData } from "@/lib"
 // import {HttpsProxyAgent} from 'https-proxy-agent';
 // import fetch, { RequestInit } from 'node-fetch';
-
-export async function fetchFeeds(currentPage: number) {
-  // Add artificial latency
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-
-  // Mock data generation
-  const mockItems: PostData[] = Array(5)
-    .fill(null)
-    .map(() => getMockPostData())
-
-  return {
-    items: mockItems,
-    hasMore: currentPage < 6 // Mock 6 pages of content
-  }
-}
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 // const proxyUrl = process.env.NEXT_PROXY_URL || "http://127.0.0.1:8889";

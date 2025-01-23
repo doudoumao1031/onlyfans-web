@@ -1,6 +1,6 @@
 "use client"
 import IconWithImage from "@/components/profile/icon"
-import Modal, { TModaProps } from "@/components/space/modal"
+import Modal, { TModalProps } from "@/components/space/modal"
 import { useState } from "react"
 // import SubScribeConfirm from '@/components/space/subscribe-confirm'
 import { userDelFollowing, userFollowing } from "@/lib/actions/space/actions"
@@ -17,7 +17,7 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
   const handleTopUp = () => {
     setVisible(false)
   }
-  const models: TModaProps[] = [
+  const models: TModalProps[] = [
     {
       type: "modal",
       closeModal: false,

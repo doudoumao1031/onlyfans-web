@@ -68,8 +68,8 @@ const AddSubscriptionModal = ({ children, refresh }: { children: React.ReactNode
               user_id: 1
             }).then((result) => {
               if (result?.code === 0) {
-                showMessage("添加成功",{
-                  afterDuration:() => {
+                showMessage("添加成功", "default", {
+                  afterDuration: () => {
                     setIsOpen(false)
                   }
                 })
@@ -77,9 +77,9 @@ const AddSubscriptionModal = ({ children, refresh }: { children: React.ReactNode
               }
               if (result?.code === 400) {
                 if (result?.message === "SUBSCRIBE_ITEM_SAME_MONTH_ERR") {
-                  form.setError("month_count",{
-                    type:"custom",
-                    message:"月份订阅设置重复"
+                  form.setError("month_count", {
+                    type: "custom",
+                    message: "月份订阅设置重复"
                   })
                 }
               }
@@ -98,9 +98,10 @@ const AddSubscriptionModal = ({ children, refresh }: { children: React.ReactNode
             ></ModalHeader>
 
             <div className={"mt-5 block px-4"}>
-              <Controller render={({ field,fieldState }) => {
+              <Controller render={({ field, fieldState }) => {
                 return (
-                  <InputWithLabel errorMessage={fieldState.error?.message} placeholder={"订阅时限"} onInputChange={field.onChange}
+                  <InputWithLabel errorMessage={fieldState.error?.message} placeholder={"订阅时限"}
+                    onInputChange={field.onChange}
                     options={[
                       { label: "1个月", value: "1" },
                       { label: "2个月", value: "2" },
@@ -132,34 +133,40 @@ const AddSubscriptionModal = ({ children, refresh }: { children: React.ReactNode
   )
 }
 
-const AddPromotionalActivities = ({ children,unsubList }: { children: React.ReactNode,unsubList: DiscountInfo[] }) => {
+const AddPromotionalActivities = ({ children, unsubList }: { children: React.ReactNode, unsubList: DiscountInfo[] }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const handleClose = () => setIsOpen(false)
   const addForm = useForm<DiscountInfo>({
-    mode:"all",
-    resolver:zodResolver(addDiscount),
+    mode: "all",
+    resolver: zodResolver(addDiscount),
     defaultValues: {}
   })
 
   const priceOptions: ISelectOption[] = useMemo(() => {
     return unsubList.map(item => {
       return {
-        label: <div className={"text-left"}>${item.discount_price} {item.month_count}个月 <span className={"text-[#bbb]"}>（平均约${calcAvg(item.discount_price,item.month_count)}/月）</span></div>,
+        label: <div className={"text-left"}>${item.discount_price} {item.month_count}个月 <span
+          className={"text-[#bbb]"}
+        >（平均约${calcAvg(item.discount_price, item.month_count)}/月）</span></div>,
         value: item.id
       }
     })
-  },[unsubList])
+  }, [unsubList])
 
   useEffect(() => {
     if (isOpen) {
       addForm.reset()
     }
-  },[isOpen,addForm])
+  }, [isOpen, addForm])
 
   const id = addForm.watch("id")
 
+  const { showMessage,renderNode } = useCommonMessage()
+  const minTime = new Date()
+
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
+      {renderNode}
       <DrawerTrigger asChild>
         {children}
       </DrawerTrigger>
@@ -177,10 +184,15 @@ const AddPromotionalActivities = ({ children,unsubList }: { children: React.Reac
             }
             updateSubscribeSettingItem({
               ...newValues,
-              discount_per: Number(newValues.discount_per),
-              discount_price: Number(newValues.discount_price)
+              discount_per: Number(newValues.discount_per)
             }).then((response) => {
-              console.log(response)
+              if (response) {
+                showMessage("保存成功","default",{
+                  afterDuration: () => {
+                    setIsOpen(false)
+                  }
+                })
+              }
             })
           })}
           >
@@ -195,8 +207,8 @@ const AddPromotionalActivities = ({ children,unsubList }: { children: React.Reac
 
             <div className={"mt-5 block px-4"}>
               <section>
-                <Controller render={({ field,fieldState }) => {
-                  return  (
+                <Controller render={({ field, fieldState }) => {
+                  return (
                     <InputWithLabel
                       errorMessage={fieldState.error?.message}
                       description={"在基本订阅和捆绑订阅中已经设定好的价格"}
@@ -211,7 +223,7 @@ const AddPromotionalActivities = ({ children,unsubList }: { children: React.Reac
 
               </section>
               <section className={"mt-[30px]"}>
-                <Controller control={addForm.control} render={({ field,fieldState }) => {
+                <Controller control={addForm.control} render={({ field, fieldState }) => {
                   return (
                     <InputWithLabel
                       disabled={!id}
@@ -236,23 +248,27 @@ const AddPromotionalActivities = ({ children,unsubList }: { children: React.Reac
                   // <InputWithLabel value={field.value} onInputChange={field.onChange} label={"促销开始时间"}/>
                   return (
                     <TopLabelWrapper label="促销开始时间">
-                      <DateTimePicker disabled={!id} value={field.value * 1000} dateChange={value => {
+                      <DateTimePicker min={minTime} disabled={!id} value={field.value * 1000} dateChange={value => {
                         field.onChange(value / 1000)
                       }}
-                      />
+                      >
+                        <div className={field.value ? "" : "text-gray-500"}>{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
+                      </DateTimePicker>
                     </TopLabelWrapper>
                   )
                 }} name={"discount_start_time"} control={addForm.control}
                 />
               </section>
               <section className={"mt-[30px]"}>
-                <Controller render={({ field }) => {
+                <Controller render={({ field,fieldState }) => {
                   return (
-                    <TopLabelWrapper label="促销结束时间">
-                      <DateTimePicker disabled={!id} value={field.value * 1000} dateChange={value => {
+                    <TopLabelWrapper label="促销结束时间" errorMessage={fieldState.error?.message}>
+                      <DateTimePicker min={minTime} disabled={!id} value={field.value * 1000} dateChange={value => {
                         field.onChange(value / 1000)
                       }}
-                      />
+                      >
+                        <div className={field.value ? "" : "text-gray-500"}>{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
+                      </DateTimePicker>
                     </TopLabelWrapper>
                   )
                 }} name={"discount_end_time"} control={addForm.control}
@@ -266,21 +282,28 @@ const AddPromotionalActivities = ({ children,unsubList }: { children: React.Reac
   )
 }
 
-function calcAvg(total: number,count:number) {
-  if (total ===0 || count === 0) return 0
-  return (total/count).toFixed(2)
+function calcAvg(total: number, count: number) {
+  if (total === 0 || count === 0) return 0
+  return (total / count).toFixed(2)
 }
 
 
-function TopLabelWrapper ({ label,children }:{children: React.ReactNode,label:React.ReactNode}) {
+function TopLabelWrapper({ label, children, errorMessage }: {
+  children: React.ReactNode,
+  label: React.ReactNode,
+  errorMessage?: React.ReactNode
+}) {
   return (
     <section className="mt-6 relative rounded-xl">
       <div className={"absolute top-[-10px] left-4 bg-white text-[#6D7781]"}>
         {label}
       </div>
-      <section className={"flex items-center pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)]"}>
+      <section
+        className={"flex items-center pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)]"}
+      >
         {children}
       </section>
+      {errorMessage && <div className="text-red-600 text-xs px-4 mt-1.5">{errorMessage}</div>}
     </section>
   )
 }
@@ -297,7 +320,7 @@ function SubscribeBundle({ refresh, initSettings }: {
   }, [bundleForm, initSettings])
   const { fields } = useFieldArray({
     control: bundleForm.control,
-    name:"list"
+    name: "list"
   })
   return (
     <section className={"pt-5 pb-5 border-b border-gray-100"}>
@@ -325,7 +348,9 @@ function SubscribeBundle({ refresh, initSettings }: {
                 <TopLabelWrapper label={`价格${index + 1}`}>
                   <section className={"flex items-center justify-between w-full"}>
                     <section className={"flex-1"}>
-                      ${discount.price}&nbsp;&nbsp;{discount.month_count}个月&nbsp;&nbsp;<span className="text-[#6D7781]">(平均${calcAvg(discount.price,discount.month_count)}/月)</span>
+                      ${discount.price}&nbsp;&nbsp;{discount.month_count}个月&nbsp;&nbsp;<span
+                        className="text-[#6D7781]"
+                      >(平均${calcAvg(discount.price, discount.month_count)}/月)</span>
                     </section>
                     <Switch checked={field.value.item_status} onCheckedChange={(value) => {
                       field.onChange({
@@ -347,16 +372,19 @@ function SubscribeBundle({ refresh, initSettings }: {
   )
 }
 
-function PromotionalActivities({ initDiscountList,unsubList }:{initDiscountList :DiscountInfo[], unsubList: DiscountInfo[]}) {
-  const form = useForm<{list:DiscountInfo[]}>({
-    mode:"all"
+function PromotionalActivities({ initDiscountList, unsubList }: {
+  initDiscountList: DiscountInfo[],
+  unsubList: DiscountInfo[]
+}) {
+  const form = useForm<{ list: DiscountInfo[] }>({
+    mode: "all"
   })
   useEffect(() => {
-    form.setValue("list",initDiscountList)
-  },[initDiscountList,form])
+    form.setValue("list", initDiscountList)
+  }, [initDiscountList, form])
 
-  const { fields:discountList } = useFieldArray({
-    name:"list",
+  const { fields: discountList } = useFieldArray({
+    name: "list",
     control: form.control
   })
   return (
@@ -364,7 +392,7 @@ function PromotionalActivities({ initDiscountList,unsubList }:{initDiscountList 
       <section className="pl-4 pr-4">
         <section className="flex justify-between items-center">
           <h1 className="text-base font-medium">促销活动</h1>
-          { unsubList.length > 0 && (
+          {unsubList.length > 0 && (
             <AddPromotionalActivities unsubList={unsubList}>
               <button
                 className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
@@ -384,10 +412,12 @@ function PromotionalActivities({ initDiscountList,unsubList }:{initDiscountList 
               <TopLabelWrapper label={`促销${index + 1}`}>
                 <div className={"flex-1"}>
                   <div>
-                    {discount.discount_price}&nbsp;&nbsp;{discount.month_count}个月&nbsp;&nbsp;<span className="text-[#6D7781]">(平均${calcAvg(discount.discount_price,discount.month_count)}/月)</span>
+                    {discount.discount_price}&nbsp;&nbsp;{discount.month_count}个月&nbsp;&nbsp;<span
+                      className="text-[#6D7781]"
+                    >(平均${calcAvg(discount.discount_price, discount.month_count)}/月)</span>
                   </div>
                   <div className="text-[#6D7781]">
-                    {dayjs(discount.discount_start_time*1000).format(DATE_TIME_FORMAT)} {dayjs(discount.discount_end_time*1000).format(DATE_TIME_FORMAT)}
+                    {dayjs(discount.discount_start_time * 1000).format(DATE_TIME_FORMAT)} {dayjs(discount.discount_end_time * 1000).format(DATE_TIME_FORMAT)}
                   </div>
                 </div>
                 <Switch checked={field.value.discount_status}></Switch>
@@ -423,7 +453,7 @@ export default function Page() {
       initList: [],
       unsubList: []
     }
-  },[defaultSettings])
+  }, [defaultSettings])
 
   const baseFeeForm = useForm<Pick<SubscribeSetting, "price" | "id" | "user_id">>({
     mode: "all",
@@ -451,7 +481,7 @@ export default function Page() {
                 id: defaultSettings?.id
               }).then(data => {
                 if (data) {
-                  showMessage("修改成功", {
+                  showMessage("修改成功", "default", {
                     afterDuration: router.back
                   })
                 }

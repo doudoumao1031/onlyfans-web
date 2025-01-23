@@ -1,5 +1,5 @@
 // Post related types and interfaces
-import { CommonPageReq, FileType, PageInfo } from "@/lib"
+import { PageInfo, FileType } from "@/lib"
 
 export interface PostInfoReq {
   title?: string
@@ -132,7 +132,7 @@ export interface PostId {
 /**
  * 搜索帖子请求
  */
-export type SearchPostReq = CommonPageReq & {
+export type SearchPostReq = PageInfo & {
   title: string
 }
 
