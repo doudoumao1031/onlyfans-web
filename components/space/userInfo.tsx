@@ -7,7 +7,13 @@ import Attention from "./attention"
 import SubColumn from "./subColumn"
 // import { data } from '../profile/chart-line';
 // import SubscribedDrawer from "../explore/subscribed-drawer"
-export default async function UserInfo({ data }: { data: UserProfile | undefined }) {
+export default async function UserInfo({
+  data,
+  isSelf
+}: {
+  data: UserProfile | undefined
+  isSelf: boolean
+}) {
   // const response = await userProfile()
   // const data = response?.data
   if (!data) {
@@ -32,7 +38,7 @@ export default async function UserInfo({ data }: { data: UserProfile | undefined
               {data.first_name} {data.last_name}
             </span>
           </h1>
-          <Attention data={data} />
+          {!isSelf && <Attention data={data} />}
           <div className="text-center text-gray-400 text-xs">@{data.username}</div>
           <div className="flex justify-center mt-1">
             <IconWithImage
@@ -52,7 +58,7 @@ export default async function UserInfo({ data }: { data: UserProfile | undefined
             ))}
           </div>
           <Directions about={data.about} />
-          <SubColumn data={data} />
+          {!isSelf && <SubColumn data={data} />}
         </section>
       </section>
     </div>

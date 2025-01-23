@@ -52,7 +52,22 @@ export async function fetchPostComments(post_id: number) {
   return res?.list || []
 }
 
-export async function getCommentReplies(params: CommentReplyPageReq): Promise<CommentReplyInfo[]> {
-  // Implementation
-  throw new Error("Not implemented")
+export async function getCommentReplies(params: CommentReplyPageReq) {
+  const res = await fetchWithPost<CommentReplyPageReq, PageResponse<CommentReplyInfo>>(
+    ENDPOINTS.COMMENT.GET_REPLIES,
+    params
+  )
+  return res && res.code === 0 ? res.data : null
+}
+
+export async function fetchCommentReplies(comment_id: number, post_id: number) {
+  const res = await getCommentReplies({
+    post_id,
+    comment_id,
+    from_id: 0,
+    page: 1,
+    pageSize: 100
+  })
+
+  return res?.list || []
 }

@@ -2,6 +2,8 @@
 import Header from "@/components/common/header"
 import IconWithImage from "@/components/profile/icon"
 import { UserProfile } from "@/lib/actions/profile"
+import { buildImageUrl } from "@/lib/utils"
+import Link from "next/link"
 import { useEffect, useState } from "react"
 export default function SpaceHeader({ data }: { data: UserProfile | undefined }) {
   if (!data) {
@@ -21,7 +23,12 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
   //   isTop !== value && setIsTop(value)
   // }
   return (
-    <div className="bg-slate-400 h-[200px] bg-[url('/demo/blog-bg2.jpeg')] bg-cover bg-blend-multiply ">
+    <div
+      className="bg-slate-400 h-[200px]  bg-cover bg-blend-multiply "
+      style={{
+        backgroundImage: `url(${buildImageUrl(data.back_img)})`
+      }}
+    >
       <div className={`w-full fixed top-0 left-0 z-50 ${isTop ? "bg-[#fff]" : "auto"}`}>
         <Header
           leftTitle={
@@ -35,12 +42,14 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           }
           right={
             <>
-              <IconWithImage
-                url="/icons/space/icon_nav_search@3x.png"
-                width={22}
-                height={22}
-                color={isTop ? "#222" : "#fff"}
-              />
+              <Link className="flex items-center justify-center" href="/search">
+                <IconWithImage
+                  url="/icons/space/icon_nav_search@3x.png"
+                  width={22}
+                  height={22}
+                  color={isTop ? "#222" : "#fff"}
+                />
+              </Link>
               <IconWithImage
                 url="/icons/space/icon_nav_code_black@3x.png"
                 width={22}

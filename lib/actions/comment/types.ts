@@ -33,31 +33,34 @@ export interface CommentPageReq {
 }
 
 export interface CommentReplyPageReq {
-  commentId: string
+  comment_id: number
+  from_id: number
   page: number
-  limit: number
+  pageSize: number
+  post_id: number
 }
 
 export interface CommentInfo {
-  id: number
-  comment_id: number
   content: string
-  thumbs_up_count: number
-  thumb_up: boolean
-  user: User
+  id: number
   is_self: boolean
   post_id: number
   reply_arr: CommentReplyInfo[]
   reply_count: number
+  thumb_down: boolean
+  thumb_up: boolean
+  thumbs_up_count: number
+  user: User
 }
 
 export interface CommentReplyInfo {
-  id: number
   comment_id: number
   content: string
-  thumbs_up_count: number
-  thumb_up: boolean
-  reply_user: User
+  id: number
   is_self: boolean
+  reply_user: User
+  thumb_down: boolean
+  thumb_up: boolean
+  thumbs_up_count: number
   user: User
 }
