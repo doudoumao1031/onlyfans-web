@@ -243,9 +243,9 @@ function Reply({
 
   async function sendReply() {
     const params: CommentReplyReq = {
-      comment_id: id,
+      comment_id,
       content: replyInput,
-      parent_reply_id: comment_id
+      parent_reply_id: id
     }
     const success = await replyComment(params)
     if (success) {
