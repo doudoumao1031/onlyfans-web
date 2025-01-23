@@ -158,6 +158,15 @@ export async function userStatement(params: StatementReq) {
   return fetchWithPost<StatementReq, PageResponse<StatementResp>>(ENDPOINTS.USERS.STATEMENT, params)
 }
 
+/**
+ * 成为博主
+ * @param params
+ */
+export async function userApplyBlogger() {
+  return fetchWithPost(ENDPOINTS.USERS.APPLY_BLOGGER, undefined)
+}
+
+
 
 
 export const getUserMetricDay = (params: UserMetricDayReq) => fetchWithPost<UserMetricDayReq, PageResponse<UserMetricDay>>(ENDPOINTS.USERS.STAT_DAY_METRIC, params).then(response => {

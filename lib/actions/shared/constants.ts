@@ -59,7 +59,7 @@ export const ENDPOINTS = {
     VIEW_SUBSCRIBE_SETTING: "/user/viewUserSubscribeSetting",
 
     // Profile update related
-    APPLY_BLOGGER: "/user/applyBlogger",
+    APPLY_BLOGGER: "/user/applyBlogger",  // 申请成为博主
     UPDATE_ABOUT: "/user/updateUserAbout",
     UPDATE_BACK_IMG: "/user/updateUserBackImg",
     UPDATE_BASE: "/user/updateUserBase",
