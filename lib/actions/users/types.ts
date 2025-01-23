@@ -106,8 +106,8 @@ export interface StatementResp {
 }
 
 export interface UserMetricDayReq {
-  start: string
-  end: string
+  start?: string
+  end?: string
 }
 export interface UserMetricDay {
   access_count:number

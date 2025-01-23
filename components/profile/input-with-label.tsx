@@ -15,18 +15,20 @@ type InputValueType = string | number | readonly string[] | undefined
 
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-    label?: ReactNode,
-    name?: string,
-    value: InputValueType,
-    disabled?: boolean,
-    description?: ReactNode,
-    errorMessage?: ReactNode,
-    options?: ISelectOption[],
-    onInputChange?: (value: InputValueType) => void,
+  label?: ReactNode,
+  name?: string,
+  value: InputValueType,
+  disabled?: boolean,
+  description?: ReactNode,
+  errorMessage?: ReactNode,
+  options?: ISelectOption[],
+  labelClass?: string,
+  iconSize?: number,
+  onInputChange?: (value: InputValueType) => void,
 }
 
 export default function InputWithLabel(props: InputProps) {
-  const { label, name, disabled, onInputChange, description, value, options,errorMessage } = props
+  const { label, name, disabled, onInputChange, description, value, options, errorMessage, iconSize } = props
   // const [val, setVal] = useState<InputValueType>(value ?? "")
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -53,7 +55,7 @@ export default function InputWithLabel(props: InputProps) {
     setPositionInCenter(false)
     setTimeout(() => {
       inputRef?.current?.focus?.()
-    },100)
+    }, 100)
   }, [positionInCenter])
 
 
@@ -64,7 +66,7 @@ export default function InputWithLabel(props: InputProps) {
     if (value) return
     if (positionInCenter) return
     setPositionInCenter(true)
-  }, [positionInCenter, value,props])
+  }, [positionInCenter, value, props])
 
   const inputFocus = useCallback(() => {
     if (positionInCenter) {
@@ -77,8 +79,8 @@ export default function InputWithLabel(props: InputProps) {
   const optionShowLabel = useMemo(() => {
     if (!isSelectInput) return ""
     const option = options?.find(item => item.value === value)
-    return  option?.label ?? ""
-  },[isSelectInput,value,options])
+    return option?.label ?? ""
+  }, [isSelectInput, value, options])
 
   return (
     <section className={clsx(
@@ -100,7 +102,7 @@ export default function InputWithLabel(props: InputProps) {
       </label>
       <section
         className={
-          clsx("flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center",
+          clsx(`flex ${props.labelClass ? props.labelClass : "pt-[12px] pb-[12px] pl-4 pr-4"} rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center`,
             disabled ? "bg-[#F7F7F7]" : "",)
         }
       >
@@ -129,8 +131,8 @@ export default function InputWithLabel(props: InputProps) {
             >
               <div className={"flex w-full items-center"}>
                 <div className={clsx("flex-1 font-medium text-left", !optionShowLabel ? "text-gray-300" : "")}>{optionShowLabel || props?.placeholder}</div>
-                <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
-                  height={24} color={"#bbb"}
+                <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={iconSize || 24}
+                  height={iconSize || 24} color={"#bbb"}
                 />
               </div>
             </SheetSelect>
