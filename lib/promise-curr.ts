@@ -8,9 +8,9 @@ interface IPromiseConcurrency {
   skipError?: boolean;
 }
 interface IPromiseConcurrencyQueue {
-  promiseFn: (...args: any) => any;
+  promiseFn: (...args: unknown[]) => unknown;
   resolve: (value: unknown) => void;
-  reject: (reason?: any) => void;
+  reject: (reason?: unknown) => void;
   retry?: number;
   skipError?: boolean;
 }

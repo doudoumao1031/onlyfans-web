@@ -1,5 +1,6 @@
 // Post related types and interfaces
 import { PageInfo, FileType } from "@/lib"
+import { User } from "@/lib/actions/users/types"
 
 export interface PostInfoReq {
   title?: string
@@ -116,15 +117,6 @@ export interface Attachment {
   thumb_id: string
 }
 
-export interface User {
-  back_img: string
-  first_name: string
-  id: number
-  last_name: string
-  photo: string
-  username: string
-}
-
 export interface PostId {
   post_id: number
 }
@@ -186,14 +178,4 @@ export interface Attachment {
   file_id: string
   file_type: FileType
   thumb_id: string
-}
-
-export interface User {
-  back_img: string
-  first_name: string
-  id: number
-  last_name: string
-  photo: string
-  username: string
-  sub: boolean //是否订阅
 }

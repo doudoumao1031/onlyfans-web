@@ -23,8 +23,8 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            video.play().catch(() => {
-              console.log("Autoplay prevented")
+            video.play().catch((error) => {
+              console.log("Autoplay prevented", error)
             })
           } else {
             video.pause()
@@ -32,7 +32,7 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
         })
       },
       {
-        threshold: 0.5
+        threshold: 0.9
       }
     )
 

@@ -15,8 +15,8 @@ export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
         post.visibility === 1 && !user.sub
           ? "javascript:void(0);"
           : `/space/${id}/media/${
-              post_attachment[0].file_type === FileType.Video ? "video" : "image"
-            }/${post_attachment[0].file_id}`
+            post_attachment[0].file_type === FileType.Video ? "video" : "image"
+          }/${post_attachment[0].file_id}`
       }
     >
       <div

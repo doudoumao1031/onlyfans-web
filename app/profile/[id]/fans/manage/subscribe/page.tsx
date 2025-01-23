@@ -6,11 +6,17 @@ import { getSubscribedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
 import InfiniteScroll, { InfiniteScrollProps } from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 
-function SubscribeUsers ({ initialItems, initialHasMore, fetcherFn }: InfiniteScrollProps<SubscribeUserInfo>) {
+interface SubscribeUsersProps {
+  initialHasMore: boolean;
+  initialItems: SubscribeUserInfo[];
+  fetchData: (page: number) => Promise<{ items: SubscribeUserInfo[]; hasMore: boolean; }>;
+}
+
+function SubscribeUsers({ initialItems, initialHasMore, fetchData }: SubscribeUsersProps) {
   return (
     <InfiniteScroll<SubscribeUserInfo> initialItems={initialItems}
       initialHasMore={initialHasMore}
-      fetcherFn={fetcherFn}
+      fetcherFn={fetchData}
     >
       {({ items, isLoading, hasMore, error }) => (
         <div>
