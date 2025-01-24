@@ -1,5 +1,5 @@
 import { useTimeout } from "@/lib/hooks/useTimeout"
-import React,{ useEffect, useMemo, useRef, useState } from "react"
+import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react"
 import IconWithImage from "@/components/profile/icon"
 
 export default function useCommonMessage() {
@@ -65,7 +65,17 @@ export default function useCommonMessage() {
       )
     }
     return null
-  }, [content, openState, isVisible])
+  }, [content, openState, isVisible, type])
 
   return { showMessage, renderNode }
 }
+
+export type CommonMessageContextValues = {
+  showMessage: (content: React.ReactNode, type?: string, options?: {
+    duration?: number,
+    afterDuration?: () => void
+  }) => void
+}
+
+export const CommonMessageContext = createContext({} as CommonMessageContextValues)
+export const useCommonMessageContext = () => useContext(CommonMessageContext)
