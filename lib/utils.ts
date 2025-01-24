@@ -178,11 +178,11 @@ function createChunks(file:File) {
 
 const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 export function buildImageUrl(fileId: string) {
-  return `https://imfanstest.potato.im/api/v1/media/img/${fileId}`
+  return `${process.env.NEXT_PUBLIC_MEDIA_URL}/${fileId}`
 }
 
 export function buildVideoUrl(fileId: string, quality: string) {
-  return `https://imfanstest.potato.im/api/v1/media/videocut/${fileId}/${quality}`
+  return `${process.env.NEXT_PUBLIC_VIDEO_URL}/${fileId}/${quality}`
 }
 
 /**
