@@ -14,7 +14,7 @@ const filterTypes = [
   { label: "最新发布", value: 0 },
   { label: "总播放量", value: 1 },
   { label: "总评论", value: 2 },
-  { label: "总点赞", value: 3 },
+  { label: "总点赞", value: 3 }
 ]
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
@@ -35,7 +35,7 @@ export default function Page() {
   }
   const title = useMemo(() => {
     const cur = filterTypes.find(v => v.value === type)
-    return cur ? cur.label : '最新发布'
+    return cur ? cur.label : "最新发布"
   }, [type])
 
   const infiniteFetchPosts = useInfiniteFetch({

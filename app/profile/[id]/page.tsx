@@ -2,7 +2,7 @@
 import StaticFooter from "@/components/profile/static-footer"
 import PostsCards from "@/components/profile/posts-cards"
 import MeInfos from "@/components/profile/me-infos"
-import PostsCardSkeleton from '@/components/profile/posts-card-skeleton'
+import PostsCardSkeleton from "@/components/profile/posts-card-skeleton"
 import MeInfosSkeleton from "@/components/profile/me-infos-skeleton"
 import { Suspense } from "react"
 export default async function Page({
