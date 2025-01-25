@@ -437,7 +437,14 @@ export default function Page() {
   const [defaultSettings, setDefaultSettings] = useState<SubscribeSetting | null>()
   const { showMessage, renderNode } = useCommonMessage()
   const refreshDefaultSettings = () => {
-    getSubscribeSetting().then(setDefaultSettings)
+    getSubscribeSetting().then(response=>{
+      if (response) {
+        setDefaultSettings({
+          ...response,
+          items: response?.items || []
+        })
+      }
+    })
   }
 
   useEffect(refreshDefaultSettings, [])

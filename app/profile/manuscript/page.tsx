@@ -198,7 +198,7 @@ export default function Page() {
 
   return (
     <div>
-      <Header title="稿件管理" titleColor={"#000"} right={<Link href={"/profile/123/manuscript/draft"} className="text-main-pink text-base">草稿</Link>}>
+      <Header title="稿件管理" titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-main-pink text-base">草稿</Link>}>
       </Header>
       <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive}/>
       {active === ACTIVE_TYPE.POST && <ManuscriptPost/>}

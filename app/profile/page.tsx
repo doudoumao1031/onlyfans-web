@@ -5,21 +5,16 @@ import MeInfos from "@/components/profile/me-infos"
 import PostsCardSkeleton from "@/components/profile/posts-card-skeleton"
 import MeInfosSkeleton from "@/components/profile/me-infos-skeleton"
 import { Suspense } from "react"
-export default async function Page({
-  params
-}: {
-  params: Promise<{ id: string }>
-}) {
-  const { id } = await params
+export default  function Page() {
   return (
     <div>
       <Suspense fallback={<MeInfosSkeleton />}>
-        <MeInfos id={id} />
+        <MeInfos />
       </Suspense>
       <Suspense fallback={<PostsCardSkeleton />}>
-        <PostsCards id={id} />
+        <PostsCards />
       </Suspense>
-      <StaticFooter id={id} />
+      <StaticFooter />
     </div>
   )
 }

@@ -3,7 +3,7 @@ import Link from "next/link"
 import clsx from "clsx"
 import { useCallback } from "react"
 import { usePathname } from "next/navigation"
-export default function TabLinks({ id }: { id: string }) {
+export default function TabLinks() {
   const pathName = usePathname()
   const pathNameClass = useCallback((href: string) => {
     if (pathName === href) {
@@ -12,8 +12,8 @@ export default function TabLinks({ id }: { id: string }) {
     return "text-[#777] font-normal"
   }, [pathName])
   const links = [
-    { name: "数据概览", href: `/profile/${id}/dataCenter/dataView` },
-    { name: "帖子情况", href: `/profile/${id}/dataCenter/feeds` }
+    { name: "数据概览", href: `/profile/dataCenter/dataView` },
+    { name: "帖子情况", href: `/profile/dataCenter/feeds` }
   ]
   return (
     <div className="w-full text-center grid grid-cols-2 border-b border-gray-100">

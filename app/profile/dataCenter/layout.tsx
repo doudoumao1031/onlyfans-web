@@ -13,7 +13,7 @@ export default async function Layout({
     <>
       <div className="flex h-screen flex-col w-full justify-start items-center overflow-auto">
         <div className="w-full"><Header title="数据中心" titleColor="#000" /></div>
-        <TabLink id={id} />
+        <TabLink />
         <div className="grow  py-3 w-full h-3/4">{children}</div>
       </div>
     </>
