@@ -4,7 +4,7 @@ import React, { Fragment } from "react"
 import Post from "@/components/post/post"
 import InfiniteScroll from "../common/infinite-scroll"
 import { ListError, ListLoading, ListEnd } from "@/components/explore/list-states"
-import { PostData, SearchPostReq } from "@/lib"
+import { PostData, SearchPostReq, PageInfo } from "@/lib"
 import { getMyFeeds, getUserPosts } from "@/lib/actions/space"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 
@@ -15,8 +15,12 @@ interface FeedListProps {
   isSelf: boolean
 }
 
+type FeedParams = PageInfo & {
+  user_id: number
+}
+
 export default function FeedList({ initialItems, initialHasMore, isSelf, id }: FeedListProps) {
-  const infiniteFetchPosts = useInfiniteFetch({
+  const infiniteFetchPosts = useInfiniteFetch<FeedParams, PostData>({
     fetchFn: !isSelf ? getMyFeeds : getUserPosts,
     params: {
       pageSize: 10,

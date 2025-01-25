@@ -43,7 +43,7 @@ export default function Post({
           ))}
         </div>
       )}
-      {showVote && post_vote && <Vote data={post_vote} />}
+      {showVote && post_vote && <Vote vote={post_vote} postId={post.id} />}
       <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} postId={post.id} />
         <CommentStats count={comment_count} onClick={toggleComments} />

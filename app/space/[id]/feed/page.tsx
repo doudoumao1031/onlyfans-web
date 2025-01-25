@@ -4,12 +4,16 @@ import React, { Fragment, useEffect, useState } from "react"
 import Post from "@/components/post/post"
 
 import { ListError, ListLoading, ListEnd } from "@/components/explore/list-states"
-import { PageResponse, PostData } from "@/lib"
+import { PageResponse, PostData, PageInfo } from "@/lib"
 import { getMyFeeds, getUserPosts } from "@/lib/actions/space"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { useParams } from "next/navigation"
 import Empty from "@/components/common/empty"
+
+type FeedParams = PageInfo & {
+  user_id: number
+}
 
 export default function FeedList() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
@@ -21,7 +25,7 @@ export default function FeedList() {
     getInitData()
   }, [])
   const getInitData = async () => {
-    const params = {
+    const params: FeedParams = {
       page: 1,
       pageSize: 10,
       from_id: 0,
@@ -30,7 +34,7 @@ export default function FeedList() {
     const res = selfId ? await getMyFeeds(params) : await getUserPosts(params)
     setInitData(res)
   }
-  const infiniteFetchPosts = useInfiniteFetch({
+  const infiniteFetchPosts = useInfiniteFetch<FeedParams, PostData>({
     fetchFn: selfId ? getMyFeeds : getUserPosts,
     params: {
       pageSize: 10,
