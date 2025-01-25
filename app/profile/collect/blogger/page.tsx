@@ -17,7 +17,7 @@ export default async function Page() {
             backgroundImage: `url(${buildImageUrl(v.photo)})`
           }}
           >
-            <div className="text-xs min-h-4  truncate ...">{v.top_info}</div>
+            <div className="text-xs min-h-4  truncate px-2">{v.top_info}</div>
             <div className="pl-4 pr-4 pt-2 flex justify-start">
               <Image src={buildImageUrl(v.photo)} width={112} height={112} alt={"blogger photo"} className={"w-16 h-16 rounded-full mr-4 border-2 border-white"} />
               <div>
