@@ -21,9 +21,6 @@ export interface SubOrderReq {
 
 export interface WalletDownOrderReq {
   amount: number
-  bankName: string
-  bankAccount: string
-  bankAccountName: string
 }
 
 export interface WalletOrderReq {

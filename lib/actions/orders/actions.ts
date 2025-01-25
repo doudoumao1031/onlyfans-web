@@ -28,9 +28,8 @@ export const addPostTip = (params: PostTipReq) => fetchWithPost<PostTipReq, stri
 export const addSubOrder = (params: SubOrderReq) => fetchWithPost<SubOrderReq, unknown>(ENDPOINTS.ORDERS.ADD_SUB, params)
 
 
-export async function addWalletDownOrder(params: WalletDownOrderReq): Promise<OrderInfo> {
-  // Implementation
-  throw new Error("Not implemented")
+export async function addWalletDownOrder(params: WalletDownOrderReq) {
+  return fetchWithPost<WalletDownOrderReq>(ENDPOINTS.ORDERS.ADD_WALLET_DOWN,params)
 }
 
 /**

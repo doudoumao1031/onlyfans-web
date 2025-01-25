@@ -2,26 +2,35 @@
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { ToggleGroupSubscribed, ToggleGroupSubscribedItem } from "@/components/ui/toggle-group-subcribed"
-import { useState, useMemo } from "react"
+import { useState, useMemo,useEffect } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
 
 interface SubscribedDrawerProps {
     userId: number;
     name: string,
-    children?: React.ReactNode,
-    trigger?: (event: () => void) => React.ReactNode
+    trigger?: (event: () => void) => React.ReactNode,
+    isOpen: boolean
 }
 
-const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, children, trigger }) => {
+const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigger, isOpen }) => {
 
   const { showMessage, renderNode } = useCommonMessage()
   const [items, setItems] = useState<DiscountInfo[]>([])
   const [discount, setDiscount] = useState<DiscountInfo>()
   const [amount, setAmount] = useState<number>(0)
+  const [free, setFree] = useState<boolean>(false)
+  useEffect(() => {
+    getSettingData()
+  }, [])
   const getSettingData = async () => {
     try {
       const settings = await viewUserSubscribeSetting({ user_id: userId })
+      if (settings && settings.price === 0) {
+        setFree(true)
+      } else {
+        setFree(false)
+      }
       if (settings?.items) {
         const list: DiscountInfo[] = []
         list.push({
@@ -61,10 +70,21 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, child
       }
     }
   }, [discount])
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(isOpen)
+  const handleSubmit = async () => {
+    await addSubOrder({ user_id: userId, price: Number(amount), id: discount?.id ?? 0 })
+      .then((result) => {
+        if (result && result.code === 0) {
+          console.log("订阅成功")
+          showMessage("订阅成功", "success")
+        } else {
+          console.log("订阅失败:", result?.message)
+          showMessage("订阅失败")
+        }
+      })
+  }
   return (
     <>
-      {renderNode}
       <FormDrawer
         title={(
           <div>
@@ -79,23 +99,19 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, child
             </button>
           )
         }}
-        trigger={trigger ? trigger(() => {
-          getSettingData()
-          setDrawerOpen(true)
-        }) : (
-          <button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white"
-            onClick={() => {
-              getSettingData()
-              setDrawerOpen(true)
-            }}
-          >
-            <span className="text-xs text-nowrap">免费/订阅</span>
-          </button>
-        )}
+        trigger={trigger && trigger(() => {
+          if (free) {
+            handleSubmit()
+          } else {
+            setDrawerOpen(true)
+          }
+        })}
         className="h-[43vh] border-0"
         setIsOpen={setDrawerOpen}
         isOpen={drawerOpen}
+        outerControl
       >
+        {renderNode}
         <input hidden={true} name="user_id" defaultValue={userId} />
         <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50">
           <ToggleGroupSubscribed
@@ -152,18 +168,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, child
                 className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
                 onTouchEnd={(e) => {
                   e.preventDefault()
-                  addSubOrder({ user_id: userId, price: Number(amount), id: discount?.id ?? 0 })
-                    .then((result) => {
-                      console.log("addSubOrder result:", result)
-                      if (result && result.code === 0) {
-                        console.log("订阅成功")
-                        setDrawerOpen(false)
-                        showMessage("订阅成功", "success")
-                      } else {
-                        console.log("订阅失败:", result?.message)
-                        showMessage("订阅失败")
-                      }
-                    })
+                  handleSubmit()
                 }}
               >确认支付 {amount} USDT
               </button>

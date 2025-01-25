@@ -26,6 +26,7 @@ import {
 } from "@/lib/actions/profile"
 import { isNumber } from "lodash"
 import { uploadFile } from "@/lib/utils"
+import DateTimePicker from "@/components/common/date-time-picker"
 
 const ItemEditTitle = ({
   title,
@@ -65,17 +66,19 @@ const FormItemWithSelect = ({
   return (
     <section className="flex justify-between items-center border-b border-[#ddd] py-4">
       <div>{label}</div>
-      <SheetSelect outerControl={false} options={options} onInputChange={onValueChange}>
-        <div className={"flex items-center justify-center gap-1.5 text-[#777]"}>
-          <span>{showLabel}</span>
-          <IconWithImage
-            url={"/icons/profile/icon_arrow_right@3x.png"}
-            width={16}
-            height={16}
-            color={"#ddd"}
-          />
-        </div>
-      </SheetSelect>
+      <div className="flex-1">
+        <SheetSelect outerControl={false} options={options} onInputChange={onValueChange}>
+          <div className={"flex items-center justify-end gap-1.5 text-[#777]"}>
+            <span>{showLabel}</span>
+            <IconWithImage
+              url={"/icons/profile/icon_arrow_right@3x.png"}
+              width={16}
+              height={16}
+              color={"#ddd"}
+            />
+          </div>
+        </SheetSelect>
+      </div>
     </section>
   )
 }
@@ -118,7 +121,9 @@ const AddVoteModal = ({
       append({ content: "" })
       append({ content: "" })
     }
-  }, [])
+  }, [voteForm])
+
+  const minTime = new Date()
 
   return (
     <>
@@ -254,36 +259,22 @@ const AddVoteModal = ({
           />
           <section className="flex justify-between items-center border-b border-[#ddd] py-4">
             <div>截止时间</div>
-            <Controller
-              control={control}
-              render={({ field }) => {
-                return (
-                  <DatePickerModal
-                    onValueChange={(value) => {
-                      field.onChange(dayjs(value).endOf("date").valueOf())
+            <div className={""}>
+              <Controller
+                control={control}
+                render={({ field }) => {
+                  return (
+                    <DateTimePicker min={minTime} value={field.value * 1000} dateChange={value => {
+                      field.onChange(value / 1000)
                     }}
-                    trigger={
-                      <button className={"flex items-center justify-center gap-1.5 text-[#777]"}>
-                        <span>
-                          <input
-                            className="text-right"
-                            readOnly
-                            value={dayjs(field.value).format("YYYY-MM-DD HH:mm")}
-                          />
-                        </span>
-                        <IconWithImage
-                          url={"/icons/profile/icon_arrow_right@3x.png"}
-                          width={16}
-                          height={16}
-                          color={"#ddd"}
-                        />
-                      </button>
-                    }
-                  />
-                )
-              }}
-              name={"stop_time"}
-            />
+                    >
+                      <div className={field.value ? "" : "text-gray-500"}>{field.value ? dayjs(field.value * 1000).format("YYYY-MM-DD HH:mm") : "请选择"}</div>
+                    </DateTimePicker>
+                  )
+                }}
+                name={"stop_time"}
+              />
+            </div>
           </section>
         </section>
       </FormDrawer>
@@ -777,7 +768,7 @@ export default function Page() {
               <div className="text-xs text-[#999] mt-1.5">
                 截止：
                 {formValues.post_vote?.stop_time
-                  ? dayjs(formValues.post_vote?.stop_time).format("YYYY-MM-DD HH:mm")
+                  ? dayjs(formValues.post_vote?.stop_time * 1000).format("YYYY-MM-DD HH:mm")
                   : ""}{" "}
                 结束
               </div>

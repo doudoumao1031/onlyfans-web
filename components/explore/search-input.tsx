@@ -31,7 +31,7 @@ export default function SearchInput({ placeholder }: { placeholder: string }) {
         height={18}
         className="absolute top-1/3 left-6"
       />
-      <button onTouchEnd={() => {back()}}>
+      <button onClick={() => {back()}}>
         <span className="text-main-pink text-lg font-normal text-nowrap w-8">取消</span>
       </button>
     </div>

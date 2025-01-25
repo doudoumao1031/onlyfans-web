@@ -12,13 +12,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "imfanstest.potato.im",
+        hostname: process.env.NEXT_PUBLIC_HOST || "",
         port: "",
         pathname: "/**"
       },
       {
         protocol: "https",
-        hostname: "imfanstest.potato.im",
+        hostname: process.env.NEXT_PUBLIC_HOST || "",
         port: "",
         pathname: "/**",
         search: ""
