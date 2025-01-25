@@ -2,6 +2,7 @@ export interface Vote {
   items: VoteItem[]
   title: string
   stop_time: number
+  mu_select: boolean
 }
 export interface VoteItem {
   content: string
