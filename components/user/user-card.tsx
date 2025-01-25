@@ -77,10 +77,10 @@ export default function UserCard({ user, subscribe }: {user: BloggerInfo, subscr
 
   return (
     <div className="relative">
-      <Link href={`/space/${user.id}_1/feed`}>
+      <Link href={`/space/${user.id}/feed`}>
         {cardContent}
       </Link>
-      {subscribe && (
+      {subscribe && !user.sub && (
         <div className="absolute right-4 bottom-4 z-10">
           <SubscribedButton userId={user.id} name={user.first_name} subPrice={user.sub_price} type={"button"}  />
         </div>
