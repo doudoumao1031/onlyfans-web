@@ -69,6 +69,7 @@ export type UserProfile = {
   pt_user_id: number
   status: number // 1正常，2停用
   sub: boolean // 是否订阅
+  sub_price: number // 订阅价格
   sub_end_time: number //订阅结束时间
   subscribe_count: number //订阅数量
   today_add_count: number //当日新增帖子数量

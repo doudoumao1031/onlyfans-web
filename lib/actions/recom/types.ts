@@ -45,7 +45,8 @@ export type BloggerInfo = {
   today_add_count: number;
   access_count: number;
   play_count: number;
-  sub: boolean;
+  sub: boolean; // 是否已经订阅
+  sub_price: number // 订阅基础价格
   sub_end_time: number;
   collection: boolean;
   following: boolean;

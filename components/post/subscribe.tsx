@@ -2,10 +2,10 @@ import { buildImageUrl } from "@/lib/utils"
 import { User } from "@/lib/actions/users/types"
 import Avatar from "./avatar"
 import { buildMention } from "./utils"
-import SubscribedDrawer from "../explore/subscribed-drawer"
+import SubscribedButton from "@/components/explore/subscribed-button"
 
 export default function Subscribe({ user }: { user: User }) {
-  const { back_img, photo, id, first_name, last_name, username } = user
+  const { back_img, photo, id, first_name, last_name, username, sub_price } = user
   return (
     <div
       className="w-full rounded-lg bg-cover h-[100px]"
@@ -25,7 +25,7 @@ export default function Subscribe({ user }: { user: User }) {
             <div className="text-white/75 text-xs">{buildMention(username)}</div>
           </div>
         </div>
-        <SubscribedDrawer name={first_name} userId={Number(id)} />
+        <SubscribedButton name={first_name} userId={Number(id)} subPrice={sub_price} type={"button"} />
       </div>
     </div>
   )

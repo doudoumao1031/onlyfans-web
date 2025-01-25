@@ -136,35 +136,6 @@ const uploadBatch = async (fileId: string, chunks: Blob[]) => {
   await Promise.all(requestList)
 }
 
-const uploadChunksInBatches = async (fileId: string, file: File, totalChunks: number, batchSize: number) => {
-  const failedChunks: { part_no: string; chunk: Blob }[] = []
-
-  for (let i = 1; i < totalChunks; i += batchSize) {
-    console.log("handleUploadFile batch", i, batchSize)
-    const batchPromises = []
-    for (let j = i; j < i + batchSize && j < totalChunks; j++) {
-      const start = j * CHUNK_SIZE
-      const end = Math.min(start + CHUNK_SIZE, file.size)
-      const chunk = file.slice(start, end)
-      batchPromises.push(uploadFileChunk(fileId, String(j + 1), chunk).then(result => {
-        if (!result) {
-          failedChunks.push({ part_no: String(j + 1), chunk })
-        }
-      }))
-      console.log("handleUploadFile batchPromises", batchPromises.length)
-    }
-
-    try {
-      await Promise.all(batchPromises)
-    } catch (error) {
-      console.error("handleUploadFile part failed", error)
-      return failedChunks
-    }
-  }
-
-  return failedChunks
-}
-
 function createChunks(file:File) {
   const chunkList = [] // 收集所有的切片
   let offset = 0 // 收集的切片总大小
@@ -176,24 +147,10 @@ function createChunks(file:File) {
   return chunkList
 }
 
-const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 export function buildImageUrl(fileId: string) {
   return `${process.env.NEXT_PUBLIC_MEDIA_URL}/${fileId}`
 }
 
 export function buildVideoUrl(fileId: string, quality: string) {
   return `${process.env.NEXT_PUBLIC_VIDEO_URL}/${fileId}/${quality}`
-}
-
-/**
- * 获取媒体地址
- * @param fileId 文件id
- * @param quality 分辨率
- */
-export function buildMediaUrl(fileId: string, quality?: string) {
-  if (quality) {
-    return `${mediaUrl}videocut/${fileId}/${quality}`
-  } else {
-    return `${mediaUrl}${fileId}`
-  }
 }

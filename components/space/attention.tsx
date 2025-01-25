@@ -2,6 +2,7 @@
 import IconWithImage from "@/components/profile/icon"
 import Modal, { TModalProps } from "@/components/space/modal"
 import { useState } from "react"
+import dayjs from "dayjs"
 // import SubScribeConfirm from '@/components/space/subscribe-confirm'
 import { userDelFollowing, userFollowing } from "@/lib/actions/space/actions"
 import { UserProfile } from "@/lib/actions/profile"
@@ -9,10 +10,8 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
   const [isFocus, setIsFocus] = useState<boolean>(data?.following || false)
   const [visible, setVisible] = useState<boolean>(false)
   const [modalType, setModalType] = useState<number>(0)
-  const [isOpenDrawer, setIsOpenDrawer] = useState<boolean>(false)
   const handleFocus = () => {
     setVisible(false)
-    setIsOpenDrawer(true)
   }
   const handleTopUp = () => {
     setVisible(false)
@@ -91,10 +90,15 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
           {isFocus ? "已关注" : "关注"}
         </span>
       </div>
-      <div className="flex text-main-pink text-xs mt-3 items-center">
-        <span className="pr-1">订阅：999天</span>
-        <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="#ff8492" />
-      </div>
+      {
+        data?.sub && (
+          <div className="flex text-main-pink text-xs mt-3 items-center">
+            <span className="pr-1">订阅：{dayjs(data && data?.sub_end_time * 1000 || 0).diff(dayjs(), "days")}天</span>
+            <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="#ff8492"/>
+          </div>
+        )
+      }
+
       <Modal
         visible={visible}
         cancel={() => {
@@ -102,7 +106,6 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
         }}
         {...models[modalType]}
       ></Modal>
-      {/* <SubScribeConfirm data={data} isOpen={isOpenDrawer} setIsOpen={setIsOpenDrawer}> </SubScribeConfirm> */}
     </div>
   )
 }
