@@ -1,0 +1,85 @@
+import Link from "next/link";
+import Image from "next/image"
+type Tprops = {
+  id: string
+}
+export default function Page({ id }: Tprops) {
+  return (
+    <div className="px-4 pb-8">
+      <div className="mt-5 ">
+        <div className="grid grid-cols-3 gap-y-4 text-[#222]">
+          <Link
+            href={`/profile/${id}/order`}
+            className="flex justify-center flex-col items-center gap-2"
+          >
+            <div>
+              <Image
+                src="/icons/profile/icon-subscription-management.png"
+                alt="subscription-management"
+                width={50}
+                height={50}
+              />
+            </div>
+            <div>订阅管理</div>
+          </Link>
+          <Link
+            href={`/profile/${id}/manuscript`}
+            className="flex justify-center flex-col items-center gap-2"
+          >
+            <div>
+              <Image
+                src="/icons/profile/icon-manuscript-management.png"
+                alt="icon-manuscript-management"
+                width={50}
+                height={50}
+              />
+            </div>
+            <div>稿件管理</div>
+          </Link>
+          <Link
+            href={`/profile/${id}/fans/manage/subscribe`}
+            className="flex justify-center flex-col items-center gap-2"
+          >
+            <div>
+              <Image
+                src="/icons/profile/icon-fan-management.png"
+                alt="icon-fan-management"
+                width={50}
+                height={50}
+              />
+            </div>
+            <div>粉丝管理</div>
+          </Link>
+          <Link
+            href={`/profile/${id}/income`}
+            className="flex justify-center flex-col items-center gap-2"
+          >
+            <div>
+              <Image
+                src="/icons/profile/icon-revenue-center.png"
+                alt="icon-revenue-center"
+                width={50}
+                height={50}
+              />
+            </div>
+            <div>收益中心</div>
+          </Link>
+          <Link
+            href={`/profile/${id}/dataCenter`}
+            className="flex justify-center flex-col items-center gap-2"
+          >
+            <div>
+              <Image
+                src="/icons/profile/icon-data-analysis.png"
+                alt="icon-data-analysis"
+                width={50}
+                height={50}
+              />
+            </div>
+            <div>数据分析</div>
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
