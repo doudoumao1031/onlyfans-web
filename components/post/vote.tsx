@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import Image from "next/image"
 import { Vote as VoteData, VoteParams } from "./types"
 import { ApiResponse, fetchWithPost } from "@/lib"
@@ -7,17 +7,20 @@ export default function Vote({ postId }: { postId: number }) {
   const [vote, setVote] = useState<VoteData>()
   const { title, items, stop_time, mu_select } = vote || { items: [], stop_time: 0 }
   const [showOptionAmount, setShowOptionAmount] = useState(3)
-  const [selectedIds, setSelectedIds] = useState<number[]>(
-    items.filter((i) => i.select).map((i) => i.id)
-  )
+  const selectedIds = items.filter((i) => i.select).map((i) => i.id)
   const votedByMe = items.reduce((voted, item) => item.select || voted, false)
   const secondsToExpire = stop_time - Math.floor(Date.now() / 1000)
   const totalVotes = items.reduce((t, o) => t + o.vote_count, 0)
   const canVote = secondsToExpire > 0
 
+  const getVoteData = useCallback(async () => {
+    const data = await fetchVote(postId)
+    setVote(data)
+  }, [postId])
+
   useEffect(() => {
     getVoteData()
-  }, [])
+  }, [getVoteData])
 
   return (
     <div className="mt-2 flex flex-col gap-2">
@@ -67,17 +70,12 @@ export default function Vote({ postId }: { postId: number }) {
     </div>
   )
 
-  async function getVoteData() {
-    const data = await fetchVote(postId)
-    setVote(data)
-  }
-
   async function handleClickOption(id: number) {
     if (!canVote) return
     if (mu_select) {
       if (selectedIds.includes(id)) {
         const success = await _vote({
-          item_ids: selectedIds.filter((id) => id !== id),
+          item_ids: selectedIds.filter((i) => i !== id),
           post_id: postId
         })
         if (success) {
