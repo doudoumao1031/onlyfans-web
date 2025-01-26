@@ -7,12 +7,14 @@ import SubscribedDrawer from "@/components/explore/subscribed-drawer"
 export default function SubscribedButton({ userId, name, subPrice, type } : {userId: number, name: string, subPrice: number, type: string | "button" | "panel"}) {
   const { showMessage, renderNode } = useCommonMessage()
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
+  const [show, setShow] = useState<boolean>(true)
   const handleSubmit = async () => {
     if (subPrice === 0) {
       addSubOrder({ user_id: userId, price: 0, id: 0 })
         .then((result) => {
           if (result && result.code === 0) {
             console.log("订阅成功")
+            setShow(false)
             showMessage("订阅成功", "success")
           } else {
             console.log("订阅失败:", result?.message)
@@ -26,7 +28,7 @@ export default function SubscribedButton({ userId, name, subPrice, type } : {use
   return (
     <>
       {renderNode}
-      {type === "button" && (
+      {type === "button" && show && (
         <button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white"
           onClick={handleSubmit}
         >
@@ -34,7 +36,7 @@ export default function SubscribedButton({ userId, name, subPrice, type } : {use
         </button>
       )}
       {
-        type === "panel" && (
+        type === "panel" && show && (
           <div
             onClick={handleSubmit}
             className="w-full h-12 bg-[#ff8492] rounded-lg  pl-4 mt-2 flex flex-col justify-center text-white bg-[url('/icons/space/bg_space_subscription.png')] bg-cover"
