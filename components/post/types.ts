@@ -7,8 +7,15 @@ export interface Vote {
 export interface VoteItem {
   content: string
   id: number
+  select: boolean
   vote_count: number
 }
+
+export interface VoteParams {
+  items_ids: number[]
+  post_id: number
+}
+
 export interface Attachment {
   file_id: string
   file_type: FileType
