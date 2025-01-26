@@ -1,9 +1,10 @@
 import Image from "next/image"
+import LazyImg from "../common/lazy-img"
 
 export default function Avatar({ src, vlog = false, width = "w-16" }: { src: string, vlog?: boolean, width?: string }) {
   return (
     <div className={`relative ${width}`}>
-      <Image
+      <LazyImg
         src={src}
         alt=""
         className={`rounded-full border-2 border-white ${width}`}

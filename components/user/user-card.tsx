@@ -12,7 +12,7 @@ import SubscribedButton from "@/components/explore/subscribed-button"
  * @param subscribe 是否订阅
  * @constructor
  */
-export default function UserCard({ user, subscribe }: {user: BloggerInfo, subscribe: boolean }) {
+export default function UserCard({ user, subscribe }: { user: BloggerInfo, subscribe: boolean }) {
 
   const cardContent = (
     <>
@@ -31,7 +31,7 @@ export default function UserCard({ user, subscribe }: {user: BloggerInfo, subscr
           <div className="w-full">
             <div className="flex px-3 items-center justify-start">
               <div className="w-1/4">
-                <Avatar src={user.photo ? buildImageUrl(user.photo) : "/mock/avatar1.jpg"} vlog={user.live_certification} width="w-[66px]"/>
+                <Avatar src={user.photo ? buildImageUrl(user.photo) : "/mock/avatar1.jpg"} vlog={user.live_certification} width="w-[66px]" />
               </div>
               <div className="flex-col w-3/4">
                 <div>
@@ -82,7 +82,7 @@ export default function UserCard({ user, subscribe }: {user: BloggerInfo, subscr
       </Link>
       {subscribe && !user.sub && (
         <div className="absolute right-4 bottom-4 z-10">
-          <SubscribedButton userId={user.id} name={user.first_name} subPrice={user.sub_price} type={"button"}  />
+          <SubscribedButton userId={user.id} name={user.first_name} subPrice={user.sub_price} type={"button"} />
         </div>
       )}
     </div>

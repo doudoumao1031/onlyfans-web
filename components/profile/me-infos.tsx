@@ -66,7 +66,7 @@ export default async function Page() {
             </span>
             <Link href={`/profile/edit`}>
               <IconWithImage
-                url={"/icons/profile/icon_edit@3x.png"}
+                url={"/icons/profile/icon_edit_gray@3x.png"}
                 width={20}
                 height={20}
                 color={"#bbb"}
@@ -78,7 +78,7 @@ export default async function Page() {
           </div>
           <Link href={`/space/${data.id}_1/feed`}>
             <div className="flex justify-center mt-2">
-              <button className="pt-0.5 pb-0.5 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
+              <button className=" py-1 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
                 进入空间
               </button>
             </div>

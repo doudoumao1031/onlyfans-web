@@ -8,7 +8,7 @@ export default function Vote({ vote, postId }: { vote: VoteData; postId: number 
   const secondsToExpire = stop_time - Math.floor(Date.now()) / 1000
   const [showOptionAmount, setShowOptionAmount] = useState(3)
   const [voteSelectionIds, setVoteSelectionIds] = useState<number[]>([])
-  const totalVotes = items.reduce((t, o) => t + o.vote_count, 0)
+  const totalVotes = (items || []).reduce((t, o) => t + o.vote_count, 0)
 
   const canVote = secondsToExpire > 0
 
