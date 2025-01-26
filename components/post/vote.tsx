@@ -9,7 +9,7 @@ export default function Vote({ vote, postId }: { vote: VoteData; postId: number 
   const [showOptions, setShowOptions] = useState(false)
   const [showOptionAmount, setShowOptionAmount] = useState(3)
   const [voteSelectionIds, setVoteSelectionIds] = useState<number[]>([])
-  const totalVotes = items.reduce((t, o) => t + o.vote_count, 0)
+  const totalVotes = (items || []).reduce((t, o) => t + o.vote_count, 0)
 
   const canVote = secondsToExpire > 0
 
@@ -33,11 +33,10 @@ export default function Vote({ vote, postId }: { vote: VoteData; postId: number 
               key={id}
               className="w-full h-11 border rounded-md px-2 flex justify-between items-center bg-no-repeat"
               style={{
-                backgroundImage: `${
-                  !canVote || voteSelectionIds.includes(id)
+                backgroundImage: `${!canVote || voteSelectionIds.includes(id)
                     ? "url(/icons/pink.png)"
                     : "url(/icons/silver.png)"
-                }`,
+                  }`,
                 backgroundSize: `${(totalVotes ? vote_count / totalVotes : 0) * 100}% 100%`,
                 borderColor: `${!canVote || voteSelectionIds.includes(id) ? "#FF8492" : "#DDDDDD"}`
               }}
