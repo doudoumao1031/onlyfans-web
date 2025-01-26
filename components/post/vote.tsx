@@ -12,8 +12,6 @@ export default function Vote({ vote, postId }: { vote: VoteData; postId: number 
 
   const canVote = secondsToExpire > 0
 
-  console.log(vote)
-
   return (
     <div className="mt-2 flex flex-col gap-2">
       <div>{title}</div>

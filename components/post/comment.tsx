@@ -7,7 +7,6 @@ import {
   CommentReplyReq,
   deleteComment,
   fetchCommentReplies,
-  fetchPostComments,
   replyComment,
   upComment
 } from "@/lib"
@@ -38,9 +37,7 @@ export default function Comments({
         <button onClick={sendComment}>发送评论</button>
       </div>
       {comments.map((comment) => (
-        <div key={comment.id} className="flex flex-col gap-4">
-          <Comment comment={comment} removed={removeComment} />
-        </div>
+        <Comment key={comment.id} comment={comment} removed={removeComment} />
       ))}
     </div>
   )
