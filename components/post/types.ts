@@ -12,7 +12,7 @@ export interface VoteItem {
 }
 
 export interface VoteParams {
-  items_ids: number[]
+  item_ids: number[]
   post_id: number
 }
 

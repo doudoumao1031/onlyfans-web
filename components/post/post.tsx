@@ -31,7 +31,6 @@ export default function Post({
   const [showComments, setShowComments] = useState(false)
   const [comments, setComments] = useState<CommentInfo[]>()
   const [showVote, setShowVote] = useState(false)
-  const [vote, setVote] = useState<VoteData>()
 
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
@@ -47,7 +46,7 @@ export default function Post({
         </div>
       )}
       {hasVote && (
-        <div className="flex gap-2 items-end" onClick={toggleVote}>
+        <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
           <Image src="/icons/vote.png" alt="" width={20} height={20} />
           <div className="text-red-500 text-sm">投票</div>
           {showVote ? (
@@ -57,7 +56,7 @@ export default function Post({
           )}
         </div>
       )}
-      {hasVote && showVote && vote && <Vote vote={vote} postId={post.id} />}
+      {hasVote && showVote && <Vote postId={post.id} />}
       <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} postId={post.id} />
         <CommentStats count={comment_count} onClick={toggleComments} />
@@ -90,24 +89,4 @@ export default function Post({
       setShowComments(false)
     }
   }
-
-  async function toggleVote() {
-    if (!showVote) {
-      if (!vote) {
-        const data = await fetchVote(post.id)
-        console.log(data)
-        setVote(data)
-      }
-      setShowVote(true)
-    } else {
-      setShowVote(false)
-    }
-  }
-}
-
-async function fetchVote(post_id: number) {
-  const res = await fetchWithPost<{ post_id: number }, ApiResponse<VoteData>>("/post/getVoteInfo", {
-    post_id
-  })
-  return res?.code === 0 ? res.data : undefined
 }
