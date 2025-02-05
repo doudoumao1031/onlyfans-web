@@ -45,6 +45,11 @@ export default function Post({
           ))}
         </div>
       )}
+      {hasSubscribe && user && !mention_user && (
+        <div>
+          <Subscribe user={user} />
+        </div>
+      )}
       {hasVote && (
         <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
           <Image src="/icons/vote.png" alt="" width={20} height={20} />
