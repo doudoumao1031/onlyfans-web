@@ -36,7 +36,7 @@ export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
           )} alt={""} />
         </div>
         <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
-          <div className="p-2">
+          <div className="p-2 truncate overflow-hidden text-ellipsis">
             {!(post.visibility === 1 && !user.sub && isClick) ? post.title : ""}
           </div>
           {post.visibility === 1 && !user.sub && isClick && (

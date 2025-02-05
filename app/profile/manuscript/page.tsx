@@ -12,14 +12,14 @@ import { ListEnd, ListError, ListLoading } from "@/components/explore/list-state
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 
 enum ACTIVE_TYPE {
-    POST = "POST",
-    MEDIA = "MEDIA"
+  POST = "POST",
+  MEDIA = "MEDIA"
 }
 
 const ManuscriptPost = () => {
   const [timeSort, setTimeSort] = useState<boolean>(false)
-  const [title,setTitle] = useState<string>("")
-  const [initData,setInitData] = useState<PageResponse<PostData>>()
+  const [title, setTitle] = useState<string>("")
+  const [initData, setInitData] = useState<PageResponse<PostData>>()
 
   useEffect(() => {
     myPosts({
@@ -32,9 +32,9 @@ const ManuscriptPost = () => {
         setInitData(response)
       }
     })
-  },[])
+  }, [])
 
-  const infiniteFetchMyPosts = useInfiniteFetch<SearchPostReq,PostData>({
+  const infiniteFetchMyPosts = useInfiniteFetch<SearchPostReq, PostData>({
     fetchFn: myPosts,
     params: {
       title,
@@ -73,10 +73,10 @@ const ManuscriptPost = () => {
           <InfiniteScroll<PostData> fetcherFn={infiniteFetchMyPosts} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
             {({ items, isLoading, hasMore, error }) => (
               <Fragment>
-                {Boolean(error) && <ListError/>}
-                {items?.map((item,index) => <ManuscriptItem data={item} key={index}/>)}
-                {isLoading && <ListLoading/>}
-                {!hasMore && items.length > 0 && <ListEnd/>}
+                {Boolean(error) && <ListError />}
+                {items?.map((item, index) => <ManuscriptItem data={item} key={index} />)}
+                {isLoading && <ListLoading />}
+                {!hasMore && items?.length > 0 && <ListEnd />}
               </Fragment>
             )}
           </InfiniteScroll>
@@ -88,7 +88,7 @@ const ManuscriptPost = () => {
 
 const ManuscriptMedia = () => {
   const [timeSort, setTimeSort] = useState<boolean>(false)
-  const [initData,setInitData] = useState<PageResponse<unknown> | null>()
+  const [initData, setInitData] = useState<PageResponse<unknown> | null>()
   useEffect(() => {
     myMediaPosts({
       page: 1,
@@ -98,11 +98,11 @@ const ManuscriptMedia = () => {
       console.log(response)
       setInitData(response)
     })
-  },[])
+  }, [])
 
   const infiniteFetchMedia = useInfiniteFetch({
     fetchFn: myMediaPosts,
-    params:{
+    params: {
       pageSize: 10,
       from_id: 0
     }
@@ -128,8 +128,8 @@ const ManuscriptMedia = () => {
           <InfiniteScroll<unknown> className={"grid grid-cols-2 gap-3 mt-2"} fetcherFn={infiniteFetchMedia} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
             {({ items, isLoading, hasMore, error }) => (
               <Fragment>
-                {Boolean(error) && <ListError/>}
-                {items?.map((item,index) => (
+                {Boolean(error) && <ListError />}
+                {items?.map((item, index) => (
                   <section key={index}>
                     <section className="rounded-xl relative overflow-hidden text-xs">
                       <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5">
@@ -173,13 +173,13 @@ const ManuscriptMedia = () => {
                     <button
                       className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-main-pink border-2 text-main-pink w-full mt-2"
                     >
-                      <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
+                      <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"} />
                       <span>编辑</span>
                     </button>
                   </section>
                 ))}
-                {isLoading && <ListLoading/>}
-                {!hasMore && items.length > 0 && <ListEnd/>}
+                {isLoading && <ListLoading />}
+                {!hasMore && items?.length > 0 && <ListEnd />}
               </Fragment>
             )}
           </InfiniteScroll>
@@ -200,9 +200,9 @@ export default function Page() {
     <div>
       <Header title="稿件管理" titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-main-pink text-base">草稿</Link>}>
       </Header>
-      <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive}/>
-      {active === ACTIVE_TYPE.POST && <ManuscriptPost/>}
-      {active === ACTIVE_TYPE.MEDIA && <ManuscriptMedia/>}
+      <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
+      {active === ACTIVE_TYPE.POST && <ManuscriptPost />}
+      {active === ACTIVE_TYPE.MEDIA && <ManuscriptMedia />}
     </div>
   )
 }

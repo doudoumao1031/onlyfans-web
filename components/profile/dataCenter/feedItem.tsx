@@ -2,6 +2,7 @@ import { useState } from "react"
 import IconWithImage from "../icon"
 import { PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
+import LazyImg from '../../common/lazy-img';
 type TProps = {
   item: PostData
 }
@@ -22,9 +23,15 @@ export default function Page({ item }: TProps) {
     <div className={`pl-4 ${isOpen ? "border-b-gray-100 border-b" : ""}`}>
       <div className={` py-2 ${!isOpen ? "border-b-gray-100 border-b" : ""}`}>
         <div className={"h-28 flex justify-between px-4 pl-0"}>
-          <div style={{
-            backgroundImage: `url(${buildImageUrl(post_attachment[0]?.thumb_id || post_attachment[0]?.file_id)})`
-          }} className="h-28 w-28 bg-cover mr-2 shrink-0 rounded-md bg-slate-200"></div>
+          <div className="h-28 w-28 bg-cover mr-2 shrink-0 rounded-md bg-slate-200">
+            <LazyImg
+              className="aspect-square rounded-md "
+              src={buildImageUrl(post_attachment[0]?.thumb_id || post_attachment[0]?.file_id)}
+              alt=""
+              width={112}
+              height={112}
+            />
+          </div>
           <div className="flex flex-col justify-between flex-1">
             <div className="fbreak-all text-ellipsis line-clamp-2">{post.title}</div>
             <div className="flex justify-between items-center">
