@@ -4,7 +4,7 @@ import { FileType, PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
 import Link from "next/link"
 import { ParamValue } from "next/dist/server/request/params"
-import LazyImg from '../common/lazy-img';
+import LazyImg from "../common/lazy-img"
 export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
   const [isClick, setIsClick] = useState<boolean>(false)
   if (!item) return null

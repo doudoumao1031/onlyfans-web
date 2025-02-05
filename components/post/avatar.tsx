@@ -1,5 +1,5 @@
 import { buildImageUrl } from "@/lib/utils"
-import LazyImg from "../common/lazy-img";
+import LazyImg from "../common/lazy-img"
 
 export default function Avatar({ fileId, width = 16 }: { fileId: string; width?: number }) {
   return (

@@ -1,8 +1,8 @@
 "use client"
-import { useState } from "react";
+import { useState } from "react"
 import { Skeleton } from "@/components/ui/skeleton"
-import Image from 'next/image';
-import { ComponentProps } from 'react';
+import Image from "next/image"
+import { ComponentProps } from "react"
 type MyImageProps = ComponentProps<typeof Image> & {
 };
 export default function LazyImg(props: MyImageProps): React.ReactNode {

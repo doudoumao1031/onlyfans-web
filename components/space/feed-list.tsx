@@ -4,7 +4,7 @@ import React, { Fragment } from "react"
 import Post from "@/components/post/post"
 import InfiniteScroll from "../common/infinite-scroll"
 import { ListError, ListLoading, ListEnd } from "@/components/explore/list-states"
-import { PostData, SearchPostReq, PageInfo } from "@/lib"
+import { PostData, PageInfo } from "@/lib"
 import { getMyFeeds, getUserPosts } from "@/lib/actions/space"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 
