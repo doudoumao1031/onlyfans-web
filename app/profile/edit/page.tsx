@@ -10,11 +10,14 @@ import { useEffect, useState } from "react"
 import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/profile"
 import { useRouter } from "next/navigation"
 import useCommonMessage from "@/components/common/common-message"
+import { commonUploadFile } from "@/lib/utils"
 
 type EditUserProfile = Pick<
   UserProfile,
   "about" | "username" | "location" | "back_img" | "top_info" | "photo"
 >
+
+const IMAGE_PREFIX = `${process.env.NEXT_PUBLIC_API_URL}/media/img/`
 
 export default function Page() {
   const router = useRouter()
@@ -27,7 +30,8 @@ export default function Page() {
         about: z.string().optional(),
         location: z.string().optional(),
         photo: z.string().optional(),
-        top_info: z.string().optional()
+        top_info: z.string().optional(),
+        back_img: z.string().optional()
       })
     ),
     defaultValues: {}
@@ -54,11 +58,18 @@ export default function Page() {
   }, [setValue])
 
   const formValues = watch()
-
+  const handleUploadFile = (file: File) => {
+    commonUploadFile(file).then((fileId) => {
+      if (fileId) {
+        setValue("back_img", fileId)
+      }
+    })
+  }
   return (
     <>
       {renderNode}
       <form
+        className={"relative"}
         onSubmit={handleSubmit((data) => {
           updateUserBaseInfo({
             ...data,
@@ -72,8 +83,21 @@ export default function Page() {
           })
         })}
       >
-        <div className="profile-content bg-[url('/demo/user_bg.png')]">
+        <div className={"w-full left-0 top-0 absolute z-20"}>
           <Header right={<button type={"submit"}>保存</button>} title="编辑个人信息" />
+        </div>
+        <div className="profile-content bg-[url('/demo/user_bg.png')] relative" style={{ backgroundImage: `url(${IMAGE_PREFIX}${formValues.back_img})` }}>
+          <input
+            type="file"
+            accept="image/*"
+            multiple={false}
+            className="w-full h-full opacity-0 z-10 absolute"
+            onChange={(event) => {
+              if (event.target.files?.length) {
+                handleUploadFile(event.target.files[0])
+              }
+            }}
+          />
         </div>
         <section className="mt-[-47px] rounded-t-3xl bg-white relative pt-12 text-black pb-8">
           <section className="pl-4 pr-4 pb-3 ">
@@ -102,6 +126,7 @@ export default function Page() {
                       onInputChange={field.onChange}
                       label={"用户名"}
                       value={field.value}
+                      disabled
                       description={`https://secretfans.com/${field.value ?? ""}`}
                     />
                   )}

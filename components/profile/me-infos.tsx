@@ -6,6 +6,7 @@ import RechargeDrawer from "@/components/profile/recharge-drawer"
 import { userProfile } from "@/lib/actions/profile"
 import { userWallet } from "@/lib"
 import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
+import FoldingDescription from "@/components/profile/folding-description"
 
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
@@ -16,6 +17,7 @@ const displayNumber = (data: number) => {
   }
   return Math.ceil(data / 100000) + "W+"
 }
+
 export default async function Page() {
   const response = await userProfile()
   const data = response?.data
@@ -83,10 +85,7 @@ export default async function Page() {
             </div>
           </Link>
           <div className="text-xs mt-2.5">
-            <section>{data.about || "暂无信息"}</section>
-            {data.about && (
-              <button className="text-main-pink mt-1">更多信息</button>
-            )}
+            <FoldingDescription about={data.about}/>
           </div>
           <div className={"flex text-xs gap-1 mt-1.5 text-[#6D7781]"}>
             <IconWithImage
