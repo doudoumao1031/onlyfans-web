@@ -9,19 +9,20 @@ enum FANS_TYPE {
   FOLLOW = "FOLLOW"
 }
 
-export default function Layout({children,}: {
+export default function Layout({ children }: {
   children: React.ReactNode,
 }) {
   return (
     <>
       <Header title="粉丝管理" titleColor={"#000"}
-              right={<Link href={`/profile/fans/reply`} className="text-main-pink text-base">订阅回复</Link>}
+        right={<Link href={"/profile/fans/reply"} className="text-main-pink text-base">订阅回复</Link>}
       >
       </Header>
       <TopTab tabOptions={[
-        {label: "订阅", name: FANS_TYPE.SUBSCRIBE, link: `/profile/fans/manage/subscribe`},
-        {label: "关注", name: FANS_TYPE.FOLLOW, link: `/profile/fans/manage/follow`}
-      ]}/>
+        { label: "订阅", name: FANS_TYPE.SUBSCRIBE, link: "/profile/fans/manage/subscribe" },
+        { label: "关注", name: FANS_TYPE.FOLLOW, link: "/profile/fans/manage/follow" }
+      ]}
+      />
       {children}
     </>
   )

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react"
 import Image from "next/image"
-import { ApiResponse, CommentInfo, fetchPostComments, fetchWithPost, PostData } from "@/lib"
+import { CommentInfo, fetchPostComments, PostData } from "@/lib"
 import Comments from "./comment"
 import Vote from "./vote"
 import Subscribe from "./subscribe"
@@ -15,7 +15,6 @@ import CommentStats from "./comment-stats"
 import Tip from "./tip"
 import Share from "./share"
 import Save from "./save"
-import { Vote as VoteData } from "./types"
 
 export default function Post({
   data,
@@ -50,7 +49,7 @@ export default function Post({
           ))}
         </div>
       )}
-      {hasSubscribe && user && !mention_user && (
+      {hasSubscribe && user && !user?.sub && !mention_user &&  (
         <div>
           <Subscribe user={user} />
         </div>

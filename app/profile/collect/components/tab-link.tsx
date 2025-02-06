@@ -12,8 +12,8 @@ export default function TabLinks() {
     return "text-[#777] font-normal"
   }, [pathName])
   const links = [
-    { name: "博主", href: `/profile/collect/blogger` },
-    { name: "帖子", href: `/profile/collect/feed` }
+    { name: "博主", href: "/profile/collect/blogger" },
+    { name: "帖子", href: "/profile/collect/feed" }
   ]
   return (
     <div className="w-full text-center grid grid-cols-2 border-b border-gray-100">

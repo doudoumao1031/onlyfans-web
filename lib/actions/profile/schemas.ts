@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const postVoteSchema = z.object({
-  id: z.string().optional(),
+  id: z.union([z.string(),z.number()]).optional(),
   items: z.array(z.object({
     content: z.string().optional()
   }).required()).min(2, "最少两个选项"),
@@ -11,7 +11,7 @@ export const postVoteSchema = z.object({
 })
 
 export const postPriceSchema = z.array(z.object({
-  id: z.string().optional(),
+  id: z.union([z.string(),z.number()]).optional(),
   price: z.union([z.string().refine(data => Number(data) < 999,"不能大于999").refine(data => Number(data) > -1, "不能小于0").optional(),z.number()]),
   user_type: z.number(),
   visibility: z.boolean()
@@ -24,8 +24,8 @@ export const postSchema = z.object({
     title: z.string({ message: "请输入标题" }).min(2, "最少两个字").max(999, "最多999个字")
   }),
   post_attachment: z.array(z.object({
-    file_id: z.string(),
-    id: z.string().optional()
+    file_id: z.union([z.string(),z.number()]),
+    id: z.union([z.string(),z.number()]).optional()
   })).optional(),
   post_price: postPriceSchema.min(1),
   post_vote: postVoteSchema.optional(),

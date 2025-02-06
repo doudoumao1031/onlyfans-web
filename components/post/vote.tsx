@@ -14,8 +14,8 @@ export default function Vote({ postId }: { postId: number }) {
   const canVote = secondsToExpire > 0
 
   const getVoteData = useCallback(async () => {
-    const data = await fetchVote(postId)
-    setVote(data)
+    const response = await fetchVote(postId)
+    setVote(response?.data)
   }, [postId])
 
   useEffect(() => {
