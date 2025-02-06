@@ -1,6 +1,7 @@
 import Image from "next/image"
 import IconWithImage from "@/components/profile/icon"
 import { commonUploadFile } from "@/lib/utils"
+import LazyImg from "../common/lazy-img"
 
 const IMAGE_PREFIX = `${process.env.NEXT_PUBLIC_API_URL}/media/img/`
 export default function Avatar({
@@ -26,7 +27,7 @@ export default function Avatar({
     <div className="absolute rounded-full p-0.5 bg-white w-[90px] h-[90px] top-[-47px] left-[50%] ml-[-45px] ">
       <section className="w-full h-full relative rounded-full">
         {fileId && (
-          <Image
+          <LazyImg
             src={`${IMAGE_PREFIX}${fileId}`}
             alt=""
             className="rounded-full w-full h-full"

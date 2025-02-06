@@ -26,8 +26,10 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
             await starPost({ post_id: Number(postId), deleted: false })
             console.log("star success")
           }
+          setDrawerOpen(false)
           showMessage("打赏成功", "success")
         } else if (res?.message == "NOT_ENOUGH_BALANCE") {
+          setDrawerOpen(false)
           setVisible(true)
         } else {
           console.log("tip failed")
@@ -54,6 +56,10 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
         content={<div className="p-4 pb-6">余额不足</div>}
         okText="充值"
       />
+      <button onTouchEnd={() => {
+        setDrawerOpen(true)
+      }}
+      >{children}</button>
       <FormDrawer
         title={""}
         trigger={children}
@@ -77,6 +83,7 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
         className="h-[40vh] border-0"
         setIsOpen={setDrawerOpen}
         isOpen={drawerOpen}
+        outerControl={true}
       >
         <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50 rounded-t-lg">
           <ToggleGroup type="single"

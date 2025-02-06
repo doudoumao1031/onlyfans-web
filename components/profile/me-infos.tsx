@@ -5,10 +5,9 @@ import Link from "next/link"
 import RechargeDrawer from "@/components/profile/recharge-drawer"
 import { userProfile } from "@/lib/actions/profile"
 import { userWallet } from "@/lib"
-import { buildImageUrl } from "@/lib/utils"
-type Tprops = {
-  id: string
-}
+import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
+import FoldingDescription from "@/components/profile/folding-description"
+
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
     return data
@@ -18,7 +17,8 @@ const displayNumber = (data: number) => {
   }
   return Math.ceil(data / 100000) + "W+"
 }
-export default async function Page({ id }: Tprops) {
+
+export default async function Page() {
   const response = await userProfile()
   const data = response?.data
   if (!data) {
@@ -35,8 +35,7 @@ export default async function Page({ id }: Tprops) {
       <div
         className={"profile-content bg-slate-300"}
         style={{
-          backgroundImage: `url(${buildImageUrl(data.back_img
-          )})`
+          backgroundImage: data.back_img ? `url(${buildImageUrl(data.back_img)})` : `url(${getUserDefaultBackImg(data.username)})`
         }}
       >
         <Header
@@ -66,9 +65,9 @@ export default async function Page({ id }: Tprops) {
             <span>
               {data.first_name} {data.last_name}
             </span>
-            <Link href={`/profile/${id}/edit`}>
+            <Link href={"/profile/edit"}>
               <IconWithImage
-                url={"/icons/profile/icon_edit@3x.png"}
+                url={"/icons/profile/icon_edit_gray@3x.png"}
                 width={20}
                 height={20}
                 color={"#bbb"}
@@ -78,18 +77,15 @@ export default async function Page({ id }: Tprops) {
           <div className="text-center text-[#6D7781] text-xs">
             @{data.username}
           </div>
-          <Link href={`/space/${id}_1/feed`}>
+          <Link href={`/space/${data.id}_1/feed`}>
             <div className="flex justify-center mt-2">
-              <button className="pt-0.5 pb-0.5 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
+              <button className=" py-1 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
                 进入空间
               </button>
             </div>
           </Link>
           <div className="text-xs mt-2.5">
-            <section>{data.about || "暂无信息"}</section>
-            {data.about && (
-              <button className="text-main-pink mt-1">更多信息</button>
-            )}
+            <FoldingDescription about={data.about}/>
           </div>
           <div className={"flex text-xs gap-1 mt-1.5 text-[#6D7781]"}>
             <IconWithImage
@@ -140,7 +136,7 @@ export default async function Page({ id }: Tprops) {
           <div className="flex justify-between items-center pt-2.5 pb-2.5">
             <h3 className="text-[15px] font-bold">收藏夹</h3>
             <Link
-              href={`/profile/${id}/collect/posts`}
+              href={"/profile/collect/posts"}
               className="text-gray-300"
             >
               <IconWithImage
@@ -154,7 +150,7 @@ export default async function Page({ id }: Tprops) {
 
           <div className="grid grid-cols-2 gap-3">
             <Link
-              href={`/profile/${id}/collect/blogger`}
+              href={"/profile/collect/blogger"}
               className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-blogger.png')] bg-cover"
             >
               <div className="text-xs text-[rgba(34,34,34,0.70)]">博主</div>
@@ -163,7 +159,7 @@ export default async function Page({ id }: Tprops) {
               </div>
             </Link>
             <Link
-              href={`/profile/${id}/collect/posts`}
+              href={"/profile/collect/posts"}
               className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-posts.png')] bg-cover"
             >
               <div className="text-xs text-[rgba(34,34,34,0.70)]">帖子</div>

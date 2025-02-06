@@ -76,6 +76,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
       .then((result) => {
         if (result && result.code === 0) {
           console.log("订阅成功")
+          setDrawerOpen(false)
           showMessage("订阅成功", "success")
         } else {
           console.log("订阅失败:", result?.message)
@@ -85,6 +86,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
   }
   return (
     <>
+      {renderNode}
       <FormDrawer
         title={(
           <div>
@@ -111,7 +113,6 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
         isOpen={drawerOpen}
         outerControl
       >
-        {renderNode}
         <input hidden={true} name="user_id" defaultValue={userId} />
         <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50">
           <ToggleGroupSubscribed

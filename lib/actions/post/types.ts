@@ -83,7 +83,6 @@ export interface PostData {
     tip_count: number
     play_count: number
   }
-  post_vote: Vote
   user: User
   comments: Comment[]
   post_price: {

@@ -51,7 +51,7 @@ export default function FormDrawer({
         className ?? ""
       )}
       >
-        <form className={"flex-1"} onSubmit={handleSubmit}>
+        <form className={"flex-1 max-h-full"} onSubmit={handleSubmit}>
           <DrawerHeader className={"hidden"}>
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>

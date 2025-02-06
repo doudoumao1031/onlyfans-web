@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import Image from "next/image"
 import { CommentInfo, fetchPostComments, PostData } from "@/lib"
 import Comments from "./comment"
 import Vote from "./vote"
@@ -17,18 +18,18 @@ import Save from "./save"
 
 export default function Post({
   data,
-  showSubscribe,
-  showVote
+  hasVote,
+  hasSubscribe
 }: {
   data: PostData
-  showSubscribe: boolean
-  showVote: boolean
+  hasVote: boolean
+  hasSubscribe: boolean
 }) {
-  const { user, post, post_attachment, post_metric, post_vote, mention_user, collection, star } =
-    data
+  const { user, post, post_attachment, post_metric, mention_user, collection, star } = data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
   const [showComments, setShowComments] = useState(false)
-  const [comments, setComments] = useState<CommentInfo[] | undefined>()
+  const [comments, setComments] = useState<CommentInfo[]>()
+  const [showVote, setShowVote] = useState(false)
 
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
@@ -36,14 +37,30 @@ export default function Post({
       <Description content={post.title} />
       <UserHomePageLink userId={user.username} />
       {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} />}
-      {showSubscribe && mention_user && mention_user.length > 0 && (
+      {hasSubscribe && mention_user && mention_user.length > 0 && (
         <div>
           {mention_user.map((user) => (
             <Subscribe key={user.id} user={user} />
           ))}
         </div>
       )}
-      {showVote && post_vote && <Vote vote={post_vote} postId={post.id} />}
+      {hasSubscribe && user && !user?.sub && !mention_user &&  (
+        <div>
+          <Subscribe user={user} />
+        </div>
+      )}
+      {hasVote && (
+        <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
+          <Image src="/icons/vote.png" alt="" width={20} height={20} />
+          <div className="text-red-500 text-sm">投票</div>
+          {showVote ? (
+            <Image src="/icons/arrow_up.png" alt="" width={20} height={20} />
+          ) : (
+            <Image src="/icons/arrow_down.png" alt="" width={20} height={20} />
+          )}
+        </div>
+      )}
+      {hasVote && showVote && <Vote postId={post.id} />}
       <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} postId={post.id} />
         <CommentStats count={comment_count} onClick={toggleComments} />

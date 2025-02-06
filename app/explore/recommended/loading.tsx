@@ -1,7 +1,5 @@
+import LoadingPage from "@/components/common/loading-page"
+
 export default function Loading() {
-  return (
-    <div>
-      Loading...
-    </div>
-  )
+  return <LoadingPage />
 }

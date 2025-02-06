@@ -1,15 +1,13 @@
 import Link from "next/link"
 import Image from "next/image"
-type Tprops = {
-  id: string
-}
-export default function Page({ id }: Tprops) {
+
+export default function Page() {
   return (
     <div className="px-4 pb-8">
       <div className="mt-5 ">
         <div className="grid grid-cols-3 gap-y-4 text-[#222]">
           <Link
-            href={`/profile/${id}/order`}
+            href={"/profile/order"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>
@@ -23,7 +21,7 @@ export default function Page({ id }: Tprops) {
             <div>订阅管理</div>
           </Link>
           <Link
-            href={`/profile/${id}/manuscript`}
+            href={"/profile/manuscript"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>
@@ -37,7 +35,7 @@ export default function Page({ id }: Tprops) {
             <div>稿件管理</div>
           </Link>
           <Link
-            href={`/profile/${id}/fans/manage/subscribe`}
+            href={"/profile/fans/manage/subscribe"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>
@@ -51,7 +49,7 @@ export default function Page({ id }: Tprops) {
             <div>粉丝管理</div>
           </Link>
           <Link
-            href={`/profile/${id}/income`}
+            href={"/profile/income"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>
@@ -65,7 +63,7 @@ export default function Page({ id }: Tprops) {
             <div>收益中心</div>
           </Link>
           <Link
-            href={`/profile/${id}/dataCenter`}
+            href={"/profile/dataCenter"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>

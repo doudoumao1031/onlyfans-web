@@ -58,7 +58,7 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
             height={200}
           />
         ) : (
-          <Skeleton className="absolute inset-0 w-full h-full rounded-xl bg-gray-400 opacity-10" />
+          <Skeleton className="absolute w-full h-full rounded-xl" />
         )
       )}
       <video

@@ -83,3 +83,34 @@ export const fetchFeeds = async (page: number, fromId: number = 0) => {
     hasMore
   }
 }
+
+export const followedList = async (page: number, fromId: number = 0) => {
+  const pageSize = 3
+  const response = await getFollowUserPosts({
+    from_id: fromId,
+    page,
+    pageSize: pageSize
+  })
+
+  if (!response) {
+    return {
+      items: [],
+      hasMore: false
+    }
+  }
+
+  const { list, total } = response
+
+  if (!list) {
+    return {
+      items: [],
+      hasMore: false
+    }
+  }
+
+  const hasMore = page * pageSize < total
+  return {
+    items: list,
+    hasMore
+  }
+}

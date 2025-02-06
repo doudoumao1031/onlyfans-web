@@ -6,7 +6,7 @@ export default async function VideoBrowseModal({ params }: { params: Promise<{ p
 
   return (
     <Modal>
-      <div className="relative w-full max-w-[90vw] aspect-video">
+      <div className="relative w-full max-w-[100vw] aspect-video">
         <video className="w-full h-full" controls autoPlay src={buildVideoUrl(pid, "1080p")} />
       </div>
     </Modal>

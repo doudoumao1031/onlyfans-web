@@ -10,13 +10,13 @@ export default async function ImageBrowseModal({
   const { id } = await params
   return (
     <Modal>
-      <div className="relative max-w-[90vw] max-h-[90vh]">
+      <div className="relative max-w-[100vw] max-h-[100vh]">
         <Image
           src={buildImageUrl(id)}
           alt=""
           width={1200}
           height={800}
-          className="object-contain max-w-full max-h-[90vh]"
+          className="object-contain w-[100vw] max-h-[100vh]"
         />
       </div>
     </Modal>
