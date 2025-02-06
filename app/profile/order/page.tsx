@@ -18,7 +18,7 @@ import {
   addSubscribeSetting,
   addSubscribeSettingItem, DiscountInfo,
   getSubscribeSetting,
-  SubscribeSetting, updateSubscribeSettingItem
+  SubscribeSetting, updateSubscribeSettingItem, userApplyBlogger
 } from "@/lib"
 import { Switch } from "@/components/ui/switch"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
@@ -437,7 +437,7 @@ export default function Page() {
   const [defaultSettings, setDefaultSettings] = useState<SubscribeSetting | null>()
   const { showMessage, renderNode } = useCommonMessage()
   const refreshDefaultSettings = () => {
-    getSubscribeSetting().then(response=>{
+    getSubscribeSetting().then(response => {
       if (response) {
         setDefaultSettings({
           ...response,
@@ -492,6 +492,14 @@ export default function Page() {
                     afterDuration: router.back
                   })
                 }
+                // todo: 根据profile信息判断是否已经是博主，是则不调用
+                userApplyBlogger().then((res) => {
+                  if (res && res.code === 0) {
+                    console.log("申请博主成功")
+                  } else {
+                    console.log("申请博主失败")
+                  }
+                })
               })
             }
           })

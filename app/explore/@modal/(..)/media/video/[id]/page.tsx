@@ -19,10 +19,10 @@ export default async function VideoBrowseModal({
 
   return (
     <Modal>
-      <div className="relative max-w-[90vw] max-h-[90vh]">
+      <div className="relative max-w-[100vw] max-h-[100vh]">
         <VideoPlayer
           sources={videoSources}
-          className="max-h-[90vh]"
+          className="max-h-[100vh]"
         />
       </div>
     </Modal>

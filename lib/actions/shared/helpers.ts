@@ -29,19 +29,22 @@ export function calculatePagination(
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
-const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
 export const getAuthToken = () => {
-  return "25"
+  return "29"
 }
 
-async function fetchResultHandle<T>(method: string, response: Response) {
+async function fetchResultHandle<T>(method: string, response: Response, url: string) {
   if (response.ok) {
     const result: ApiResponse<T> = await response.json()
-    console.log(`Success-${method.toUpperCase()}-response:`, result)
+    console.log(`Success-${method.toUpperCase()}-${url}-response:`, result)
     return result
   } else {
-    console.error(`Error-${method.toUpperCase()}-response:`, response.status, response.statusText)
+    console.error(
+      `Error-${method.toUpperCase()}-${url}-response:`,
+      response.status,
+      response.statusText
+    )
     const errorText = await response.text()
     console.error("Error details:", errorText)
   }
@@ -65,7 +68,7 @@ export async function fetchWithGet<Req, Res = unknown>(
         ...headers
       }
     })
-    return fetchResultHandle<Res>("GET", response)
+    return fetchResultHandle<Res>("GET", response, url)
   } catch (error) {
     console.error("Error-GET-catch:", error)
   }
@@ -91,7 +94,7 @@ export async function fetchWithPost<Req, Res = unknown>(
       },
       body: isFormData ? data : JSON.stringify(data)
     })
-    return fetchResultHandle<Res>("POST", response)
+    return fetchResultHandle<Res>("POST", response, url)
   } catch (error) {
     console.error("Error-POST-catch:", error)
   }

@@ -10,7 +10,7 @@ export default async function VideoBrowseModal({
 
   return (
     <Modal>
-      <div className="relative w-full max-w-[90vw] aspect-video">
+      <div className="relative w-full max-w-[100vw] aspect-video">
         <video
           className="w-full h-full"
           controls

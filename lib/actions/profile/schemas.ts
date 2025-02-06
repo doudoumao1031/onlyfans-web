@@ -28,5 +28,6 @@ export const postSchema = z.object({
     id: z.string().optional()
   })).optional(),
   post_price: postPriceSchema.min(1),
-  post_vote: postVoteSchema.optional()
+  post_vote: postVoteSchema.optional(),
+  post_mention_user: z.array(z.object({ user_id: z.number() })).optional()
 })
