@@ -27,3 +27,12 @@ export enum FileType {
   Video = 2,
   Other = 3
 }
+
+export type TPost = {
+  id: number //id
+  notice: boolean //是否发送通知
+  post_status: boolean //发布状态
+  pub_time: number //发布时间
+  title: string //主题
+  visibility: number //可见性: 0 可浏览 1 订阅可浏览 2支付可浏览
+}

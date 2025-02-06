@@ -1,4 +1,5 @@
 // Post related types and interfaces
+import { TPost } from "@/components/post/types"
 import { PageInfo, FileType } from "@/lib"
 import { User } from "@/lib/actions/users/types"
 
@@ -69,11 +70,7 @@ export interface PostData {
   collection: boolean
   star: boolean
   mention_user: User[]
-  post: {
-    id: number
-    title: string
-    visibility: number
-  }
+  post: TPost
   post_attachment: Attachment[]
   post_metric: {
     collection_count: number
@@ -131,11 +128,7 @@ export interface PostData {
   collection: boolean
   star: boolean
   mention_user: User[]
-  post: {
-    id: number
-    title: string
-    visibility: number
-  }
+  post: TPost
   post_attachment: Attachment[]
   post_metric: {
     collection_count: number

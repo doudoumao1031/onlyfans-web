@@ -20,24 +20,29 @@ import { Vote as VoteData } from "./types"
 export default function Post({
   data,
   hasVote,
-  hasSubscribe
+  hasSubscribe,
+  isInfoPage
 }: {
   data: PostData
   hasVote: boolean
   hasSubscribe: boolean
+  isInfoPage?: boolean
 }) {
   const { user, post, post_attachment, post_metric, mention_user, collection, star } = data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
   const [showComments, setShowComments] = useState(false)
   const [comments, setComments] = useState<CommentInfo[]>()
   const [showVote, setShowVote] = useState(false)
-
+  const isShow = () => {
+    if (!isInfoPage) return false
+    return (post.visibility == 1 && !user.sub)
+  }
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
       <UserTitle user={user} />
       <Description content={post.title} />
       <UserHomePageLink userId={user.username} />
-      {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} />}
+      {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} post={post} user={user} />}
       {hasSubscribe && mention_user && mention_user.length > 0 && (
         <div>
           {mention_user.map((user) => (
@@ -69,6 +74,11 @@ export default function Post({
         <Share count={share_count} postId={post.id} />
         <Save count={collection_count} saved={collection} postId={post.id} />
       </div>
+      {
+        isShow() && <div className="flex justify-center items-center mt-2">
+          <div className="w-[295px] h-[50px] bg-main-pink  text-white rounded-full text-[15px] flex justify-center items-center">订阅后浏览博主的帖子</div>
+        </div>
+      }
       {showComments && comments && (
         <Comments
           post_id={post.id}

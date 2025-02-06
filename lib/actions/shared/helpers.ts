@@ -31,7 +31,7 @@ export function calculatePagination(
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 export const getAuthToken = () => {
-  return "29"
+  return "25"
 }
 
 async function fetchResultHandle<T>(method: string, response: Response, url: string) {
