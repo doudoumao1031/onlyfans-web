@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { isNumber } from "lodash"
 
 export default  function Layout({
-  children,
+  children
 }: {
   children: React.ReactNode,
 }) {

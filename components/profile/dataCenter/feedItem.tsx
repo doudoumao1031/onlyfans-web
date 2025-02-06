@@ -2,7 +2,7 @@ import { useState } from "react"
 import IconWithImage from "../icon"
 import { PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
-import LazyImg from '../../common/lazy-img';
+import LazyImg from "../../common/lazy-img"
 type TProps = {
   item: PostData
 }

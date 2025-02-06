@@ -33,7 +33,8 @@ export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
         <div className="absolute w-full h-full">
           <LazyImg style={{ objectFit: "cover" }} width={200} height={400} className="w-full h-full" src={buildImageUrl(
             post_attachment[0].thumb_id || post_attachment[0].file_id
-          )} alt={""} />
+          )} alt={""}
+          />
         </div>
         <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
           <div className="p-2 truncate overflow-hidden text-ellipsis">
