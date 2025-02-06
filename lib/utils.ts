@@ -147,8 +147,23 @@ function createChunks(file:File) {
   return chunkList
 }
 
+/**
+ * 随机获取用户背景图
+ * @param username 用户名
+ */
+export function getUserDefaultBackImg(username: string) {
+  if (username.length === 0) {
+    return "/icons/default/image_fans_normal_01.png"
+  }
+  const firstCharCode = Math.min(username.charCodeAt(0), 0xFFFF)
+  const index = (username.length + firstCharCode) % 6 + 1
+  // 返回背景图路径
+  return `/icons/default/image_fans_normal_0${index}.png`
+}
+
+
 export function buildImageUrl(fileId: string) {
-  return `${process.env.NEXT_PUBLIC_MEDIA_URL}/${fileId}`
+  return fileId ? `${process.env.NEXT_PUBLIC_MEDIA_URL}/${fileId}` : ""
 }
 
 export function buildVideoUrl(fileId: string, quality: string) {

@@ -3,7 +3,7 @@ import Avatar from "@/components/user/avatar"
 import Image from "next/image"
 import { BloggerInfo } from "@/lib"
 import IconWithImage from "@/components/profile/icon"
-import { buildImageUrl } from "@/lib/utils"
+import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
 import Link from "next/link"
 import SubscribedButton from "@/components/explore/subscribed-button"
 /**
@@ -18,7 +18,7 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo, subsc
     <>
       <div className="flex justify-center w-full bg-black rounded-lg h-[100px]">
         <Image
-          src={user.back_img ? buildImageUrl(user.back_img) : "/mock/header_image1.jpg"}
+          src={user.back_img ? buildImageUrl(user.back_img) : getUserDefaultBackImg(user.username)}
           width={280}
           height={100}
           alt=""
@@ -31,7 +31,7 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo, subsc
           <div className="w-full">
             <div className="flex px-3 items-center justify-start">
               <div className="w-1/4">
-                <Avatar src={user.photo ? buildImageUrl(user.photo) : "/mock/avatar1.jpg"} vlog={user.live_certification} width="w-[66px]" />
+                <Avatar src={buildImageUrl(user.photo)} vlog={user.live_certification} width="66px" initials={user.username || user.first_name} />
               </div>
               <div className="flex-col w-3/4">
                 <div>
