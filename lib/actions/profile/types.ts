@@ -36,6 +36,7 @@ export interface iPost {
     id?: number
   },
   post_attachment?: iPostAttachment[], //帖子附件
+  post_mention_user?: Array<{user_id: number}> //提及的用户ID
   post_price?: iPostPrice[] // 帖子价格
   post_vote?: iPostVote
 }
