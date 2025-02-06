@@ -1,5 +1,5 @@
 "use client"
-import React, { HTMLAttributes, useEffect, useMemo, useRef, useState } from "react"
+import React, { HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import clsx from "clsx"
 import IconWithImage from "@/components/profile/icon"
 import { Switch } from "@/components/ui/switch"
@@ -10,7 +10,6 @@ import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
 import ConfirmModal from "@/components/common/confirm-modal"
 import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import DatePickerModal from "@/components/common/date-picker-modal"
 import dayjs from "dayjs"
 import { z } from "zod"
 import Image from "next/image"
@@ -25,8 +24,11 @@ import {
   addPost, postDetail
 } from "@/lib/actions/profile"
 import { isNumber } from "lodash"
-import { uploadFile } from "@/lib/utils"
+import { buildImageUrl, uploadFile } from "@/lib/utils"
 import DateTimePicker from "@/components/common/date-time-picker"
+import { getFollowedUsers, SubscribeUserInfo } from "@/lib"
+import Empty from "@/components/common/empty"
+import useCommonMessage, { CommonMessageContext, useCommonMessageContext } from "@/components/common/common-message"
 
 const ItemEditTitle = ({
   title,
@@ -268,7 +270,9 @@ const AddVoteModal = ({
                       field.onChange(value / 1000)
                     }}
                     >
-                      <div className={field.value ? "" : "text-gray-500"}>{field.value ? dayjs(field.value * 1000).format("YYYY-MM-DD HH:mm") : "请选择"}</div>
+                      <div
+                        className={field.value ? "" : "text-gray-500"}
+                      >{field.value ? dayjs(field.value * 1000).format("YYYY-MM-DD HH:mm") : "请选择"}</div>
                     </DateTimePicker>
                   )
                 }}
@@ -528,7 +532,7 @@ const UploadMedia = () => {
   })
   const handleUpload = (file: File) => {
     uploadFile(file).then((data) => {
-      console.log("upload file result: ",data)
+      console.log("upload file result: ", data)
       if (data) {
         append({
           file_id: data
@@ -551,16 +555,18 @@ const UploadMedia = () => {
                 <div
                   key={item.file_id}
                   className={
-                    "relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "
+                    "relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5]  "
                   }
                 >
-                  <Image
-                    className={"rounded-xl"}
-                    src={`${IMAGE_PREFIX}${field.value}`}
-                    alt={"attachment"}
-                    width={100}
-                    height={100}
-                  />
+                  <section className={"h-full w-full overflow-hidden rounded"}>
+                    <Image
+                      className={"rounded-xl"}
+                      src={`${IMAGE_PREFIX}${field.value}`}
+                      alt={"attachment"}
+                      width={100}
+                      height={100}
+                    />
+                  </section>
                   <button
                     className={"absolute right-[-4px] top-[-4px]"}
                     onTouchEnd={() => {
@@ -618,6 +624,7 @@ const initPostFormData: iPost = {
       visibility: true
     }
   ],
+  post_mention_user: [],
   post_vote: undefined
 }
 
@@ -648,25 +655,107 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
   )
 }
 
+function SelectMotionUser({
+  isOpen, setIsOpen, updateMentionUserIds, subUsers
+}: {
+  isOpen: boolean
+  setIsOpen: (val: boolean) => void
+  subUsers: SubscribeUserInfo[],
+  updateMentionUserIds: (id: number) => void
+}) {
+  const [filterValue, setFilterValue] = useState<string>("")
+
+  const filteredData = useMemo(() => {
+    if (!filterValue) return subUsers
+    return subUsers.filter(item => item.user.username.includes(filterValue)) ?? []
+  }, [filterValue, subUsers])
+
+  return (
+    <FormDrawer title={"已关注用户"} outerControl trigger={<></>} isOpen={isOpen} setIsOpen={setIsOpen}>
+      <section className="h-full flex flex-col">
+        <section className={"flex-shrink-0 px-4 mb-2.5"}>
+          <input className={"block w-full rounded-full h-9 px-4 bg-[#f8f8f8]"} value={filterValue} onChange={event => {
+            setFilterValue(event.target.value)
+          }}
+          />
+        </section>
+        <section className={"flex-1 overflow-y-scroll"}>
+          <div className={"px-4"}>
+            {filteredData.map(item => {
+              return (
+                <div key={item.user.id} className={"flex gap-4 items-center"}>
+                  <Image src={buildImageUrl(item.user.photo)} alt={"avatar"} width={40} height={40}
+                    className={"rounded-full shrink-0"}
+                  />
+                  <button onTouchEnd={() => {
+                    updateMentionUserIds(item.user.id)
+                  }} type={"button"} className={"flex-1 flex justify-between border-b border-[#ddd] py-3 "}
+                  >
+                    <section className={"text-left"}>
+                      <div className={"text-base text-[#222] font-medium"}>{item.user.username}</div>
+                      <div
+                        className={"text-xs text-[#bbb]"}
+                      >{dayjs(item.start_time).format("YYYY-MM-DD HH:mm")}</div>
+                    </section>
+                  </button>
+                </div>
+              )
+            })
+            }
+            {filteredData.length === 0 && <Empty text={"暂无数据"}/>}
+          </div>
+        </section>
+      </section>
+    </FormDrawer>
+  )
+}
+
+const insertString = (str: string, index: number, char: string) => {
+  return str.substring(0, index) + char + str.substring(index + 1)
+}
+
 export default function Page() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const postId = Number(searchParams.get("id"))
+  const [subUsers, setSubUsers] = useState<SubscribeUserInfo[]>([])
+  const { showMessage, renderNode } = useCommonMessage()
+  useEffect(() => {
+    getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 }).then(response => {
+      if (!response) return
+      setSubUsers(response.list ?? [])
+    })
+  }, [])
+  const selectionStart = useRef<number>(0)
   const onFormSubmit = (formData: iPost) => {
-    addPost(formData).then((data) => {
+    const { post_mention_user = [], post: { title } } = formData
+    const mentionUsers = post_mention_user?.map(item => subUsers.find(sub => sub.user.id === item.user_id))?.filter(item => !!item)
+    const mentionUserIds = mentionUsers.filter(item => {
+      return title.includes(`@${item?.user?.username} `)
+    }).map(user => ({ user_id:user.user.id }))
+    addPost({
+      ...formData,
+      post_mention_user: mentionUserIds
+    }).then((data) => {
+      showMessage("success")
       if (data?.code === 0) {
         router.back()
+      } else {
+        showMessage(data?.message)
       }
     })
   }
 
   const postForm = useForm<iPost>({
-    mode: "onTouched",
+    mode: "all",
     resolver: zodResolver(postSchema),
     defaultValues: (isNumber(postId) && postId > 0) ? () => {
       return postDetail(postId).then(data => {
         if (data) {
-          return data.data
+          return {
+            ...data.data,
+            post_vote: data.data.post_vote ?? undefined
+          }
         }
         return initPostFormData
       })
@@ -678,164 +767,192 @@ export default function Page() {
   const noticeRegister = register("post.notice")
 
   const formValues = watch()
+  const [atUserModal, setAtUserModal] = useState<boolean>(false)
+
+  const updateMentionUserIds = useCallback((id: number) => {
+    const value = formValues.post_mention_user ?? []
+    value.push({ user_id:id })
+    setValue("post_mention_user", [...new Set(value)])
+    const appendUsername = subUsers.find(item => item.user.id === id)?.user?.username ?? ""
+    const insertedString = insertString(formValues.post.title, selectionStart.current, appendUsername + " ")
+    setValue("post.title", insertedString)
+    setAtUserModal(false)
+  }, [formValues, setValue, subUsers])
+
 
   return (
-    <FormProvider {...postForm}>
-      <form onSubmit={handleSubmit(onFormSubmit)}>
-        <section className="flex justify-between h-11 items-center pl-4 pr-4 ">
-          <ConfirmModal
-            content={"未发布的内容是否保存到草稿中？"}
-            confirm={() => {
-              console.log("保存到草稿")
-              router.back()
-            }}
-            cancel={router.back}
-            trigger={
-              <button>
-                <IconWithImage
-                  url={"/icons/profile/icon_close@3x.png"}
-                  width={24}
-                  height={24}
-                  color={"#000"}
-                />
-              </button>
-            }
-          />
-          <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "#000")}>
-            发布
-          </button>
-        </section>
+    <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
+      {renderNode}
+      <FormProvider {...postForm}>
+        <SelectMotionUser isOpen={atUserModal} setIsOpen={setAtUserModal}
+          subUsers={subUsers}
+          updateMentionUserIds={updateMentionUserIds}
+        />
+        <form onSubmit={handleSubmit(onFormSubmit)}>
+          <section className="flex justify-between h-11 items-center pl-4 pr-4">
+            <ConfirmModal
+              content={"未发布的内容是否保存到草稿中？"}
+              confirm={() => {
+                console.log("保存到草稿")
+                router.back()
+              }}
+              cancel={router.back}
+              trigger={
+                <button>
+                  <IconWithImage
+                    url={"/icons/profile/icon_close@3x.png"}
+                    width={24}
+                    height={24}
+                    color={"#000"}
+                  />
+                </button>
+              }
+            />
+            <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "#000")}>
+              发布
+            </button>
+          </section>
 
-        <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">
-          <UploadMedia />
-        </section>
-        <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 relative">
-          <textarea
-            {...register("post.title")}
-            className="resize-none block w-full"
-            maxLength={999}
-            placeholder="分享我的感受"
-            rows={5}
-          />
-          <div className="absolute left-4 bottom-1.5 text-red-600 text-xs">
-            {formState?.errors?.post?.title?.message}
-          </div>
-        </section>
-        {watch("post_vote") !== undefined && (
-          <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
-            <section className="flex justify-between">
-              <div className="flex gap-2.5 items-center">
-                <div className="font-bold text-base">发起了一个投票:</div>
-                <AddVoteModal
-                  initFormData={formValues.post_vote}
-                  updateVoteData={(data) => {
-                    setValue("post_vote", data)
+
+          <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">
+            <UploadMedia/>
+          </section>
+          <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 relative">
+            <textarea
+              {...register("post.title")}
+              className="resize-none block w-full"
+              maxLength={999}
+              placeholder="分享我的感受"
+              rows={5}
+              onKeyUp={event => {
+                if (event.key === "@") {
+                  selectionStart.current = (event.target as HTMLTextAreaElement).selectionStart
+                  setAtUserModal(true)
+                }
+              }}
+            />
+            <div className="absolute left-4 bottom-1.5 text-red-600 text-xs">
+              {formState?.errors?.post?.title?.message}
+            </div>
+          </section>
+          {watch("post_vote") !== undefined && (
+            <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
+              <section className="flex justify-between">
+                <div className="flex gap-2.5 items-center">
+                  <div className="font-bold text-base">发起了一个投票:</div>
+                  <AddVoteModal
+                    initFormData={formValues.post_vote}
+                    updateVoteData={(data) => {
+                      setValue("post_vote", data)
+                    }}
+                  >
+                    <IconWithImage
+                      url={"/icons/profile/icon_edit@3x.png"}
+                      width={20}
+                      height={20}
+                      color={"#bbb"}
+                    />
+                  </AddVoteModal>
+                </div>
+                <button
+                  onTouchEnd={() => {
+                    setValue("post_vote", undefined)
                   }}
                 >
                   <IconWithImage
-                    url={"/icons/profile/icon_edit@3x.png"}
+                    url={"/icons/profile/icon_close@3x.png"}
+                    width={24}
+                    height={24}
+                    color={"#000"}
+                  />
+                </button>
+              </section>
+              <section className="mt-2.5 rounded-xl bg-[#F4F5F5] px-3 py-2">
+                <div className="flex gap-2.5 items-center">
+                  <IconWithImage
+                    url={"/icons/profile/icon_fans_vote@3x.png"}
                     width={20}
                     height={20}
-                    color={"#bbb"}
+                    color={"#FF8492"}
                   />
-                </AddVoteModal>
-              </div>
-              <button
-                onTouchEnd={() => {
-                  setValue("post_vote", undefined)
+                  <span className="font-bold text-main-pink text-base">
+                    {formValues.post_vote?.title}
+                  </span>
+                </div>
+                <div className="text-xs text-[#999] mt-1.5">
+                  截止：
+                  {formValues.post_vote?.stop_time
+                    ? dayjs(formValues.post_vote?.stop_time * 1000).format("YYYY-MM-DD HH:mm")
+                    : ""}{" "}
+                  结束
+                </div>
+              </section>
+            </section>
+          )}
+          <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
+            {/*<ItemEditTitle title={"阅览设置："}/>*/}
+            <div className="flex gap-2.5 items-center">
+              <div className="font-bold text-base">阅览设置：</div>
+              <ReadSettings
+                initFormData={formValues.post_price}
+                updatePrice={(value) => {
+                  setValue("post_price", value)
                 }}
               >
                 <IconWithImage
-                  url={"/icons/profile/icon_close@3x.png"}
-                  width={24}
-                  height={24}
-                  color={"#000"}
-                />
-              </button>
-            </section>
-            <section className="mt-2.5 rounded-xl bg-[#F4F5F5] px-3 py-2">
-              <div className="flex gap-2.5 items-center">
-                <IconWithImage
-                  url={"/icons/profile/icon_fans_vote@3x.png"}
+                  url={"/icons/profile/icon_edit@3x.png"}
                   width={20}
                   height={20}
-                  color={"#FF8492"}
+                  color={"#bbb"}
                 />
-                <span className="font-bold text-main-pink text-base">
-                  {formValues.post_vote?.title}
-                </span>
-              </div>
-              <div className="text-xs text-[#999] mt-1.5">
-                截止：
-                {formValues.post_vote?.stop_time
-                  ? dayjs(formValues.post_vote?.stop_time * 1000).format("YYYY-MM-DD HH:mm")
-                  : ""}{" "}
-                结束
-              </div>
+              </ReadSettings>
+            </div>
+            <section className="mt-2.5">
+              {formValues.post_price?.map((price, index) => (
+                <ReadingSettingsDisplay postPrice={price} key={index}/>
+              ))}
+              {/*<div className="flex items-center space-x-2">*/}
+              {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
+              {/*                   color={'#FF8492'}/>*/}
+              {/*    <label className={"text-main-pink"}>免费订阅</label>*/}
+              {/*</div>*/}
             </section>
           </section>
-        )}
-        <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
-          {/*<ItemEditTitle title={"阅览设置："}/>*/}
-          <div className="flex gap-2.5 items-center">
-            <div className="font-bold text-base">阅览设置：</div>
-            <ReadSettings
-              initFormData={formValues.post_price}
-              updatePrice={(value) => {
-                setValue("post_price", value)
+          <section className="pt-5 pb-5 pl-4 pr-4 ">
+            <ItemEditTitle showIcon={false} title={"发布通知"}/>
+            <section className="border-b border-gray-200 flex justify-between items-center py-3">
+              <div>订阅者</div>
+              <Switch
+                {...noticeRegister}
+                onCheckedChange={(value) => {
+                  setValue("post.notice", value)
+                }}
+              ></Switch>
+            </section>
+          </section>
+          <section className="text-center pb-5">
+            <AddVoteModal
+              updateVoteData={(data) => {
+                setValue("post_vote", data, { shouldDirty: true, shouldTouch: true })
               }}
             >
-              <IconWithImage
-                url={"/icons/profile/icon_edit@3x.png"}
-                width={20}
-                height={20}
-                color={"#bbb"}
-              />
-            </ReadSettings>
-          </div>
-          <section className="mt-2.5">
-            {formValues.post_price?.map((price, index) => (
-              <ReadingSettingsDisplay postPrice={price} key={index} />
-            ))}
-            {/*<div className="flex items-center space-x-2">*/}
-            {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
-            {/*                   color={'#FF8492'}/>*/}
-            {/*    <label className={"text-main-pink"}>免费订阅</label>*/}
-            {/*</div>*/}
+              {!watch("post_vote") && (
+                <span
+                  className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-main-pink py-2 text-main-pink text-base"
+                >
+                  <IconWithImage
+                    url={"/icons/profile/icon_fans_vote@3x.png"}
+                    width={20}
+                    height={20}
+                    color={"#FF8492"}
+                  />
+                  投票
+                </span>
+              )}
+            </AddVoteModal>
           </section>
-        </section>
-        <section className="pt-5 pb-5 pl-4 pr-4 ">
-          <ItemEditTitle showIcon={false} title={"发布通知"} />
-          <section className="border-b border-gray-200 flex justify-between items-center py-3">
-            <div>订阅者</div>
-            <Switch
-              {...noticeRegister}
-              onCheckedChange={(value) => {
-                setValue("post.notice", value)
-              }}
-            ></Switch>
-          </section>
-        </section>
-        <section className="text-center pb-5">
-          <AddVoteModal
-            updateVoteData={(data) => {
-              setValue("post_vote", data, { shouldDirty: true, shouldTouch: true })
-            }}
-          >
-            {watch("post_vote") === undefined && (
-              <span className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-main-pink py-2 text-main-pink text-base">
-                <IconWithImage
-                  url={"/icons/profile/icon_fans_vote@3x.png"}
-                  width={20}
-                  height={20}
-                  color={"#FF8492"}
-                />
-                投票
-              </span>
-            )}
-          </AddVoteModal>
-        </section>
-      </form>
-    </FormProvider>
+        </form>
+      </FormProvider>
+    </CommonMessageContext.Provider>
   )
 }

@@ -16,9 +16,9 @@ export default async function Page() {
   const noSettings = (subscribeSettings?.items?.length ?? 0) === 0
   return (
     <div className="px-4">
-      {/* 已发布过帖子 */}
+      {/* 开启订阅之后才能发布 */}
       {
-        totalPosts > 0 && (
+        totalPosts > 0 && !noSettings && (
           <PostsCard
             link={"/profile/manuscript/draft/edit"}
             description={"通过订阅、打赏都可以赚取现金"}
