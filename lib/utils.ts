@@ -169,3 +169,6 @@ export function buildImageUrl(fileId: string) {
 export function buildVideoUrl(fileId: string, quality: string) {
   return `${process.env.NEXT_PUBLIC_VIDEO_URL}/${fileId}/${quality}`
 }
+
+
+export const TOKEN_KEY = "X-Token"

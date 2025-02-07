@@ -2,6 +2,8 @@
 
 // 日期格式化
 import { ApiResponse, FetchOptions } from "@/lib"
+import { TOKEN_KEY } from "@/lib/utils"
+import { cookies } from "next/headers"
 
 export function formatDate(date: string | Date, locale: string = "en-US"): string {
   const d = typeof date === "string" ? new Date(date) : date
@@ -30,8 +32,9 @@ export function calculatePagination(
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
-export const getAuthToken = () => {
-  return "29"
+export const getAuthToken = async () => {
+  const cookiesStore = await cookies()
+  return cookiesStore.get(TOKEN_KEY)?.value ?? ""
 }
 
 async function fetchResultHandle<T>(method: string, response: Response, url: string) {
@@ -60,11 +63,12 @@ export async function fetchWithGet<Req, Res = unknown>(
     const { headers = {} } = options ?? {}
     const qs = new URLSearchParams(data ?? {})
     const urlWithParams = `${apiUrl}${url}?${qs.toString()}`
+    const token = await getAuthToken()
     console.log("GET-url:", urlWithParams)
     const response = await fetch(urlWithParams, {
       method: "GET",
       headers: {
-        "X-Token": getAuthToken(),
+        [TOKEN_KEY]: token,
         ...headers
       }
     })
@@ -89,7 +93,7 @@ export async function fetchWithPost<Req, Res = unknown>(
     const response = await fetch(fullPath, {
       method: "POST",
       headers: {
-        "X-Token": getAuthToken(),
+        [TOKEN_KEY]: await getAuthToken(),
         ...headers
       },
       body: isFormData ? data : JSON.stringify(data)
@@ -101,7 +105,7 @@ export async function fetchWithPost<Req, Res = unknown>(
   return null
 }
 
-export function uploadFetch<Req, Res = unknown>(
+export async function uploadFetch<Req, Res = unknown>(
   url: string,
   data: Req,
   options?: FetchOptions<Res>
@@ -114,7 +118,7 @@ export function uploadFetch<Req, Res = unknown>(
   return fetch(fullPath, {
     method: "POST",
     headers: {
-      "X-Token": getAuthToken(),
+      [TOKEN_KEY]: await getAuthToken(),
       ...headers
     },
     body: isFormData ? data : JSON.stringify(data)
