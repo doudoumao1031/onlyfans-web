@@ -11,7 +11,7 @@
     "push-all": "./push-all.sh",
     "type-check": "tsc --noEmit",
     "check-all": "npm run type-check && npm run lint",
-    "zip": "zip -r dist.zip .next public package.json package-lock.json .env"
+    "zip": "zip -r dist.zip .next public package.json package-lock.json next.config.ts .env"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

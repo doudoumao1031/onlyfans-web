@@ -20,10 +20,17 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: process.env.NEXT_PUBLIC_HOST || "",
         port: "",
-        pathname: "/**",
-        search: ""
+        pathname: "/**"
+      },
+      {
+        protocol: "https",
+        hostname: "https://onlyfanswebtest.potato.im",
+        port: "",
+        pathname: "/**"
       }
-    ]
+    ],
+    dangerouslyAllowSVG: true,
+    formats: ["image/avif", "image/webp"]
   }
 }
 
