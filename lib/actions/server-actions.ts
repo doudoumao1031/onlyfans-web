@@ -8,7 +8,7 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 async function getAuthToken() {
   try {
-    const cookiesStore = cookies()
+    const cookiesStore = await cookies()
     const token = cookiesStore.get(TOKEN_KEY)?.value
     console.log("getAuthToken server side:", token)
     return token ?? ""
@@ -28,7 +28,7 @@ async function fetchResultHandle<T>(method: string, response: Response, url: str
   return null
 }
 
-export async function fetchWithGet<Req extends Record<string, any> = any, Res = any>(
+export async function fetchWithGet<Req, Res = unknown>(
   url: string,
   data: Req,
   options?: FetchOptions<Res>
@@ -53,7 +53,7 @@ export async function fetchWithGet<Req extends Record<string, any> = any, Res = 
   return null
 }
 
-export async function fetchWithPost<Req extends Record<string, any> = any, Res = any>(
+export async function fetchWithPost<Req, Res = unknown>(
   url: string,
   data: Req,
   options?: FetchOptions<Res>
@@ -83,7 +83,7 @@ export async function fetchWithPost<Req extends Record<string, any> = any, Res =
   return null
 }
 
-export async function uploadFetch<Req extends Record<string, any> = any, Res = any>(
+export async function uploadFetch<Req, Res = unknown>(
   url: string,
   data: Req,
   options?: FetchOptions<Res>
