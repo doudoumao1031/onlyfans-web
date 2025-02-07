@@ -63,7 +63,7 @@ export default function Page() {
             <div>收益中心</div>
           </Link>
           <Link
-            href={"/profile/dataCenter"}
+            href={"/profile/dataCenter/dataView"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>
