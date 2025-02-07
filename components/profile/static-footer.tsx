@@ -7,7 +7,7 @@ export default function Page() {
       <div className="mt-5 ">
         <div className="grid grid-cols-3 gap-y-4 text-[#222]">
           <Link
-            href={`/profile/order`}
+            href={"/profile/order"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>
@@ -21,7 +21,7 @@ export default function Page() {
             <div>订阅管理</div>
           </Link>
           <Link
-            href={`/profile/manuscript`}
+            href={"/profile/manuscript"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>
@@ -35,7 +35,7 @@ export default function Page() {
             <div>稿件管理</div>
           </Link>
           <Link
-            href={`/profile/fans/manage/subscribe`}
+            href={"/profile/fans/manage/subscribe"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>
@@ -49,7 +49,7 @@ export default function Page() {
             <div>粉丝管理</div>
           </Link>
           <Link
-            href={`/profile/income`}
+            href={"/profile/income"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>
@@ -63,7 +63,7 @@ export default function Page() {
             <div>收益中心</div>
           </Link>
           <Link
-            href={`/profile/dataCenter`}
+            href={"/profile/dataCenter/dataView"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>

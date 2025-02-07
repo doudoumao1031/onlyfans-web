@@ -25,10 +25,10 @@ const ManuscriptActions = ({ id ,postStatus }:{id:number ,postStatus: boolean}) 
         <IconWithImage url={"/icons/profile/icon_fans_stick@3x.png"} width={20} height={20} color={"#222"}/>
         <span>置顶</span>
       </button>
-      <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
+      <Link href={`/profile/dataCenter/feeds?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
         <IconWithImage url={"/icons/profile/icon_fans_data@3x.png"} width={20} height={20} color={"#222"}/>
         <span>数据</span>
-      </button>
+      </Link>
       {postStatus ? (
         <Link href={`/profile/manuscript/draft/edit?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink">
           <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>

@@ -8,6 +8,7 @@ import { PageResponse, PostData } from "@/lib"
 import { getMyFeeds } from "@/lib/actions/space"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { Fragment, useEffect, useMemo, useState } from "react"
+import { useSearchParams } from "next/navigation"
 
 
 const filterTypes = [
@@ -17,22 +18,31 @@ const filterTypes = [
   { label: "总点赞", value: 3 }
 ]
 export default function Page() {
+  const queryString = useSearchParams()
+  const id = queryString.get("id")
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const [type, setType] = useState<number>(0)
 
-  useEffect(() => {
-    getData()
-  }, [type])
-  const getData = async () => {
+  const getData = async (extraParams = {}) => {
     const params = {
       page: 1,
       pageSize: 10,
       from_id: 0,
-      sort_type: type
+      sort_type: type,
+      ...extraParams
     }
     const res = await getMyFeeds(params)
     setInitData(res)
   }
+
+  useEffect(() => {
+    if (!id) {
+      getData()
+    } else {
+      getData({ from_id: Number(id) })
+    }
+  }, [])
+
   const title = useMemo(() => {
     const cur = filterTypes.find(v => v.value === type)
     return cur ? cur.label : "最新发布"
@@ -48,7 +58,12 @@ export default function Page() {
   })
   return (
     <div className="">
-      {initData && (
+      {initData && id && initData?.list?.length && (
+        <>
+          <FeedItem item={initData.list?.[0]} />
+        </>
+      )}
+      {initData && !id && (
         <InfiniteScroll<PostData>
           className={"h-full w-full mx-auto"}
           initialItems={initData.list || []}
