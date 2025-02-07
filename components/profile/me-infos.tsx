@@ -33,7 +33,7 @@ export default async function Page() {
   return (
     <div>
       <div
-        className={"profile-content bg-slate-300"}
+        className={"profile-content bg-slate-300 bg-cover"}
         style={{
           backgroundImage: data.back_img ? `url(${buildImageUrl(data.back_img)})` : `url(${getUserDefaultBackImg(data.username)})`
         }}
@@ -85,7 +85,7 @@ export default async function Page() {
             </div>
           </Link>
           <div className="text-xs mt-2.5">
-            <FoldingDescription about={data.about}/>
+            <FoldingDescription about={data.about} />
           </div>
           <div className={"flex text-xs gap-1 mt-1.5 text-[#6D7781]"}>
             <IconWithImage

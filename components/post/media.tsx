@@ -7,7 +7,7 @@ import LazyImg from "@/components/common/lazy-img"
 import IconWithImage from "../profile/icon"
 import { User } from "@/lib"
 
-export default function Media({ data, post, user }: { data: Attachment[], post: TPost, user: User }) {
+export default function Media({ data, post, user, id }: { data: Attachment[], post: TPost, user: User, id: string | undefined }) {
 
   return (
     <div className="grid grid-cols-3 gap-2 relative">
@@ -25,7 +25,7 @@ export default function Media({ data, post, user }: { data: Attachment[], post: 
       {data.map(({ file_id, file_type, thumb_id }, i) => (
         <Link
           key={i}
-          href={`/media/${file_type === FileType.Video ? "video" : "image"}/${file_id}`}
+          href={`${id ? "/space/" + id : ""}/media/${file_type === FileType.Video ? "video" : "image"}/${file_id}`}
           className={file_type === FileType.Video ? "col-span-3" : "block"}
         >
           {file_type === FileType.Video ? (

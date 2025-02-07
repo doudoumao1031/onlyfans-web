@@ -20,12 +20,14 @@ export default function Post({
   data,
   hasVote,
   hasSubscribe,
-  isInfoPage
+  isInfoPage,
+  id
 }: {
   data: PostData
   hasVote: boolean
   hasSubscribe: boolean
   isInfoPage?: boolean
+  id?: string
 }) {
   const { user, post, post_attachment, post_metric, mention_user, collection, star } = data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
@@ -41,7 +43,7 @@ export default function Post({
       <UserTitle user={user} />
       <Description content={post.title} />
       <UserHomePageLink userId={user.username} />
-      {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} post={post} user={user} />}
+      {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} post={post} user={user} id={id} />}
       {hasSubscribe && mention_user && mention_user.length > 0 && (
         <div>
           {mention_user.map((user) => (
@@ -49,7 +51,7 @@ export default function Post({
           ))}
         </div>
       )}
-      {hasSubscribe && user && !user?.sub && !mention_user &&  (
+      {hasSubscribe && user && !user?.sub && !mention_user && (
         <div>
           <Subscribe user={user} />
         </div>
