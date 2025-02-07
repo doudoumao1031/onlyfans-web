@@ -14,7 +14,7 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
   )
 }
 
-const ManuscriptActions = ({ id }:{id:number}) => {
+const ManuscriptActions = ({ id ,postStatus }:{id:number ,postStatus: boolean}) => {
   return (
     <section className="flex">
       <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
@@ -29,28 +29,28 @@ const ManuscriptActions = ({ id }:{id:number}) => {
         <IconWithImage url={"/icons/profile/icon_fans_data@3x.png"} width={20} height={20} color={"#222"}/>
         <span>数据</span>
       </button>
-      <Link href={`/profile/manuscript/draft/edit?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink">
-        <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
-        <span>编辑</span>
-      </Link>
+      {postStatus ? (
+        <Link href={`/profile/manuscript/draft/edit?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink">
+          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
+          <span>编辑</span>
+        </Link>
+      ) : (
+        <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-gray-300">
+          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#6b7280"}/>
+          <span>编辑</span>
+        </button>
+      )}
     </section>
   )
 }
 
-const ManuscriptItemState = ({ state }: { state: "AUDITING" | "REJECT" | "PASS" }) => {
-  const map = {
-    "AUDITING": "审核中",
-    "REJECT": "未通过",
-    "PASS": ""
-  }
-  if (!["AUDITING", "REJECT"].includes(state)) return null
+const ManuscriptItemState = ({ state }: { state: boolean }) => {
+  if (state) return null
   return (
     <span className={clsx(
-      "leading-[15px] text-xs rounded-br rounded-tl px-1.5 text-white absolute left-0 top-0",
-      state === "AUDITING" ? "bg-[#58bf8e]" : "",
-      state === "REJECT" ? "bg-[#ec5048]" : "",
+      "leading-[15px] text-xs rounded-br rounded-tl px-1.5 text-white absolute left-0 top-0 bg-[#58bf8e]",
     )}
-    >{map[state]}</span>
+    >审核中</span>
   )
 }
 export default function ManuscriptItem({ data }: { data: PostData }) {
@@ -58,7 +58,7 @@ export default function ManuscriptItem({ data }: { data: PostData }) {
     <section className="border-b border-gray-100 pt-4">
       <button className={"flex gap-2.5 text-left h-[100px] relative w-full"}>
         {/*<ManuscriptItemState state={"REJECT"}/>*/}
-        <ManuscriptItemState state={"AUDITING"}/>
+        <ManuscriptItemState state={data.post.post_status}/>
         <Image src={"/demo/user_bg.png"} alt={""} width={100} height={100}
           className={"shrink-0 w-[100px] h-full rounded"}
         />
@@ -87,7 +87,7 @@ export default function ManuscriptItem({ data }: { data: PostData }) {
           </section>
         </section>
       </button>
-      <ManuscriptActions id={data.post.id}/>
+      <ManuscriptActions id={data.post.id} postStatus={data.post.post_status}/>
     </section>
   )
 }

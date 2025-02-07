@@ -1,8 +1,3 @@
-// Shared utility functions
-import { ApiResponse, FetchOptions } from "@/lib"
-import { TOKEN_KEY } from "@/lib/utils"
-
-// Client-side cookie getter
 const getClientCookie = (key: string) => {
   if (typeof document === "undefined") return null
   const value = `; ${document.cookie}`

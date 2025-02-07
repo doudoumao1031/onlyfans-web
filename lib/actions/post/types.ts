@@ -73,6 +73,7 @@ export interface PostData {
     id: number
     title: string
     visibility: number
+    post_status: boolean
   }
   post_attachment: Attachment[]
   post_metric: {
@@ -84,6 +85,7 @@ export interface PostData {
     play_count: number
   }
   user: User
+  post_vote: Vote
   comments: Comment[]
   post_price: {
     id: number
@@ -127,34 +129,6 @@ export type SearchPostReq = PageInfo & {
   title: string
 }
 
-export interface PostData {
-  collection: boolean
-  star: boolean
-  mention_user: User[]
-  post: {
-    id: number
-    title: string
-    visibility: number
-  }
-  post_attachment: Attachment[]
-  post_metric: {
-    collection_count: number
-    comment_count: number
-    share_count: number
-    thumbs_up_count: number
-    tip_count: number
-    play_count: number
-  }
-  post_vote: Vote
-  user: User
-  comments: Comment[]
-  post_price: {
-    id: number
-    price: number
-    user_type: number
-    visibility: boolean
-  }[]
-}
 export interface Comment {
   content: string
   id: number
