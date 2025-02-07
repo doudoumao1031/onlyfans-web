@@ -76,9 +76,11 @@ export default function Post({
         <Save count={collection_count} saved={collection} postId={post.id} />
       </div>
       {
-        isShow() && <div className="flex justify-center items-center mt-2">
-          <div className="w-[295px] h-[50px] bg-main-pink  text-white rounded-full text-[15px] flex justify-center items-center">订阅后浏览博主的帖子</div>
-        </div>
+        isShow() && (
+          <div className="flex justify-center items-center mt-2">
+            <div className="w-[295px] h-[50px] bg-main-pink  text-white rounded-full text-[15px] flex justify-center items-center">订阅后浏览博主的帖子</div>
+          </div>
+        )
       }
       {showComments && comments && (
         <Comments
