@@ -1,5 +1,5 @@
 export function buildUserHomePagePath(userId: string) {
-  return `/${userId}`
+  return `/space/${userId}/feed`
 }
 
 export function buildUserHomePagePathForDisplay(userId: string) {

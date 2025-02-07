@@ -15,6 +15,7 @@ import CommentStats from "./comment-stats"
 import Tip from "./tip"
 import Share from "./share"
 import Save from "./save"
+import Link from "next/link"
 
 export default function Post({
   data,
@@ -34,15 +35,15 @@ export default function Post({
   const [showComments, setShowComments] = useState(false)
   const [comments, setComments] = useState<CommentInfo[]>()
   const [showVote, setShowVote] = useState(false)
-  const isShow = () => {
-    if (!isInfoPage) return false
-    return (post.visibility == 1 && !user.sub)
+  const linkRender = (content: string) => {
+    return <Link href={`/postInfo?postId=${post.id}`}>{content}</Link>
   }
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
-      <UserTitle user={user} />
-      <Description content={post.title} />
-      <UserHomePageLink userId={user.username} />
+      {!isInfoPage && <UserTitle user={user} />}
+
+      <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
+      <UserHomePageLink userId={user.id.toString()} />
       {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} post={post} user={user} id={id} />}
       {hasSubscribe && mention_user && mention_user.length > 0 && (
         <div>
@@ -70,16 +71,13 @@ export default function Post({
       {hasVote && showVote && <Vote postId={post.id} />}
       <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} postId={post.id} />
-        <CommentStats count={comment_count} onClick={toggleComments} />
+        <Link href={isInfoPage ? "javascript:void(0);" : `/postInfo?postId=${post.id}`}>
+          <CommentStats count={comment_count} onClick={toggleComments} />
+        </Link>
         <Tip count={tip_count} postId={post.id} />
         <Share count={share_count} postId={post.id} />
         <Save count={collection_count} saved={collection} postId={post.id} />
       </div>
-      {
-        isShow() && <div className="flex justify-center items-center mt-2">
-          <div className="w-[295px] h-[50px] bg-main-pink  text-white rounded-full text-[15px] flex justify-center items-center">订阅后浏览博主的帖子</div>
-        </div>
-      }
       {showComments && comments && (
         <Comments
           post_id={post.id}
