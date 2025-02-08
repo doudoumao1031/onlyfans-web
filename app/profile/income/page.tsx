@@ -31,7 +31,7 @@ const Withdrawal = ({ children, info, refresh }: {
   const withdrawalForm = useForm<{ amount: string }>({
     mode: "all",
     defaultValues: {
-      amount: "0"
+      amount: undefined
     },
     resolver: zodResolver(schemas)
   })
@@ -102,10 +102,13 @@ const Withdrawal = ({ children, info, refresh }: {
               <Controller control={withdrawalForm.control} render={({ field }) => {
                 return (
                   <Input
-                    value={field.value}
+                    value={field.value || ""}
                     onChange={field.onChange}
                     onBlur={event => {
-                      field.onChange(Number(event.target.value).toFixed(2))
+                      const value = event.target.value
+                      if (value) {
+                        field.onChange(Number(event.target.value).toFixed(2))
+                      }
                     }} placeholder="0.00" className="border-0 w-16 text-[#BBB] flex-1 text-right"
                   />
                 )
