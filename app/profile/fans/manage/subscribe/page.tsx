@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import TimeSort from "@/components/profile/time-sort"
 import FansListItem from "@/components/profile/fans/fans-list-item"
 import { getSubscribedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
-import InfiniteScroll, { InfiniteScrollProps } from "@/components/common/infinite-scroll"
+import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 
 interface SubscribeUsersProps {

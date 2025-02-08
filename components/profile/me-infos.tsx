@@ -42,12 +42,12 @@ export default async function Page() {
           right={(
             <>
               <IconWithImage
-                url="/icons/profile/icon_nav_code@3x.png"
+                url="/icons/profile/icon_nav_code_white@3x.png"
                 width={22}
                 height={22}
               />
               <IconWithImage
-                url="/icons/profile/icon_fans_share@3x.png"
+                url="/icons/profile/icon_nav_share_white@3x.png"
                 width={22}
                 height={22}
               />
@@ -85,16 +85,7 @@ export default async function Page() {
             </div>
           </Link>
           <div className="text-xs mt-2.5">
-            <FoldingDescription about={data.about}/>
-          </div>
-          <div className={"flex text-xs gap-1 mt-1.5 text-[#6D7781]"}>
-            <IconWithImage
-              url={"/icons/profile/icon-address.png"}
-              width={16}
-              height={16}
-              color={"#222"}
-            />
-            <span>{data.location || "北京"}</span>
+            <FoldingDescription about={data.about} location={data.location}/>
           </div>
         </section>
         <div className="p-5 border-b border-b-gray-100">
