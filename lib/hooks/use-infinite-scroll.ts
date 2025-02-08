@@ -39,9 +39,14 @@ export function useInfiniteScroll<T>({
       keepPreviousData: true
     }
   )
+
   useEffect(() => {
     setItems(initialItems)
-  }, [initialItems])
+    setHasMore(initialHasMore)
+    setPage(1)
+    isFetchingRef.current = false
+  }, [initialItems, initialHasMore, fetcherFn])
+
   useEffect(() => {
     if (data && page > 1 && !isFetchingRef.current) {
       isFetchingRef.current = true

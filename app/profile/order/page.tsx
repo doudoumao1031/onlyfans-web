@@ -18,7 +18,7 @@ import {
   addSubscribeSetting,
   addSubscribeSettingItem, DiscountInfo,
   getSubscribeSetting,
-  SubscribeSetting, updateSubscribeSettingItem, userApplyBlogger
+  SubscribeSetting, updateSubscribeSettingItem, userApplyBlogger, UserInfoVo
 } from "@/lib"
 import { Switch } from "@/components/ui/switch"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
@@ -27,10 +27,11 @@ import { addDiscount, baseSubscribe, bundleSubscribe } from "@/lib/actions/users
 import useCommonMessage from "@/components/common/common-message"
 import dayjs from "dayjs"
 import DateTimePicker from "@/components/common/date-time-picker"
+import { UserProfile, userProfile } from "@/lib/actions/profile"
 
 const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 
-const AddSubscriptionModal = ({ children, refresh }: { children: React.ReactNode, refresh: () => void }) => {
+const AddSubscriptionModal = ({ children, refresh ,userId }: { children: React.ReactNode, refresh: () => void ,userId: number}) => {
   const { showMessage, renderNode } = useCommonMessage()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const handleClose = () => setIsOpen(false)
@@ -65,7 +66,7 @@ const AddSubscriptionModal = ({ children, refresh }: { children: React.ReactNode
               ...data,
               price: Number(data.price),
               month_count: Number(data.month_count),
-              user_id: 1
+              user_id: userId
             }).then((result) => {
               if (result?.code === 0) {
                 showMessage("添加成功", "default", {
@@ -228,7 +229,7 @@ const AddPromotionalActivities = ({ children, unsubList }: { children: React.Rea
                     <InputWithLabel
                       disabled={!id}
                       errorMessage={fieldState.error?.message}
-                      value={field.value} label={"促销折扣"} max={90}
+                      value={field.value || ""} label={"促销折扣"} max={90}
                       onInputChange={field.onChange}
                       onBlur={event => {
                         const value = event.target.value
@@ -308,9 +309,10 @@ function TopLabelWrapper({ label, children, errorMessage }: {
   )
 }
 
-function SubscribeBundle({ refresh, initSettings }: {
+function SubscribeBundle({ refresh, initSettings ,userId }: {
   refresh: () => void,
   initSettings: DiscountInfo[]
+  userId: number
 }) {
   const bundleForm = useForm<{ list: DiscountInfo[] }>({
     mode: "onChange"
@@ -329,7 +331,7 @@ function SubscribeBundle({ refresh, initSettings }: {
           <section className="flex justify-between items-center">
             <h1 className="text-base font-medium">捆绑订阅</h1>
             {fields.length < 6 && (
-              <AddSubscriptionModal refresh={refresh}>
+              <AddSubscriptionModal refresh={refresh} userId={userId}>
                 <button
                   className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
                 >添加
@@ -434,6 +436,7 @@ function PromotionalActivities({ initDiscountList, unsubList }: {
 
 export default function Page() {
   const router = useRouter()
+  const [userInfo,setUserInfo] = useState<UserProfile>()
   const [defaultSettings, setDefaultSettings] = useState<SubscribeSetting | null>()
   const { showMessage, renderNode } = useCommonMessage()
   const refreshDefaultSettings = () => {
@@ -447,7 +450,14 @@ export default function Page() {
     })
   }
 
-  useEffect(refreshDefaultSettings, [])
+  useEffect(() => {
+    refreshDefaultSettings()
+    userProfile().then(data => {
+      if (data ) {
+        setUserInfo(data?.data)
+      }
+    })
+  }, [])
 
   const discountConfig = useMemo(() => {
     if (defaultSettings) {
@@ -484,8 +494,8 @@ export default function Page() {
           baseFeeForm.trigger().then(valid => {
             if (valid) {
               addSubscribeSetting({
-                price: baseFormValues.price,
-                id: defaultSettings?.id
+                price: Number(baseFormValues.price),
+                id: userInfo?.id
               }).then(data => {
                 if (data) {
                   showMessage("修改成功", "default", {
@@ -532,7 +542,7 @@ export default function Page() {
             </section>
           </form>
         </section>
-        <SubscribeBundle initSettings={defaultSettings?.items || []} refresh={refreshDefaultSettings}/>
+        {userInfo && <SubscribeBundle initSettings={discountConfig.initList} refresh={refreshDefaultSettings} userId={userInfo?.id}/>}
         <PromotionalActivities initDiscountList={discountConfig.initList} unsubList={discountConfig.unsubList}/>
       </section>
     </div>
