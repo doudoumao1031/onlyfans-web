@@ -22,11 +22,11 @@ const ManuscriptActions = ({ id ,postStatus }:{id:number ,postStatus: boolean}) 
         <span>分享</span>
       </button>
       <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-        <IconWithImage url={"/icons/profile/icon_fans_stick@3x.png"} width={20} height={20} color={"#222"}/>
+        <IconWithImage url={"/icons/profile/icon_fans_stick_gray@3x.png"} width={20} height={20} color={"#222"}/>
         <span>置顶</span>
       </button>
       <Link href={`/profile/dataCenter/feeds?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-        <IconWithImage url={"/icons/profile/icon_fans_data@3x.png"} width={20} height={20} color={"#222"}/>
+        <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
         <span>数据</span>
       </Link>
       {postStatus ? (
@@ -67,22 +67,22 @@ export default function ManuscriptItem({ data }: { data: PostData }) {
           <section className={"flex-1 flex items-center text-[#bbb]"}>2022-02-02 12:12:12</section>
           <section className="flex gap-4 text-xs justify-around">
             <ShowNumberWithIcon number={data.post_metric?.thumbs_up_count ?? 0}
-              icon={"/icons/profile/icon_fans_like@3x.png"}
+              icon={"/icons/profile/icon_fans_like_normal@3x.png"}
             />
             <ShowNumberWithIcon number={data.post_metric?.comment_count ?? 0}
-              icon={"/icons/profile/icon_fans_comment@3x.png"}
+              icon={"/icons/profile/icon_fans_comment_normal@3x.png"}
             />
             <ShowNumberWithIcon number={data.post_metric?.play_count ?? 0}
-              icon={"/icons/profile/icon_fans_reward@3x.png"}
+              icon={"/icons/profile/icon_fans_reward_normal@3x.png"}
             />
             <ShowNumberWithIcon number={data.post_metric?.share_count ?? 0}
-              icon={"/icons/profile/icon_fans_share@3x.png"}
+              icon={"/icons/profile/icon_fans_share_normal@3x.png"}
             />
             <ShowNumberWithIcon number={data.post_metric?.collection_count ?? 0}
-              icon={"/icons/profile/icon_fans_collect@3x.png"}
+              icon={"/icons/profile/icon_fans_collect_normal@3x.png"}
             />
             <ShowNumberWithIcon number={data.post_metric?.tip_count ?? 0}
-              icon={"/icons/profile/icon_fans_money_s@3x.png"}
+              icon={"/icons/profile/icon_fans_money_s_gray@3x.png"}
             />
           </section>
         </section>
