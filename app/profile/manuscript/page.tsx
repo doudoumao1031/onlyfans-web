@@ -10,6 +10,8 @@ import { myMediaPosts, myPosts, PageResponse, PostData, SearchPostReq } from "@/
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
+import LazyImg from "@/components/common/lazy-img"
+import { buildImageUrl } from "@/lib/utils"
 
 enum ACTIVE_TYPE {
   POST = "POST",
@@ -88,7 +90,7 @@ const ManuscriptPost = () => {
 
 const ManuscriptMedia = () => {
   const [timeSort, setTimeSort] = useState<boolean>(false)
-  const [initData, setInitData] = useState<PageResponse<unknown> | null>()
+  const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   useEffect(() => {
     myMediaPosts({
       page: 1,
@@ -125,14 +127,14 @@ const ManuscriptMedia = () => {
       </div>
       <section className="">
         {initData && (
-          <InfiniteScroll<unknown> className={"grid grid-cols-2 gap-3 mt-2"} fetcherFn={infiniteFetchMedia} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
+          <InfiniteScroll<PostData> className={"grid grid-cols-2 gap-3 mt-2"} fetcherFn={infiniteFetchMedia} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
             {({ items, isLoading, hasMore, error }) => (
               <Fragment>
                 {Boolean(error) && <ListError />}
                 {items?.map((item, index) => (
                   <section key={index}>
                     <section className="rounded-xl relative overflow-hidden text-xs">
-                      <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5">
+                      <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5 z-10">
                         <section className="flex items-center gap-0.5">
                           <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
                             color={"#fff"}
@@ -143,39 +145,41 @@ const ManuscriptMedia = () => {
                           <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
                             color={"#fff"}
                           />
-                          <span>989</span>
+                          <span>{item.post_metric.tip_count}</span>
                         </section>
                       </section>
-                      <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around">
+                      <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around z-10">
                         <section className="flex items-center gap-0.5 flex-1">
                           <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12}
                             color={"#fff"}
                           />
-                          <span>989</span>
+                          <span>{item.post_metric.collection_count}</span>
                         </section>
                         <section className="flex items-center gap-0.5 flex-1 justify-center">
                           <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12}
                             color={"#fff"}
                           />
-                          <span>989</span>
+                          <span>{item.post_metric.comment_count}</span>
                         </section>
                         <section className="flex items-center gap-0.5 flex-1 justify-end">
                           <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12}
                             color={"#fff"}
                           />
-                          <span>989</span>
+                          <span>{item.post_metric.share_count}</span>
                         </section>
                       </section>
                       <section
-                        className="w-full h-[220px] rounded bg-[url('/demo/user_bg.png')] bg-cover bg-center"
-                      ></section>
+                        className="w-full h-[220px] rounded flex justify-center items-center overflow-hidden"
+                      >
+                        <LazyImg src={buildImageUrl(item.post_attachment?.[0]?.file_id)} alt={"post_attachment"} width={200} height={220} className="w-full h-full" />
+                      </section>
                     </section>
-                    <button
+                    <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
                       className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-main-pink border-2 text-main-pink w-full mt-2"
                     >
                       <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"} />
                       <span>编辑</span>
-                    </button>
+                    </Link>
                   </section>
                 ))}
                 {isLoading && <ListLoading />}
