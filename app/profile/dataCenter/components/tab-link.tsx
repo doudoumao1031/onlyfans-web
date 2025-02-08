@@ -12,8 +12,8 @@ export default function TabLinks() {
     return "text-[#777] font-normal"
   }, [pathName])
   const links = [
-    { name: "数据概览", href: `/profile/dataCenter/dataView` },
-    { name: "帖子情况", href: `/profile/dataCenter/feeds` }
+    { name: "数据概览", href: "/profile/dataCenter/dataView" },
+    { name: "帖子情况", href: "/profile/dataCenter/feeds" }
   ]
   return (
     <div className="w-full text-center grid grid-cols-2 border-b border-gray-100">

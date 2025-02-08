@@ -1,5 +1,5 @@
 "use client"
-import React, { HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState, Suspense } from "react"
 import clsx from "clsx"
 import IconWithImage from "@/components/profile/icon"
 import { Switch } from "@/components/ui/switch"
@@ -517,8 +517,6 @@ const ReadSettings = ({
   )
 }
 
-const IMAGE_PREFIX = `${process.env.NEXT_PUBLIC_API_URL}/media/img/`
-
 const UploadMedia = () => {
   const { control } = useFormContext<iPost>()
   const ref = useRef<HTMLInputElement>(null)
@@ -561,7 +559,7 @@ const UploadMedia = () => {
                   <section className={"h-full w-full overflow-hidden rounded"}>
                     <Image
                       className={"rounded-xl"}
-                      src={`${IMAGE_PREFIX}${field.value}`}
+                      src={buildImageUrl(field.value)}
                       alt={"attachment"}
                       width={100}
                       height={100}
@@ -714,7 +712,15 @@ const insertString = (str: string, index: number, char: string) => {
   return str.substring(0, index) + char + str.substring(index + 1)
 }
 
-export default function Page() {
+const Page = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EditPageContent />
+    </Suspense>
+  )
+}
+
+const EditPageContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const postId = Number(searchParams.get("id"))
@@ -957,3 +963,5 @@ export default function Page() {
     </CommonMessageContext.Provider>
   )
 }
+
+export default Page

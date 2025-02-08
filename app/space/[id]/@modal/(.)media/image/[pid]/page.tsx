@@ -10,6 +10,8 @@ export default async function ImageBrowseModal({ params }: { params: Promise<{ p
         <Image
           src={buildImageUrl(pid)}
           alt=""
+          width={1200}
+          height={800}
           className="object-contain max-w-full max-h-[100vh]"
         />
       </div>

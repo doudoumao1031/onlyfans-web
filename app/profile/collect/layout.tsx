@@ -6,12 +6,12 @@ enum COLLECT_TYPE {
   BLOGGER = "BLOGGER",
   POSTS = "FOLLOW"
 }
-export default function Layout({ children}: {
+export default function Layout({ children }: {
   children: React.ReactNode,
 }) {
   const tabOptions = [
-    { label: "博主", name: COLLECT_TYPE.BLOGGER, link: `/profile/collect/blogger` },
-    { label: "帖子", name: COLLECT_TYPE.POSTS, link: `/profile/collect/posts` }
+    { label: "博主", name: COLLECT_TYPE.BLOGGER, link: "/profile/collect/blogger" },
+    { label: "帖子", name: COLLECT_TYPE.POSTS, link: "/profile/collect/posts" }
   ]
   return (
     <>

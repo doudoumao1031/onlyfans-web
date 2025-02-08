@@ -9,13 +9,13 @@ export default async function Page() {
     <>
       <div className="total-num p-4"><span className="text-gray-400">总数：</span>{postsData?.total ?? 0}</div>
       <div className="p-4">
-        {postsData?.list.map((v, i) => (
+        {(postsData?.list || []).map((v, i) => (
           <div key={i} className={"h-28   mb-4 flex"}>
             <Image src={buildImageUrl(v.post_attachment?.[0]?.file_id)} width={112} height={112} alt={"post image"} className={"h-28 w-28 bg-cover mr-2 shrink-0 rounded-md border border-slate-600"} />
             <div className="flex flex-col justify-between flex-1">
               <div className="">{v.post.title}</div>
               <div className="flex items-center">
-                <Image src={buildImageUrl(v.user.photo)} className={"w-6 h-6 rounded-full mr-2 bg-cover "} width={24} height={24} alt={"user avatar"}/>
+                <Image src={buildImageUrl(v.user.photo)} className={"w-6 h-6 rounded-full mr-2 bg-cover "} width={24} height={24} alt={"user avatar"} />
                 <span className="text-main-pink text-xs">{v.user.username}</span>
               </div>
             </div>

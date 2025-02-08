@@ -101,6 +101,13 @@ export const followedList = async (page: number, fromId: number = 0) => {
 
   const { list, total } = response
 
+  if (!list) {
+    return {
+      items: [],
+      hasMore: false
+    }
+  }
+
   const hasMore = page * pageSize < total
   return {
     items: list,

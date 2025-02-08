@@ -33,7 +33,7 @@ export default async function Page() {
   return (
     <div>
       <div
-        className={"profile-content bg-slate-300"}
+        className={"profile-content bg-slate-300 bg-cover"}
         style={{
           backgroundImage: data.back_img ? `url(${buildImageUrl(data.back_img)})` : `url(${getUserDefaultBackImg(data.username)})`
         }}
