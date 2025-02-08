@@ -45,9 +45,9 @@ export default function Page({ tabs, title }: TProos) {
         end: now.format(DATE_FORMAT)
       }
     },
-    {
-      label: "累计", key: 5, value: null
-    }
+    // {
+    //   label: "累计", key: 5, value: null
+    // }
   ]
   const [dateType, setDateType] = useState<number>(2)
   const [active, setActive] = useState<string>(Object.keys(tabs)[0])

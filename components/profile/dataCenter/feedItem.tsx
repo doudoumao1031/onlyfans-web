@@ -26,7 +26,7 @@ export default function Page({ item }: TProps) {
           <div className="h-28 w-28 bg-cover mr-2 shrink-0 rounded-md bg-slate-200">
             <LazyImg
               className="aspect-square rounded-md "
-              src={buildImageUrl(post_attachment[0]?.thumb_id || post_attachment[0]?.file_id)}
+              src={buildImageUrl(post_attachment ? post_attachment[0]?.thumb_id || post_attachment[0]?.file_id : "")}
               alt=""
               width={112}
               height={112}

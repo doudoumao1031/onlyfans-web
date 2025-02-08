@@ -59,7 +59,7 @@ const Withdrawal = ({ children, info, refresh }: {
         headerLeft={(close) => {
           return (
             <button onTouchEnd={close} className={"text-base text-[#777]"}>
-              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"}/>
+              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
             </button>
           )
         }}
@@ -161,7 +161,7 @@ function ChartData({ params }: { params: UserMetricDayReq }) {
       ]
     }
   }, [data])
-  return <Line options={options} data={lineData}/>
+  return <Line options={options} data={lineData} />
 }
 
 
@@ -188,22 +188,23 @@ export default function Page() {
     }
   ]
   const [dateActive, setDateActive] = useState<UserMetricDayReq>(dateTabs[0].value)
+  const [activeKey, setActiveKey] = useState<number>(0)
 
-  const tabs: Array<{ label: string, value: UserMetricDayReq }> = [
+  const tabs: Array<{ label: string, key: number, value: UserMetricDayReq }> = [
     {
-      label: "今天", value: {
+      label: "今天", key: 0, value: {
         start: now.format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近30日", value: {
+      label: "近30日", key: 1, value: {
         start: now.add(-30, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近一年", value: {
+      label: "近一年", key: 2, value: {
         start: now.add(-1, "year").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
@@ -240,12 +241,13 @@ export default function Page() {
     <>
       <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
         {renderNode}
-        <Header title="收益中心" titleColor="#000"/>
+        <Header title="收益中心" titleColor="#000" />
         <div className="flex p-4">
           {tabs.map(v => (
             <button
               type={"button"} onTouchEnd={() => {
                 setActive(v.value)
+                setActiveKey(v.key)
               }}
               key={v.value.start}
               className={`w-20 h-8 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""}`}
@@ -259,7 +261,9 @@ export default function Page() {
         </div>
         <div className="pl-4 pr-4 flex justify-between items-center mt-2 mb-12">
           <span className="text-xs">
-            <span className="text-[#777] ">较前30日</span>
+            <span className="text-[#777] ">{
+              ['今日', '较前30日', '较前一年'][activeKey]
+            }</span>
             <span className="text-main-pink ml-2">+{inCome}</span>
           </span>
           {walletInfo && (
@@ -290,7 +294,7 @@ export default function Page() {
           ))}
         </div>
         <div className="p-4">
-          <ChartData params={dateActive}/>
+          <ChartData params={dateActive} />
         </div>
       </CommonMessageContext.Provider>
     </>

@@ -78,8 +78,8 @@ export default function Page() {
                 <FeedItem key={i} item={v} />
               ))}
               {isLoading && <ListLoading />}
-              {!hasMore && items.length > 0 && <ListEnd />}
-              {(!items || !items.length) && <Empty top={20} />}
+              {!hasMore && items?.length > 0 && <ListEnd />}
+              {(!items || !items?.length) && <Empty top={20} />}
             </Fragment>
           )}
         </InfiniteScroll>
