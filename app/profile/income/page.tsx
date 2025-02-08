@@ -8,24 +8,41 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { Line } from "react-chartjs-2"
-import { addWalletDownOrder, getUserMetricDay, getUserStatIncome, UserMetricDay, userWallet, WalletInfo } from "@/lib"
+import {
+  addWalletDownOrder,
+  getUserMetricDay,
+  getUserStatIncome,
+  UserMetricDay,
+  userWallet,
+  WalletInfo
+} from "@/lib"
 import dayjs from "dayjs"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import useCommonMessage, { CommonMessageContext, useCommonMessageContext } from "@/components/common/common-message"
+import useCommonMessage, {
+  CommonMessageContext,
+  useCommonMessageContext
+} from "@/components/common/common-message"
 
-const Withdrawal = ({ children, info, refresh }: {
-  children: React.ReactNode,
-  info: WalletInfo,
+const Withdrawal = ({
+  children,
+  info,
+  refresh
+}: {
+  children: React.ReactNode
+  info: WalletInfo
   refresh: () => void
 }) => {
   const pathname = usePathname()
   const schemas = useMemo(() => {
     return z.object({
-      amount: z.string({ message: "请输入" })
-        .refine(data => Number(data) > 0, { message: "必须大于等于0" })
-        .refine(data => Number(data) <= info.amount - (info?.freeze ?? 0), { message: "不能超过可提现余额" })
+      amount: z
+        .string({ message: "请输入" })
+        .refine((data) => Number(data) > 0, { message: "必须大于等于0" })
+        .refine((data) => Number(data) <= info.amount - (info?.freeze ?? 0), {
+          message: "不能超过可提现余额"
+        })
     })
   }, [info])
   const withdrawalForm = useForm<{ amount: string }>({
@@ -46,10 +63,13 @@ const Withdrawal = ({ children, info, refresh }: {
   }, [openState, withdrawalForm])
   return (
     <>
-      <button onTouchEnd={() => {
-        setOpenState(true)
-      }}
-      >{children}</button>
+      <button
+        onTouchEnd={() => {
+          setOpenState(true)
+        }}
+      >
+        {children}
+      </button>
       <FormDrawer
         trigger={children}
         isOpen={openState}
@@ -59,22 +79,27 @@ const Withdrawal = ({ children, info, refresh }: {
         headerLeft={(close) => {
           return (
             <button onTouchEnd={close} className={"text-base text-[#777]"}>
-              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
+              <IconWithImage
+                url={"/icons/profile/icon_close@3x.png"}
+                width={24}
+                height={24}
+                color={"#000"}
+              />
             </button>
           )
         }}
-        headerRight={(() => {
+        headerRight={() => {
           return (
             <Link href={`${pathname}/withdrawalInfo`}>
               <button className={"text-base text-main-pink"}>明细</button>
             </Link>
           )
-        })}
+        }}
         className="h-[47vh] border-0"
-        handleSubmit={withdrawalForm.handleSubmit(data => {
+        handleSubmit={withdrawalForm.handleSubmit((data) => {
           addWalletDownOrder({
             amount: Number(data.amount)
-          }).then(response => {
+          }).then((response) => {
             if (response?.code === 0) {
               refresh()
               setOpenState(false)
@@ -99,28 +124,35 @@ const Withdrawal = ({ children, info, refresh }: {
           <div className="flex justify-between items-center mt-10 relative">
             <span className="font-bold text-base">提现</span>
             <span className="flex items-center flex-1 justify-end">
-              <Controller control={withdrawalForm.control} render={({ field }) => {
-                return (
-                  <Input
-                    value={field.value}
-                    onChange={field.onChange}
-                    onBlur={event => {
-                      field.onChange(Number(event.target.value).toFixed(2))
-                    }} placeholder="0.00" className="border-0 w-16 text-[#BBB] flex-1 text-right"
-                  />
-                )
-              }} name={"amount"}
+              <Controller
+                control={withdrawalForm.control}
+                render={({ field }) => {
+                  return (
+                    <Input
+                      value={field.value}
+                      onChange={field.onChange}
+                      onBlur={(event) => {
+                        field.onChange(Number(event.target.value).toFixed(2))
+                      }}
+                      placeholder="0.00"
+                      className="border-0 w-16 text-[#BBB] flex-1 text-right"
+                    />
+                  )
+                }}
+                name={"amount"}
               />
               <span>USDT</span>
             </span>
-            <section
-              className={"absolute bottom-[-12px] text-red-600 text-xs"}
-            >{withdrawalForm.formState.errors?.amount?.message}</section>
+            <section className={"absolute bottom-[-12px] text-red-600 text-xs"}>
+              {withdrawalForm.formState.errors?.amount?.message}
+            </section>
           </div>
           <div className="flex justify-center">
-            <button type={"submit"}
+            <button
+              type={"submit"}
               className="w-72 h-12 rounded-full bg-main-pink text-white flex justify-center items-center mt-10"
-            >提现
+            >
+              提现
             </button>
           </div>
         </div>
@@ -129,18 +161,17 @@ const Withdrawal = ({ children, info, refresh }: {
   )
 }
 
-
 const DATE_FORMAT = "YYYY-MM-DD"
 
 type UserMetricDayReq = {
-  start: string,
+  start: string
   end: string
 }
 
 function ChartData({ params }: { params: UserMetricDayReq }) {
   const [data, setData] = useState<Array<UserMetricDay>>()
   useEffect(() => {
-    getUserMetricDay(params).then(response => {
+    getUserMetricDay(params).then((response) => {
       if (response) {
         setData(response.list.reverse())
       }
@@ -149,11 +180,11 @@ function ChartData({ params }: { params: UserMetricDayReq }) {
 
   const lineData = useMemo(() => {
     return {
-      labels: data?.map(item => item.day),
+      labels: data?.map((item) => item.day),
       datasets: [
         {
           label: "播放量",
-          data: data?.map(item => item.income),
+          data: data?.map((item) => item.income),
           borderColor: "rgb(255, 99, 132)",
           backgroundColor: "rgba(255, 99, 132, 0.5)",
           yAxisID: "y"
@@ -164,24 +195,26 @@ function ChartData({ params }: { params: UserMetricDayReq }) {
   return <Line options={options} data={lineData} />
 }
 
-
 export default function Page() {
   const now = dayjs()
-  const dateTabs: Array<{ label: string, value: UserMetricDayReq }> = [
+  const dateTabs: Array<{ label: string; value: UserMetricDayReq }> = [
     {
-      label: "近7日", value: {
+      label: "近7日",
+      value: {
         start: now.add(-7, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近15日", value: {
+      label: "近15日",
+      value: {
         start: now.add(-15, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近30日", value: {
+      label: "近30日",
+      value: {
         start: now.add(-30, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
@@ -190,21 +223,27 @@ export default function Page() {
   const [dateActive, setDateActive] = useState<UserMetricDayReq>(dateTabs[0].value)
   const [activeKey, setActiveKey] = useState<number>(0)
 
-  const tabs: Array<{ label: string, key: number, value: UserMetricDayReq }> = [
+  const tabs: Array<{ label: string; key: number; value: UserMetricDayReq }> = [
     {
-      label: "今天", key: 0, value: {
+      label: "今天",
+      key: 0,
+      value: {
         start: now.format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近30日", key: 1, value: {
+      label: "近30日",
+      key: 1,
+      value: {
         start: now.add(-30, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近一年", key: 2, value: {
+      label: "近一年",
+      key: 2,
+      value: {
         start: now.add(-1, "year").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
@@ -214,7 +253,7 @@ export default function Page() {
   const [active, setActive] = useState<UserMetricDayReq>(tabs[0].value)
   const [inCome, setIncome] = useState<number>(0)
   useEffect(() => {
-    getUserStatIncome(active).then(data => {
+    getUserStatIncome(active).then((data) => {
       if (data !== null) {
         setIncome(data)
       }
@@ -243,34 +282,37 @@ export default function Page() {
         {renderNode}
         <Header title="收益中心" titleColor="#000" />
         <div className="flex p-4">
-          {tabs.map(v => (
+          {tabs.map((v) => (
             <button
-              type={"button"} onTouchEnd={() => {
+              type={"button"}
+              onTouchEnd={() => {
                 setActive(v.value)
                 setActiveKey(v.key)
               }}
               key={v.value.start}
-              className={`w-20 h-8 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""}`}
-            >{v.label}</button>
+              className={`w-20 h-8 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""
+                }`}
+            >
+              {v.label}
+            </button>
           ))}
         </div>
         <div className="p-6 pt-0 flex justify-center items-end">
           <span className="text-[32px] font-medium">{walletInfo?.amount}</span>
           <span className="text-[18px] text-[#777] ml-2 pb-1">USDT</span>
-
         </div>
         <div className="pl-4 pr-4 flex justify-between items-center mt-2 mb-12">
           <span className="text-xs">
-            <span className="text-[#777] ">{
-              ['今日', '较前30日', '较前一年'][activeKey]
-            }</span>
+            <span className="text-[#777] ">{["今日", "较前30日", "较前一年"][activeKey]}</span>
             <span className="text-main-pink ml-2">+{inCome}</span>
           </span>
           {walletInfo && (
             <Withdrawal info={walletInfo} refresh={refreshWalletInfo}>
               <span className="text-xs flex">
                 <span className="text-[#777] ">可提现</span>
-                <span className="ml-2 mr-2">{(Number(walletInfo?.amount)) - (walletInfo?.freeze ?? 0)}</span>
+                <span className="ml-2 mr-2">
+                  {Number(walletInfo?.amount) - (walletInfo?.freeze ?? 0)}
+                </span>
                 <span>
                   <IconWithImage
                     url="/icons/profile/icon-r.png"
@@ -287,10 +329,17 @@ export default function Page() {
         <div className="p-4 flex">
           <span className="mr-8">收益时间</span>
           {dateTabs.map((v, index) => (
-            <button type={"button"} onClick={() => {
-              setDateActive(v.value)
-            }} key={index} className={`mr-8 text-[#bbb] ${dateActive.start === v.value.start ? "text-main-pink" : ""}`}
-            >{v.label}</button>
+            <button
+              type={"button"}
+              onClick={() => {
+                setDateActive(v.value)
+              }}
+              key={index}
+              className={`mr-8 text-[#bbb] ${dateActive.start === v.value.start ? "text-main-pink" : ""
+                }`}
+            >
+              {v.label}
+            </button>
           ))}
         </div>
         <div className="p-4">

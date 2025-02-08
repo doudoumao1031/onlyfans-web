@@ -14,7 +14,7 @@ export default async function Page() {
       <div className="total-num p-4"><span className="text-gray-400">总数：</span>{bloggerData?.total ?? 0}</div>
       <div className="p-4 pt-0 ">
         {bloggerData?.list?.map((v, i) => (
-          <Link href={`/space/${v.id}/feed`}>
+          <Link key={i} href={`/space/${v.id}/feed`}>
             <div key={i} className={"h-28 pt-1 text-white bg-slate-400  mb-4 bg-cover rounded-lg bg-blend-multiply"} style={{
               backgroundImage: `url(${buildImageUrl(v.photo)})`
             }}

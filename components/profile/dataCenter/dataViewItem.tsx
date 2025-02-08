@@ -44,7 +44,7 @@ export default function Page({ tabs, title }: TProos) {
         start: now.add(-90, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
-    },
+    }
     // {
     //   label: "累计", key: 5, value: null
     // }
