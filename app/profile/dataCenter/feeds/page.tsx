@@ -76,7 +76,7 @@ export default function Page() {
                 />
               </div>
               {items.map((v, i) => (
-                <Link key={i} href={`/postInfo?postId=${v.post.id}`}>
+                <Link key={i} href={`/postInfo/${v.post.id}`}>
                   <FeedItem key={i} item={v} />
                 </Link>
               ))}

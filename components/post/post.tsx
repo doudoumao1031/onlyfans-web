@@ -36,7 +36,7 @@ export default function Post({
   const [comments, setComments] = useState<CommentInfo[]>()
   const [showVote, setShowVote] = useState(false)
   const linkRender = (content: string) => {
-    return <Link href={`/postInfo?postId=${post.id}`}>{content}</Link>
+    return <Link href={`/postInfo/${post.id}`}>{content}</Link>
   }
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
@@ -71,7 +71,7 @@ export default function Post({
       {hasVote && showVote && <Vote postId={post.id} />}
       <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} postId={post.id} />
-        <Link href={isInfoPage ? "javascript:void(0);" : `/postInfo?postId=${post.id}`}>
+        <Link href={isInfoPage ? "javascript:void(0);" : `/postInfo/${post.id}`}>
           <CommentStats count={comment_count} onClick={toggleComments} />
         </Link>
         <Tip count={tip_count} postId={post.id} />
