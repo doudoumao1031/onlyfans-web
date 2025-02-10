@@ -1,14 +1,22 @@
 // Shared utility functions
-
-// 日期格式化
-import { ApiResponse, FetchOptions } from "@/lib"
+// Client-side cookie getter
+const getClientCookie = (key: string) => {
+  if (typeof document === "undefined") return null
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${key}=`)
+  if (parts.length === 2) return parts.pop()?.split(";").shift() ?? null
+  return null
+}
 
 export function formatDate(date: string | Date, locale: string = "en-US"): string {
   const d = typeof date === "string" ? new Date(date) : date
   return d.toLocaleDateString(locale, {
     year: "numeric",
-    month: "long",
-    day: "numeric"
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
   })
 }
 
@@ -28,95 +36,5 @@ export function calculatePagination(
   }
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL
+export { fetchWithGet, fetchWithPost, uploadFetch } from "../server-actions"
 
-export const getAuthToken = () => {
-  return "25"
-}
-
-async function fetchResultHandle<T>(method: string, response: Response, url: string) {
-  if (response.ok) {
-    const result: ApiResponse<T> = await response.json()
-    console.log(`Success-${method.toUpperCase()}-${url}-response:`, result)
-    return result
-  } else {
-    console.error(
-      `Error-${method.toUpperCase()}-${url}-response:`,
-      response.status,
-      response.statusText
-    )
-    const errorText = await response.text()
-    console.error("Error details:", errorText)
-  }
-  return null
-}
-
-export async function fetchWithGet<Req, Res = unknown>(
-  url: string,
-  data: Req,
-  options?: FetchOptions<Res>
-) {
-  try {
-    const { headers = {} } = options ?? {}
-    const qs = new URLSearchParams(data ?? {})
-    const urlWithParams = `${apiUrl}${url}?${qs.toString()}`
-    console.log("GET-url:", urlWithParams)
-    const response = await fetch(urlWithParams, {
-      method: "GET",
-      headers: {
-        "X-Token": getAuthToken(),
-        ...headers
-      }
-    })
-    return fetchResultHandle<Res>("GET", response, url)
-  } catch (error) {
-    console.error("Error-GET-catch:", error)
-  }
-  return null
-}
-
-export async function fetchWithPost<Req, Res = unknown>(
-  url: string,
-  data: Req,
-  options?: FetchOptions<Res>
-) {
-  try {
-    const { headers = {} } = options ?? {}
-    const isFormData = data instanceof FormData
-    const fullPath = `${apiUrl}${url}`
-    console.log("POST-url:", fullPath)
-    console.log("POST-data:", data)
-    const response = await fetch(fullPath, {
-      method: "POST",
-      headers: {
-        "X-Token": getAuthToken(),
-        ...headers
-      },
-      body: isFormData ? data : JSON.stringify(data)
-    })
-    return fetchResultHandle<Res>("POST", response, url)
-  } catch (error) {
-    console.error("Error-POST-catch:", error)
-  }
-  return null
-}
-
-export function uploadFetch<Req, Res = unknown>(
-  url: string,
-  data: Req,
-  options?: FetchOptions<Res>
-) {
-  const { headers = {} } = options ?? {}
-  const isFormData = data instanceof FormData
-  const fullPath = `${apiUrl}${url}`
-  console.log("POST-url:", fullPath)
-  console.log("POST-data:", data)
-  return fetch(fullPath, {
-    method: "POST",
-    headers: {
-      "X-Token": getAuthToken(),
-      ...headers
-    },
-    body: isFormData ? data : JSON.stringify(data)
-  })
-}
