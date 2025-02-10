@@ -142,3 +142,9 @@ export const myMediaPosts = (params:PageInfo) => fetchWithPost<PageInfo,PageResp
   }
   return null
 })
+
+/**
+ * 置顶帖子
+ * @param post_id
+ */
+export const postPined = (post_id: number) => fetchWithPost<{post_id: number}>(ENDPOINTS.POST.PINED,{ post_id })

@@ -202,7 +202,7 @@ const AddVoteModal = ({
         <section className={"py-5 px-4 border-b border-[#ddd]"}>
           <h3 className="font-medium text-base mb-2">
             投票内容
-            {watch("items").length < 2 && (
+            {watch("items").filter(item => !!item.content).length < 2 && (
               <span className="text-xs text-red-600 ml-2 font-normal">最少2个选项</span>
             )}
           </h3>
@@ -814,7 +814,7 @@ const EditPageContent = () => {
                 </button>
               }
             />
-            <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "#000")}>
+            <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-main-pink")}>
               发布
             </button>
           </section>
@@ -929,6 +929,7 @@ const EditPageContent = () => {
             <section className="border-b border-gray-200 flex justify-between items-center py-3">
               <div>订阅者</div>
               <Switch
+                className={"custom-switch"}
                 {...noticeRegister}
                 onCheckedChange={(value) => {
                   setValue("post.notice", value)
@@ -944,13 +945,13 @@ const EditPageContent = () => {
             >
               {!watch("post_vote") && (
                 <span
-                  className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-main-pink py-2 text-main-pink text-base"
+                  className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-[#999] py-2 text-[#999] text-base"
                 >
                   <IconWithImage
                     url={"/icons/profile/icon_fans_vote@3x.png"}
                     width={20}
                     height={20}
-                    color={"#FF8492"}
+                    color={"#999"}
                   />
                   投票
                 </span>

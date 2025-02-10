@@ -11,6 +11,7 @@ import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/prof
 import { useRouter } from "next/navigation"
 import useCommonMessage from "@/components/common/common-message"
 import { commonUploadFile } from "@/lib/utils"
+import { Switch } from "@/components/ui/switch"
 
 type EditUserProfile = Pick<
   UserProfile,
@@ -194,7 +195,9 @@ export default function Page() {
                   className="pt-4 pb-4 text-base w-full border-b border-gray-100 flex justify-between items-center"
                 >
                   <span>直播展示</span>
-                  <span>Switch</span>
+                  <span>
+                    <Switch className={"custom-switch"}/>
+                  </span>
                 </button>
               </section>
             </section>

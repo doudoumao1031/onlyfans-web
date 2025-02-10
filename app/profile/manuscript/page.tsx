@@ -1,7 +1,7 @@
 "use client"
 
 import TabTitle, { iTabTitleOption } from "@/components/profile/tab-title"
-import React, { Fragment, useEffect, useState } from "react"
+import React, { Fragment, SyntheticEvent, useEffect, useMemo, useState } from "react"
 import IconWithImage from "@/components/profile/icon"
 import ManuscriptItem from "@/components/profile/manuscript/manuscript-item"
 import Header from "@/components/common/header"
@@ -12,6 +12,7 @@ import { ListEnd, ListError, ListLoading } from "@/components/explore/list-state
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl } from "@/lib/utils"
+import useCommonMessage, { CommonMessageContext, useCommonMessageContext } from "@/components/common/common-message"
 
 enum ACTIVE_TYPE {
   POST = "POST",
@@ -23,7 +24,7 @@ const ManuscriptPost = () => {
   const [title, setTitle] = useState<string>("")
   const [initData, setInitData] = useState<PageResponse<PostData>>()
 
-  useEffect(() => {
+  const fetchInitData = () => {
     myPosts({
       title,
       page: 1,
@@ -34,7 +35,8 @@ const ManuscriptPost = () => {
         setInitData(response)
       }
     })
-  }, [])
+  }
+  useEffect(fetchInitData,[])
 
   const infiniteFetchMyPosts = useInfiniteFetch<SearchPostReq, PostData>({
     fetchFn: myPosts,
@@ -45,38 +47,46 @@ const ManuscriptPost = () => {
     }
   })
 
+  const handleFormSubmit = (event:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+    event.preventDefault()
+    fetchInitData()
+  }
+
   return (
     <section className="pl-4 pr-4 text-black">
-      <section className="mt-5 flex gap-4 items-center">
-        <div className={"flex-1 pt-2 pb-2 pl-3 pr-3 bg-[#F4F5F5] rounded-full flex items-center"}>
-          <IconWithImage url={"/icons/profile/icon_search_s@3x.png"} width={18} height={18}
-            color={"rgb(221, 221, 221)"}
-          />
-          <input value={title} onChange={(event) => {
-            setTitle(event.target.value)
-          }} placeholder="输入博文内容" className="w-full bg-transparent flex pl-0.5"
-          />
-        </div>
-        <button className="shrink-0" onTouchEnd={() => {
-          setTimeSort(prevState => !prevState)
-        }}
-        >
-          <div className="flex items-center justify-center">
-            <IconWithImage
-              url={`/icons/profile/${timeSort ? "icon_gradedown" : "icon_gradeup"}@3x.png`} color={"#000"}
-              width={20} height={20}
+      <form onSubmit={handleFormSubmit}>
+        <section className="mt-5 flex gap-4 items-center">
+          <div className={"flex-1 pt-2 pb-2 pl-3 pr-3 bg-[#F4F5F5] rounded-full flex items-center"}>
+            <IconWithImage url={"/icons/profile/icon_search_s@3x.png"} width={18} height={18}
+              color={"rgb(221, 221, 221)"}
+            />
+            <input value={title} onChange={(event) => {
+              setTitle(event.target.value)
+            }} placeholder="输入博文内容" className="w-full bg-transparent flex pl-0.5"
             />
           </div>
-          <span className="text-main-pink text-xs">创建时间</span>
-        </button>
-      </section>
+
+          <button className="shrink-0" onTouchEnd={() => {
+            setTimeSort(prevState => !prevState)
+          }}
+          >
+            <div className="flex items-center justify-center">
+              <IconWithImage
+                url={`/icons/profile/${timeSort ? "icon_gradedown" : "icon_gradeup"}@3x.png`} color={"#000"}
+                width={20} height={20}
+              />
+            </div>
+            <span className="text-main-pink text-xs">创建时间</span>
+          </button>
+        </section>
+      </form>
       <section className={"flex flex-col gap-2.5"}>
         {initData && (
           <InfiniteScroll<PostData> fetcherFn={infiniteFetchMyPosts} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
             {({ items, isLoading, hasMore, error }) => (
               <Fragment>
                 {Boolean(error) && <ListError />}
-                {items?.map((item, index) => <ManuscriptItem data={item} key={index} />)}
+                {items?.map((item, index) => <ManuscriptItem data={item} key={index} refresh={fetchInitData}/>)}
                 {isLoading && <ListLoading />}
                 {!hasMore && items?.length > 0 && <ListEnd />}
               </Fragment>
@@ -200,13 +210,19 @@ export default function Page() {
     { label: "媒体", name: ACTIVE_TYPE.MEDIA }
   ]
 
+  const { showMessage, renderNode } = useCommonMessage()
+
   return (
-    <div>
-      <Header title="稿件管理" titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-main-pink text-base">草稿</Link>}>
-      </Header>
-      <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
-      {active === ACTIVE_TYPE.POST && <ManuscriptPost />}
-      {active === ACTIVE_TYPE.MEDIA && <ManuscriptMedia />}
-    </div>
+    <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
+      {renderNode}
+      <div>
+        <Header title="稿件管理" titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-main-pink text-base">草稿</Link>}>
+        </Header>
+        <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
+        {active === ACTIVE_TYPE.POST && <ManuscriptPost />}
+        {active === ACTIVE_TYPE.MEDIA && <ManuscriptMedia />}
+      </div>
+
+    </CommonMessageContext.Provider>
   )
 }

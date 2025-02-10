@@ -315,11 +315,12 @@ function SubscribeBundle({ refresh, initSettings ,userId }: {
   userId: number
 }) {
   const bundleForm = useForm<{ list: DiscountInfo[] }>({
-    mode: "onChange"
+    mode: "all",
+    defaultValues:{
+      list: initSettings
+    }
   })
-  useEffect(() => {
-    bundleForm.setValue("list", initSettings)
-  }, [bundleForm, initSettings])
+  // bundleForm.setValue("list", initSettings)
   const { fields } = useFieldArray({
     control: bundleForm.control,
     name: "list"
@@ -354,12 +355,15 @@ function SubscribeBundle({ refresh, initSettings ,userId }: {
                         className="text-[#6D7781]"
                       >(平均${calcAvg(discount.price, discount.month_count)}/月)</span>
                     </section>
-                    <Switch checked={field.value.item_status} onCheckedChange={(value) => {
+                    <Switch className={"custom-switch"} checked={field.value.item_status} onCheckedChange={(value) => {
                       field.onChange({
                         ...field.value,
                         item_status: value
                       })
-                      updateSubscribeSettingItem(field.value).then(refresh)
+                      updateSubscribeSettingItem({
+                        ...field.value,
+                        item_status: value
+                      }).then(refresh)
                     }}
                     ></Switch>
                   </section>
@@ -374,9 +378,10 @@ function SubscribeBundle({ refresh, initSettings ,userId }: {
   )
 }
 
-function PromotionalActivities({ initDiscountList, unsubList }: {
+function PromotionalActivities({ initDiscountList, unsubList,refresh }: {
   initDiscountList: DiscountInfo[],
-  unsubList: DiscountInfo[]
+  unsubList: DiscountInfo[],
+  refresh: () => void
 }) {
   const form = useForm<{ list: DiscountInfo[] }>({
     mode: "all"
@@ -422,7 +427,17 @@ function PromotionalActivities({ initDiscountList, unsubList }: {
                     {dayjs(discount.discount_start_time * 1000).format(DATE_TIME_FORMAT)} {dayjs(discount.discount_end_time * 1000).format(DATE_TIME_FORMAT)}
                   </div>
                 </div>
-                <Switch checked={field.value.discount_status}></Switch>
+                <Switch className={"custom-switch"} checked={field.value.discount_status} onCheckedChange={(value) => {
+                  field.onChange({
+                    ...field.value,
+                    discount_status: value
+                  })
+                  updateSubscribeSettingItem({
+                    ...field.value,
+                    discount_status: value
+                  }).then(refresh)
+                }}
+                ></Switch>
               </TopLabelWrapper>
             )
           }} name={`list.${index}`}
@@ -542,8 +557,8 @@ export default function Page() {
             </section>
           </form>
         </section>
-        {userInfo && <SubscribeBundle initSettings={discountConfig.initList} refresh={refreshDefaultSettings} userId={userInfo?.id}/>}
-        <PromotionalActivities initDiscountList={discountConfig.initList} unsubList={discountConfig.unsubList}/>
+        {userInfo && defaultSettings?.items && <SubscribeBundle initSettings={discountConfig.initList} refresh={refreshDefaultSettings} userId={userInfo?.id}/>}
+        <PromotionalActivities initDiscountList={discountConfig.initList} unsubList={discountConfig.unsubList} refresh={refreshDefaultSettings}/>
       </section>
     </div>
   )

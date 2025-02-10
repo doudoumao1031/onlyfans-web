@@ -28,3 +28,15 @@
   bottom: -2px;
   left: -8px;
 }
+
+.custom-switch{
+  & > span {
+    background: #fff;
+  }
+  &.data-\[state\=checked\]\:bg-primary[data-state="checked"]{
+    background:  #4CD964;
+  }
+  &.data-\[state\=unchecked\]\:bg-input[data-state="unchecked"]{
+    background: #999;
+  }
+}
