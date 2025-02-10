@@ -4,6 +4,8 @@ import { buildImageUrl } from "@/lib/utils"
 import Image from "next/image"
 import Link from "next/link"
 
+export const dynamic = "force-dynamic"
+
 export default async function Page() {
   const bloggerData = await userCollectionUsers({ page: 1, pageSize: 10, from_id: 0 })
   if (!bloggerData) {

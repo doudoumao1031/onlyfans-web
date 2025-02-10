@@ -1,6 +1,8 @@
 import { recomActions } from "@/lib/actions"
 import FollowedList from "@/components/explore/followed-list"
 
+export const dynamic = "force-dynamic"
+
 export default async function Page() {
   const { items, hasMore } = await recomActions.followedList(1)
   return (

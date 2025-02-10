@@ -27,7 +27,7 @@ export default function PostInfo() {
   const getPostInfo = async () => {
     const res = await postDetail(Number(postId))
     const result = res?.data as unknown as PostData
-    console.log(res, "data------a");
+    console.log(res, "data------a")
 
     if (res?.data) {
       setPosTInfo(result)
@@ -84,17 +84,18 @@ export default function PostInfo() {
         </div>
 
         <div className="focus">
-          <div onClick={() => {
-            handleFllowing()
-          }}
+          <div
+            onClick={() => {
+              handleFllowing()
+            }}
             className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${isFocus
               ? "bg-white border border-main-pink text-main-pink"
               : " bg-main-pink text-white"
-              }`}
+            }`}
           >
             <IconWithImage
               url={`/icons/${isFocus ? "icon_info_followed_white@3x.png" : "icon_info_follow_white@3x.png"
-                }`}
+              }`}
               width={20}
               height={20}
               color={isFocus ? "#f08b94" : "#fff"}

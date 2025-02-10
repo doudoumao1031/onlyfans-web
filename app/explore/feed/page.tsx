@@ -1,7 +1,8 @@
 import FeedList from "@/components/explore/feed-list"
 import { recomActions } from "@/lib/actions"
 
-export const revalidate = 3600 // Regenerate the page every 3600 seconds
+export const dynamic = "force-dynamic"
+// export const revalidate = 3600 // Regenerate the page every 3600 seconds
 
 export default async function Page() {
   const { items, hasMore } = await recomActions.fetchFeeds(1)
