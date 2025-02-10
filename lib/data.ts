@@ -10,6 +10,7 @@ export type UserProfile = {
   last_name: string
   following: boolean //是否关注
   following_count: number //关注其他博主的数量
+  collection_user_count?: number //收藏博主数量，收藏帖子会自动收藏博主
   id: number
   img_count: number //图片数量
   live_certification: boolean //直播认证 0 未认证、1 已认证

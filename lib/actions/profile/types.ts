@@ -1,5 +1,5 @@
 export interface iPostAttachment {
-  file_id: string,
+  file_id: string
   id?: string
 }
 
@@ -15,37 +15,38 @@ type iPostVoteItem = {
 }
 
 export interface iPostVote {
-  id?: number,
-  items: iPostVoteItem[],
-  mu_select: boolean,
+  id?: number
+  items: iPostVoteItem[]
+  mu_select: boolean
   stop_time: number // timestamp
   title?: string // min 2
 }
 
 export interface iPostPrice {
-  id?: number,
+  id?: number
   price?: number // 0-999,
   user_type: iPostUserType
-  visibility: boolean,
+  visibility: boolean
 }
 
 export interface iPost {
   post: {
-    notice: boolean, //通知
-    title: string, // 标题
+    notice: boolean //通知
+    title: string // 标题
     id?: number
-  },
-  post_attachment?: iPostAttachment[], //帖子附件
-  post_mention_user?: Array<{user_id: number}> //提及的用户ID
+  }
+  post_attachment?: iPostAttachment[] //帖子附件
+  post_mention_user?: Array<{ user_id: number }> //提及的用户ID
   post_price?: iPostPrice[] // 帖子价格
   post_vote?: iPostVote
 }
 
-
-export type UpdateUserBaseReq = Pick<UserProfile, "about" | "photo" | "back_img" | "location" | "top_info"> & {
-  flags: number,
+export type UpdateUserBaseReq = Pick<
+  UserProfile,
+  "about" | "photo" | "back_img" | "location" | "top_info"
+> & {
+  flags: number
 }
-
 
 export type UserProfile = {
   about: string //简介
@@ -59,6 +60,7 @@ export type UserProfile = {
   last_name: string
   following: boolean //是否关注
   following_count: number //关注其他博主的数量
+  collection_user_count?: number //收藏博主数量，收藏帖子会自动收藏博主
   id: number
   img_count: number //图片数量
   live_certification: boolean //直播认证 0 未认证、1 已认证
@@ -82,4 +84,3 @@ export type UserProfile = {
 export interface ReplyForm {
   sub_reply: string
 }
-
