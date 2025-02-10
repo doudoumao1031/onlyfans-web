@@ -3,7 +3,8 @@ import Image from "next/image"
 import IconWithImage from "@/components/profile/icon"
 import Link from "next/link"
 import { clsx } from "clsx"
-import { PostData } from "@/lib"
+import { PostData, postPined } from "@/lib"
+import { useCommonMessageContext } from "@/components/common/common-message"
 
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
   return (
@@ -14,14 +15,27 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
   )
 }
 
-const ManuscriptActions = ({ id ,postStatus }:{id:number ,postStatus: boolean}) => {
+const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: boolean , refresh?: () => void}) => {
+
+  const { showMessage } = useCommonMessageContext()
+  const handlePined = () => {
+    postPined(id).then((data) => {
+      if (data?.code === 0) {
+        showMessage("置顶成功","",{
+          afterDuration: () => {
+            refresh?.()
+          }
+        })
+      }
+    })
+  }
   return (
     <section className="flex">
       <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
         <IconWithImage url={"/icons/profile/icon_fans_share@3x.png"} width={20} height={20} color={"#222"}/>
         <span>分享</span>
       </button>
-      <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
+      <button onTouchEnd={handlePined} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
         <IconWithImage url={"/icons/profile/icon_fans_stick_gray@3x.png"} width={20} height={20} color={"#222"}/>
         <span>置顶</span>
       </button>
@@ -53,7 +67,7 @@ const ManuscriptItemState = ({ state }: { state: boolean }) => {
     >审核中</span>
   )
 }
-export default function ManuscriptItem({ data }: { data: PostData }) {
+export default function ManuscriptItem({ data, refresh }: { data: PostData, refresh?: () => void }) {
   return (
     <section className="border-b border-gray-100 pt-4">
       <button className={"flex gap-2.5 text-left h-[100px] relative w-full"}>
@@ -87,7 +101,7 @@ export default function ManuscriptItem({ data }: { data: PostData }) {
           </section>
         </section>
       </button>
-      <ManuscriptActions id={data.post.id} postStatus={data.post.post_status}/>
+      <ManuscriptActions id={data.post.id} postStatus={data.post.post_status} refresh={refresh}/>
     </section>
   )
 }

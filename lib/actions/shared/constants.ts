@@ -37,7 +37,8 @@ export const ENDPOINTS = {
     USER_MEDIAS: "/post/userPostMedias",
     USER_POSTS: "/post/userPosts",
     USER_VOTE: "/post/userVote",
-    VIEW: "/post/view"
+    VIEW: "/post/view",
+    PINED: "/post/pinned"
   },
   COMMENT: {
     ADD: "/post/comment",

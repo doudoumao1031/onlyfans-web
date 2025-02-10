@@ -1,7 +1,7 @@
 "use client"
 
 import TabTitle, { iTabTitleOption } from "@/components/profile/tab-title"
-import React, { Fragment, SyntheticEvent, useEffect, useState } from "react"
+import React, { Fragment, SyntheticEvent, useEffect, useMemo, useState } from "react"
 import IconWithImage from "@/components/profile/icon"
 import ManuscriptItem from "@/components/profile/manuscript/manuscript-item"
 import Header from "@/components/common/header"
@@ -12,6 +12,7 @@ import { ListEnd, ListError, ListLoading } from "@/components/explore/list-state
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl } from "@/lib/utils"
+import useCommonMessage, { CommonMessageContext, useCommonMessageContext } from "@/components/common/common-message"
 
 enum ACTIVE_TYPE {
   POST = "POST",
@@ -85,7 +86,7 @@ const ManuscriptPost = () => {
             {({ items, isLoading, hasMore, error }) => (
               <Fragment>
                 {Boolean(error) && <ListError />}
-                {items?.map((item, index) => <ManuscriptItem data={item} key={index} />)}
+                {items?.map((item, index) => <ManuscriptItem data={item} key={index} refresh={fetchInitData}/>)}
                 {isLoading && <ListLoading />}
                 {!hasMore && items?.length > 0 && <ListEnd />}
               </Fragment>
@@ -209,13 +210,19 @@ export default function Page() {
     { label: "媒体", name: ACTIVE_TYPE.MEDIA }
   ]
 
+  const { showMessage, renderNode } = useCommonMessage()
+
   return (
-    <div>
-      <Header title="稿件管理" titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-main-pink text-base">草稿</Link>}>
-      </Header>
-      <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
-      {active === ACTIVE_TYPE.POST && <ManuscriptPost />}
-      {active === ACTIVE_TYPE.MEDIA && <ManuscriptMedia />}
-    </div>
+    <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
+      {renderNode}
+      <div>
+        <Header title="稿件管理" titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-main-pink text-base">草稿</Link>}>
+        </Header>
+        <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
+        {active === ACTIVE_TYPE.POST && <ManuscriptPost />}
+        {active === ACTIVE_TYPE.MEDIA && <ManuscriptMedia />}
+      </div>
+
+    </CommonMessageContext.Provider>
   )
 }
