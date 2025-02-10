@@ -288,8 +288,7 @@ export default function Page() {
                 setActiveKey(v.key)
               }}
               key={v.value.start}
-              className={`w-20 h-8 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""
-                }`}
+              className={`w-20 h-8 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""}`}
             >
               {v.label}
             </button>
@@ -333,8 +332,7 @@ export default function Page() {
                 setDateActive(v.value)
               }}
               key={index}
-              className={`mr-8 text-[#bbb] ${dateActive.start === v.value.start ? "text-main-pink" : ""
-                }`}
+              className={`mr-8 text-[#bbb] ${dateActive.start === v.value.start ? "text-main-pink" : ""}`}
             >
               {v.label}
             </button>
