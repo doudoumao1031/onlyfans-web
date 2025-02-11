@@ -28,7 +28,7 @@ export default function FormDrawer({
     title?: React.ReactNode,
     headerLeft?: (close: () => void) => React.ReactNode,
     headerRight?: (close: () => void) => React.ReactNode,
-    trigger: React.ReactNode,
+    trigger?: React.ReactNode,
     className?: string,
     outerControl?: boolean,
     isOpen?: boolean,

@@ -7,7 +7,7 @@ import useCommonMessage from "@/components/common/common-message"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-export default function RechargeDrawer () {
+export default function RechargeDrawer ({ children, isOpen, setIsOpen }: {children: React.ReactNode, isOpen: boolean, setIsOpen: (val: boolean) => void}) {
   const pathname = usePathname()
   const { showMessage, renderNode } = useCommonMessage()
   const [amount, setAmount] = useState<number>(0)
@@ -31,7 +31,7 @@ export default function RechargeDrawer () {
       }
     })
   }
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  // const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   const columns: { title: string, desc: string }[] = [
     { title: "服务", desc: "唯粉充值" },
     { title: "钱包余额", desc: ptBalance.toFixed(2).toString() + " USDT" },
@@ -68,11 +68,23 @@ export default function RechargeDrawer () {
   return (
     <>
       {renderNode}
+      <button
+        onTouchEnd={() => {
+          getSettingData()
+          setIsOpen(true)
+        }}
+      >
+        {children}
+      </button>
       <FormDrawer
         title={<span className={"text-[18px] font-semibold"}>充值</span>}
         headerLeft={(close) => {
           return (
-            <button onTouchEnd={close} className={"text-base text-[#777]"}>
+            <button onTouchEnd={(e) => {
+              e.preventDefault()
+              close()
+            }} className={"text-base text-[#777]"}
+            >
               <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"}/>
             </button>
           )
@@ -84,17 +96,10 @@ export default function RechargeDrawer () {
             </Link>
           )
         })}
-        trigger={
-          <button className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
-            onClick={() => {
-              getSettingData()
-              setDrawerOpen(true)
-            }}
-          >充值</button>
-        }
         className="h-[50vh] border-0"
-        setIsOpen={setDrawerOpen}
-        isOpen={drawerOpen}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        outerControl={true}
       >
         <div className="h-[50vh] w-full flex flex-col items-center text-black text-2xl bg-slate-50">
           <div className={"rounded-xl p-4 w-full text-base"}>
