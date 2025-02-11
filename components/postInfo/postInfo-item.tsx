@@ -12,7 +12,7 @@ import dayjs from "dayjs"
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState } from "react"
 
-export default function postData({ postData }: { postData: PostData }) {
+export default function Page({ postData }: { postData: PostData }) {
   const { showMessage, renderNode } = useCommonMessage()
   const [isFocus, setIsFocus] = useState<boolean>(postData.user?.following as boolean)
   const [openDrawer, seOpenDrawer] = useState<boolean>(false)
@@ -70,21 +70,27 @@ export default function postData({ postData }: { postData: PostData }) {
             onClick={() => {
               handleFllowing()
             }}
-            className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${isFocus
-              ? "bg-white border border-main-pink text-main-pink"
-              : " bg-main-pink text-white"
-              }`}
+            className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${
+              isFocus
+                ? "bg-white border border-main-pink text-main-pink"
+                : " bg-main-pink text-white"
+            }`}
           >
             <IconWithImage
-              url={`/icons/${isFocus ? "icon_info_followed_white@3x.png" : "icon_info_follow_white@3x.png"
-                }`}
+              url={`/icons/${
+                isFocus ? "icon_info_followed_white@3x.png" : "icon_info_follow_white@3x.png"
+              }`}
               width={20}
               height={20}
               color={isFocus ? "#f08b94" : "#fff"}
             />
             <span className="ml-1">{isFocus ? "已关注" : "关注"}</span>
           </div>
-          {isFocus && <div className="text-[10px] text-main-pink mt-1">订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}天</div>}
+          {isFocus && (
+            <div className="text-[10px] text-main-pink mt-1">
+              订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}天
+            </div>
+          )}
         </div>
       </div>
     )
@@ -110,14 +116,23 @@ export default function postData({ postData }: { postData: PostData }) {
       />
       {btnText() && (
         <div className="flex justify-center items-center mt-2">
-          <div onClick={() => { seOpenDrawer(true) }} className="w-[295px] h-[50px] bg-main-pink  text-white rounded-full text-[15px] flex justify-center items-center">
+          <div
+            onClick={() => {
+              seOpenDrawer(true)
+            }}
+            className="w-[295px] h-[50px] bg-main-pink  text-white rounded-full text-[15px] flex justify-center items-center"
+          >
             {btnText()}
           </div>
         </div>
       )}
-      {
-        openDrawer && <SubscribedDrawer userId={postData.user.id} name={postData.user.username} isOpen={openDrawer} />
-      }
+      {openDrawer && (
+        <SubscribedDrawer
+          userId={postData.user.id}
+          name={postData.user.username}
+          isOpen={openDrawer}
+        />
+      )}
     </div>
   )
 }
