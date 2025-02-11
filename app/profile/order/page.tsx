@@ -12,22 +12,32 @@ import {
   DrawerTrigger
 } from "@/components/ui/drawer"
 import ModalHeader from "@/components/common/modal-header"
-import { ISelectOption } from "@/components/common/sheet-select"
+import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
 import {
   AddBundleDiscount,
   addSubscribeSetting,
   addSubscribeSettingItem, DiscountInfo,
   getSubscribeSetting,
-  SubscribeSetting, updateSubscribeSettingItem, userApplyBlogger, UserInfoVo
+  SubscribeSetting, updateSubscribeSettingItem, userApplyBlogger
 } from "@/lib"
 import { Switch } from "@/components/ui/switch"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { addDiscount, baseSubscribe, bundleSubscribe } from "@/lib/actions/users/schemas"
+import { addDiscount, baseSubscribe, bundlePriceSchema, bundleSubscribe } from "@/lib/actions/users/schemas"
 import useCommonMessage from "@/components/common/common-message"
 import dayjs from "dayjs"
 import DateTimePicker from "@/components/common/date-time-picker"
 import { UserProfile, userProfile } from "@/lib/actions/profile"
+import clsx from "clsx"
+import IconWithImage from "@/components/profile/icon"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle
+} from "@/components/ui/dialog"
+import { z } from "zod"
 
 const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 
@@ -448,6 +458,100 @@ function PromotionalActivities({ initDiscountList, unsubList,refresh }: {
   )
 }
 
+function BasePriceSettings ({ valueChange,value }:{valueChange: (value: number) => void , value: number}) {
+  const [isOpen,setIsOpen] = useState<boolean>(false)
+  const [drawerIsOpen,setDrawerIsOpen] = useState<boolean>(false)
+
+  const customPriceForm = useForm<{price: string}>({
+    mode:"all",
+    resolver: zodResolver(z.object({
+      price: bundlePriceSchema
+    }))
+  })
+  const handleChange = (v:unknown) => {
+    if (v === 0) {
+      valueChange(v)
+    }
+    if (v === -1) {
+      customPriceForm.setValue("price",value.toString())
+      setDrawerIsOpen(true)
+    }
+  }
+
+  const options:ISelectOption[] = [
+    {
+      label:"免费",
+      value: 0
+    },
+    {
+      label:"自定义",
+      value: -1
+    }
+  ]
+
+  const { formState } = customPriceForm
+
+  return (
+    <>
+      <SheetSelect
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        onInputChange={handleChange} options={options}
+      >
+        <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
+          height={24} color={"#bbb"}
+        />
+      </SheetSelect>
+
+      <Dialog open={drawerIsOpen} onOpenChange={setDrawerIsOpen}>
+        <DialogContent className={"hide-modal-close border-none bg-transparent"}>
+          <form onSubmit={customPriceForm.handleSubmit((data => {
+            valueChange(Number(data.price))
+            setDrawerIsOpen(false)
+          }))}
+          >
+            <div className={"bg-white rounded-xl w-[270px] ml-auto mr-auto"}>
+              <div className="py-4 px-4">
+                <div className="text-center text-xs">
+                  自定义金额
+                </div>
+                <div className="mt-2.5">
+                  <Controller control={customPriceForm.control} render={({ field }) => {
+                    return (
+                      <input value={field.value} onChange={field.onChange} onBlur={(event) => {
+                        const targetValue = event.target.value
+                        if (value) {
+                          field.onChange(Number(targetValue).toFixed(2).toString())
+                        }
+                      }} className="w-full block bg-[#F8F8F8] rounded-full px-5 py-2"
+                      />
+                    )
+                  }} name={"price"}
+                  />
+                  {formState.errors.price?.message && <div className={"text-xs text-red-600 mt-1.5 px-1"}>{formState.errors.price.message}</div>}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 text-base border-t border-[#ddd]">
+                <button onTouchEnd={() => {
+                  setDrawerIsOpen(false)
+                }} className={"py-3.5 border-r border-[#ddd]"}
+                >取消
+                </button>
+                <button type={"submit"}  className={"py-3.5 text-main-pink font-medium"}>确定
+                </button>
+              </div>
+            </div>
+          </form>
+          <DialogHeader className={"hidden"}>
+            <DialogTitle/>
+            <DialogDescription/>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}
+
 
 export default function Page() {
   const router = useRouter()
@@ -501,6 +605,15 @@ export default function Page() {
     }
   }, [baseFeeForm, defaultSettings])
 
+  const realPrice = baseFeeForm.watch("price")
+
+  const showBaseValue = useMemo(() => {
+    if (Number(realPrice) === 0) {
+      return "免费"
+    }
+    return realPrice.toFixed(2)
+  },[realPrice])
+
   return (
     <div>
       {renderNode}
@@ -536,21 +649,54 @@ export default function Page() {
           <h1 className="text-base font-medium">基本订阅</h1>
           <form>
             <section className="mt-2.5">
+
               <Controller render={({ field, fieldState }) => {
                 return (
-                  <InputWithLabel
-                    errorMessage={fieldState.error?.message}
-                    onInputChange={field.onChange}
-                    onBlur={event => {
-                      field.onChange(Number(event.target.value).toFixed(2))
-                    }}
-                    value={field.value} label={"每月价格"} description={(
-                      <>
-                        <div>最小价格$1.99 USDT 或免费</div>
-                        您必须先开通 <span className="text-main-pink">Potato钱包</span>，然后才能设置订阅价格或收取打赏
-                      </>
+                  <section>
+                    <section className={clsx(
+                      "relative rounded-xl",
                     )}
-                  />
+                    >
+                      <label
+                        style={{
+                          transition: "top .1s",
+                          top: -7
+                        }} className={clsx(
+                          "absolute bg-white left-4 leading-none font-normal z-30 transition text-[#6D7781]",
+                        )}
+                      >
+                        每月价格
+                      </label>
+                      <section
+                        className={
+                          clsx("h-[46px] flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center justify-between",
+                          )
+                        }
+                      >
+                        <div >{showBaseValue}</div>
+                        <div className="shrink-0 flex items-center">
+                          <BasePriceSettings valueChange={field.onChange} value={field.value}/>
+                        </div>
+                      </section>
+                    </section>
+                    <section className="text-[#6D7781] text-xs px-4 mt-1.5">
+                      <div>最小价格$1.99 USDT 或免费</div>
+                      <div>您必须先开通 <span className="text-main-pink">Potato钱包</span>，然后才能设置订阅价格或收取打赏</div>
+                    </section>
+                  </section>
+                  // <InputWithLabel
+                  //   errorMessage={fieldState.error?.message}
+                  //   onInputChange={field.onChange}
+                  //   onBlur={event => {
+                  //     field.onChange(Number(event.target.value).toFixed(2))
+                  //   }}
+                  //   value={field.value} label={"每月价格"} description={(
+                  //     <>
+                  //       <div>最小价格$1.99 USDT 或免费</div>
+                  //       您必须先开通 <span className="text-main-pink">Potato钱包</span>，然后才能设置订阅价格或收取打赏
+                  //     </>
+                  //   )}
+                  // />
                 )
               }} name={"price"} control={baseFeeForm.control}
               />
