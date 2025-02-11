@@ -21,7 +21,7 @@ export default function Subscribe({ user }: { user: User }) {
       <div className="w-full h-full absolute flex justify-between bg-black/50 p-3 rounded-lg">
         <div className="flex gap-4 px-3 items-center">
           <div>
-            <Avatar fileId={photo} width={24}/>
+            <Avatar fileId={photo} width={16}/>
           </div>
           <div className="text-white">
             <div className="text-lg">
