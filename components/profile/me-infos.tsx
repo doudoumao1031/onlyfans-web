@@ -85,7 +85,7 @@ export default async function Page() {
             </div>
           </Link>
           <div className="text-xs mt-2.5">
-            <FoldingDescription about={data.about} location={data.location}/>
+            <FoldingDescription about={data.about} location={data.location} />
           </div>
         </section>
         <div className="p-5 border-b border-b-gray-100">
@@ -146,7 +146,7 @@ export default async function Page() {
             >
               <div className="text-xs text-[rgba(34,34,34,0.70)]">博主</div>
               <div className="font-medium text-[#2b2b2b] text-[34px] ">
-                {data.following_count}
+                {data.collection_user_count}
               </div>
             </Link>
             <Link

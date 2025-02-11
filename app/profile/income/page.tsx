@@ -24,6 +24,7 @@ import useCommonMessage, {
   CommonMessageContext,
   useCommonMessageContext
 } from "@/components/common/common-message"
+import { getEvenlySpacedPoints } from "@/lib/utils"
 
 const Withdrawal = ({
   children,
@@ -171,7 +172,8 @@ function ChartData({ params }: { params: UserMetricDayReq }) {
   useEffect(() => {
     getUserMetricDay(params).then((response) => {
       if (response) {
-        setData(response.list.reverse())
+        const result = getEvenlySpacedPoints<UserMetricDay>(response.list.reverse())
+        setData(result)
       }
     })
   }, [params])

@@ -6,6 +6,7 @@ import { options } from "@/components/profile/chart-line"
 import { getUserMetricDay, UserMetricDay, UserMetricDayReq } from "@/lib"
 import dayjs from "dayjs"
 import { Line } from "react-chartjs-2"
+import { getEvenlySpacedPoints } from "@/lib/utils"
 export type TProos = {
   tabs: Record<string, string>,
   title: string
@@ -60,7 +61,8 @@ export default function Page({ tabs, title }: TProos) {
   const getInfoData = async () => {
     const res = await getUserMetricDay(dateTabs[dateType]?.value || {})
     if (!res) return
-    setDataInfo(res.list.reverse())
+    const result = getEvenlySpacedPoints<UserMetricDay>(res.list.reverse())
+    setDataInfo(result)
   }
   const lineData = useMemo(() => {
     return {

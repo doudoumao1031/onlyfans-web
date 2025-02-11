@@ -46,7 +46,7 @@ export default function Page() {
             <Fragment>
               {Boolean(error) && <ListError />}
               {items.map((v, i) => (
-                <Link key={i} href={`/postInfo?postId=${v.post.id}`}>
+                <Link key={i} href={`/postInfo/${v.post.id}`}>
                   <div key={i} className={"h-28   mb-4 flex"}>
                     <Image src={buildImageUrl(v.post_attachment?.[0]?.file_id)} width={112} height={112} alt={"post image"} className={"h-28 w-28 bg-cover mr-2 shrink-0 rounded-md border border-slate-600"} />
                     <div className="flex flex-col justify-between flex-1">
