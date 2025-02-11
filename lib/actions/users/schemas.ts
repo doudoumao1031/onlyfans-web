@@ -7,9 +7,11 @@ export const pageInfoSchema = z.object({
 })
 
 
+export const bundlePriceSchema = z.string({ message:"请输入" }).refine(d => Number(d) > 1.99,"不能小于2").refine(d => Number(d) < 1000,"不能超过999.99")
+
 export const bundleSubscribe = z.object({
   month_count: z.union([z.number({ message:"请选择" }), z.string({ message:"请选择" })]),
-  price: z.string({ message:"请输入" }).refine(d => Number(d) > 1.99,"不能小于1.99").refine(d => Number(d) < 1000,"不能超过999.99")
+  price: bundlePriceSchema
 })
 
 export const baseSubscribe = z.object({
