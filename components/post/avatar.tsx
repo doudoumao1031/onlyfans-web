@@ -8,8 +8,8 @@ export default function Avatar({ fileId, width = 16 }: { fileId: string; width?:
         src={buildImageUrl(fileId)}
         alt=""
         className={`rounded-full border-2 border-white w-${width} h-${width}`}
-        width={50}
-        height={50}
+        width={66}
+        height={66}
       />
     </div>
   )

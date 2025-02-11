@@ -10,17 +10,13 @@ export default function Subscribe({ user }: { user: User }) {
   const { back_img, photo, id, first_name, last_name, username, sub_price, sub } = user
 
   const content = (
-    <div
-      className="flex justify-center w-full bg-black rounded-lg h-[100px]"
-      style={{
-        backgroundImage: `url(${buildImageUrl(back_img)})`
-      }}
-    >
+    <div className="flex justify-center w-full bg-black rounded-lg h-[100px]">
       <Image
         src={back_img ? buildImageUrl(back_img) : getUserDefaultBackImg(username)}
+        alt="Background"
         width={280}
         height={100}
-        alt="Background"
+        className="w-full rounded-lg"
       />
       <div className="w-full h-full absolute flex justify-between bg-black/50 p-3 rounded-lg">
         <div className="flex gap-4 px-3 items-center">
