@@ -43,7 +43,7 @@ export default function Subscribe({ user }: { user: User }) {
         {content}
       </Link>
       {!sub && (
-        <div className="absolute right-4 bottom-4 z-10">
+        <div className="absolute right-4 top-4 z-10">
           <SubscribedButton name={first_name} userId={Number(id)} subPrice={sub_price} type={"button"}/>
         </div>
       )}
