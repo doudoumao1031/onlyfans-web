@@ -10,15 +10,22 @@ function ErrorContent() {
   const router = useRouter()
   const redirectPath = search.get("redirect")
   const [userId, setUserId] = useState(20240990)
+  const [token, setToken] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
 
   const handleClick = async () => {
-    if (!userId) {
-      alert("Please enter user ID")
+    if (!userId && !token) {
+      alert("Please enter either user ID or token")
       return
     }
 
     try {
+      if (token) {
+        document.cookie = `${TOKEN_KEY}=${token}; path=/; secure; samesite=lax`
+        router.push(redirectPath ?? "/explore/feed")
+        return
+      }
+
       const data = await login({ user_id: userId })
       if (data && data.token) {
         document.cookie = `${TOKEN_KEY}=${data.token}; path=/; secure; samesite=lax`
@@ -36,23 +43,44 @@ function ErrorContent() {
     <div className="flex min-h-screen items-center justify-center">
       <div className="text-center">
         {errorMsg && <div className="text-red-500 mb-4">{errorMsg}</div>}
-        <h1 className="text-2xl font-bold mb-4">403 - Unauthorized</h1>
-        <p className="text-gray-600 mb-4">Please enter your Potato user ID to access the content</p>
-        <div className="mb-4">
-          <input
-            type="text"
-            value={userId}
-            onChange={(e) => setUserId(Number(e.target.value))}
-            placeholder="Enter User ID"
-            className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+        <h1 className="text-2xl font-bold mb-4">403 - Unauthorized / 未授权访问</h1>
+        <div className="space-y-4">
+          <div>
+            <input
+              type="text"
+              value={userId}
+              onChange={(e) => setUserId(Number(e.target.value))}
+              className="border rounded px-4 py-2 w-64"
+              placeholder="Enter User ID / 输入用户ID"
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              Type #getself in Potato Chat to get your User ID
+              <br />
+              在Potato聊天中输入 #getself 获取用户ID
+            </p>
+          </div>
+          <div className="text-gray-500">- OR - / - 或者 -</div>
+          <div>
+            <input
+              type="text"
+              value={token}
+              onChange={(e) => setToken(e.target.value)}
+              className="border rounded px-4 py-2 w-64"
+              placeholder="Enter Token / 输入令牌"
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              For development env, you can type 1-28
+              <br />
+              开发环境可以输入 1-28
+            </p>
+          </div>
+          <button
+            onClick={handleClick}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Login / 登录
+          </button>
         </div>
-        <button
-          onClick={handleClick}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          登录
-        </button>
       </div>
     </div>
   )
