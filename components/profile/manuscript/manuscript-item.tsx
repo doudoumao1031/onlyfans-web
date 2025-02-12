@@ -15,7 +15,7 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
   )
 }
 
-const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: boolean , refresh?: () => void}) => {
+const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: number , refresh?: () => void}) => {
 
   const { showMessage } = useCommonMessageContext()
   const handlePined = () => {
@@ -58,7 +58,7 @@ const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: bo
   )
 }
 
-const ManuscriptItemState = ({ state }: { state: boolean }) => {
+const ManuscriptItemState = ({ state }: { state: number }) => {
   if (state) return null
   return (
     <span className={clsx(
