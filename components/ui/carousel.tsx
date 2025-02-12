@@ -15,8 +15,8 @@ export default function EmblaCarousel({ ids, startIndex }: { ids: string[]; star
               <LazyImg
                 src={buildImageUrl(v)}
                 alt=""
-                width={1200}
-                height={800}
+                width={800}
+                height={1200}
                 className="object-contain max-w-full max-h-[100vh]"
               />
             </div>

@@ -9,14 +9,16 @@ export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
   const [isClick, setIsClick] = useState<boolean>(false)
   if (!item) return null
   const { post_attachment, post_price, user, post, post_metric } = item
+  const showIds = post_attachment.map((v) => v.file_id).join("_")
   return (
     <Link
       className="w-[calc(50%_-_8px)] h-[220px] mt-4"
       href={
         post.visibility === 1 && !user.sub
           ? "javascript:void(0);"
-          : `/space/${id}/media/${post_attachment[0].file_type === FileType.Video ? "video" : "image"
-          }/${post_attachment[0].file_id}`
+          : `/space/${id}/media/${
+              post_attachment[0].file_type === FileType.Video ? "video" : "image"
+            }/${post_attachment[0].file_type === FileType.Video ? showIds : showIds + "_" + 0}}`
       }
     >
       <div
@@ -31,9 +33,13 @@ export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
         className=" overflow-hidden relative rounded-lg text-xs  text-white flex flex-col justify-between w-full h-full mb-4 bg-cover  bg-gray-300"
       >
         <div className="absolute w-full h-full">
-          <LazyImg style={{ objectFit: "cover" }} width={200} height={400} className="w-full h-full" src={buildImageUrl(
-            post_attachment[0].thumb_id || post_attachment[0].file_id
-          )} alt={""}
+          <LazyImg
+            style={{ objectFit: "cover" }}
+            width={200}
+            height={400}
+            className="w-full h-full"
+            src={buildImageUrl(post_attachment[0].thumb_id || post_attachment[0].file_id)}
+            alt={""}
           />
         </div>
         <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
