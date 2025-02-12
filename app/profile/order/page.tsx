@@ -41,7 +41,7 @@ import { z } from "zod"
 
 const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 
-const AddSubscriptionModal = ({ children, refresh ,userId }: { children: React.ReactNode, refresh: () => void ,userId: number}) => {
+const AddSubscriptionModal = ({ children, refresh ,userId, hasSub }: { children: React.ReactNode, refresh: () => void ,userId: number, hasSub: number[]}) => {
   const { showMessage, renderNode } = useCommonMessage()
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const handleClose = () => setIsOpen(false)
@@ -57,6 +57,15 @@ const AddSubscriptionModal = ({ children, refresh ,userId }: { children: React.R
       form.reset()
     }
   }, [isOpen, form])
+
+  const monthSelections = useMemo(() => {
+    return [
+      { label: "1个月", value: "1" },
+      { label: "2个月", value: "2" },
+      { label: "3个月", value: "3" },
+      { label: "4个月", value: "4" }
+    ].filter(item => !hasSub.includes(Number(item.value)))
+  },[hasSub])
 
 
   return (
@@ -113,12 +122,7 @@ const AddSubscriptionModal = ({ children, refresh ,userId }: { children: React.R
                 return (
                   <InputWithLabel errorMessage={fieldState.error?.message} placeholder={"订阅时限"}
                     onInputChange={field.onChange}
-                    options={[
-                      { label: "1个月", value: "1" },
-                      { label: "2个月", value: "2" },
-                      { label: "3个月", value: "3" },
-                      { label: "4个月", value: "4" }
-                    ]}
+                    options={monthSelections}
                     value={field.value}
                   />
                 )
@@ -335,6 +339,11 @@ function SubscribeBundle({ refresh, initSettings ,userId }: {
     control: bundleForm.control,
     name: "list"
   })
+
+  useEffect(() => {
+    bundleForm.setValue("list",initSettings)
+  },[bundleForm, initSettings])
+
   return (
     <section className={"pt-5 pb-5 border-b border-gray-100"}>
       <form>
@@ -342,7 +351,7 @@ function SubscribeBundle({ refresh, initSettings ,userId }: {
           <section className="flex justify-between items-center">
             <h1 className="text-base font-medium">捆绑订阅</h1>
             {fields.length < 6 && (
-              <AddSubscriptionModal refresh={refresh} userId={userId}>
+              <AddSubscriptionModal refresh={refresh} userId={userId} hasSub={initSettings.map(item => item.month_count)}>
                 <button
                   className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
                 >添加
@@ -561,6 +570,7 @@ export default function Page() {
   const refreshDefaultSettings = () => {
     getSubscribeSetting().then(response => {
       if (response) {
+        console.log(response)
         setDefaultSettings({
           ...response,
           items: response?.items || []
@@ -703,8 +713,8 @@ export default function Page() {
             </section>
           </form>
         </section>
-        {userInfo && defaultSettings?.items && <SubscribeBundle initSettings={discountConfig.initList} refresh={refreshDefaultSettings} userId={userInfo?.id}/>}
-        <PromotionalActivities initDiscountList={discountConfig.initList} unsubList={discountConfig.unsubList} refresh={refreshDefaultSettings}/>
+        {userInfo && Number(defaultSettings?.price) > 0 && defaultSettings?.items && <SubscribeBundle initSettings={defaultSettings?.items} refresh={refreshDefaultSettings} userId={userInfo?.id}/>}
+        {Number(defaultSettings?.price) > 0 && <PromotionalActivities initDiscountList={discountConfig.initList} unsubList={discountConfig.unsubList} refresh={refreshDefaultSettings}/>}
       </section>
     </div>
   )

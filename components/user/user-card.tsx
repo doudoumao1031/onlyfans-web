@@ -31,7 +31,7 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo, subsc
           <div className="w-full">
             <div className="flex px-3 items-center justify-start">
               <div className="w-1/4">
-                <Avatar src={buildImageUrl(user.photo)} vlog={user.live_certification} initials={user.username || user.first_name} />
+                <Avatar src={user.photo} vlog={user.live_certification} />
               </div>
               <div className="flex-col w-3/4">
                 <div>
