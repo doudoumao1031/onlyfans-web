@@ -1,7 +1,7 @@
-import Avatar from "./avatar"
 import { User } from "@/lib"
 import { buildMention } from "./utils"
 import dayjs from "dayjs"
+import CommonAvatar from "@/components/common/common-avatar"
 
 export default function UserTitle({ user, pub_time }: { user: User, pub_time: number }) {
   const { photo, first_name, last_name, username } = user
@@ -9,7 +9,7 @@ export default function UserTitle({ user, pub_time }: { user: User, pub_time: nu
     <div className={"flex justify-between"}>
       <div className="flex gap-4 px-3">
         <div>
-          <Avatar fileId={photo}/>
+          <CommonAvatar photoFileId={photo} size={50}/>
         </div>
         <div>
           <div className="text-lg">
