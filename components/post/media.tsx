@@ -1,5 +1,4 @@
 import Link from "next/link"
-import Image from "next/image"
 import { Attachment, FileType, TPost } from "./types"
 import { buildImageUrl } from "@/lib/utils"
 import { VideoPreview } from "./video-preview"
@@ -11,18 +10,27 @@ export default function Media({ data, post, user, id }: { data: Attachment[], po
 
   return (
     <div className="grid grid-cols-3 gap-2 relative">
-      {post.visibility === 1 && !user.sub && (
-        <div className="w-full h-full bg-black bg-opacity-5 rounded-lg backdrop-blur absolute top-0 left-0 z-[99] flex flex-col items-center justify-center">
-          <IconWithImage
-            url="/icons/icon_info_lock_white.png"
-            width={32}
-            color="#fff"
-            height={32}
+      {((post.visibility === 1 && !user.sub) || post.visibility === 2) && (
+        <>
+          <div className="w-full h-full bg-black bg-opacity-5 rounded-lg backdrop-blur absolute top-0 left-0 z-[99] flex flex-col items-center justify-center">
+            <IconWithImage
+              url="/icons/icon_info_lock_white.png"
+              width={32}
+              color="#fff"
+              height={32}
+            />
+            <span className="mt-2 text-white">订阅内容，请订阅后查看</span>
+          </div>
+          <LazyImg
+            className={"aspect-square rounded-md block"}
+            src={"/icons/default/img_media_default.png"}
+            alt=""
+            width={200}
+            height={200}
           />
-          <span className="mt-2 text-white">订阅内容，请订阅后查看</span>
-        </div>
+        </>
       )}
-      {data.map(({ file_id, file_type, thumb_id }, i) => (
+      {(post.visibility === 0 || post.visibility === 1 && user.sub) && data.map(({ file_id, file_type, thumb_id }, i) => (
         <Link
           key={i}
           href={`${id ? "/space/" + id : ""}/media/${file_type === FileType.Video ? "video" : "image"}/${file_id}`}
