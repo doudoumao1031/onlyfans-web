@@ -7,8 +7,18 @@ import LazyImg from "@/components/common/lazy-img"
 import IconWithImage from "../profile/icon"
 import { User } from "@/lib"
 
-export default function Media({ data, post, user, id }: { data: Attachment[], post: TPost, user: User, id: string | undefined }) {
-
+export default function Media({
+  data,
+  post,
+  user,
+  id
+}: {
+  data: Attachment[]
+  post: TPost
+  user: User
+  id: string | undefined
+}) {
+  const showIds = data.map((v) => v.file_id).join("_")
   return (
     <div className="grid grid-cols-3 gap-2 relative">
       {post.visibility === 1 && !user.sub && (
@@ -22,25 +32,29 @@ export default function Media({ data, post, user, id }: { data: Attachment[], po
           <span className="mt-2 text-white">订阅内容，请订阅后查看</span>
         </div>
       )}
-      {data.map(({ file_id, file_type, thumb_id }, i) => (
-        <Link
-          key={i}
-          href={`${id ? "/space/" + id : ""}/media/${file_type === FileType.Video ? "video" : "image"}/${file_id}`}
-          className={file_type === FileType.Video ? "col-span-3" : "block"}
-        >
-          {file_type === FileType.Video ? (
-            <VideoPreview fileId={file_id} thumbId={thumb_id} />
-          ) : (
-            <LazyImg
-              className="aspect-square rounded-md "
-              src={buildImageUrl(file_id)}
-              alt=""
-              width={200}
-              height={200}
-            />
-          )}
-        </Link>
-      ))}
+      {data.map(({ file_id, file_type, thumb_id }, i) => {
+        return (
+          <Link
+            key={i}
+            href={`${id ? "/space/" + id : ""}/media/${
+              file_type === FileType.Video ? "video" : "image"
+            }/${file_type === FileType.Video ? showIds : showIds + "_" + i}`}
+            className={file_type === FileType.Video ? "col-span-3" : "block"}
+          >
+            {file_type === FileType.Video ? (
+              <VideoPreview fileId={file_id} thumbId={thumb_id} />
+            ) : (
+              <LazyImg
+                className="aspect-square rounded-md "
+                src={buildImageUrl(file_id)}
+                alt=""
+                width={200}
+                height={200}
+              />
+            )}
+          </Link>
+        )
+      })}
     </div>
   )
 }
