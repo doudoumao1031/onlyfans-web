@@ -13,12 +13,17 @@ export default async function Page() {
     throw new Error()
   }
   const totalPosts = posts.total
-  const noSettings = (subscribeSettings?.items?.length ?? 0) === 0
+  const { items = [], price } = subscribeSettings
+  let canPub = false
+  if (Number(price) === 0 || (price > 0 && items.length > 0)) {
+    canPub = true
+  }
+
   return (
     <div className="px-4">
       {/* 开启订阅之后才能发布 */}
       {
-        totalPosts > 0 && !noSettings && (
+        totalPosts > 0 && canPub && (
           <PostsCard
             link={"/profile/manuscript/draft/edit"}
             description={"通过订阅、打赏都可以赚取现金"}
@@ -28,7 +33,7 @@ export default async function Page() {
         )
       }
       {/* 未开启订阅 */}
-      {noSettings && (
+      {!canPub && (
         <PostsCard
           link={"/profile/order"}
           description={"成为唯粉博主，启航个人新旅途"}
@@ -37,7 +42,7 @@ export default async function Page() {
         />
       )}
       {/*已开启订阅，但未发布帖子*/}
-      {!noSettings && totalPosts === 0 && (
+      {canPub && totalPosts === 0 && (
         <PostsCard
           link={"/profile/manuscript/draft/edit"}
           description={"分享你的帖子，赚取真金白银"}

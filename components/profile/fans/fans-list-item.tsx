@@ -1,8 +1,7 @@
 import IconWithImage from "@/components/profile/icon"
 import { SubscribeUserInfo } from "@/lib"
-import { buildImageUrl } from "@/lib/utils"
 import dayjs from "dayjs"
-import LazyImg from "@/components/common/lazy-img"
+import CommonAvatar from "@/components/common/common-avatar"
 
 
 const showTime = (startTime: number) => {
@@ -20,7 +19,7 @@ export default function FansListItem({ isSubscribe, data }: {
   return (
     <div className={"flex gap-4 items-center"}>
       <div className={" shrink-0"}>
-        <LazyImg className={"rounded-full"} src={buildImageUrl(data.user.photo)} alt={"avatar"} width={40} height={40}/>
+        <CommonAvatar photoFileId={data.user.photo} size={40}/>
       </div>
       <div className={"flex-1 flex justify-between border-b border-[#ddd] py-3 "}>
         <button className={"text-left"}>
