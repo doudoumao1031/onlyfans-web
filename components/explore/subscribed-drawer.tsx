@@ -6,31 +6,23 @@ import { useState, useMemo,useEffect } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
 
-interface SubscribedDrawerProps {
-    userId: number;
-    name: string,
-    trigger?: (event: () => void) => React.ReactNode,
-    isOpen: boolean
-}
-
-const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigger, isOpen }) => {
+export default function SubscribedDrawer ({ userId, name, isOpen, setIsOpen }:{
+  userId: number
+  name: string
+  isOpen: boolean
+  setIsOpen: (val: boolean) => void
+})  {
 
   const { showMessage, renderNode } = useCommonMessage()
   const [items, setItems] = useState<DiscountInfo[]>([])
   const [discount, setDiscount] = useState<DiscountInfo>()
   const [amount, setAmount] = useState<number>(0)
-  const [free, setFree] = useState<boolean>(false)
   useEffect(() => {
     getSettingData()
   }, [])
   const getSettingData = async () => {
     try {
       const settings = await viewUserSubscribeSetting({ user_id: userId })
-      if (settings && settings.price === 0) {
-        setFree(true)
-      } else {
-        setFree(false)
-      }
       if (settings?.items) {
         const list: DiscountInfo[] = []
         list.push({
@@ -70,13 +62,12 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
       }
     }
   }, [discount])
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(isOpen)
   const handleSubmit = async () => {
     await addSubOrder({ user_id: userId, price: Number(amount), id: discount?.id ?? 0 })
       .then((result) => {
         if (result && result.code === 0) {
           console.log("订阅成功")
-          setDrawerOpen(false)
+          setIsOpen(false)
           showMessage("订阅成功", "success")
         } else {
           console.log("订阅失败:", result?.message)
@@ -96,21 +87,18 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
         )}
         headerLeft={(close) => {
           return (
-            <button onTouchEnd={close} className={"text-base text-[#777]"}>
+            <button onTouchEnd={(e) => {
+              e.preventDefault()
+              close()
+            }} className={"text-base text-[#777]"}
+            >
               <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
             </button>
           )
         }}
-        trigger={trigger && trigger(() => {
-          if (free) {
-            handleSubmit()
-          } else {
-            setDrawerOpen(true)
-          }
-        })}
         className="h-[43vh] border-0"
-        setIsOpen={setDrawerOpen}
-        isOpen={drawerOpen}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
         outerControl
       >
         <input hidden={true} name="user_id" defaultValue={userId} />
@@ -191,5 +179,3 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
     </>
   )
 }
-
-export default SubscribedDrawer

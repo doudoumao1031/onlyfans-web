@@ -31,7 +31,7 @@ export enum FileType {
 export type TPost = {
   id: number //id
   notice: boolean //是否发送通知
-  post_status: boolean //发布状态
+  post_status: number //发布状态 0 草稿状态 1发布 2审核中 3未通过
   pub_time: number //发布时间
   title: string //主题
   visibility: number //可见性: 0 可浏览 1 订阅可浏览 2支付可浏览

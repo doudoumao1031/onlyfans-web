@@ -9,7 +9,7 @@ import { PostData } from "@/lib"
 import { userDelFollowing, userFollowing } from "@/lib/actions/space"
 import { buildImageUrl } from "@/lib/utils"
 import dayjs from "dayjs"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function Page({ postData }: { postData: PostData }) {
@@ -131,6 +131,7 @@ export default function Page({ postData }: { postData: PostData }) {
           userId={postData.user.id}
           name={postData.user.username}
           isOpen={openDrawer}
+          setIsOpen={seOpenDrawer}
         />
       )}
     </div>

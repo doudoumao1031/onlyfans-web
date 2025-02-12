@@ -5,7 +5,6 @@ import { BloggerInfo } from "@/lib"
 import IconWithImage from "@/components/profile/icon"
 import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
 import Link from "next/link"
-import SubscribedButton from "@/components/explore/subscribed-button"
 /**
  * 博主名片
  * @param user 用户信息
@@ -79,12 +78,15 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo, subsc
     <div className="relative">
       <Link href={`/space/${user.id}/feed`}>
         {cardContent}
+        {subscribe && !user.sub && (
+          <div className="absolute right-4 bottom-4 z-10">
+            {/*<SubscribedButton userId={user.id} name={user.first_name} subPrice={user.sub_price} type={"button"}/>*/}
+            <div className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white">
+              <span className="text-xs text-nowrap">免费/订阅</span>
+            </div>
+          </div>
+        )}
       </Link>
-      {subscribe && !user.sub && (
-        <div className="absolute right-4 bottom-4 z-10">
-          <SubscribedButton userId={user.id} name={user.first_name} subPrice={user.sub_price} type={"button"} />
-        </div>
-      )}
     </div>
   )
 }

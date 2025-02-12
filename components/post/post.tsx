@@ -30,7 +30,7 @@ export default function Post({
   isInfoPage?: boolean
   id?: string
 }) {
-  const { user, post, post_attachment, post_metric, mention_user, collection, star } = data
+  const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } = data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
   const [showComments, setShowComments] = useState(false)
   const [comments, setComments] = useState<CommentInfo[]>()
@@ -40,7 +40,7 @@ export default function Post({
   }
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
-      {!isInfoPage && <UserTitle user={user} />}
+      {!isInfoPage && <UserTitle user={user} pub_time={post.pub_time} />}
 
       <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
       <UserHomePageLink userId={user.id.toString()} />
@@ -57,7 +57,7 @@ export default function Post({
           <Subscribe user={user} />
         </div>
       )}
-      {hasVote && (
+      {hasVote && post_vote && (
         <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
           <Image src="/icons/vote.png" alt="" width={20} height={20} />
           <div className="text-red-500 text-sm">投票</div>

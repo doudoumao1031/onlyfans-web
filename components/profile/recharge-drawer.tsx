@@ -1,19 +1,25 @@
 "use client"
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-const RechargeDrawer: React.FC = () => {
+export default function RechargeDrawer ({ children, isOpen, setIsOpen }: {children: React.ReactNode, isOpen: boolean, setIsOpen: (val: boolean) => void}) {
   const pathname = usePathname()
   const { showMessage, renderNode } = useCommonMessage()
   const [amount, setAmount] = useState<number>(0)
   const [ptBalance, setPtBalance] = useState<number>(0)
   const [wfBalance, setWfBalance] = useState<number>(0)
   const [rate, setRate] = useState<string>("1:1")
+  const [errorMessage, setErrorMessage] = useState<string>("")
+  useMemo(() => {
+    if (amount && amount > 0) {
+      setErrorMessage("")
+    }
+  },  [amount])
 
   const getSettingData = async () => {
     setAmount(0)
@@ -25,8 +31,8 @@ const RechargeDrawer: React.FC = () => {
       }
     })
   }
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-  const columns:{title: string, desc: string}[] = [
+  // const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  const columns: { title: string, desc: string }[] = [
     { title: "服务", desc: "唯粉充值" },
     { title: "钱包余额", desc: ptBalance.toFixed(2).toString() + " USDT" },
     { title: "唯粉余额", desc: wfBalance.toFixed(2).toString() + " USDT" },
@@ -35,7 +41,7 @@ const RechargeDrawer: React.FC = () => {
 
   async function handleRecharge(amount: number) {
     if (!amount || amount <= 0) {
-      showMessage("请输入充值金额")
+      setErrorMessage("充值金额必须大于0")
       return
     }
     const tradeNo = await addWalletOrder({ amount: Number(amount) })
@@ -62,12 +68,24 @@ const RechargeDrawer: React.FC = () => {
   return (
     <>
       {renderNode}
+      <button
+        onTouchEnd={() => {
+          getSettingData()
+          setIsOpen(true)
+        }}
+      >
+        {children}
+      </button>
       <FormDrawer
         title={<span className={"text-[18px] font-semibold"}>充值</span>}
         headerLeft={(close) => {
           return (
-            <button onTouchEnd={close} className={"text-base text-[#777]"}>
-              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
+            <button onTouchEnd={(e) => {
+              e.preventDefault()
+              close()
+            }} className={"text-base text-[#777]"}
+            >
+              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"}/>
             </button>
           )
         }}
@@ -78,17 +96,10 @@ const RechargeDrawer: React.FC = () => {
             </Link>
           )
         })}
-        trigger={
-          <button className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
-            onClick={() => {
-              getSettingData()
-              setDrawerOpen(true)
-            }}
-          >充值</button>
-        }
         className="h-[50vh] border-0"
-        setIsOpen={setDrawerOpen}
-        isOpen={drawerOpen}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        outerControl={true}
       >
         <div className="h-[50vh] w-full flex flex-col items-center text-black text-2xl bg-slate-50">
           <div className={"rounded-xl p-4 w-full text-base"}>
@@ -129,11 +140,13 @@ const RechargeDrawer: React.FC = () => {
             >
               全部
             </button>
+            <section className={"absolute bottom-[-12px] text-red-600 text-xs ml-1"}>
+              {errorMessage}
+            </section>
           </div>
           <div className="my-[40px] self-center">
             <button
-              disabled={!amount || amount === 0}
-              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${amount === 0 || !amount ? "bg-gray-300" : "bg-main-pink"}`}
+              className={"w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full bg-main-pink"}
               onTouchEnd={(e) => {
                 e.preventDefault()
                 handleRecharge(amount)
@@ -146,5 +159,3 @@ const RechargeDrawer: React.FC = () => {
     </>
   )
 }
-
-export default RechargeDrawer

@@ -19,6 +19,7 @@ export default function TabLinks() {
     <div className="w-full text-center grid grid-cols-2 border-b border-gray-100">
       {links.map((link) => (
         <Link
+          replace={true}
           prefetch={true}
           key={link.name}
           href={link.href}
