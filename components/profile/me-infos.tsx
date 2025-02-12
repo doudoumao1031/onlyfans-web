@@ -7,6 +7,7 @@ import { userProfile } from "@/lib/actions/profile"
 import { userWallet } from "@/lib"
 import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
 import FoldingDescription from "@/components/profile/folding-description"
+import LazyImg from "../common/lazy-img"
 
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
@@ -34,29 +35,41 @@ export default async function Page() {
     <div>
       <div
         className={"profile-content bg-slate-300 bg-cover"}
-        style={{
-          backgroundImage: data.back_img ? `url(${buildImageUrl(data.back_img)})` : `url(${getUserDefaultBackImg(data.username)})`
-        }}
+        // style={{
+        //   backgroundImage: data.back_img
+        //     ? `url(${buildImageUrl(data.back_img)})`
+        //     : "url(/icons/base-header.png)"
+        // }}
       >
-        <Header
-          right={(
-            <>
-              <IconWithImage
-                url="/icons/profile/icon_nav_code_white@3x.png"
-                width={22}
-                height={22}
-              />
-              <IconWithImage
-                url="/icons/profile/icon_nav_share_white@3x.png"
-                width={22}
-                height={22}
-              />
-            </>
-          )}
-          title="My"
-          backIconColor={"#fff"}
+        <LazyImg
+          style={{ objectFit: "cover" }}
+          width={200}
+          height={400}
+          className="w-full h-full"
+          src={data.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"}
+          alt={""}
         />
-        <div className="text-xs pl-6 pr-6 text-white">{data.top_info}</div>
+        <div className=" absolute top-0 left-0 w-full">
+          <Header
+            right={
+              <>
+                <IconWithImage
+                  url="/icons/profile/icon_nav_code_white@3x.png"
+                  width={22}
+                  height={22}
+                />
+                <IconWithImage
+                  url="/icons/profile/icon_nav_share_white@3x.png"
+                  width={22}
+                  height={22}
+                />
+              </>
+            }
+            title="My"
+            backIconColor={"#fff"}
+          />
+          <div className="text-xs pl-6 pr-6 text-white ">{data.top_info}</div>
+        </div>
       </div>
       <section className="mt-[-47px] rounded-t-3xl bg-white relative  pt-12 text-black ">
         <section className="pl-4 pr-4 pb-3 border-b border-b-gray-100">
@@ -74,9 +87,7 @@ export default async function Page() {
               />
             </Link>
           </h1>
-          <div className="text-center text-[#6D7781] text-xs">
-            @{data.username}
-          </div>
+          <div className="text-center text-[#6D7781] text-xs">@{data.username}</div>
           <Link href={`/space/${data.id}_1/feed`}>
             <div className="flex justify-center mt-2">
               <button className=" py-1 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
@@ -103,19 +114,21 @@ export default async function Page() {
               <div className="text-xs text-[#333]">粉丝</div>
             </div>
             <div>
-              <div className="text-2xl">
-                {displayNumber(data.subscribe_count)}
-              </div>
+              <div className="text-2xl">{displayNumber(data.subscribe_count)}</div>
               <div className="text-xs text-[#333]">订阅</div>
             </div>
           </div>
         </div>
         <div className={"p-4"}>
-          <div className={"bg-[url('/icons/profile/bg_wallet.png')] bg-cover rounded-xl text-white flex justify-between items-center w-full px-[20px] pt-[10px] pb-[20px]"}>
+          <div
+            className={
+              "bg-[url('/icons/profile/bg_wallet.png')] bg-cover rounded-xl text-white flex justify-between items-center w-full px-[20px] pt-[10px] pb-[20px]"
+            }
+          >
             <div className={"flx flex-col justify-start"}>
               <span className={"text-xs"}>唯粉余额</span>
               <div className={"flex items-baseline font-medium"}>
-                <span className={"text-[32px]"}>{walletInfo?.amount || 0.00}</span>
+                <span className={"text-[32px]"}>{walletInfo?.amount || 0.0}</span>
                 <span className={"text-[15px]"}>&nbsp;&nbsp;USDT</span>
               </div>
             </div>
@@ -126,10 +139,7 @@ export default async function Page() {
         <div className="pl-4 pr-4">
           <div className="flex justify-between items-center pt-2.5 pb-2.5">
             <h3 className="text-[15px] font-bold">收藏夹</h3>
-            <Link
-              href={"/profile/collect/posts"}
-              className="text-gray-300"
-            >
+            <Link href={"/profile/collect/posts"} className="text-gray-300">
               <IconWithImage
                 url={"/icons/profile/icon_arrow_right@3x.png"}
                 width={16}

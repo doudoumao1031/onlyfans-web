@@ -159,12 +159,15 @@ function createChunks(file: File) {
  */
 export function getUserDefaultBackImg(username: string) {
   if (username.length === 0) {
-    return "/icons/default/image_fans_normal_01.png"
+    // return "/icons/default/image_fans_normal_01.png"
+    return "/icons/image_fans_normal_05.png"
   }
   const firstCharCode = Math.min(username.charCodeAt(0), 0xffff)
   const index = ((username.length + firstCharCode) % 6) + 1
   // 返回背景图路径
-  return `/icons/default/image_fans_normal_0${index}.png`
+  // return `/icons/default/image_fans_normal_0${index}.png`
+  //默认固定
+  return "/icons/image_fans_normal_05.png"
 }
 
 export function buildImageUrl(fileId: string) {
