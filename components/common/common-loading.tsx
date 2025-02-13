@@ -11,7 +11,7 @@ export default function CommonLoading({
   count = 5,
   size = 30,
   speed = 1.5,
-  colors = ["red", "orange", "yellow", "green", "red"]
+  colors = ["white", "lightblue", "skyblue", "deepskyblue", "white"]
 }: CommonLoadingProps): React.ReactNode {
   return (
     <div className="loading-container flex justify-center items-center gap-2">

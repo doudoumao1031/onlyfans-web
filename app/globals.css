@@ -112,9 +112,9 @@ input,textarea {
 }
 
 @keyframes colorChange {
-  0% { fill: red; }
-  25% { fill: orange; }
-  50% { fill: yellow; }
-  75% { fill: green; }
-  100% { fill: red; }
+  0% { fill: white; }
+  25% { fill: lightblue; }
+  50% { fill: skyblue; }
+  75% { fill: deepskyblue; }
+  100% { fill: white; }
 } 
