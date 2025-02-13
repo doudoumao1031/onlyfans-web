@@ -30,7 +30,8 @@ export default function Post({
   isInfoPage?: boolean
   id?: string
 }) {
-  const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } = data
+  const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
+    data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
   const [showComments, setShowComments] = useState(false)
   const [comments, setComments] = useState<CommentInfo[]>()
@@ -44,7 +45,9 @@ export default function Post({
 
       <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
       <UserHomePageLink userId={user.id.toString()} />
-      {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} post={post} user={user} id={id} />}
+      {post_attachment && post_attachment.length > 0 && (
+        <Media data={post_attachment} post={post} user={user} id={id} />
+      )}
       {hasSubscribe && mention_user && mention_user.length > 0 && (
         <div>
           {mention_user.map((user) => (
@@ -71,9 +74,13 @@ export default function Post({
       {hasVote && showVote && <Vote postId={post.id} />}
       <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} postId={post.id} />
-        <Link href={isInfoPage ? "javascript:void(0);" : `/postInfo/${post.id}`}>
+        {isInfoPage ? (
           <CommentStats count={comment_count} onClick={toggleComments} />
-        </Link>
+        ) : (
+          <Link href={`/postInfo/${post.id}`}>
+            <CommentStats count={comment_count} onClick={toggleComments} />
+          </Link>
+        )}
         <Tip count={tip_count} postId={post.id} />
         <Share count={share_count} postId={post.id} />
         <Save count={collection_count} saved={collection} postId={post.id} />
