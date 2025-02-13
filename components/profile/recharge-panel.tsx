@@ -3,6 +3,7 @@ import RechargeDrawer from "@/components/profile/recharge-drawer"
 import { useState } from "react"
 export default function RechargePanel({ amount }: {amount: number}) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [initAmount, setInitAmount] = useState<number>(amount)
   return (
     <div className={"p-4"}>
       <div
@@ -11,11 +12,11 @@ export default function RechargePanel({ amount }: {amount: number}) {
         <div className={"flx flex-col justify-start"}>
           <span className={"text-xs"}>唯粉余额</span>
           <div className={"flex items-baseline font-medium"}>
-            <span className={"text-[32px]"}>{amount || 0.00}</span>
+            <span className={"text-[32px]"}>{initAmount || 0.00}</span>
             <span className={"text-[15px]"}>&nbsp;&nbsp;USDT</span>
           </div>
         </div>
-        <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
+        <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen} setWfAmount={setInitAmount}>
           <div className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
             onTouchEnd={() => {setIsOpen(true)}}
           >充值

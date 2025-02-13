@@ -7,7 +7,9 @@ import useCommonMessage from "@/components/common/common-message"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-export default function RechargeDrawer ({ children, isOpen, setIsOpen }: {children: React.ReactNode, isOpen: boolean, setIsOpen: (val: boolean) => void}) {
+export default function RechargeDrawer (
+  { children, isOpen, setIsOpen, setWfAmount }:
+  {children: React.ReactNode, isOpen: boolean, setIsOpen: (val: boolean) => void ,setWfAmount: (val: number) => void}) {
   const pathname = usePathname()
   const { showMessage, renderNode } = useCommonMessage()
   const [amount, setAmount] = useState<number>(0)
@@ -28,6 +30,7 @@ export default function RechargeDrawer ({ children, isOpen, setIsOpen }: {childr
         setPtBalance(Number(result.data.pt_wallet))
         setWfBalance(result.data.amount)
         setRate(result.data.proportion)
+        setWfAmount(result.data.amount)
       }
     })
   }
@@ -58,8 +61,9 @@ export default function RechargeDrawer ({ children, isOpen, setIsOpen }: {childr
           showMessage("充值成功", "success")
           getSettingData()
           setAmount(0)
+          setIsOpen(false)
         } else {
-          console.log("充值失败:", result?.message)
+          console.log("充值失败:")
           showMessage("充值失败")
         }
       })

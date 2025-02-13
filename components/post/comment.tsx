@@ -199,7 +199,7 @@ function Reply({
   removed: (replyId: number) => void
   fetchReplies: () => void
 }) {
-  const { user, content, thumbs_up_count, thumb_up, id, comment_id, is_self } = reply
+  const { user, content, thumbs_up_count, thumb_up, id, comment_id, is_self, reply_user } = reply
   const { photo, username } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
@@ -213,7 +213,10 @@ function Reply({
           <Avatar fileId={photo} width={9} />
           <div className="flex flex-col gap-2">
             <div className="text-xs text-[#FF8492]">{username}</div>
-            <div className="text-sm">{content}</div>
+            <div className="text-sm flex gap-2">
+              {reply_user && <div className="text-[#6D7781]">{reply_user.username}</div>}
+              <div>{content}</div>
+            </div>
             <div className="flex gap-4 text-xs text-[#6D7781]">
               <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
               {is_self && <div onClick={removeReply}>删除</div>}

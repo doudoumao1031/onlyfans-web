@@ -10,9 +10,9 @@ export default function LazyImg(props: MyImageProps): React.ReactNode {
   return (
     <div className="relative w-full h-full">
       {
-        isLoading && <Skeleton className={`${props.className} w-full h-full absolute `}></Skeleton>
+        (isLoading) && <Skeleton className={`${props.className} w-full h-full absolute `}></Skeleton>
       }
-      <Image {...props} onLoad={(e) => setIsLoading(false)} />
+      {props.src && <Image {...props} onLoad={(e) => setIsLoading(false)} />}
     </div>
 
   )
