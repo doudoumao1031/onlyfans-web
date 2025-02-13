@@ -11,6 +11,7 @@ import {
   upComment
 } from "@/lib"
 import { useState } from "react"
+import CommonAvatar from "@/components/common/common-avatar"
 
 export default function Comments({
   post_id,
@@ -71,7 +72,10 @@ function Comment({
     <div className="flex flex-col gap-2">
       <div className="flex justify-between">
         <div className="flex gap-2">
-          <Avatar fileId={photo} width={9} />
+          {/*<Avatar fileId={photo} width={9} />*/}
+          <div className={"shrink-0"}>
+            <CommonAvatar photoFileId={photo} size={36}/>
+          </div>
           <div className="flex flex-col gap-2">
             <div className="text-xs text-[#FF8492]">{username}</div>
             <div className="text-sm">{content}</div>

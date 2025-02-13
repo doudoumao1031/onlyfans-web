@@ -518,6 +518,7 @@ const ReadSettings = ({
 }
 
 const UploadMedia = () => {
+  const [uploading, setIsUploading] = useState<boolean>(false)
   const { control } = useFormContext<iPost>()
   const ref = useRef<HTMLInputElement>(null)
   const {
@@ -529,6 +530,7 @@ const UploadMedia = () => {
     name: "post_attachment"
   })
   const handleUpload = (file: File) => {
+    setIsUploading(true)
     uploadFile(file).then((data) => {
       console.log("upload file result: ", data)
       if (data) {
@@ -539,8 +541,11 @@ const UploadMedia = () => {
         // @ts-expect-error
         ref.current.value = null
       }
+    }).finally(() => {
+      setIsUploading(false)
     })
   }
+
   return (
     <>
       {itemsList?.map((item, index) => {
@@ -585,26 +590,33 @@ const UploadMedia = () => {
           />
         )
       })}
-      <div className="relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded ">
-        <input
-          ref={ref}
-          type="file"
-          multiple={false}
-          className="block w-full h-full absolute left-0 top-0 opacity-0 z-10"
-          onChange={(event) => {
-            if (event.target.files?.length) {
-              handleUpload(event.target.files[0])
-            }
-          }}
-        />
-        <IconWithImage
-          url={"/icons/profile/icon_add@3x.png"}
-          width={24}
-          height={24}
-          color={"#000"}
-        />
-        <div className="text-[#bbb] text-xs text-center absolute bottom-2">视频/图片</div>
-      </div>
+      {uploading && (
+        <div className={"w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "}>
+          上传中...
+        </div>
+      )}
+      {!uploading && (
+        <div className="relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded ">
+          <input
+            ref={ref}
+            type="file"
+            multiple={false}
+            className="block w-full h-full absolute left-0 top-0 opacity-0 z-10"
+            onChange={(event) => {
+              if (event.target.files?.length) {
+                handleUpload(event.target.files[0])
+              }
+            }}
+          />
+          <IconWithImage
+            url={"/icons/profile/icon_add@3x.png"}
+            width={24}
+            height={24}
+            color={"#000"}
+          />
+          <div className="text-[#bbb] text-xs text-center absolute bottom-2">视频/图片</div>
+        </div>
+      )}
     </>
   )
 }
@@ -715,7 +727,7 @@ const insertString = (str: string, index: number, char: string) => {
 const Page = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <EditPageContent />
+      <EditPageContent/>
     </Suspense>
   )
 }
@@ -737,8 +749,8 @@ const EditPageContent = () => {
     const { post_mention_user = [], post: { title } } = formData
     const mentionUsers = post_mention_user?.map(item => subUsers.find(sub => sub.user.id === item.user_id))?.filter(item => !!item)
     const mentionUserIds = mentionUsers.filter(item => {
-      return title.includes(`@${item?.user?.username} `)
-    }).map(user => ({ user_id:user.user.id }))
+      return title?.includes(`@${item?.user?.username} `)
+    }).map(user => ({ user_id: user.user.id }))
     addPost({
       ...formData,
       post_mention_user: mentionUserIds
@@ -777,14 +789,30 @@ const EditPageContent = () => {
 
   const updateMentionUserIds = useCallback((id: number) => {
     const value = formValues.post_mention_user ?? []
-    value.push({ user_id:id })
+    value.push({ user_id: id })
     setValue("post_mention_user", [...new Set(value)])
     const appendUsername = subUsers.find(item => item.user.id === id)?.user?.username ?? ""
-    const insertedString = insertString(formValues.post.title, selectionStart.current, appendUsername + " ")
+    const insertedString = insertString(formValues?.post?.title ?? "", selectionStart.current, appendUsername + " ")
     setValue("post.title", insertedString)
     setAtUserModal(false)
   }, [formValues, setValue, subUsers])
 
+  const handleSaveDraft = () => {
+    const values = formValues
+    onFormSubmit({
+      ...values,
+      post: {
+        ...values.post,
+        post_status: 0
+      }
+    })
+  }
+
+  const showSaveDraft = useMemo(() => {
+    const title = formValues.post.title
+    const attachments = formValues.post_attachment
+    return !!title || !!attachments?.length
+  },[formValues])
 
   return (
     <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
@@ -796,24 +824,35 @@ const EditPageContent = () => {
         />
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <section className="flex justify-between h-11 items-center pl-4 pr-4">
-            <ConfirmModal
-              content={"未发布的内容是否保存到草稿中？"}
-              confirm={() => {
-                console.log("保存到草稿")
-                router.back()
-              }}
-              cancel={router.back}
-              trigger={
-                <button>
-                  <IconWithImage
-                    url={"/icons/profile/icon_close@3x.png"}
-                    width={24}
-                    height={24}
-                    color={"#000"}
-                  />
-                </button>
-              }
-            />
+            {
+              showSaveDraft ? (
+                <ConfirmModal
+                  content={"未发布的内容是否保存到草稿中？"}
+                  confirm={handleSaveDraft}
+                  cancel={router.back}
+                  trigger={
+                    <button>
+                      <IconWithImage
+                        url={"/icons/profile/icon_close@3x.png"}
+                        width={24}
+                        height={24}
+                        color={"#000"}
+                      />
+                    </button>
+                  }
+                />
+              )
+                : (
+                  <button onTouchEnd={router.back}>
+                    <IconWithImage
+                      url={"/icons/profile/icon_close@3x.png"}
+                      width={24}
+                      height={24}
+                      color={"#000"}
+                    />
+                  </button>
+                )
+            }
             <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-main-pink")}>
               发布
             </button>

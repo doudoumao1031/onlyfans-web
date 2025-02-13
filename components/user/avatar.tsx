@@ -9,7 +9,7 @@ export default function Avatar({ src, vlog = false }: {
   return (
     <div className={"relative"}>
       <div className={"w-[66px] h-[66px] rounded-full border-2 border-white"}>
-        <CommonAvatar photoFileId={src} size={66}/>
+        <CommonAvatar photoFileId={src} size={62}/>
       </div>
       {vlog && (
         <div

@@ -1,3 +1,5 @@
+import { TPost } from "@/components/post/types"
+
 export interface iPostAttachment {
   file_id: string
   id?: string
@@ -30,11 +32,7 @@ export interface iPostPrice {
 }
 
 export interface iPost {
-  post: {
-    notice: boolean //通知
-    title: string // 标题
-    id?: number
-  }
+  post: Partial<Pick<TPost, "id" | "notice" | "post_status"|"title">>
   post_attachment?: iPostAttachment[] //帖子附件
   post_mention_user?: Array<{ user_id: number }> //提及的用户ID
   post_price?: iPostPrice[] // 帖子价格

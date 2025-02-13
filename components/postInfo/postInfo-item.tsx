@@ -1,16 +1,15 @@
 "use client"
 import useCommonMessage from "@/components/common/common-message"
-import LazyImg from "@/components/common/lazy-img"
 import SubscribedDrawer from "@/components/explore/subscribed-drawer"
 import Post from "@/components/post/post"
 import { buildMention } from "@/components/post/utils"
 import IconWithImage from "@/components/profile/icon"
 import { PostData } from "@/lib"
 import { userDelFollowing, userFollowing } from "@/lib/actions/space"
-import { buildImageUrl } from "@/lib/utils"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import CommonAvatar from "@/components/common/common-avatar"
 
 export default function Page({ postData }: { postData: PostData }) {
   const { showMessage, renderNode } = useCommonMessage()
@@ -49,13 +48,14 @@ export default function Page({ postData }: { postData: PostData }) {
         </div>
         <div className="flex-1 flex items-center pl-4">
           <div className="w-8 h-8">
-            <LazyImg
-              src={buildImageUrl(photo)}
-              alt=""
-              className={`rounded-full border-2 border-white w-${8} h-${8}`}
-              width={32}
-              height={32}
-            />
+            <CommonAvatar photoFileId={photo} size={32}/>
+            {/*<LazyImg*/}
+            {/*  src={buildImageUrl(photo)}*/}
+            {/*  alt=""*/}
+            {/*  className={`rounded-full border-2 border-white w-${8} h-${8}`}*/}
+            {/*  width={32}*/}
+            {/*  height={32}*/}
+            {/*/>*/}
           </div>
           <div className="ml-2">
             <div className="text-[14px]">
