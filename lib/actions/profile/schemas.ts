@@ -21,7 +21,7 @@ export const postSchema = z.object({
   post: z.object({
     id: z.number().optional(),
     notice: z.boolean(),
-    title: z.string({ message: "请输入标题" }).min(2, "最少两个字").max(999, "最多999个字")
+    title: z.string({ message: "请输入标题" }).min(5, "最少5个字").max(999, "最多999个字")
   }),
   post_attachment: z.array(z.object({
     file_id: z.union([z.string(),z.number()]),
