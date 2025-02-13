@@ -60,9 +60,9 @@ export default function Page() {
 
   const formValues = watch()
   const handleUploadFile = (file: File) => {
-    commonUploadFile(file).then((fileId) => {
-      if (fileId) {
-        setValue("back_img", fileId)
+    commonUploadFile(file).then((res) => {
+      if (res?.file_id) {
+        setValue("back_img", res.file_id)
       }
     })
   }

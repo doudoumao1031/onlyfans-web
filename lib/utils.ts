@@ -21,7 +21,7 @@ export function convertImageToBase64(file: File) {
   })
 }
 
-enum UPLOAD_MEDIA_TYPE {
+export enum UPLOAD_MEDIA_TYPE {
   PIC = "1", // 图片
   VIDEO = "2", // 视频
   OTHER = "3" // 其他附件
@@ -47,7 +47,7 @@ export async function commonUploadFile(file: File) {
   formData.append("file", file)
   const response = await uploadMediaFile(formData)
   if (response?.data) {
-    return response.data?.file_id
+    return response.data
   }
   return null
   // uploadMediaFile(formData).then((data) => {
@@ -83,9 +83,9 @@ const uploadFirstChunk = async (size: string, file: Blob, type: string, count?: 
   fd.append("file", file)
   return uploadMediaFile(fd).then((data) => {
     if (data && data.code == 0) {
-      return data.data.file_id
+      return data.data
     } else {
-      return ""
+      return null
     }
   })
 }
@@ -97,14 +97,14 @@ export async function uploadFile(file: File) {
   if (totalChunks > 1) {
     const chunks = createChunks(file)
     const firstChunk = chunks.shift() as Blob
-    const fileId = await uploadFirstChunk(
+    const chunkResult = await uploadFirstChunk(
       String(file.size),
       firstChunk,
       getUploadMediaFileType(file),
       totalChunks.toString()
     )
     console.log("handleUploadFile totalChunks", totalChunks)
-
+    const fileId = chunkResult?.file_id
     if (!fileId) {
       console.log("upload file part first chunk failed")
       return ""
@@ -117,9 +117,9 @@ export async function uploadFile(file: File) {
       return ""
     }
     console.log("handleUploadFile complete file")
-    return fileId
+    return chunkResult
   } else {
-    return await commonUploadFile(file)
+    return commonUploadFile(file)
   }
 }
 

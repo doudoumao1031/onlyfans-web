@@ -12,7 +12,7 @@ import { ListEnd, ListError, ListLoading } from "@/components/explore/list-state
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl } from "@/lib/utils"
-import useCommonMessage, { CommonMessageContext, useCommonMessageContext } from "@/components/common/common-message"
+import useCommonMessage, { CommonMessageContext } from "@/components/common/common-message"
 
 enum ACTIVE_TYPE {
   POST = "POST",
@@ -29,7 +29,9 @@ const ManuscriptPost = () => {
       title,
       page: 1,
       pageSize: 10,
-      from_id: 0
+      from_id: 0,
+      sort_type: 0,
+      sort_asc: timeSort
     }).then(response => {
       if (response) {
         setInitData(response)

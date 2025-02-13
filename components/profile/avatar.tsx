@@ -16,10 +16,9 @@ export default function Avatar({
   onAvatarChange?: (fileId: string) => void
 }) {
   const handleUploadFile = (file: File) => {
-    commonUploadFile(file).then((fileId) => {
-      if (fileId) {
-        onAvatarChange?.(fileId)
-      } else {
+    commonUploadFile(file).then((res) => {
+      if (res?.file_id) {
+        onAvatarChange?.(res?.file_id)
       }
     })
   }
