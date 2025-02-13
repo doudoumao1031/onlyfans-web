@@ -4,14 +4,16 @@ import { useSearchParams, useRouter } from "next/navigation"
 import { Suspense, useState } from "react"
 import { login } from "@/lib/actions/auth/actions"
 import { TOKEN_KEY } from "@/lib/utils"
+import LoadingMask from "@/components/common/loading-mask"
 
 function ErrorContent() {
   const search = useSearchParams()
   const router = useRouter()
   const redirectPath = search.get("redirect")
-  const [userId, setUserId] = useState(20240990)
+  const [userId, setUserId] = useState("20240990")
   const [token, setToken] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleClick = async () => {
     if (!userId && !token) {
@@ -19,24 +21,39 @@ function ErrorContent() {
       return
     }
 
+    setIsLoading(true)
+    setErrorMsg("")
+
     try {
       if (token) {
         document.cookie = `${TOKEN_KEY}=${token}; path=/; secure; samesite=lax`
-        router.push(redirectPath ?? "/explore/feed")
+        await router.push(redirectPath ?? "/explore/feed")
         return
       }
 
-      const data = await login({ user_id: userId })
+      const userIdNumber = parseInt(userId, 10)
+      if (isNaN(userIdNumber)) {
+        setErrorMsg("Please enter a valid user ID")
+        return
+      }
+
+      const data = await login({ user_id: userIdNumber })
       if (data && data.token) {
         document.cookie = `${TOKEN_KEY}=${data.token}; path=/; secure; samesite=lax`
-        router.push(redirectPath ?? "/explore/feed")
+        await router.push(redirectPath ?? "/explore/feed")
       } else {
         setErrorMsg("Login failed: Invalid response from server")
       }
     } catch (error) {
       console.error("Auth error:", error)
       setErrorMsg("Login failed: " + (error instanceof Error ? error.message : "Unknown error"))
+    } finally {
+      setIsLoading(false)
     }
+  }
+
+  if (isLoading) {
+    return <LoadingMask isLoading={isLoading} />
   }
 
   return (
@@ -49,7 +66,7 @@ function ErrorContent() {
             <input
               type="text"
               value={userId}
-              onChange={(e) => setUserId(Number(e.target.value))}
+              onChange={(e) => setUserId(e.target.value)}
               className="border rounded px-4 py-2 w-64"
               placeholder="Enter User ID / 输入用户ID"
             />
