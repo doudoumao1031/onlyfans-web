@@ -48,7 +48,7 @@ export default function Page({ postData }: { postData: PostData }) {
         </div>
         <div className="flex-1 flex items-center pl-4">
           <div className="w-8 h-8">
-            <CommonAvatar photoFileId={photo} size={32}/>
+            <CommonAvatar photoFileId={photo} size={32} />
             {/*<LazyImg*/}
             {/*  src={buildImageUrl(photo)}*/}
             {/*  alt=""*/}
@@ -108,12 +108,7 @@ export default function Page({ postData }: { postData: PostData }) {
     <div className="p-4 pt-20">
       {renderNode}
       <Header />
-      <Post
-        data={postData as unknown as PostData}
-        hasSubscribe={false}
-        hasVote={false}
-        isInfoPage={true}
-      />
+      <Post data={postData as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
       {btnText() && (
         <div className="flex justify-center items-center mt-2">
           <div
