@@ -20,10 +20,10 @@ export default async function UserInfo({
     throw new Error()
   }
   const tabs = [
-    { icon: "/icons/space/icon_info_video@3x.png", num: data.video_count },
-    { icon: "/icons/space/icon_info_photo@3x.png", num: data.post_count },
-    { icon: "/icons/space/icon_info_like@3x.png", num: data.fans_count },
-    { icon: "/icons/space/icon_info_follownumber@3x.png", num: data.following_count }
+    { icon: "/icons/space/icon_info_video@3x.png", num: data.video_count }, //视频
+    { icon: "/icons/space/icon_info_photo@3x.png", num: data.img_count }, //图片
+    { icon: "/icons/space/icon_info_like@3x.png", num: data.collection_user_count }, //收藏
+    { icon: "/icons/space/icon_info_follownumber@3x.png", num: data.fans_count } //关注==粉丝
   ]
 
   return (

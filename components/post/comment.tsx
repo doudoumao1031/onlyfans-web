@@ -214,7 +214,7 @@ function Reply({
     <div className="flex flex-col gap-2">
       <div className="flex justify-between">
         <div className="flex gap-2">
-          <Avatar fileId={photo} width={9} />
+          <Avatar fileId={photo} width={9} height={9} />
           <div className="flex flex-col gap-2">
             <div className="text-xs text-[#FF8492]">{username}</div>
             <div className="text-sm flex gap-2">
