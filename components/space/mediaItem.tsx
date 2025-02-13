@@ -18,9 +18,9 @@ export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
       href={
         lock
           ? "javascript:void(0);"
-          : `/space/${id}/media/${
-              post_attachment[0].file_type === FileType.Video ? "video" : "image"
-            }/${post_attachment[0].file_type === FileType.Video ? showIds : showIds + "_" + 0}}`
+          : `/media/${post_attachment[0].file_type === FileType.Video ? "video" : "image"}/${
+              post_attachment[0].file_type === FileType.Video ? showIds : showIds + "_" + 0
+            }}`
       }
     >
       <div

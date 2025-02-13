@@ -45,9 +45,9 @@ export default function Media({
           return (
             <Link
               key={i}
-              href={`${id ? "/space/" + id : ""}/media/${
-                file_type === FileType.Video ? "video" : "image"
-              }/${file_type === FileType.Video ? showIds : showIds + "_" + i}`}
+              href={`/media/${file_type === FileType.Video ? "video" : "image"}/${
+                file_type === FileType.Video ? showIds : showIds + "_" + i
+              }`}
               className={file_type === FileType.Video ? "col-span-3" : "block"}
             >
               {file_type === FileType.Video ? (
