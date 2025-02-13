@@ -202,7 +202,7 @@ const AddVoteModal = ({
         <section className={"py-5 px-4 border-b border-[#ddd]"}>
           <h3 className="font-medium text-base mb-2">
             投票内容
-            {watch("items").filter(item => !!item.content).length < 2 && (
+            {watch("items")?.filter(item => !!item.content)?.length < 2 && (
               <span className="text-xs text-red-600 ml-2 font-normal">最少2个选项</span>
             )}
           </h3>
@@ -624,7 +624,8 @@ const UploadMedia = () => {
 const initPostFormData: iPost = {
   post: {
     notice: false,
-    title: ""
+    title: "",
+    post_status: 2
   },
   post_attachment: [],
   post_price: [
@@ -809,7 +810,7 @@ const EditPageContent = () => {
   }
 
   const showSaveDraft = useMemo(() => {
-    const title = formValues.post.title
+    const title = formValues.post?.title
     const attachments = formValues.post_attachment
     return !!title || !!attachments?.length
   },[formValues])
