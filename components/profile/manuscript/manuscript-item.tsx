@@ -15,7 +15,7 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
   )
 }
 
-const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: boolean , refresh?: () => void}) => {
+const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: number , refresh?: () => void}) => {
 
   const { showMessage } = useCommonMessageContext()
   const handlePined = () => {
@@ -43,7 +43,7 @@ const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: bo
         <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
         <span>数据</span>
       </Link>
-      {postStatus ? (
+      {[0,3].includes(postStatus) ? (
         <Link href={`/profile/manuscript/draft/edit?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink">
           <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
           <span>编辑</span>
@@ -58,8 +58,8 @@ const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: bo
   )
 }
 
-const ManuscriptItemState = ({ state }: { state: boolean }) => {
-  if (state) return null
+const ManuscriptItemState = ({ state }: { state: number }) => {
+  if (state !== 2) return null
   return (
     <span className={clsx(
       "leading-[15px] text-xs rounded-br rounded-tl px-1.5 text-white absolute left-0 top-0 bg-[#58bf8e]",
