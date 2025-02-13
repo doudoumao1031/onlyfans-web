@@ -22,7 +22,7 @@ export default function Media({
     <div className="grid grid-cols-3 gap-2 relative">
       {((post.visibility === 1 && !user.sub) || post.visibility === 2) && (
         <>
-          <div className="w-full h-full bg-black bg-opacity-5 rounded-lg backdrop-blur absolute top-0 left-0 z-[99] flex flex-col items-center justify-center">
+          <div className="w-full h-full bg-black bg-opacity-[30%] rounded-lg backdrop-blur absolute top-0 left-0 z-[99] flex flex-col items-center justify-center">
             <IconWithImage
               url="/icons/icon_info_lock_white.png"
               width={32}

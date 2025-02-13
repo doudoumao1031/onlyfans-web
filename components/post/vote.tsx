@@ -15,7 +15,7 @@ export default function Vote({ postId }: { postId: number }) {
 
   const getVoteData = useCallback(async () => {
     const response = await fetchVote(postId)
-    setVote(response?.data)
+    setVote(response)
   }, [postId])
 
   useEffect(() => {
@@ -109,7 +109,7 @@ async function _vote(params: VoteParams): Promise<boolean> {
 }
 
 async function fetchVote(post_id: number) {
-  const res = await fetchWithPost<{ post_id: number }, ApiResponse<VoteData>>("/post/getVoteInfo", {
+  const res = await fetchWithPost<{ post_id: number }, VoteData>("/post/getVoteInfo", {
     post_id
   })
   return res?.code === 0 ? res.data : undefined
