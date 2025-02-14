@@ -123,6 +123,9 @@ export interface PostId {
  */
 export type SearchPostReq = PageInfo & {
   title: string
+  sort_type?: number
+  sort_asc?: boolean
+  post_status?: number
 }
 
 export interface Comment {

@@ -1,8 +1,10 @@
 import { TPost } from "@/components/post/types"
+import { FileType } from "@/lib"
 
 export interface iPostAttachment {
   file_id: string
   id?: string
+  file_type: FileType
 }
 
 //     ALL = "0", // 所有

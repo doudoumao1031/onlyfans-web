@@ -7,7 +7,11 @@ import { iPost, ReplyForm, UpdateUserBaseReq, UserProfile } from "./types"
 
 export async function addPost(params: iPost) {
   // Implementation
-  return fetchWithPost<iPost, ApiResponse<unknown>>(ENDPOINTS.POST.ADD, params)
+  return fetchWithPost<iPost, iPost>(ENDPOINTS.POST.ADD, params)
+}
+
+export async function pubPost(id: number) {
+  return fetchWithPost<{post_id: number}>(ENDPOINTS.POST.PUBLISH,{ post_id: id })
 }
 
 export async function postDetail(id: number) {

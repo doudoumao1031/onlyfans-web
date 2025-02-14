@@ -1,5 +1,5 @@
 "use client"
-import React, { HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState, Suspense } from "react"
+import React, { HTMLAttributes, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import clsx from "clsx"
 import IconWithImage from "@/components/profile/icon"
 import { Switch } from "@/components/ui/switch"
@@ -13,18 +13,18 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import dayjs from "dayjs"
 import { z } from "zod"
 import Image from "next/image"
-import * as process from "process"
 import {
-  postVoteSchema,
-  iPostVote,
-  iPostPrice,
-  postPriceSchema,
+  addPost,
   iPost,
+  iPostPrice,
+  iPostVote,
+  postDetail,
+  postPriceSchema,
   postSchema,
-  addPost, postDetail
+  postVoteSchema, pubPost
 } from "@/lib/actions/profile"
 import { isNumber } from "lodash"
-import { buildImageUrl, uploadFile } from "@/lib/utils"
+import { buildImageUrl, getUploadMediaFileType, UPLOAD_MEDIA_TYPE, uploadFile } from "@/lib/utils"
 import DateTimePicker from "@/components/common/date-time-picker"
 import { getFollowedUsers, SubscribeUserInfo } from "@/lib"
 import Empty from "@/components/common/empty"
@@ -123,7 +123,7 @@ const AddVoteModal = ({
       append({ content: "" })
       append({ content: "" })
     }
-  }, [voteForm])
+  }, [append, voteForm])
 
   const minTime = new Date()
 
@@ -518,7 +518,9 @@ const ReadSettings = ({
 }
 
 const UploadMedia = () => {
+  const { showMessage } = useCommonMessageContext()
   const [uploading, setIsUploading] = useState<boolean>(false)
+  const [firstMediaType,setFirstMediaType] = useState<UPLOAD_MEDIA_TYPE | undefined>(undefined)
   const { control } = useFormContext<iPost>()
   const ref = useRef<HTMLInputElement>(null)
   const {
@@ -529,13 +531,35 @@ const UploadMedia = () => {
     control,
     name: "post_attachment"
   })
+
+  useEffect(() => {
+    if (itemsList.length === 0) {
+      setFirstMediaType(undefined)
+    }
+  },[itemsList])
+
   const handleUpload = (file: File) => {
+    const fileType = getUploadMediaFileType(file)
+    if (!firstMediaType) {
+      setFirstMediaType(fileType)
+    } else {
+      if (fileType !== firstMediaType) {
+        if (fileType === UPLOAD_MEDIA_TYPE.PIC) {
+          showMessage("请先删除视频内容")
+        }
+        if (fileType === UPLOAD_MEDIA_TYPE.VIDEO) {
+          showMessage("请先删除图片内容")
+        }
+        return
+      }
+    }
     setIsUploading(true)
     uploadFile(file).then((data) => {
       console.log("upload file result: ", data)
-      if (data) {
+      if (data && data?.file_id) {
         append({
-          file_id: data
+          file_id: data?.file_id,
+          file_type: data?.file_type
         })
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
@@ -756,9 +780,11 @@ const EditPageContent = () => {
       ...formData,
       post_mention_user: mentionUserIds
     }).then((data) => {
-      showMessage("success")
-      if (data?.code === 0) {
-        router.back()
+      if (data?.code === 0 && data?.data?.post?.id) {
+        pubPost(data.data.post.id).then(() => {
+          showMessage("success")
+          router.back()
+        })
       } else {
         showMessage(data?.message)
       }
