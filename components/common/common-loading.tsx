@@ -9,7 +9,7 @@ interface CommonLoadingProps {
 
 export default function CommonLoading({
   count = 5,
-  size = 30,
+  size = 10,
   speed = 1.5,
   colors = ["white", "lightblue", "skyblue", "deepskyblue", "white"]
 }: CommonLoadingProps): React.ReactNode {
@@ -19,10 +19,10 @@ export default function CommonLoading({
         <svg
           key={index}
           viewBox="0 0 24 24"
-          className="common-loading-heart-icon"
+          className="common-loading-heart-icon flex-shrink-0"
           style={{
-            width: size,
-            height: size,
+            width: `${size}vw`,
+            height: `${size}vw`,
             animationDuration: `${speed}s`,
             animationDelay: `${(index * speed) / count}s`,
             fill: colors[index % colors.length]
