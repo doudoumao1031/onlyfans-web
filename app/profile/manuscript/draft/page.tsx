@@ -9,19 +9,20 @@ import { myPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import LazyImg from "@/components/common/lazy-img"
-import { buildImageUrl } from "@/lib/utils"
+import { buildImageUrl, TIME_FORMAT } from "@/lib/utils"
+import dayjs from "dayjs"
 
 const DraftItem = ({ data }:{data:PostData}) => {
   const pathname = usePathname()
   return (
-    <Link href={`${pathname}/edit`} className="pt-2.5 pb-2.5 border-b border-gray-100 flex gap-2.5">
+    <Link href={`${pathname}/edit?id=${data.post.id}`} className="pt-2.5 pb-2.5 border-b border-gray-100 flex gap-2.5">
       {/*<Image src={""} alt={"img"} width={100} height={100} className="rounded"/>*/}
-      <div className={"w-[100px] h-[100px] shrink-0"}>
+      <div className={"w-[100px] h-[100px] shrink-0 overflow-hidden"}>
         <LazyImg src={buildImageUrl(data.post_attachment?.[0].file_id)} alt={data.post.title} width={100} height={100} className={"rounded"}/>
       </div>
       <div className="flex-col justify-between flex flex-1 w-0">
         <div className="text-[#333] line-clamp-[2] ">{data.post.title}</div>
-        <div className="pb-2.5 text-xs text-[#bbb]">保存：</div>
+        <div className="pb-2.5 text-xs text-[#bbb]">保存于：{dayjs(data.post.last_update_time * 1000).format(TIME_FORMAT)}</div>
       </div>
     </Link>
   )
