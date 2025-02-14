@@ -21,7 +21,7 @@ import {
   postDetail,
   postPriceSchema,
   postSchema,
-  postVoteSchema
+  postVoteSchema, pubPost
 } from "@/lib/actions/profile"
 import { isNumber } from "lodash"
 import { buildImageUrl, getUploadMediaFileType, UPLOAD_MEDIA_TYPE, uploadFile } from "@/lib/utils"
@@ -780,9 +780,11 @@ const EditPageContent = () => {
       ...formData,
       post_mention_user: mentionUserIds
     }).then((data) => {
-      showMessage("success")
-      if (data?.code === 0) {
-        router.back()
+      if (data?.code === 0 && data?.data?.post?.id) {
+        pubPost(data.data.post.id).then(() => {
+          showMessage("success")
+          router.back()
+        })
       } else {
         showMessage(data?.message)
       }
