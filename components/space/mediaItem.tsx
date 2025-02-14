@@ -18,8 +18,8 @@ export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
       href={
         lock
           ? "javascript:void(0);"
-          : `/media/${post_attachment[0].file_type === FileType.Video ? "video" : "image"}/${
-              post_attachment[0].file_type === FileType.Video ? showIds : showIds + "_" + 0
+          : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${
+              post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0
             }}`
       }
     >
@@ -36,8 +36,8 @@ export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
             height={400}
             className="w-full h-full"
             src={
-              post_attachment[0].thumb_id || post_attachment[0].file_id
-                ? buildImageUrl(post_attachment[0].thumb_id || post_attachment[0].file_id)
+              post_attachment[0]?.thumb_id || post_attachment[0]?.file_id
+                ? buildImageUrl(post_attachment[0]?.thumb_id || post_attachment[0]?.file_id)
                 : "/icons/default/img_media_default.png"
             }
             alt={""}
