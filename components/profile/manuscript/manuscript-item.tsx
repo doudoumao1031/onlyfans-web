@@ -3,8 +3,10 @@ import Image from "next/image"
 import IconWithImage from "@/components/profile/icon"
 import Link from "next/link"
 import { clsx } from "clsx"
-import { PostData, postPined } from "@/lib"
+import { FileType, PostData, postPined } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
+import LazyImg from "@/components/common/lazy-img"
+import { buildImageUrl } from "@/lib/utils"
 
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
   return (
@@ -15,13 +17,13 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
   )
 }
 
-const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: number , refresh?: () => void}) => {
+const ManuscriptActions = ({ id, postStatus, refresh }: { id: number, postStatus: number, refresh?: () => void }) => {
 
   const { showMessage } = useCommonMessageContext()
   const handlePined = () => {
     postPined(id).then((data) => {
       if (data?.code === 0) {
-        showMessage("置顶成功","",{
+        showMessage("置顶成功", "", {
           afterDuration: () => {
             refresh?.()
           }
@@ -43,8 +45,10 @@ const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: nu
         <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
         <span>数据</span>
       </Link>
-      {[0,3].includes(postStatus) ? (
-        <Link href={`/profile/manuscript/draft/edit?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink">
+      {[0, 3].includes(postStatus) ? (
+        <Link href={`/profile/manuscript/draft/edit?id=${id}`}
+          className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink"
+        >
           <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
           <span>编辑</span>
         </Link>
@@ -59,23 +63,44 @@ const ManuscriptActions = ({ id ,postStatus,refresh }:{id:number ,postStatus: nu
 }
 
 const ManuscriptItemState = ({ state }: { state: number }) => {
-  if (state !== 2) return null
+  if (![2, 3].includes(state)) return null
+  const textMap = {
+    "2": "审核中",
+    "3": "未通过"
+  }
   return (
     <span className={clsx(
-      "leading-[15px] text-xs rounded-br rounded-tl px-1.5 text-white absolute left-0 top-0 bg-[#58bf8e]",
+      "leading-[15px] text-xs rounded-br rounded-tl px-1.5 text-white absolute left-0 top-0",
+      state === 2 ? "bg-[#58bf8e]" : "bg-[#FF8492]",
     )}
-    >审核中</span>
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+    >{textMap[state]}</span>
   )
 }
 export default function ManuscriptItem({ data, refresh }: { data: PostData, refresh?: () => void }) {
+  const firstMedia = data.post_attachment?.[0]
+  let imageId = ""
+  if (firstMedia?.file_type === FileType.Image) {
+    imageId = firstMedia.file_id
+  }
+  if (firstMedia?.file_type === FileType.Video) {
+    imageId = firstMedia.thumb_id
+  }
   return (
     <section className="border-b border-gray-100 pt-4">
       <button className={"flex gap-2.5 text-left h-[100px] relative w-full"}>
         {/*<ManuscriptItemState state={"REJECT"}/>*/}
         <ManuscriptItemState state={data.post.post_status}/>
-        <Image src={"/demo/user_bg.png"} alt={""} width={100} height={100}
-          className={"shrink-0 w-[100px] h-full rounded"}
-        />
+        <div className={"w-[100px] h-[100px] overflow-hidden rounded"}>
+          {imageId ? <LazyImg src={buildImageUrl(imageId)} alt={"post"} width={100} height={100}/>
+            : (
+              <Image src={"/icons/image_draft.png"} alt={""} width={100} height={100}
+                className={"shrink-0 w-[100px] h-full rounded"}
+              />
+            )
+          }
+        </div>
         <section className={"flex-1 h-full flex flex-col justify-between "}>
           <h3 className="line-clamp-[2]">{data.post.title}</h3>
           <section className={"flex-1 flex items-center text-[#bbb]"}>2022-02-02 12:12:12</section>

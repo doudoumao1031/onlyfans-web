@@ -619,7 +619,7 @@ const UploadMedia = () => {
           上传中...
         </div>
       )}
-      {!uploading && (
+      {!uploading && itemsList.length < 10 && (
         <div className="relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded ">
           <input
             ref={ref}
@@ -770,16 +770,21 @@ const EditPageContent = () => {
     })
   }, [])
   const selectionStart = useRef<number>(0)
-  const onFormSubmit = (formData: iPost) => {
+
+  const getSubmitFormData = (formData:iPost) => {
     const { post_mention_user = [], post: { title } } = formData
     const mentionUsers = post_mention_user?.map(item => subUsers.find(sub => sub.user.id === item.user_id))?.filter(item => !!item)
     const mentionUserIds = mentionUsers.filter(item => {
       return title?.includes(`@${item?.user?.username} `)
     }).map(user => ({ user_id: user.user.id }))
-    addPost({
+    return {
       ...formData,
       post_mention_user: mentionUserIds
-    }).then((data) => {
+    }
+  }
+  const onFormSubmit = (formData: iPost) => {
+    const params = getSubmitFormData(formData)
+    addPost(params).then((data) => {
       if (data?.code === 0 && data?.data?.post?.id) {
         pubPost(data.data.post.id).then(() => {
           showMessage("success")
@@ -825,13 +830,9 @@ const EditPageContent = () => {
   }, [formValues, setValue, subUsers])
 
   const handleSaveDraft = () => {
-    const values = formValues
-    onFormSubmit({
-      ...values,
-      post: {
-        ...values.post,
-        post_status: 0
-      }
+    addPost(getSubmitFormData(formValues)).then(() => {
+      showMessage("success")
+      router.back()
     })
   }
 
