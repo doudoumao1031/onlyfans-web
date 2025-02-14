@@ -185,3 +185,6 @@ export function getEvenlySpacedPoints<T>(arr: T[], count = 12) {
   const step = (arr.length - 1) / (count - 1)
   return Array.from({ length: count }, (_, i) => arr[Math.round(i * step)])
 }
+
+
+export const TIME_FORMAT = "YYYY-MM-DD HH:mm:ss"
