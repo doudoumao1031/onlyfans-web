@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useMemo, useState } from "react"
 import Image from "next/image"
 import { CommentInfo, fetchPostComments, PostData } from "@/lib"
 import Comments from "./comment"
@@ -16,7 +16,7 @@ import Tip from "./tip"
 import Share from "./share"
 import Save from "./save"
 import Link from "next/link"
-
+import CommentSkeleton from "./comment-skeleton"
 export default function Post({
   data,
   hasVote,
@@ -33,12 +33,19 @@ export default function Post({
   const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
     data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
-  const [showComments, setShowComments] = useState(false)
+  const [showComments, setShowComments] = useState(isInfoPage ? true : false)
   const [comments, setComments] = useState<CommentInfo[]>()
   const [showVote, setShowVote] = useState(false)
+  const [commentsLoading, setCommentsLoading] = useState<boolean>(false)
   const linkRender = (content: string) => {
     return <Link href={`/postInfo/${post.id}`}>{content}</Link>
   }
+  useMemo(async () => {
+    setCommentsLoading(true)
+    const res = await fetchPostComments(post.id)
+    setCommentsLoading(false)
+    setComments(res)
+  }, [post.id])
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
       {!isInfoPage && <UserTitle user={user} pub_time={post.pub_time} />}
@@ -78,21 +85,24 @@ export default function Post({
           <CommentStats count={comment_count} onClick={toggleComments} />
         ) : (
           <Link href={`/postInfo/${post.id}`}>
-            <CommentStats count={comment_count} onClick={toggleComments} />
+            <CommentStats count={comment_count} />
           </Link>
         )}
         <Tip count={tip_count} postId={post.id} />
         <Share count={share_count} postId={post.id} />
         <Save count={collection_count} saved={collection} postId={post.id} />
       </div>
-      {showComments && comments && (
-        <Comments
-          post_id={post.id}
-          comments={comments}
-          removeComment={removeComment}
-          fetchComments={async () => setComments(await fetchPostComments(post.id))}
-        />
-      )}
+      {showComments &&
+        (commentsLoading ? (
+          <CommentSkeleton></CommentSkeleton>
+        ) : (
+          <Comments
+            post_id={post.id}
+            comments={comments || []}
+            removeComment={removeComment}
+            fetchComments={async () => setComments(await fetchPostComments(post.id))}
+          />
+        ))}
     </div>
   )
 

@@ -2,7 +2,7 @@ import { PageInfo, ENDPOINTS, fetchWithPost, PageResponse, PostData, fetchWithGe
 import { UserProfile } from "../profile"
 
 //我的帖子
-export const getMyFeeds = (params: PageInfo & { sort_type?: number }) =>
+export const getMyFeeds = (params: PageInfo & { sort_type?: number; post_status?: number }) =>
   fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.POST.ME_POSTS, params).then((res) => {
     if (res && res.code === 0) {
       return res.data
