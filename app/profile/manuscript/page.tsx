@@ -31,7 +31,8 @@ const ManuscriptPost = () => {
       pageSize: 10,
       from_id: 0,
       sort_type: 0,
-      sort_asc: timeSort
+      sort_asc: timeSort,
+      post_status: 1
     }).then(response => {
       if (response) {
         setInitData(response)

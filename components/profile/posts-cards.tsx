@@ -7,7 +7,8 @@ export default async function Page() {
     title: "",
     page: 1,
     pageSize: 1,
-    from_id: 0
+    from_id: 0,
+    post_status: 1
   })
   if (!subscribeSettings || !posts) {
     throw new Error()
