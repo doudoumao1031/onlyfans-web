@@ -100,7 +100,7 @@ export const ENDPOINTS = {
     COLLECTION_USERS: "/user/userCollectionUsers"
   },
   ORDERS: {
-    ADD_POST_PAY: "/wallet/addPostPayOrder",
+    ADD_POST_PAY: "/wallet/addPostPayOrder", //增加帖子付费记录
     ADD_POST_TIP: "/wallet/addPostTip",
     ADD_SUB: "/wallet/addSubOrder",
     ADD_WALLET_DOWN: "/wallet/addWalletDownOrder",

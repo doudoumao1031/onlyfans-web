@@ -1,10 +1,7 @@
 // Order related types and interfaces
-
-export interface PostPayOrderReq {
-  postId: string
-  payType: number
-}
-
+/**
+ * 打赏请求 | 帖子付费请求
+ */
 export interface PostTipReq {
   post_id: number
   amount: number // 打赏金额
