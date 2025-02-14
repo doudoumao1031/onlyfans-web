@@ -3,12 +3,15 @@ import Empty from "@/components/common/empty"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import MediaItem from "@/components/space/mediaItem"
-import { myMediaPosts, PageResponse, PostData } from "@/lib"
+import { myMediaPosts, PageInfo, PageResponse, PostData } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { Fragment, useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { userMediaPosts } from "@/lib/actions/space"
-
+type FeedParams = PageInfo & {
+  user_id: number
+  post_status?: number
+}
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const { id } = useParams()
@@ -19,11 +22,12 @@ export default function Page() {
     getInitData()
   }, [])
   const getInitData = async () => {
-    const params = {
+    const params: FeedParams = {
       page: 1,
       pageSize: 10,
       from_id: 0,
-      user_id: Number(userId)
+      user_id: Number(userId),
+      post_status: 1
     }
     const res = selfId ? await myMediaPosts(params) : await userMediaPosts(params)
     setInitData(res)
@@ -33,7 +37,8 @@ export default function Page() {
     params: {
       pageSize: 10,
       from_id: 0,
-      user_id: Number(userId)
+      user_id: Number(userId),
+      post_status: 1
     }
   })
   return (
