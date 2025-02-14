@@ -4,20 +4,66 @@ import SubscribedDrawer from "@/components/explore/subscribed-drawer"
 import Post from "@/components/post/post"
 import { buildMention } from "@/components/post/utils"
 import IconWithImage from "@/components/profile/icon"
-import { PostData } from "@/lib"
+import { addPostPayOrder, PostData } from "@/lib"
 import { userDelFollowing, userFollowing } from "@/lib/actions/space"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { useState,useMemo } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
+import Modal from "@/components/space/modal"
+import { postDetail } from "@/lib/actions/profile"
 
 export default function Page({ postData }: { postData: PostData }) {
+  const [data, setData] = useState<PostData>(postData)
   const { showMessage, renderNode } = useCommonMessage()
   const [isFocus, setIsFocus] = useState<boolean>(postData.user?.following as boolean)
   const [openDrawer, seOpenDrawer] = useState<boolean>(false)
+  const [pay, setPay] = useState<boolean>(false)
+  const [price, setPrice] = useState<number>(0)
+  const [visible, setVisible] = useState<boolean>(false)
   const router = useRouter()
 
-  const handleFllowing = async () => {
+  const [btnText, setBtnText] = useState<string>("")
+  useMemo(() => {
+    const { sub } = data.user
+    const { visibility } = data.post
+    let user_type = 0
+    data.post_price.forEach(item => {
+      setPrice(item.price)
+      if (item.user_type === 1 && sub) {
+        user_type = 1
+        return
+      }
+      if (item.user_type === 2 && !sub) {
+        user_type = 2
+        return
+      }
+    })
+    console.log("=====>user_type",user_type, "===>price:", price)
+    if (user_type === 0 && price === 0 && !sub) {
+      setBtnText("订阅后解锁更多内容")
+    } else if (user_type === 1) {
+      if (price === 0 && !sub) {
+        setBtnText("订阅后浏览博主的帖子")
+      } else if (price > 0 && visibility !== 0) {
+        setPay(true)
+        setBtnText(`支付${price || 0} USDT 浏览该帖子`)
+      }
+    } else if (user_type === 2 && price > 0 && visibility === 2) {
+      setPay(true)
+      setBtnText(`支付${price || 0} USDT 浏览该帖子`)
+    } else {
+      setBtnText("")
+    }
+  }, [data.post_price, data.user, price])
+
+  const flush = async () => {
+    const res = await postDetail(Number(data.post.id))
+    const result = res?.data as unknown as PostData
+    setData(result)
+  }
+
+  const handleFollowing = async () => {
     setIsFocus(!isFocus)
     try {
       const res = isFocus
@@ -29,6 +75,26 @@ export default function Page({ postData }: { postData: PostData }) {
       console.log("FETCH_ERROR,", error)
     }
   }
+
+  const handlePay = async () => {
+    try {
+      const res = await addPostPayOrder({
+        post_id: postData.post.id,
+        amount: price
+      })
+      setVisible(false)
+      if (res && res.code === 0)  {
+        flush()
+        showMessage("支付成功", "success")
+      } else {
+        showMessage("支付失败")
+      }
+    } catch (error) {
+      console.log("FETCH_ERROR,", error)
+      showMessage("支付失败")
+    }
+  }
+
 
   const Header = () => {
     const { photo, first_name, last_name, username, sub_end_time } = postData.user
@@ -48,14 +114,7 @@ export default function Page({ postData }: { postData: PostData }) {
         </div>
         <div className="flex-1 flex items-center pl-4">
           <div className="w-8 h-8">
-            <CommonAvatar photoFileId={photo} size={32} />
-            {/*<LazyImg*/}
-            {/*  src={buildImageUrl(photo)}*/}
-            {/*  alt=""*/}
-            {/*  className={`rounded-full border-2 border-white w-${8} h-${8}`}*/}
-            {/*  width={32}*/}
-            {/*  height={32}*/}
-            {/*/>*/}
+            <CommonAvatar photoFileId={photo} size={32}/>
           </div>
           <div className="ml-2">
             <div className="text-[14px]">
@@ -68,7 +127,7 @@ export default function Page({ postData }: { postData: PostData }) {
         <div className="focus">
           <div
             onClick={() => {
-              handleFllowing()
+              handleFollowing()
             }}
             className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${
               isFocus
@@ -96,28 +155,40 @@ export default function Page({ postData }: { postData: PostData }) {
     )
   }
   if (!postData) return null
-  const btnText = () => {
-    const { sub } = postData.user
-    const { price, user_type } = postData.post_price[0]
-    if (user_type === 0) return ""
-    if (!sub) return "订阅后浏览博主的帖子"
-    if (!sub) return "订阅后解锁更多内容"
-    if (price) return `支付${price || 0} USDT 浏览该帖子`
-  }
+
+
   return (
     <div className="p-4 pt-20">
       {renderNode}
       <Header />
-      <Post data={postData as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
-      {btnText() && (
+      <Modal
+        visible={visible}
+        cancel={() => {
+          setVisible(false)
+        }}
+        type={"modal"}
+        content={<div className="p-4 pb-6">付费可观看次内容</div>}
+        confirm={handlePay}
+      />
+      <Post
+        data={postData as unknown as PostData}
+        hasSubscribe={false}
+        hasVote
+        isInfoPage={true}
+      />
+      {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
             onClick={() => {
-              seOpenDrawer(true)
+              if (pay) {
+                setVisible(true)
+              } else {
+                seOpenDrawer(true)
+              }
             }}
             className="w-[295px] h-[50px] bg-main-pink  text-white rounded-full text-[15px] flex justify-center items-center"
           >
-            {btnText()}
+            {btnText}
           </div>
         </div>
       )}
