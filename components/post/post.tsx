@@ -21,14 +21,12 @@ export default function Post({
   data,
   hasVote,
   hasSubscribe,
-  isInfoPage,
-  id
+  isInfoPage
 }: {
   data: PostData
   hasVote: boolean
   hasSubscribe: boolean
   isInfoPage?: boolean
-  id?: string
 }) {
   const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
     data
@@ -53,7 +51,7 @@ export default function Post({
       <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
       <UserHomePageLink userId={user.id.toString()} />
       {post_attachment && post_attachment.length > 0 && (
-        <Media data={post_attachment} post={post} user={user} id={id} />
+        <Media data={post_attachment} post={post} user={user} />
       )}
       {hasSubscribe && mention_user && mention_user.length > 0 && (
         <div className={"grid gap-1"}>

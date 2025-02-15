@@ -4,11 +4,13 @@ import IconWithImage from "@/components/profile/icon"
 import { addPostPayOrder } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
 
-export default function PostPayDrawer ({ post_id, amount, isOpen, setIsOpen }:{
+export default function PostPayDrawer ({ post_id, amount, flush, isOpen, setIsOpen, setRechargeModel }:{
   post_id: number
   amount: number
+  flush: () => void
   isOpen: boolean
   setIsOpen: (val: boolean) => void
+  setRechargeModel: (val: boolean) => void
 })  {
 
   const { showMessage, renderNode } = useCommonMessage()
@@ -18,9 +20,14 @@ export default function PostPayDrawer ({ post_id, amount, isOpen, setIsOpen }:{
       .then((result) => {
         if (result && result.code === 0) {
           console.log("支付成功")
+          flush()
           setIsOpen(false)
           showMessage("支付成功", "success")
+        } else if (result?.message === "NOT_ENOUGH_BALANCE") {
+          setIsOpen(false)
+          setRechargeModel(true)
         } else {
+          setIsOpen(false)
           console.log("支付失败:", result?.message)
           showMessage("支付失败")
         }

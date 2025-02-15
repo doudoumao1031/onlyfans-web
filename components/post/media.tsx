@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link"
 import { Attachment, FileType, TPost } from "./types"
 import { buildImageUrl } from "@/lib/utils"
@@ -5,6 +6,7 @@ import { VideoPreview } from "./video-preview"
 import LazyImg from "@/components/common/lazy-img"
 import IconWithImage from "../profile/icon"
 import { User } from "@/lib"
+import { usePathname } from "next/navigation"
 
 export default function Media({
   data,
@@ -16,21 +18,32 @@ export default function Media({
   user: User
 }) {
   const showIds = data.map((v) => v.file_id).join("_")
+  const path = usePathname()
+  const content = (
+    <div
+      className="w-full h-full bg-black bg-opacity-[30%] rounded-lg backdrop-blur absolute top-0 left-0 z-20 flex flex-col items-center justify-center"
+    >
+      <IconWithImage
+        url="/icons/icon_info_lock_white.png"
+        width={32}
+        color="#fff"
+        height={32}
+      />
+      <span
+        className="mt-2 text-white"
+      >{post.visibility === 2 ? "付费内容，请付费后查看" : "订阅内容，请订阅后查看"}</span>
+    </div>
+  )
   return (
     <>
       {((post.visibility === 1 && !user.sub) || post.visibility === 2) && (
         <div className="w-full h-[200px] relative">
-          <div
-            className="w-full h-full bg-black bg-opacity-[30%] rounded-lg backdrop-blur absolute top-0 left-0 z-20 flex flex-col items-center justify-center"
-          >
-            <IconWithImage
-              url="/icons/icon_info_lock_white.png"
-              width={32}
-              color="#fff"
-              height={32}
-            />
-            <span className="mt-2 text-white">{post.visibility === 2 ? "付费内容，请付费后查看" : "订阅内容，请订阅后查看"}</span>
-          </div>
+          {path.startsWith("/postInfo") && content}
+          {!path.startsWith("/postInfo") && (
+            <Link href={`/postInfo/${post.id}`}>
+              {content}
+            </Link>
+          )}
           <LazyImg
             className={"aspect-square rounded-md block"}
             src={"/icons/default/img_media_default.png"}

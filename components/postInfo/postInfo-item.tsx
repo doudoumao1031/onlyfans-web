@@ -4,7 +4,7 @@ import SubscribedDrawer from "@/components/explore/subscribed-drawer"
 import Post from "@/components/post/post"
 import { buildMention } from "@/components/post/utils"
 import IconWithImage from "@/components/profile/icon"
-import { addPostPayOrder, PostData } from "@/lib"
+import { PostData } from "@/lib"
 import { userDelFollowing, userFollowing } from "@/lib/actions/space"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation"
@@ -12,6 +12,8 @@ import { useState, useMemo } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
 import { postDetail } from "@/lib/actions/profile"
 import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
+import Modal from "@/components/space/modal"
+import RechargeDrawer from "@/components/profile/recharge-drawer"
 
 export default function Page({ postData }: { postData: PostData }) {
   const [data, setData] = useState<PostData>(postData)
@@ -21,6 +23,8 @@ export default function Page({ postData }: { postData: PostData }) {
   const [payDrawer, setPayDrawer] = useState<boolean>(false)
   const [pay, setPay] = useState<boolean>(false)
   const [price, setPrice] = useState<number>(0)
+  const [visible, setVisible] = useState<boolean>(false)
+  const [recharge, setRecharge] = useState<boolean>(false)
   const router = useRouter()
 
   const [btnText, setBtnText] = useState<string>("")
@@ -69,24 +73,6 @@ export default function Page({ postData }: { postData: PostData }) {
       showMessage(!isFocus ? "关注成功" : "取消成功")
     } catch (error) {
       console.log("FETCH_ERROR,", error)
-    }
-  }
-
-  const handlePay = async () => {
-    try {
-      const res = await addPostPayOrder({
-        post_id: postData.post.id,
-        amount: price
-      })
-      if (res && res.code === 0) {
-        flush()
-        showMessage("支付成功", "success")
-      } else {
-        showMessage("支付失败")
-      }
-    } catch (error) {
-      console.log("FETCH_ERROR,", error)
-      showMessage("支付失败")
     }
   }
 
@@ -184,10 +170,34 @@ export default function Page({ postData }: { postData: PostData }) {
         <PostPayDrawer
           post_id={postData.post.id}
           amount={price}
+          flush={flush}
           isOpen={payDrawer}
           setIsOpen={setPayDrawer}
+          setRechargeModel={setVisible}
         />
       )}
+      <Modal
+        visible={visible}
+        cancel={() => {
+          setVisible(false)
+        }}
+        type={"modal"}
+        content={<div className="p-4 pb-6">余额不足</div>}
+        okText="充值"
+        confirm={() => {
+          setVisible(false)
+          setRecharge(true)
+        }}
+      />
+      {recharge && (
+        <RechargeDrawer isOpen={recharge} setIsOpen={setRecharge} setWfAmount={() => {}}>
+          <div className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
+            onTouchEnd={() => {setRecharge(true)}}
+          >充值
+          </div>
+        </RechargeDrawer>
+      )
+      }
     </div>
   )
 }
