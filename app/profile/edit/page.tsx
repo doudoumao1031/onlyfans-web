@@ -191,15 +191,14 @@ export default function Page() {
                 </button>
               </section>
               <section>
-                <button
-                  type="button"
+                <div
                   className="pt-4 pb-4 text-base w-full border-b border-gray-100 flex justify-between items-center"
                 >
                   <span>直播展示</span>
                   <span>
                     <Switch className={"custom-switch"}/>
                   </span>
-                </button>
+                </div>
               </section>
             </section>
           </section>
