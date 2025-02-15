@@ -27,6 +27,7 @@ export default function TabLinks({ id, data }: { id: string; data: UserProfile |
     <div className="w-full text-center grid grid-cols-2 border-b border-gray-100 sticky top-[68px] z-40 bg-white">
       {links.map((link) => (
         <Link
+          replace
           prefetch={true}
           key={link.name}
           href={link.href}

@@ -35,7 +35,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           alt={""}
         />
       </div>
-      <div className={`w-full fixed top-0 left-0 z-50 ${isTop ? "bg-[#fff]" : "auto"}`}>
+      <div className={`w-full fixed top-0 left-0 z-40 ${isTop ? "bg-[#fff]" : "auto"}`}>
         <Header
           leftTitle={
             <span

@@ -8,7 +8,7 @@ import { addPostPayOrder, PostData } from "@/lib"
 import { userDelFollowing, userFollowing } from "@/lib/actions/space"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation"
-import { useState,useMemo } from "react"
+import { useState, useMemo } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
 import { postDetail } from "@/lib/actions/profile"
 import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
@@ -27,7 +27,7 @@ export default function Page({ postData }: { postData: PostData }) {
   useMemo(() => {
     const { sub } = data.user
     const { visibility } = data.post
-    data.post_price.some(item => {
+    data.post_price.some((item) => {
       if (item.user_type === 1 && sub) {
         setPrice(item.price)
         return true
@@ -78,7 +78,7 @@ export default function Page({ postData }: { postData: PostData }) {
         post_id: postData.post.id,
         amount: price
       })
-      if (res && res.code === 0)  {
+      if (res && res.code === 0) {
         flush()
         showMessage("支付成功", "success")
       } else {
@@ -90,11 +90,10 @@ export default function Page({ postData }: { postData: PostData }) {
     }
   }
 
-
   const Header = () => {
     const { photo, first_name, last_name, username, sub_end_time } = postData.user
     return (
-      <div className="flex items-center fixed w-full h-[76px] top-0 left-0 px-4 py-4 bg-white z-[99999]">
+      <div className="flex items-center fixed w-full h-[76px] top-0 left-0 px-4 py-4 bg-white z-[45]">
         <div
           onClick={() => {
             router.back()
@@ -109,7 +108,7 @@ export default function Page({ postData }: { postData: PostData }) {
         </div>
         <div className="flex-1 flex items-center pl-4">
           <div className="w-8 h-8">
-            <CommonAvatar photoFileId={photo} size={32}/>
+            <CommonAvatar photoFileId={photo} size={32} />
           </div>
           <div className="ml-2">
             <div className="text-[14px]">
@@ -151,17 +150,11 @@ export default function Page({ postData }: { postData: PostData }) {
   }
   if (!postData) return null
 
-
   return (
     <div className="p-4 pt-20">
       {renderNode}
       <Header />
-      <Post
-        data={postData as unknown as PostData}
-        hasSubscribe={false}
-        hasVote
-        isInfoPage={true}
-      />
+      <Post data={postData as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
       {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
@@ -188,7 +181,12 @@ export default function Page({ postData }: { postData: PostData }) {
         />
       )}
       {payDrawer && (
-        <PostPayDrawer post_id={postData.post.id} amount={price} isOpen={payDrawer} setIsOpen={setPayDrawer} />
+        <PostPayDrawer
+          post_id={postData.post.id}
+          amount={price}
+          isOpen={payDrawer}
+          setIsOpen={setPayDrawer}
+        />
       )}
     </div>
   )

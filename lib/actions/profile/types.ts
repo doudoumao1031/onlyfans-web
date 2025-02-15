@@ -34,7 +34,7 @@ export interface iPostPrice {
 }
 
 export interface iPost {
-  post: Partial<Pick<TPost, "id" | "notice" | "post_status"|"title">>
+  post: Partial<Pick<TPost, "id" | "notice" | "post_status" | "title">>
   post_attachment?: iPostAttachment[] //帖子附件
   post_mention_user?: Array<{ user_id: number }> //提及的用户ID
   post_price?: iPostPrice[] // 帖子价格
@@ -69,6 +69,7 @@ export type UserProfile = {
   photo: string //用户头像
   play_count: number //帖子/媒体播放数量
   post_count: number //帖子数量
+  post_start_count: number //帖子点赞数量
   pt_user_id: number
   status: number // 1正常，2停用
   sub: boolean // 是否订阅
