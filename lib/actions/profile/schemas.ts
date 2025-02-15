@@ -7,7 +7,7 @@ export const postVoteSchema = z.object({
   }).required()).min(2, "最少两个选项"),
   mu_select: z.boolean(),
   stop_time: z.union([z.number().min(0, "请选择结束时间"), z.string().min(1, "请选择结束时间")]),
-  title: z.string({ message: "请输入投票标题" }).min(2, "标题最少2个字")
+  title: z.string({ message: "请输入投票标题" }).min(2, "标题最少2个字").max(15,"不能超过15个字")
 })
 
 export const postPriceSchema = z.array(z.object({

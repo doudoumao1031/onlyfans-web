@@ -619,7 +619,7 @@ const UploadMedia = () => {
           上传中...
         </div>
       )}
-      {!uploading && itemsList.length < 10 && (
+      {!uploading && itemsList.length < 9 && (
         <div className="relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded ">
           <input
             ref={ref}

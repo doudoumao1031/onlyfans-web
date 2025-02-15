@@ -25,6 +25,7 @@ import useCommonMessage, {
   useCommonMessageContext
 } from "@/components/common/common-message"
 import { getEvenlySpacedPoints } from "@/lib/utils"
+import { clsx } from "clsx"
 
 const Withdrawal = ({
   children,
@@ -39,10 +40,10 @@ const Withdrawal = ({
   const schemas = useMemo(() => {
     return z.object({
       amount: z
-        .string({ message: "请输入" })
-        .refine((data) => Number(data) > 0, { message: "必须大于等于0" })
+        .string({ message: "请输入提现金额" })
+        .refine((data) => Number(data) > 0.01, { message: "提现金额不能小于0.01USDT" })
         .refine((data) => Number(data) <= info.amount - (info?.freeze ?? 0), {
-          message: "不能超过可提现余额"
+          message: "提现金额不能大于可提现余额"
         })
     })
   }, [info])
@@ -62,6 +63,14 @@ const Withdrawal = ({
       withdrawalForm.reset()
     }
   }, [openState, withdrawalForm])
+
+  const errorMessage = withdrawalForm.formState.errors.amount?.message
+
+  useEffect(() => {
+    if (openState) {
+      withdrawalForm.trigger("amount")
+    }
+  },[openState])
   return (
     <>
       <button
@@ -128,6 +137,9 @@ const Withdrawal = ({
               <Controller control={withdrawalForm.control} render={({ field }) => {
                 return (
                   <Input
+                    style={{
+                      boxShadow:"none"
+                    }}
                     value={field.value || ""}
                     onChange={field.onChange}
                     onBlur={event => {
@@ -142,16 +154,20 @@ const Withdrawal = ({
               />
               <span>USDT</span>
             </span>
-            <section className={"absolute bottom-[-12px] text-red-600 text-xs"}>
-              {withdrawalForm.formState.errors?.amount?.message}
-            </section>
+            {/*<section className={"absolute bottom-[-12px] text-red-600 text-xs"}>*/}
+            {/*  {withdrawalForm.formState.errors?.amount?.message}*/}
+            {/*</section>*/}
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center mt-10">
             <button
+              disabled={!!errorMessage}
               type={"submit"}
-              className="w-72 h-12 rounded-full bg-main-pink text-white flex justify-center items-center mt-10"
+              className={clsx(
+                "w-full transition-all h-12 rounded-full text-white flex justify-center items-center ",
+                !!errorMessage ? "bg-[#ddd]" :"bg-main-pink "
+              )}
             >
-              提现
+              {errorMessage ? errorMessage : "提现"}
             </button>
           </div>
         </div>
