@@ -17,7 +17,7 @@ export type UserReq = {
 export type DiscountInfo = {
   discount_end_time: number
   discount_per: number
-  discount_price: string
+  discount_price: number
   discount_start_time: number
   discount_status: boolean //折扣信息状态（false可用｜true不可用）
   id: number
