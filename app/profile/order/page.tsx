@@ -9,7 +9,6 @@ import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger
 } from "@/components/ui/drawer"
 import ModalHeader from "@/components/common/modal-header"
 import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
@@ -42,46 +41,50 @@ import { omit } from "lodash"
 
 const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 
-const AddSubscriptionModal = ({ children, append ,userId, currentDiscounts }: { children: React.ReactNode, append: (data: DiscountInfo) => void ,userId: number, currentDiscounts: AddBundleDiscount[]}) => {
+const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, openState, setOpenState }: {
+  callback: (data: DiscountInfo) => void,
+  userId: number,
+  currentDiscounts: AddBundleDiscount[],
+  initData?: DiscountInfo,
+  openState: boolean,
+  setOpenState: (val: boolean) => void
+}) => {
   const { renderNode } = useCommonMessage()
-  const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const hasSub = currentDiscounts.filter(item => item.month_count !== undefined).map(item => item.month_count)
-
-  const handleClose = () => setIsOpen(false)
 
   const minId = useMemo(() => {
     const ids = currentDiscounts.map(item => item.id).filter(item => item !== undefined)
     return Math.min(...ids, 0)
-  },[currentDiscounts])
+  }, [currentDiscounts])
 
   const form = useForm<DiscountInfo>({
     mode: "all",
     resolver: zodResolver(bundleSubscribe),
-    defaultValues: {}
+    defaultValues: {
+      ...(initData ?? {})
+    }
   })
 
   useEffect(() => {
-    if (isOpen) {
-      form.reset()
+    if (openState) {
+      form.reset(initData)
     }
-  }, [isOpen, form])
+  }, [openState, form])
 
   const monthSelections = useMemo(() => {
     return [
-      { label: "1个月", value: "1" },
       { label: "2个月", value: "2" },
       { label: "3个月", value: "3" },
-      { label: "4个月", value: "4" }
+      { label: "6个月", value: "6" },
+      { label: "6个月", value: "9" },
+      { label: "12个月", value: "12" }
     ].filter(item => !hasSub.includes(Number(item.value)))
-  },[hasSub])
+  }, [hasSub])
 
 
   return (
-    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerTrigger asChild>
-        {children}
-      </DrawerTrigger>
+    <Drawer open={openState} onOpenChange={setOpenState}>
       <DrawerContent className={"h-[95vh] bg-white"}>
         {renderNode}
         <section className={"flex-1"}>
@@ -90,24 +93,25 @@ const AddSubscriptionModal = ({ children, append ,userId, currentDiscounts }: { 
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>
           <form onSubmit={form.handleSubmit(data => {
-            append({
-              discount_end_time: 0,
-              discount_per: 0,
-              discount_price: String(data.price),
-              discount_start_time: 0,
-              discount_status: false,
-              id: minId -1,
-              item_status: false,
+            callback({
+              discount_end_time: initData?.discount_end_time ?? 0,
+              discount_per: initData?.discount_per ?? 0,
+              discount_price: initData?.discount_price ?? 0,
+              discount_start_time: initData?.discount_start_time ?? 0,
+              discount_status: initData?.discount_status ?? false,
+              id: !initData ? minId - 1 : initData.id,
+              item_status: initData?.item_status ?? false,
               user_id: userId,
               month_count: Number(data.month_count),
               price: Number(data.price)
             })
-            setIsOpen(false)
+            setOpenState(false)
           })}
           >
             <ModalHeader title={"捆绑订阅"}
-              left={<button type={"button"} onTouchEnd={handleClose}
-                className={"text-base text-[#777]"}
+              left={<button type={"button"} onTouchEnd={() => {
+                setOpenState(false)
+              }} className={"text-base text-[#777]"}
               >取消</button>}
               right={(
                 <button type={"submit"}
@@ -119,11 +123,15 @@ const AddSubscriptionModal = ({ children, append ,userId, currentDiscounts }: { 
             <div className={"mt-5 block px-4"}>
               <Controller render={({ field, fieldState }) => {
                 return (
-                  <InputWithLabel errorMessage={fieldState.error?.message} placeholder={"订阅时限"}
-                    onInputChange={field.onChange}
-                    options={monthSelections}
-                    value={field.value ?? ""}
-                  />
+                  initData ? (
+                    <InputWithLabel placeholder={"订阅时限"} value={`${field.value}个月`} disabled/>
+                  ) : (
+                    <InputWithLabel errorMessage={fieldState.error?.message} placeholder={"订阅时限"}
+                      onInputChange={field.onChange}
+                      options={monthSelections}
+                      value={field.value ?? ""}
+                    />
+                  )
                 )
               }} name={"month_count"} control={form.control}
               />
@@ -147,9 +155,13 @@ const AddSubscriptionModal = ({ children, append ,userId, currentDiscounts }: { 
   )
 }
 
-const AddPromotionalActivities = ({ children, items,updateItems }: { children: React.ReactNode, items: DiscountInfo[] ,updateItems:(items:DiscountInfo[]) => void }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
-  const handleClose = () => setIsOpen(false)
+const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState, initData }: {
+  items: DiscountInfo[],
+  updateItems: (items: DiscountInfo[]) => void,
+  openState: boolean,
+  setOpenState: (val: boolean) => void,
+  initData?: DiscountInfo
+}) => {
   const addForm = useForm<DiscountInfo>({
     mode: "all",
     resolver: zodResolver(addDiscount),
@@ -167,22 +179,26 @@ const AddPromotionalActivities = ({ children, items,updateItems }: { children: R
     })
   }, [items])
 
+
+
   useEffect(() => {
-    if (isOpen) {
-      addForm.reset()
+    if (openState) {
+      addForm.reset(initData)
     }
-  }, [isOpen, addForm])
-
+  }, [openState, addForm, initData])
   const id = addForm.watch("id")
-
   const minTime = new Date()
-  const values = addForm.watch()
+
+  const disableShowText = useMemo(() => {
+    const item = items.find(d => d.id === id)
+    if (item) {
+      return `${item.discount_price} ${item.month_count}个月 （平均约${calcAvg(Number(item.discount_price), item.month_count)}/月）`
+    }
+    return ""
+  },[id, items])
 
   return (
-    <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <DrawerTrigger asChild>
-        {children}
-      </DrawerTrigger>
+    <Drawer open={openState} onOpenChange={setOpenState}>
       <DrawerContent className={"h-[95vh] bg-white"}>
         <section className={"flex-1"}>
           <DrawerHeader className={"hidden"}>
@@ -193,7 +209,7 @@ const AddPromotionalActivities = ({ children, items,updateItems }: { children: R
             const newItems = items.map(item => {
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
               // @ts-expect-error
-              if (item.id === data.id || item?.discount_id === data?.discount_id) {
+              if (item.id === data.id || (item.discount_id && item?.discount_id === data?.discount_id)) {
                 return {
                   ...item,
                   ...data,
@@ -203,7 +219,7 @@ const AddPromotionalActivities = ({ children, items,updateItems }: { children: R
               return item
             })
             updateItems(newItems as DiscountInfo[])
-            setIsOpen(false)
+            setOpenState(false)
             // updateSubscribeSettingItem({
             //   ...newValues,
             //   discount_per: Number(newValues.discount_per)
@@ -219,7 +235,10 @@ const AddPromotionalActivities = ({ children, items,updateItems }: { children: R
           })}
           >
             <ModalHeader title={"促销活动"}
-              left={<button onTouchEnd={handleClose} className={"text-base text-[#777]"}>取消</button>}
+              left={<button onTouchEnd={() => {
+                setOpenState(false)
+              }} className={"text-base text-[#777]"}
+              >取消</button>}
               right={(
                 <button type={"submit"}
                   className={"text-base text-main-pink"}
@@ -231,14 +250,24 @@ const AddPromotionalActivities = ({ children, items,updateItems }: { children: R
               <section>
                 <Controller render={({ field, fieldState }) => {
                   return (
-                    <InputWithLabel
-                      errorMessage={fieldState.error?.message}
-                      description={"在基本订阅和捆绑订阅中已经设定好的价格"}
-                      label={"促销价格选择"}
-                      value={field.value}
-                      onInputChange={field.onChange}
-                      options={priceOptions}
-                    />
+                    initData ? (
+                      <InputWithLabel
+                        disabled
+                        errorMessage={fieldState.error?.message}
+                        description={"在基本订阅和捆绑订阅中已经设定好的价格"}
+                        label={"促销价格选择"}
+                        value={disableShowText}
+                      />
+                    ) : (
+                      <InputWithLabel
+                        errorMessage={fieldState.error?.message}
+                        description={"在基本订阅和捆绑订阅中已经设定好的价格"}
+                        label={"促销价格选择"}
+                        value={field.value}
+                        onInputChange={field.onChange}
+                        options={priceOptions}
+                      />
+                    )
                   )
                 }} name={"id"} control={addForm.control}
                 />
@@ -274,7 +303,9 @@ const AddPromotionalActivities = ({ children, items,updateItems }: { children: R
                         field.onChange(value / 1000)
                       }}
                       >
-                        <div className={field.value ? "" : "text-gray-500"}>{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
+                        <div
+                          className={field.value ? "" : "text-gray-500"}
+                        >{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
                       </DateTimePicker>
                     </TopLabelWrapper>
                   )
@@ -282,14 +313,16 @@ const AddPromotionalActivities = ({ children, items,updateItems }: { children: R
                 />
               </section>
               <section className={"mt-[30px]"}>
-                <Controller render={({ field,fieldState }) => {
+                <Controller render={({ field, fieldState }) => {
                   return (
                     <TopLabelWrapper label="促销结束时间" errorMessage={fieldState.error?.message}>
                       <DateTimePicker min={minTime} disabled={!id} value={field.value * 1000} dateChange={value => {
                         field.onChange(value / 1000)
                       }}
                       >
-                        <div className={field.value ? "" : "text-gray-500"}>{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
+                        <div
+                          className={field.value ? "" : "text-gray-500"}
+                        >{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
                       </DateTimePicker>
                     </TopLabelWrapper>
                   )
@@ -330,46 +363,79 @@ function TopLabelWrapper({ label, children, errorMessage }: {
   )
 }
 
-function SubscribeBundle({ initSettings ,userId,updateItems }: {
+function SubscribeBundle({ items,initSettings, userId, updateItems }: {
+  items: DiscountInfo[],
   initSettings: DiscountInfo[]
   userId: number,
   updateItems: (items: DiscountInfo[]) => void
 }) {
   const bundleForm = useForm<{ list: DiscountInfo[] }>({
     mode: "all",
-    defaultValues:{
-      list: initSettings
+    defaultValues: {
+      list: items
     }
   })
-  const { fields,append } = useFieldArray({
+  const { fields, append, update } = useFieldArray({
     control: bundleForm.control,
     name: "list",
-    keyName:"discount_id"
+    keyName: "discount_id"
   })
 
-  const items = bundleForm.watch("list")
+  const mockSubmit = () => {
+    bundleForm.trigger().then(() => {
+      const values = bundleForm.getValues()
+      updateItems(values.list)
+    })
+  }
+
+  const [editModalOpenState, setEditModalOpenState] = useState<boolean>(false)
+  const [editModalInitData, setEditModalEditInitData] = useState<DiscountInfo | undefined>()
+  const openEditModal = (data?: DiscountInfo) => {
+    setEditModalEditInitData(data)
+    setEditModalOpenState(true)
+  }
+
+  const handleEditModalCallback = (data: DiscountInfo) => {
+    if (data.id < 0) {
+      append(data)
+    } else {
+      const updateIndex = fields.findIndex(item => item.id === data.id)
+      const defaultItem = initSettings.find(i => i.id === data.id)
+      const shouldChangeStatus = defaultItem && Number(defaultItem.price) !== Number(data.price)
+      update(updateIndex, {
+        ...data,
+        discount_status: shouldChangeStatus? false :data.discount_status
+      })
+    }
+    mockSubmit()
+  }
 
   useEffect(() => {
-    updateItems(items)
-  },[items])
-
-  useEffect(() => {
-    bundleForm.setValue("list",initSettings)
-  },[bundleForm, initSettings])
+    bundleForm.setValue("list", initSettings)
+  }, [bundleForm, initSettings])
 
   return (
     <section className={"pt-5 pb-5 border-b border-gray-100"}>
+      <EditSubscriptionModal
+        setOpenState={setEditModalOpenState}
+        openState={editModalOpenState}
+        initData={editModalInitData}
+        callback={handleEditModalCallback}
+        userId={userId}
+        currentDiscounts={fields}
+      />
       <form>
         <section className="pl-4 pr-4">
           <section className="flex justify-between items-center">
             <h1 className="text-base font-medium">捆绑订阅</h1>
-            {fields.length < 6 && (
-              <AddSubscriptionModal append={append} userId={userId} currentDiscounts={fields}>
-                <button
-                  className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
-                >添加
-                </button>
-              </AddSubscriptionModal>
+            {fields.length < 5 && (
+              <button
+                onTouchEnd={() => {
+                  openEditModal()
+                }}
+                className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
+              >添加
+              </button>
             )}
           </section>
           {fields.length === 0 && (
@@ -382,17 +448,21 @@ function SubscribeBundle({ initSettings ,userId,updateItems }: {
               return (
                 <TopLabelWrapper label={`价格${index + 1}`}>
                   <section className={"flex items-center justify-between w-full"}>
-                    <section className={"flex-1"}>
+                    <button type={"button"} onTouchEnd={() => {
+                      openEditModal(discount)
+                    }} className={"flex-1 text-left"}
+                    >
                       ${discount.price}&nbsp;&nbsp;{discount.month_count}个月&nbsp;&nbsp;<span
                         className="text-[#6D7781]"
                       >(平均${calcAvg(discount.price, discount.month_count)}/月)</span>
-                    </section>
+                    </button>
                     <Switch className={"custom-switch"} checked={field.value.item_status} onCheckedChange={(value) => {
                       field.onChange({
                         ...field.value,
-                        item_status: value
+                        item_status: value,
+                        discount_status: !value ? false : field.value.discount_status
                       })
-                      updateItems(items)
+                      mockSubmit()
                     }}
                     ></Switch>
                   </section>
@@ -407,46 +477,47 @@ function SubscribeBundle({ initSettings ,userId,updateItems }: {
   )
 }
 
+function DiscountPercentLabel ({ index,percent }:{index:number,percent:number}) {
+  return (
+    <div className={"flex gap-1 items-center"}>
+      <div>促销{index}</div>
+      <div className={"rounded-tl-full rounded-tr-full rounded-br-full bg-[#F7B500] text-white px-1.5 py-0.5 text-xs"}>{percent}% off</div>
+    </div>
+  )
+}
+
 function PromotionalActivities({ updateItems, items }: {
   items: DiscountInfo[]
   updateItems: (values: DiscountInfo[]) => void
 }) {
-  const form = useForm<{ list: DiscountInfo[] }>({
-    mode: "all",
-    defaultValues:{}
-  })
-
-  useEffect(() => {
-    form.setValue("list",items)
+  const discountList = useMemo(() => {
+    return items.filter(item => item.discount_per > 0)
+  },[items])
+  const noDiscountList = useMemo(() => {
+    return items.filter(item => item.discount_per === 0)
   },[items])
 
-  const { fields } = useFieldArray({
-    name: "list",
-    control: form.control,
-    keyName:"discount_id"
-  })
-
-  const values = form.watch()
-
-  const submitChange = () => {
-    updateItems(values.list)
+  const [openState,setOpenState] = useState<boolean>(false)
+  const [editData,setEditData] = useState<DiscountInfo>()
+  const openEditModal = (data?: DiscountInfo) => {
+    setEditData(data)
+    setOpenState(true)
   }
-
-  const discountList = fields.filter(item => item.discount_per > 0)
-  const noDiscountList = fields.filter(item => item.discount_per=== 0)
 
   return (
     <section className={"pt-5 pb-5 border-b border-gray-100"}>
+      <EditPromotionalActivities initData={editData} items={items} updateItems={updateItems} openState={openState} setOpenState={setOpenState}/>
       <section className="pl-4 pr-4">
         <section className="flex justify-between items-center">
           <h1 className="text-base font-medium">促销活动</h1>
           {noDiscountList.length > 0 && (
-            <AddPromotionalActivities items={fields} updateItems={updateItems}>
-              <button
-                className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
-              >添加
-              </button>
-            </AddPromotionalActivities>
+            <button
+              onTouchEnd={() => {
+                openEditModal()
+              }}
+              className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
+            >添加
+            </button>
           )}
         </section>
         {discountList.length === 0 && (
@@ -454,36 +525,33 @@ function PromotionalActivities({ updateItems, items }: {
             为用户提供订阅的促销活动，可以为您吸引更多的订阅用户
           </section>
         )}
-        {fields.map((discount, index) => {
-          if (discount.discount_per === 0) {
-            return null
-          }
-          return  (
-            <Controller key={discount.id} control={form.control} render={({ field }) => {
-              return (
-                <TopLabelWrapper label={`促销${index + 1}`}>
-                  <div className={"flex-1"}>
-                    <div>
-                      {discount.discount_price}&nbsp;&nbsp;{discount.month_count}个月&nbsp;&nbsp;<span
-                        className="text-[#6D7781]"
-                      >(平均${calcAvg(Number(discount.discount_price), discount.month_count)}/月)</span>
-                    </div>
-                    <div className="text-[#6D7781]">
-                      {dayjs(discount.discount_start_time * 1000).format(DATE_TIME_FORMAT)} {dayjs(discount.discount_end_time * 1000).format(DATE_TIME_FORMAT)}
-                    </div>
-                  </div>
-                  <Switch className={"custom-switch"} checked={field.value.discount_status} onCheckedChange={(value) => {
-                    field.onChange({
-                      ...field.value,
-                      discount_status: value
-                    })
-                    submitChange()
-                  }}
-                  ></Switch>
-                </TopLabelWrapper>
-              )
-            }} name={`list.${index}`}
-            />
+        {items.filter(d => d.discount_per > 0).map((discount, index) => {
+          return (
+            <TopLabelWrapper key={discount.id} label={<DiscountPercentLabel index={index+1} percent={discount.discount_per}/>}>
+              <div className={"flex-1"} onTouchEnd={() => {
+                openEditModal(discount)
+              }}
+              >
+                <div>
+                  {discount.discount_price}&nbsp;&nbsp;{discount.month_count}个月&nbsp;&nbsp;<span
+                    className="text-[#6D7781]"
+                  >(平均${calcAvg(Number(discount.discount_price), discount.month_count)}/月)</span>
+                </div>
+                <div className="text-[#6D7781]">
+                  {dayjs(discount.discount_start_time * 1000).format(DATE_TIME_FORMAT)} {dayjs(discount.discount_end_time * 1000).format(DATE_TIME_FORMAT)}
+                </div>
+              </div>
+              <Switch disabled={!discount.item_status} className={"custom-switch"}
+                checked={discount.discount_status} onCheckedChange={(value) => {
+                  const updateIndex = items.findIndex(i => i.id === discount.id)
+                  const arr = [...items]
+                  const item = arr[updateIndex]
+                  item.discount_status = value
+                  arr.splice(updateIndex,1,item)
+                  updateItems(arr)
+                }}
+              ></Switch>
+            </TopLabelWrapper>
           )
         })}
       </section>
@@ -491,33 +559,33 @@ function PromotionalActivities({ updateItems, items }: {
   )
 }
 
-function BasePriceSettings ({ valueChange,value }:{valueChange: (value: number) => void , value: number}) {
-  const [isOpen,setIsOpen] = useState<boolean>(false)
-  const [drawerIsOpen,setDrawerIsOpen] = useState<boolean>(false)
+function BasePriceSettings({ valueChange, value }: { valueChange: (value: number) => void, value: number }) {
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [drawerIsOpen, setDrawerIsOpen] = useState<boolean>(false)
 
-  const customPriceForm = useForm<{price: string}>({
-    mode:"all",
+  const customPriceForm = useForm<{ price: string }>({
+    mode: "all",
     resolver: zodResolver(z.object({
       price: bundlePriceSchema
     }))
   })
-  const handleChange = (v:unknown) => {
+  const handleChange = (v: unknown) => {
     if (v === 0) {
       valueChange(v)
     }
     if (v === -1) {
-      customPriceForm.setValue("price",value.toString())
+      customPriceForm.setValue("price", value.toString())
       setDrawerIsOpen(true)
     }
   }
 
-  const options:ISelectOption[] = [
+  const options: ISelectOption[] = [
     {
-      label:"免费",
+      label: "免费",
       value: 0
     },
     {
-      label:"自定义",
+      label: "自定义",
       value: -1
     }
   ]
@@ -561,7 +629,8 @@ function BasePriceSettings ({ valueChange,value }:{valueChange: (value: number) 
                     )
                   }} name={"price"}
                   />
-                  {formState.errors.price?.message && <div className={"text-xs text-red-600 mt-1.5 px-1"}>{formState.errors.price.message}</div>}
+                  {formState.errors.price?.message &&
+                    <div className={"text-xs text-red-600 mt-1.5 px-1"}>{formState.errors.price.message}</div>}
                 </div>
               </div>
               <div className="grid grid-cols-2 text-base border-t border-[#ddd]">
@@ -570,7 +639,7 @@ function BasePriceSettings ({ valueChange,value }:{valueChange: (value: number) 
                 }} className={"py-3.5 border-r border-[#ddd]"}
                 >取消
                 </button>
-                <button type={"submit"}  className={"py-3.5 text-main-pink font-medium"}>确定
+                <button type={"submit"} className={"py-3.5 text-main-pink font-medium"}>确定
                 </button>
               </div>
             </div>
@@ -588,12 +657,13 @@ function BasePriceSettings ({ valueChange,value }:{valueChange: (value: number) 
 
 export default function Page() {
   const router = useRouter()
-  const [userInfo,setUserInfo] = useState<UserProfile>()
+  const [userInfo, setUserInfo] = useState<UserProfile>()
   const [defaultSettings, setDefaultSettings] = useState<SubscribeSetting | null>()
   const { showMessage, renderNode } = useCommonMessage()
   const refreshDefaultSettings = () => {
     getSubscribeSetting().then(response => {
       if (response) {
+        console.log(response.items)
         setDefaultSettings({
           ...response,
           items: response?.items || []
@@ -605,13 +675,13 @@ export default function Page() {
   useEffect(() => {
     refreshDefaultSettings()
     userProfile().then(data => {
-      if (data ) {
+      if (data) {
         setUserInfo(data?.data)
       }
     })
   }, [])
 
-  const baseFeeForm = useForm<Pick<SubscribeSetting, "price" | "id" | "user_id"| "items">>({
+  const baseFeeForm = useForm<Pick<SubscribeSetting, "price" | "id" | "user_id" | "items">>({
     mode: "all",
     resolver: zodResolver(baseSubscribe),
     defaultValues: { price: (defaultSettings?.price || 0) as number, items: [] }
@@ -619,15 +689,13 @@ export default function Page() {
   const baseFormValues = baseFeeForm.watch()
 
   useEffect(() => {
-    const { price,items = [] } = defaultSettings || {}
-    if (price !== undefined) {
-      baseFeeForm.setValue("price", price)
-      baseFeeForm.setValue("items", items)
+    if (defaultSettings) {
+      baseFeeForm.reset(defaultSettings)
     }
   }, [baseFeeForm, defaultSettings])
 
   const updateItems = (items: DiscountInfo[]) => {
-    baseFeeForm.setValue("items",items)
+    baseFeeForm.setValue("items", items)
   }
 
   const realPrice = baseFeeForm.watch("price")
@@ -637,17 +705,17 @@ export default function Page() {
       return "免费"
     }
     return realPrice.toFixed(2)
-  },[realPrice])
+  }, [realPrice])
 
-  const updateSubscribeSettings = async() => {
-    const { price,items } = baseFormValues
+  const updateSubscribeSettings = async () => {
+    const { price, items } = baseFormValues
     try {
       await addSubscribeSetting({
         price,
         id: userInfo?.id
       })
       await Promise.all(items.map(item => {
-        const params = item.id < 0 ? omit(item,"id") : item
+        const params = item.id < 0 ? omit(item, "id") : item
         return updateSubscribeSettingItem(params)
       }))
       userApplyBlogger().then((res) => {
@@ -657,7 +725,7 @@ export default function Page() {
           console.log("申请博主失败")
         }
       })
-      showMessage("更新成功","",{
+      showMessage("更新成功", "", {
         afterDuration: router.back
       })
     } catch (e) {
@@ -706,7 +774,7 @@ export default function Page() {
                           )
                         }
                       >
-                        <div >{showBaseValue}</div>
+                        <div>{showBaseValue}</div>
                         <div className="shrink-0 flex items-center">
                           <BasePriceSettings valueChange={field.onChange} value={field.value}/>
                         </div>
@@ -714,29 +782,21 @@ export default function Page() {
                     </section>
                     <section className="text-[#6D7781] text-xs px-4 mt-1.5">
                       <div>最小价格$1.99 USDT 或免费</div>
-                      <div>您必须先开通 <span className="text-main-pink">Potato钱包</span>，然后才能设置订阅价格或收取打赏</div>
+                      <div>您必须先开通 <span className="text-main-pink">Potato钱包</span>，然后才能设置订阅价格或收取打赏
+                      </div>
                     </section>
                   </section>
-                  // <InputWithLabel
-                  //   errorMessage={fieldState.error?.message}
-                  //   onInputChange={field.onChange}
-                  //   onBlur={event => {
-                  //     field.onChange(Number(event.target.value).toFixed(2))
-                  //   }}
-                  //   value={field.value} label={"每月价格"} description={(
-                  //     <>
-                  //       <div>最小价格$1.99 USDT 或免费</div>
-                  //       您必须先开通 <span className="text-main-pink">Potato钱包</span>，然后才能设置订阅价格或收取打赏
-                  //     </>
-                  //   )}
-                  // />
                 )
               }} name={"price"} control={baseFeeForm.control}
               />
             </section>
           </form>
         </section>
-        {userInfo && realPrice > 0 && <SubscribeBundle updateItems={updateItems} initSettings={defaultSettings?.items ?? []} userId={userInfo?.id}/>}
+        {userInfo && realPrice > 0 && (
+          <SubscribeBundle updateItems={updateItems} items={baseFormValues.items} initSettings={baseFormValues?.items ?? []}
+            userId={userInfo?.id}
+          />
+        )}
         {realPrice > 0 && <PromotionalActivities items={baseFormValues.items} updateItems={updateItems}/>}
       </section>
     </div>
