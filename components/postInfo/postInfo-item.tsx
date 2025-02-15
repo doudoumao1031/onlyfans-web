@@ -10,52 +10,48 @@ import dayjs from "dayjs"
 import { useRouter } from "next/navigation"
 import { useState,useMemo } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
-import Modal from "@/components/space/modal"
 import { postDetail } from "@/lib/actions/profile"
+import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
 
 export default function Page({ postData }: { postData: PostData }) {
   const [data, setData] = useState<PostData>(postData)
   const { showMessage, renderNode } = useCommonMessage()
   const [isFocus, setIsFocus] = useState<boolean>(postData.user?.following as boolean)
-  const [openDrawer, seOpenDrawer] = useState<boolean>(false)
+  const [drawer, setDrawer] = useState<boolean>(false)
+  const [payDrawer, setPayDrawer] = useState<boolean>(false)
   const [pay, setPay] = useState<boolean>(false)
   const [price, setPrice] = useState<number>(0)
-  const [visible, setVisible] = useState<boolean>(false)
   const router = useRouter()
 
   const [btnText, setBtnText] = useState<string>("")
   useMemo(() => {
     const { sub } = data.user
     const { visibility } = data.post
-    let user_type = 0
-    data.post_price.forEach(item => {
-      setPrice(item.price)
+    data.post_price.some(item => {
       if (item.user_type === 1 && sub) {
-        user_type = 1
-        return
+        setPrice(item.price)
+        return true
       }
       if (item.user_type === 2 && !sub) {
-        user_type = 2
-        return
+        setPrice(item.price)
+        return true
+      }
+      if (item.user_type === 0) {
+        setPrice(item.price)
+        return true
       }
     })
-    console.log("=====>user_type",user_type, "===>price:", price)
-    if (user_type === 0 && price === 0 && !sub) {
-      setBtnText("订阅后解锁更多内容")
-    } else if (user_type === 1) {
-      if (price === 0 && !sub) {
-        setBtnText("订阅后浏览博主的帖子")
-      } else if (price > 0 && visibility !== 0) {
-        setPay(true)
-        setBtnText(`支付${price || 0} USDT 浏览该帖子`)
-      }
-    } else if (user_type === 2 && price > 0 && visibility === 2) {
+    if (visibility === 2 && price > 0) {
       setPay(true)
       setBtnText(`支付${price || 0} USDT 浏览该帖子`)
+    } else if (visibility === 1 && !sub) {
+      setBtnText("订阅后浏览博主的帖子")
+    } else if (visibility === 0 && !sub) {
+      setBtnText("订阅后解锁更多内容")
     } else {
       setBtnText("")
     }
-  }, [data.post_price, data.user, price])
+  }, [data.post, data.post_price, data.user, price])
 
   const flush = async () => {
     const res = await postDetail(Number(data.post.id))
@@ -82,7 +78,6 @@ export default function Page({ postData }: { postData: PostData }) {
         post_id: postData.post.id,
         amount: price
       })
-      setVisible(false)
       if (res && res.code === 0)  {
         flush()
         showMessage("支付成功", "success")
@@ -161,15 +156,6 @@ export default function Page({ postData }: { postData: PostData }) {
     <div className="p-4 pt-20">
       {renderNode}
       <Header />
-      <Modal
-        visible={visible}
-        cancel={() => {
-          setVisible(false)
-        }}
-        type={"modal"}
-        content={<div className="p-4 pb-6">付费可观看次内容</div>}
-        confirm={handlePay}
-      />
       <Post
         data={postData as unknown as PostData}
         hasSubscribe={false}
@@ -179,11 +165,12 @@ export default function Page({ postData }: { postData: PostData }) {
       {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault()
               if (pay) {
-                setVisible(true)
+                setPayDrawer(true)
               } else {
-                seOpenDrawer(true)
+                setDrawer(true)
               }
             }}
             className="w-[295px] h-[50px] bg-main-pink  text-white rounded-full text-[15px] flex justify-center items-center"
@@ -192,13 +179,16 @@ export default function Page({ postData }: { postData: PostData }) {
           </div>
         </div>
       )}
-      {openDrawer && (
+      {drawer && (
         <SubscribedDrawer
           userId={postData.user.id}
           name={postData.user.username}
-          isOpen={openDrawer}
-          setIsOpen={seOpenDrawer}
+          isOpen={drawer}
+          setIsOpen={setDrawer}
         />
+      )}
+      {payDrawer && (
+        <PostPayDrawer post_id={postData.post.id} amount={price} isOpen={payDrawer} setIsOpen={setPayDrawer} />
       )}
     </div>
   )
