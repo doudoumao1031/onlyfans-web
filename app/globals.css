@@ -10,6 +10,28 @@ body {
 /*antd mobile override*/
 :root:root {
   --adm-color-primary: #000;
+  --red: #FF8492;
+  --orange: #FFA94B;
+  --green: #0DC28A;
+  --black: #222222;
+  --gray-primary: #444444;
+  --gray-secondary: #6D7781;
+  --gray-tertiary: #999999;
+  --gray-quaternary: #DDDDDD;
+  --white: #FFFFFF;
+  --white-80: #FFFFFFcc;
+  --white-20: #FFFFFF33;
+  --background-primary: #FFFFFF;
+  --background-secondary: #F8F8F8;
+  /* Text Colors */
+  --text-title: #222222;
+  --text-subtitle: #444444;
+  --text-desc: #6D7781;
+  --text-disabled: #999999;
+  --text-link: #FF8492;
+  --text-light: #FFFFFF;
+  --text-light-secondary: #FFFFFFcc;
+  --border: #DDDDDD;
 }
 
 /* @media (prefers-color-scheme: dark) {
