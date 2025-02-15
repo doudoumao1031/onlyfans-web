@@ -8,7 +8,7 @@ import { addPostPayOrder, PostData } from "@/lib"
 import { userDelFollowing, userFollowing } from "@/lib/actions/space"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation"
-import { useState,useMemo } from "react"
+import { useState, useMemo } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
 import Modal from "@/components/space/modal"
 import { postDetail } from "@/lib/actions/profile"
@@ -28,7 +28,7 @@ export default function Page({ postData }: { postData: PostData }) {
     const { sub } = data.user
     const { visibility } = data.post
     let user_type = 0
-    data.post_price.forEach(item => {
+    data.post_price.forEach((item) => {
       setPrice(item.price)
       if (item.user_type === 1 && sub) {
         user_type = 1
@@ -39,7 +39,7 @@ export default function Page({ postData }: { postData: PostData }) {
         return
       }
     })
-    console.log("=====>user_type",user_type, "===>price:", price)
+    console.log("=====>user_type", user_type, "===>price:", price)
     if (user_type === 0 && price === 0 && !sub) {
       setBtnText("订阅后解锁更多内容")
     } else if (user_type === 1) {
@@ -83,7 +83,7 @@ export default function Page({ postData }: { postData: PostData }) {
         amount: price
       })
       setVisible(false)
-      if (res && res.code === 0)  {
+      if (res && res.code === 0) {
         flush()
         showMessage("支付成功", "success")
       } else {
@@ -95,11 +95,10 @@ export default function Page({ postData }: { postData: PostData }) {
     }
   }
 
-
   const Header = () => {
     const { photo, first_name, last_name, username, sub_end_time } = postData.user
     return (
-      <div className="flex items-center fixed w-full h-[76px] top-0 left-0 px-4 py-4 bg-white z-[99999]">
+      <div className="flex items-center fixed w-full h-[76px] top-0 left-0 px-4 py-4 bg-white z-[45]">
         <div
           onClick={() => {
             router.back()
@@ -114,7 +113,7 @@ export default function Page({ postData }: { postData: PostData }) {
         </div>
         <div className="flex-1 flex items-center pl-4">
           <div className="w-8 h-8">
-            <CommonAvatar photoFileId={photo} size={32}/>
+            <CommonAvatar photoFileId={photo} size={32} />
           </div>
           <div className="ml-2">
             <div className="text-[14px]">
@@ -156,7 +155,6 @@ export default function Page({ postData }: { postData: PostData }) {
   }
   if (!postData) return null
 
-
   return (
     <div className="p-4 pt-20">
       {renderNode}
@@ -170,12 +168,7 @@ export default function Page({ postData }: { postData: PostData }) {
         content={<div className="p-4 pb-6">付费可观看次内容</div>}
         confirm={handlePay}
       />
-      <Post
-        data={postData as unknown as PostData}
-        hasSubscribe={false}
-        hasVote
-        isInfoPage={true}
-      />
+      <Post data={postData as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
       {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
