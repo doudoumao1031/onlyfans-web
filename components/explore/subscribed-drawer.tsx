@@ -5,14 +5,14 @@ import { ToggleGroupSubscribed, ToggleGroupSubscribedItem } from "@/components/u
 import { useState, useMemo,useEffect } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
-
-export default function SubscribedDrawer ({ userId, name, isOpen, setIsOpen }:{
+interface SubscribedDrawerProps {
   userId: number
   name: string
   isOpen: boolean
   setIsOpen: (val: boolean) => void
-})  {
-
+}
+export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
+  const { userId, name, isOpen, setIsOpen } = props
   const { showMessage, renderNode } = useCommonMessage()
   const [items, setItems] = useState<DiscountInfo[]>([])
   const [discount, setDiscount] = useState<DiscountInfo>()

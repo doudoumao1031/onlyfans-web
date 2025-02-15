@@ -3,16 +3,16 @@ import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { addPostPayOrder } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
-
-export default function PostPayDrawer ({ post_id, amount, flush, isOpen, setIsOpen, setRechargeModel }:{
+interface PostPayDrawerProps {
   post_id: number
   amount: number
   flush: () => void
   isOpen: boolean
   setIsOpen: (val: boolean) => void
   setRechargeModel: (val: boolean) => void
-})  {
-
+}
+export default function PostPayDrawer (props: PostPayDrawerProps)  {
+  const { post_id, amount, flush, isOpen, setIsOpen, setRechargeModel } = props
   const { showMessage, renderNode } = useCommonMessage()
 
   const handleSubmit = async () => {

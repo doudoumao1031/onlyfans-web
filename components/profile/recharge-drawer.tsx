@@ -1,16 +1,21 @@
 "use client"
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import LoadingMask from "@/components/common/loading-mask"
+interface RechargeProps {
+  children: React.ReactNode,
+  isOpen: boolean,
+  setIsOpen: (val: boolean) => void,
+  setWfAmount: (val: number) => void
+}
 
-export default function RechargeDrawer (
-  { children, isOpen, setIsOpen, setWfAmount }:
-  {children: React.ReactNode, isOpen: boolean, setIsOpen: (val: boolean) => void ,setWfAmount: (val: number) => void}) {
+export default function RechargeDrawer (props: RechargeProps) {
+  const { children, isOpen, setIsOpen, setWfAmount } = props
   const pathname = usePathname()
   const { showMessage, renderNode } = useCommonMessage()
   const [amount, setAmount] = useState<number>(0)
@@ -24,6 +29,9 @@ export default function RechargeDrawer (
       setErrorMessage("")
     }
   },  [amount])
+  useEffect(() => {
+    getSettingData()
+  }, [])
 
   const getSettingData = async () => {
     setAmount(0)
@@ -89,8 +97,8 @@ export default function RechargeDrawer (
       {renderNode}
       <LoadingMask isLoading={isLoading} />
       <button
-        onTouchEnd={() => {
-          getSettingData()
+        onClick={() => {
+          // getSettingData()
           setIsOpen(true)
         }}
       >
@@ -121,7 +129,7 @@ export default function RechargeDrawer (
         isOpen={isOpen}
         outerControl={true}
       >
-        <div className="h-[50vh] w-full flex flex-col items-center text-black text-2xl bg-slate-50">
+        <div className="h-[50vh] w-full flex flex-col items-center text-black text-2xl bg-[#F8F8F8]">
           <div className={"rounded-xl p-4 w-full text-base"}>
             {columns.map((item, index) => (
               <div key={index} className={`flex justify-between px-4 py-[13px] items-center bg-white 
@@ -166,12 +174,14 @@ export default function RechargeDrawer (
           </div>
           <div className="my-[40px] self-center">
             <button
-              className={"w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full bg-main-pink"}
-              onTouchEnd={(e) => {
-                e.preventDefault()
-                handleRecharge(amount)
+              disabled={amount === 0 || amount > ptBalance}
+              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-main-pink"}`}
+              onClick={() => {
+                if (!(amount === 0 || amount > ptBalance)) {
+                  handleRecharge(amount)
+                }
               }}
-            >确认充值
+            >{amount > ptBalance ? "充值金额不能大于钱包余额" : "确认充值"}
             </button>
           </div>
         </div>
