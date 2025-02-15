@@ -60,7 +60,7 @@ function ErrorContent() {
     <div className="flex min-h-screen items-center justify-center">
       <div className="text-center">
         {errorMsg && <div className="text-red-500 mb-4">{errorMsg}</div>}
-        <h1 className="text-2xl font-bold mb-4">403 - Unauthorized / 未授权访问</h1>
+        <h1 className="text-2xl font-bold mb-4 text-text-title">403 - Unauthorized / 未授权访问</h1>
         <div className="space-y-4">
           <div>
             <input
