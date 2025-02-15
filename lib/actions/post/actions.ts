@@ -156,3 +156,9 @@ export const myMediaPosts = (
  */
 export const postPined = (post_id: number) =>
   fetchWithPost<{ post_id: number }>(ENDPOINTS.POST.PINED, { post_id })
+
+/**
+ * 增加帖子访问日志
+ * @param post_id
+ */
+export const addPostLog = (post_id: number) => fetchWithPost(ENDPOINTS.POST.VIEW_LOG, { post_id })
