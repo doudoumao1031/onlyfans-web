@@ -33,7 +33,7 @@ export default function Post({
   const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
     data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
-  const [showComments, setShowComments] = useState(isInfoPage ? true : false)
+  const [showComments, setShowComments] = useState(isInfoPage)
   const [comments, setComments] = useState<CommentInfo[]>()
   const [showVote, setShowVote] = useState(false)
   const [commentsLoading, setCommentsLoading] = useState<boolean>(false)
@@ -56,7 +56,7 @@ export default function Post({
         <Media data={post_attachment} post={post} user={user} id={id} />
       )}
       {hasSubscribe && mention_user && mention_user.length > 0 && (
-        <div>
+        <div className={"grid gap-1"}>
           {mention_user.map((user) => (
             <Subscribe key={user.id} user={user} />
           ))}

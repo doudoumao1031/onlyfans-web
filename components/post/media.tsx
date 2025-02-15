@@ -9,13 +9,11 @@ import { User } from "@/lib"
 export default function Media({
   data,
   post,
-  user,
-  id
+  user
 }: {
   data: Attachment[]
   post: TPost
   user: User
-  id: string | undefined
 }) {
   const showIds = data.map((v) => v.file_id).join("_")
   return (
@@ -23,7 +21,7 @@ export default function Media({
       {((post.visibility === 1 && !user.sub) || post.visibility === 2) && (
         <div className="w-full h-[200px] relative">
           <div
-            className="w-full h-full bg-black bg-opacity-[30%] rounded-lg backdrop-blur absolute top-0 left-0 z-[99] flex flex-col items-center justify-center"
+            className="w-full h-full bg-black bg-opacity-[30%] rounded-lg backdrop-blur absolute top-0 left-0 z-20 flex flex-col items-center justify-center"
           >
             <IconWithImage
               url="/icons/icon_info_lock_white.png"
@@ -31,7 +29,7 @@ export default function Media({
               color="#fff"
               height={32}
             />
-            <span className="mt-2 text-white">订阅内容，请订阅后查看</span>
+            <span className="mt-2 text-white">{post.visibility === 2 ? "付费内容，请付费后查看" : "订阅内容，请订阅后查看"}</span>
           </div>
           <LazyImg
             className={"aspect-square rounded-md block"}

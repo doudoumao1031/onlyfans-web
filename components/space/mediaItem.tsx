@@ -3,9 +3,8 @@ import IconWithImage from "../profile/icon"
 import { FileType, PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
 import Link from "next/link"
-import { ParamValue } from "next/dist/server/request/params"
 import LazyImg from "../common/lazy-img"
-export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
+export default function Page({ item }: { item: PostData }) {
   const [isClick, setIsClick] = useState<boolean>(false)
   if (!item) return null
   const { post_attachment, post_price, user, post, post_metric } = item
@@ -19,8 +18,8 @@ export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
         lock
           ? "javascript:void(0);"
           : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${
-              post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0
-            }}`
+            post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0
+          }}`
       }
     >
       <div
@@ -55,7 +54,7 @@ export default function Page({ item, id }: { item: PostData; id: ParamValue }) {
                 color="#fff"
                 height={32}
               />
-              <span className="mt-2">订阅内容，请订阅后查看</span>
+              <span className="mt-2">{post.visibility === 2 ? "付费内容，请付费后查看" : "订阅内容，请订阅后查看"}</span>
             </div>
           )}
           <div className="flex justify-between p-2">
