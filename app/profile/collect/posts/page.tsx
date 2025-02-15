@@ -32,7 +32,7 @@ export default function Page() {
     }
   })
   return (
-    <div className="mt-4">
+    <div className="mt-4 px-4">
       {initData && (
         <InfiniteScroll<PostData>
           className={"h-full w-full mx-auto"}
@@ -43,6 +43,10 @@ export default function Page() {
           {({ items, isLoading, hasMore, error }) => (
             <Fragment>
               {Boolean(error) && <ListError />}
+              <div className="total-num p-4 pt-0">
+                <span className="text-gray-400">总数：</span>
+                {initData?.total ?? 0}
+              </div>
               {items.map((v, i) => (
                 <Link key={i} href={`/postInfo/${v.post.id}`}>
                   <div key={i} className={"h-28   mb-4 flex"}>
