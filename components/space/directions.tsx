@@ -8,7 +8,7 @@ export default function Page({ about }: { about: string }) {
       <section className={!isOpen ? "flex h-4 overflow-hidden text-ellipsis ..." : ""} dangerouslySetInnerHTML={{ __html: about }}>
       </section>
       <button
-        className="text-main-pink mt-1"
+        className="text-text-pink mt-1"
         onTouchEnd={() => {
           setIsOpen(!isOpen)
         }}

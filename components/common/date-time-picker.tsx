@@ -45,7 +45,7 @@ export default function DateTimePicker(props: {
                 setVisible(false)
               }}
               >取消</button>
-              <button className={"text-main-pink"} type={"button"} onTouchEnd={() => {
+              <button className={"text-text-pink"} type={"button"} onTouchEnd={() => {
                 setVisible(false)
                 if (inputValue) {
                   dateChange(inputValue.valueOf())

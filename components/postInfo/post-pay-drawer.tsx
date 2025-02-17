@@ -69,7 +69,7 @@ export default function PostPayDrawer (props: PostPayDrawerProps)  {
             <div className="relative">
               <button
                 disabled={amount === 0}
-                className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
+                className="w-[295px] h-[49px] p-2 bg-background-pink text-white text-base font-medium rounded-full"
                 onTouchEnd={(e) => {
                   e.preventDefault()
                   handleSubmit()

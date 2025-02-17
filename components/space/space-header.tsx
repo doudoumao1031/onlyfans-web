@@ -72,7 +72,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           }
           backIconColor={isTop ? "#222" : "#fff"}
         />
-        <div className={`text-xs pl-6 pr-6 pb-2 ${isTop ? "text-main-pink" : "text-white"}`}>
+        <div className={`text-xs pl-6 pr-6 pb-2 ${isTop ? "text-text-pink" : "text-white"}`}>
           {data.top_info}
         </div>
       </div>

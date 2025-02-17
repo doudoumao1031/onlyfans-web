@@ -56,7 +56,7 @@ export default function SubScribeConfirm({
               <div
                 onClick={() => setActive(i)}
                 key={i}
-                className={`relative w-[32%] h-36 rounded-lg border-main-pink flex flex-col justify-center items-center ${
+                className={`relative w-[32%] h-36 rounded-lg border-border-pink flex flex-col justify-center items-center ${
                   active === i && "border"
                 }`}
               >
@@ -65,7 +65,7 @@ export default function SubScribeConfirm({
                 >{`${v.month}个月`}</span>
                 <span
                   className={`text-[20px] font-bold my-4] ${
-                    active === i ? "text-main-pink" : "text-[#222222"
+                    active === i ? "text-text-pink" : "text-[#222222"
                   }`}
                 >{`$${v.price}`}</span>
                 <span className="text-[#6D7781] text-xs">{v.discount ? `$${v.discount}` : ""}</span>
@@ -77,7 +77,7 @@ export default function SubScribeConfirm({
           })}
         </div>
         <div className="flex justify-center">
-          <div className=" relative w-72 h-[50px] rounded-full bg-main-pink text-white flex justify-center items-center mt-10 text-[15px] font-semibold">
+          <div className=" relative w-72 h-[50px] rounded-full bg-background-pink text-white flex justify-center items-center mt-10 text-[15px] font-semibold">
             确认并支付 999.99 USDT
             <div className=" absolute top-[-14px] right-6 py-1 px-2 bg-[#F7B500] flex justify-center items-center text-xs rounded-full">
               已省 $99.99
@@ -91,7 +91,7 @@ export default function SubScribeConfirm({
     <FormDrawer
       title={
         <div>
-          订阅 <span className="ml-1 text-[15px] text-main-pink">{data?.first_name}</span>
+          订阅 <span className="ml-1 text-[15px] text-text-pink">{data?.first_name}</span>
         </div>
       }
       headerLeft={(close) => {

@@ -120,7 +120,7 @@ export default function RechargeDrawer (props: RechargeProps) {
         headerRight={(() => {
           return (
             <Link href={`${pathname}/income/withdrawalInfo?changeType=1`} prefetch={false}>
-              <button className={"text-base text-main-pink"}>明细</button>
+              <button className={"text-base text-text-pink"}>明细</button>
             </Link>
           )
         })}
@@ -160,7 +160,7 @@ export default function RechargeDrawer (props: RechargeProps) {
               }}
             />
             <button
-              className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal text-main-pink text-base"
+              className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal text-text-pink text-base"
               onTouchEnd={(e) => {
                 e.preventDefault()
                 setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
@@ -175,7 +175,7 @@ export default function RechargeDrawer (props: RechargeProps) {
           <div className="my-[40px] self-center">
             <button
               disabled={amount === 0 || amount > ptBalance}
-              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-main-pink"}`}
+              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-pink"}`}
               onClick={() => {
                 if (!(amount === 0 || amount > ptBalance)) {
                   handleRecharge(amount)

@@ -111,8 +111,8 @@ export default function Page({ postData }: { postData: PostData }) {
             }}
             className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${
               isFocus
-                ? "bg-white border border-main-pink text-main-pink"
-                : " bg-main-pink text-white"
+                ? "bg-white border border-border-pink text-text-pink"
+                : " bg-background-pink text-white"
             }`}
           >
             <IconWithImage
@@ -126,7 +126,7 @@ export default function Page({ postData }: { postData: PostData }) {
             <span className="ml-1">{isFocus ? "已关注" : "关注"}</span>
           </div>
           {isFocus && (
-            <div className="text-[10px] text-main-pink mt-1">
+            <div className="text-[10px] text-text-pink mt-1">
               订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}天
             </div>
           )}
@@ -152,7 +152,7 @@ export default function Page({ postData }: { postData: PostData }) {
                 setDrawer(true)
               }
             }}
-            className="w-[295px] h-[50px] bg-main-pink  text-white rounded-full text-[15px] flex justify-center items-center"
+            className="w-[295px] h-[50px] bg-background-pink  text-white rounded-full text-[15px] flex justify-center items-center"
           >
             {btnText}
           </div>

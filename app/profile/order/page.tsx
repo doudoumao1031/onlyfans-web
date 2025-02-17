@@ -115,7 +115,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
               >取消</button>}
               right={(
                 <button type={"submit"}
-                  className={"text-base text-main-pink"}
+                  className={"text-base text-text-pink"}
                 >保存</button>
               )}
             ></ModalHeader>
@@ -241,7 +241,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
               >取消</button>}
               right={(
                 <button type={"submit"}
-                  className={"text-base text-main-pink"}
+                  className={"text-base text-text-pink"}
                 >保存</button>
               )}
             ></ModalHeader>
@@ -433,7 +433,7 @@ function SubscribeBundle({ items,initSettings, userId, updateItems }: {
                 onTouchEnd={() => {
                   openEditModal()
                 }}
-                className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
+                className="rounded-full border border-border-pink text-text-pink pl-4 pr-4 pt-0.5 pb-0.5"
               >添加
               </button>
             )}
@@ -515,7 +515,7 @@ function PromotionalActivities({ updateItems, items }: {
               onTouchEnd={() => {
                 openEditModal()
               }}
-              className="rounded-full border border-main-pink text-main-pink pl-4 pr-4 pt-0.5 pb-0.5"
+              className="rounded-full border border-border-pink text-text-pink pl-4 pr-4 pt-0.5 pb-0.5"
             >添加
             </button>
           )}
@@ -639,7 +639,7 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
                 }} className={"py-3.5 border-r border-[#ddd]"}
                 >取消
                 </button>
-                <button type={"submit"} className={"py-3.5 text-main-pink font-medium"}>确定
+                <button type={"submit"} className={"py-3.5 text-text-pink font-medium"}>确定
                 </button>
               </div>
             </div>
@@ -743,7 +743,7 @@ export default function Page() {
               updateSubscribeSettings()
             }
           })
-        }} className="text-main-pink text-base"
+        }} className="text-text-pink text-base"
         >完成</button>}
       />
       <section className="mt-5 text-black">
@@ -782,7 +782,7 @@ export default function Page() {
                     </section>
                     <section className="text-[#6D7781] text-xs px-4 mt-1.5">
                       <div>最小价格$1.99 USDT 或免费</div>
-                      <div>您必须先开通 <span className="text-main-pink">Potato钱包</span>，然后才能设置订阅价格或收取打赏
+                      <div>您必须先开通 <span className="text-text-pink">Potato钱包</span>，然后才能设置订阅价格或收取打赏
                       </div>
                     </section>
                   </section>

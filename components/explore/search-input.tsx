@@ -32,7 +32,7 @@ export default function SearchInput({ placeholder }: { placeholder: string }) {
         className="absolute top-1/3 left-6"
       />
       <button onClick={() => {back()}}>
-        <span className="text-main-pink text-lg font-normal text-nowrap w-8">取消</span>
+        <span className="text-text-pink text-lg font-normal text-nowrap w-8">取消</span>
       </button>
     </div>
   )

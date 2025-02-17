@@ -103,7 +103,7 @@ export default function Page() {
 
             <div className="my-[40px]  self-center">
               <button
-                className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
+                className="w-[295px] h-[49px] p-2 bg-background-pink text-white text-base font-medium rounded-full"
                 onTouchEnd={(event) => {
                   event.preventDefault()
                   handTip()
