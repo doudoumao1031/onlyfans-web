@@ -135,13 +135,16 @@ input,textarea {
   display: none;
 }
 .common-loading-heart-icon {
-  animation: colorChange 1s infinite;
+  animation: colorProgress 3s linear infinite;
 }
 
-@keyframes colorChange {
-  0% { fill: white; }
-  25% { fill: lightblue; }
-  50% { fill: skyblue; }
-  75% { fill: deepskyblue; }
-  100% { fill: white; }
-} 
+@keyframes colorProgress {
+  0% { fill: #FFC0CB; } /* 浅粉色 */
+  15% { fill: #FFB6C1; } /* 浅粉红 */
+  30% { fill: #FF69B4; } /* 热粉色 */
+  45% { fill: #FF1493; } /* 深粉红 */
+  60% { fill: #FF69B4; } /* 热粉色 */
+  75% { fill: #FFB6C1; } /* 浅粉红 */
+  90% { fill: #FFC0CB; } /* 浅粉色 */
+  100% { fill: #FFC0CB; } /* 浅粉色 */
+}
