@@ -20,15 +20,17 @@ export default function UserTitle({ user, pub_time,pinned }: { user: User; pub_t
         </div>
       </div>
       <div className={"mt-1 mr-2"}>
-       {
-        !pinned? <span>{dayjs(pub_time * 1000).format("MM-DD HH:mm")}</span>
-         :<IconWithImage
-           url={"/icons/icon_fans_stick_gray@3x.png"}
-           height={20}
-           width={20}
-           color={"#777"}
-         />
-       }
+        {
+          !pinned? <span>{dayjs(pub_time * 1000).format("MM-DD HH:mm")}</span>
+            :(
+              <IconWithImage
+                url={"/icons/icon_fans_stick_gray@3x.png"}
+                height={20}
+                width={20}
+                color={"#777"}
+              />
+            )
+        }
       </div>
     </div>
   )

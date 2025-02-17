@@ -12,7 +12,9 @@ export default async function Layout(props: {
   const [userId, slefId] = id.split("_")
 
   const response = !!slefId ? await userProfile() : await getUserById({ id: userId })
-  !slefId && (await addSpaceLog(Number(userId)))
+  if (!slefId) {
+    await addSpaceLog(Number(userId))
+  }
   const data = response?.data
   if (!data) {
     throw new Error()

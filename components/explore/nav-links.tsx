@@ -22,7 +22,7 @@ export default function NavLinks() {
     [pathName]
   )
   return (
-    /*<div className="flex w-full border-b border-gray-300">
+  /*<div className="flex w-full border-b border-gray-300">
       {links.map((link) => (
         <Link
           prefetch={true}

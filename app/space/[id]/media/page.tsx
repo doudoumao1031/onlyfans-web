@@ -26,8 +26,8 @@ export default function Page() {
       page: 1,
       pageSize: 10,
       from_id: 0,
-      user_id: Number(userId),
-      post_status: 1
+      user_id: Number(userId)
+      // post_status: 1
     }
     // const res = selfId ? await myMediaPosts(params) : await userMediaPosts(params)
     const res = selfId ? await userMediaPosts(params) : await userMediaPosts(params)
@@ -39,8 +39,7 @@ export default function Page() {
     params: {
       pageSize: 10,
       from_id: 0,
-      user_id: Number(userId),
-      post_status: 1
+      user_id: Number(userId)
     }
   })
   return (

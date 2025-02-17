@@ -43,7 +43,9 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
         currentlyPlaying = null
       }
       observer.unobserve(video)
-      video && video.pause()
+      if (video) {
+        video.pause()
+      }
     }
   }, [])
 

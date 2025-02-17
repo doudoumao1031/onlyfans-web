@@ -66,6 +66,7 @@ export default function Page() {
                   onDelete={() => {
                     delItem(v.post.id)
                   }}
+                  key={v.post.id}
                 >
                   <Link key={i} href={`/postInfo/${v.post.id}`}>
                     <div key={i} className={"  pt-3 pb-3 border-b border-[#e5e5e5] flex"}>

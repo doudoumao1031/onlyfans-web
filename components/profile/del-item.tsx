@@ -66,7 +66,7 @@ const SwipeToDelete: React.FC<SwipeToDeleteProps> = ({ children, onDelete }) => 
         className="absolute top-0 right-0 h-full flex items-center justify-center bg-rose-500 text-white"
         style={{
           width: "100px",
-          transform: `translateX(100%)`
+          transform: "translateX(100%)"
         }}
       >
         删除
