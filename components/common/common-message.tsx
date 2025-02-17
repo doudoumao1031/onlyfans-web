@@ -50,22 +50,22 @@ export default function useCommonMessage() {
         >
           {
             type === "default" && (
-              <div>{content}</div>
+              <div className="whitespace-nowrap">{content}</div>
             )
           }
           {
             type === "success" && (
-              <div className={"w-36 h-12 flex justify-center items-center"}>
+              <div className="flex items-center gap-2 whitespace-nowrap">
                 <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20}/>
-                <span className={"text-white font-medium text-base"}>{content}</span>
+                <span className="text-white font-medium text-base">{content}</span>
               </div>
             )
           }
           {
             type === "love" && (
-              <div className={"w-36 h-12 flex justify-center items-center"}>
+              <div className="flex items-center gap-2 whitespace-nowrap">
                 <IconWithImage url={"/icons/icon_fans_like_highlight@3x.png"} height={20} width={20}/>
-                <span className={"text-white font-medium text-base"}>{content}</span>
+                <span className="text-white font-medium text-base">{content}</span>
               </div>
             )
           }
