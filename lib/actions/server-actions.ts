@@ -1,7 +1,7 @@
 "use server"
 
 import { ApiResponse, FetchOptions } from "@/lib"
-import { TOKEN_KEY } from "@/lib/utils"
+import { TOKEN_KEY, USER_KEY } from "@/lib/utils"
 import { cookies } from "next/headers"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
@@ -14,6 +14,18 @@ async function getAuthToken() {
     return token ?? ""
   } catch (error) {
     console.error("Error getting auth token:", error)
+    return ""
+  }
+}
+
+export async function getSelfId() {
+  try {
+    const cookiesStore = await cookies()
+    const userId = cookiesStore.get(USER_KEY)?.value
+    console.log("getUserId server side:", userId)
+    return userId ?? ""
+  } catch (error) {
+    console.error("Error getting auth userId:", error)
     return ""
   }
 }

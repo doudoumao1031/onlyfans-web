@@ -32,7 +32,7 @@ export default async function Page(props: {
       {query === "" && (
         <span className="mt-16 text-gray-500 text-center">输入博主的昵称或用户名进行搜索</span>
       )}
-      {query !== "" && users && users.total === 0 && posts && posts.total === 0 && (
+      {query !== "" && users && !users.list && users.total === 0 && posts && posts.total === 0 && (
         <div className="flex flex-col justify-center items-center justify-items-center mt-40">
           <Image
             src="/icons/explore/icon_search_null@3x.png"
@@ -43,7 +43,7 @@ export default async function Page(props: {
           <span className="mt-6 text-gray-500 text-center">没有搜到相关博主，请尝试别的搜索词</span>
         </div>
       )}
-      {query !== "" && users && users.total > 0 && (
+      {query !== "" && users && users.total > 0 && users.list && (
         <div className="flex flex-col justify-start px-4 pt-[20px]">
           <span className="font-medium text-left text-[#6D7781]">用户</span>
           <div className="w-full mt-[10px]">

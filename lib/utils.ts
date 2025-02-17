@@ -179,6 +179,7 @@ export function buildVideoUrl(fileId: string, quality: string) {
 }
 
 export const TOKEN_KEY = "X-Token"
+export const USER_KEY = "USER_ID"
 
 export function getEvenlySpacedPoints<T>(arr: T[], count = 12) {
   if (arr.length <= count) return arr // If array length is less than or equal to count, return it as is

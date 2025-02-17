@@ -8,12 +8,16 @@ import useCommonMessage from "@/components/common/common-message"
 interface SubscribedDrawerProps {
   userId: number
   name: string
-  isOpen: boolean
-  setIsOpen: (val: boolean) => void
+  free: boolean
+  isOpen?: boolean
+  setIsOpen?: (val: boolean) => void
+  setRechargeModel?: (val: boolean) => void
+  children?: React.ReactNode
 }
 export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
-  const { userId, name, isOpen, setIsOpen } = props
+  const { userId, name, free, isOpen, setIsOpen, setRechargeModel, children } = props
   const { showMessage, renderNode } = useCommonMessage()
+  const [drawer, setDrawer] = useState<boolean>(false)
   const [items, setItems] = useState<DiscountInfo[]>([])
   const [discount, setDiscount] = useState<DiscountInfo>()
   const [amount, setAmount] = useState<number>(0)
@@ -63,12 +67,18 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
     }
   }, [discount])
   const handleSubmit = async () => {
-    await addSubOrder({ user_id: userId, price: Number(amount), id: discount?.id ?? 0 })
+    const data = { user_id: userId, price: free?0:Number(amount), id: free?0:discount?.id ?? 0 }
+    await addSubOrder(data)
       .then((result) => {
         if (result && result.code === 0) {
           console.log("订阅成功")
-          setIsOpen(false)
+          setIsOpen?.(false)
+          setDrawer(false)
           showMessage("订阅成功", "success")
+        } else if (result?.message === "NOT_ENOUGH_BALANCE") {
+          setDrawer(false)
+          setIsOpen?.(false)
+          setRechargeModel?.(true)
         } else {
           console.log("订阅失败:", result?.message)
           showMessage("订阅失败")
@@ -78,6 +88,18 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
   return (
     <>
       {renderNode}
+      <button
+        className={"w-full"}
+        onClick={() => {
+          if (free) {
+            handleSubmit()
+          } else {
+            setDrawer(true)
+          }
+        }}
+      >
+        {children}
+      </button>
       <FormDrawer
         title={(
           <div>
@@ -97,8 +119,8 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
           )
         }}
         className="h-[43vh] border-0"
-        setIsOpen={setIsOpen}
-        isOpen={isOpen}
+        setIsOpen={setIsOpen ? setIsOpen : setDrawer}
+        isOpen={isOpen ? isOpen : drawer}
         outerControl
       >
         <input hidden={true} name="user_id" defaultValue={userId} />
@@ -138,7 +160,7 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
                   {
                     showDiscount(item) && (
                       <div
-                        className="absolute bg-main-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center"
+                        className="absolute bg-background-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center"
                       >
                         <span
                           className="text-white text-xs text-center"
@@ -164,7 +186,7 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
               {
                 showDiscount(discount) && (
                   <div
-                    className="absolute bg-main-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center"
+                    className="absolute bg-background-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center"
                   >
                     <span
                       className="text-white text-xs text-center text-nowrap"

@@ -20,7 +20,6 @@ export default function FeedList() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const { id } = useParams()
   const [userId, selfId] = (id as string).split("_")
-  console.log("userId", userId)
 
   useEffect(() => {
     getInitData()

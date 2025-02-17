@@ -3,7 +3,7 @@
 import { useSearchParams, useRouter } from "next/navigation"
 import { Suspense, useState } from "react"
 import { login } from "@/lib/actions/auth/actions"
-import { TOKEN_KEY } from "@/lib/utils"
+import { TOKEN_KEY, USER_KEY } from "@/lib/utils"
 import LoadingMask from "@/components/common/loading-mask"
 
 function ErrorContent() {
@@ -27,6 +27,7 @@ function ErrorContent() {
     try {
       if (token) {
         document.cookie = `${TOKEN_KEY}=${token}; path=/; secure; samesite=lax`
+        document.cookie = `${USER_KEY}=${token}; path=/; secure; samesite=lax`
         await router.push(redirectPath ?? "/explore/feed")
         return
       }

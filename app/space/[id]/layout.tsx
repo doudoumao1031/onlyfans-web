@@ -3,6 +3,7 @@ import UserInfo from "@/components/space/userInfo"
 import { addSpaceLog } from "@/lib"
 import { userProfile } from "@/lib/actions/profile"
 import { getUserById } from "@/lib/actions/space"
+import { getSelfId } from "@/lib/actions/server-actions"
 export default async function Layout(props: {
   children: React.ReactNode
   modal: React.ReactNode
@@ -10,9 +11,12 @@ export default async function Layout(props: {
 }) {
   const { id } = await props.params
   const [userId, slefId] = id.split("_")
+  const selfId = await getSelfId()
+  const isSelf = selfId === userId
+  console.log("isSelf", isSelf, "selfId:", selfId, "userId:", userId)
 
-  const response = !!slefId ? await userProfile() : await getUserById({ id: userId })
-  if (!slefId) {
+  const response = isSelf ? await userProfile() : await getUserById({ id: userId })
+  if (!isSelf) {
     await addSpaceLog(Number(userId))
   }
   const data = response?.data
@@ -23,7 +27,7 @@ export default async function Layout(props: {
     <>
       {props.modal}
       <div className="flex flex-col w-full justify-start items-center">
-        <UserInfo data={data} isSelf={!!slefId} />
+        <UserInfo data={data} isSelf={isSelf} />
         <TabLink id={id} data={data} />
         <div className="grow px-4 py-3 w-full h-3/4">{props.children}</div>
       </div>
