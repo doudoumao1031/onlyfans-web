@@ -140,11 +140,8 @@ input,textarea {
 
 @keyframes colorProgress {
   0% { fill: #FFC0CB; } /* 浅粉色 */
-  15% { fill: #FFB6C1; } /* 浅粉红 */
-  30% { fill: #FF69B4; } /* 热粉色 */
-  45% { fill: #FF1493; } /* 深粉红 */
-  60% { fill: #FF69B4; } /* 热粉色 */
-  75% { fill: #FFB6C1; } /* 浅粉红 */
-  90% { fill: #FFC0CB; } /* 浅粉色 */
+  25% { fill: #FFFFFF; } /* 白色 */
+  50% { fill: #f29fa7; } /* 调淡的深粉红 */
+  75% { fill: #f0919a; } /* 热粉色 */
   100% { fill: #FFC0CB; } /* 浅粉色 */
 }
