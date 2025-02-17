@@ -89,7 +89,7 @@ export default async function Page() {
           <div className="text-center text-[#6D7781] text-xs">@{data.username}</div>
           <Link href={`/space/${data.id}_1/feed`}>
             <div className="flex justify-center mt-2">
-              <button className=" py-1 rounded-2xl pl-8 pr-8 border border-main-pink text-main-pink">
+              <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-pink text-text-pink">
                 进入空间
               </button>
             </div>

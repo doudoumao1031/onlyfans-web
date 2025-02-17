@@ -18,7 +18,7 @@ export default function Error({
       <h2 className="text-2xl font-bold mb-4">Space Error</h2>
       <p className="text-gray-600 mb-4">Unable to load user space</p>
       <button
-        className="px-4 py-2 bg-main-pink text-white rounded-lg hover:bg-opacity-90"
+        className="px-4 py-2 bg-background-pink text-white rounded-lg hover:bg-opacity-90"
         onClick={() => reset()}
       >
         Try again

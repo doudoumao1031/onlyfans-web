@@ -23,7 +23,7 @@ export default function FoldingDescription ({ about,location }:{about:string,loc
         )
       }
       {about && hideState && (
-        <button className="text-main-pink mt-1" type={"button"} onTouchEnd={() => {
+        <button className="text-text-pink mt-1" type={"button"} onTouchEnd={() => {
           setHideState(false)
         }}
         >更多信息</button>

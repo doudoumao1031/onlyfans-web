@@ -32,9 +32,9 @@ export default function Layout(
         <Header title="Fans" titleColor="#000"
           right={
             path === "/explore/subscribed" && !isBlogger ? (
-              <Link href="/profile/order" className="text-main-pink text-base">成为博主</Link>
+              <Link href="/profile/order" className="text-text-pink text-base">成为博主</Link>
             ) :
-              <Link href="/profile" className="text-main-pink text-base">我的</Link>
+              <Link href="/profile" className="text-text-pink text-base">我的</Link>
           }
         />
         <div className="flex flex-col w-full h-[calc(100vh-44px)] justify-start items-center">

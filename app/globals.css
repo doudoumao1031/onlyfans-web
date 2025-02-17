@@ -23,6 +23,7 @@ body {
   --white-20: #FFFFFF33;
   --background-primary: #FFFFFF;
   --background-secondary: #F8F8F8;
+  --background-pink: #FF8492;
   /* Text Colors */
   --text-title: #222222;
   --text-subtitle: #444444;
@@ -31,7 +32,11 @@ body {
   --text-link: #FF8492;
   --text-light: #FFFFFF;
   --text-light-secondary: #FFFFFFcc;
+  --text-pink: #FF8492;
   --border: #DDDDDD;
+  --border-pink: #FF8492;
+
+  --radius: 0.5rem;
 }
 
 /* @media (prefers-color-scheme: dark) {

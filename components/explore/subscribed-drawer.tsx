@@ -82,7 +82,7 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
         title={(
           <div>
             <span className="text-lg font-semibold">订阅</span>
-            <span className="text-main-pink font-normal text-[15px] t">{name}</span>
+            <span className="text-text-pink font-normal text-[15px] t">{name}</span>
           </div>
         )}
         headerLeft={(close) => {
@@ -125,7 +125,7 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
                   >
                     <span className="text-nowrap text-xs">{item.month_count}个月</span>
                     <span
-                      className={`text-nowrap text-xl my-4 ${item.id === discount?.id ? "text-main-pink" : "text-black"}`}
+                      className={`text-nowrap text-xl my-4 ${item.id === discount?.id ? "text-text-pink" : "text-black"}`}
                     >${item.discount_price}</span>
                     <span className="text-nowrap text-xs block">
                       {
@@ -154,7 +154,7 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
             <div className="relative">
               <button
                 disabled={amount === 0}
-                className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
+                className="w-[295px] h-[49px] p-2 bg-background-pink text-white text-base font-medium rounded-full"
                 onTouchEnd={(e) => {
                   e.preventDefault()
                   handleSubmit()

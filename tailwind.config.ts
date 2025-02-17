@@ -27,7 +27,8 @@ export default {
         background: {
           DEFAULT: "var(--background-primary)",
           primary: "var(--background-primary)",
-          secondary: "var(--background-secondary)"
+          secondary: "var(--background-secondary)",
+		  pink: "var(--background-pink)"
         },
         "white-80": "var(--white-80)",
         "white-20": "var(--white-20)",
@@ -38,9 +39,13 @@ export default {
           disabled: "var(--text-disabled)",   // 文本禁用色、输入框默认文字色
           link: "var(--text-link)",          // 链接文本、提示弹窗按钮颜色
           light: "var(--text-light)",        // 深色背景下文字标题色
-          "light-secondary": "var(--text-light-secondary)" // 深色背景下次要文本颜色
+          "light-secondary": "var(--text-light-secondary)", // 深色背景下次要文本颜色
+		  pink: "var(--text-pink)"
         },
-        border: "var(--border)"
+        border: {
+		  DEFAULT: "var(--border)",
+		  pink: "var(--border-pink)"
+        }
       },
   	  borderRadius: {
   		lg: "var(--radius)",

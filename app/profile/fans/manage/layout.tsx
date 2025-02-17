@@ -15,7 +15,7 @@ export default function Layout({ children }: {
   return (
     <>
       <Header title="粉丝管理" titleColor={"#000"}
-        right={<Link href={"/profile/fans/reply"} className="text-main-pink text-base">订阅回复</Link>}
+        right={<Link href={"/profile/fans/reply"} className="text-text-pink text-base">订阅回复</Link>}
       >
       </Header>
       <TopTab tabOptions={[
