@@ -29,7 +29,6 @@ export enum FileType {
 }
 
 export type TPost = {
-  pinned: boolean
   id: number //id
   notice: boolean //是否发送通知
   post_status: number //发布状态 0 草稿状态 1发布 2审核中 3未通过

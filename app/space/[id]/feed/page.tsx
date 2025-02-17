@@ -61,13 +61,7 @@ export default function FeedList() {
               {Boolean(error) && <ListError />}
               <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
                 {items.map((item, index) => (
-                  <Post
-                    key={`${item.post.id}-${index}`}
-                    data={item}
-                    hasSubscribe={false}
-                    hasVote
-                    id={id as string}
-                  />
+                  <Post key={`${item.post.id}-${index}`} data={item} hasSubscribe={false} hasVote />
                 ))}
               </div>
               {isLoading && <ListLoading />}
