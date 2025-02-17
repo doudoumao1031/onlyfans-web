@@ -10,8 +10,7 @@ import { myMediaPosts, myPosts, PageResponse, PostData, SearchPostReq } from "@/
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import LazyImg from "@/components/common/lazy-img"
-import { buildImageUrl } from "@/lib/utils"
+import { LazyImageWithFileId } from "@/components/common/lazy-img"
 import useCommonMessage, { CommonMessageContext } from "@/components/common/common-message"
 
 enum ACTIVE_TYPE {
@@ -183,7 +182,7 @@ const ManuscriptMedia = () => {
                       <section
                         className="w-full h-[220px] rounded flex justify-center items-center overflow-hidden"
                       >
-                        <LazyImg src={buildImageUrl(item.post_attachment?.[0]?.file_id)} alt={"post_attachment"} width={200} height={220} className="w-full h-full" />
+                        <LazyImageWithFileId fileId={item.post_attachment?.[0]?.file_id} alt={"post_attachment"} width={200} height={220} className="w-full h-full" />
                       </section>
                     </section>
                     <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}

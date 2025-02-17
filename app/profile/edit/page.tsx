@@ -88,7 +88,7 @@ export default function Page() {
         <div className={"w-full left-0 top-0 absolute z-20"}>
           <Header right={<button type={"submit"}>保存</button>} title="编辑个人信息" />
         </div>
-        <div className="profile-content bg-[url('/demo/user_bg.png')] relative" style={{ backgroundImage: `url(${IMAGE_PREFIX}${formValues.back_img})` }}>
+        <div className="profile-content bg-[url('/demo/user_bg.png')] relative bg-cover" style={{ backgroundImage: `url(${IMAGE_PREFIX}${formValues.back_img})` }}>
           <input
             type="file"
             accept="image/*"

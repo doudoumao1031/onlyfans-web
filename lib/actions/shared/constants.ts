@@ -28,6 +28,7 @@ export const ENDPOINTS = {
     DELETE_VOTE: "/post/deleteVote",
     ME_MEDIAS: "/post/mePostMedias",
     ME_POSTS: "/post/mePosts",
+    ME_DRAFT_POST:"/post/meDraftPosts",
     FILE_PLAY_LOG: "/post/postFilePlayLog",
     SHARE_LOG: "/post/postSharLog",
     VIEW_LOG: "/post/postViewLog",
