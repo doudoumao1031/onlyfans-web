@@ -29,11 +29,13 @@ export default function Page() {
       user_id: Number(userId),
       post_status: 1
     }
-    const res = selfId ? await myMediaPosts(params) : await userMediaPosts(params)
+    // const res = selfId ? await myMediaPosts(params) : await userMediaPosts(params)
+    const res = selfId ? await userMediaPosts(params) : await userMediaPosts(params)
     setInitData(res)
   }
   const infiniteFetchMedia = useInfiniteFetch({
-    fetchFn: selfId ? myMediaPosts : userMediaPosts,
+    // fetchFn: selfId ? myMediaPosts : userMediaPosts,
+    fetchFn: selfId ? userMediaPosts : userMediaPosts,
     params: {
       pageSize: 10,
       from_id: 0,

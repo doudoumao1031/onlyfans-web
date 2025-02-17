@@ -15,7 +15,7 @@ export default {
         pink: "var(--red)",
         orange: "var(--orange)",
         green: "var(--green)",
-        black: "var(--black)",
+        // black: "var(--black)",
         gray: {
           primary: "var(--gray-primary)",
           secondary: "var(--gray-secondary)",
@@ -26,7 +26,8 @@ export default {
           DEFAULT: "var(--white)"
         },
         background: {
-          DEFAULT: "var(--background-primary)",
+        //   DEFAULT: "var(--background-primary)",
+		  DEFAULT: "hsl(var(--background))",
           primary: "var(--background-primary)",
           secondary: "var(--background-secondary)",
 		  pink: "var(--background-pink)"
