@@ -1,5 +1,6 @@
 import TabLink from "@/components/space/tab-link"
 import UserInfo from "@/components/space/userInfo"
+import { addSpaceLog } from "@/lib"
 import { userProfile } from "@/lib/actions/profile"
 import { getUserById } from "@/lib/actions/space"
 export default async function Layout(props: {
@@ -11,6 +12,9 @@ export default async function Layout(props: {
   const [userId, slefId] = id.split("_")
 
   const response = !!slefId ? await userProfile() : await getUserById({ id: userId })
+  if (!slefId) {
+    await addSpaceLog(Number(userId))
+  }
   const data = response?.data
   if (!data) {
     throw new Error()

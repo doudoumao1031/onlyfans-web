@@ -11,6 +11,7 @@ import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/prof
 import { useRouter } from "next/navigation"
 import useCommonMessage from "@/components/common/common-message"
 import { commonUploadFile } from "@/lib/utils"
+import { Switch } from "@/components/ui/switch"
 
 type EditUserProfile = Pick<
   UserProfile,
@@ -59,12 +60,13 @@ export default function Page() {
 
   const formValues = watch()
   const handleUploadFile = (file: File) => {
-    commonUploadFile(file).then((fileId) => {
-      if (fileId) {
-        setValue("back_img", fileId)
+    commonUploadFile(file).then((res) => {
+      if (res?.file_id) {
+        setValue("back_img", res.file_id)
       }
     })
   }
+
   return (
     <>
       {renderNode}
@@ -86,7 +88,7 @@ export default function Page() {
         <div className={"w-full left-0 top-0 absolute z-20"}>
           <Header right={<button type={"submit"}>保存</button>} title="编辑个人信息" />
         </div>
-        <div className="profile-content bg-[url('/demo/user_bg.png')] relative" style={{ backgroundImage: `url(${IMAGE_PREFIX}${formValues.back_img})` }}>
+        <div className="profile-content bg-[url('/demo/user_bg.png')] relative bg-cover" style={{ backgroundImage: `url(${IMAGE_PREFIX}${formValues.back_img})` }}>
           <input
             type="file"
             accept="image/*"
@@ -98,6 +100,7 @@ export default function Page() {
               }
             }}
           />
+          <div className={"text-xs text-white absolute right-4 top-24"}>点击空白区域更换背景</div>
         </div>
         <section className="mt-[-47px] rounded-t-3xl bg-white relative pt-12 text-black pb-8">
           <section className="pl-4 pr-4 pb-3 ">
@@ -189,13 +192,14 @@ export default function Page() {
                 </button>
               </section>
               <section>
-                <button
-                  type="button"
+                <div
                   className="pt-4 pb-4 text-base w-full border-b border-gray-100 flex justify-between items-center"
                 >
                   <span>直播展示</span>
-                  <span>Switch</span>
-                </button>
+                  <span>
+                    <Switch className={"custom-switch"}/>
+                  </span>
+                </div>
               </section>
             </section>
           </section>

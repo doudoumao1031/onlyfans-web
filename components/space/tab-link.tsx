@@ -21,12 +21,13 @@ export default function TabLinks({ id, data }: { id: string; data: UserProfile |
   )
   const links = [
     { name: "帖子", href: `/space/${id}/feed`, num: data.post_count },
-    { name: "媒体", href: `/space/${id}/media`, num: data.video_count }
+    { name: "媒体", href: `/space/${id}/media`, num: data.media_count }
   ]
   return (
     <div className="w-full text-center grid grid-cols-2 border-b border-gray-100 sticky top-[68px] z-40 bg-white">
       {links.map((link) => (
         <Link
+          replace
           prefetch={true}
           key={link.name}
           href={link.href}

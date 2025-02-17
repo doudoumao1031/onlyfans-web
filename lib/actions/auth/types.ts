@@ -1,6 +1,6 @@
 // Auth related types and interfaces
 export interface LoginReq {
-  user_id: string  // pt的user_id
+  user_id: number  // pt的user_id
 }
 
 export interface LoginResp {

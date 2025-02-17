@@ -7,6 +7,7 @@ import InputWithLabel from "@/components/profile/input-with-label"
 import { PageResponse, PostData } from "@/lib"
 import { getMyFeeds } from "@/lib/actions/space"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
+import Link from "next/link"
 import { Fragment, useEffect, useMemo, useState } from "react"
 
 
@@ -75,11 +76,13 @@ export default function Page() {
                 />
               </div>
               {items.map((v, i) => (
-                <FeedItem key={i} item={v} />
+                <Link key={i} href={`/postInfo/${v.post.id}`}>
+                  <FeedItem key={i} item={v} />
+                </Link>
               ))}
               {isLoading && <ListLoading />}
-              {!hasMore && items.length > 0 && <ListEnd />}
-              {(!items || !items.length) && <Empty top={20} />}
+              {!hasMore && items?.length > 0 && <ListEnd />}
+              {(!items || !items?.length) && <Empty top={20} />}
             </Fragment>
           )}
         </InfiniteScroll>

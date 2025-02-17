@@ -43,13 +43,16 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
         currentlyPlaying = null
       }
       observer.unobserve(video)
+      if (video) {
+        video.pause()
+      }
     }
   }, [])
 
   return (
     <div className="relative w-full rounded-xl" style={{ aspectRatio: "343/200" }}>
-      {isLoading && (
-        thumbId ? (
+      {isLoading &&
+        (thumbId ? (
           <Image
             src={buildImageUrl(thumbId)}
             alt="Video thumbnail"
@@ -59,8 +62,7 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
           />
         ) : (
           <Skeleton className="absolute w-full h-full rounded-xl" />
-        )
-      )}
+        ))}
       <video
         ref={videoRef}
         className="w-full h-full object-cover rounded-xl"

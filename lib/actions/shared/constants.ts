@@ -28,6 +28,7 @@ export const ENDPOINTS = {
     DELETE_VOTE: "/post/deleteVote",
     ME_MEDIAS: "/post/mePostMedias",
     ME_POSTS: "/post/mePosts",
+    ME_DRAFT_POST:"/post/meDraftPosts",
     FILE_PLAY_LOG: "/post/postFilePlayLog",
     SHARE_LOG: "/post/postSharLog",
     VIEW_LOG: "/post/postViewLog",
@@ -37,7 +38,8 @@ export const ENDPOINTS = {
     USER_MEDIAS: "/post/userPostMedias",
     USER_POSTS: "/post/userPosts",
     USER_VOTE: "/post/userVote",
-    VIEW: "/post/view"
+    VIEW: "/post/view",
+    PINED: "/post/pinned"
   },
   COMMENT: {
     ADD: "/post/comment",
@@ -99,7 +101,7 @@ export const ENDPOINTS = {
     COLLECTION_USERS: "/user/userCollectionUsers"
   },
   ORDERS: {
-    ADD_POST_PAY: "/wallet/addPostPayOrder",
+    ADD_POST_PAY: "/wallet/addPostPayOrder", //增加帖子付费记录
     ADD_POST_TIP: "/wallet/addPostTip",
     ADD_SUB: "/wallet/addSubOrder",
     ADD_WALLET_DOWN: "/wallet/addWalletDownOrder",

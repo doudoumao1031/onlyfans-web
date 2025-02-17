@@ -13,6 +13,7 @@ import Empty from "@/components/common/empty"
 
 type FeedParams = PageInfo & {
   user_id: number
+  post_status?: number
 }
 
 export default function FeedList() {
@@ -29,17 +30,21 @@ export default function FeedList() {
       page: 1,
       pageSize: 10,
       from_id: 0,
-      user_id: Number(userId)
+      user_id: Number(userId),
+      post_status: 1
     }
-    const res = selfId ? await getMyFeeds(params) : await getUserPosts(params)
+    // const res = selfId ? await getMyFeeds(params) : await getUserPosts(params)
+    const res = selfId ? await getUserPosts(params) : await getUserPosts(params)
     setInitData(res)
   }
   const infiniteFetchPosts = useInfiniteFetch<FeedParams, PostData>({
-    fetchFn: selfId ? getMyFeeds : getUserPosts,
+    // fetchFn: selfId ? getMyFeeds : getUserPosts,
+    fetchFn: selfId ? getUserPosts : getUserPosts,
     params: {
       pageSize: 10,
       from_id: 0,
-      user_id: Number(userId)
+      user_id: Number(userId),
+      post_status: 1
     }
   })
   return (
@@ -56,7 +61,7 @@ export default function FeedList() {
               {Boolean(error) && <ListError />}
               <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
                 {items.map((item, index) => (
-                  <Post key={`${item.post.id}-${index}`} data={item} hasSubscribe hasVote />
+                  <Post key={`${item.post.id}-${index}`} data={item} hasSubscribe={false} hasVote />
                 ))}
               </div>
               {isLoading && <ListLoading />}

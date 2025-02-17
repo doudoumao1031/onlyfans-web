@@ -11,8 +11,20 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
+        protocol: "http",
+        hostname: "imfans",
+        port: "8080",
+        pathname: "/**"
+      },
+      {
+        protocol: "http",
         hostname: process.env.NEXT_PUBLIC_HOST || "",
+        port: process.env.NEXT_PUBLIC_PORT || "8080",
+        pathname: "/**"
+      },
+      {
+        protocol: "https",
+        hostname: "onlyfanswebtest.potato.im",
         port: "",
         pathname: "/**"
       },
@@ -20,10 +32,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: process.env.NEXT_PUBLIC_HOST || "",
         port: "",
-        pathname: "/**",
-        search: ""
+        pathname: "/**"
       }
-    ]
+    ],
+    dangerouslyAllowSVG: true,
+    formats: ["image/avif", "image/webp"]
   }
 }
 

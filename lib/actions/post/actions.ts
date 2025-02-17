@@ -11,7 +11,12 @@ import {
   PostSearchReq,
   PostStarReq,
   UserPostsReq,
-  UserVoteReq, fetchWithPost, PostId, SearchPostReq, PageResponse, PostData
+  UserVoteReq,
+  fetchWithPost,
+  PostId,
+  SearchPostReq,
+  PageResponse,
+  PostData
 } from "@/lib"
 import type { PostInfoVo } from "@/lib"
 
@@ -65,10 +70,8 @@ export async function searchPosts(params: PostSearchReq): Promise<PostInfoVo[]> 
   throw new Error("Not implemented")
 }
 
-export const starPost = (
-  params: PostStarReq
-) => fetchWithPost<PostStarReq, unknown>(ENDPOINTS.POST.STAR, params)
-  .then((res) => {
+export const starPost = (params: PostStarReq) =>
+  fetchWithPost<PostStarReq, unknown>(ENDPOINTS.POST.STAR, params).then((res) => {
     return !!(res && res.code === 0)
   })
 
@@ -87,15 +90,12 @@ export async function getPost(id: string): Promise<PostInfoVo> {
   throw new Error("Not implemented")
 }
 
-
 /**
  * 添加帖子分享记录
  * @param params
  */
-export const postSharLog = (
-  params: PostId
-) => fetchWithPost<PostId, unknown>(ENDPOINTS.POST.SHARE_LOG, params)
-  .then((res) => {
+export const postSharLog = (params: PostId) =>
+  fetchWithPost<PostId, unknown>(ENDPOINTS.POST.SHARE_LOG, params).then((res) => {
     if (res && res.code === 0) {
       return true
     } else {
@@ -106,26 +106,33 @@ export const postSharLog = (
 /**
  * 搜索帖子
  */
-export const searchPost = (
-  params: SearchPostReq
-) => fetchWithPost<SearchPostReq, PageResponse<PostData>>(ENDPOINTS.POST.SEARCH, params)
-  .then((res) => {
-    if (res && res.code === 0) {
-      return res.data
-    } else {
-      return null
+export const searchPost = (params: SearchPostReq) =>
+  fetchWithPost<SearchPostReq, PageResponse<PostData>>(ENDPOINTS.POST.SEARCH, params).then(
+    (res) => {
+      if (res && res.code === 0) {
+        return res.data
+      } else {
+        return null
+      }
     }
-  })
-
+  )
 
 /**
  * 我的帖子
  * @param params
  */
-export const myPosts = (
-  params: SearchPostReq
-) => fetchWithPost<SearchPostReq, PageResponse<PostData>>(ENDPOINTS.POST.ME_POSTS, params)
-  .then((res) => {
+export const myPosts = (params: SearchPostReq) =>
+  fetchWithPost<SearchPostReq, PageResponse<PostData>>(ENDPOINTS.POST.ME_POSTS, params).then(
+    (res) => {
+      if (res && res.code === 0) {
+        return res.data
+      }
+      return null
+    }
+  )
+
+export const myDraftPosts = (params:SearchPostReq) => fetchWithPost<SearchPostReq,PageResponse<PostData>>(ENDPOINTS.POST.ME_DRAFT_POST,params)
+  .then(res => {
     if (res && res.code === 0) {
       return res.data
     }
@@ -136,9 +143,30 @@ export const myPosts = (
  * 待定
  * @param params
  */
-export const myMediaPosts = (params:PageInfo) => fetchWithPost<PageInfo,PageResponse<PostData>>(ENDPOINTS.POST.ME_MEDIAS,params).then(response => {
-  if (response?.code === 0) {
-    return response.data
+export const myMediaPosts = (
+  params: PageInfo & {
+    user_id?: number
+    post_status?: number
   }
-  return null
-})
+) =>
+  fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.POST.ME_MEDIAS, params).then(
+    (response) => {
+      if (response?.code === 0) {
+        return response.data
+      }
+      return null
+    }
+  )
+
+/**
+ * 置顶帖子
+ * @param post_id
+ */
+export const postPined = (post_id: number) =>
+  fetchWithPost<{ post_id: number }>(ENDPOINTS.POST.PINED, { post_id })
+
+/**
+ * 增加帖子访问日志
+ * @param post_id
+ */
+export const addPostLog = (post_id: number) => fetchWithPost(ENDPOINTS.POST.VIEW_LOG, { post_id })

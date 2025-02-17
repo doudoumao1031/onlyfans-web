@@ -42,7 +42,7 @@ export default function Page({
           onClick={() => {
             confirm()
           }}
-          className="h-full flex justify-center items-center flex-1 text-center text-main-pink"
+          className="h-full flex justify-center items-center flex-1 text-center text-text-pink"
         >
           {okText || "确定"}
         </div>

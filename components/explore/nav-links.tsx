@@ -4,7 +4,6 @@ import { usePathname } from "next/navigation"
 import clsx from "clsx"
 import { useCallback } from "react"
 
-
 export default function NavLinks() {
   const links = [
     { name: "已订阅", href: "/explore/subscribed" },
@@ -42,7 +41,7 @@ export default function NavLinks() {
       ))}
     </div>*/
 
-    <div className="w-full text-center grid grid-cols-4 border-b border-gray-100 sticky z-40 bg-white">
+    <div className="w-full text-center grid grid-cols-4 border-b border-gray-100 sticky z-30 bg-white">
       {links.map((link) => (
         <Link
           prefetch={true}

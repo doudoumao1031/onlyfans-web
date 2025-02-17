@@ -1,4 +1,5 @@
 // Post related types and interfaces
+import { TPost } from "@/components/post/types"
 import { PageInfo, FileType } from "@/lib"
 import { User } from "@/lib/actions/users/types"
 
@@ -69,11 +70,7 @@ export interface PostData {
   collection: boolean
   star: boolean
   mention_user: User[]
-  post: {
-    id: number
-    title: string
-    visibility: number
-  }
+  post: TPost
   post_attachment: Attachment[]
   post_metric: {
     collection_count: number
@@ -84,6 +81,7 @@ export interface PostData {
     play_count: number
   }
   user: User
+  post_vote: Vote
   comments: Comment[]
   post_price: {
     id: number
@@ -126,36 +124,11 @@ export interface PostId {
  */
 export type SearchPostReq = PageInfo & {
   title: string
+  sort_type?: number
+  sort_asc?: boolean
+  post_status?: number
 }
 
-export interface PostData {
-  collection: boolean
-  star: boolean
-  mention_user: User[]
-  post: {
-    id: number
-    title: string
-    visibility: number
-  }
-  post_attachment: Attachment[]
-  post_metric: {
-    collection_count: number
-    comment_count: number
-    share_count: number
-    thumbs_up_count: number
-    tip_count: number
-    play_count: number
-  }
-  post_vote: Vote
-  user: User
-  comments: Comment[]
-  post_price: {
-    id: number
-    price: number
-    user_type: number
-    visibility: boolean
-  }[]
-}
 export interface Comment {
   content: string
   id: number

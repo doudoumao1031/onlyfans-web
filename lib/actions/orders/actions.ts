@@ -1,18 +1,20 @@
-import { ENDPOINTS } from "../shared/constants"
+import { ENDPOINTS } from "@/lib"
 import {
-  PostPayOrderReq,
   PostTipReq,
   SubOrderReq,
   WalletDownOrderReq,
   WalletOrderReq,
   DeleteOrderReq,
-  OrderInfo, PayOrderResp, OrderCallBackReq
+  PayOrderResp, OrderCallBackReq
 } from "@/lib"
 import { fetchWithPost } from "@/lib"
 
-export async function addPostPayOrder(params: PostPayOrderReq): Promise<OrderInfo> {
-  // Implementation
-  throw new Error("Not implemented")
+/**
+ * 增加帖子付费记录
+ * @param params
+ */
+export async function addPostPayOrder(params: PostTipReq) {
+  return fetchWithPost<PostTipReq>(ENDPOINTS.ORDERS.ADD_POST_PAY, params)
 }
 
 /**

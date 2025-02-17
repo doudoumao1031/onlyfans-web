@@ -1,6 +1,8 @@
 import UserCard from "@/components/user/user-card"
 import { BloggerInfo, getRecomBlogger } from "@/lib"
 
+export const dynamic = "force-dynamic"
+
 async function getPopularBloggers() {
   try {
     const bloggers = await getRecomBlogger({ from_id: 0, page: 1, pageSize: 20, type: 2 })

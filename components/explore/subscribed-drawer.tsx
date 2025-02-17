@@ -5,32 +5,24 @@ import { ToggleGroupSubscribed, ToggleGroupSubscribedItem } from "@/components/u
 import { useState, useMemo,useEffect } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
-
 interface SubscribedDrawerProps {
-    userId: number;
-    name: string,
-    trigger?: (event: () => void) => React.ReactNode,
-    isOpen: boolean
+  userId: number
+  name: string
+  isOpen: boolean
+  setIsOpen: (val: boolean) => void
 }
-
-const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigger, isOpen }) => {
-
+export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
+  const { userId, name, isOpen, setIsOpen } = props
   const { showMessage, renderNode } = useCommonMessage()
   const [items, setItems] = useState<DiscountInfo[]>([])
   const [discount, setDiscount] = useState<DiscountInfo>()
   const [amount, setAmount] = useState<number>(0)
-  const [free, setFree] = useState<boolean>(false)
   useEffect(() => {
     getSettingData()
   }, [])
   const getSettingData = async () => {
     try {
       const settings = await viewUserSubscribeSetting({ user_id: userId })
-      if (settings && settings.price === 0) {
-        setFree(true)
-      } else {
-        setFree(false)
-      }
       if (settings?.items) {
         const list: DiscountInfo[] = []
         list.push({
@@ -70,13 +62,12 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
       }
     }
   }, [discount])
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(isOpen)
   const handleSubmit = async () => {
     await addSubOrder({ user_id: userId, price: Number(amount), id: discount?.id ?? 0 })
       .then((result) => {
         if (result && result.code === 0) {
           console.log("订阅成功")
-          setDrawerOpen(false)
+          setIsOpen(false)
           showMessage("订阅成功", "success")
         } else {
           console.log("订阅失败:", result?.message)
@@ -91,26 +82,23 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
         title={(
           <div>
             <span className="text-lg font-semibold">订阅</span>
-            <span className="text-main-pink font-normal text-[15px] t">{name}</span>
+            <span className="text-text-pink font-normal text-[15px] t">{name}</span>
           </div>
         )}
         headerLeft={(close) => {
           return (
-            <button onTouchEnd={close} className={"text-base text-[#777]"}>
+            <button onTouchEnd={(e) => {
+              e.preventDefault()
+              close()
+            }} className={"text-base text-[#777]"}
+            >
               <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
             </button>
           )
         }}
-        trigger={trigger && trigger(() => {
-          if (free) {
-            handleSubmit()
-          } else {
-            setDrawerOpen(true)
-          }
-        })}
         className="h-[43vh] border-0"
-        setIsOpen={setDrawerOpen}
-        isOpen={drawerOpen}
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
         outerControl
       >
         <input hidden={true} name="user_id" defaultValue={userId} />
@@ -137,7 +125,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
                   >
                     <span className="text-nowrap text-xs">{item.month_count}个月</span>
                     <span
-                      className={`text-nowrap text-xl my-4 ${item.id === discount?.id ? "text-main-pink" : "text-black"}`}
+                      className={`text-nowrap text-xl my-4 ${item.id === discount?.id ? "text-text-pink" : "text-black"}`}
                     >${item.discount_price}</span>
                     <span className="text-nowrap text-xs block">
                       {
@@ -166,7 +154,7 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
             <div className="relative">
               <button
                 disabled={amount === 0}
-                className="w-[295px] h-[49px] p-2 bg-main-pink text-white text-base font-medium rounded-full"
+                className="w-[295px] h-[49px] p-2 bg-background-pink text-white text-base font-medium rounded-full"
                 onTouchEnd={(e) => {
                   e.preventDefault()
                   handleSubmit()
@@ -191,5 +179,3 @@ const SubscribedDrawer: React.FC<SubscribedDrawerProps> = ({ userId, name, trigg
     </>
   )
 }
-
-export default SubscribedDrawer

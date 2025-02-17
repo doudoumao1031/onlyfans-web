@@ -1,23 +1,24 @@
 "use client"
-import React, { Fragment, useEffect, useState } from "react"
+import React, { Fragment, useCallback, useEffect, useState } from "react"
 import TimeSort from "@/components/profile/time-sort"
-import { getFollowedUsers, infiniteGetFollowedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
-import InfiniteScroll, { InfiniteScrollProps } from "@/components/common/infinite-scroll"
+import { getFollowedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
+import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import FansListItem from "@/components/profile/fans/fans-list-item"
 
 interface FollowedUsersProps {
   initialItems: SubscribeUserInfo[];
   initialHasMore: boolean;
+  fetcherFn: (page: number) => Promise<{ items: SubscribeUserInfo[]; hasMore: boolean; }>
 }
 
-function FollowedUsers({ initialItems, initialHasMore }: FollowedUsersProps) {
+function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsersProps) {
 
   return (
     <InfiniteScroll<SubscribeUserInfo>
       initialItems={initialItems}
       initialHasMore={initialHasMore}
-      fetcherFn={infiniteGetFollowedUsers}
+      fetcherFn={fetcherFn}
     >
       {({ items, isLoading, hasMore, error }) => (
         <Fragment>
@@ -33,9 +34,21 @@ function FollowedUsers({ initialItems, initialHasMore }: FollowedUsersProps) {
 
 export default function Page() {
   const [data,setData] = useState<PageResponse<SubscribeUserInfo> | null>(null)
-  useEffect(() => {
-    getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 }).then(setData)
-  },[])
+  const [sortDesc,setSortDesc] = useState<boolean>(true)
+
+  const fetcherFn = useCallback(async(page:number) => {
+    const data = await getFollowedUsers({ page, pageSize: 10, from_id: 0,desc: sortDesc })
+    return {
+      items: data?.list || [],
+      hasMore: !data?.list ? false : page < Math.ceil(data.total / page)
+    }
+  },[sortDesc])
+  const fetchInitData = () => {
+    getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 ,desc: sortDesc }).then(setData)
+  }
+  useEffect(fetchInitData,[])
+
+  useEffect(fetchInitData,[sortDesc])
 
   if (!data) return null
 
@@ -46,9 +59,9 @@ export default function Page() {
           <span className={"text-[#777]"}>关注总数：</span>
           {data?.total}
         </span>
-        <TimeSort sortDesc={false}>关注时间升序</TimeSort>
+        <TimeSort sortDesc={sortDesc} handleSortChange={setSortDesc}>关注时间升序</TimeSort>
       </div>
-      {data && <FollowedUsers initialHasMore={Number(data?.total) > Number(data?.list?.length)} initialItems={data?.list ?? []}/>}
+      {data && <FollowedUsers initialHasMore={Number(data?.total) > Number(data?.list?.length)} initialItems={data?.list ?? []} fetcherFn={fetcherFn}/>}
     </div>
   )
 }

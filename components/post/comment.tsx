@@ -11,6 +11,8 @@ import {
   upComment
 } from "@/lib"
 import { useState } from "react"
+import CommonAvatar from "@/components/common/common-avatar"
+import CommentSkeleton from "./comment-skeleton"
 
 export default function Comments({
   post_id,
@@ -64,30 +66,38 @@ function Comment({
   const [replyInput, setReplyInput] = useState("")
   const [thumbupCount, setThumbupCount] = useState(thumbs_up_count)
   const [isThumbupped, setIsThumbupped] = useState(thumb_up)
+  const [loading, setLoading] = useState<boolean>(false)
   const [replies, setReplies] = useState<CommentReplyInfo[] | undefined>(undefined)
   const [showReplies, setShowReplies] = useState(false)
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex justify-between">
-        <div className="flex gap-2">
-          <Avatar fileId={photo} width={9} />
-          <div className="flex flex-col gap-2">
-            <div className="text-xs text-[#FF8492]">{username}</div>
-            <div className="text-sm">{content}</div>
-            <div className="flex gap-4 text-xs text-[#6D7781]">
-              {reply_count > 0 && (
-                <div onClick={toggleReplies} className="text-[#FF8492]">
-                  {reply_count}条回复
-                </div>
-              )}
-              <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
-              {is_self && <div onClick={removeComment}>删除</div>}
+      {!loading ? (
+        <div className="flex justify-between">
+          <div className="flex gap-2">
+            {/*<Avatar fileId={photo} width={9} />*/}
+            <div className={"shrink-0"}>
+              <CommonAvatar photoFileId={photo} size={36} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="text-xs text-[#FF8492]">{username}</div>
+              <div className="text-sm">{content}</div>
+              <div className="flex gap-4 text-xs text-[#6D7781]">
+                {reply_count > 0 && (
+                  <div onClick={toggleReplies} className="text-[#FF8492]">
+                    {reply_count}条回复
+                  </div>
+                )}
+                <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
+                {is_self && <div onClick={removeComment}>删除</div>}
+              </div>
             </div>
           </div>
+          <Thumbup thumbupCount={thumbupCount} isThumbupped={isThumbupped} thumbup={thumbup} />
         </div>
-        <Thumbup thumbupCount={thumbupCount} isThumbupped={isThumbupped} thumbup={thumbup} />
-      </div>
+      ) : (
+        <CommentSkeleton></CommentSkeleton>
+      )}
       {showReplyInput && (
         <div className="flex gap-2 p-4">
           <input
@@ -120,11 +130,13 @@ function Comment({
   }
 
   async function fetchReplies() {
+    setLoading(true)
     const replies = await fetchCommentReplies(id, post_id)
     if (replies.length) {
       setReplies(replies)
       setShowReplies(true)
     }
+    setLoading(false)
   }
 
   async function toggleReplies() {
@@ -199,7 +211,7 @@ function Reply({
   removed: (replyId: number) => void
   fetchReplies: () => void
 }) {
-  const { user, content, thumbs_up_count, thumb_up, id, comment_id, is_self } = reply
+  const { user, content, thumbs_up_count, thumb_up, id, comment_id, is_self, reply_user } = reply
   const { photo, username } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
@@ -210,10 +222,13 @@ function Reply({
     <div className="flex flex-col gap-2">
       <div className="flex justify-between">
         <div className="flex gap-2">
-          <Avatar fileId={photo} width={9} />
+          <Avatar fileId={photo} width={9} height={9} />
           <div className="flex flex-col gap-2">
             <div className="text-xs text-[#FF8492]">{username}</div>
-            <div className="text-sm">{content}</div>
+            <div className="text-sm flex gap-2">
+              {reply_user && <div className="text-[#6D7781]">{reply_user.username}</div>}
+              <div>{content}</div>
+            </div>
             <div className="flex gap-4 text-xs text-[#6D7781]">
               <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
               {is_self && <div onClick={removeReply}>删除</div>}

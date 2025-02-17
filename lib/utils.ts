@@ -21,7 +21,7 @@ export function convertImageToBase64(file: File) {
   })
 }
 
-enum UPLOAD_MEDIA_TYPE {
+export enum UPLOAD_MEDIA_TYPE {
   PIC = "1", // 图片
   VIDEO = "2", // 视频
   OTHER = "3" // 其他附件
@@ -47,7 +47,7 @@ export async function commonUploadFile(file: File) {
   formData.append("file", file)
   const response = await uploadMediaFile(formData)
   if (response?.data) {
-    return response.data?.file_id
+    return response.data
   }
   return null
   // uploadMediaFile(formData).then((data) => {
@@ -83,9 +83,9 @@ const uploadFirstChunk = async (size: string, file: Blob, type: string, count?: 
   fd.append("file", file)
   return uploadMediaFile(fd).then((data) => {
     if (data && data.code == 0) {
-      return data.data.file_id
+      return data.data
     } else {
-      return ""
+      return null
     }
   })
 }
@@ -97,9 +97,14 @@ export async function uploadFile(file: File) {
   if (totalChunks > 1) {
     const chunks = createChunks(file)
     const firstChunk = chunks.shift() as Blob
-    const fileId = await uploadFirstChunk(String(file.size), firstChunk, getUploadMediaFileType(file), totalChunks.toString())
+    const chunkResult = await uploadFirstChunk(
+      String(file.size),
+      firstChunk,
+      getUploadMediaFileType(file),
+      totalChunks.toString()
+    )
     console.log("handleUploadFile totalChunks", totalChunks)
-
+    const fileId = chunkResult?.file_id
     if (!fileId) {
       console.log("upload file part first chunk failed")
       return ""
@@ -112,9 +117,9 @@ export async function uploadFile(file: File) {
       return ""
     }
     console.log("handleUploadFile complete file")
-    return fileId
+    return chunkResult
   } else {
-    return await commonUploadFile(file)
+    return commonUploadFile(file)
   }
 }
 
@@ -129,18 +134,19 @@ const uploadBatch = async (fileId: string, chunks: Blob[]) => {
   })
   const rcl = new PromiseConcurrency({ limit: BATCH_SIZE, retry: 3 }) // 最大请求并发数为10，重试次数3
   // 将所有的切片请求append到rcl控制器中
-  const requestList = chunksFormData.map(
-    (data) => rcl.append(() => uploadFetch(ENDPOINTS.MEDIA.UPLOAD_PART, data))
+  const requestList = chunksFormData.map((data) =>
+    rcl.append(() => uploadFetch(ENDPOINTS.MEDIA.UPLOAD_PART, data))
   )
   // 上传所有切片
   await Promise.all(requestList)
 }
 
-function createChunks(file:File) {
+function createChunks(file: File) {
   const chunkList = [] // 收集所有的切片
   let offset = 0 // 收集的切片总大小
   const size = file.size
-  while (offset < size) { // 当切片总大小小于文件大小时还需要继续分片
+  while (offset < size) {
+    // 当切片总大小小于文件大小时还需要继续分片
     chunkList.push(file.slice(offset, Math.min(offset + CHUNK_SIZE, size)))
     offset += CHUNK_SIZE
   }
@@ -153,14 +159,16 @@ function createChunks(file:File) {
  */
 export function getUserDefaultBackImg(username: string) {
   if (username.length === 0) {
-    return "/icons/default/image_fans_normal_01.png"
+    // return "/icons/default/image_fans_normal_01.png"
+    return "/icons/image_fans_normal_05.png"
   }
-  const firstCharCode = Math.min(username.charCodeAt(0), 0xFFFF)
-  const index = (username.length + firstCharCode) % 6 + 1
+  const firstCharCode = Math.min(username.charCodeAt(0), 0xffff)
+  const index = ((username.length + firstCharCode) % 6) + 1
   // 返回背景图路径
-  return `/icons/default/image_fans_normal_0${index}.png`
+  // return `/icons/default/image_fans_normal_0${index}.png`
+  //默认固定
+  return "/icons/image_fans_normal_05.png"
 }
-
 
 export function buildImageUrl(fileId: string) {
   return fileId ? `${process.env.NEXT_PUBLIC_MEDIA_URL}/${fileId}` : ""
@@ -169,3 +177,14 @@ export function buildImageUrl(fileId: string) {
 export function buildVideoUrl(fileId: string, quality: string) {
   return `${process.env.NEXT_PUBLIC_VIDEO_URL}/${fileId}/${quality}`
 }
+
+export const TOKEN_KEY = "X-Token"
+
+export function getEvenlySpacedPoints<T>(arr: T[], count = 12) {
+  if (arr.length <= count) return arr // If array length is less than or equal to count, return it as is
+  const step = (arr.length - 1) / (count - 1)
+  return Array.from({ length: count }, (_, i) => arr[Math.round(i * step)])
+}
+
+
+export const TIME_FORMAT = "YYYY-MM-DD HH:mm:ss"

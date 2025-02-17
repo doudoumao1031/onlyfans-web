@@ -44,7 +44,7 @@ export default function Page() {
       {renderNode}
       <form onSubmit={formSubmit}>
         <Header title={"订阅回复"}
-          right={<button type={"submit"} className={"text-main-pink text-base"}>保存</button>}
+          right={<button type={"submit"} className={"text-text-pink text-base"}>保存</button>}
         />
         <section className={"py-5 px-4"}>
           用户成功订阅后，将会对用户发起一条问候信息：

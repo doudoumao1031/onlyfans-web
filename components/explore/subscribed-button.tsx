@@ -37,18 +37,18 @@ export default function SubscribedButton({ userId, name, subPrice, type } : {use
       )}
       {
         type === "panel" && show && (
-          <div
+          <button
             onClick={handleSubmit}
             className="w-full h-12 bg-[#ff8492] rounded-lg  pl-4 mt-2 flex flex-col justify-center text-white bg-[url('/icons/space/bg_space_subscription.png')] bg-cover"
           >
             <div>订阅</div>
-            <div className="text-xs">免费</div>
-          </div>
+            <div className="text-xs">{subPrice === 0 ? "免费" : `${subPrice} USDT/月`}</div>
+          </button>
         )
       }
       {
         subPrice !== 0 && openDrawer && (
-          <SubscribedDrawer userId={userId} name={name} isOpen={openDrawer}/>
+          <SubscribedDrawer userId={userId} name={name} isOpen={openDrawer} setIsOpen={setOpenDrawer}/>
         )
       }
     </>

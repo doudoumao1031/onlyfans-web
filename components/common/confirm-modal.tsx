@@ -35,7 +35,7 @@ export default function ConfirmModal({ confirm, cancel, trigger, content }: {
             <button onTouchEnd={() => {
               confirm?.()
               setOpenState(false)
-            }} className={"py-3.5 text-main-pink font-medium"}
+            }} className={"py-3.5 text-text-pink font-medium"}
             >确定
             </button>
           </div>

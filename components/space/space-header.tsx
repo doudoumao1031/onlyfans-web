@@ -24,17 +24,23 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
   //   isTop !== value && setIsTop(value)
   // }
   return (
-    <div
-      className=" relative h-[200px]"
-    >
+    <div className=" relative h-[200px]">
       <div className="absolute w-full h-full z-0">
-        <LazyImg style={{ objectFit: "cover" }} width={200} height={400} className="w-full h-full" src={data.back_img ? buildImageUrl(data.back_img) : getUserDefaultBackImg(data.username)} alt={""} />
+        <LazyImg
+          style={{ objectFit: "cover" }}
+          width={200}
+          height={400}
+          className="w-full h-full"
+          src={data.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"}
+          alt={""}
+        />
       </div>
-      <div className={`w-full fixed top-0 left-0 z-50 ${isTop ? "bg-[#fff]" : "auto"}`}>
+      <div className={`w-full fixed top-0 left-0 z-40 ${isTop ? "bg-[#fff]" : "auto"}`}>
         <Header
           leftTitle={
             <span
-              className={` pt-[1px] shrink-0 text-[18px] font-semibold ml-8 ${isTop ? "text-[#222]" : "text-[#fff]"
+              className={` pt-[1px] shrink-0 text-[18px] font-semibold ml-8 ${
+                isTop ? "text-[#222]" : "text-[#fff]"
               }`}
             >
               {isTop ? "我的空间" : ""}
@@ -66,7 +72,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           }
           backIconColor={isTop ? "#222" : "#fff"}
         />
-        <div className={`text-xs pl-6 pr-6 pb-2 ${isTop ? "text-main-pink" : "text-white"}`}>
+        <div className={`text-xs pl-6 pr-6 pb-2 ${isTop ? "text-text-pink" : "text-white"}`}>
           {data.top_info}
         </div>
       </div>

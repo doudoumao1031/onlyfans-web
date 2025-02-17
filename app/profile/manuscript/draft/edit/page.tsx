@@ -1,5 +1,5 @@
 "use client"
-import React, { HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState, Suspense } from "react"
+import React, { HTMLAttributes, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import clsx from "clsx"
 import IconWithImage from "@/components/profile/icon"
 import { Switch } from "@/components/ui/switch"
@@ -13,18 +13,18 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import dayjs from "dayjs"
 import { z } from "zod"
 import Image from "next/image"
-import * as process from "process"
 import {
-  postVoteSchema,
-  iPostVote,
-  iPostPrice,
-  postPriceSchema,
+  addPost,
   iPost,
+  iPostPrice,
+  iPostVote,
+  postDetail,
+  postPriceSchema,
   postSchema,
-  addPost, postDetail
+  postVoteSchema, pubPost
 } from "@/lib/actions/profile"
 import { isNumber } from "lodash"
-import { buildImageUrl, uploadFile } from "@/lib/utils"
+import { buildImageUrl, getUploadMediaFileType, UPLOAD_MEDIA_TYPE, uploadFile } from "@/lib/utils"
 import DateTimePicker from "@/components/common/date-time-picker"
 import { getFollowedUsers, SubscribeUserInfo } from "@/lib"
 import Empty from "@/components/common/empty"
@@ -123,7 +123,7 @@ const AddVoteModal = ({
       append({ content: "" })
       append({ content: "" })
     }
-  }, [voteForm])
+  }, [append, voteForm])
 
   const minTime = new Date()
 
@@ -173,7 +173,7 @@ const AddVoteModal = ({
                   }
                 })
               }}
-              className={"text-base text-main-pink"}
+              className={"text-base text-text-pink"}
             >
               确定
             </button>
@@ -202,7 +202,7 @@ const AddVoteModal = ({
         <section className={"py-5 px-4 border-b border-[#ddd]"}>
           <h3 className="font-medium text-base mb-2">
             投票内容
-            {watch("items").length < 2 && (
+            {watch("items")?.filter(item => !!item.content)?.length < 2 && (
               <span className="text-xs text-red-600 ml-2 font-normal">最少2个选项</span>
             )}
           </h3>
@@ -229,7 +229,7 @@ const AddVoteModal = ({
               onTouchEnd={() => {
                 append({ content: "" })
               }}
-              className="flex gap-1.5 w-full rounded-xl border border-main-pink justify-center items-center py-2.5 text-main-pink"
+              className="flex gap-1.5 w-full rounded-xl border border-border-pink justify-center items-center py-2.5 text-text-pink"
             >
               <IconWithImage
                 url={"/icons/profile/icon_add@3x.png"}
@@ -439,7 +439,7 @@ const ReadSettings = ({
                   }
                 })
               }}
-              className={"text-base text-main-pink"}
+              className={"text-base text-text-pink"}
             >
               确定
             </button>
@@ -518,6 +518,9 @@ const ReadSettings = ({
 }
 
 const UploadMedia = () => {
+  const { showMessage } = useCommonMessageContext()
+  const [uploading, setIsUploading] = useState<boolean>(false)
+  const [firstMediaType,setFirstMediaType] = useState<UPLOAD_MEDIA_TYPE | undefined>(undefined)
   const { control } = useFormContext<iPost>()
   const ref = useRef<HTMLInputElement>(null)
   const {
@@ -528,19 +531,45 @@ const UploadMedia = () => {
     control,
     name: "post_attachment"
   })
+
+  useEffect(() => {
+    if (itemsList.length === 0) {
+      setFirstMediaType(undefined)
+    }
+  },[itemsList])
+
   const handleUpload = (file: File) => {
+    const fileType = getUploadMediaFileType(file)
+    if (!firstMediaType) {
+      setFirstMediaType(fileType)
+    } else {
+      if (fileType !== firstMediaType) {
+        if (fileType === UPLOAD_MEDIA_TYPE.PIC) {
+          showMessage("请先删除视频内容")
+        }
+        if (fileType === UPLOAD_MEDIA_TYPE.VIDEO) {
+          showMessage("请先删除图片内容")
+        }
+        return
+      }
+    }
+    setIsUploading(true)
     uploadFile(file).then((data) => {
       console.log("upload file result: ", data)
-      if (data) {
+      if (data && data?.file_id) {
         append({
-          file_id: data
+          file_id: data?.file_id,
+          file_type: data?.file_type
         })
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         ref.current.value = null
       }
+    }).finally(() => {
+      setIsUploading(false)
     })
   }
+
   return (
     <>
       {itemsList?.map((item, index) => {
@@ -585,26 +614,33 @@ const UploadMedia = () => {
           />
         )
       })}
-      <div className="relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded ">
-        <input
-          ref={ref}
-          type="file"
-          multiple={false}
-          className="block w-full h-full absolute left-0 top-0 opacity-0 z-10"
-          onChange={(event) => {
-            if (event.target.files?.length) {
-              handleUpload(event.target.files[0])
-            }
-          }}
-        />
-        <IconWithImage
-          url={"/icons/profile/icon_add@3x.png"}
-          width={24}
-          height={24}
-          color={"#000"}
-        />
-        <div className="text-[#bbb] text-xs text-center absolute bottom-2">视频/图片</div>
-      </div>
+      {uploading && (
+        <div className={"w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "}>
+          上传中...
+        </div>
+      )}
+      {!uploading && itemsList.length < 9 && (
+        <div className="relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded ">
+          <input
+            ref={ref}
+            type="file"
+            multiple={false}
+            className="block w-full h-full absolute left-0 top-0 opacity-0 z-10"
+            onChange={(event) => {
+              if (event.target.files?.length) {
+                handleUpload(event.target.files[0])
+              }
+            }}
+          />
+          <IconWithImage
+            url={"/icons/profile/icon_add@3x.png"}
+            width={24}
+            height={24}
+            color={"#000"}
+          />
+          <div className="text-[#bbb] text-xs text-center absolute bottom-2">视频/图片</div>
+        </div>
+      )}
     </>
   )
 }
@@ -612,7 +648,8 @@ const UploadMedia = () => {
 const initPostFormData: iPost = {
   post: {
     notice: false,
-    title: ""
+    title: "",
+    post_status: 2
   },
   post_attachment: [],
   post_price: [
@@ -645,7 +682,7 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
         height={20}
         color={"#FF8492"}
       />
-      <label className={"text-main-pink"}>
+      <label className={"text-text-pink"}>
         {option?.label}
         {Number(price) === 0 ? "免费" : price}
       </label>
@@ -715,7 +752,7 @@ const insertString = (str: string, index: number, char: string) => {
 const Page = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <EditPageContent />
+      <EditPageContent/>
     </Suspense>
   )
 }
@@ -733,19 +770,26 @@ const EditPageContent = () => {
     })
   }, [])
   const selectionStart = useRef<number>(0)
-  const onFormSubmit = (formData: iPost) => {
+
+  const getSubmitFormData = (formData:iPost) => {
     const { post_mention_user = [], post: { title } } = formData
     const mentionUsers = post_mention_user?.map(item => subUsers.find(sub => sub.user.id === item.user_id))?.filter(item => !!item)
     const mentionUserIds = mentionUsers.filter(item => {
-      return title.includes(`@${item?.user?.username} `)
-    }).map(user => ({ user_id:user.user.id }))
-    addPost({
+      return title?.includes(`@${item?.user?.username} `)
+    }).map(user => ({ user_id: user.user.id }))
+    return {
       ...formData,
       post_mention_user: mentionUserIds
-    }).then((data) => {
-      showMessage("success")
-      if (data?.code === 0) {
-        router.back()
+    }
+  }
+  const onFormSubmit = (formData: iPost) => {
+    const params = getSubmitFormData(formData)
+    addPost(params).then((data) => {
+      if (data?.code === 0 && data?.data?.post?.id) {
+        pubPost(data.data.post.id).then(() => {
+          showMessage("success")
+          router.back()
+        })
       } else {
         showMessage(data?.message)
       }
@@ -777,14 +821,26 @@ const EditPageContent = () => {
 
   const updateMentionUserIds = useCallback((id: number) => {
     const value = formValues.post_mention_user ?? []
-    value.push({ user_id:id })
+    value.push({ user_id: id })
     setValue("post_mention_user", [...new Set(value)])
     const appendUsername = subUsers.find(item => item.user.id === id)?.user?.username ?? ""
-    const insertedString = insertString(formValues.post.title, selectionStart.current, appendUsername + " ")
+    const insertedString = insertString(formValues?.post?.title ?? "", selectionStart.current, appendUsername + " ")
     setValue("post.title", insertedString)
     setAtUserModal(false)
   }, [formValues, setValue, subUsers])
 
+  const handleSaveDraft = () => {
+    addPost(getSubmitFormData(formValues)).then(() => {
+      showMessage("success")
+      router.back()
+    })
+  }
+
+  const showSaveDraft = useMemo(() => {
+    const title = formValues.post?.title
+    const attachments = formValues.post_attachment
+    return !!title || !!attachments?.length
+  },[formValues])
 
   return (
     <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
@@ -796,25 +852,36 @@ const EditPageContent = () => {
         />
         <form onSubmit={handleSubmit(onFormSubmit)}>
           <section className="flex justify-between h-11 items-center pl-4 pr-4">
-            <ConfirmModal
-              content={"未发布的内容是否保存到草稿中？"}
-              confirm={() => {
-                console.log("保存到草稿")
-                router.back()
-              }}
-              cancel={router.back}
-              trigger={
-                <button>
-                  <IconWithImage
-                    url={"/icons/profile/icon_close@3x.png"}
-                    width={24}
-                    height={24}
-                    color={"#000"}
-                  />
-                </button>
-              }
-            />
-            <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "#000")}>
+            {
+              showSaveDraft ? (
+                <ConfirmModal
+                  content={"未发布的内容是否保存到草稿中？"}
+                  confirm={handleSaveDraft}
+                  cancel={router.back}
+                  trigger={
+                    <button>
+                      <IconWithImage
+                        url={"/icons/profile/icon_close@3x.png"}
+                        width={24}
+                        height={24}
+                        color={"#000"}
+                      />
+                    </button>
+                  }
+                />
+              )
+                : (
+                  <button onTouchEnd={router.back}>
+                    <IconWithImage
+                      url={"/icons/profile/icon_close@3x.png"}
+                      width={24}
+                      height={24}
+                      color={"#000"}
+                    />
+                  </button>
+                )
+            }
+            <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-text-pink")}>
               发布
             </button>
           </section>
@@ -881,7 +948,7 @@ const EditPageContent = () => {
                     height={20}
                     color={"#FF8492"}
                   />
-                  <span className="font-bold text-main-pink text-base">
+                  <span className="font-bold text-text-pink text-base">
                     {formValues.post_vote?.title}
                   </span>
                 </div>
@@ -920,7 +987,7 @@ const EditPageContent = () => {
               {/*<div className="flex items-center space-x-2">*/}
               {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
               {/*                   color={'#FF8492'}/>*/}
-              {/*    <label className={"text-main-pink"}>免费订阅</label>*/}
+              {/*    <label className={"text-text-pink"}>免费订阅</label>*/}
               {/*</div>*/}
             </section>
           </section>
@@ -929,6 +996,7 @@ const EditPageContent = () => {
             <section className="border-b border-gray-200 flex justify-between items-center py-3">
               <div>订阅者</div>
               <Switch
+                className={"custom-switch"}
                 {...noticeRegister}
                 onCheckedChange={(value) => {
                   setValue("post.notice", value)
@@ -944,13 +1012,13 @@ const EditPageContent = () => {
             >
               {!watch("post_vote") && (
                 <span
-                  className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-main-pink py-2 text-main-pink text-base"
+                  className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-[#999] py-2 text-[#999] text-base"
                 >
                   <IconWithImage
                     url={"/icons/profile/icon_fans_vote@3x.png"}
                     width={20}
                     height={20}
-                    color={"#FF8492"}
+                    color={"#999"}
                   />
                   投票
                 </span>

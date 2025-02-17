@@ -2,6 +2,8 @@ import UserCard from "@/components/user/user-card"
 import { getSubscribeUsers } from "@/lib"
 import Empty from "@/components/explore/empty"
 
+export const dynamic = "force-dynamic"
+
 export default async function Page() {
   const bloggers = await getSubscribeUsers({ from_id: 0, page: 1, pageSize: 10 })
   return (

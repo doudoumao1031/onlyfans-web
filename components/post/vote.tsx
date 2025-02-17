@@ -2,9 +2,11 @@ import { useCallback, useEffect, useState } from "react"
 import Image from "next/image"
 import { Vote as VoteData, VoteParams } from "./types"
 import { ApiResponse, fetchWithPost } from "@/lib"
+import VoteSkeleton from "./vote-skeleton"
 
 export default function Vote({ postId }: { postId: number }) {
   const [vote, setVote] = useState<VoteData>()
+  const [loading, setLoading] = useState<boolean>(false)
   const { title, items, stop_time, mu_select } = vote || { items: [], stop_time: 0 }
   const [showOptionAmount, setShowOptionAmount] = useState(3)
   const selectedIds = items.filter((i) => i.select).map((i) => i.id)
@@ -14,15 +16,19 @@ export default function Vote({ postId }: { postId: number }) {
   const canVote = secondsToExpire > 0
 
   const getVoteData = useCallback(async () => {
+    setLoading(true)
     const response = await fetchVote(postId)
-    setVote(response?.data)
+    setVote(response)
+    setLoading(false)
   }, [postId])
 
   useEffect(() => {
     getVoteData()
   }, [getVoteData])
 
-  return (
+  return loading ? (
+    <VoteSkeleton></VoteSkeleton>
+  ) : (
     <div className="mt-2 flex flex-col gap-2">
       <div>{title}</div>
       <div className="flex flex-col gap-1">
@@ -109,7 +115,7 @@ async function _vote(params: VoteParams): Promise<boolean> {
 }
 
 async function fetchVote(post_id: number) {
-  const res = await fetchWithPost<{ post_id: number }, ApiResponse<VoteData>>("/post/getVoteInfo", {
+  const res = await fetchWithPost<{ post_id: number }, VoteData>("/post/getVoteInfo", {
     post_id
   })
   return res?.code === 0 ? res.data : undefined

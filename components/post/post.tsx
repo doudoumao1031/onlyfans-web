@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import { CommentInfo, fetchPostComments, PostData } from "@/lib"
 import Comments from "./comment"
@@ -15,41 +15,69 @@ import CommentStats from "./comment-stats"
 import Tip from "./tip"
 import Share from "./share"
 import Save from "./save"
-
+import Link from "next/link"
+import CommentSkeleton from "./comment-skeleton"
 export default function Post({
   data,
   hasVote,
-  hasSubscribe
+  hasSubscribe,
+  isInfoPage
 }: {
   data: PostData
   hasVote: boolean
   hasSubscribe: boolean
+  isInfoPage?: boolean
 }) {
-  const { user, post, post_attachment, post_metric, mention_user, collection, star } = data
+  const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
+    data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
-  const [showComments, setShowComments] = useState(false)
+  const [showComments, setShowComments] = useState(isInfoPage)
   const [comments, setComments] = useState<CommentInfo[]>()
   const [showVote, setShowVote] = useState(false)
+  const [commentsLoading, setCommentsLoading] = useState<boolean>(false)
+  const linkRender = (content: string) => {
+    return <Link href={`/postInfo/${post.id}`}>{content}</Link>
+  }
+
+  useEffect(() => {
+    if (isInfoPage) {
+      const loadComments = async () => {
+        setCommentsLoading(true)
+        try {
+          const res = await fetchPostComments(post.id)
+          setComments(res)
+        } catch (error) {
+          console.error("Error loading comments:", error)
+        } finally {
+          setCommentsLoading(false)
+        }
+      }
+      loadComments()
+    }
+  }, [post.id, isInfoPage])
 
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
-      <UserTitle user={user} />
-      <Description content={post.title} />
-      <UserHomePageLink userId={user.username} />
-      {post_attachment && post_attachment.length > 0 && <Media data={post_attachment} />}
+      {!isInfoPage && <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} />}
+
+      <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
+      <UserHomePageLink userId={user.id.toString()} />
+      {post_attachment && post_attachment.length > 0 && (
+        <Media data={post_attachment} post={post} user={user} />
+      )}
       {hasSubscribe && mention_user && mention_user.length > 0 && (
-        <div>
+        <div className={"grid gap-1"}>
           {mention_user.map((user) => (
             <Subscribe key={user.id} user={user} />
           ))}
         </div>
       )}
-      {hasSubscribe && user && !user?.sub && !mention_user &&  (
+      {hasSubscribe && user && !user?.sub && !mention_user && (
         <div>
           <Subscribe user={user} />
         </div>
       )}
-      {hasVote && (
+      {hasVote && post_vote && (
         <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
           <Image src="/icons/vote.png" alt="" width={20} height={20} />
           <div className="text-red-500 text-sm">投票</div>
@@ -63,19 +91,28 @@ export default function Post({
       {hasVote && showVote && <Vote postId={post.id} />}
       <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
         <Like count={thumbs_up_count} liked={star} postId={post.id} />
-        <CommentStats count={comment_count} onClick={toggleComments} />
+        {isInfoPage ? (
+          <CommentStats count={comment_count} onClick={toggleComments} />
+        ) : (
+          <Link href={`/postInfo/${post.id}`}>
+            <CommentStats count={comment_count} />
+          </Link>
+        )}
         <Tip count={tip_count} postId={post.id} />
         <Share count={share_count} postId={post.id} />
         <Save count={collection_count} saved={collection} postId={post.id} />
       </div>
-      {showComments && comments && (
-        <Comments
-          post_id={post.id}
-          comments={comments}
-          removeComment={removeComment}
-          fetchComments={async () => setComments(await fetchPostComments(post.id))}
-        />
-      )}
+      {showComments &&
+        (commentsLoading ? (
+          <CommentSkeleton></CommentSkeleton>
+        ) : (
+          <Comments
+            post_id={post.id}
+            comments={comments || []}
+            removeComment={removeComment}
+            fetchComments={async () => setComments(await fetchPostComments(post.id))}
+          />
+        ))}
     </div>
   )
 
