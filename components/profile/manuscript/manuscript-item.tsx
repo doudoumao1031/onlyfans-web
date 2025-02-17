@@ -20,6 +20,7 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
 const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, postStatus: number, refresh?: () => void ,pinned: boolean}) => {
 
   const { showMessage } = useCommonMessageContext()
+  const isAuditing = postStatus === 2
   const handlePined = () => {
     postPined(id).then((data) => {
       if (data?.code === 0) {
@@ -30,6 +31,29 @@ const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, pos
         })
       }
     })
+  }
+  // 审核中不允许有操作
+  if (isAuditing) {
+    return (
+      <section className="flex opacity-50">
+        <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
+          <IconWithImage url={"/icons/profile/icon_fans_share@3x.png"} width={20} height={20} color={"#222"}/>
+          <span>分享</span>
+        </button>
+        <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
+          <IconWithImage url={"/icons/profile/icon_fans_stick_gray@3x.png"} width={20} height={20} color={"#222"}/>
+          <span>置顶</span>
+        </button>
+        <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
+          <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
+          <span>数据</span>
+        </button>
+        <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 ">
+          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#222"}/>
+          <span>编辑</span>
+        </button>
+      </section>
+    )
   }
   return (
     <section className="flex">
