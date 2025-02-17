@@ -12,6 +12,7 @@ export default {
   	extend: {
       colors: {
         red: "var(--red)",
+        pink: "var(--red)",
         orange: "var(--orange)",
         green: "var(--green)",
         black: "var(--black)",
