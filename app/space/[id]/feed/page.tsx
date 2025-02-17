@@ -33,11 +33,13 @@ export default function FeedList() {
       user_id: Number(userId),
       post_status: 1
     }
-    const res = selfId ? await getMyFeeds(params) : await getUserPosts(params)
+    // const res = selfId ? await getMyFeeds(params) : await getUserPosts(params)
+    const res = selfId ? await getUserPosts(params) : await getUserPosts(params)
     setInitData(res)
   }
   const infiniteFetchPosts = useInfiniteFetch<FeedParams, PostData>({
-    fetchFn: selfId ? getMyFeeds : getUserPosts,
+    // fetchFn: selfId ? getMyFeeds : getUserPosts,
+    fetchFn: selfId ? getUserPosts : getUserPosts,
     params: {
       pageSize: 10,
       from_id: 0,

@@ -15,6 +15,8 @@ import Link from "next/link"
 import { Fragment, useEffect, useState } from "react"
 import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
 import IconWithImage from "@/components/profile/icon"
+import CommonAvatar from "@/components/common/common-avatar"
+import SubscribedButton from "@/components/explore/subscribed-button"
 
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<BloggerInfo> | null>()
@@ -71,13 +73,16 @@ export default function Page() {
                   >
                     <div className="text-xs min-h-4  truncate px-2">{v.top_info}</div>
                     <div className="pl-4 pr-4 pt-2 flex justify-start">
-                      <Image
+                      {/* <Image
                         src={buildImageUrl(v.photo)}
                         width={112}
                         height={112}
                         alt={"blogger photo"}
                         className={"w-16 h-16 rounded-full mr-4 border-2 border-white"}
-                      />
+                      /> */}
+                      <div className="w-[65px] h-[65px] rounded-full mr-4 border-2 border-white overflow-hidden">
+                        <CommonAvatar photoFileId={v.photo} size={64} />
+                      </div>
                       <div className="flex-1">
                         <div className="text-sm">
                           {v.first_name} {v.last_name}
@@ -102,8 +107,20 @@ export default function Page() {
                               <span className="ml-1">{v.video_count}</span>
                             </div>
                           </div>
-                          <div className="bg-black rounded-full bg-opacity-20 py-1 px-3 ml-2 text-xs">
+                          {/* <div className="bg-black rounded-full bg-opacity-20 py-1 px-3 ml-2 text-xs">
                             免费/订阅
+                          </div> */}
+                          <div
+                            onClick={(e) => {
+                              e.preventDefault()
+                            }}
+                          >
+                            <SubscribedButton
+                              name={v.first_name}
+                              userId={Number(v.id)}
+                              subPrice={v.sub_price}
+                              type={"button"}
+                            />
                           </div>
                         </div>
                       </div>
