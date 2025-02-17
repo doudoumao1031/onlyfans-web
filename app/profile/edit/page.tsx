@@ -100,6 +100,7 @@ export default function Page() {
               }
             }}
           />
+          <div className={"text-xs text-white absolute right-4 top-24"}>点击空白区域更换背景</div>
         </div>
         <section className="mt-[-47px] rounded-t-3xl bg-white relative pt-12 text-black pb-8">
           <section className="pl-4 pr-4 pb-3 ">
