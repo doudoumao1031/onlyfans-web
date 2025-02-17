@@ -5,11 +5,11 @@ import React, { Fragment, useEffect, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import InfiniteScroll from "@/components/common/infinite-scroll"
-import { myPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
+import { myDraftPosts, myPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import LazyImg from "@/components/common/lazy-img"
-import { buildImageUrl, TIME_FORMAT } from "@/lib/utils"
+import { LazyImageWithFileId } from "@/components/common/lazy-img"
+import { TIME_FORMAT } from "@/lib/utils"
 import dayjs from "dayjs"
 
 const DraftItem = ({ data }:{data:PostData}) => {
@@ -18,7 +18,7 @@ const DraftItem = ({ data }:{data:PostData}) => {
     <Link href={`${pathname}/edit?id=${data.post.id}`} className="pt-2.5 pb-2.5 border-b border-gray-100 flex gap-2.5">
       {/*<Image src={""} alt={"img"} width={100} height={100} className="rounded"/>*/}
       <div className={"w-[100px] h-[100px] shrink-0 overflow-hidden"}>
-        <LazyImg src={buildImageUrl(data.post_attachment?.[0].file_id)} alt={data.post.title} width={100} height={100} className={"rounded"}/>
+        <LazyImageWithFileId fileId={data.post_attachment?.[0].file_id} alt={data.post.title} width={100} height={100} className={"rounded"}/>
       </div>
       <div className="flex-col justify-between flex flex-1 w-0">
         <div className="text-[#333] line-clamp-[2] ">{data.post.title}</div>
@@ -30,14 +30,15 @@ const DraftItem = ({ data }:{data:PostData}) => {
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData>>()
 
+  const defaultParams = {
+    page: 1,
+    title:"",
+    pageSize: 10,
+    from_id: 0,
+    post_status: 0
+  }
   const fetchInitData = () => {
-    myPosts({
-      page: 1,
-      title:"",
-      pageSize: 10,
-      from_id: 0,
-      post_status: 0
-    }).then(response => {
+    myPosts(defaultParams).then(response => {
       if (response) {
         setInitData(response)
       }
@@ -46,11 +47,8 @@ export default function Page() {
   useEffect(fetchInitData,[])
 
   const infiniteFetchMyPosts = useInfiniteFetch<SearchPostReq, PostData>({
-    fetchFn: myPosts,
-    params: {
-      pageSize: 10,
-      from_id: 0
-    }
+    fetchFn: myDraftPosts,
+    params: defaultParams
   })
   return (
     <div>

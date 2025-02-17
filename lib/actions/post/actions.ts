@@ -131,6 +131,14 @@ export const myPosts = (params: SearchPostReq) =>
     }
   )
 
+export const myDraftPosts = (params:SearchPostReq) => fetchWithPost<SearchPostReq,PageResponse<PostData>>(ENDPOINTS.POST.ME_DRAFT_POST,params)
+  .then(res => {
+    if (res && res.code === 0) {
+      return res.data
+    }
+    return null
+  })
+
 /**
  * 待定
  * @param params
