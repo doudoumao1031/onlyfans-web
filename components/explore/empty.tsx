@@ -9,7 +9,7 @@ export default function Empty({ text }: {text: string}) {
       />
       <span className="mt-6 text-gray-500 text-center">{text}
         <Link href="/explore/feed">
-          <span className="text-main-pink">精彩贴文</span>
+          <span className="text-text-pink">精彩贴文</span>
         </Link>
         吧</span>
     </div>

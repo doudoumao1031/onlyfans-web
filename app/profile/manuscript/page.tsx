@@ -79,7 +79,7 @@ const ManuscriptPost = () => {
                 width={20} height={20}
               />
             </div>
-            <span className="text-main-pink text-xs">创建时间</span>
+            <span className="text-text-pink text-xs">创建时间</span>
           </button>
         </section>
       </form>
@@ -110,7 +110,6 @@ const ManuscriptMedia = () => {
       pageSize: 10,
       from_id: 0
     }).then(response => {
-      console.log(response)
       setInitData(response)
     })
   }, [])
@@ -135,7 +134,7 @@ const ManuscriptMedia = () => {
               width={20} height={20}
             />
           </div>
-          <span className="text-main-pink text-xs">创建时间</span>
+          <span className="text-text-pink text-xs">创建时间</span>
         </button>
       </div>
       <section className="">
@@ -188,7 +187,7 @@ const ManuscriptMedia = () => {
                       </section>
                     </section>
                     <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
-                      className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-main-pink border-2 text-main-pink w-full mt-2"
+                      className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-pink border-2 text-text-pink w-full mt-2"
                     >
                       <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"} />
                       <span>编辑</span>
@@ -219,7 +218,7 @@ export default function Page() {
     <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
       {renderNode}
       <div>
-        <Header title="稿件管理" titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-main-pink text-base">草稿</Link>}>
+        <Header title="稿件管理" titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-text-pink text-base">草稿</Link>}>
         </Header>
         <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
         {active === ACTIVE_TYPE.POST && <ManuscriptPost />}

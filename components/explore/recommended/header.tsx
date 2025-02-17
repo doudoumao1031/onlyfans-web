@@ -19,7 +19,7 @@ export default function Header() {
     <div className="gap-3 flex justify-around mb-4">
       {tabs.map((tab) => (
         <Link key={tab.path} href={tab.path}
-          className={`flex items-center justify-center ${pathname === tab.path ? "bg-main-pink text-white" : "bg-white text-main-pink"} border border-main-pink rounded-full px-5 py-1`}
+          className={`flex items-center justify-center ${pathname === tab.path ? "bg-background-pink text-white" : "bg-white text-text-pink"} border border-border-pink rounded-full px-5 py-1`}
         >
           <span className="text-nowrap font-medium text-base">{tab.label}</span>
         </Link>

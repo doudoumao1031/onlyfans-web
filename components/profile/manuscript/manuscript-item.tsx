@@ -17,7 +17,7 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
   )
 }
 
-const ManuscriptActions = ({ id, postStatus, refresh }: { id: number, postStatus: number, refresh?: () => void }) => {
+const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, postStatus: number, refresh?: () => void ,pinned: boolean}) => {
 
   const { showMessage } = useCommonMessageContext()
   const handlePined = () => {
@@ -38,8 +38,11 @@ const ManuscriptActions = ({ id, postStatus, refresh }: { id: number, postStatus
         <span>分享</span>
       </button>
       <button onTouchEnd={handlePined} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-        <IconWithImage url={"/icons/profile/icon_fans_stick_gray@3x.png"} width={20} height={20} color={"#222"}/>
-        <span>置顶</span>
+        <IconWithImage url={"/icons/profile/icon_fans_stick_gray@3x.png"} width={20} height={20} color={ pinned ? "#FF8492":"#222"}/>
+        <span className={clsx(
+          pinned ? "text-text-pink":""
+        )}
+        >置顶</span>
       </button>
       <Link href={`/profile/dataCenter/feeds?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
         <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
@@ -47,7 +50,7 @@ const ManuscriptActions = ({ id, postStatus, refresh }: { id: number, postStatus
       </Link>
       {[0, 3].includes(postStatus) ? (
         <Link href={`/profile/manuscript/draft/edit?id=${id}`}
-          className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-main-pink"
+          className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-text-pink"
         >
           <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
           <span>编辑</span>
@@ -126,7 +129,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
           </section>
         </section>
       </button>
-      <ManuscriptActions id={data.post.id} postStatus={data.post.post_status} refresh={refresh}/>
+      <ManuscriptActions id={data.post.id} postStatus={data.post.post_status} refresh={refresh} pinned={data.post.pinned}/>
     </section>
   )
 }

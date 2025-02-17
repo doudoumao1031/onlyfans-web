@@ -173,7 +173,7 @@ const AddVoteModal = ({
                   }
                 })
               }}
-              className={"text-base text-main-pink"}
+              className={"text-base text-text-pink"}
             >
               确定
             </button>
@@ -229,7 +229,7 @@ const AddVoteModal = ({
               onTouchEnd={() => {
                 append({ content: "" })
               }}
-              className="flex gap-1.5 w-full rounded-xl border border-main-pink justify-center items-center py-2.5 text-main-pink"
+              className="flex gap-1.5 w-full rounded-xl border border-border-pink justify-center items-center py-2.5 text-text-pink"
             >
               <IconWithImage
                 url={"/icons/profile/icon_add@3x.png"}
@@ -439,7 +439,7 @@ const ReadSettings = ({
                   }
                 })
               }}
-              className={"text-base text-main-pink"}
+              className={"text-base text-text-pink"}
             >
               确定
             </button>
@@ -682,7 +682,7 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
         height={20}
         color={"#FF8492"}
       />
-      <label className={"text-main-pink"}>
+      <label className={"text-text-pink"}>
         {option?.label}
         {Number(price) === 0 ? "免费" : price}
       </label>
@@ -881,7 +881,7 @@ const EditPageContent = () => {
                   </button>
                 )
             }
-            <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-main-pink")}>
+            <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-text-pink")}>
               发布
             </button>
           </section>
@@ -948,7 +948,7 @@ const EditPageContent = () => {
                     height={20}
                     color={"#FF8492"}
                   />
-                  <span className="font-bold text-main-pink text-base">
+                  <span className="font-bold text-text-pink text-base">
                     {formValues.post_vote?.title}
                   </span>
                 </div>
@@ -987,7 +987,7 @@ const EditPageContent = () => {
               {/*<div className="flex items-center space-x-2">*/}
               {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
               {/*                   color={'#FF8492'}/>*/}
-              {/*    <label className={"text-main-pink"}>免费订阅</label>*/}
+              {/*    <label className={"text-text-pink"}>免费订阅</label>*/}
               {/*</div>*/}
             </section>
           </section>

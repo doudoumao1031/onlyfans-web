@@ -69,7 +69,7 @@ export default function Page() {
                           height={24}
                           alt={"user avatar"}
                         />
-                        <span className="text-main-pink text-xs">{v.user.username}</span>
+                        <span className="text-text-pink text-xs">{v.user.username}</span>
                       </div>
                     </div>
                   </div>

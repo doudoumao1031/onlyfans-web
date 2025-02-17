@@ -101,7 +101,7 @@ const Withdrawal = ({
         headerRight={() => {
           return (
             <Link href={`${pathname}/withdrawalInfo`}>
-              <button className={"text-base text-main-pink"}>明细</button>
+              <button className={"text-base text-text-pink"}>明细</button>
             </Link>
           )
         }}
@@ -164,7 +164,7 @@ const Withdrawal = ({
               type={"submit"}
               className={clsx(
                 "w-full transition-all h-12 rounded-full text-white flex justify-center items-center ",
-                !!errorMessage ? "bg-[#ddd]" :"bg-main-pink "
+                !!errorMessage ? "bg-[#ddd]" :"bg-background-pink "
               )}
             >
               {errorMessage ? errorMessage : "提现"}
@@ -319,7 +319,7 @@ export default function Page() {
         <div className="pl-4 pr-4 flex justify-between items-center mt-2 mb-12">
           <span className="text-xs">
             <span className="text-[#777] ">{["今日", "较前30日", "较前一年"][activeKey]}</span>
-            <span className="text-main-pink ml-2">+{inCome}</span>
+            <span className="text-text-pink ml-2">+{inCome}</span>
           </span>
           {walletInfo && (
             <Withdrawal info={walletInfo} refresh={refreshWalletInfo}>
@@ -350,7 +350,7 @@ export default function Page() {
                 setDateActive(v.value)
               }}
               key={index}
-              className={`mr-8 text-[#bbb] ${dateActive.start === v.value.start ? "text-main-pink" : ""}`}
+              className={`mr-8 text-[#bbb] ${dateActive.start === v.value.start ? "text-text-pink" : ""}`}
             >
               {v.label}
             </button>
