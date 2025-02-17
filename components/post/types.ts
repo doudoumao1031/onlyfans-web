@@ -36,4 +36,5 @@ export type TPost = {
   title: string //主题
   visibility: number //可见性: 0 可浏览 1 订阅可浏览 2支付可浏览
   last_update_time: number
+  pinned: boolean
 }

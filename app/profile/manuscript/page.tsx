@@ -110,7 +110,6 @@ const ManuscriptMedia = () => {
       pageSize: 10,
       from_id: 0
     }).then(response => {
-      console.log(response)
       setInitData(response)
     })
   }, [])
