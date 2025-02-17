@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
 import Image from "next/image"
 import { CommentInfo, fetchPostComments, PostData } from "@/lib"
 import Comments from "./comment"
@@ -38,12 +38,24 @@ export default function Post({
   const linkRender = (content: string) => {
     return <Link href={`/postInfo/${post.id}`}>{content}</Link>
   }
-  useMemo(async () => {
-    setCommentsLoading(true)
-    const res = await fetchPostComments(post.id)
-    setCommentsLoading(false)
-    setComments(res)
-  }, [post.id])
+
+  useEffect(() => {
+    if (isInfoPage) {
+      const loadComments = async () => {
+        setCommentsLoading(true)
+        try {
+          const res = await fetchPostComments(post.id)
+          setComments(res)
+        } catch (error) {
+          console.error("Error loading comments:", error)
+        } finally {
+          setCommentsLoading(false)
+        }
+      }
+      loadComments()
+    }
+  }, [post.id, isInfoPage])
+
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
       {!isInfoPage && <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} />}
