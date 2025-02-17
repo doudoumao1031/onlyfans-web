@@ -46,7 +46,7 @@ export default function Post({
   }, [post.id])
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
-      {!isInfoPage && <UserTitle user={user} pub_time={post.pub_time} />}
+      {!isInfoPage && <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} />}
 
       <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
       <UserHomePageLink userId={user.id.toString()} />

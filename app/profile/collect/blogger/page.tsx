@@ -107,21 +107,24 @@ export default function Page() {
                               <span className="ml-1">{v.video_count}</span>
                             </div>
                           </div>
-                          {/* <div className="bg-black rounded-full bg-opacity-20 py-1 px-3 ml-2 text-xs">
-                            免费/订阅
-                          </div> */}
-                          <div
-                            onClick={(e) => {
-                              e.preventDefault()
-                            }}
-                          >
-                            <SubscribedButton
-                              name={v.first_name}
-                              userId={Number(v.id)}
-                              subPrice={v.sub_price}
-                              type={"button"}
-                            />
-                          </div>
+
+                          {!v.sub && (
+                            <div className="bg-black rounded-full bg-opacity-20 py-1 px-3 ml-2 text-xs">
+                              免费/订阅
+                            </div>
+                            // <div
+                            //   onClick={(e) => {
+                            //     e.preventDefault()
+                            //   }}
+                            // >
+                            //   <SubscribedButton
+                            //     name={v.first_name}
+                            //     userId={Number(v.id)}
+                            //     subPrice={v.sub_price}
+                            //     type={"button"}
+                            //   />
+                            // </div>
+                          )}
                         </div>
                       </div>
                     </div>
