@@ -162,8 +162,10 @@ export default function Page({ postData }: { postData: PostData }) {
         <SubscribedDrawer
           userId={postData.user.id}
           name={postData.user.username}
+          free={postData.user.sub_price === 0}
           isOpen={drawer}
           setIsOpen={setDrawer}
+          setRechargeModel={setVisible}
         />
       )}
       {payDrawer && (
