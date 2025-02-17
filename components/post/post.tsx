@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useMemo, useState } from "react"
+import React, { useState, useEffect } from "react"
 import Image from "next/image"
 import { CommentInfo, fetchPostComments, PostData } from "@/lib"
 import Comments from "./comment"
@@ -38,11 +38,17 @@ export default function Post({
   const linkRender = (content: string) => {
     return <Link href={`/postInfo/${post.id}`}>{content}</Link>
   }
-  useMemo(async () => {
-    setCommentsLoading(true)
-    const res = await fetchPostComments(post.id)
-    setCommentsLoading(false)
-    setComments(res)
+  useEffect(() => {
+    async function fetchComments() {
+      setCommentsLoading(true)
+      try {
+        const res = await fetchPostComments(post.id)
+        setComments(res)
+      } finally {
+        setCommentsLoading(false)
+      }
+    }
+    fetchComments()
   }, [post.id])
   return (
     <div className="w-full flex flex-col gap-2 mb-8">
