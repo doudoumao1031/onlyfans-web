@@ -63,13 +63,14 @@ export default function Page() {
               </div>
               {items.map((v, i) => (
                 <DelItem
+                  key={i}
                   onDelete={() => {
                     delItem(v.post.id)
                   }}
                   key={v.post.id}
                 >
-                  <Link key={i} href={`/postInfo/${v.post.id}`}>
-                    <div key={i} className={"  pt-3 pb-3 border-b border-[#e5e5e5] flex"}>
+                  <Link href={`/postInfo/${v.post.id}`}>
+                    <div className={"  pt-3 pb-3 border-b border-[#e5e5e5] flex"}>
                       <div className="w-[112px] h-[112px] mr-2">
                         <LazyImg
                           src={

@@ -8,5 +8,5 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  return <ErrorPage reset={reset} error={error} text="个人中心加载失败" />
+  return <ErrorPage reset={reset} error={error} text="帖子内容加载失败" />
 }
