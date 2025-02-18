@@ -7,6 +7,8 @@ import useCommonMessage from "@/components/common/common-message"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import LoadingMask from "@/components/common/loading-mask"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+
 interface RechargeProps {
   children: React.ReactNode
   isOpen: boolean
@@ -23,7 +25,12 @@ export default function RechargeDrawer(props: RechargeProps) {
   const [wfBalance, setWfBalance] = useState<number>(0)
   const [rate, setRate] = useState<string>("1:1")
   const [errorMessage, setErrorMessage] = useState<string>("")
-  const [isLoading, setIsLoading] = useState(false)
+  const { isLoading, withLoading } = useLoadingHandler({
+    onError: (error) => {
+      console.error("Recharge error:", error)
+      showMessage("充值失败")
+    }
+  })
   useMemo(() => {
     if (amount && amount > 0) {
       setErrorMessage("")
@@ -58,15 +65,14 @@ export default function RechargeDrawer(props: RechargeProps) {
       return
     }
 
-    setIsLoading(true)
-    try {
+    await withLoading(async () => {
       const tradeNo = await addWalletOrder({ amount: Number(amount) }).then((result) => {
         if (result && result.code === 0) {
           return result.data.trade_no
         }
         throw Error()
       })
-      // todo: 调用pt钱包支付
+
       await handleRechargeOrderCallback({ trade_no: tradeNo }).then((result) => {
         if (result && result.code === 0) {
           showMessage("充值成功", "success")
@@ -78,12 +84,7 @@ export default function RechargeDrawer(props: RechargeProps) {
           showMessage("充值失败")
         }
       })
-    } catch (error) {
-      console.error("Recharge error:", error)
-      showMessage("充值失败")
-    } finally {
-      setIsLoading(false)
-    }
+    })
   }
 
   if (isLoading) {
