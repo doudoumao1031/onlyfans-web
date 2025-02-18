@@ -38,6 +38,8 @@ import {
 } from "@/components/ui/dialog"
 import { z } from "zod"
 import { omit } from "lodash"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import LoadingMask from "@/components/common/loading-mask"
 
 const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 
@@ -707,9 +709,20 @@ export default function Page() {
     return realPrice.toFixed(2)
   }, [realPrice])
 
+  const { isLoading,withLoading } = useLoadingHandler({
+    onError: () => {
+      showMessage("更新失败")
+    },
+    onSuccess: () => {
+      showMessage("更新成功", "success", {
+        afterDuration: router.back
+      })
+    }
+  })
+
   const updateSubscribeSettings = async () => {
     const { price, items } = baseFormValues
-    try {
+    await withLoading(async () => {
       await addSubscribeSetting({
         price,
         id: userInfo?.id
@@ -725,22 +738,18 @@ export default function Page() {
           console.log("申请博主失败")
         }
       })
-      showMessage("更新成功", "", {
-        afterDuration: router.back
-      })
-    } catch (e) {
-      showMessage("更新失败")
-    }
+    })
   }
 
   return (
     <div>
       {renderNode}
+      <LoadingMask isLoading={isLoading} />
       <Header title={"订阅管理"} titleColor={"#000"}
         right={<button onTouchEnd={() => {
-          baseFeeForm.trigger().then(valid => {
+          baseFeeForm.trigger().then(async(valid) => {
             if (valid) {
-              updateSubscribeSettings()
+              await updateSubscribeSettings()
             }
           })
         }} className="text-text-pink text-base"

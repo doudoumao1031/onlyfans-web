@@ -4,20 +4,22 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getUserReply, ReplyForm, setUserReply } from "@/lib/actions/profile"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import useCommonMessage from "@/components/common/common-message"
 import { useRouter } from "next/navigation"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import LoadingMask from "@/components/common/loading-mask"
 // import { ReplyForm, setReply } from "@/lib/data"
 
 
 const formValidation = z.object({
-  sub_reply: z.string({ message: "请输入订阅回复" }).min(1,"请输入订阅回复")
+  sub_reply: z.string({ message: "请输入订阅回复" }).min(1, "请输入订阅回复")
 })
 
 
 export default function Page() {
-  const { showMessage,renderNode } = useCommonMessage()
-  const [originData,setOriginData] = useState<string>("")
+  const { showMessage, renderNode } = useCommonMessage()
+  const [originData, setOriginData] = useState<string>("")
   const router = useRouter()
   const replyForm = useForm<ReplyForm>({
     mode: "all",
@@ -27,21 +29,39 @@ export default function Page() {
     getUserReply().then((data) => {
       const value = data?.data?.sub_reply ?? ""
       setOriginData(value)
-      replyForm.setValue("sub_reply",value)
+      replyForm.setValue("sub_reply", value)
     })
-  },[])
+  }, [])
 
-  const formSubmit = replyForm.handleSubmit((data) => {
-    setUserReply(data).then(response => {
-      if (response?.code === 0) {
-        showMessage("修改成功")
-        setTimeout(router.back,500)
+  const { isLoading, withLoading } = useLoadingHandler({
+    onError: (message: string) => {
+      showMessage(message)
+    },
+    onSuccess: (message: string) => {
+      showMessage(message, "success", {
+        afterDuration: router.back
+      })
+    }
+  })
+
+  const formSubmit = replyForm.handleSubmit(async (data) => {
+    await withLoading(async () => {
+      try {
+        const response = await setUserReply(data)
+        if (response?.code === 0) {
+          return "修改成功"
+        }
+        return new Error()
+      } catch {
+        throw "修改失败"
       }
     })
   })
+
   return (
     <>
       {renderNode}
+      <LoadingMask isLoading={isLoading} />
       <form onSubmit={formSubmit}>
         <Header title={"订阅回复"}
           right={<button type={"submit"} className={"text-text-pink text-base"}>保存</button>}
@@ -59,7 +79,7 @@ export default function Page() {
         <section className={"mt-5 px-4"}>
           <textarea {...replyForm.register("sub_reply")}
             className={"resize-none p-4 border border-[#ddd] block w-full rounded-xl"}
-            placeholder={"Hi，我是 用户的昵称，感谢您的订阅"} rows={4}
+            placeholder={"Hi，我是用户的昵称，感谢您的订阅"} rows={4}
           />
           {replyForm.formState?.errors?.sub_reply?.message &&
             <div className={"text-xs text-red-600"}>{replyForm.formState.errors.sub_reply.message}</div>}
