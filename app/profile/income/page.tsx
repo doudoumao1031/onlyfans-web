@@ -26,6 +26,8 @@ import useCommonMessage, {
 } from "@/components/common/common-message"
 import { getEvenlySpacedPoints } from "@/lib/utils"
 import { clsx } from "clsx"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import LoadingMask from "@/components/common/loading-mask"
 
 const Withdrawal = ({
   children,
@@ -71,6 +73,18 @@ const Withdrawal = ({
       withdrawalForm.trigger("amount")
     }
   }, [openState])
+
+  const { isLoading, withLoading } = useLoadingHandler({
+    onError: () => {
+      showMessage("提现失败")
+    },
+    onSuccess: () => {
+      refresh()
+      setOpenState(false)
+      showMessage("提现成功，等待人工审核", "success")
+    }
+  })
+
   return (
     <>
       <button
@@ -80,6 +94,7 @@ const Withdrawal = ({
       >
         {children}
       </button>
+      <LoadingMask isLoading={isLoading} />
       <FormDrawer
         trigger={children}
         isAutoHeight
@@ -107,16 +122,15 @@ const Withdrawal = ({
           )
         }}
         className="border-0"
-        handleSubmit={withdrawalForm.handleSubmit((data) => {
-          addWalletDownOrder({
-            amount: Number(data.amount)
-          }).then((response) => {
+        handleSubmit={withdrawalForm.handleSubmit(async(data) => {
+          await withLoading(async () => {
+            const response = await addWalletDownOrder({
+              amount: Number(data.amount)
+            })
             if (response?.code === 0) {
-              refresh()
-              setOpenState(false)
-              showMessage("提现成功，等待人工审核", "default")
+              return true
             } else {
-              showMessage("提现失败: " + response?.message)
+              throw Error
             }
           })
         })}

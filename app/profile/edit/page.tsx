@@ -6,12 +6,14 @@ import IconWithImage from "@/components/profile/icon"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/profile"
 import { useRouter } from "next/navigation"
 import useCommonMessage from "@/components/common/common-message"
 import { commonUploadFile } from "@/lib/utils"
 import { Switch } from "@/components/ui/switch"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import LoadingMask from "@/components/common/loading-mask"
 
 type EditUserProfile = Pick<
   UserProfile,
@@ -67,20 +69,33 @@ export default function Page() {
     })
   }
 
+  const { isLoading,withLoading } = useLoadingHandler({
+    onError: () => {
+      showMessage("更新失败")
+    },
+    onSuccess: () => {
+      showMessage("更新成功", "success", {
+        afterDuration: router.back
+      })
+    }
+  })
+
   return (
     <>
       {renderNode}
+      <LoadingMask isLoading={isLoading} />
       <form
         className={"relative"}
-        onSubmit={handleSubmit((data) => {
-          updateUserBaseInfo({
-            ...data,
-            flags: 31
-          }).then((data) => {
-            if (data?.code === 0) {
-              router.back()
+        onSubmit={handleSubmit(async(data) => {
+          await withLoading(async() => {
+            const response = await updateUserBaseInfo({
+              ...data,
+              flags: 31
+            })
+            if (response?.code === 0) {
+              return Promise.resolve()
             } else {
-              showMessage(data?.message)
+              return Promise.reject(response?.message)
             }
           })
         })}
