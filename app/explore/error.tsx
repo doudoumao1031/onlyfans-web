@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
-
+import ErrorPage from "@/components/common/error-page"
 export default function Error({
   error,
   reset
@@ -9,21 +8,5 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  useEffect(() => {
-    // Log the error to an error reporting service
-    console.error(error)
-  }, [error])
-
-  return (
-    <div className="flex h-screen flex-col items-center justify-center">
-      <h2 className="text-2xl font-bold mb-4">Explore page error occurred!</h2>
-      <p className="text-gray-600 mb-4">We apologize for the inconvenience</p>
-      <button
-        className="px-4 py-2 bg-background-pink text-white rounded-lg hover:bg-opacity-90"
-        onClick={() => reset()}
-      >
-        Try again
-      </button>
-    </div>
-  )
+  return <ErrorPage reset={reset} error={error} text="内容加载失败" />
 }
