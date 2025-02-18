@@ -1,8 +1,11 @@
 "use client"
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
-import { ToggleGroupSubscribed, ToggleGroupSubscribedItem } from "@/components/ui/toggle-group-subcribed"
-import { useState, useMemo,useEffect } from "react"
+import {
+  ToggleGroupSubscribed,
+  ToggleGroupSubscribedItem
+} from "@/components/ui/toggle-group-subcribed"
+import { useState, useMemo, useEffect } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
 interface SubscribedDrawerProps {
@@ -14,7 +17,7 @@ interface SubscribedDrawerProps {
   setRechargeModel?: (val: boolean) => void
   children?: React.ReactNode
 }
-export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
+export default function SubscribedDrawer(props: SubscribedDrawerProps) {
   const { userId, name, free, isOpen, setIsOpen, setRechargeModel, children } = props
   const { showMessage, renderNode } = useCommonMessage()
   const [drawer, setDrawer] = useState<boolean>(false)
@@ -50,7 +53,11 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
   const showDiscount = (discount: DiscountInfo | undefined) => {
     if (!discount) return false
     const now = Date.now()
-    return !discount.discount_status && discount.discount_start_time * 1000 <= now && discount.discount_end_time * 1000 >= now
+    return (
+      !discount.discount_status &&
+      discount.discount_start_time * 1000 <= now &&
+      discount.discount_end_time * 1000 >= now
+    )
   }
   const [diff, setDiff] = useState<number>(0)
   useMemo(() => {
@@ -67,23 +74,26 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
     }
   }, [discount])
   const handleSubmit = async () => {
-    const data = { user_id: userId, price: free?0:Number(amount), id: free?0:discount?.id ?? 0 }
-    await addSubOrder(data)
-      .then((result) => {
-        if (result && result.code === 0) {
-          console.log("订阅成功")
-          setIsOpen?.(false)
-          setDrawer(false)
-          showMessage("订阅成功", "success")
-        } else if (result?.message === "NOT_ENOUGH_BALANCE") {
-          setDrawer(false)
-          setIsOpen?.(false)
-          setRechargeModel?.(true)
-        } else {
-          console.log("订阅失败:", result?.message)
-          showMessage("订阅失败")
-        }
-      })
+    const data = {
+      user_id: userId,
+      price: free ? 0 : Number(amount),
+      id: free ? 0 : discount?.id ?? 0
+    }
+    await addSubOrder(data).then((result) => {
+      if (result && result.code === 0) {
+        console.log("订阅成功")
+        setIsOpen?.(false)
+        setDrawer(false)
+        showMessage("订阅成功", "success")
+      } else if (result?.message === "NOT_ENOUGH_BALANCE") {
+        setDrawer(false)
+        setIsOpen?.(false)
+        setRechargeModel?.(true)
+      } else {
+        console.log("订阅失败:", result?.message)
+        showMessage("订阅失败")
+      }
+    })
   }
   return (
     <>
@@ -101,30 +111,38 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
         {children}
       </button>
       <FormDrawer
-        title={(
+        isAutoHeight
+        title={
           <div>
             <span className="text-lg font-semibold">订阅</span>
             <span className="text-text-pink font-normal text-[15px] t">{name}</span>
           </div>
-        )}
+        }
         headerLeft={(close) => {
           return (
-            <button onTouchEnd={(e) => {
-              e.preventDefault()
-              close()
-            }} className={"text-base text-[#777]"}
+            <button
+              onTouchEnd={(e) => {
+                e.preventDefault()
+                close()
+              }}
+              className={"text-base text-[#777]"}
             >
-              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
+              <IconWithImage
+                url={"/icons/profile/icon_close@3x.png"}
+                width={24}
+                height={24}
+                color={"#000"}
+              />
             </button>
           )
         }}
-        className="h-[43vh] border-0"
+        className="border-0"
         setIsOpen={setIsOpen ? setIsOpen : setDrawer}
         isOpen={isOpen ? isOpen : drawer}
         outerControl
       >
         <input hidden={true} name="user_id" defaultValue={userId} />
-        <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50">
+        <div className="flex flex-col items-center text-black text-2xl bg-slate-50">
           <ToggleGroupSubscribed
             type="single"
             variant="default"
@@ -139,35 +157,33 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
               }
             }}
           >
-            {items.map(item => (
+            {items.map((item) => (
               <ToggleGroupSubscribedItem key={item.id} value={String(item.id)}>
                 <div className="relative h-full">
-                  <div
-                    className="h-full flex flex-col justify-center items-center text-black"
-                  >
+                  <div className="h-full flex flex-col justify-center items-center text-black">
                     <span className="text-nowrap text-xs">{item.month_count}个月</span>
                     <span
-                      className={`text-nowrap text-xl my-4 ${item.id === discount?.id ? "text-text-pink" : "text-black"}`}
-                    >${item.discount_price}</span>
+                      className={`text-nowrap text-xl my-4 ${
+                        item.id === discount?.id ? "text-text-pink" : "text-black"
+                      }`}
+                    >
+                      ${item.discount_price}
+                    </span>
                     <span className="text-nowrap text-xs block">
-                      {
-                        showDiscount(item) ? (
-                          <s className="text-xs text-gray-500">${item.price}</s>) :
-                          (<span>&nbsp;</span>)
-                      }
+                      {showDiscount(item) ? (
+                        <s className="text-xs text-gray-500">${item.price}</s>
+                      ) : (
+                        <span>&nbsp;</span>
+                      )}
                     </span>
                   </div>
-                  {
-                    showDiscount(item) && (
-                      <div
-                        className="absolute bg-background-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center"
-                      >
-                        <span
-                          className="text-white text-xs text-center"
-                        >{item.discount_per}% off</span>
-                      </div>
-                    )
-                  }
+                  {showDiscount(item) && (
+                    <div className="absolute bg-background-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center">
+                      <span className="text-white text-xs text-center">
+                        {item.discount_per}% off
+                      </span>
+                    </div>
+                  )}
                 </div>
               </ToggleGroupSubscribedItem>
             ))}
@@ -181,19 +197,14 @@ export default function SubscribedDrawer (props: SubscribedDrawerProps)  {
                   e.preventDefault()
                   handleSubmit()
                 }}
-              >确认支付 {amount} USDT
+              >
+                确认支付 {amount} USDT
               </button>
-              {
-                showDiscount(discount) && (
-                  <div
-                    className="absolute bg-background-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center"
-                  >
-                    <span
-                      className="text-white text-xs text-center text-nowrap"
-                    >已省 ${diff}</span>
-                  </div>
-                )
-              }
+              {showDiscount(discount) && (
+                <div className="absolute bg-background-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center">
+                  <span className="text-white text-xs text-center text-nowrap">已省 ${diff}</span>
+                </div>
+              )}
             </div>
           </div>
         </div>

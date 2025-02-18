@@ -11,56 +11,65 @@ interface PostPayDrawerProps {
   setIsOpen: (val: boolean) => void
   setRechargeModel: (val: boolean) => void
 }
-export default function PostPayDrawer (props: PostPayDrawerProps)  {
+export default function PostPayDrawer(props: PostPayDrawerProps) {
   const { post_id, amount, flush, isOpen, setIsOpen, setRechargeModel } = props
   const { showMessage, renderNode } = useCommonMessage()
 
   const handleSubmit = async () => {
-    await addPostPayOrder({ post_id: post_id, amount:amount })
-      .then((result) => {
-        if (result && result.code === 0) {
-          console.log("支付成功")
-          flush()
-          setIsOpen(false)
-          showMessage("支付成功", "success", { afterDuration: () => flush() })
-        } else if (result?.message === "NOT_ENOUGH_BALANCE") {
-          setIsOpen(false)
-          setRechargeModel(true)
-        } else {
-          setIsOpen(false)
-          console.log("支付失败:", result?.message)
-          showMessage("支付失败")
-        }
-      })
+    await addPostPayOrder({ post_id: post_id, amount: amount }).then((result) => {
+      if (result && result.code === 0) {
+        console.log("支付成功")
+        flush()
+        setIsOpen(false)
+        showMessage("支付成功", "success", { afterDuration: () => flush() })
+      } else if (result?.message === "NOT_ENOUGH_BALANCE") {
+        setIsOpen(false)
+        setRechargeModel(true)
+      } else {
+        setIsOpen(false)
+        console.log("支付失败:", result?.message)
+        showMessage("支付失败")
+      }
+    })
   }
   return (
     <>
       {renderNode}
       <FormDrawer
-        title={(
+        title={
           <div>
             <span className="text-lg font-semibold">付费浏览此视频</span>
           </div>
-        )}
+        }
         headerLeft={(close) => {
           return (
-            <button onTouchEnd={(e) => {
-              e.preventDefault()
-              close()
-            }} className={"text-base text-[#777]"}
+            <button
+              onTouchEnd={(e) => {
+                e.preventDefault()
+                close()
+              }}
+              className={"text-base text-[#777]"}
             >
-              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"} />
+              <IconWithImage
+                url={"/icons/profile/icon_close@3x.png"}
+                width={24}
+                height={24}
+                color={"#000"}
+              />
             </button>
           )
         }}
-        className="h-[30vh] border-0"
+        isAutoHeight
+        className="border-0"
         setIsOpen={setIsOpen}
         isOpen={isOpen}
         outerControl
       >
-        <div className="h-[20vh] w-full flex flex-col items-center text-black text-base bg-slate-50">
+        <div className="w-full flex flex-col items-center text-black text-base bg-slate-50">
           <div className={"w-full px-4 mt-[20px]"}>
-            <div className={"h-[49px] bg-white flex justify-between items-center py-2 px-4 rounded-xl"}>
+            <div
+              className={"h-[49px] bg-white flex justify-between items-center py-2 px-4 rounded-xl"}
+            >
               <span>$ &nbsp; {amount}</span>
               <span className={"text-gray-500"}>USDT</span>
             </div>
@@ -74,7 +83,8 @@ export default function PostPayDrawer (props: PostPayDrawerProps)  {
                   e.preventDefault()
                   handleSubmit()
                 }}
-              >确认支付 {amount} USDT
+              >
+                确认支付 {amount} USDT
               </button>
             </div>
           </div>

@@ -8,13 +8,13 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import LoadingMask from "@/components/common/loading-mask"
 interface RechargeProps {
-  children: React.ReactNode,
-  isOpen: boolean,
-  setIsOpen: (val: boolean) => void,
+  children: React.ReactNode
+  isOpen: boolean
+  setIsOpen: (val: boolean) => void
   setWfAmount: (val: number) => void
 }
 
-export default function RechargeDrawer (props: RechargeProps) {
+export default function RechargeDrawer(props: RechargeProps) {
   const { children, isOpen, setIsOpen, setWfAmount } = props
   const pathname = usePathname()
   const { showMessage, renderNode } = useCommonMessage()
@@ -28,7 +28,7 @@ export default function RechargeDrawer (props: RechargeProps) {
     if (amount && amount > 0) {
       setErrorMessage("")
     }
-  },  [amount])
+  }, [amount])
   useEffect(() => {
     getSettingData()
   }, [])
@@ -45,7 +45,7 @@ export default function RechargeDrawer (props: RechargeProps) {
     })
   }
   // const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-  const columns: { title: string, desc: string }[] = [
+  const columns: { title: string; desc: string }[] = [
     { title: "服务", desc: "唯粉充值" },
     { title: "钱包余额", desc: ptBalance.toFixed(2).toString() + " USDT" },
     { title: "唯粉余额", desc: wfBalance.toFixed(2).toString() + " USDT" },
@@ -60,26 +60,24 @@ export default function RechargeDrawer (props: RechargeProps) {
 
     setIsLoading(true)
     try {
-      const tradeNo = await addWalletOrder({ amount: Number(amount) })
-        .then((result) => {
-          if (result && result.code === 0) {
-            return result.data.trade_no
-          }
-          throw Error()
-        })
+      const tradeNo = await addWalletOrder({ amount: Number(amount) }).then((result) => {
+        if (result && result.code === 0) {
+          return result.data.trade_no
+        }
+        throw Error()
+      })
       // todo: 调用pt钱包支付
-      await handleRechargeOrderCallback({ trade_no: tradeNo })
-        .then((result) => {
-          if (result && result.code === 0) {
-            showMessage("充值成功", "success")
-            getSettingData()
-            setAmount(0)
-            setIsOpen(false)
-          } else {
-            console.log("充值失败:")
-            showMessage("充值失败")
-          }
-        })
+      await handleRechargeOrderCallback({ trade_no: tradeNo }).then((result) => {
+        if (result && result.code === 0) {
+          showMessage("充值成功", "success")
+          getSettingData()
+          setAmount(0)
+          setIsOpen(false)
+        } else {
+          console.log("充值失败:")
+          showMessage("充值失败")
+        }
+      })
     } catch (error) {
       console.error("Recharge error:", error)
       showMessage("充值失败")
@@ -108,31 +106,41 @@ export default function RechargeDrawer (props: RechargeProps) {
         title={<span className={"text-[18px] font-semibold"}>充值</span>}
         headerLeft={(close) => {
           return (
-            <button onTouchEnd={(e) => {
-              e.preventDefault()
-              close()
-            }} className={"text-base text-[#777]"}
+            <button
+              onTouchEnd={(e) => {
+                e.preventDefault()
+                close()
+              }}
+              className={"text-base text-[#777]"}
             >
-              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"}/>
+              <IconWithImage
+                url={"/icons/profile/icon_close@3x.png"}
+                width={24}
+                height={24}
+                color={"#000"}
+              />
             </button>
           )
         }}
-        headerRight={(() => {
+        headerRight={() => {
           return (
             <Link href={`${pathname}/income/withdrawalInfo?changeType=1`} prefetch={false}>
               <button className={"text-base text-text-pink"}>明细</button>
             </Link>
           )
-        })}
-        className="h-[50vh] border-0"
+        }}
+        className="border-0"
+        isAutoHeight
         setIsOpen={setIsOpen}
         isOpen={isOpen}
         outerControl={true}
       >
-        <div className="h-[50vh] w-full flex flex-col items-center text-black text-2xl bg-[#F8F8F8]">
+        <div className="w-full flex flex-col items-center text-black text-2xl bg-[#F8F8F8]">
           <div className={"rounded-xl p-4 w-full text-base"}>
             {columns.map((item, index) => (
-              <div key={index} className={`flex justify-between px-4 py-[13px] items-center bg-white 
+              <div
+                key={index}
+                className={`flex justify-between px-4 py-[13px] items-center bg-white 
               ${index < columns.length - 1 && "border-b border-gray-200"}
               ${index == 0 && "rounded-t-xl"} 
               ${index == columns.length - 1 && "rounded-b-xl"} 
@@ -141,11 +149,11 @@ export default function RechargeDrawer (props: RechargeProps) {
                 <span className={"font-medium"}>{item.title}</span>
                 <span className={"text-gray-400 font-normal"}>{item.desc}</span>
               </div>
-            )
-            )}
+            ))}
           </div>
           <div className="w-full flex items-center px-4 relative">
-            <input id="amount"
+            <input
+              id="amount"
               type="number"
               className="w-full py-2 pl-4 pr-16 border-0 bg-white rounded-lg text-left h-[49px] placeholder:text-gray-400 text-base"
               placeholder="请输入充值金额"
@@ -175,13 +183,16 @@ export default function RechargeDrawer (props: RechargeProps) {
           <div className="my-[40px] self-center">
             <button
               disabled={amount === 0 || amount > ptBalance}
-              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-pink"}`}
+              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${
+                amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-pink"
+              }`}
               onClick={() => {
                 if (!(amount === 0 || amount > ptBalance)) {
                   handleRecharge(amount)
                 }
               }}
-            >{amount > ptBalance ? "充值金额不能大于钱包余额" : "确认充值"}
+            >
+              {amount > ptBalance ? "充值金额不能大于钱包余额" : "确认充值"}
             </button>
           </div>
         </div>

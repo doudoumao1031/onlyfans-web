@@ -8,33 +8,32 @@ import Modal from "@/components/space/modal"
 import FormDrawer from "@/components/common/form-drawer"
 import useCommonMessage from "@/components/common/common-message"
 interface TipDrawerProps {
-  postId: number;
-  children?: React.ReactNode,
+  postId: number
+  children?: React.ReactNode
 }
 const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
   const [amount, setAmount] = useState<number>(0)
   const [check, setCheck] = useState<boolean>(true)
   const [visible, setVisible] = useState<boolean>(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-  const { showMessage,renderNode } = useCommonMessage()
+  const { showMessage, renderNode } = useCommonMessage()
   const handTip = () => {
-    addPostTip({ post_id: Number(postId), amount: amount })
-      .then(async (res) => {
-        if (res && res.code === 0) {
-          console.log("tip success")
-          if (check) {
-            await starPost({ post_id: Number(postId), deleted: false })
-            console.log("star success")
-          }
-          setDrawerOpen(false)
-          showMessage("打赏成功", "success")
-        } else if (res?.message == "NOT_ENOUGH_BALANCE") {
-          setDrawerOpen(false)
-          setVisible(true)
-        } else {
-          console.log("tip failed")
+    addPostTip({ post_id: Number(postId), amount: amount }).then(async (res) => {
+      if (res && res.code === 0) {
+        console.log("tip success")
+        if (check) {
+          await starPost({ post_id: Number(postId), deleted: false })
+          console.log("star success")
         }
-      })
+        setDrawerOpen(false)
+        showMessage("打赏成功", "success")
+      } else if (res?.message == "NOT_ENOUGH_BALANCE") {
+        setDrawerOpen(false)
+        setVisible(true)
+      } else {
+        console.log("tip failed")
+      }
+    })
   }
 
   const handleToggleValue = (value: string) => {
@@ -56,37 +55,41 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
         content={<div className="p-4 pb-6">余额不足</div>}
         okText="充值"
       />
-      <button onTouchEnd={() => {
-        setDrawerOpen(true)
-      }}
-      >{children}</button>
+      <button
+        onTouchEnd={() => {
+          setDrawerOpen(true)
+        }}
+      >
+        {children}
+      </button>
       <FormDrawer
         title={""}
         trigger={children}
+        isAutoHeight
         headerLeft={() => {
-          return (
-            <span className="font-semibold text-lg">
-              打赏金额
-            </span>
-          )
+          return <span className="font-semibold text-lg">打赏金额</span>
         }}
-        headerRight={(() => {
+        headerRight={() => {
           return (
             <>
-              <CheckboxLabel label="同时点赞" checked={check} change={(val) => {
-                setCheck(val)
-              }}
+              <CheckboxLabel
+                label="同时点赞"
+                checked={check}
+                change={(val) => {
+                  setCheck(val)
+                }}
               />
             </>
           )
-        })}
-        className="h-[40vh] border-0"
+        }}
+        className="border-0"
         setIsOpen={setDrawerOpen}
         isOpen={drawerOpen}
         outerControl={true}
       >
-        <div className="h-[35vh] flex flex-col items-center text-black text-2xl bg-slate-50 rounded-t-lg">
-          <ToggleGroup type="single"
+        <div className="flex flex-col items-center text-black text-2xl bg-slate-50 rounded-t-lg">
+          <ToggleGroup
+            type="single"
             variant="default"
             defaultValue="0"
             id="select_amount"
@@ -107,7 +110,8 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
           </ToggleGroup>
 
           <div className="w-full flex items-center mt-[20px] px-4 relative">
-            <input id="amount"
+            <input
+              id="amount"
               type="number"
               className="w-full py-2 px-16 border-0 bg-white rounded-lg text-right h-[49px] placeholder:text-gray-400"
               placeholder="0.00"
@@ -121,14 +125,13 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
                 Number(event.target.value).toFixed(2)
               }}
             />
-            <Label htmlFor="amount"
+            <Label
+              htmlFor="amount"
               className="absolute left-6 top-1/2 transform -translate-y-1/2 text-left font-medium text-lg pointer-events-none pr-12"
             >
               自定义
             </Label>
-            <span
-              className="absolute right-6 top-1/2 transform -translate-y-1/2 text-lg font-normal pointer-events-none z-0"
-            >
+            <span className="absolute right-6 top-1/2 transform -translate-y-1/2 text-lg font-normal pointer-events-none z-0">
               USDT
             </span>
           </div>
@@ -140,9 +143,9 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
               onTouchEnd={(event) => {
                 event.preventDefault()
                 handTip()
-              }
-              }
-            >确认支付{amount}USDT
+              }}
+            >
+              确认支付{amount}USDT
             </button>
           </div>
         </div>

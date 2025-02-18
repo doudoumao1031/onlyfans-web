@@ -70,7 +70,7 @@ const Withdrawal = ({
     if (openState) {
       withdrawalForm.trigger("amount")
     }
-  },[openState])
+  }, [openState])
   return (
     <>
       <button
@@ -82,6 +82,7 @@ const Withdrawal = ({
       </button>
       <FormDrawer
         trigger={children}
+        isAutoHeight
         isOpen={openState}
         setIsOpen={setOpenState}
         outerControl={true}
@@ -105,7 +106,7 @@ const Withdrawal = ({
             </Link>
           )
         }}
-        className="h-[47vh] border-0"
+        className="border-0"
         handleSubmit={withdrawalForm.handleSubmit((data) => {
           addWalletDownOrder({
             amount: Number(data.amount)
@@ -134,23 +135,28 @@ const Withdrawal = ({
           <div className="flex justify-between items-center mt-10 relative">
             <span className="font-bold text-base">提现</span>
             <span className="flex items-center flex-1 justify-end">
-              <Controller control={withdrawalForm.control} render={({ field }) => {
-                return (
-                  <Input
-                    style={{
-                      boxShadow:"none"
-                    }}
-                    value={field.value || ""}
-                    onChange={field.onChange}
-                    onBlur={event => {
-                      const value = event.target.value
-                      if (value) {
-                        field.onChange(Number(event.target.value).toFixed(2))
-                      }
-                    }} placeholder="0.00" className="border-0 w-16 text-[#BBB] flex-1 text-right"
-                  />
-                )
-              }} name={"amount"}
+              <Controller
+                control={withdrawalForm.control}
+                render={({ field }) => {
+                  return (
+                    <Input
+                      style={{
+                        boxShadow: "none"
+                      }}
+                      value={field.value || ""}
+                      onChange={field.onChange}
+                      onBlur={(event) => {
+                        const value = event.target.value
+                        if (value) {
+                          field.onChange(Number(event.target.value).toFixed(2))
+                        }
+                      }}
+                      placeholder="0.00"
+                      className="border-0 w-16 text-[#BBB] flex-1 text-right"
+                    />
+                  )
+                }}
+                name={"amount"}
               />
               <span>USDT</span>
             </span>
@@ -164,7 +170,7 @@ const Withdrawal = ({
               type={"submit"}
               className={clsx(
                 "w-full transition-all h-12 rounded-full text-white flex justify-center items-center ",
-                !!errorMessage ? "bg-[#ddd]" :"bg-background-pink "
+                !!errorMessage ? "bg-[#ddd]" : "bg-background-pink "
               )}
             >
               {errorMessage ? errorMessage : "提现"}
@@ -306,7 +312,9 @@ export default function Page() {
                 setActiveKey(v.key)
               }}
               key={v.value.start}
-              className={`w-20 h-8 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""}`}
+              className={`w-20 h-8 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${
+                active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""
+              }`}
             >
               {v.label}
             </button>
@@ -350,7 +358,9 @@ export default function Page() {
                 setDateActive(v.value)
               }}
               key={index}
-              className={`mr-8 text-[#bbb] ${dateActive.start === v.value.start ? "text-text-pink" : ""}`}
+              className={`mr-8 text-[#bbb] ${
+                dateActive.start === v.value.start ? "text-text-pink" : ""
+              }`}
             >
               {v.label}
             </button>
