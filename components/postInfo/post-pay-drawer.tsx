@@ -22,7 +22,7 @@ export default function PostPayDrawer (props: PostPayDrawerProps)  {
           console.log("支付成功")
           flush()
           setIsOpen(false)
-          showMessage("支付成功", "success")
+          showMessage("支付成功", "success", { afterDuration: () => flush() })
         } else if (result?.message === "NOT_ENOUGH_BALANCE") {
           setIsOpen(false)
           setRechargeModel(true)

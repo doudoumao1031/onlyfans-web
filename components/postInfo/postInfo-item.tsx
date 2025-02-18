@@ -16,7 +16,7 @@ import Modal from "@/components/space/modal"
 import RechargeDrawer from "@/components/profile/recharge-drawer"
 
 export default function Page({ postData }: { postData: PostData }) {
-  const [data, setData] = useState<PostData>(postData)
+  const [postInfo, setPostInfo] = useState<PostData>(postData)
   const { showMessage, renderNode } = useCommonMessage()
   const [isFocus, setIsFocus] = useState<boolean>(postData.user?.following as boolean)
   const [drawer, setDrawer] = useState<boolean>(false)
@@ -29,9 +29,9 @@ export default function Page({ postData }: { postData: PostData }) {
 
   const [btnText, setBtnText] = useState<string>("")
   useMemo(() => {
-    const { sub } = data.user
-    const { visibility } = data.post
-    data.post_price.some((item) => {
+    const { sub } = postInfo.user
+    const { visibility } = postInfo.post
+    postInfo.post_price.some((item) => {
       if (item.user_type === 1 && sub) {
         setPrice(item.price)
         return true
@@ -49,18 +49,21 @@ export default function Page({ postData }: { postData: PostData }) {
       setPay(true)
       setBtnText(`支付${price || 0} USDT 浏览该帖子`)
     } else if (visibility === 1 && !sub) {
+      setPay(false)
       setBtnText("订阅后浏览博主的帖子")
     } else if (visibility === 0 && !sub) {
+      setPay(false)
       setBtnText("订阅后解锁更多内容")
     } else {
+      setPay(false)
       setBtnText("")
     }
-  }, [data.post, data.post_price, data.user, price])
+  }, [postInfo.post, postInfo.post_price, postInfo.user, price])
 
   const flush = async () => {
-    const res = await postDetail(Number(data.post.id))
+    const res = await postDetail(Number(postInfo.post.id))
     const result = res?.data as unknown as PostData
-    setData(result)
+    setPostInfo(result)
   }
 
   const handleFollowing = async () => {
@@ -134,13 +137,13 @@ export default function Page({ postData }: { postData: PostData }) {
       </div>
     )
   }
-  if (!postData) return null
+  if (!postInfo) return null
 
   return (
     <div className="p-4 pt-20">
       {renderNode}
       <Header />
-      <Post data={postData as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
+      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
       {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
@@ -160,9 +163,9 @@ export default function Page({ postData }: { postData: PostData }) {
       )}
       {drawer && (
         <SubscribedDrawer
-          userId={postData.user.id}
-          name={postData.user.username}
-          free={postData.user.sub_price === 0}
+          userId={postInfo.user.id}
+          name={postInfo.user.username}
+          free={postInfo.user.sub_price === 0}
           isOpen={drawer}
           setIsOpen={setDrawer}
           setRechargeModel={setVisible}

@@ -33,10 +33,10 @@ export async function getSelfId() {
 async function fetchResultHandle<T>(method: string, response: Response, url: string) {
   if (response.ok) {
     const result: ApiResponse<T> = await response.json()
-    console.log(`Success-${method.toUpperCase()}-${url}-response:`, result)
+    console.log(`%cSuccess-${method.toUpperCase()}-${url}-response:`, "color: green",result)
     return result
   }
-  console.error(`Error-${method.toUpperCase()}-${url}-response:`, response)
+  console.error(`%cError-${method.toUpperCase()}-${url}-response:`+response, "color: red")
   return null
 }
 
@@ -50,7 +50,7 @@ export async function fetchWithGet<Req, Res = unknown>(
     const qs = new URLSearchParams(data ?? {})
     const urlWithParams = `${apiUrl}${url}?${qs.toString()}`
     const token = await getAuthToken()
-    console.log("GET-url:", urlWithParams)
+    console.log("%cGET-url:", "color: orange", urlWithParams)
     const response = await fetch(urlWithParams, {
       method: "GET",
       headers: {
@@ -75,8 +75,8 @@ export async function fetchWithPost<Req, Res = unknown>(
     const isFormData = data instanceof FormData
     const fullPath = `${apiUrl}${url}`
     const token = await getAuthToken()
-    console.log("POST-url:", fullPath)
-    console.log("POST-data:", data)
+    console.log("%cPOST-url:", "color: blue", fullPath)
+    console.log("%cPOST-data:", "color: blue", data)
     const response = await fetch(fullPath, {
       method: "POST",
       headers: {
@@ -90,7 +90,7 @@ export async function fetchWithPost<Req, Res = unknown>(
     })
     return fetchResultHandle<Res>("POST", response, url)
   } catch (error) {
-    console.error("Error-POST-catch:", error)
+    console.error("%cError-POST-catch:", "color: red", error)
   }
   return null
 }

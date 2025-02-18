@@ -48,7 +48,7 @@ export default function SubscribedButton({ userId, name, subPrice, type } : {use
       }
       {
         subPrice !== 0 && openDrawer && (
-          <SubscribedDrawer userId={userId} name={name} isOpen={openDrawer} setIsOpen={setOpenDrawer}/>
+          <SubscribedDrawer userId={userId} name={name} isOpen={openDrawer} setIsOpen={setOpenDrawer} free={subPrice === 0}/>
         )
       }
     </>
