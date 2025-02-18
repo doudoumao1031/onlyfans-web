@@ -94,7 +94,6 @@ export default function RechargeDrawer(props: RechargeProps) {
   return (
     <>
       {renderNode}
-      <LoadingMask isLoading={isLoading} />
       <button
         onClick={() => {
           // getSettingData()
