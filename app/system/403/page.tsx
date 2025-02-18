@@ -41,6 +41,7 @@ function ErrorContent() {
       const data = await login({ user_id: userIdNumber })
       if (data && data.token) {
         document.cookie = `${TOKEN_KEY}=${data.token}; path=/; secure; samesite=lax`
+        document.cookie = `${USER_KEY}=${data.id}; path=/; secure; samesite=lax`
         await router.push(redirectPath ?? "/explore/feed")
       } else {
         setErrorMsg("Login failed: Invalid response from server")

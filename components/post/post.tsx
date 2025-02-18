@@ -17,6 +17,8 @@ import Share from "./share"
 import Save from "./save"
 import Link from "next/link"
 import CommentSkeleton from "./comment-skeleton"
+import { getSelfId } from "@/lib/actions/server-actions"
+
 export default function Post({
   data,
   hasVote,
@@ -38,6 +40,9 @@ export default function Post({
   const linkRender = (content: string) => {
     return <Link href={`/postInfo/${post.id}`}>{content}</Link>
   }
+  const selfId = (async () => {
+    return await getSelfId()
+  }).toString()
 
   useEffect(() => {
     if (isInfoPage) {
@@ -98,7 +103,7 @@ export default function Post({
             <CommentStats count={comment_count} />
           </Link>
         )}
-        <Tip count={tip_count} postId={post.id} />
+        <Tip count={tip_count} postId={post.id} self={user.id.toString() === selfId}/>
         <Share count={share_count} postId={post.id} />
         <Save count={collection_count} saved={collection} postId={post.id} />
       </div>

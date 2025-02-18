@@ -1,7 +1,7 @@
 "use client"
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
-import { useState, useMemo, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib"
 import useCommonMessage from "@/components/common/common-message"
 import Link from "next/link"
@@ -24,18 +24,12 @@ export default function RechargeDrawer(props: RechargeProps) {
   const [ptBalance, setPtBalance] = useState<number>(0)
   const [wfBalance, setWfBalance] = useState<number>(0)
   const [rate, setRate] = useState<string>("1:1")
-  const [errorMessage, setErrorMessage] = useState<string>("")
   const { isLoading, withLoading } = useLoadingHandler({
     onError: (error) => {
       console.error("Recharge error:", error)
       showMessage("充值失败")
     }
   })
-  useMemo(() => {
-    if (amount && amount > 0) {
-      setErrorMessage("")
-    }
-  }, [amount])
   useEffect(() => {
     getSettingData()
   }, [])
@@ -60,11 +54,6 @@ export default function RechargeDrawer(props: RechargeProps) {
   ]
 
   async function handleRecharge(amount: number) {
-    if (!amount || amount <= 0) {
-      setErrorMessage("充值金额必须大于0")
-      return
-    }
-
     await withLoading(async () => {
       const tradeNo = await addWalletOrder({ amount: Number(amount) }).then((result) => {
         if (result && result.code === 0) {
@@ -177,9 +166,6 @@ export default function RechargeDrawer(props: RechargeProps) {
             >
               全部
             </button>
-            <section className={"absolute bottom-[-12px] text-red-600 text-xs ml-1"}>
-              {errorMessage}
-            </section>
           </div>
           <div className="my-[40px] self-center">
             <button
