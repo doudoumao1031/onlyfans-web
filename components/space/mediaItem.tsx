@@ -34,11 +34,14 @@ export default function Page({ item }: { item: PostData }) {
           />
         </div>
 
-        <Link href={lock ? "javascript:void(0);"
-          : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${
-            post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0
-          }}`
-        }
+        <Link
+          href={
+            lock
+              ? "javascript:void(0);"
+              : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${
+                  post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0
+                }}`
+          }
         >
           <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
             <div className="p-2 truncate overflow-hidden text-ellipsis">
@@ -62,7 +65,11 @@ export default function Page({ item }: { item: PostData }) {
                     color="#fff"
                     height={12}
                   />
-                  {post_price ? <span className="ml-1">${post_price[0].price}</span> : <span></span>}
+                  {post_price ? (
+                    <span className="ml-1">${post_price[0].price}</span>
+                  ) : (
+                    <span></span>
+                  )}
                 </span>
               ) : (
                 <></>
@@ -79,7 +86,9 @@ export default function Page({ item }: { item: PostData }) {
                 color="#fff"
                 height={32}
               />
-              <span className="mt-2">{post.visibility === 2 ? "付费内容，请付费后查看" : "订阅内容，请订阅后查看"}</span>
+              <span className="mt-2">
+                {post.visibility === 2 ? "付费内容，请付费后查看" : "订阅内容，请订阅后查看"}
+              </span>
             </div>
           </Link>
         )}

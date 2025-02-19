@@ -6,10 +6,7 @@ export default function Page() {
     <div className="px-4 pb-8">
       <div className="mt-5 ">
         <div className="grid grid-cols-3 gap-y-4 text-[#222]">
-          <Link
-            href={"/profile/order"}
-            className="flex justify-center flex-col items-center gap-2"
-          >
+          <Link href={"/profile/order"} className="flex justify-center flex-col items-center gap-2">
             <div>
               <Image
                 src="/icons/profile/icon-subscription-management.png"
@@ -49,7 +46,7 @@ export default function Page() {
             <div>粉丝管理</div>
           </Link>
           <Link
-            href={"/profile/income"}
+            href={"/profile/income/incomeView"}
             className="flex justify-center flex-col items-center gap-2"
           >
             <div>

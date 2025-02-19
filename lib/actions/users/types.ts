@@ -106,6 +106,7 @@ export interface StatementReq extends PageInfo {
   change_type?: number // 1 充值 2购买会员 3 打赏 4 帖子付费 5 提现
   start_time?: number
   end_time?: number
+  date?: string
 }
 
 /**

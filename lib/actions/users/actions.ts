@@ -187,6 +187,18 @@ export async function userStatement(params: StatementReq) {
   return fetchWithPost<StatementReq, PageResponse<StatementResp>>(ENDPOINTS.USERS.STATEMENT, params)
 }
 
+//支出记录
+export const getExpenses = (params: PageInfo & { date?: string }) =>
+  fetchWithPost<PageInfo, PageResponse<StatementResp>>(ENDPOINTS.USERS.PAT_STATEMENT, params).then(
+    (res) => {
+      if (res && res.code === 0) {
+        return res.data
+      } else {
+        return null
+      }
+    }
+  )
+
 /**
  * 成为博主
  * @param params
