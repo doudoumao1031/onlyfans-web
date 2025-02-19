@@ -23,7 +23,7 @@ import { Switch } from "@/components/ui/switch"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { addDiscount, baseSubscribe, bundlePriceSchema, bundleSubscribe } from "@/lib/actions/users/schemas"
-import useCommonMessage from "@/components/common/common-message"
+import { useCommonMessageContext } from "@/components/common/common-message"
 import dayjs from "dayjs"
 import DateTimePicker from "@/components/common/date-time-picker"
 import { UserProfile, userProfile } from "@/lib/actions/profile"
@@ -39,7 +39,6 @@ import {
 import { z } from "zod"
 import { omit } from "lodash"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import LoadingMask from "@/components/common/loading-mask"
 
 const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 
@@ -51,7 +50,6 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
   openState: boolean,
   setOpenState: (val: boolean) => void
 }) => {
-  const { renderNode } = useCommonMessage()
 
   const hasSub = currentDiscounts.filter(item => item.month_count !== undefined).map(item => item.month_count)
 
@@ -88,7 +86,6 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
   return (
     <Drawer open={openState} onOpenChange={setOpenState}>
       <DrawerContent className={"h-[95vh] bg-white"}>
-        {renderNode}
         <section className={"flex-1"}>
           <DrawerHeader className={"hidden"}>
             <DrawerTitle></DrawerTitle>
@@ -661,7 +658,7 @@ export default function Page() {
   const router = useRouter()
   const [userInfo, setUserInfo] = useState<UserProfile>()
   const [defaultSettings, setDefaultSettings] = useState<SubscribeSetting | null>()
-  const { showMessage, renderNode } = useCommonMessage()
+  const { showMessage } = useCommonMessageContext()
   const refreshDefaultSettings = () => {
     getSubscribeSetting().then(response => {
       if (response) {
@@ -709,7 +706,7 @@ export default function Page() {
     return realPrice.toFixed(2)
   }, [realPrice])
 
-  const { isLoading,withLoading } = useLoadingHandler({
+  const { withLoading } = useLoadingHandler({
     onError: () => {
       showMessage("更新失败")
     },
@@ -743,8 +740,6 @@ export default function Page() {
 
   return (
     <div>
-      {renderNode}
-      <LoadingMask isLoading={isLoading} />
       <Header title={"订阅管理"} titleColor={"#000"}
         right={<button onTouchEnd={() => {
           baseFeeForm.trigger().then(async(valid) => {

@@ -1,5 +1,5 @@
 "use client"
-import useCommonMessage from "@/components/common/common-message"
+import { useCommonMessageContext } from "@/components/common/common-message"
 import SubscribedDrawer from "@/components/explore/subscribed-drawer"
 import Post from "@/components/post/post"
 import { buildMention } from "@/components/post/utils"
@@ -17,7 +17,7 @@ import RechargeDrawer from "@/components/profile/recharge-drawer"
 
 export default function Page({ postData }: { postData: PostData }) {
   const [postInfo, setPostInfo] = useState<PostData>(postData)
-  const { showMessage, renderNode } = useCommonMessage()
+  const { showMessage } = useCommonMessageContext()
   const [isFocus, setIsFocus] = useState<boolean>(postData.user?.following as boolean)
   const [drawer, setDrawer] = useState<boolean>(false)
   const [payDrawer, setPayDrawer] = useState<boolean>(false)
@@ -97,7 +97,7 @@ export default function Page({ postData }: { postData: PostData }) {
         </div>
         <div className="flex-1 flex items-center pl-4">
           <div className="w-8 h-8">
-            <CommonAvatar photoFileId={photo} size={32} />
+            <CommonAvatar photoFileId={photo} size={32}/>
           </div>
           <div className="ml-2">
             <div className="text-[14px]">
@@ -141,9 +141,8 @@ export default function Page({ postData }: { postData: PostData }) {
 
   return (
     <div className="p-4 pt-20">
-      {renderNode}
-      <Header />
-      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
+      <Header/>
+      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true}/>
       {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
@@ -195,9 +194,13 @@ export default function Page({ postData }: { postData: PostData }) {
         }}
       />
       {recharge && (
-        <RechargeDrawer isOpen={recharge} setIsOpen={setRecharge} setWfAmount={() => {}}>
+        <RechargeDrawer isOpen={recharge} setIsOpen={setRecharge} setWfAmount={() => {
+        }}
+        >
           <div className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
-            onTouchEnd={() => {setRecharge(true)}}
+            onTouchEnd={() => {
+              setRecharge(true)
+            }}
           >充值
           </div>
         </RechargeDrawer>

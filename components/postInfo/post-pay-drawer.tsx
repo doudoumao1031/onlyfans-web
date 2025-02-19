@@ -2,7 +2,7 @@
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { addPostPayOrder } from "@/lib"
-import useCommonMessage from "@/components/common/common-message"
+import { useCommonMessageContext } from "@/components/common/common-message"
 interface PostPayDrawerProps {
   post_id: number
   amount: number
@@ -13,7 +13,7 @@ interface PostPayDrawerProps {
 }
 export default function PostPayDrawer(props: PostPayDrawerProps) {
   const { post_id, amount, flush, isOpen, setIsOpen, setRechargeModel } = props
-  const { showMessage, renderNode } = useCommonMessage()
+  const { showMessage  } = useCommonMessageContext()
 
   const handleSubmit = async () => {
     await addPostPayOrder({ post_id: post_id, amount: amount }).then((result) => {
@@ -34,7 +34,6 @@ export default function PostPayDrawer(props: PostPayDrawerProps) {
   }
   return (
     <>
-      {renderNode}
       <FormDrawer
         title={
           <div>

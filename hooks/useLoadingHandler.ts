@@ -1,13 +1,12 @@
-import { useState } from "react"
+import { useCommonLoadingContext } from "@/components/common/loading-mask"
 
 type LoadingHandlerOptions = {
-  onError?: (error: any) => void;
-  onSuccess?: (result: any) => void;
+  onError?: (error: unknown) => void;
+  onSuccess?: (result: unknown) => void;
 };
 
 export const useLoadingHandler = (options: LoadingHandlerOptions = {}) => {
-  const [isLoading, setIsLoading] = useState(false)
-
+  const { isLoading,setIsLoading } = useCommonLoadingContext()
   const withLoading = async <T>(
     asyncFn: () => Promise<T>,
   ): Promise<T | undefined> => {

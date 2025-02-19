@@ -1,11 +1,11 @@
 "use client"
 import { addSubOrder } from "@/lib"
-import useCommonMessage from "@/components/common/common-message"
+import { useCommonMessageContext } from "@/components/common/common-message"
 import { useState } from "react"
 import SubscribedDrawer from "@/components/explore/subscribed-drawer"
 
 export default function SubscribedButton({ userId, name, subPrice, type } : {userId: number, name: string, subPrice: number, type: string | "button" | "panel"}) {
-  const { showMessage, renderNode } = useCommonMessage()
+  const { showMessage } = useCommonMessageContext()
   const [openDrawer, setOpenDrawer] = useState<boolean>(false)
   const [show, setShow] = useState<boolean>(true)
   const handleSubmit = async () => {
@@ -27,7 +27,6 @@ export default function SubscribedButton({ userId, name, subPrice, type } : {use
   }
   return (
     <>
-      {renderNode}
       {type === "button" && show && (
         <button className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white"
           onClick={handleSubmit}

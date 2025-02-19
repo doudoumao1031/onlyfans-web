@@ -5,7 +5,7 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { getUserReply, ReplyForm, setUserReply } from "@/lib/actions/profile"
 import React, { useEffect, useState } from "react"
-import useCommonMessage from "@/components/common/common-message"
+import { useCommonMessageContext } from "@/components/common/common-message"
 import { useRouter } from "next/navigation"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import LoadingMask from "@/components/common/loading-mask"
@@ -18,7 +18,7 @@ const formValidation = z.object({
 
 
 export default function Page() {
-  const { showMessage, renderNode } = useCommonMessage()
+  const { showMessage } = useCommonMessageContext()
   const [originData, setOriginData] = useState<string>("")
   const router = useRouter()
   const replyForm = useForm<ReplyForm>({
@@ -60,7 +60,6 @@ export default function Page() {
 
   return (
     <>
-      {renderNode}
       <LoadingMask isLoading={isLoading} />
       <form onSubmit={formSubmit}>
         <Header title={"订阅回复"}

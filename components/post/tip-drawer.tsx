@@ -1,14 +1,12 @@
 "use client"
 import { Label } from "@/components/ui/label"
-import { useState } from "react"
+import React,{ useState } from "react"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import CheckboxLabel from "@/components/user/checkbox-label"
 import { addPostTip, starPost } from "@/lib"
 import Modal from "@/components/space/modal"
 import FormDrawer from "@/components/common/form-drawer"
-import useCommonMessage from "@/components/common/common-message"
-import LoadingMask from "@/components/common/loading-mask"
-import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import  { useCommonMessageContext } from "@/components/common/common-message"
 interface TipDrawerProps {
   postId: number;
   refresh: (amount: number) => void;
@@ -19,7 +17,7 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId, refresh }) => {
   const [check, setCheck] = useState<boolean>(true)
   const [visible, setVisible] = useState<boolean>(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-  const { showMessage,renderNode } = useCommonMessage()
+  const { showMessage } = useCommonMessageContext()
   const { isLoading, withLoading } = useLoadingHandler({
     onError: (error) => {
       console.error("Recharge error:", error)
@@ -55,13 +53,8 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId, refresh }) => {
       setAmount(0)
     }
   }
-  if (isLoading) {
-    console.log("--->loading1")
-    return <LoadingMask isLoading={isLoading} />
-  }
   return (
     <>
-      {renderNode}
       <Modal
         visible={visible}
         cancel={() => {
