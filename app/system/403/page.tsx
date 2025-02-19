@@ -25,13 +25,17 @@ function ErrorContent() {
     setErrorMsg("")
 
     try {
-      if (token) {
-        document.cookie = `${TOKEN_KEY}=${token}; path=/; secure; samesite=lax`
-        document.cookie = `${USER_KEY}=${token}; path=/; secure; samesite=lax`
+      if (userId) {
+        document.cookie = `${USER_KEY}=${userId}; path=/; secure; samesite=lax`
+        document.cookie = `${TOKEN_KEY}=${userId}; path=/; secure; samesite=lax`
         await router.push(redirectPath ?? "/explore/feed")
         return
       }
-
+      if (token) {
+        document.cookie = `${TOKEN_KEY}=${token}; path=/; secure; samesite=lax`
+        await router.push(redirectPath ?? "/explore/feed")
+        return
+      }
       const userIdNumber = parseInt(userId, 10)
       if (isNaN(userIdNumber)) {
         setErrorMsg("Please enter a valid user ID")
@@ -41,6 +45,7 @@ function ErrorContent() {
       const data = await login({ user_id: userIdNumber })
       if (data && data.token) {
         document.cookie = `${TOKEN_KEY}=${data.token}; path=/; secure; samesite=lax`
+        document.cookie = `${USER_KEY}=${data.user_id}; path=/; secure; samesite=lax`
         await router.push(redirectPath ?? "/explore/feed")
       } else {
         setErrorMsg("Login failed: Invalid response from server")

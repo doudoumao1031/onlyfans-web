@@ -7,32 +7,43 @@ import { addPostTip, starPost } from "@/lib"
 import Modal from "@/components/space/modal"
 import FormDrawer from "@/components/common/form-drawer"
 import  { useCommonMessageContext } from "@/components/common/common-message"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 interface TipDrawerProps {
-  postId: number
-  children?: React.ReactNode
+  postId: number;
+  refresh: (amount: number) => void;
+  children?: React.ReactNode,
 }
-const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId }) => {
+const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId, refresh }) => {
   const [amount, setAmount] = useState<number>(0)
   const [check, setCheck] = useState<boolean>(true)
   const [visible, setVisible] = useState<boolean>(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   const { showMessage } = useCommonMessageContext()
-  const handTip = () => {
-    addPostTip({ post_id: Number(postId), amount: amount }).then(async (res) => {
-      if (res && res.code === 0) {
-        console.log("tip success")
-        if (check) {
-          await starPost({ post_id: Number(postId), deleted: false })
-          console.log("star success")
-        }
-        setDrawerOpen(false)
-        showMessage("打赏成功", "success")
-      } else if (res?.message == "NOT_ENOUGH_BALANCE") {
-        setDrawerOpen(false)
-        setVisible(true)
-      } else {
-        console.log("tip failed")
-      }
+  const { withLoading } = useLoadingHandler({
+    onError: (error) => {
+      console.error("Recharge error:", error)
+      showMessage("打赏失败")
+    }
+  })
+  async function handTip() {
+    await withLoading(async () => {
+      addPostTip({ post_id: Number(postId), amount: amount })
+        .then(async (res) => {
+          if (res && res.code === 0) {
+            console.log("tip success")
+            if (check) {
+              await starPost({ post_id: Number(postId), deleted: false })
+              console.log("star success")
+            }
+            setDrawerOpen(false)
+            showMessage("打赏成功", "success", { afterDuration: () => {refresh(amount) }, duration: 1500 })
+          } else if (res?.message == "NOT_ENOUGH_BALANCE") {
+            setDrawerOpen(false)
+            setVisible(true)
+          } else {
+            console.log("tip failed")
+          }
+        })
     })
   }
 
