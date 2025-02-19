@@ -7,6 +7,7 @@ import { addPostTip, starPost } from "@/lib"
 import Modal from "@/components/space/modal"
 import FormDrawer from "@/components/common/form-drawer"
 import  { useCommonMessageContext } from "@/components/common/common-message"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 interface TipDrawerProps {
   postId: number;
   refresh: (amount: number) => void;
@@ -18,7 +19,7 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId, refresh }) => {
   const [visible, setVisible] = useState<boolean>(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   const { showMessage } = useCommonMessageContext()
-  const { isLoading, withLoading } = useLoadingHandler({
+  const { withLoading } = useLoadingHandler({
     onError: (error) => {
       console.error("Recharge error:", error)
       showMessage("打赏失败")

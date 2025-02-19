@@ -5,7 +5,7 @@ export interface LoginReq {
 
 export interface LoginResp {
   token: string
-  id: number
+  user_id: number
   user: UserVo
 }
 

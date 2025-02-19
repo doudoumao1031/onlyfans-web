@@ -6,7 +6,7 @@ export default function Tip({ count, postId, self }: { count: number; postId: nu
   const [amount, setAmount] = useState<number>(count)
   const content = (
     <div>
-      <Stats icon={self?"icon_fans_reward":"icon_fans_reward"} value={amount}/>
+      <Stats icon="icon_fans_reward" value={amount} disable={self}/>
     </div>
   )
   return self ? content :

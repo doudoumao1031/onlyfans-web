@@ -728,13 +728,16 @@ export default function Page() {
         const params = item.id < 0 ? omit(item, "id") : item
         return updateSubscribeSettingItem(params)
       }))
-      userApplyBlogger().then((res) => {
-        if (res && res.code === 0) {
-          console.log("申请博主成功")
-        } else {
-          console.log("申请博主失败")
-        }
-      })
+      if (!userInfo?.blogger) {
+        await userApplyBlogger().then((res) => {
+          if (res && res.code === 0) {
+            console.log("申请博主成功")
+          } else {
+            console.log("申请博主失败")
+          }
+        })
+      }
+
     })
   }
 

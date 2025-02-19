@@ -5,7 +5,7 @@ import Post from "@/components/post/post"
 
 import { ListError, ListLoading, ListEnd } from "@/components/explore/list-states"
 import { PageResponse, PostData, PageInfo } from "@/lib"
-import { getMyFeeds, getUserPosts } from "@/lib/actions/space"
+import { getUserPosts } from "@/lib/actions/space"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { useParams } from "next/navigation"
