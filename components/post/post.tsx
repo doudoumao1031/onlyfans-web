@@ -61,7 +61,7 @@ export default function Post({
       {!isInfoPage && <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} />}
 
       <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
-      <UserHomePageLink userId={user.id.toString()} />
+      <UserHomePageLink userId={user.id.toString()} postId={post.id} />
       {post_attachment && post_attachment.length > 0 && (
         <Media data={post_attachment} post={post} user={user} />
       )}
