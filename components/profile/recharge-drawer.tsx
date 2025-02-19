@@ -118,7 +118,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         }}
         headerRight={() => {
           return (
-            <Link href={`/profile/withdrawalInfo?changeType=1`} prefetch={false}>
+            <Link href={"/profile/withdrawalInfo?changeType=1"} prefetch={false}>
               <button className={"text-base text-text-pink"}>明细</button>
             </Link>
           )
@@ -176,6 +176,7 @@ export default function RechargeDrawer(props: RechargeProps) {
           </div>
           <div className="my-[40px] self-center">
             <button
+              type="button"
               disabled={amount === 0 || amount > ptBalance}
               className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${
                 amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-pink"
