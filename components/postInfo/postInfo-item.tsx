@@ -14,6 +14,7 @@ import { postDetail } from "@/lib/actions/profile"
 import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
 import Modal from "@/components/space/modal"
 import RechargeDrawer from "@/components/profile/recharge-drawer"
+import Link from "next/link"
 
 export default function Page({ postData }: { postData: PostData }) {
   const [postInfo, setPostInfo] = useState<PostData>(postData)
@@ -80,7 +81,7 @@ export default function Page({ postData }: { postData: PostData }) {
   }
 
   const Header = () => {
-    const { photo, first_name, last_name, username, sub_end_time } = postData.user
+    const { photo, first_name, last_name, username, sub_end_time, id } = postData.user
     return (
       <div className="flex items-center fixed w-full h-[76px] top-0 left-0 px-4 py-4 bg-white z-[45]">
         <div
@@ -95,17 +96,19 @@ export default function Page({ postData }: { postData: PostData }) {
             color={"#222"}
           />
         </div>
-        <div className="flex-1 flex items-center pl-4">
-          <div className="w-8 h-8">
-            <CommonAvatar photoFileId={photo} size={32}/>
-          </div>
-          <div className="ml-2">
-            <div className="text-[14px]">
-              {first_name} {last_name}
+        <Link href={`/space/${id}/feed`} className="flex-1">
+          <div className="flex-1 flex items-center pl-4">
+            <div className="w-8 h-8">
+              <CommonAvatar photoFileId={photo} size={32} />
             </div>
-            <div className="text-black/50 text-[12px]">{buildMention(username)}</div>
+            <div className="ml-2">
+              <div className="text-[14px]">
+                {first_name} {last_name}
+              </div>
+              <div className="text-black/50 text-[12px]">{buildMention(username)}</div>
+            </div>
           </div>
-        </div>
+        </Link>
 
         <div className="focus">
           <div
@@ -141,8 +144,8 @@ export default function Page({ postData }: { postData: PostData }) {
 
   return (
     <div className="p-4 pt-20">
-      <Header/>
-      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true}/>
+      <Header />
+      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
       {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
@@ -194,18 +197,17 @@ export default function Page({ postData }: { postData: PostData }) {
         }}
       />
       {recharge && (
-        <RechargeDrawer isOpen={recharge} setIsOpen={setRecharge} setWfAmount={() => {
-        }}
-        >
-          <div className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
+        <RechargeDrawer isOpen={recharge} setIsOpen={setRecharge} setWfAmount={() => {}}>
+          <div
+            className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
             onTouchEnd={() => {
               setRecharge(true)
             }}
-          >充值
+          >
+            充值
           </div>
         </RechargeDrawer>
-      )
-      }
+      )}
     </div>
   )
 }
