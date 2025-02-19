@@ -5,7 +5,7 @@ import useSWR from "swr"
 interface UseInfiniteScrollOptions<T> {
   initialItems: T[]
   initialHasMore: boolean
-  fetcherFn: (page: number) => Promise<{ items: T[], hasMore: boolean }>
+  fetcherFn: (page: number) => Promise<{ items: T[]; hasMore: boolean }>
 }
 
 interface UseInfiniteScrollResult<T> {
@@ -32,13 +32,9 @@ export function useInfiniteScroll<T>({
   const { data, isValidating, error, mutate } = useSWR<{
     items: T[]
     hasMore: boolean
-  }>(
-    hasMore ? page.toString() : null,
-    async (pageStr) => fetcherFn(parseInt(pageStr)),
-    {
-      keepPreviousData: true
-    }
-  )
+  }>(hasMore ? page.toString() : null, async (pageStr) => fetcherFn(parseInt(pageStr)), {
+    keepPreviousData: true
+  })
 
   useEffect(() => {
     setItems(initialItems)
@@ -58,7 +54,7 @@ export function useInfiniteScroll<T>({
 
   const loadMore = () => {
     if (!isValidating && hasMore) {
-      setPage(prev => prev + 1)
+      setPage((prev) => prev + 1)
     }
   }
 
@@ -86,22 +82,25 @@ export function useInfiniteScroll<T>({
   }
 }
 
-
-
 interface UseInfinitePostsOptions<Req, Res> {
   fetchFn: (params: Req) => Promise<PageResponse<Res> | null>
   defaultPageSize?: number
   params?: Partial<Req>
 }
 
-export const useInfiniteFetch = <Req extends Record<string, unknown> & {page: number}, Res>(options: UseInfinitePostsOptions<Req, Res>) => {
+export const useInfiniteFetch = <Req extends Record<string, unknown> & { page: number }, Res>(
+  options: UseInfinitePostsOptions<Req, Res>
+) => {
   const { fetchFn, params = {} as Partial<Req> } = options
 
-  return useCallback(async (page: number) => {
-    const data = await fetchFn({ page, ...params } as Req)
-    return {
-      items: data?.list || [],
-      hasMore: !data?.list ? false : page < Math.ceil(data.total / page)
-    }
-  }, [fetchFn, params])
+  return useCallback(
+    async (page: number) => {
+      const data = await fetchFn({ ...params, page } as Req)
+      return {
+        items: data?.list || [],
+        hasMore: !data?.list ? false : page < Math.ceil(data.total / page)
+      }
+    },
+    [fetchFn, params]
+  )
 }

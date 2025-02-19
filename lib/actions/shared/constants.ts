@@ -28,7 +28,7 @@ export const ENDPOINTS = {
     DELETE_VOTE: "/post/deleteVote",
     ME_MEDIAS: "/post/mePostMedias",
     ME_POSTS: "/post/mePosts",
-    ME_DRAFT_POST:"/post/meDraftPosts",
+    ME_DRAFT_POST: "/post/meDraftPosts",
     FILE_PLAY_LOG: "/post/postFilePlayLog",
     SHARE_LOG: "/post/postSharLog",
     VIEW_LOG: "/post/postViewLog",
@@ -61,7 +61,7 @@ export const ENDPOINTS = {
     VIEW_SUBSCRIBE_SETTING: "/user/viewUserSubscribeSetting",
 
     // Profile update related
-    APPLY_BLOGGER: "/user/applyBlogger",  // 申请成为博主
+    APPLY_BLOGGER: "/user/applyBlogger", // 申请成为博主
     UPDATE_ABOUT: "/user/updateUserAbout",
     UPDATE_BACK_IMG: "/user/updateUserBackImg",
     UPDATE_BASE: "/user/updateUserBase",
@@ -83,16 +83,17 @@ export const ENDPOINTS = {
     GET_BY_ID: "/user/uid",
     GET_BY_USERNAME: "/user/username",
     POST_VIEW_LOG: "/user/userPostViewLog",
-    STAT_DAY_METRIC: "/user/userStatDayUserMetric",  //用户每日统计
-    STATEMENT: "/user/userStatement",  // 查询用户收支明细
+    STAT_DAY_METRIC: "/user/userStatDayUserMetric", //用户每日统计
+    STATEMENT: "/user/userStatement", // 查询用户收支明细
+    PAT_STATEMENT: "/user/userPayStatement", // 查询用户支出记录
     STAT_INCOME: "/user/userStatIncome",
-    SUB_ME_LOG: "/user/userSubMeLog",  // 我的订阅记录
+    SUB_ME_LOG: "/user/userSubMeLog", // 我的订阅记录
     VIEW_LOG: "/user/userViewLog",
     VIEW_LOGS: "/user/userViewLogs",
     VIEW_ME_LOGS: "/user/userViewMeLogs",
     WALLET_STATEMENT: "/user/userWalletStatement",
-    WALLET: "/user/wallet",  // 我的钱包（余额信息）
-    PT_WALLET: "/user/ptWallet",  // pt钱包信息（充值配置）
+    WALLET: "/user/wallet", // 我的钱包（余额信息）
+    PT_WALLET: "/user/ptWallet", // pt钱包信息（充值配置）
 
     // Collection related
     COLLECTION_POST: "/user/userCollectionPost",
