@@ -1,7 +1,7 @@
 "use client"
 
 import { createPortal } from "react-dom"
-import { useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 import CommonLoading from "./common-loading"
 
 interface LoadingMaskProps {
@@ -27,3 +27,12 @@ export default function LoadingMask({ isLoading }: LoadingMaskProps) {
     document.body
   )
 }
+
+export interface CommonLoadingContextValues {
+  isLoading: boolean,
+  setIsLoading: (v: boolean) => void
+}
+
+export const CommonLoadingContext = createContext({} as CommonLoadingContextValues)
+
+export const useCommonLoadingContext = () => useContext(CommonLoadingContext)

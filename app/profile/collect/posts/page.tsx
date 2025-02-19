@@ -61,9 +61,8 @@ export default function Page() {
                 <span className="text-gray-400">总数：</span>
                 {initData?.total ?? 0}
               </div>
-              {items.map((v, i) => (
+              {items.map((v) => (
                 <DelItem
-                  key={i}
                   onDelete={() => {
                     delItem(v.post.id)
                   }}

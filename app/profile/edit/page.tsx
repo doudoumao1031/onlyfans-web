@@ -9,11 +9,10 @@ import { z } from "zod"
 import React, { useEffect, useState } from "react"
 import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/profile"
 import { useRouter } from "next/navigation"
-import useCommonMessage from "@/components/common/common-message"
+import { useCommonMessageContext } from "@/components/common/common-message"
 import { commonUploadFile } from "@/lib/utils"
 import { Switch } from "@/components/ui/switch"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import LoadingMask from "@/components/common/loading-mask"
 
 type EditUserProfile = Pick<
   UserProfile,
@@ -24,7 +23,7 @@ const IMAGE_PREFIX = `${process.env.NEXT_PUBLIC_API_URL}/media/img/`
 
 export default function Page() {
   const router = useRouter()
-  const { renderNode, showMessage } = useCommonMessage()
+  const { showMessage } = useCommonMessageContext()
   const { handleSubmit, control, setValue, watch } = useForm<EditUserProfile>({
     mode: "all",
     resolver: zodResolver(
@@ -69,7 +68,7 @@ export default function Page() {
     })
   }
 
-  const { isLoading,withLoading } = useLoadingHandler({
+  const { withLoading } = useLoadingHandler({
     onError: () => {
       showMessage("更新失败")
     },
@@ -82,8 +81,6 @@ export default function Page() {
 
   return (
     <>
-      {renderNode}
-      <LoadingMask isLoading={isLoading} />
       <form
         className={"relative"}
         onSubmit={handleSubmit(async(data) => {

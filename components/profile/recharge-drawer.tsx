@@ -3,10 +3,9 @@ import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { useState, useMemo, useEffect } from "react"
 import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib"
-import useCommonMessage from "@/components/common/common-message"
+import { useCommonMessageContext } from "@/components/common/common-message"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import LoadingMask from "@/components/common/loading-mask"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 
 interface RechargeProps {
@@ -19,13 +18,13 @@ interface RechargeProps {
 export default function RechargeDrawer(props: RechargeProps) {
   const { children, isOpen, setIsOpen, setWfAmount } = props
   const pathname = usePathname()
-  const { showMessage, renderNode } = useCommonMessage()
+  const { showMessage } = useCommonMessageContext()
   const [amount, setAmount] = useState<number>(0)
   const [ptBalance, setPtBalance] = useState<number>(0)
   const [wfBalance, setWfBalance] = useState<number>(0)
   const [rate, setRate] = useState<string>("1:1")
   const [errorMessage, setErrorMessage] = useState<string>("")
-  const { isLoading, withLoading } = useLoadingHandler({
+  const {  withLoading } = useLoadingHandler({
     onError: (error) => {
       console.error("Recharge error:", error)
       showMessage("充值失败")
@@ -87,13 +86,8 @@ export default function RechargeDrawer(props: RechargeProps) {
     })
   }
 
-  if (isLoading) {
-    return <LoadingMask isLoading={isLoading} />
-  }
-
   return (
     <>
-      {renderNode}
       <button
         onClick={() => {
           // getSettingData()

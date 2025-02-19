@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/toggle-group-subcribed"
 import { useState, useMemo, useEffect } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
-import useCommonMessage from "@/components/common/common-message"
+import { useCommonMessageContext } from "@/components/common/common-message"
 interface SubscribedDrawerProps {
   userId: number
   name: string
@@ -19,7 +19,7 @@ interface SubscribedDrawerProps {
 }
 export default function SubscribedDrawer(props: SubscribedDrawerProps) {
   const { userId, name, free, isOpen, setIsOpen, setRechargeModel, children } = props
-  const { showMessage, renderNode } = useCommonMessage()
+  const { showMessage  } = useCommonMessageContext()
   const [drawer, setDrawer] = useState<boolean>(false)
   const [items, setItems] = useState<DiscountInfo[]>([])
   const [discount, setDiscount] = useState<DiscountInfo>()
@@ -97,7 +97,6 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
   }
   return (
     <>
-      {renderNode}
       <button
         className={"w-full"}
         onClick={() => {

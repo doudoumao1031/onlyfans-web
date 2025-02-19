@@ -28,9 +28,8 @@ import { buildImageUrl, getUploadMediaFileType, UPLOAD_MEDIA_TYPE, uploadFile } 
 import DateTimePicker from "@/components/common/date-time-picker"
 import { getFollowedUsers, SubscribeUserInfo } from "@/lib"
 import Empty from "@/components/common/empty"
-import useCommonMessage, { CommonMessageContext, useCommonMessageContext } from "@/components/common/common-message"
+import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import LoadingMask from "@/components/common/loading-mask"
 
 const ItemEditTitle = ({
   title,
@@ -764,7 +763,7 @@ const EditPageContent = () => {
   const searchParams = useSearchParams()
   const postId = Number(searchParams.get("id"))
   const [subUsers, setSubUsers] = useState<SubscribeUserInfo[]>([])
-  const { showMessage, renderNode } = useCommonMessage()
+  const { showMessage } = useCommonMessageContext()
   useEffect(() => {
     getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 }).then(response => {
       if (!response) return
@@ -785,7 +784,7 @@ const EditPageContent = () => {
     }
   }
 
-  const { isLoading,withLoading } = useLoadingHandler({
+  const { withLoading } = useLoadingHandler({
     onError: (message: string) => {
       showMessage(message)
     },
@@ -826,7 +825,8 @@ const EditPageContent = () => {
         if (data) {
           return {
             ...data.data,
-            post_vote: data.data.post_vote ?? undefined
+            post_vote: data.data.post_vote ?? undefined,
+            post_attachment: data.data.post_attachment ?? []
           }
         }
         return initPostFormData
@@ -869,36 +869,21 @@ const EditPageContent = () => {
   },[formValues])
 
   return (
-    <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
-      {renderNode}
-      <LoadingMask isLoading={isLoading} />
-      <FormProvider {...postForm}>
-        <SelectMotionUser isOpen={atUserModal} setIsOpen={setAtUserModal}
-          subUsers={subUsers}
-          updateMentionUserIds={updateMentionUserIds}
-        />
-        <form onSubmit={handleSubmit(onFormSubmit)}>
-          <section className="flex justify-between h-11 items-center pl-4 pr-4">
-            {
-              showSaveDraft ? (
-                <ConfirmModal
-                  content={"未发布的内容是否保存到草稿中？"}
-                  confirm={handleSaveDraft}
-                  cancel={router.back}
-                  trigger={
-                    <button>
-                      <IconWithImage
-                        url={"/icons/profile/icon_close@3x.png"}
-                        width={24}
-                        height={24}
-                        color={"#000"}
-                      />
-                    </button>
-                  }
-                />
-              )
-                : (
-                  <button onTouchEnd={router.back}>
+    <FormProvider {...postForm}>
+      <SelectMotionUser isOpen={atUserModal} setIsOpen={setAtUserModal}
+        subUsers={subUsers}
+        updateMentionUserIds={updateMentionUserIds}
+      />
+      <form onSubmit={handleSubmit(onFormSubmit)}>
+        <section className="flex justify-between h-11 items-center pl-4 pr-4">
+          {
+            showSaveDraft ? (
+              <ConfirmModal
+                content={"未发布的内容是否保存到草稿中？"}
+                confirm={handleSaveDraft}
+                cancel={router.back}
+                trigger={
+                  <button>
                     <IconWithImage
                       url={"/icons/profile/icon_close@3x.png"}
                       width={24}
@@ -906,59 +891,11 @@ const EditPageContent = () => {
                       color={"#000"}
                     />
                   </button>
-                )
-            }
-            <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-text-pink")}>
-              发布
-            </button>
-          </section>
-
-
-          <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">
-            <UploadMedia/>
-          </section>
-          <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 relative">
-            <textarea
-              {...register("post.title")}
-              className="resize-none block w-full"
-              maxLength={999}
-              placeholder="分享我的感受"
-              rows={5}
-              onKeyUp={event => {
-                if (event.key === "@") {
-                  selectionStart.current = (event.target as HTMLTextAreaElement).selectionStart
-                  setAtUserModal(true)
                 }
-              }}
-            />
-            <div className="absolute left-4 bottom-1.5 text-red-600 text-xs">
-              {formState?.errors?.post?.title?.message}
-            </div>
-          </section>
-          {watch("post_vote") !== undefined && (
-            <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
-              <section className="flex justify-between">
-                <div className="flex gap-2.5 items-center">
-                  <div className="font-bold text-base">发起了一个投票:</div>
-                  <AddVoteModal
-                    initFormData={formValues.post_vote}
-                    updateVoteData={(data) => {
-                      setValue("post_vote", data)
-                    }}
-                  >
-                    <IconWithImage
-                      url={"/icons/profile/icon_edit@3x.png"}
-                      width={20}
-                      height={20}
-                      color={"#bbb"}
-                    />
-                  </AddVoteModal>
-                </div>
-                <button
-                  onTouchEnd={() => {
-                    setValue("post_vote", undefined)
-                  }}
-                >
+              />
+            )
+              : (
+                <button onTouchEnd={router.back}>
                   <IconWithImage
                     url={"/icons/profile/icon_close@3x.png"}
                     width={24}
@@ -966,95 +903,154 @@ const EditPageContent = () => {
                     color={"#000"}
                   />
                 </button>
-              </section>
-              <section className="mt-2.5 rounded-xl bg-[#F4F5F5] px-3 py-2">
-                <div className="flex gap-2.5 items-center">
+              )
+          }
+          <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-text-pink")}>
+            发布
+          </button>
+        </section>
+
+
+        <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">
+          <UploadMedia/>
+        </section>
+        <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 relative">
+          <textarea
+            {...register("post.title")}
+            className="resize-none block w-full"
+            maxLength={999}
+            placeholder="分享我的感受"
+            rows={5}
+            onKeyUp={event => {
+              if (event.key === "@") {
+                selectionStart.current = (event.target as HTMLTextAreaElement).selectionStart
+                setAtUserModal(true)
+              }
+            }}
+          />
+          <div className="absolute left-4 bottom-1.5 text-red-600 text-xs">
+            {formState?.errors?.post?.title?.message}
+          </div>
+        </section>
+        {watch("post_vote") !== undefined && (
+          <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
+            <section className="flex justify-between">
+              <div className="flex gap-2.5 items-center">
+                <div className="font-bold text-base">发起了一个投票:</div>
+                <AddVoteModal
+                  initFormData={formValues.post_vote}
+                  updateVoteData={(data) => {
+                    setValue("post_vote", data)
+                  }}
+                >
                   <IconWithImage
-                    url={"/icons/profile/icon_fans_vote@3x.png"}
+                    url={"/icons/profile/icon_edit@3x.png"}
                     width={20}
                     height={20}
-                    color={"#FF8492"}
+                    color={"#bbb"}
                   />
-                  <span className="font-bold text-text-pink text-base">
-                    {formValues.post_vote?.title}
-                  </span>
-                </div>
-                <div className="text-xs text-[#999] mt-1.5">
-                  截止：
-                  {formValues.post_vote?.stop_time
-                    ? dayjs(formValues.post_vote?.stop_time * 1000).format("YYYY-MM-DD HH:mm")
-                    : ""}{" "}
-                  结束
-                </div>
-              </section>
-            </section>
-          )}
-          <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
-            {/*<ItemEditTitle title={"阅览设置："}/>*/}
-            <div className="flex gap-2.5 items-center">
-              <div className="font-bold text-base">阅览设置：</div>
-              <ReadSettings
-                initFormData={formValues.post_price}
-                updatePrice={(value) => {
-                  setValue("post_price", value)
+                </AddVoteModal>
+              </div>
+              <button
+                onTouchEnd={() => {
+                  setValue("post_vote", undefined)
                 }}
               >
                 <IconWithImage
-                  url={"/icons/profile/icon_edit@3x.png"}
+                  url={"/icons/profile/icon_close@3x.png"}
+                  width={24}
+                  height={24}
+                  color={"#000"}
+                />
+              </button>
+            </section>
+            <section className="mt-2.5 rounded-xl bg-[#F4F5F5] px-3 py-2">
+              <div className="flex gap-2.5 items-center">
+                <IconWithImage
+                  url={"/icons/profile/icon_fans_vote@3x.png"}
                   width={20}
                   height={20}
-                  color={"#bbb"}
+                  color={"#FF8492"}
                 />
-              </ReadSettings>
-            </div>
-            <section className="mt-2.5">
-              {formValues.post_price?.map((price, index) => (
-                <ReadingSettingsDisplay postPrice={price} key={index}/>
-              ))}
-              {/*<div className="flex items-center space-x-2">*/}
-              {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
-              {/*                   color={'#FF8492'}/>*/}
-              {/*    <label className={"text-text-pink"}>免费订阅</label>*/}
-              {/*</div>*/}
+                <span className="font-bold text-text-pink text-base">
+                  {formValues.post_vote?.title}
+                </span>
+              </div>
+              <div className="text-xs text-[#999] mt-1.5">
+                截止：
+                {formValues.post_vote?.stop_time
+                  ? dayjs(formValues.post_vote?.stop_time * 1000).format("YYYY-MM-DD HH:mm")
+                  : ""}{" "}
+                结束
+              </div>
             </section>
           </section>
-          <section className="pt-5 pb-5 pl-4 pr-4 ">
-            <ItemEditTitle showIcon={false} title={"发布通知"}/>
-            <section className="border-b border-gray-200 flex justify-between items-center py-3">
-              <div>订阅者</div>
-              <Switch
-                className={"custom-switch"}
-                {...noticeRegister}
-                onCheckedChange={(value) => {
-                  setValue("post.notice", value)
-                }}
-              ></Switch>
-            </section>
-          </section>
-          <section className="text-center pb-5">
-            <AddVoteModal
-              updateVoteData={(data) => {
-                setValue("post_vote", data, { shouldDirty: true, shouldTouch: true })
+        )}
+        <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
+          {/*<ItemEditTitle title={"阅览设置："}/>*/}
+          <div className="flex gap-2.5 items-center">
+            <div className="font-bold text-base">阅览设置：</div>
+            <ReadSettings
+              initFormData={formValues.post_price}
+              updatePrice={(value) => {
+                setValue("post_price", value)
               }}
             >
-              {!watch("post_vote") && (
-                <span
-                  className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-[#999] py-2 text-[#999] text-base"
-                >
-                  <IconWithImage
-                    url={"/icons/profile/icon_fans_vote@3x.png"}
-                    width={20}
-                    height={20}
-                    color={"#999"}
-                  />
-                  投票
-                </span>
-              )}
-            </AddVoteModal>
+              <IconWithImage
+                url={"/icons/profile/icon_edit@3x.png"}
+                width={20}
+                height={20}
+                color={"#bbb"}
+              />
+            </ReadSettings>
+          </div>
+          <section className="mt-2.5">
+            {formValues.post_price?.map((price, index) => (
+              <ReadingSettingsDisplay postPrice={price} key={index}/>
+            ))}
+            {/*<div className="flex items-center space-x-2">*/}
+            {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
+            {/*                   color={'#FF8492'}/>*/}
+            {/*    <label className={"text-text-pink"}>免费订阅</label>*/}
+            {/*</div>*/}
           </section>
-        </form>
-      </FormProvider>
-    </CommonMessageContext.Provider>
+        </section>
+        <section className="pt-5 pb-5 pl-4 pr-4 ">
+          <ItemEditTitle showIcon={false} title={"发布通知"}/>
+          <section className="border-b border-gray-200 flex justify-between items-center py-3">
+            <div>订阅者</div>
+            <Switch
+              className={"custom-switch"}
+              {...noticeRegister}
+              onCheckedChange={(value) => {
+                setValue("post.notice", value)
+              }}
+            ></Switch>
+          </section>
+        </section>
+        <section className="text-center pb-5">
+          <AddVoteModal
+            updateVoteData={(data) => {
+              setValue("post_vote", data, { shouldDirty: true, shouldTouch: true })
+            }}
+          >
+            {!watch("post_vote") && (
+              <span
+                className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-[#999] py-2 text-[#999] text-base"
+              >
+                <IconWithImage
+                  url={"/icons/profile/icon_fans_vote@3x.png"}
+                  width={20}
+                  height={20}
+                  color={"#999"}
+                />
+                投票
+              </span>
+            )}
+          </AddVoteModal>
+        </section>
+      </form>
+    </FormProvider>
   )
 }
 
