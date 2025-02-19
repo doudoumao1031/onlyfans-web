@@ -29,6 +29,8 @@ import DateTimePicker from "@/components/common/date-time-picker"
 import { getFollowedUsers, SubscribeUserInfo } from "@/lib"
 import Empty from "@/components/common/empty"
 import useCommonMessage, { CommonMessageContext, useCommonMessageContext } from "@/components/common/common-message"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import LoadingMask from "@/components/common/loading-mask"
 
 const ItemEditTitle = ({
   title,
@@ -782,16 +784,36 @@ const EditPageContent = () => {
       post_mention_user: mentionUserIds
     }
   }
-  const onFormSubmit = (formData: iPost) => {
-    const params = getSubmitFormData(formData)
-    addPost(params).then((data) => {
-      if (data?.code === 0 && data?.data?.post?.id) {
-        pubPost(data.data.post.id).then(() => {
-          showMessage("success")
-          router.back()
-        })
+
+  const { isLoading,withLoading } = useLoadingHandler({
+    onError: (message: string) => {
+      showMessage(message)
+    },
+    onSuccess: (message: string) => {
+      showMessage(message, "success", {
+        afterDuration: router.back
+      })
+    }
+  })
+
+  const onFormSubmit = async(formData: iPost) => {
+    await withLoading(async () => {
+      const params = getSubmitFormData(formData)
+      let addPostResponse
+      try {
+        addPostResponse = await addPost(params)
+      } catch {
+        throw "保存帖子失败"
+      }
+      if (addPostResponse?.code === 0 && addPostResponse?.data?.post?.id) {
+        try {
+          await pubPost(addPostResponse.data.post.id)
+          return "发布成功"
+        } catch {
+          throw "发布失败"
+        }
       } else {
-        showMessage(data?.message)
+        throw "保存帖子失败"
       }
     })
   }
@@ -829,10 +851,14 @@ const EditPageContent = () => {
     setAtUserModal(false)
   }, [formValues, setValue, subUsers])
 
-  const handleSaveDraft = () => {
-    addPost(getSubmitFormData(formValues)).then(() => {
-      showMessage("success")
-      router.back()
+  const handleSaveDraft = async() => {
+    await withLoading(async() => {
+      try {
+        await addPost(getSubmitFormData(formValues))
+        return "草稿保存成功"
+      } catch {
+        throw "草稿保存失败"
+      }
     })
   }
 
@@ -845,6 +871,7 @@ const EditPageContent = () => {
   return (
     <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
       {renderNode}
+      <LoadingMask isLoading={isLoading} />
       <FormProvider {...postForm}>
         <SelectMotionUser isOpen={atUserModal} setIsOpen={setAtUserModal}
           subUsers={subUsers}
