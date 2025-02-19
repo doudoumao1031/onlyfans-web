@@ -178,7 +178,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
                     </span>
                   </div>
                   {showDiscount(item) && (
-                    <div className="absolute bg-background-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center">
+                    <div className="absolute bg-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center">
                       <span className="text-white text-xs text-center">
                         {item.discount_per}% off
                       </span>
@@ -201,7 +201,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
                 确认支付 {amount} USDT
               </button>
               {showDiscount(discount) && (
-                <div className="absolute bg-background-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center">
+                <div className="absolute bg-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center">
                   <span className="text-white text-xs text-center text-nowrap">已省 ${diff}</span>
                 </div>
               )}
