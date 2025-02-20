@@ -1,19 +1,28 @@
 import { starPost } from "@/lib"
 import { useState } from "react"
 import Stats from "./stats"
+import { useMemo } from "react"
 
 export default function Like({
   count,
   liked,
-  postId
+  postId,
+  outLike
 }: {
   count: number
   liked: boolean
   postId: number
+  outLike: boolean
 }) {
   // 添加点赞状态
   const [likes, setLikes] = useState(count)
   const [isLiked, setIsLiked] = useState(liked)
+  useMemo(() => {
+    if (outLike) {
+      setIsLiked(true)
+      setLikes(count + 1)
+    }
+  }, [count, outLike])
 
   const handleLike = async () => {
     if (isLiked) {

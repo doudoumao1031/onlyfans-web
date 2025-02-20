@@ -5,7 +5,6 @@ import { useState, useEffect } from "react"
 import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 
 interface RechargeProps {
@@ -17,7 +16,6 @@ interface RechargeProps {
 
 export default function RechargeDrawer(props: RechargeProps) {
   const { children, isOpen, setIsOpen, setWfAmount } = props
-  const pathname = usePathname()
   const { showMessage } = useCommonMessageContext()
   const [amount, setAmount] = useState<number>(0)
   const [ptBalance, setPtBalance] = useState<number>(0)

@@ -31,13 +31,13 @@ export default function Post({
   isInfoPage?: boolean
 }) {
   const { sid } = useGlobal()
-  const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
-    data
+  const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } = data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
   const [showComments, setShowComments] = useState(isInfoPage)
   const [comments, setComments] = useState<CommentInfo[]>()
   const [showVote, setShowVote] = useState(false)
   const [commentsLoading, setCommentsLoading] = useState<boolean>(false)
+  const [tipStar, setTipStar] = useState<boolean>(false)
   const linkRender = (content: string) => {
     return <Link href={`/postInfo/${post.id}`}>{content}</Link>
   }
@@ -93,7 +93,7 @@ export default function Post({
       )}
       {hasVote && showVote && <Vote postId={post.id} />}
       <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
-        <Like count={thumbs_up_count} liked={star} postId={post.id} />
+        <Like count={thumbs_up_count} liked={star} postId={post.id} outLike={!star && tipStar}/>
         {isInfoPage ? (
           <CommentStats count={comment_count} onClick={toggleComments} />
         ) : (
@@ -101,7 +101,7 @@ export default function Post({
             <CommentStats count={comment_count} />
           </Link>
         )}
-        <Tip count={tip_count} postId={post.id} self={sid === user.id}/>
+        <Tip count={tip_count} postId={post.id} self={sid === user.id} tipStar={setTipStar}/>
         <Share count={share_count} postId={post.id} />
         <Save count={collection_count} saved={collection} postId={post.id} />
       </div>

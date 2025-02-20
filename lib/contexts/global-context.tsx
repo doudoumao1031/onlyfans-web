@@ -1,6 +1,7 @@
 "use client"
 
-import React, { createContext, useContext, ReactNode } from "react"
+import React, { createContext, useContext, ReactNode, useState, useEffect } from "react"
+import { getSelfId } from "@/lib/actions/server-actions"
 
 interface GlobalContextType {
   sid: number | null // self userId
@@ -9,13 +10,21 @@ interface GlobalContextType {
 
 interface GlobalProviderProps {
   children: ReactNode
-  sid?: number | null
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined)
 
-export function GlobalProvider({ children, sid: initSid = 0 }: GlobalProviderProps) {
-  const [sid, setSid] = React.useState<number | null>(initSid)
+export function GlobalProvider({ children }: GlobalProviderProps) {
+  const [sid, setSid] = useState<number | null>(0)
+  useEffect(() => {
+    const initData = async () => {
+      await getSelfId().then((res) => {
+        console.log("GlobalProvider set uid:", res)
+        setSid(Number(res))
+      })
+    }
+    initData()
+  }, [])
   return (
     <GlobalContext.Provider value={{ sid, setSid }}>
       {children}

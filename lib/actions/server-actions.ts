@@ -22,7 +22,6 @@ export async function getSelfId() {
   try {
     const cookiesStore = await cookies()
     const userId = cookiesStore.get(USER_KEY)?.value
-    console.log("getUserId server side:", userId)
     return userId ?? ""
   } catch (error) {
     console.error("Error getting auth userId:", error)

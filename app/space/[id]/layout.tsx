@@ -13,7 +13,6 @@ export default async function Layout(props: {
   const [userId, slefId] = id.split("_")
   const selfId = await getSelfId()
   const isSelf = selfId === userId
-  console.log("isSelf", isSelf, "selfId:", selfId, "userId:", userId)
 
   const response = isSelf ? await userProfile() : await getUserById({ id: userId })
   if (!isSelf) {

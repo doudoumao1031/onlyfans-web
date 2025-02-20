@@ -7,12 +7,11 @@ import { LoadingProvider } from "@/lib/contexts/loading-context"
 
 interface ProvidersProps {
   children: React.ReactNode
-  sid?: number | null
 }
 
-export default function Providers({ children, sid }: ProvidersProps) {
+export default function Providers({ children }: ProvidersProps) {
   return (
-    <GlobalProvider sid={sid}>
+    <GlobalProvider>
       <MessageProvider>
         <LoadingProvider>
           {children}

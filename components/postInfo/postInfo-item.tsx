@@ -15,9 +15,11 @@ import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
 import Modal from "@/components/space/modal"
 import RechargeDrawer from "@/components/profile/recharge-drawer"
 import Link from "next/link"
+import { useGlobal } from "@/lib/contexts/global-context"
 
 export default function Page({ postData }: { postData: PostData }) {
   const [postInfo, setPostInfo] = useState<PostData>(postData)
+  const { sid } = useGlobal()
   const { showMessage } = useCommonMessageContext()
   const [isFocus, setIsFocus] = useState<boolean>(postData.user?.following as boolean)
   const [drawer, setDrawer] = useState<boolean>(false)
@@ -27,9 +29,12 @@ export default function Page({ postData }: { postData: PostData }) {
   const [visible, setVisible] = useState<boolean>(false)
   const [recharge, setRecharge] = useState<boolean>(false)
   const router = useRouter()
-
   const [btnText, setBtnText] = useState<string>("")
   useMemo(() => {
+    if (postInfo.user.id === sid) {
+      setBtnText("")
+      return
+    }
     const { sub } = postInfo.user
     const { visibility } = postInfo.post
     postInfo.post_price.some((item) => {
@@ -59,7 +64,7 @@ export default function Page({ postData }: { postData: PostData }) {
       setPay(false)
       setBtnText("")
     }
-  }, [postInfo.post, postInfo.post_price, postInfo.user, price])
+  }, [postInfo.post, postInfo.post_price, postInfo.user, price, sid])
 
   const flush = async () => {
     const res = await postDetail(Number(postInfo.post.id))
@@ -109,34 +114,35 @@ export default function Page({ postData }: { postData: PostData }) {
             </div>
           </div>
         </Link>
-
-        <div className="focus">
-          <div
-            onClick={() => {
-              handleFollowing()
-            }}
-            className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${
-              isFocus
-                ? "bg-white border border-border-pink text-text-pink"
-                : " bg-background-pink text-white"
-            }`}
-          >
-            <IconWithImage
-              url={`/icons/${
-                isFocus ? "icon_info_followed_white@3x.png" : "icon_info_follow_white@3x.png"
+        {sid !== id && (
+          <div className="focus">
+            <div
+              onClick={() => {
+                handleFollowing()
+              }}
+              className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${
+                isFocus
+                  ? "bg-white border border-border-pink text-text-pink"
+                  : " bg-background-pink text-white"
               }`}
-              width={20}
-              height={20}
-              color={isFocus ? "#f08b94" : "#fff"}
-            />
-            <span className="ml-1">{isFocus ? "已关注" : "关注"}</span>
-          </div>
-          {isFocus && (
-            <div className="text-[10px] text-text-pink mt-1">
-              订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}天
+            >
+              <IconWithImage
+                url={`/icons/${
+                  isFocus ? "icon_info_followed_white@3x.png" : "icon_info_follow_white@3x.png"
+                }`}
+                width={20}
+                height={20}
+                color={isFocus ? "#f08b94" : "#fff"}
+              />
+              <span className="ml-1">{isFocus ? "已关注" : "关注"}</span>
             </div>
-          )}
-        </div>
+            {isFocus && (
+              <div className="text-[10px] text-text-pink mt-1">
+                订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}天
+              </div>
+            )}
+          </div>
+        )}
       </div>
     )
   }
@@ -144,8 +150,8 @@ export default function Page({ postData }: { postData: PostData }) {
 
   return (
     <div className="p-4 pt-20">
-      <Header />
-      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
+      <Header/>
+      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true}/>
       {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
