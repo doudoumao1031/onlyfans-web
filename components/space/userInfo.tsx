@@ -7,8 +7,8 @@ import SpaceHeader from "./space-header"
 import Attention from "./attention"
 import { useState } from "react"
 import SubscribedDrawer from "@/components/explore/subscribed-drawer"
-import Modal from "@/components/space/modal"
-import RechargeDrawer from "@/components/profile/recharge-drawer"
+import CommonRecharge from "@/components/post/common-recharge"
+import { useRouter } from "next/navigation"
 
 export default function UserInfo({
   data,
@@ -22,6 +22,7 @@ export default function UserInfo({
   if (!data) {
     throw new Error()
   }
+  const router = useRouter()
   const tabs = [
     { icon: "/icons/space/icon_info_video@3x.png", num: data.video_count }, //视频
     { icon: "/icons/space/icon_info_photo@3x.png", num: data.img_count }, //图片
@@ -65,7 +66,7 @@ export default function UserInfo({
           <Directions about={data.about}/>
           {
             !isSelf && !data.sub && (
-              <SubscribedDrawer userId={data.id} name={data.username} free={data.sub_price === 0} setRechargeModel={setVisible}>
+              <SubscribedDrawer userId={data.id} name={data.username} free={data.sub_price === 0} setRechargeModel={setVisible} flush={router.refresh}>
                 <div
                   className="w-full h-12 bg-[#ff8492] rounded-lg  pl-4 mt-2 flex flex-col justify-center items-start text-white bg-[url('/icons/space/bg_space_subscription.png')] bg-cover"
                 >
@@ -77,28 +78,7 @@ export default function UserInfo({
           }
         </section>
       </section>
-      <Modal
-        visible={visible}
-        cancel={() => {
-          setVisible(false)
-        }}
-        type={"modal"}
-        content={<div className="p-4 pb-6">余额不足</div>}
-        okText="充值"
-        confirm={() => {
-          setVisible(false)
-          setRecharge(true)
-        }}
-      />
-      {recharge && (
-        <RechargeDrawer isOpen={recharge} setIsOpen={setRecharge} setWfAmount={() => {}}>
-          <div className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
-            onTouchEnd={() => {setRecharge(true)}}
-          >充值
-          </div>
-        </RechargeDrawer>
-      )
-      }
+      <CommonRecharge visible={visible} setVisible={setVisible} recharge={recharge} setRecharge={setRecharge} />
     </div>
   )
 }

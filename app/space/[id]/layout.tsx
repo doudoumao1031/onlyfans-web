@@ -10,7 +10,7 @@ export default async function Layout(props: {
   params: Promise<{ id: string }>
 }) {
   const { id } = await props.params
-  const [userId, slefId] = id.split("_")
+  const [userId] = id.split("_")
   const selfId = await getSelfId()
   const isSelf = selfId === userId
 
