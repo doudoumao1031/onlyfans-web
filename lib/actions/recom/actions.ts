@@ -12,6 +12,32 @@ import type {
 } from "@/lib"
 
 /**
+ * Get hot bloggers list
+ */
+export async function getHotBloggers() {
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${ENDPOINTS.RECOM.RECOM_BLOGGER}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Token": process.env.NEXT_PUBLIC_TOKEN ?? ""
+      },
+      body: JSON.stringify({ from_id: 0, page: 1, pageSize: 20, type: 0 }),
+      next: {
+        tags: ["hot-bloggers"]
+      }
+    })
+
+    if (!res.ok) throw new Error(`API Error: ${res.status}`)
+    const data = await res.json()
+    return data?.data?.list || []
+  } catch (error) {
+    console.error("Error fetching hot bloggers:", error)
+    return []
+  }
+}
+
+/**
  * 关注用户帖子
  */
 export const getFollowUserPosts =
@@ -23,6 +49,7 @@ export const getFollowUserPosts =
         return null
       }
     })
+
 export async function getFollowUserUpdate(): Promise<FollowUserUpdateResp> {
   // Implementation
   throw new Error("Not implemented")

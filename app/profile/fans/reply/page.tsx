@@ -31,14 +31,14 @@ export default function Page() {
       setOriginData(value)
       replyForm.setValue("sub_reply", value)
     })
-  }, [])
+  }, [replyForm])
 
   const { isLoading, withLoading } = useLoadingHandler({
-    onError: (message: string) => {
-      showMessage(message)
+    onError: (message) => {
+      showMessage(typeof message === "string" ? message : "保存失败")
     },
-    onSuccess: (message: string) => {
-      showMessage(message, "success", {
+    onSuccess: (message) => {
+      showMessage(typeof message === "string" ? message : "保存成功", "success", {
         afterDuration: router.back
       })
     }
