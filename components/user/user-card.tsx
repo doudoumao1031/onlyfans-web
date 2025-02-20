@@ -1,4 +1,3 @@
-"use client"
 import Avatar from "@/components/user/avatar"
 import Image from "next/image"
 import { BloggerInfo } from "@/lib"

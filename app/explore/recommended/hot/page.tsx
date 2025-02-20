@@ -1,12 +1,12 @@
 // app/explore/recommended/hot/page.tsx
 import UserCard from "@/components/user/user-card"
-import { BloggerInfo } from "@/lib"
+import { BloggerInfo, BloggerType } from "@/lib"
 import { getHotBloggers } from "@/lib/actions/recom/actions"
 
 export const revalidate = 30
 
 export default async function Page() {
-  const bloggers = await getHotBloggers()
+  const bloggers = await getHotBloggers({ from_id: 0, page: 1, pageSize: 20, type: BloggerType.Hot })
   const serverTime = new Date().toLocaleString("zh-CN", {
     timeZone: "Asia/Shanghai",
     year: "numeric",

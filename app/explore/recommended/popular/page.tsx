@@ -1,26 +1,32 @@
+// app/explore/recommended/hot/page.tsx
 import UserCard from "@/components/user/user-card"
-import { BloggerInfo, getRecomBlogger } from "@/lib"
+import { BloggerInfo, BloggerType } from "@/lib"
+import { getPopularBloggers } from "@/lib/actions/recom/actions"
 
-export const dynamic = "force-dynamic"
-
-async function getPopularBloggers() {
-  try {
-    const bloggers = await getRecomBlogger({ from_id: 0, page: 1, pageSize: 20, type: 2 })
-    return bloggers?.list || []
-  } catch (error) {
-    console.error("Error fetching popular bloggers:", error)
-    return []
-  }
-}
+export const revalidate = 30
 
 export default async function Page() {
-  const bloggers = await getPopularBloggers()
+  const bloggers = await getPopularBloggers({ from_id: 0, page: 1, pageSize: 20, type: BloggerType.Popular })
+  const serverTime = new Date().toLocaleString("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  })
 
   return (
     <>
-      {bloggers.map((item) => (
+      <div className="text-center text-sm text-gray-500 space-y-1">
+        <div>服务器生成时间: {serverTime}</div>
+        <div>页面缓存时间: 30秒</div>
+      </div>
+      {bloggers.map((item: BloggerInfo) => (
         <div key={item.id} className="w-full mb-[10px]">
-          <UserCard user={item} subscribe={true}/>
+          <UserCard user={item} subscribe={true} />
         </div>
       ))}
     </>

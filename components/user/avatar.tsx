@@ -1,5 +1,4 @@
 import Image from "next/image"
-import LazyImg from "../common/lazy-img"
 import CommonAvatar from "@/components/common/common-avatar"
 
 export default function Avatar({ src, vlog = false }: {
@@ -9,7 +8,7 @@ export default function Avatar({ src, vlog = false }: {
   return (
     <div className={"relative"}>
       <div className={"w-[66px] h-[66px] rounded-full border-2 border-white"}>
-        <CommonAvatar photoFileId={src} size={62}/>
+        <CommonAvatar photoFileId={src} size={62} />
       </div>
       {vlog && (
         <div
