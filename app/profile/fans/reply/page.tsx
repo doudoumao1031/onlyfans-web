@@ -34,11 +34,11 @@ export default function Page() {
   }, [replyForm])
 
   const { isLoading, withLoading } = useLoadingHandler({
-    onError: (error: unknown) => {
-      showMessage(String(error))
+    onError: (message) => {
+      showMessage(typeof message === "string" ? message : "保存失败")
     },
-    onSuccess: (result: unknown) => {
-      showMessage(result as string, "success", {
+    onSuccess: (message) => {
+      showMessage(typeof message === "string" ? message : "保存成功", "success", {
         afterDuration: router.back
       })
     }

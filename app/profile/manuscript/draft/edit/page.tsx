@@ -785,11 +785,11 @@ const EditPageContent = () => {
   }
 
   const { withLoading } = useLoadingHandler({
-    onError: (error: unknown) => {
-      showMessage(String(error))
+    onError: (message) => {
+      showMessage(typeof message === "string" ? message : "保存失败")
     },
-    onSuccess: (result: unknown) => {
-      showMessage(result as string, "success", {
+    onSuccess: (message) => {
+      showMessage(typeof message === "string" ? message : "保存成功", "success", {
         afterDuration: router.back
       })
     }
@@ -834,7 +834,7 @@ const EditPageContent = () => {
     } : { ...initPostFormData }
   })
 
-  const { register, watch, formState, setValue, handleSubmit } = postForm
+  const { register, watch, formState, setValue, handleSubmit: handleFormSubmit } = postForm
 
   const noticeRegister = register("post.notice")
 
@@ -874,7 +874,7 @@ const EditPageContent = () => {
         subUsers={subUsers}
         updateMentionUserIds={updateMentionUserIds}
       />
-      <form onSubmit={handleSubmit(onFormSubmit)}>
+      <form onSubmit={handleFormSubmit(onFormSubmit)}>
         <section className="flex justify-between h-11 items-center pl-4 pr-4">
           {
             showSaveDraft ? (

@@ -5,6 +5,7 @@ import { Suspense, useState } from "react"
 import { login } from "@/lib/actions/auth/actions"
 import { TOKEN_KEY, USER_KEY } from "@/lib/utils"
 import LoadingMask from "@/components/common/loading-mask"
+import { useGlobal } from "@/lib/contexts/global-context"
 
 function ErrorContent() {
   const search = useSearchParams()
@@ -14,6 +15,7 @@ function ErrorContent() {
   const [token, setToken] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const { setSid } = useGlobal()
 
   const handleClick = async () => {
     if (!userId && !token) {
@@ -28,6 +30,8 @@ function ErrorContent() {
       if (userId) {
         document.cookie = `${USER_KEY}=${userId}; path=/; secure; samesite=lax`
         document.cookie = `${TOKEN_KEY}=${userId}; path=/; secure; samesite=lax`
+        console.log("===> 1.outer set setSid:", userId)
+        setSid(Number(userId))
         await router.push(redirectPath ?? "/explore/feed")
         return
       }
@@ -46,6 +50,8 @@ function ErrorContent() {
       if (data && data.token) {
         document.cookie = `${TOKEN_KEY}=${data.token}; path=/; secure; samesite=lax`
         document.cookie = `${USER_KEY}=${data.user_id}; path=/; secure; samesite=lax`
+        setSid(data.user_id)
+        console.log("===> 2. login setSid:", userId)
         await router.push(redirectPath ?? "/explore/feed")
       } else {
         setErrorMsg("Login failed: Invalid response from server")
