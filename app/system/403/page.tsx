@@ -7,6 +7,85 @@ import { TOKEN_KEY, USER_KEY } from "@/lib/utils"
 import LoadingMask from "@/components/common/loading-mask"
 import { useGlobal } from "@/lib/contexts/global-context"
 
+const testUsersList = [
+  {
+    id: 1,
+    token: "1"
+  },
+  {
+    id: 2,
+    token: "2"
+  },
+  {
+    id: 3,
+    token: "3"
+  },
+  {
+    id: 6,
+    token: "6"
+  },
+  {
+    id: 15,
+    token: "15"
+  },
+  {
+    id: 16,
+    token: "16"
+  },
+  {
+    id: 17,
+    token: "17"
+  },
+  {
+    id: 18,
+    token: "18"
+  },
+  {
+    id: 19,
+    token: "19"
+  },
+  {
+    id: 20,
+    token: "20"
+  },
+  {
+    id: 21,
+    token: "21"
+  },
+  {
+    id: 22,
+    token: "22"
+  },
+  {
+    id: 23,
+    token: "23"
+  },
+  {
+    id: 24,
+    token: "24"
+  },
+  {
+    id: 25,
+    token: "25"
+  },
+  {
+    id: 26,
+    token: "26"
+  }
+  // {
+  //   id: 27,
+  //   token: "27"
+  // },
+  // {
+  //   id: 28,
+  //   token: "28"
+  // },
+  // {
+  //   id: 29,
+  //   token: "29"
+  // }
+]
+
 function ErrorContent() {
   const search = useSearchParams()
   const router = useRouter()
@@ -27,15 +106,8 @@ function ErrorContent() {
     setErrorMsg("")
 
     try {
-      if (userId) {
-        document.cookie = `${USER_KEY}=${userId}; path=/; secure; samesite=lax`
-        document.cookie = `${TOKEN_KEY}=${userId}; path=/; secure; samesite=lax`
-        console.log("===> 1.outer set setSid:", userId)
-        setSid(Number(userId))
-        await router.push(redirectPath ?? "/explore/feed")
-        return
-      }
       if (token) {
+        document.cookie = `${USER_KEY}=${token}; path=/; secure; samesite=lax`
         document.cookie = `${TOKEN_KEY}=${token}; path=/; secure; samesite=lax`
         await router.push(redirectPath ?? "/explore/feed")
         return
@@ -90,17 +162,22 @@ function ErrorContent() {
           </div>
           <div className="text-gray-500">- OR - / - 或者 -</div>
           <div>
-            <input
-              type="text"
+            <select
               value={token}
               onChange={(e) => setToken(e.target.value)}
               className="border rounded px-4 py-2 w-64"
-              placeholder="Enter Token / 输入令牌"
-            />
+            >
+              <option value="">Select Token / 选择令牌</option>
+              {testUsersList.map((user) => (
+                <option key={user.id} value={user.token}>
+                  User {user.id} (Token: {user.token})
+                </option>
+              ))}
+            </select>
             <p className="text-sm text-gray-500 mt-1">
-              For development env, you can type 1-28
+              For development env, you can select from the list
               <br />
-              开发环境可以输入 1-28
+              开发环境可以从列表中选择
             </p>
           </div>
           <button
