@@ -38,7 +38,8 @@ export default function Page() {
       page: 1,
       pageSize: 20,
       from_id: 0,
-      date: date
+      start_time: Math.floor(dayjs(date).startOf("month").valueOf() / 1000),
+      end_time: Math.floor(dayjs(date).endOf("month").valueOf() / 1000)
     }
     setLoading(true)
     const res = await getExpenses(params)
@@ -51,7 +52,8 @@ export default function Page() {
     params: {
       pageSize: 20,
       from_id: 0,
-      date: date
+      start_time: Math.floor(dayjs(date).startOf("month").valueOf() / 1000),
+      end_time: Math.floor(dayjs(date).endOf("month").valueOf() / 1000)
     }
   })
   const [curYear, curMonth] = date.split("-")
@@ -61,7 +63,7 @@ export default function Page() {
         <InfiniteScroll<StatementResp>
           className={"h-full w-full mx-auto"}
           initialItems={initData.list || []}
-          initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}
+          initialHasMore={true}
           fetcherFn={infiniteFetchPosts}
         >
           {({ items, isLoading, hasMore, error }) => (

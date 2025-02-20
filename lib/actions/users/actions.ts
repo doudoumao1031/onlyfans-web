@@ -188,7 +188,7 @@ export async function userStatement(params: StatementReq) {
 }
 
 //支出记录
-export const getExpenses = (params: PageInfo & { date?: string }) =>
+export const getExpenses = (params: PageInfo & { start_time?: number; end_time?: number }) =>
   fetchWithPost<PageInfo, PageResponse<StatementResp>>(ENDPOINTS.USERS.PAT_STATEMENT, params).then(
     (res) => {
       if (res && res.code === 0) {
