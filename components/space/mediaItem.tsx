@@ -1,11 +1,9 @@
-import { useState } from "react"
 import IconWithImage from "../profile/icon"
 import { FileType, PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
 import Link from "next/link"
 import LazyImg from "../common/lazy-img"
 export default function Page({ item }: { item: PostData }) {
-  const [isClick, setIsClick] = useState<boolean>(false)
   if (!item) return null
   const { post_attachment, post_price, user, post, post_metric } = item
   const showIds = post_attachment.map((v) => v.file_id).join("_")
@@ -14,9 +12,6 @@ export default function Page({ item }: { item: PostData }) {
   return (
     <div className="w-[calc(50%_-_8px)] h-[220px] mt-4">
       <div
-        onClick={() => {
-          setIsClick(!isClick)
-        }}
         className="overflow-hidden relative rounded-lg text-xs  text-white flex flex-col justify-between w-full h-full mb-4 bg-cover  bg-gray-300"
       >
         <div className="absolute w-full h-full">
@@ -43,7 +38,7 @@ export default function Page({ item }: { item: PostData }) {
         >
           <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
             <div className="p-2 truncate overflow-hidden text-ellipsis">
-              {!(post.visibility === 1 && !user.sub && isClick) ? post.title : ""}
+              {!lock ? post.title : ""}
             </div>
             <div className="flex justify-between p-2">
               <span className="flex items-center">
@@ -55,7 +50,7 @@ export default function Page({ item }: { item: PostData }) {
                 />
                 <span className="ml-1">{post_metric.play_count}</span>
               </span>
-              {!(post.visibility === 1 && !user.sub && isClick) ? (
+              {!lock ? (
                 <span className="flex items-center ">
                   <IconWithImage
                     url="/icons/space/icon_fans_money_s_gray@3x.png"
@@ -75,9 +70,9 @@ export default function Page({ item }: { item: PostData }) {
             </div>
           </div>
         </Link>
-        {lock && isClick && (
+        {lock && (
           <Link href={`/postInfo/${post.id}`}>
-            <div className="flex flex-col items-center justify-center absolute z-10 top-16 left-8">
+            <div className="flex flex-col items-center justify-center absolute z-10 top-20 left-8">
               <IconWithImage
                 url="/icons/icon_info_lock_white.png"
                 width={32}
