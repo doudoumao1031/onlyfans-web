@@ -3,19 +3,21 @@
 import React, { createContext, useContext, ReactNode } from "react"
 
 interface GlobalContextType {
-  userId: string | null
+  sid: number | null // self userId
+  setSid: (sid: number | null) => void
 }
 
 interface GlobalProviderProps {
   children: ReactNode
-  userId?: string | null
+  sid?: number | null
 }
 
 const GlobalContext = createContext<GlobalContextType | undefined>(undefined)
 
-export function GlobalProvider({ children, userId = null }: GlobalProviderProps) {
+export function GlobalProvider({ children, sid: initSid = 0 }: GlobalProviderProps) {
+  const [sid, setSid] = React.useState<number | null>(initSid)
   return (
-    <GlobalContext.Provider value={{ userId }}>
+    <GlobalContext.Provider value={{ sid, setSid }}>
       {children}
     </GlobalContext.Provider>
   )
