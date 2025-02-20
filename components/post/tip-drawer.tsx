@@ -32,28 +32,20 @@ export default function TipDrawer(props: TipDrawerProps) {
   })
   async function handTip() {
     await withLoading(async () => {
-      addPostTip({ post_id: Number(postId), amount: amount })
-        .then(async (res) => {
-          if (res && res.code === 0) {
-            if (check) {
-              await starPost({ post_id: Number(postId), deleted: false }).then(
-                (res) => {
-                  if (res) {
-                    tipStar(true)
-                  }
-                }
-              )
-            }
-            setDrawerOpen(false)
-            showMessage("打赏成功", "success", { afterDuration: () => {refresh(amount) }, duration: 1500 })
-          } else if (res?.message == "NOT_ENOUGH_BALANCE") {
-            setDrawerOpen(false)
-            setVisible(true)
-          } else {
-            console.log("tip failed")
-            showMessage("打赏失败")
+      const res = await addPostTip({ post_id: Number(postId), amount: amount })
+      if (res && res.code === 0) {
+        if (check) {
+          const starRes = await starPost({ post_id: Number(postId), deleted: false })
+          if (starRes) {
+            tipStar(true)
           }
-        })
+        }
+        setDrawerOpen(false)
+        showMessage("打赏成功", "success", { afterDuration: () => {refresh(amount) }, duration: 1500 })
+      } else if (res?.message == "NOT_ENOUGH_BALANCE") {
+        setDrawerOpen(false)
+        setVisible(true)
+      }
     })
   }
 
