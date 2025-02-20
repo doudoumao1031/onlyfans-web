@@ -16,7 +16,7 @@ export default function Header() {
   ]
 
   return (
-    <div className="gap-3 w-full overflow-x-auto flex justify-around mb-4">
+    <div className="grid grid-cols-3 gap-3 w-full mb-4">
       {tabs.map((tab) => (
         <Link key={tab.path} href={tab.path}
           className={`flex flex-shrink-0 whitespace-nowrap items-center justify-center ${pathname === tab.path ? "bg-background-pink text-white" : "bg-white text-text-pink"} border border-border-pink rounded-full px-5 py-1`}
