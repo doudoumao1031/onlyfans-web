@@ -707,11 +707,11 @@ export default function Page() {
   }, [realPrice])
 
   const { withLoading } = useLoadingHandler({
-    onError: () => {
-      showMessage("更新失败")
+    onError: (message) => {
+      showMessage(typeof message === "string" ? message : "更新失败")
     },
-    onSuccess: () => {
-      showMessage("更新成功", "success", {
+    onSuccess: (message) => {
+      showMessage(typeof message === "string" ? message : "更新成功", "success", {
         afterDuration: router.back
       })
     }
@@ -737,7 +737,7 @@ export default function Page() {
           }
         })
       }
-
+      return "更新成功"
     })
   }
 

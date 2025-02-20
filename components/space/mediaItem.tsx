@@ -38,9 +38,7 @@ export default function Page({ item }: { item: PostData }) {
           href={
             lock
               ? "javascript:void(0);"
-              : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${
-                  post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0
-                }}`
+              : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0}}`
           }
         >
           <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
