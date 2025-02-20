@@ -521,7 +521,7 @@ const ReadSettings = ({
 const UploadMedia = () => {
   const { showMessage } = useCommonMessageContext()
   const [uploading, setIsUploading] = useState<boolean>(false)
-  const [firstMediaType,setFirstMediaType] = useState<UPLOAD_MEDIA_TYPE | undefined>(undefined)
+  const [firstMediaType, setFirstMediaType] = useState<UPLOAD_MEDIA_TYPE | undefined>(undefined)
   const { control } = useFormContext<iPost>()
   const ref = useRef<HTMLInputElement>(null)
   const {
@@ -537,7 +537,7 @@ const UploadMedia = () => {
     if (itemsList.length === 0) {
       setFirstMediaType(undefined)
     }
-  },[itemsList])
+  }, [itemsList])
 
   const handleUpload = (file: File) => {
     const fileType = getUploadMediaFileType(file)
@@ -738,7 +738,7 @@ function SelectMotionUser({
               )
             })
             }
-            {filteredData.length === 0 && <Empty text={"暂无数据"}/>}
+            {filteredData.length === 0 && <Empty text={"暂无数据"} />}
           </div>
         </section>
       </section>
@@ -753,7 +753,7 @@ const insertString = (str: string, index: number, char: string) => {
 const Page = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <EditPageContent/>
+      <EditPageContent />
     </Suspense>
   )
 }
@@ -772,7 +772,7 @@ const EditPageContent = () => {
   }, [])
   const selectionStart = useRef<number>(0)
 
-  const getSubmitFormData = (formData:iPost) => {
+  const getSubmitFormData = (formData: iPost) => {
     const { post_mention_user = [], post: { title } } = formData
     const mentionUsers = post_mention_user?.map(item => subUsers.find(sub => sub.user.id === item.user_id))?.filter(item => !!item)
     const mentionUserIds = mentionUsers.filter(item => {
@@ -785,17 +785,17 @@ const EditPageContent = () => {
   }
 
   const { withLoading } = useLoadingHandler({
-    onError: (message: string) => {
-      showMessage(message)
+    onError: (error: unknown) => {
+      showMessage(String(error))
     },
-    onSuccess: (message: string) => {
-      showMessage(message, "success", {
+    onSuccess: (result: unknown) => {
+      showMessage(result as string, "success", {
         afterDuration: router.back
       })
     }
   })
 
-  const onFormSubmit = async(formData: iPost) => {
+  const onFormSubmit = async (formData: iPost) => {
     await withLoading(async () => {
       const params = getSubmitFormData(formData)
       let addPostResponse
@@ -851,8 +851,8 @@ const EditPageContent = () => {
     setAtUserModal(false)
   }, [formValues, setValue, subUsers])
 
-  const handleSaveDraft = async() => {
-    await withLoading(async() => {
+  const handleSaveDraft = async () => {
+    await withLoading(async () => {
       try {
         await addPost(getSubmitFormData(formValues))
         return "草稿保存成功"
@@ -866,7 +866,7 @@ const EditPageContent = () => {
     const title = formValues.post?.title
     const attachments = formValues.post_attachment
     return !!title || !!attachments?.length
-  },[formValues])
+  }, [formValues])
 
   return (
     <FormProvider {...postForm}>
@@ -912,7 +912,7 @@ const EditPageContent = () => {
 
 
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">
-          <UploadMedia/>
+          <UploadMedia />
         </section>
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 relative">
           <textarea
@@ -1006,7 +1006,7 @@ const EditPageContent = () => {
           </div>
           <section className="mt-2.5">
             {formValues.post_price?.map((price, index) => (
-              <ReadingSettingsDisplay postPrice={price} key={index}/>
+              <ReadingSettingsDisplay postPrice={price} key={index} />
             ))}
             {/*<div className="flex items-center space-x-2">*/}
             {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
@@ -1016,7 +1016,7 @@ const EditPageContent = () => {
           </section>
         </section>
         <section className="pt-5 pb-5 pl-4 pr-4 ">
-          <ItemEditTitle showIcon={false} title={"发布通知"}/>
+          <ItemEditTitle showIcon={false} title={"发布通知"} />
           <section className="border-b border-gray-200 flex justify-between items-center py-3">
             <div>订阅者</div>
             <Switch

@@ -5,7 +5,6 @@ import { options } from "@/components/profile/chart-line"
 import FormDrawer from "@/components/common/form-drawer"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
 import { Line } from "react-chartjs-2"
 import {
   addWalletDownOrder,
@@ -37,7 +36,6 @@ const Withdrawal = ({
   info: WalletInfo
   refresh: () => void
 }) => {
-  const pathname = usePathname()
   const schemas = useMemo(() => {
     return z.object({
       amount: z
@@ -71,7 +69,7 @@ const Withdrawal = ({
     if (openState) {
       withdrawalForm.trigger("amount")
     }
-  }, [openState])
+  }, [openState, withdrawalForm])
 
   const { isLoading, withLoading } = useLoadingHandler({
     onError: () => {
@@ -115,7 +113,7 @@ const Withdrawal = ({
         }}
         headerRight={() => {
           return (
-            <Link href={`/profile/withdrawalInfo`}>
+            <Link href={"/profile/withdrawalInfo"}>
               <button className={"text-base text-text-pink"}>明细</button>
             </Link>
           )
@@ -324,9 +322,7 @@ export default function Page() {
                 setActiveKey(v.key)
               }}
               key={v.value.start}
-              className={`w-20 h-8 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${
-                active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""
-              }`}
+              className={`w-20 h-8 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""}`}
             >
               {v.label}
             </button>
@@ -370,9 +366,7 @@ export default function Page() {
                 setDateActive(v.value)
               }}
               key={index}
-              className={`mr-8 text-[#bbb] ${
-                dateActive.start === v.value.start ? "text-text-pink" : ""
-              }`}
+              className={`mr-8 text-[#bbb] ${dateActive.start === v.value.start ? "text-text-pink" : ""}`}
             >
               {v.label}
             </button>
