@@ -2,30 +2,40 @@
 import Header from "@/components/common/header"
 import IconWithImage from "@/components/profile/icon"
 import { UserProfile } from "@/lib/actions/profile"
-import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
+import { buildImageUrl } from "@/lib/utils"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import LazyImg from "../common/lazy-img"
 export default function SpaceHeader({ data }: { data: UserProfile | undefined }) {
   if (!data) {
     throw new Error()
   }
+  const bgRef = useRef<HTMLDivElement>(null)
   const [isTop, setIsTop] = useState<boolean>(false)
-  useEffect(() => {
-    window.addEventListener("scroll", () => {
-      const refEl = document.getElementById("refEl")
 
-      if (!refEl) return
-      const height = refEl.getBoundingClientRect().top
-      setIsTop(height < 0)
-    })
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsTop(!entry.isIntersecting)
+      },
+      {
+        threshold: 0.1
+      }
+    )
+
+    if (bgRef.current) {
+      observer.observe(bgRef.current)
+    }
+
+    return () => {
+      if (bgRef.current) {
+        observer.unobserve(bgRef.current)
+      }
+    }
   }, [])
-  // const throt = (value: boolean) => {
-  //   isTop !== value && setIsTop(value)
-  // }
   return (
     <div className=" relative h-[200px]">
-      <div className="absolute w-full h-full z-0">
+      <div className="absolute w-full h-full z-0" ref={bgRef}>
         <LazyImg
           style={{ objectFit: "cover" }}
           width={200}
