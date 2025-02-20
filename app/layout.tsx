@@ -49,14 +49,17 @@ export default function RootLayout({
         <title></title>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-[100vh] flex flex-col`}
         suppressHydrationWarning
       >
-        <Providers sid={uid}>
-          {children}
-          {modal}
-          <div id="modal-root" />
-        </Providers>
+        <div className="h-full overflow-y-auto">
+          <Providers sid={uid}>
+            {children}
+            {modal}
+            <div id="modal-root" />
+          </Providers>
+        </div>
+
       </body>
     </html>
   )

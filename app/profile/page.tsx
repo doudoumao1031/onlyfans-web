@@ -7,9 +7,9 @@ import { Suspense } from "react"
 
 export const dynamic = "force-dynamic"
 
-export default  function Page() {
+export default function Page() {
   return (
-    <div>
+    <>
       <Suspense fallback={<MeInfosSkeleton />}>
         <MeInfos />
       </Suspense>
@@ -17,6 +17,6 @@ export default  function Page() {
         <PostsCards />
       </Suspense>
       <StaticFooter />
-    </div>
+    </>
   )
 }
