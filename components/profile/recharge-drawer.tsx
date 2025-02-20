@@ -42,7 +42,6 @@ export default function RechargeDrawer(props: RechargeProps) {
       }
     })
   }
-  // const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   const columns: { title: string; desc: string }[] = [
     { title: "服务", desc: "唯粉充值" },
     { title: "钱包余额", desc: ptBalance.toFixed(2).toString() + " USDT" },
@@ -148,30 +147,37 @@ export default function RechargeDrawer(props: RechargeProps) {
                 setAmount(parseFloat(formattedAmount) || 0)
               }}
             />
-            <button
-              className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal text-text-pink text-base"
-              onTouchEnd={(e) => {
-                e.preventDefault()
-                setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
-              }}
-            >
-              全部
-            </button>
+            {
+              ptBalance > 0 && (
+                <button
+                  className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal text-text-pink text-base"
+                  onTouchEnd={(e) => {
+                    e.preventDefault()
+                    setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
+                  }}
+                >
+                  全部
+                </button>
+              )
+            }
           </div>
           <div className="my-[40px] self-center">
             <button
               type="button"
-              disabled={amount === 0 || amount > ptBalance}
+              /*disabled={amount === 0 || amount > ptBalance}*/
+              disabled={amount === 0}
               className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${
-                amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-pink"
+                amount === 0 ? "bg-[#dddddd]" : "bg-background-pink"
               }`}
               onClick={() => {
-                if (!(amount === 0 || amount > ptBalance)) {
+                /*if (!(amount === 0 || amount > ptBalance)) {*/
+                if (amount !== 0) {
                   handleRecharge(amount)
                 }
               }}
             >
-              {amount > ptBalance ? "充值金额不能大于钱包余额" : "确认充值"}
+              {/*{amount > ptBalance ? "充值金额不能大于钱包余额" : "确认充值"}*/}
+              确认充值
             </button>
           </div>
         </div>
