@@ -12,16 +12,15 @@ import { useState, useMemo } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
 import { postDetail } from "@/lib/actions/profile"
 import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
-import Modal from "@/components/space/modal"
-import RechargeDrawer from "@/components/profile/recharge-drawer"
 import Link from "next/link"
 import { useGlobal } from "@/lib/contexts/global-context"
+import CommonRecharge from "@/components/post/common-recharge"
 
 export default function Page({ postData }: { postData: PostData }) {
   const [postInfo, setPostInfo] = useState<PostData>(postData)
   const { sid } = useGlobal()
   const { showMessage } = useCommonMessageContext()
-  const [isFocus, setIsFocus] = useState<boolean>(postData.user?.following as boolean)
+  const [isFocus, setIsFocus] = useState<boolean>(postInfo.user?.following as boolean)
   const [drawer, setDrawer] = useState<boolean>(false)
   const [payDrawer, setPayDrawer] = useState<boolean>(false)
   const [pay, setPay] = useState<boolean>(false)
@@ -76,8 +75,8 @@ export default function Page({ postData }: { postData: PostData }) {
     setIsFocus(!isFocus)
     try {
       const res = isFocus
-        ? await userDelFollowing({ follow_id: postData?.user.id as number, following_type: 0 })
-        : await userFollowing({ follow_id: postData?.user.id as number, following_type: 0 })
+        ? await userDelFollowing({ follow_id: postInfo?.user.id as number, following_type: 0 })
+        : await userFollowing({ follow_id: postInfo?.user.id as number, following_type: 0 })
       if (!res || res.code !== 0) return setIsFocus(!isFocus)
       showMessage(!isFocus ? "关注成功" : "取消成功")
     } catch (error) {
@@ -86,7 +85,7 @@ export default function Page({ postData }: { postData: PostData }) {
   }
 
   const Header = () => {
-    const { photo, first_name, last_name, username, sub_end_time, id } = postData.user
+    const { photo, first_name, last_name, username, sub_end_time, id } = postInfo.user
     return (
       <div className="flex items-center fixed w-full h-[76px] top-0 left-0 px-4 py-4 bg-white z-[45]">
         <div
@@ -174,6 +173,7 @@ export default function Page({ postData }: { postData: PostData }) {
           userId={postInfo.user.id}
           name={postInfo.user.username}
           free={postInfo.user.sub_price === 0}
+          flush={flush}
           isOpen={drawer}
           setIsOpen={setDrawer}
           setRechargeModel={setVisible}
@@ -181,7 +181,7 @@ export default function Page({ postData }: { postData: PostData }) {
       )}
       {payDrawer && (
         <PostPayDrawer
-          post_id={postData.post.id}
+          post_id={postInfo.post.id}
           amount={price}
           flush={flush}
           isOpen={payDrawer}
@@ -189,31 +189,7 @@ export default function Page({ postData }: { postData: PostData }) {
           setRechargeModel={setVisible}
         />
       )}
-      <Modal
-        visible={visible}
-        cancel={() => {
-          setVisible(false)
-        }}
-        type={"modal"}
-        content={<div className="p-4 pb-6">余额不足</div>}
-        okText="充值"
-        confirm={() => {
-          setVisible(false)
-          setRecharge(true)
-        }}
-      />
-      {recharge && (
-        <RechargeDrawer isOpen={recharge} setIsOpen={setRecharge} setWfAmount={() => {}}>
-          <div
-            className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
-            onTouchEnd={() => {
-              setRecharge(true)
-            }}
-          >
-            充值
-          </div>
-        </RechargeDrawer>
-      )}
+      <CommonRecharge visible={visible} setVisible={setVisible} recharge={recharge} setRecharge={setRecharge}/>
     </div>
   )
 }

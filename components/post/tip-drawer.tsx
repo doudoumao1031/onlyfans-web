@@ -4,20 +4,24 @@ import React,{ useState } from "react"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import CheckboxLabel from "@/components/user/checkbox-label"
 import { addPostTip, starPost } from "@/lib"
-import Modal from "@/components/space/modal"
 import FormDrawer from "@/components/common/form-drawer"
 import  { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import CommonRecharge from "@/components/post/common-recharge"
+
 interface TipDrawerProps {
   postId: number
   refresh: (amount: number) => void
   tipStar: (star: boolean) => void
   children?: React.ReactNode
 }
-const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId, refresh, tipStar }) => {
+
+export default function TipDrawer(props: TipDrawerProps) {
+  const { postId, refresh, tipStar, children } = props
   const [amount, setAmount] = useState<number>(0)
   const [check, setCheck] = useState<boolean>(true)
   const [visible, setVisible] = useState<boolean>(false)
+  const [recharge, setRecharge] = useState<boolean>(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
   const { showMessage } = useCommonMessageContext()
   const { withLoading } = useLoadingHandler({
@@ -36,11 +40,9 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId, refresh, tipSta
                 (res) => {
                   if (res) {
                     tipStar(true)
-                    console.log("tipStar success")
                   }
                 }
               )
-              console.log("star success")
             }
             setDrawerOpen(false)
             showMessage("打赏成功", "success", { afterDuration: () => {refresh(amount) }, duration: 1500 })
@@ -64,15 +66,7 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId, refresh, tipSta
   }
   return (
     <>
-      <Modal
-        visible={visible}
-        cancel={() => {
-          setVisible(false)
-        }}
-        type={"modal"}
-        content={<div className="p-4 pb-6">余额不足</div>}
-        okText="充值"
-      />
+      <CommonRecharge visible={visible} setVisible={setVisible} recharge={recharge} setRecharge={setRecharge} />
       <button
         onTouchEnd={() => {
           setDrawerOpen(true)
@@ -156,14 +150,18 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId, refresh, tipSta
 
           <div className="my-[40px]  self-center">
             <button
-              disabled={amount == 0}
-              className="w-[295px] h-[49px] p-2 bg-background-pink text-white text-base font-medium rounded-full"
-              onTouchEnd={(event) => {
-                event.preventDefault()
-                handTip()
+              type={"button"}
+              disabled={amount === 0 || !amount}
+              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${
+                amount === 0 || !amount ? "bg-[#dddddd]" : "bg-background-pink"
+              }`}
+              onTouchEnd={() => {
+                if (amount > 0) {
+                  handTip()
+                }
               }}
             >
-              确认支付{amount}USDT
+              { amount > 0 ? `确认支付${amount}USDT`: "确认支付"}
             </button>
           </div>
         </div>
@@ -171,5 +169,3 @@ const TipDrawer: React.FC<TipDrawerProps> = ({ children, postId, refresh, tipSta
     </>
   )
 }
-
-export default TipDrawer

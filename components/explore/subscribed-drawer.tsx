@@ -8,6 +8,8 @@ import {
 import { useState, useMemo, useEffect } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+
 interface SubscribedDrawerProps {
   userId: number
   name: string
@@ -15,10 +17,12 @@ interface SubscribedDrawerProps {
   isOpen?: boolean
   setIsOpen?: (val: boolean) => void
   setRechargeModel?: (val: boolean) => void
+  flush?: () => void //订阅成功刷新
   children?: React.ReactNode
 }
+
 export default function SubscribedDrawer(props: SubscribedDrawerProps) {
-  const { userId, name, free, isOpen, setIsOpen, setRechargeModel, children } = props
+  const { userId, name, free, isOpen, setIsOpen, setRechargeModel, flush, children } = props
   const { showMessage  } = useCommonMessageContext()
   const [drawer, setDrawer] = useState<boolean>(false)
   const [items, setItems] = useState<DiscountInfo[]>([])
@@ -73,26 +77,35 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
       }
     }
   }, [discount])
-  const handleSubmit = async () => {
-    const data = {
-      user_id: userId,
-      price: free ? 0 : Number(amount),
-      id: free ? 0 : discount?.id ?? 0
+
+  const { withLoading } = useLoadingHandler({
+    onError: (error) => {
+      console.error("post pay error:", error)
+      showMessage("订阅失败")
     }
-    await addSubOrder(data).then((result) => {
-      if (result && result.code === 0) {
-        console.log("订阅成功")
-        setIsOpen?.(false)
-        setDrawer(false)
-        showMessage("订阅成功", "success")
-      } else if (result?.message === "NOT_ENOUGH_BALANCE") {
-        setDrawer(false)
-        setIsOpen?.(false)
-        setRechargeModel?.(true)
-      } else {
-        console.log("订阅失败:", result?.message)
-        showMessage("订阅失败")
+  })
+  async function handleSubmit() {
+    await withLoading(async () => {
+      const data = {
+        user_id: userId,
+        price: free ? 0 : Number(amount),
+        id: free ? 0 : discount?.id ?? 0
       }
+      await addSubOrder(data).then((result) => {
+        if (result && result.code === 0) {
+          console.log("订阅成功")
+          setIsOpen?.(false)
+          setDrawer(false)
+          showMessage("订阅成功", "success", { afterDuration: () => flush?.() })
+        } else if (result?.message === "NOT_ENOUGH_BALANCE") {
+          setDrawer(false)
+          setIsOpen?.(false)
+          setRechargeModel?.(true)
+        } else {
+          console.log("订阅失败:", result?.message)
+          showMessage("订阅失败")
+        }
+      })
     })
   }
   return (

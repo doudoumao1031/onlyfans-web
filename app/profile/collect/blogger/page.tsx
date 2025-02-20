@@ -5,18 +5,14 @@ import { ListEnd, ListError, ListLoading } from "@/components/explore/list-state
 import {
   BloggerInfo,
   PageResponse,
-  PostData,
-  userCollectionPosts,
   userCollectionUsers
 } from "@/lib"
-import Image from "next/image"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import Link from "next/link"
 import { Fragment, useEffect, useState } from "react"
 import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
 import IconWithImage from "@/components/profile/icon"
 import CommonAvatar from "@/components/common/common-avatar"
-import SubscribedButton from "@/components/explore/subscribed-button"
 
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<BloggerInfo> | null>()

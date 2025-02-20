@@ -3,6 +3,7 @@ import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { addPostPayOrder } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 interface PostPayDrawerProps {
   post_id: number
   amount: number
@@ -13,23 +14,31 @@ interface PostPayDrawerProps {
 }
 export default function PostPayDrawer(props: PostPayDrawerProps) {
   const { post_id, amount, flush, isOpen, setIsOpen, setRechargeModel } = props
-  const { showMessage  } = useCommonMessageContext()
+  const { showMessage } = useCommonMessageContext()
+  const { withLoading } = useLoadingHandler({
+    onError: (error) => {
+      console.error("post pay error:", error)
+      showMessage("支付失败")
+    }
+  })
 
-  const handleSubmit = async () => {
-    await addPostPayOrder({ post_id: post_id, amount: amount }).then((result) => {
-      if (result && result.code === 0) {
-        console.log("支付成功")
-        flush()
-        setIsOpen(false)
-        showMessage("支付成功", "success", { afterDuration: () => flush() })
-      } else if (result?.message === "NOT_ENOUGH_BALANCE") {
-        setIsOpen(false)
-        setRechargeModel(true)
-      } else {
-        setIsOpen(false)
-        console.log("支付失败:", result?.message)
-        showMessage("支付失败")
-      }
+  async function handleSubmit () {
+    await withLoading(async () => {
+      await addPostPayOrder({ post_id: post_id, amount: amount }).then((result) => {
+        if (result && result.code === 0) {
+          console.log("支付成功")
+          flush()
+          setIsOpen(false)
+          showMessage("支付成功", "success", { afterDuration: () => flush() })
+        } else if (result?.message === "NOT_ENOUGH_BALANCE") {
+          setIsOpen(false)
+          setRechargeModel(true)
+        } else {
+          setIsOpen(false)
+          console.log("支付失败:", result?.message)
+          showMessage("支付失败")
+        }
+      })
     })
   }
   return (
