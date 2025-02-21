@@ -460,11 +460,11 @@ function SubscribeBundle({ items,initSettings, userId, updateItems,basePrice }: 
                         className="text-[#6D7781]"
                       >(平均${calcAvg(discount.price, discount.month_count)}/月)</span>
                     </button>
-                    <Switch className={"custom-switch"} checked={field.value.item_status} onCheckedChange={(value) => {
+                    <Switch className={"custom-switch"} checked={!field.value.item_status} onCheckedChange={(value) => {
                       field.onChange({
                         ...field.value,
-                        item_status: value,
-                        discount_status: !value ? false : field.value.discount_status
+                        item_status: !value,
+                        discount_status: !value ? true : field.value.discount_status
                       })
                       mockSubmit()
                     }}
@@ -545,12 +545,12 @@ function PromotionalActivities({ updateItems, items }: {
                   {dayjs(discount.discount_start_time * 1000).format(DATE_TIME_FORMAT)} {dayjs(discount.discount_end_time * 1000).format(DATE_TIME_FORMAT)}
                 </div>
               </div>
-              <Switch disabled={!discount.item_status} className={"custom-switch"}
-                checked={discount.discount_status} onCheckedChange={(value) => {
+              <Switch disabled={discount.item_status} className={"custom-switch"}
+                checked={!discount.discount_status} onCheckedChange={(value) => {
                   const updateIndex = items.findIndex(i => i.id === discount.id)
                   const arr = [...items]
                   const item = arr[updateIndex]
-                  item.discount_status = value
+                  item.discount_status = !value
                   arr.splice(updateIndex,1,item)
                   updateItems(arr)
                 }}
