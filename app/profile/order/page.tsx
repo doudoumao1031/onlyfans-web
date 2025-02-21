@@ -357,7 +357,7 @@ function TopLabelWrapper({ label, children, errorMessage }: {
       >
         {children}
       </section>
-      {errorMessage && <div className="text-red-600 text-xs px-4 mt-1.5">{errorMessage}</div>}
+      {errorMessage && <div className="text-pink text-xs px-4 mt-1.5">{errorMessage}</div>}
     </section>
   )
 }
@@ -629,7 +629,7 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
                   }} name={"price"}
                   />
                   {formState.errors.price?.message &&
-                    <div className={"text-xs text-red-600 mt-1.5 px-1"}>{formState.errors.price.message}</div>}
+                    <div className={"text-xs text-pink mt-1.5 px-1"}>{formState.errors.price.message}</div>}
                 </div>
               </div>
               <div className="grid grid-cols-2 text-base border-t border-[#ddd]">

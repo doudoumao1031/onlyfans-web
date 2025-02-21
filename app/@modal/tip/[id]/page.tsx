@@ -114,7 +114,7 @@ export default function Page() {
             </div>
 
             <section className={`${error ? "block" : "hidden"}`}>
-              <div className="text-red-500 text-sm">
+              <div className="text-pink text-sm">
                 {error}
               </div>
             </section>

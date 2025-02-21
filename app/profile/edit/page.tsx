@@ -29,7 +29,7 @@ export default function Page() {
     resolver: zodResolver(
       z.object({
         username: z.string({ message: "请输入昵称" }),
-        about: z.string().optional(),
+        about: z.string().max(999,"最多999字").optional(),
         location: z.string().optional(),
         photo: z.string().optional(),
         top_info: z.string().optional(),
@@ -97,8 +97,8 @@ export default function Page() {
           })
         })}
       >
-        <div className={"w-full left-0 top-0 absolute z-20"}>
-          <Header right={<button type={"submit"}>保存</button>} title="编辑个人信息" />
+        <div className={"w-full left-0 top-0 absolute z-20 text-white"}>
+          <Header right={<button type={"submit"}>保存</button>} title="上传背景图" backColor={"#fff"}/>
         </div>
         <div className="profile-content bg-[url('/demo/user_bg.png')] relative bg-cover" style={{ backgroundImage: `url(${IMAGE_PREFIX}${formValues.back_img})` }}>
           <input
@@ -151,11 +151,14 @@ export default function Page() {
               <section>
                 <Controller
                   control={control}
-                  render={({ field }) => (
+                  render={({ field,fieldState }) => (
                     <InputWithLabel
+                      errorMessage={fieldState.error?.message}
                       onInputChange={field.onChange}
                       value={field.value}
                       label={"介绍"}
+                      type={"textarea"}
+                      rows={5}
                     />
                   )}
                   name={"about"}

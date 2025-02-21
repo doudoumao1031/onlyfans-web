@@ -196,7 +196,7 @@ const AddVoteModal = ({
             }}
             name="title"
           />
-          <div className=" absolute left-8 bottom-0 text-xs text-red-600">
+          <div className=" absolute left-8 bottom-0 text-xs text-pink">
             {formState.errors.title?.message}
           </div>
         </section>
@@ -204,7 +204,7 @@ const AddVoteModal = ({
           <h3 className="font-medium text-base mb-2">
             投票内容
             {watch("items")?.filter(item => !!item.content)?.length < 2 && (
-              <span className="text-xs text-red-600 ml-2 font-normal">最少2个选项</span>
+              <span className="text-xs text-pink ml-2 font-normal">最少2个选项</span>
             )}
           </h3>
           <section className="flex flex-col gap-5 mt-2">
@@ -505,7 +505,7 @@ const ReadSettings = ({
                     />
                   </div>
                 </section>
-                <section className="text-xs text-red-600 absolute right-4 bottom-0">
+                <section className="text-xs text-pink absolute right-4 bottom-0">
                   {errors.priceList?.[index]?.price?.message}
                 </section>
               </section>
@@ -928,7 +928,7 @@ const EditPageContent = () => {
               }
             }}
           />
-          <div className="absolute left-4 bottom-1.5 text-red-600 text-xs">
+          <div className="absolute left-4 bottom-1.5 text-pink text-xs">
             {formState?.errors?.post?.title?.message}
           </div>
         </section>

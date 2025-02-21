@@ -81,7 +81,7 @@ export default function Page() {
             placeholder={"Hi，我是用户的昵称，感谢您的订阅"} rows={4}
           />
           {replyForm.formState?.errors?.sub_reply?.message &&
-            <div className={"text-xs text-red-600"}>{replyForm.formState.errors.sub_reply.message}</div>}
+            <div className={"text-xs text-pink"}>{replyForm.formState.errors.sub_reply.message}</div>}
         </section>
       </form>
     </>
