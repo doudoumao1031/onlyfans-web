@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import localFont from "next/font/local"
 import "./globals.css"
+import "./profile.scss"
 import React from "react"
 import Providers from "@/lib/providers/providers"
 

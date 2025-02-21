@@ -2,7 +2,7 @@ import React from "react"
 
 export function ListError() {
   return (
-    <div className="text-center mt-4 text-red-500">
+    <div className="text-center mt-4 text-pink">
       Failed to load data. Please try again.
     </div>
   )

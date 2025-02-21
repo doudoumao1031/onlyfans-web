@@ -171,7 +171,7 @@ const Withdrawal = ({
               />
               <span>USDT</span>
             </span>
-            {/*<section className={"absolute bottom-[-12px] text-red-600 text-xs"}>*/}
+            {/*<section className={"absolute bottom-[-12px] text-pink text-xs"}>*/}
             {/*  {withdrawalForm.formState.errors?.amount?.message}*/}
             {/*</section>*/}
           </div>

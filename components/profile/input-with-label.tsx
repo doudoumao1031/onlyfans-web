@@ -25,13 +25,16 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   labelClass?: string,
   iconSize?: number,
   onInputChange?: (value: InputValueType) => void,
+  type?: "text" | "textarea",
+  rows?: number
 }
 
+
 export default function InputWithLabel(props: InputProps) {
-  const { label, name, disabled, onInputChange, description, value, options, errorMessage, iconSize } = props
+  const { label,type= "text", rows = 3, name, disabled, onInputChange, description, value, options, errorMessage, iconSize } = props
   // const [val, setVal] = useState<InputValueType>(value ?? "")
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef(null)
   const isSelectInput = useMemo(() => {
     return options !== undefined && Array.isArray(options)
   }, [options])
@@ -54,6 +57,8 @@ export default function InputWithLabel(props: InputProps) {
     if (!positionInCenter) return
     setPositionInCenter(false)
     setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       inputRef?.current?.focus?.()
     }, 100)
   }, [positionInCenter])
@@ -106,7 +111,7 @@ export default function InputWithLabel(props: InputProps) {
             disabled ? "bg-[#F7F7F7]" : "",)
         }
       >
-        {!isSelectInput && (
+        {!isSelectInput && type === "text" && (
           <input ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
             onChange={event => {
               const eventValue = (event.target as HTMLInputElement).value
@@ -118,9 +123,19 @@ export default function InputWithLabel(props: InputProps) {
             )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
           />
         )}
+        {!isSelectInput && type === "textarea" && (
+          <textarea ref={inputRef} onBlur={inputBlur} rows={rows} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
+            onChange={event => {
+              const eventValue = (event.target as HTMLTextAreaElement).value
+              // setVal(eventValue)
+              onInputChange?.(eventValue)
+            }} disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
+              "flex-1 w-full font-medium",
+            )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
+          />
+        )}
         {isSelectInput && (
           <>
-
             <SheetSelect
               isOpen={isOpen}
               setIsOpen={setIsOpen}
@@ -139,7 +154,7 @@ export default function InputWithLabel(props: InputProps) {
           </>
         )}
       </section>
-      {errorMessage && <div className="text-red-600 text-xs px-4 mt-1.5">{errorMessage}</div>}
+      {errorMessage && <div className="text-pink text-xs px-4 mt-1.5">{errorMessage}</div>}
       {description && !errorMessage && <section className="text-[#6D7781] text-xs px-4 mt-1.5">{description}</section>}
     </section>
   )
