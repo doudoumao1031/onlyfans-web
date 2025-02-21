@@ -42,13 +42,14 @@ import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 
 const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 
-const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, openState, setOpenState }: {
+const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, openState, setOpenState ,basePrice }: {
   callback: (data: DiscountInfo) => void,
   userId: number,
   currentDiscounts: AddBundleDiscount[],
   initData?: DiscountInfo,
   openState: boolean,
-  setOpenState: (val: boolean) => void
+  setOpenState: (val: boolean) => void,
+  basePrice: number
 }) => {
 
   const hasSub = currentDiscounts.filter(item => item.month_count !== undefined).map(item => item.month_count)
@@ -81,7 +82,6 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
       { label: "12个月", value: "12" }
     ].filter(item => !hasSub.includes(Number(item.value)))
   }, [hasSub])
-
 
   return (
     <Drawer open={openState} onOpenChange={setOpenState}>
@@ -126,7 +126,10 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
                     <InputWithLabel placeholder={"订阅时限"} value={`${field.value}个月`} disabled/>
                   ) : (
                     <InputWithLabel errorMessage={fieldState.error?.message} placeholder={"订阅时限"}
-                      onInputChange={field.onChange}
+                      onInputChange={(value) => {
+                        field.onChange(value)
+                        form.setValue("price", Number((Number(value) * basePrice).toFixed(2)))
+                      }}
                       options={monthSelections}
                       value={field.value ?? ""}
                     />
@@ -140,7 +143,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
                     errorMessage={form.formState.errors?.price?.message} onBlur={event => {
                       field.onChange(Number(event.target.value).toFixed(2))
                     }}
-                    value={field.value} onInputChange={field.onChange} placeholder={"订阅价格"}
+                    value={field.value ||""} onInputChange={field.onChange} placeholder={"订阅价格"}
                     description={"最小价格$1.99 USDT，最高价格不超过999.99 价格保留小数点2位数"}
                   />
                 )} name={"price"} control={form.control}
@@ -362,11 +365,12 @@ function TopLabelWrapper({ label, children, errorMessage }: {
   )
 }
 
-function SubscribeBundle({ items,initSettings, userId, updateItems }: {
+function SubscribeBundle({ items,initSettings, userId, updateItems,basePrice }: {
   items: DiscountInfo[],
   initSettings: DiscountInfo[]
   userId: number,
-  updateItems: (items: DiscountInfo[]) => void
+  updateItems: (items: DiscountInfo[]) => void,
+  basePrice: number
 }) {
   const bundleForm = useForm<{ list: DiscountInfo[] }>({
     mode: "all",
@@ -422,6 +426,7 @@ function SubscribeBundle({ items,initSettings, userId, updateItems }: {
         callback={handleEditModalCallback}
         userId={userId}
         currentDiscounts={fields}
+        basePrice={basePrice}
       />
       <form>
         <section className="pl-4 pr-4">
@@ -800,7 +805,7 @@ export default function Page() {
           </form>
         </section>
         {userInfo && realPrice > 0 && (
-          <SubscribeBundle updateItems={updateItems} items={baseFormValues.items} initSettings={baseFormValues?.items ?? []}
+          <SubscribeBundle basePrice={realPrice} updateItems={updateItems} items={baseFormValues.items} initSettings={baseFormValues?.items ?? []}
             userId={userInfo?.id}
           />
         )}
