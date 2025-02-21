@@ -31,7 +31,8 @@ export default function Post({
   isInfoPage?: boolean
 }) {
   const { sid } = useGlobal()
-  const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } = data
+  const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
+    data
   const { collection_count, comment_count, share_count, thumbs_up_count, tip_count } = post_metric
   const [showComments, setShowComments] = useState(isInfoPage)
   const [comments, setComments] = useState<CommentInfo[]>()
@@ -60,7 +61,7 @@ export default function Post({
   }, [post.id, isInfoPage])
 
   return (
-    <div className="w-full flex flex-col gap-2 mb-8">
+    <div className="w-full flex flex-col gap-2 mb-2">
       {!isInfoPage && <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} />}
 
       <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
@@ -69,7 +70,7 @@ export default function Post({
         <Media data={post_attachment} post={post} user={user} />
       )}
       {hasSubscribe && mention_user && mention_user.length > 0 && (
-        <div className={"grid gap-1"}>
+        <div className={"grid gap-2"}>
           {mention_user.map((user) => (
             <Subscribe key={user.id} user={user} />
           ))}
@@ -92,8 +93,8 @@ export default function Post({
         </div>
       )}
       {hasVote && showVote && <Vote postId={post.id} />}
-      <div className="flex gap-4 justify-between pt-4 pb-6 border-b border-black/5">
-        <Like count={thumbs_up_count} liked={star} postId={post.id} outLike={!star && tipStar}/>
+      <div className="flex gap-4 justify-between pt-2 pb-4 border-b border-black/5">
+        <Like count={thumbs_up_count} liked={star} postId={post.id} outLike={!star && tipStar} />
         {isInfoPage ? (
           <CommentStats count={comment_count} onClick={toggleComments} />
         ) : (
@@ -101,7 +102,7 @@ export default function Post({
             <CommentStats count={comment_count} />
           </Link>
         )}
-        <Tip count={tip_count} postId={post.id} self={sid === user.id} tipStar={setTipStar}/>
+        <Tip count={tip_count} postId={post.id} self={sid === user.id} tipStar={setTipStar} />
         <Share count={share_count} postId={post.id} />
         <Save count={collection_count} saved={collection} postId={post.id} />
       </div>
