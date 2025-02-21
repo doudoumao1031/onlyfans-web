@@ -10,7 +10,6 @@ import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import Link from "next/link"
 import { Fragment, useEffect, useMemo, useState } from "react"
 
-
 const filterTypes = [
   { label: "最新发布", value: 0 },
   { label: "总播放量", value: 1 },
@@ -35,7 +34,7 @@ export default function Page() {
     setInitData(res)
   }
   const title = useMemo(() => {
-    const cur = filterTypes.find(v => v.value === type)
+    const cur = filterTypes.find((v) => v.value === type)
     return cur ? cur.label : "最新发布"
   }, [type])
 
@@ -48,7 +47,7 @@ export default function Page() {
     }
   })
   return (
-    <div className="">
+    <div className="w-full h-[calc(100vh-148px)]">
       {initData && (
         <InfiniteScroll<PostData>
           className={"h-full w-full mx-auto"}
@@ -88,6 +87,5 @@ export default function Page() {
         </InfiniteScroll>
       )}
     </div>
-
   )
 }
