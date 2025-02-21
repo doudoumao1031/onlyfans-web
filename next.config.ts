@@ -37,7 +37,13 @@ const nextConfig: NextConfig = {
     ],
     dangerouslyAllowSVG: true,
     formats: ["image/avif", "image/webp"]
-  }
+  },
+  i18n: {
+    locales: ["en", "zh"],
+    defaultLocale: "zh",
+    localeDetection: false
+  },
+  trailingSlash: true
 }
 
 export default nextConfig

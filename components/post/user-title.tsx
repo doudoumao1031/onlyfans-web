@@ -18,7 +18,7 @@ export default function UserTitle({
   return (
     <div className={"flex justify-between"}>
       <Link href={`/space/${user.id}/feed`}>
-        <div className="flex gap-4 px-3">
+        <div className="flex gap-4 ">
           <div>
             <CommonAvatar photoFileId={photo} size={50} />
           </div>

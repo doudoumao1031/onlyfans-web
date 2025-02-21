@@ -43,7 +43,7 @@ export default function Page() {
     }
   })
   return (
-    <div className="">
+    <div className="w-full h-full">
       {initData && (
         <InfiniteScroll<PostData>
           className={"h-full w-full mx-auto"}

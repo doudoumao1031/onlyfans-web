@@ -58,7 +58,7 @@ export default function Page() {
   })
   const [curYear, curMonth] = date.split("-")
   return (
-    <div className="">
+    <div className="w-full h-[calc(100vh-153px)]">
       {initData && (
         <InfiniteScroll<StatementResp>
           className={"h-full w-full mx-auto"}
