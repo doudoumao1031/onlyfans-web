@@ -47,7 +47,7 @@ export default function FeedList() {
     }
   })
   return (
-    <div className="">
+    <div className="w-full h-full">
       {initData && (
         <InfiniteScroll<PostData>
           className={"h-full w-full mx-auto"}

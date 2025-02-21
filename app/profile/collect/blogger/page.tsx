@@ -43,7 +43,7 @@ export default function Page() {
     }
   })
   return (
-    <div className="mt-4 px-4">
+    <div className="mt-4 px-4  h-[calc(100vh-145px)]">
       {initData && (
         <InfiniteScroll<BloggerInfo>
           className={"h-full w-full mx-auto"}
