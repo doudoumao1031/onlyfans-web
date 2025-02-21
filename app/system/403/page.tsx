@@ -109,6 +109,7 @@ function ErrorContent() {
       if (token) {
         document.cookie = `${USER_KEY}=${token}; path=/; secure; samesite=lax`
         document.cookie = `${TOKEN_KEY}=${token}; path=/; secure; samesite=lax`
+        setSid(Number(token))
         await router.push(redirectPath ?? "/explore/feed")
         return
       }

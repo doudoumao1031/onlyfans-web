@@ -9,6 +9,7 @@ import { useState, useMemo, useEffect } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import LoadingPage from "@/components/common/loading-page"
 
 interface SubscribedDrawerProps {
   userId: number
@@ -28,10 +29,12 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
   const [items, setItems] = useState<DiscountInfo[]>([])
   const [discount, setDiscount] = useState<DiscountInfo>()
   const [amount, setAmount] = useState<number>(0)
+  const [loading, setLoading] = useState<boolean>(false)
   useEffect(() => {
     getSettingData()
   }, [])
-  const getSettingData = async () => {
+  async function getSettingData () {
+    setLoading(true)
     try {
       const settings = await viewUserSubscribeSetting({ user_id: userId })
       if (settings?.items) {
@@ -52,6 +55,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
         if (settings?.items) setItems(list)
       }
     } finally {
+      setLoading(false)
     }
   }
   const showDiscount = (discount: DiscountInfo | undefined) => {
@@ -155,51 +159,56 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
       >
         <input hidden={true} name="user_id" defaultValue={userId} />
         <div className="flex flex-col items-center text-black text-2xl bg-slate-50">
-          <ToggleGroupSubscribed
-            type="single"
-            variant="default"
-            id="select_pirce"
-            defaultValue={discount?.id + Math.random().toString(36).substring(2, 9)}
-            className="w-full flex justify-around mt-[20px] px-4"
-            onValueChange={(value) => {
-              if (value) {
-                setDiscount(items.find((item) => item.id === Number(value)) ?? items[0])
-              } else {
-                setDiscount(undefined)
-              }
-            }}
-          >
-            {items.map((item) => (
-              <ToggleGroupSubscribedItem key={item.id} value={String(item.id)}>
-                <div className="relative h-full">
-                  <div className="h-full flex flex-col justify-center items-center text-black">
-                    <span className="text-nowrap text-xs">{item.month_count}个月</span>
-                    <span
-                      className={`text-nowrap text-xl my-4 ${
-                        item.id === discount?.id ? "text-text-pink" : "text-black"
-                      }`}
-                    >
-                      ${item.discount_price}
-                    </span>
-                    <span className="text-nowrap text-xs block">
-                      {showDiscount(item) ? (
-                        <s className="text-xs text-gray-500">${item.price}</s>
-                      ) : (
-                        <span>&nbsp;</span>
-                      )}
-                    </span>
-                  </div>
-                  {showDiscount(item) && (
-                    <div className="absolute bg-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center">
-                      <span className="text-white text-xs text-center">
-                        {item.discount_per}% off
+          {loading && (
+            <LoadingPage height={"h-18"} />
+          )}
+          {!loading && (
+            <ToggleGroupSubscribed
+              type="single"
+              variant="default"
+              id="select_pirce"
+              defaultValue={discount?.id + Math.random().toString(36).substring(2, 9)}
+              className="w-full mt-[20px] px-4 grid grid-cols-3 gap-3"
+              onValueChange={(value) => {
+                if (value) {
+                  setDiscount(items.find((item) => item.id === Number(value)) ?? items[0])
+                } else {
+                  setDiscount(undefined)
+                }
+              }}
+            >
+              {items.map((item) => (
+                <ToggleGroupSubscribedItem key={item.id} value={String(item.id)}>
+                  <div className="relative w-full col-span-3 gap-4">
+                    <div className="h-full flex flex-col justify-center items-center text-black">
+                      <span className="text-nowrap text-xs">{item.month_count}个月</span>
+                      <span
+                        className={`text-nowrap text-xl my-4 ${
+                          item.id === discount?.id ? "text-text-pink" : "text-black"
+                        }`}
+                      >
+                        ${item.discount_price}
+                      </span>
+                      <span className="text-nowrap text-xs block">
+                        {showDiscount(item) ? (
+                          <s className="text-xs text-gray-500">${item.price}</s>
+                        ) : (
+                          <span>&nbsp;</span>
+                        )}
                       </span>
                     </div>
-                  )}
-                </div>
-              </ToggleGroupSubscribedItem>
-            ))}
-          </ToggleGroupSubscribed>
+                    {showDiscount(item) && (
+                      <div className="absolute bg-orange h-4 w-16 -top-9 left-0 rounded-t-full rounded-br-full flex justify-center items-center">
+                        <span className="text-white text-xs text-center">
+                          {item.discount_per}% off
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </ToggleGroupSubscribedItem>
+              ))}
+            </ToggleGroupSubscribed>
+          )}
           <div className="my-[40px]  self-center">
             <div className="relative">
               <button

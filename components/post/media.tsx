@@ -36,10 +36,12 @@ export default function Media({
   )
   return (
     <>
+      {/*订阅查看并且未订阅 或者 付费观看*/}
       {((post.visibility === 1 && !user.sub) || post.visibility === 2) && (
         <div className="w-full h-[200px] relative">
+          {/*帖子详情正常查看 ｜ 推荐/空间点击媒体到帖子详情*/}
           {path.startsWith("/postInfo") && content}
-          {!path.startsWith("/postInfo") && (
+          {!path.startsWith("/postInfo") && !user.sub && (
             <Link href={`/postInfo/${post.id}`}>
               {content}
             </Link>
@@ -60,11 +62,14 @@ export default function Media({
       {(post.visibility === 0 || (post.visibility === 1 && user.sub)) && (
         <div className="grid grid-cols-3 gap-2 relative">
           {data.map(({ file_id, file_type, thumb_id }, i) => {
+            const toDetail = !path.startsWith("/postInfo") && ((user.sub_price > 0 && !user.following) || (user.sub_price === 0 && !user.sub))
+            /*订阅需要付费 && 帖子无需付费 => 只需要关注则可查看 */
             return (
               <Link
                 key={i}
-                href={`/media/${file_type === FileType.Video ? "video" : "image"}/${
-                  file_type === FileType.Video ? showIds : showIds + "_" + i
+                href={toDetail ? `/postInfo/${post.id}` : `/media/${file_type === FileType.Video
+                  ? "video" : "image"}/${file_type === FileType.Video
+                  ? showIds : showIds + "_" + i
                 }`}
                 className={file_type === FileType.Video ? "col-span-3" : "block"}
               >

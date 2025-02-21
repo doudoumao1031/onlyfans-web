@@ -15,7 +15,7 @@ const toggleVariants = cva(
         pink: "data-[state=on]:text-text-pink"
       },
       size: {
-        default: "h-36 w-[30%]",
+        default: "h-36",
         sm: "h-8 px-1.5 min-w-8",
         lg: "h-10 px-2.5 min-w-10"
       }

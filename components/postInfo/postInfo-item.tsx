@@ -15,6 +15,7 @@ import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
 import Link from "next/link"
 import { useGlobal } from "@/lib/contexts/global-context"
 import CommonRecharge from "@/components/post/common-recharge"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 
 export default function Page({ postData }: { postData: PostData }) {
   const [postInfo, setPostInfo] = useState<PostData>(postData)
@@ -24,6 +25,7 @@ export default function Page({ postData }: { postData: PostData }) {
   const [drawer, setDrawer] = useState<boolean>(false)
   const [payDrawer, setPayDrawer] = useState<boolean>(false)
   const [pay, setPay] = useState<boolean>(false)
+  const [follow, setFollow] = useState<boolean>(false)
   const [price, setPrice] = useState<number>(0)
   const [visible, setVisible] = useState<boolean>(false)
   const [recharge, setRecharge] = useState<boolean>(false)
@@ -34,7 +36,7 @@ export default function Page({ postData }: { postData: PostData }) {
       setBtnText("")
       return
     }
-    const { sub } = postInfo.user
+    const { sub, following, sub_price } = postInfo.user
     const { visibility } = postInfo.post
     postInfo.post_price.some((item) => {
       if (item.user_type === 1 && sub) {
@@ -56,9 +58,14 @@ export default function Page({ postData }: { postData: PostData }) {
     } else if (visibility === 1 && !sub) {
       setPay(false)
       setBtnText("订阅后浏览博主的帖子")
-    } else if (visibility === 0 && !sub) {
-      setPay(false)
-      setBtnText("订阅后解锁更多内容")
+    } else if (visibility === 0) {
+      if (sub_price > 0 && !following) {
+        setFollow(true)
+        setBtnText("关注后解锁更多内容")
+      } else if (!sub) {
+        setPay(false)
+        setBtnText("订阅后解锁更多内容")
+      }
     } else {
       setPay(false)
       setBtnText("")
@@ -71,21 +78,30 @@ export default function Page({ postData }: { postData: PostData }) {
     setPostInfo(result)
   }
 
+  const { withLoading } = useLoadingHandler({
+    onError: (error) => {
+      console.error("follow error:", error)
+      showMessage("操作失败")
+    }
+  })
+
   const handleFollowing = async () => {
-    setIsFocus(!isFocus)
-    try {
+    await withLoading(async () => {
+      setIsFocus(!isFocus)
       const res = isFocus
         ? await userDelFollowing({ follow_id: postInfo?.user.id as number, following_type: 0 })
         : await userFollowing({ follow_id: postInfo?.user.id as number, following_type: 0 })
       if (!res || res.code !== 0) return setIsFocus(!isFocus)
+      if (!isFocus) {
+        setFollow(false)
+      }
+      flush()
       showMessage(!isFocus ? "关注成功" : "取消成功")
-    } catch (error) {
-      console.log("FETCH_ERROR,", error)
-    }
+    })
   }
 
   const Header = () => {
-    const { photo, first_name, last_name, username, sub_end_time, id } = postInfo.user
+    const { photo, first_name, last_name, username, sub_end_time, id, sub } = postInfo.user
     return (
       <div className="flex items-center fixed w-full h-[76px] top-0 left-0 px-4 py-4 bg-white z-[45]">
         <div
@@ -135,7 +151,7 @@ export default function Page({ postData }: { postData: PostData }) {
               />
               <span className="ml-1">{isFocus ? "已关注" : "关注"}</span>
             </div>
-            {isFocus && (
+            {sub && (
               <div className="text-[10px] text-text-pink mt-1">
                 订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}天
               </div>
@@ -158,6 +174,8 @@ export default function Page({ postData }: { postData: PostData }) {
               e.preventDefault()
               if (pay) {
                 setPayDrawer(true)
+              } else if (follow) {
+                handleFollowing()
               } else {
                 setDrawer(true)
               }

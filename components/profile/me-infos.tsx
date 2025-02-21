@@ -4,7 +4,7 @@ import IconWithImage from "@/components/profile/icon"
 import Link from "next/link"
 import { userProfile } from "@/lib/actions/profile"
 import { userWallet } from "@/lib"
-import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
+import { buildImageUrl } from "@/lib/utils"
 import FoldingDescription from "@/components/profile/folding-description"
 import RechargePanel from "@/components/profile/recharge-panel"
 import LazyImg from "../common/lazy-img"
@@ -87,7 +87,7 @@ export default async function Page() {
             </Link>
           </h1>
           <div className="text-center text-[#6D7781] text-xs">@{data.username}</div>
-          <Link href={`/space/${data.id}_1/feed`}>
+          <Link href={`/space/${data.id}/feed`}>
             <div className="flex justify-center mt-2">
               <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-pink text-text-pink">
                 进入空间
