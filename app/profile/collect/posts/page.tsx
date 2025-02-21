@@ -45,7 +45,7 @@ export default function Page() {
     }
   }
   return (
-    <div className="mt-4 ">
+    <div className="mt-4 h-[calc(100vh-145px)]">
       <LoadingMask isLoading={isLoading} />
       {initData && (
         <InfiniteScroll<PostData>

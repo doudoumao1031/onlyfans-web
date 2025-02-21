@@ -28,7 +28,7 @@ export default async function Layout(props: {
       <div className="flex flex-col w-full justify-start items-center">
         <UserInfo data={data} isSelf={isSelf} />
         <TabLink id={id} data={data} />
-        <div className="grow px-4 py-3 w-full h-3/4">{props.children}</div>
+        <div className="grow px-4 py-3 w-full h-[calc(100vh-132px)]">{props.children}</div>
       </div>
       <div id="modal-root" />
     </>
