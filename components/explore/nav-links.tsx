@@ -3,14 +3,14 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
 import { useMemo } from "react"
+const links = [
+  { name: "已订阅", href: "/explore/subscribed" },
+  { name: "关注", href: "/explore/followed" },
+  { name: "精彩贴文", href: "/explore/feed" },
+  { name: "推荐博主", href: "/explore/recommended/hot" }
+]
 
 export default function NavLinks() {
-  const links = [
-    { name: "已订阅", href: "/explore/subscribed" },
-    { name: "关注", href: "/explore/followed" },
-    { name: "精彩贴文", href: "/explore/feed" },
-    { name: "推荐博主", href: "/explore/recommended/hot" }
-  ]
   const pathName = usePathname()
   const memoLink = useMemo(() => {
     return links.map((link) => {
@@ -19,7 +19,7 @@ export default function NavLinks() {
         active: pathName === link.href || (link.href.startsWith("/explore/recommended") && pathName.startsWith("/explore/recommended"))
       }
     })
-  }, [links, pathName])
+  }, [pathName])
   return (
     <div className="w-full flex justify-around text-center border-b border-gray-100 sticky z-30 bg-white">
       {memoLink.map((link) => (
