@@ -2,19 +2,16 @@
 
 import IconWithImage from "@/components/profile/icon"
 import { useEffect } from "react"
-export default function Error({
-  error,
-  top,
-  center,
-  text,
-  reset
-}: {
-  center?: boolean
+
+interface ErrorProps {
   error?: Error & { digest?: string }
-  text?: string
   top?: number
+  center?: boolean
+  text?: string
   reset: () => void
-}) {
+}
+export default function Error(props: ErrorProps) {
+  const { error, top, center, text, reset } = props
   useEffect(() => {
     console.log(error)
   }, [error])

@@ -3,7 +3,6 @@
 import React, { useRef, useEffect } from "react"
 import { debounce } from "lodash"
 import { useInfiniteScroll } from "@/lib/hooks/use-infinite-scroll"
-import { PostData } from "@/lib"
 import clsx from "clsx"
 
 export interface InfiniteScrollProps<T> {
@@ -20,13 +19,8 @@ export interface InfiniteScrollProps<T> {
   className?: string
 }
 
-export default function InfiniteScroll<T>({
-  initialItems,
-  initialHasMore,
-  fetcherFn,
-  children,
-  className
-}: InfiniteScrollProps<T>) {
+export default function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
+  const { initialItems, initialHasMore, fetcherFn, children, className } = props
   const containerRef = useRef<HTMLDivElement>(null)
   const touchStartY = useRef(0)
   const pullDistance = useRef(0)
@@ -101,7 +95,7 @@ export default function InfiniteScroll<T>({
       container.removeEventListener("touchmove", handleTouchMove)
       container.removeEventListener("touchend", handleTouchEnd)
     }
-  }, [handleScroll])
+  }, [handleScroll, handleTouchEnd])
 
   return (
     <div
