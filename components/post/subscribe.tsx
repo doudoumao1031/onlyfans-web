@@ -17,8 +17,8 @@ export default function Subscribe({ user }: { user: User }) {
         height={100}
         className="w-full rounded-lg object-cover"
       />
-      <div className="w-full h-full absolute flex justify-between bg-black/50 p-3 rounded-lg">
-        <div className="flex gap-4 px-3 items-center">
+      <div className="w-full h-full absolute flex justify-between bg-black/50 p-4 rounded-lg">
+        <div className="flex gap-4 px-0 items-center">
           <div>
             <Avatar fileId={photo} width={16} />
           </div>
