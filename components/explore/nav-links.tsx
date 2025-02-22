@@ -4,14 +4,13 @@ import { usePathname } from "next/navigation"
 import clsx from "clsx"
 import { useMemo } from "react"
 
-const links = [
-  { name: "已订阅", href: "/explore/subscribed" },
-  { name: "关注", href: "/explore/followed" },
-  { name: "精彩贴文", href: "/explore/feed" },
-  { name: "推荐博主", href: "/explore/recommended/hot" }
-]
-
 export default function NavLinks({ isFind }: { isFind?: boolean }) {
+  const links = [
+    { name: "已订阅", href: "/explore/subscribed" },
+    { name: "关注", href: "/explore/followed" },
+    { name: isFind ? "热门" : "精彩贴文", href: "/explore/feed" },
+    { name: "推荐博主", href: "/explore/recommended/hot" }
+  ]
   const pathName = usePathname()
   const memoLink = useMemo(() => {
     return (isFind ? links.slice(1) : links).map((link) => {
