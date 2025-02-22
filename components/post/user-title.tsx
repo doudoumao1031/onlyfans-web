@@ -8,11 +8,13 @@ import Link from "next/link"
 export default function UserTitle({
   user,
   pub_time,
-  pinned
+  pinned,
+  space
 }: {
   user: User
   pub_time: number
   pinned: boolean
+  space?: boolean // 是否空间，置顶图标
 }) {
   const { photo, first_name, last_name, username } = user
   return (
@@ -31,15 +33,15 @@ export default function UserTitle({
         </div>
       </Link>
       <div className={"mt-1 mr-2"}>
-        {!pinned ? (
-          <span>{dayjs(pub_time * 1000).format("MM-DD HH:mm")}</span>
-        ) : (
+        {(pinned && space) ? (
           <IconWithImage
             url={"/icons/icon_fans_stick_gray@3x.png"}
             height={20}
             width={20}
             color={"#777"}
           />
+        ): (
+          <span>{dayjs(pub_time * 1000).format("MM-DD HH:mm")}</span>
         )}
       </div>
     </div>

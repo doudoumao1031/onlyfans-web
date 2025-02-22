@@ -23,12 +23,14 @@ export default function Post({
   data,
   hasVote,
   hasSubscribe,
-  isInfoPage
+  isInfoPage,
+  space
 }: {
   data: PostData
   hasVote: boolean
   hasSubscribe: boolean
-  isInfoPage?: boolean
+  isInfoPage?: boolean //是否详情页
+  space?: boolean //是否空间
 }) {
   const { sid } = useGlobal()
   const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
@@ -62,7 +64,7 @@ export default function Post({
 
   return (
     <div className="w-full flex flex-col gap-2 mb-2">
-      {!isInfoPage && <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} />}
+      {!isInfoPage && <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} space={space} />}
 
       <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
       <UserHomePageLink userId={user.id.toString()} postId={post.id} />
