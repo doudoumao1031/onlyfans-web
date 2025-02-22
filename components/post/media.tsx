@@ -1,4 +1,3 @@
-"use client"
 import Link from "next/link"
 import { Attachment, FileType, TPost } from "./types"
 import { buildImageUrl } from "@/lib/utils"
@@ -6,19 +5,16 @@ import { VideoPreview } from "./video-preview"
 import LazyImg from "@/components/common/lazy-img"
 import IconWithImage from "../profile/icon"
 import { User } from "@/lib"
-import { usePathname } from "next/navigation"
 
-export default function Media({
-  data,
-  post,
-  user
-}: {
+interface MediaProps {
   data: Attachment[]
   post: TPost
   user: User
-}) {
+  isInfoPage?: boolean
+}
+export default function Media(props: MediaProps) {
+  const { data, post, user, isInfoPage } = props
   const showIds = data.map((v) => v.file_id).join("_")
-  const path = usePathname()
   const content = (
     <div
       className="w-full h-full bg-black bg-opacity-[30%] rounded-lg backdrop-blur absolute top-0 left-0 z-20 flex flex-col items-center justify-center"
@@ -40,8 +36,8 @@ export default function Media({
       {((post.visibility === 1 && !user.sub) || post.visibility === 2) && (
         <div className="w-full h-[200px] relative">
           {/*帖子详情正常查看 ｜ 推荐/空间点击媒体到帖子详情*/}
-          {path.startsWith("/postInfo") && content}
-          {!path.startsWith("/postInfo") && !user.sub && (
+          {isInfoPage && content}
+          {!isInfoPage && !user.sub && (
             <Link href={`/postInfo/${post.id}`}>
               {content}
             </Link>
@@ -62,7 +58,7 @@ export default function Media({
       {(post.visibility === 0 || (post.visibility === 1 && user.sub)) && (
         <div className="grid grid-cols-3 gap-2 relative">
           {data.map(({ file_id, file_type, thumb_id }, i) => {
-            const toDetail = !path.startsWith("/postInfo") && ((user.sub_price > 0 && !user.following) || (user.sub_price === 0 && !user.sub))
+            const toDetail = !isInfoPage && ((user.sub_price > 0 && !user.following) || (user.sub_price === 0 && !user.sub))
             /*订阅需要付费 && 帖子无需付费 => 只需要关注则可查看 */
             return (
               <Link

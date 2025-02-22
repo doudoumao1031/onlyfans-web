@@ -19,7 +19,6 @@ type FeedParams = PageInfo & {
 export default function FeedList() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const { id } = useParams()
-  const [userId, selfId] = (id as string).split("_")
 
   useEffect(() => {
     getInitData()
@@ -29,20 +28,18 @@ export default function FeedList() {
       page: 1,
       pageSize: 10,
       from_id: 0,
-      user_id: Number(userId),
+      user_id: Number(id),
       post_status: 1
     }
-    // const res = selfId ? await getMyFeeds(params) : await getUserPosts(params)
-    const res = selfId ? await getUserPosts(params) : await getUserPosts(params)
+    const res = await getUserPosts(params)
     setInitData(res)
   }
   const infiniteFetchPosts = useInfiniteFetch<FeedParams, PostData>({
-    // fetchFn: selfId ? getMyFeeds : getUserPosts,
-    fetchFn: selfId ? getUserPosts : getUserPosts,
+    fetchFn: getUserPosts,
     params: {
       pageSize: 10,
       from_id: 0,
-      user_id: Number(userId),
+      user_id: Number(id),
       post_status: 1
     }
   })

@@ -168,7 +168,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
               variant="default"
               id="select_pirce"
               defaultValue={discount?.id + Math.random().toString(36).substring(2, 9)}
-              className="w-full mt-[20px] px-4 grid grid-cols-3 gap-3"
+              className="w-full mt-[20px] px-4 grid grid-cols-3 gap-x-3 gap-y-5"
               onValueChange={(value) => {
                 if (value) {
                   setDiscount(items.find((item) => item.id === Number(value)) ?? items[0])
@@ -179,7 +179,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
             >
               {items.map((item) => (
                 <ToggleGroupSubscribedItem key={item.id} value={String(item.id)}>
-                  <div className="relative w-full col-span-3 gap-4">
+                  <div className="relative w-full col-span-3">
                     <div className="h-full flex flex-col justify-center items-center text-black">
                       <span className="text-nowrap text-xs">{item.month_count}个月</span>
                       <span

@@ -67,7 +67,7 @@ export default function Post({
       <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
       <UserHomePageLink userId={user.id.toString()} postId={post.id} />
       {post_attachment && post_attachment.length > 0 && (
-        <Media data={post_attachment} post={post} user={user} />
+        <Media data={post_attachment} post={post} user={user} isInfoPage={isInfoPage}/>
       )}
       {hasSubscribe && mention_user && mention_user.length > 0 && (
         <div className={"grid gap-2"}>

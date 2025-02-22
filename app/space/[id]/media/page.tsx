@@ -3,7 +3,7 @@ import Empty from "@/components/common/empty"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import MediaItem from "@/components/space/mediaItem"
-import { myMediaPosts, PageInfo, PageResponse, PostData } from "@/lib"
+import { PageInfo, PageResponse, PostData } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { Fragment, useEffect, useState } from "react"
 import { useParams } from "next/navigation"
@@ -15,8 +15,6 @@ type FeedParams = PageInfo & {
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const { id } = useParams()
-  const [userId, selfId] = (id as string).split("_")
-  console.log("userId", userId)
 
   useEffect(() => {
     getInitData()
@@ -26,20 +24,18 @@ export default function Page() {
       page: 1,
       pageSize: 10,
       from_id: 0,
-      user_id: Number(userId)
+      user_id: Number(id)
       // post_status: 1
     }
-    // const res = selfId ? await myMediaPosts(params) : await userMediaPosts(params)
-    const res = selfId ? await userMediaPosts(params) : await userMediaPosts(params)
+    const res = await userMediaPosts(params)
     setInitData(res)
   }
   const infiniteFetchMedia = useInfiniteFetch({
-    // fetchFn: selfId ? myMediaPosts : userMediaPosts,
-    fetchFn: selfId ? userMediaPosts : userMediaPosts,
+    fetchFn: userMediaPosts,
     params: {
       pageSize: 10,
       from_id: 0,
-      user_id: Number(userId)
+      user_id: Number(id)
     }
   })
   return (
