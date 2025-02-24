@@ -11,7 +11,7 @@ import { Fragment, useEffect, useState } from "react"
 
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<StatementResp> | null>()
-  const [date, setDate] = useState("2025-1")
+  const [date, setDate] = useState(dayjs().format("YYYY-MM"))
   const [loading, setLoading] = useState(false)
   useEffect(() => {
     getData()
@@ -52,7 +52,7 @@ export default function Page() {
             <Fragment>
               {Boolean(error) && <ListError />}
               <DatePicker
-                defVal="2025-1"
+                defVal={date}
                 confirm={(e) => {
                   setDate(e)
                 }}

@@ -102,11 +102,10 @@ export interface PtWalletInfo extends WalletInfo {
 /**
  * 收支明细请求
  */
-export interface StatementReq extends PageInfo {
+export type StatementReq  = PageInfo &  {
   change_type?: number // 1 充值 2购买会员 3 打赏 4 帖子付费 5 提现
   start_time?: number
   end_time?: number
-  date?: string
 }
 
 /**

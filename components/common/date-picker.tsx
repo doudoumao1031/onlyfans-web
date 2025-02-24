@@ -2,7 +2,7 @@
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { useState } from "react"
-export type TProps = {
+interface DatePickerProps {
   defVal: string //YYYY-MM
   trigger?: React.ReactNode
   confirm: (date: string) => void
@@ -21,11 +21,12 @@ const months = [
   { label: "十一月", value: 11 },
   { label: "十二月", value: 12 }
 ]
-export default function DatePicker({ defVal, trigger, confirm }: TProps) {
+export default function DatePicker(props: DatePickerProps) {
+  const { defVal, trigger, confirm } = props
   const [date, setDate] = useState<string>(defVal)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-  const [year, setYear] = useState<number>(2025)
-  const [month, setMonth] = useState<number>(1)
+  const [year, setYear] = useState<number>(new Date().getFullYear())
+  const [month, setMonth] = useState<number>(new Date().getMonth() + 1)
   const [curYear, curMonth] = date.split("-")
   return (
     <div>
@@ -90,7 +91,7 @@ export default function DatePicker({ defVal, trigger, confirm }: TProps) {
         setIsOpen={setDrawerOpen}
         isOpen={drawerOpen}
         trigger={trigger || null}
-        outerControl={trigger ? false : true}
+        outerControl={!trigger}
       >
         <div className="pb-10  bg-[#F8F8F8]">
           <div className="w-full p-6 pt-2 flex justify-between flex-wrap">

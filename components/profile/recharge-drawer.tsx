@@ -104,7 +104,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         }}
         headerRight={() => {
           return (
-            <Link href={"/profile/withdrawalInfo?changeType=1"} prefetch={false}>
+            <Link href={"/profile/statement?changeType=1"} prefetch={false}>
               <button className={"text-base text-text-pink"}>明细</button>
             </Link>
           )

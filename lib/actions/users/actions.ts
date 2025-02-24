@@ -1,5 +1,4 @@
 import {
-  AddBundleDiscount,
   BloggerInfo,
   CollectionPostReq,
   PageInfo,
@@ -183,9 +182,17 @@ export async function userPtWallet() {
 /**
  * 收支明细
  */
-export async function userStatement(params: StatementReq) {
-  return fetchWithPost<StatementReq, PageResponse<StatementResp>>(ENDPOINTS.USERS.STATEMENT, params)
-}
+export const userStatement = (params: StatementReq) =>
+  fetchWithPost<StatementReq, PageResponse<StatementResp>>(ENDPOINTS.USERS.STATEMENT, params).then(
+    (res) => {
+      if (res && res.code === 0) {
+        return res.data
+      } else {
+        return null
+      }
+    }
+  )
+
 
 //支出记录
 export const getExpenses = (params: PageInfo & { start_time?: number; end_time?: number }) =>
@@ -201,7 +208,6 @@ export const getExpenses = (params: PageInfo & { start_time?: number; end_time?:
 
 /**
  * 成为博主
- * @param params
  */
 export async function userApplyBlogger() {
   return fetchWithPost(ENDPOINTS.USERS.APPLY_BLOGGER, undefined)
