@@ -23,10 +23,11 @@ const months = [
 ]
 export default function DatePicker({ defVal, trigger, confirm }: TProps) {
   const [date, setDate] = useState<string>(defVal)
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-  const [year, setYear] = useState<number>(2025)
-  const [month, setMonth] = useState<number>(1)
   const [curYear, curMonth] = date.split("-")
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  const [year, setYear] = useState<number>(Number(curYear))
+  const [month, setMonth] = useState<number>(Number(curMonth))
+
   return (
     <div>
       {!trigger && (
