@@ -1,15 +1,17 @@
 "use client"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import clsx from "clsx"
 import { useCallback } from "react"
 import { usePathname } from "next/navigation"
 // import { data } from '../profile/chart-line';
 import { UserProfile } from "@/lib/actions/profile"
+import { useTranslations } from "next-intl"
 export default function TabLinks({ id, data }: { id: string; data: UserProfile | undefined }) {
   if (!data) {
     throw new Error()
   }
   const pathName = usePathname()
+  const t = useTranslations("Space")
   const pathNameClass = useCallback(
     (href: string) => {
       if (pathName === href) {
@@ -20,8 +22,8 @@ export default function TabLinks({ id, data }: { id: string; data: UserProfile |
     [pathName]
   )
   const links = [
-    { name: "帖子", href: `/space/${id}/feed`, num: data.post_count },
-    { name: "媒体", href: `/space/${id}/media`, num: data.media_count }
+    { name: t("posts"), href: `/space/${id}/feed`, num: data.post_count },
+    { name: t("media"), href: `/space/${id}/media`, num: data.media_count }
   ]
   return (
     <div className="w-full text-center grid grid-cols-2 border-b border-gray-100 sticky top-[68px] z-40 bg-white">

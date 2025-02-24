@@ -3,6 +3,7 @@ import { useState } from "react"
 import FormDrawer from "../common/form-drawer"
 import IconWithImage from "../profile/icon"
 import { UserProfile } from "@/lib/actions/profile"
+import { useTranslations } from "next-intl"
 
 export type TFeeItem = {
   month: number
@@ -41,6 +42,7 @@ export default function SubScribeConfirm({
   setIsOpen?: (val: boolean) => void
 }) {
   const [active, setActive] = useState<number>(0)
+  const t = useTranslations("Space")
   // const [infos, setInfos] = useState<UserProfile | undefined>(data)
   // useEffect(() => {
   //     if (!data) return
@@ -60,9 +62,9 @@ export default function SubScribeConfirm({
                   active === i && "border"
                 }`}
               >
-                <span
-                  className={`text-xs text-[#6D7781] ${active === i && "text-[#222222]"}`}
-                >{`${v.month}个月`}</span>
+                <span className={`text-xs text-[#6D7781] ${active === i && "text-[#222222]"}`}>{`${
+                  v.month
+                }${t("month")}`}</span>
                 <span
                   className={`text-[20px] font-bold my-4] ${
                     active === i ? "text-text-pink" : "text-[#222222"
@@ -78,9 +80,9 @@ export default function SubScribeConfirm({
         </div>
         <div className="flex justify-center">
           <div className=" relative w-72 h-[50px] rounded-full bg-background-pink text-white flex justify-center items-center mt-10 text-[15px] font-semibold">
-            确认并支付 999.99 USDT
+            {t("confirmAndPay")} 999.99 USDT
             <div className=" absolute top-[-14px] right-6 py-1 px-2 bg-[#F7B500] flex justify-center items-center text-xs rounded-full">
-              已省 $99.99
+              {t("saved")} $99.99
             </div>
           </div>
         </div>
@@ -91,7 +93,8 @@ export default function SubScribeConfirm({
     <FormDrawer
       title={
         <div>
-          订阅 <span className="ml-1 text-[15px] text-text-pink">{data?.first_name}</span>
+          {t("subscribe")}
+          <span className="ml-1 text-[15px] text-text-pink">{data?.first_name}</span>
         </div>
       }
       headerLeft={(close) => {

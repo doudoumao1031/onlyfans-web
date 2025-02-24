@@ -6,7 +6,10 @@
     "save": "Save",
     "publish": "Publish",
     "back": "Back",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
     "postLoadError": "Failed to load post content",
+    "ContentLoadingFailed": "Content loading failed",
     "FreeAndSubscription": "Free/Subscription"
   },
   "Explore": {
@@ -80,5 +83,26 @@
         "liveShow": "Live Show"
       }
     }
+  },
+  "Space": {
+    "moreInfo": "More Info",
+    "foldInfo": "Fold Info",
+    "month": "Month",
+    "saved": "Saved",
+    "subscribe": "Subscribe",
+    "posts": "Posts",
+    "media": "Media",
+    "mySpace": "My Space",
+    "tip1": "Pay content, please pay after viewing",
+    "tip2": "Subscription content, please subscribe after viewing",
+    "tip3": "Subscribe blogger and chat with them",
+    "tip4": "Insufficient balance",
+    "topUp": "Top Up",
+    "FreeAndSubscription": "Free/Subscription",
+    "fllow": "Follow",
+    "fllowed": "Followed",
+    "subscribeSuccess": "Subscribe Success",
+    "fllowSuccess": "Follow Success",
+    "cancelled": "Cancelled"
   }
 }

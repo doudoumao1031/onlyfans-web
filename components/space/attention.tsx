@@ -8,11 +8,13 @@ import { useParams } from "next/navigation"
 // import SubScribeConfirm from '@/components/space/subscribe-confirm'
 import { userDelFollowing, userFollowing } from "@/lib/actions/space/actions"
 import { UserProfile } from "@/lib/actions/profile"
+import { useTranslations } from "next-intl"
 export default function Page({ data }: { data: UserProfile | undefined }) {
   const [isFocus, setIsFocus] = useState<boolean>(data?.following || false)
   const [visible, setVisible] = useState<boolean>(false)
   const [modalType, setModalType] = useState<number>(0)
   const params = useParams()
+  const t = useTranslations("Space")
   const id = params.id // Access the dynamic route parameter
   const handleFocus = () => {
     setVisible(false)
@@ -24,34 +26,34 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
     {
       type: "modal",
       closeModal: false,
-      content: <div className="p-4 pb-6">订阅博主与Ta畅谈</div>,
-      okText: "免费/订阅",
+      content: <div className="p-4 pb-6">{t("tip3")}</div>,
+      okText: t("FreeAndSubscription"),
       confirm: () => handleFocus()
     },
     {
       type: "modal",
       closeModal: false,
-      content: <div className="p-4 pb-6">订阅博主与Ta畅谈</div>,
+      content: <div className="p-4 pb-6">{t("tip3")}</div>,
       confirm: () => handleFocus()
     },
     {
       type: "modal",
       closeModal: false,
-      content: <div className="p-4 pb-6">余额不足</div>,
-      okText: "充值",
+      content: <div className="p-4 pb-6"> </div>,
+      okText: t("topUp"),
       confirm: () => handleTopUp()
     },
     {
       type: "toast",
-      content: "订阅成功"
+      content: t("subscribeSuccess")
     },
     {
       type: "toast",
-      content: "关注成功"
+      content: t("fllowSuccess")
     },
     {
       type: "toast",
-      content: "取消成功"
+      content: t("cancelled")
     }
   ]
 

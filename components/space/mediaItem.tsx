@@ -3,17 +3,17 @@ import { FileType, PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
 import Link from "next/link"
 import LazyImg from "../common/lazy-img"
-export default function Page({ item }: { item: PostData }) {
+import { getTranslations } from "next-intl/server"
+export default async function Page({ item }: { item: PostData }) {
   if (!item) return null
+  const t = await getTranslations("Space")
   const { post_attachment, post_price, user, post, post_metric } = item
   const showIds = post_attachment.map((v) => v.file_id).join("_")
   // 是否不可查看
   const lock = (post.visibility === 1 && !user.sub) || post.visibility === 2
   return (
     <div className="w-[calc(50%_-_8px)] h-[220px] mt-4">
-      <div
-        className="overflow-hidden relative rounded-lg text-xs  text-white flex flex-col justify-between w-full h-full mb-4 bg-cover  bg-gray-300"
-      >
+      <div className="overflow-hidden relative rounded-lg text-xs  text-white flex flex-col justify-between w-full h-full mb-4 bg-cover  bg-gray-300">
         <div className="absolute w-full h-full">
           <LazyImg
             style={{ objectFit: "cover" }}
@@ -33,7 +33,9 @@ export default function Page({ item }: { item: PostData }) {
           href={
             lock
               ? "javascript:void(0);"
-              : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0}}`
+              : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${
+                  post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0
+                }}`
           }
         >
           <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
@@ -79,9 +81,7 @@ export default function Page({ item }: { item: PostData }) {
                 color="#fff"
                 height={32}
               />
-              <span className="mt-2">
-                {post.visibility === 2 ? "付费内容，请付费后查看" : "订阅内容，请订阅后查看"}
-              </span>
+              <span className="mt-2">{post.visibility === 2 ? t("tip1") : t("tip2")}</span>
             </div>
           </Link>
         )}

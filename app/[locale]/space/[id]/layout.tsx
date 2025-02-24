@@ -13,7 +13,6 @@ export default async function Layout(props: {
   const [userId] = id.split("_")
   const selfId = await getSelfId()
   const isSelf = selfId === userId
-
   const response = isSelf ? await userProfile() : await getUserById({ id: userId })
   if (!isSelf) {
     await addSpaceLog(Number(userId))

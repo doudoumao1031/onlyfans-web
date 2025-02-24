@@ -20,9 +20,6 @@ export default function FeedList() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const { id } = useParams()
 
-  useEffect(() => {
-    getInitData()
-  }, [])
   const getInitData = async () => {
     const params: FeedParams = {
       page: 1,
@@ -34,6 +31,10 @@ export default function FeedList() {
     const res = await getUserPosts(params)
     setInitData(res)
   }
+  useEffect(() => {
+    getInitData()
+  }, [])
+
   const infiniteFetchPosts = useInfiniteFetch<FeedParams, PostData>({
     fetchFn: getUserPosts,
     params: {
@@ -57,7 +58,13 @@ export default function FeedList() {
               {Boolean(error) && <ListError />}
               <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
                 {items.map((item, index) => (
-                  <Post key={`${item.post.id}-${index}`} data={item} hasSubscribe={false} hasVote space />
+                  <Post
+                    key={`${item.post.id}-${index}`}
+                    data={item}
+                    hasSubscribe={false}
+                    hasVote
+                    space
+                  />
                 ))}
               </div>
               {isLoading && <ListLoading />}

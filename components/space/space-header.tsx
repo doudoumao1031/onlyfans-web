@@ -6,10 +6,12 @@ import { buildImageUrl } from "@/lib/utils"
 import Link from "next/link"
 import { useEffect, useRef, useState } from "react"
 import LazyImg from "../common/lazy-img"
+import { useTranslations } from "next-intl"
 export default function SpaceHeader({ data }: { data: UserProfile | undefined }) {
   if (!data) {
     throw new Error()
   }
+  const t = useTranslations("Space")
   const bgRef = useRef<HTMLDivElement>(null)
   const [isTop, setIsTop] = useState<boolean>(false)
 
@@ -53,7 +55,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
                 isTop ? "text-[#222]" : "text-[#fff]"
               }`}
             >
-              {isTop ? "我的空间" : ""}
+              {isTop ? t("mySpace") : ""}
             </span>
           }
           right={

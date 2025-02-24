@@ -1,3 +1,4 @@
+import { getTranslations } from "next-intl/server"
 import Image from "next/image"
 
 export type TModalProps = {
@@ -13,7 +14,7 @@ export type TModalProps = {
   cancel?: () => void
   confirm?: () => void
 }
-export default function Page({
+export default async function Page({
   children = null,
   visible = false,
   closeModal = true,
@@ -27,6 +28,7 @@ export default function Page({
   confirm = () => {}
 }: TModalProps) {
   if (!visible) return null
+  const t = await getTranslations("Space")
   const DefaultFooter = () => {
     return (
       <div className="w-full flex items-center justify-center text-[16px] border-t border-[#ebeced] h-[44px]">
@@ -36,7 +38,7 @@ export default function Page({
           }}
           className="h-full flex justify-center items-center flex-1 text-center text-[#6D7781] border-r border-[#ebeced]"
         >
-          {cancelText || "取消"}
+          {cancelText || t("cancel")}
         </div>
         <div
           onClick={() => {
@@ -44,7 +46,7 @@ export default function Page({
           }}
           className="h-full flex justify-center items-center flex-1 text-center text-text-pink"
         >
-          {okText || "确定"}
+          {okText || t("confirm")}
         </div>
       </div>
     )

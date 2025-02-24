@@ -6,7 +6,10 @@
     "save": "保存",
     "publish": "发布",
     "back": "返回",
+    "confirm": "确定",
+    "cancel": "取消",
     "postLoadError": "帖子内容加载失败",
+    "ContentLoadingFailed": "内容加载失败",
     "FreeAndSubscription": "免费/订阅"
   },
   "Explore": {
@@ -80,5 +83,27 @@
         "liveShow": "直播展示"
       }
     }
+  },
+  "Space": {
+    "moreInfo": "更多信息",
+    "foldInfo": "折叠信息",
+    "month": "个月",
+    "confirmAndPay": "确认并支付",
+    "saved": "已省",
+    "subscribe": "订阅",
+    "posts": "帖子",
+    "media": "媒体",
+    "mySpace": "我的空间",
+    "tip1": "付费内容，请付费后查看",
+    "tip2": "订阅内容，请订阅后查看",
+    "tip3": "订阅博主与Ta畅谈",
+    "tip4": "余额不足",
+    "topUp": "充值",
+    "FreeAndSubscription": "免费/订阅",
+    "fllow": "关注",
+    "fllowed": "已关注",
+    "subscribeSuccess": "订阅成功",
+    "fllowSuccess": "关注成功",
+    "cancelled": "取消成功"
   }
 }

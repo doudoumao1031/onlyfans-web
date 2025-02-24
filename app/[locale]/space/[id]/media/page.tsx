@@ -16,9 +16,6 @@ export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const { id } = useParams()
 
-  useEffect(() => {
-    getInitData()
-  }, [])
   const getInitData = async () => {
     const params: FeedParams = {
       page: 1,
@@ -30,6 +27,10 @@ export default function Page() {
     const res = await userMediaPosts(params)
     setInitData(res)
   }
+  useEffect(() => {
+    getInitData()
+  }, [getInitData])
+
   const infiniteFetchMedia = useInfiniteFetch({
     fetchFn: userMediaPosts,
     params: {
