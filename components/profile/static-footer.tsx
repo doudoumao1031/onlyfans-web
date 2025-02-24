@@ -1,7 +1,9 @@
 import Link from "next/link"
 import Image from "next/image"
+import { getTranslations } from "next-intl/server"
 
-export default function Page() {
+export default async function Page() {
+  const t = await getTranslations("Profile.management")
   return (
     <div className="px-4 pb-8">
       <div className="mt-5 ">
@@ -15,7 +17,7 @@ export default function Page() {
                 height={50}
               />
             </div>
-            <div>订阅管理</div>
+            <div>{t("subscribe")}</div>
           </Link>
           <Link
             href={"/profile/manuscript"}
@@ -29,7 +31,7 @@ export default function Page() {
                 height={50}
               />
             </div>
-            <div>稿件管理</div>
+            <div>{t("draft")}</div>
           </Link>
           <Link
             href={"/profile/fans/manage/subscribe"}
@@ -43,7 +45,7 @@ export default function Page() {
                 height={50}
               />
             </div>
-            <div>粉丝管理</div>
+            <div>{t("fans")}</div>
           </Link>
           <Link
             href={"/profile/income/incomeView"}
@@ -57,7 +59,7 @@ export default function Page() {
                 height={50}
               />
             </div>
-            <div>收益中心</div>
+            <div>{t("income")}</div>
           </Link>
           <Link
             href={"/profile/dataCenter/dataView"}
@@ -71,7 +73,7 @@ export default function Page() {
                 height={50}
               />
             </div>
-            <div>数据分析</div>
+            <div>{t("data")}</div>
           </Link>
         </div>
       </div>

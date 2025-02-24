@@ -1,4 +1,12 @@
 {
+  "common": {
+    "appName": "FansX",
+    "updateSuccess": "Update Success",
+    "updateFail": "Update Fail",
+    "save": "Save",
+    "publish": "Publish",
+    "back": "Back"
+  },
   "HomePage": {
     "title": "Hello world!",
     "about": "Go to the about page"
@@ -8,5 +16,56 @@
   },
   "Explore": {
     "postLoadError": "Failed to load post content"
+  },
+  "Profile": {
+    "mainTitle": "My",
+    "actions": {
+      "enter": "Enter the Space",
+      "moreInfo": "More Info",
+      "recharge": "Recharge"
+    },
+    "moduleTypes": {
+      "post": "Post",
+      "media": "Media",
+      "fans": "Fans",
+      "subscribe": "Subscribe"
+    },
+    "favorites": {
+      "title": "Favorites",
+      "blogger": "Blogger",
+      "posts": "Posts"
+    },
+    "balance": "Balance",
+    "postCard": {
+      "title1": "Publish your post",
+      "description1": "You can earn cash through subscriptions and rewards.",
+      "button1": "Post",
+      "title2": "Open the blogger creation road",
+      "description2": "Become a blogger and set sail on a new personal journey.",
+      "button2": "Open Subscription",
+      "title3": "Publish your first post",
+      "description3": "Share your posts and earn real money",
+      "button3": "Involved immediately"
+    },
+    "management": {
+      "subscribe": "Subscription",
+      "draft": "Manuscript",
+      "fans": "Fans",
+      "income": "Revenue Center",
+      "data": "Data analysis"
+    },
+    "edit": {
+      "changeBackgroundImage": "Click to change the background",
+      "title": "Upload Image",
+      "form": {
+        "nickname": "Nick Name",
+        "username": "User Name",
+        "introduction": "Introduction",
+        "topInfo": "Top Info",
+        "location": "Location",
+        "liveAuth": "Live certification",
+        "liveShow": "Live Show"
+      }
+    }
   }
 }

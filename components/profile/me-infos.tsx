@@ -8,6 +8,7 @@ import { buildImageUrl } from "@/lib/utils"
 import FoldingDescription from "@/components/profile/folding-description"
 import RechargePanel from "@/components/profile/recharge-panel"
 import LazyImg from "../common/lazy-img"
+import { getTranslations } from "next-intl/server"
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
     return data
@@ -19,6 +20,7 @@ const displayNumber = (data: number) => {
 }
 
 export default async function Page() {
+  const t = await getTranslations("Profile")
   const response = await userProfile()
   const data = response?.data
   if (!data) {
@@ -64,7 +66,7 @@ export default async function Page() {
                 />
               </>
             }
-            title="My"
+            title={t("mainTitle")}
             backIconColor={"#fff"}
           />
           <div className="text-xs pl-6 pr-6 text-white ">{data.top_info}</div>
@@ -90,7 +92,7 @@ export default async function Page() {
           <Link href={`/space/${data.id}/feed`}>
             <div className="flex justify-center mt-2">
               <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-pink text-text-pink">
-                进入空间
+                {t("actions.enter")}
               </button>
             </div>
           </Link>
@@ -102,19 +104,19 @@ export default async function Page() {
           <div className="grid-cols-4 grid text-center">
             <div className="border-r border-gray-100">
               <div className="text-2xl">{displayNumber(data.post_count)}</div>
-              <div className="text-xs text-[#333]">帖子</div>
+              <div className="text-xs text-[#333]">{t("moduleTypes.post")}</div>
             </div>
             <div className="border-r border-gray-100">
               <div className="text-2xl">{displayNumber(data.video_count)}</div>
-              <div className="text-xs text-[#333]">媒体</div>
+              <div className="text-xs text-[#333]">{t("moduleTypes.media")}</div>
             </div>
             <div className="border-r border-gray-100">
               <div className="text-2xl">{displayNumber(data.fans_count)}</div>
-              <div className="text-xs text-[#333]">粉丝</div>
+              <div className="text-xs text-[#333]">{t("moduleTypes.fans")}</div>
             </div>
             <div>
               <div className="text-2xl">{displayNumber(data.subscribe_count)}</div>
-              <div className="text-xs text-[#333]">订阅</div>
+              <div className="text-xs text-[#333]">{t("moduleTypes.subscribe")}</div>
             </div>
           </div>
         </div>
@@ -122,7 +124,7 @@ export default async function Page() {
 
         <div className="pl-4 pr-4">
           <div className="flex justify-between items-center pt-2.5 pb-2.5">
-            <h3 className="text-[15px] font-bold">收藏夹</h3>
+            <h3 className="text-[15px] font-bold">{t("favorites.title")}</h3>
             <Link href={"/profile/collect/posts"} className="text-gray-300">
               <IconWithImage
                 url={"/icons/profile/icon_arrow_right@3x.png"}
@@ -138,7 +140,7 @@ export default async function Page() {
               href={"/profile/collect/blogger"}
               className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-blogger.png')] bg-cover"
             >
-              <div className="text-xs text-[rgba(34,34,34,0.70)]">博主</div>
+              <div className="text-xs text-[rgba(34,34,34,0.70)]">{t("favorites.blogger")}</div>
               <div className="font-medium text-[#2b2b2b] text-[34px] ">
                 {data.collection_user_count}
               </div>
@@ -147,7 +149,7 @@ export default async function Page() {
               href={"/profile/collect/posts"}
               className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-posts.png')] bg-cover"
             >
-              <div className="text-xs text-[rgba(34,34,34,0.70)]">帖子</div>
+              <div className="text-xs text-[rgba(34,34,34,0.70)]">{t("favorites.posts")}</div>
               <div className="font-medium text-[#2b2b2b] text-[34px] ">
                 {data.collection_post_count}
               </div>

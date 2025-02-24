@@ -13,6 +13,7 @@ import { useCommonMessageContext } from "@/components/common/common-message"
 import { commonUploadFile } from "@/lib/utils"
 import { Switch } from "@/components/ui/switch"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { useTranslations } from "next-intl"
 
 type EditUserProfile = Pick<
   UserProfile,
@@ -24,6 +25,8 @@ const IMAGE_PREFIX = `${process.env.NEXT_PUBLIC_API_URL}/media/img/`
 export default function Page() {
   const router = useRouter()
   const { showMessage } = useCommonMessageContext()
+  const t = useTranslations("Profile.edit")
+  const commonTrans = useTranslations("common")
   const { handleSubmit, control, setValue, watch } = useForm<EditUserProfile>({
     mode: "all",
     resolver: zodResolver(
@@ -70,10 +73,10 @@ export default function Page() {
 
   const { withLoading } = useLoadingHandler({
     onError: () => {
-      showMessage("更新失败")
+      showMessage(commonTrans("updateFail"))
     },
     onSuccess: () => {
-      showMessage("更新成功", "success", {
+      showMessage(commonTrans("updateSuccess"), "success", {
         afterDuration: router.back
       })
     }
@@ -98,7 +101,7 @@ export default function Page() {
         })}
       >
         <div className={"w-full left-0 top-0 absolute z-20 text-white"}>
-          <Header right={<button type={"submit"}>保存</button>} title="上传背景图" backColor={"#fff"}/>
+          <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"}/>
         </div>
         <div className="profile-content bg-[url('/demo/user_bg.png')] relative bg-cover" style={{ backgroundImage: `url(${IMAGE_PREFIX}${formValues.back_img})` }}>
           <input
@@ -112,7 +115,7 @@ export default function Page() {
               }
             }}
           />
-          <div className={"text-xs text-white absolute right-4 top-24"}>点击空白区域更换背景</div>
+          <div className={"text-xs text-white absolute right-4 top-24"}>{t("changeBackgroundImage")}</div>
         </div>
         <section className="mt-[-47px] rounded-t-3xl bg-white relative pt-12 text-black pb-8">
           <section className="pl-4 pr-4 pb-3 ">
@@ -128,7 +131,7 @@ export default function Page() {
             <section className="pl-4 pr-4 flex flex-col gap-5 ">
               <section>
                 <InputWithLabel
-                  label={"昵称"}
+                  label={t("form.nickname")}
                   value={`${userOrigin?.first_name ?? ""} ${userOrigin?.last_name ?? ""}`}
                   disabled
                 />
@@ -139,7 +142,7 @@ export default function Page() {
                   render={({ field }) => (
                     <InputWithLabel
                       onInputChange={field.onChange}
-                      label={"用户名"}
+                      label={t("form.username")}
                       value={field.value}
                       disabled
                       description={`https://secretfans.com/${field.value ?? ""}`}
@@ -156,7 +159,7 @@ export default function Page() {
                       errorMessage={fieldState.error?.message}
                       onInputChange={field.onChange}
                       value={field.value}
-                      label={"介绍"}
+                      label={t("form.introduction")}
                       type={"textarea"}
                       rows={5}
                     />
@@ -171,7 +174,7 @@ export default function Page() {
                     <InputWithLabel
                       onInputChange={field.onChange}
                       value={field.value}
-                      label={"顶部信息"}
+                      label={t("form.topInfo")}
                     />
                   )}
                   name={"top_info"}
@@ -184,7 +187,7 @@ export default function Page() {
                     <InputWithLabel
                       onInputChange={field.onChange}
                       value={field.value}
-                      label={"地理位置"}
+                      label={t("form.location")}
                     />
                   )}
                   name={"location"}
@@ -197,7 +200,7 @@ export default function Page() {
                   type="button"
                   className="pt-4 pb-4 text-base w-full border-b border-gray-100 flex justify-between items-center"
                 >
-                  <span>直播认证</span>
+                  <span>{t("form.liveAuth")}</span>
                   <IconWithImage
                     url={"/icons/profile/icon-more.png"}
                     height={16}
@@ -210,7 +213,7 @@ export default function Page() {
                 <div
                   className="pt-4 pb-4 text-base w-full border-b border-gray-100 flex justify-between items-center"
                 >
-                  <span>直播展示</span>
+                  <span>{t("form.liveShow")}</span>
                   <span>
                     <Switch className={"custom-switch"}/>
                   </span>

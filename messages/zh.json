@@ -1,4 +1,12 @@
 {
+  "common": {
+    "appName": "唯粉",
+    "updateSuccess": "更新成功",
+    "updateFail": "更新失败",
+    "save": "保存",
+    "publish": "发布",
+    "back": "返回"
+  },
   "HomePage": {
     "title": "你好",
     "about": "关于"
@@ -8,5 +16,56 @@
   },
   "Explore": {
     "postLoadError": "帖子内容加载失败"
+  },
+  "Profile": {
+    "mainTitle": "我的",
+    "actions": {
+      "enter": "进入空间",
+      "moreInfo": "更多信息",
+      "recharge": "充值"
+    },
+    "moduleTypes": {
+      "post": "帖子",
+      "media": "媒体",
+      "fans": "粉丝",
+      "subscribe": "订阅"
+    },
+    "favorites": {
+      "title": "收藏夹",
+      "blogger": "博主",
+      "posts": "帖子"
+    },
+    "balance": "余额",
+    "postCard": {
+      "title1": "发布你的帖子",
+      "description1": "通过订阅、打赏都可以赚取现金",
+      "button1": "发布帖子",
+      "title2": "开启的唯粉创作之路",
+      "description2": "成为唯粉博主，启航个人新旅途",
+      "button2": "开启订阅",
+      "title3": "发布你的第一个帖子",
+      "description3": "分享你的帖子，赚取真金白银",
+      "button3": "立即参与"
+    },
+    "management": {
+      "subscribe": "订阅管理",
+      "draft": "稿件管理",
+      "fans": "粉丝管理",
+      "income": "收益中心",
+      "data": "数据分析"
+    },
+    "edit": {
+      "changeBackgroundImage": "点击空白区域更换背景",
+      "title": "上传背景图",
+      "form": {
+        "nickname": "昵称",
+        "username": "用户名",
+        "introduction": "介绍",
+        "topInfo": "顶部信息",
+        "location": "地理位置",
+        "liveAuth": "直播认证",
+        "liveShow": "直播展示"
+      }
+    }
   }
 }
