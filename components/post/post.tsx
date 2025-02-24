@@ -25,13 +25,15 @@ export default function Post({
   hasVote,
   hasSubscribe,
   isInfoPage,
-  space
+  space,
+  followConfirm
 }: {
   data: PostData
   hasVote: boolean
   hasSubscribe: boolean
   isInfoPage?: boolean //是否详情页
   space?: boolean //是否空间
+  followConfirm?: () => void //点击媒体关注弹出确认
 }) {
   const { sid } = useGlobal()
   const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
@@ -76,7 +78,7 @@ export default function Post({
         <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
         <UserHomePageLink userId={user.id.toString()} postId={post.id} />
         {post_attachment && post_attachment.length > 0 && (
-          <Media data={post_attachment} post={post} user={user} isInfoPage={isInfoPage} />
+          <Media data={post_attachment} post={post} user={user} isInfoPage={isInfoPage} followConfirm={followConfirm} />
         )}
         {hasSubscribe && mention_user && mention_user.length > 0 && (
           <div className={"grid gap-2"}>

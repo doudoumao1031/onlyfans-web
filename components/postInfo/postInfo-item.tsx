@@ -95,7 +95,7 @@ export default function Page({ postData }: { postData: PostData }) {
       if (!isFocus) {
         setFollow(false)
       }
-      flush()
+      await flush()
       showMessage(!isFocus ? "关注成功" : "取消成功")
     })
   }
@@ -166,7 +166,7 @@ export default function Page({ postData }: { postData: PostData }) {
   return (
     <div className="p-4 pt-20">
       <Header/>
-      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true}/>
+      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} followConfirm={handleFollowing}/>
       {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
