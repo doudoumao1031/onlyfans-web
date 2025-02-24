@@ -117,16 +117,7 @@ export default function Page({ postData }: { postData: PostData }) {
           />
         </div>
         <Link href={`/space/${id}/feed`} className="flex-1">
-          /
-          <div
-            className="flex-1 flex items-center pl-4"
-            // onClick={() => {
-            //   router.back()
-            //   setTimeout(() => {
-            //     router.push(`/space/${id}/feed`)
-            //   }, 100)
-            // }}
-          >
+          <div className="flex-1 flex items-center pl-4">
             <div className="w-8 h-8">
               <CommonAvatar photoFileId={photo} size={32} />
             </div>
