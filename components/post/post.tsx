@@ -100,7 +100,7 @@ export default function Post({
         {isInfoPage ? (
           <CommentStats count={comment_count} onClick={toggleComments} />
         ) : (
-          <Link href={`/postInfo/${post.id}`}>
+          <Link href={`/postInfo/${post.id}`} className="flex items-end">
             <CommentStats count={comment_count} />
           </Link>
         )}
