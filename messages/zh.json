@@ -6,9 +6,12 @@
     "save": "保存",
     "publish": "发布",
     "back": "返回",
-    "postLoadError": "帖子内容加载失败"
+    "postLoadError": "帖子内容加载失败",
+    "FreeAndSubscription": "免费/订阅"
   },
   "Explore": {
+    "BecomeABlogger": "成为博主",
+    "My": "我的",
     "Subscribed": "已订阅",
     "Followed": "关注",
     "Feed": "精彩贴文",
@@ -19,7 +22,13 @@
       "popular": "🔥人气博主",
       "FreeAndSubscription": "免费/订阅"
     },
-    "FollowedEmpty": "您尚未关注任何博主，快去看看"
+    "FollowedEmpty": "您尚未关注任何博主，快去看看",
+    "Subscribe": "订阅",
+    "SubscribeSuccess": "订阅成功",
+    "SubscribeFailed": "订阅失败",
+    "Month": "个月",
+    "ConfirmPayment": "确认支付",
+    "Saved": "已省"
   },
   "Profile": {
     "mainTitle": "我的",

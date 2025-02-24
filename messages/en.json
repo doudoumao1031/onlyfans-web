@@ -6,9 +6,12 @@
     "save": "Save",
     "publish": "Publish",
     "back": "Back",
-    "postLoadError": "Failed to load post content"
+    "postLoadError": "Failed to load post content",
+    "FreeAndSubscription": "Free/Subscription"
   },
   "Explore": {
+    "BecomeABlogger": "Become a blogger",
+    "My": "My",
     "Subscribed": "Subscribed",
     "Followed": "Followed",
     "Feed": "Feed",
@@ -19,7 +22,13 @@
       "popular": "🔥Popular Blogger",
       "FreeAndSubscription": "Free/Subscription"
     },
-    "FollowedEmpty": "You have not followed any bloggers yet, please check it out"
+    "FollowedEmpty": "You have not followed any bloggers yet, please check it out",
+    "Subscribe": "Subscribe",
+    "SubscribeSuccess": "Subscribe Success",
+    "SubscribeFailed": "Subscribe Failed",
+    "Month": "Month",
+    "ConfirmPayment": "Confirm Payment",
+    "Saved": "Saved"
   },
   "Profile": {
     "mainTitle": "My",

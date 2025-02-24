@@ -5,6 +5,7 @@ import Nav from "@/components/explore/nav"
 import { usePathname, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react"
 import { userProfile } from "@/lib/actions/profile"
+import { useLocale, useTranslations } from "next-intl"
 
 export default function Layout(props: {
   children: React.ReactNode
@@ -13,6 +14,8 @@ export default function Layout(props: {
   const searchParams = useSearchParams()
   const isFind = searchParams.get("isFind")
   const path = usePathname()
+  const t = useTranslations("Explore")
+  const locale = useLocale()
   const [isBlogger, setIsBlogger] = useState<boolean>(false)
   useEffect(() => {
     const initData = async () => {
@@ -34,13 +37,13 @@ export default function Layout(props: {
             title="Fans"
             titleColor="#000"
             right={
-              path === "/explore/subscribed" && !isBlogger ? (
+              path === `/${locale}/explore/subscribed` && !isBlogger ? (
                 <Link href="/profile/order" className="text-text-pink text-base">
-                  成为博主
+                  {t("BecomeABlogger")}
                 </Link>
               ) : (
                 <Link href="/profile" className="text-text-pink text-base">
-                  我的
+                  {t("My")}
                 </Link>
               )
             }
