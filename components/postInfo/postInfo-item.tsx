@@ -12,10 +12,10 @@ import { useState, useMemo } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
 import { postDetail } from "@/lib/actions/profile"
 import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
-import Link from "next/link"
 import { useGlobal } from "@/lib/contexts/global-context"
 import CommonRecharge from "@/components/post/common-recharge"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import Link from "next/link"
 
 export default function Page({ postData }: { postData: PostData }) {
   const [postInfo, setPostInfo] = useState<PostData>(postData)
@@ -117,7 +117,16 @@ export default function Page({ postData }: { postData: PostData }) {
           />
         </div>
         <Link href={`/space/${id}/feed`} className="flex-1">
-          <div className="flex-1 flex items-center pl-4">
+          /
+          <div
+            className="flex-1 flex items-center pl-4"
+            // onClick={() => {
+            //   router.back()
+            //   setTimeout(() => {
+            //     router.push(`/space/${id}/feed`)
+            //   }, 100)
+            // }}
+          >
             <div className="w-8 h-8">
               <CommonAvatar photoFileId={photo} size={32} />
             </div>
@@ -153,7 +162,8 @@ export default function Page({ postData }: { postData: PostData }) {
             </div>
             {sub && (
               <div className="text-[10px] text-text-pink mt-1">
-                订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}天
+                订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}
+                天
               </div>
             )}
           </div>
@@ -165,8 +175,8 @@ export default function Page({ postData }: { postData: PostData }) {
 
   return (
     <div className="p-4 pt-20">
-      <Header/>
-      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true}/>
+      <Header />
+      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
       {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
@@ -207,7 +217,12 @@ export default function Page({ postData }: { postData: PostData }) {
           setRechargeModel={setVisible}
         />
       )}
-      <CommonRecharge visible={visible} setVisible={setVisible} recharge={recharge} setRecharge={setRecharge}/>
+      <CommonRecharge
+        visible={visible}
+        setVisible={setVisible}
+        recharge={recharge}
+        setRecharge={setRecharge}
+      />
     </div>
   )
 }
