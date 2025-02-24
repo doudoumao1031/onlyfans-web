@@ -2,6 +2,7 @@ import { starPost } from "@/lib"
 import { useState } from "react"
 import Stats from "./stats"
 import { useMemo } from "react"
+import { useCommonMessageContext } from "@/components/common/common-message"
 
 export default function Like({
   count,
@@ -24,15 +25,19 @@ export default function Like({
     }
   }, [count, outLike])
 
+  const { showMessage } = useCommonMessageContext()
+
   const handleLike = async () => {
     if (isLiked) {
       // 如果已经点赞，取消点赞
       setLikes((prevLikes) => prevLikes - 1)
       setIsLiked(false)
+      showMessage("已取消点赞")
     } else {
       // 如果未点赞，增加点赞
       setLikes((prevLikes) => prevLikes + 1)
       setIsLiked(true)
+      showMessage("感谢支持", "love")
     }
     // 静默提交点赞操作
     try {

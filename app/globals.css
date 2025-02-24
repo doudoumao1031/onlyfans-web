@@ -9,8 +9,10 @@ body {
 
 /*antd mobile override*/
 :root:root {
+  --theme: #00AEF3;
   --adm-color-primary: #000;
   --red: #FF8492;
+  --blue: #00AEF3;
   --orange: #FFA94B;
   --green: #0DC28A;
   --black: #222222;
@@ -24,6 +26,7 @@ body {
   --background-primary: #FFFFFF;
   --background-secondary: #F8F8F8;
   --background-pink: #FF8492;
+  --background-blue: #00AEF3;
   /* Text Colors */
   --text-title: #222222;
   --text-subtitle: #444444;
@@ -33,8 +36,12 @@ body {
   --text-light: #FFFFFF;
   --text-light-secondary: #FFFFFFcc;
   --text-pink: #FF8492;
+  --text-blue: #00AEF3;
+  --text-theme: #00AEF3;
+
   --border: #DDDDDD;
   --border-pink: #FF8492;
+  --border-blue: #00AEF3;
 
   --radius: 0.5rem;
 }
