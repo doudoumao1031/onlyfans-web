@@ -5,7 +5,7 @@ import NavLinks from "@/components/explore/nav-links"
 export default function Nav({ isFind }: { isFind?: boolean }) {
   return (
     <div className="flex flex-row w-full h-14 px-3">
-      <div className="flex flex-1">
+      <div className="flex flex-1 overflow-hidden">
         <NavLinks isFind={isFind} />
       </div>
       {!isFind && (

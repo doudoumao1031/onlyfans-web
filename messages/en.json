@@ -6,7 +6,20 @@
   "Auth": {
     "title": "dddddd"
   },
-  "Explore": {
+  "Common": {
     "postLoadError": "Failed to load post content"
+  },
+  "Explore": {
+    "Subscribed": "Subscribed",
+    "Followed": "Followed",
+    "Feed": "Feed",
+    "Recommended": "Recommended",
+    "recommended": {
+      "hot": "Hot Recommend",
+      "new": "New Blogger",
+      "popular": "🔥Popular Blogger",
+      "FreeAndSubscription": "Free/Subscription"
+    },
+    "FollowedEmpty": "You have not followed any bloggers yet, please check it out"
   }
 }

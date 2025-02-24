@@ -6,7 +6,20 @@
   "Auth": {
     "title": "啊啊啊啊啊啊"
   },
-  "Explore": {
+  "Common": {
     "postLoadError": "帖子内容加载失败"
+  },
+  "Explore": {
+    "Subscribed": "已订阅",
+    "Followed": "关注",
+    "Feed": "精彩贴文",
+    "Recommended": "推荐博主",
+    "recommended": {
+      "hot": "热门推荐",
+      "new": "新人推荐",
+      "popular": "🔥人气博主",
+      "FreeAndSubscription": "免费/订阅"
+    },
+    "FollowedEmpty": "您尚未关注任何博主，快去看看"
   }
 }
