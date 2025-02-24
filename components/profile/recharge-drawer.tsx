@@ -105,7 +105,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         headerRight={() => {
           return (
             <Link href={"/profile/statement?changeType=1"} prefetch={false}>
-              <button className={"text-base text-text-pink"}>明细</button>
+              <button className={"text-base text-text-theme"}>明细</button>
             </Link>
           )
         }}
@@ -150,7 +150,7 @@ export default function RechargeDrawer(props: RechargeProps) {
             {
               ptBalance > 0 && (
                 <button
-                  className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal text-text-pink text-base"
+                  className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal text-text-theme text-base"
                   onTouchEnd={(e) => {
                     e.preventDefault()
                     setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
@@ -167,7 +167,7 @@ export default function RechargeDrawer(props: RechargeProps) {
               /*disabled={amount === 0 || amount > ptBalance}*/
               disabled={amount === 0}
               className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${
-                amount === 0 ? "bg-[#dddddd]" : "bg-background-pink"
+                amount === 0 ? "bg-[#dddddd]" : "bg-background-theme"
               }`}
               onClick={() => {
                 /*if (!(amount === 0 || amount > ptBalance)) {*/
