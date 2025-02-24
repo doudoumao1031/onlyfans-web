@@ -1,20 +1,11 @@
 {
-  "common": {
+  "Common": {
     "appName": "唯粉",
     "updateSuccess": "更新成功",
     "updateFail": "更新失败",
     "save": "保存",
     "publish": "发布",
-    "back": "返回"
-  },
-  "HomePage": {
-    "title": "你好",
-    "about": "关于"
-  },
-  "Auth": {
-    "title": "啊啊啊啊啊啊"
-  },
-  "Common": {
+    "back": "返回",
     "postLoadError": "帖子内容加载失败"
   },
   "Explore": {

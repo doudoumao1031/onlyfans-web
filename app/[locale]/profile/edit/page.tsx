@@ -26,7 +26,7 @@ export default function Page() {
   const router = useRouter()
   const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Profile.edit")
-  const commonTrans = useTranslations("common")
+  const commonTrans = useTranslations("Common")
   const { handleSubmit, control, setValue, watch } = useForm<EditUserProfile>({
     mode: "all",
     resolver: zodResolver(

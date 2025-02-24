@@ -6,7 +6,7 @@ export default function RechargePanel({ amount }: {amount: number}) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [initAmount, setInitAmount] = useState<number>(amount)
   const t = useTranslations("Profile")
-  const commonT = useTranslations("common")
+  const commonT = useTranslations("Common")
   return (
     <div className={"p-4"}>
       <div

@@ -1,20 +1,11 @@
 {
-  "common": {
+  "Common": {
     "appName": "FansX",
     "updateSuccess": "Update Success",
     "updateFail": "Update Fail",
     "save": "Save",
     "publish": "Publish",
-    "back": "Back"
-  },
-  "HomePage": {
-    "title": "Hello world!",
-    "about": "Go to the about page"
-  },
-  "Auth": {
-    "title": "dddddd"
-  },
-  "Common": {
+    "back": "Back",
     "postLoadError": "Failed to load post content"
   },
   "Explore": {
