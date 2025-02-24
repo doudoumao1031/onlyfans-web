@@ -5,5 +5,8 @@
   },
   "Auth": {
     "title": "啊啊啊啊啊啊"
+  },
+  "Explore": {
+    "postLoadError": "帖子内容加载失败"
   }
 }

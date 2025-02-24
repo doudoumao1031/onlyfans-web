@@ -3,17 +3,17 @@ import { NextResponse } from "next/server"
 import { cookies } from "next/headers"
 import { TOKEN_KEY } from "@/lib/utils"
 import createMiddleware from "next-intl/middleware"
-import { locales, routing } from "@/i18n/routing"
+import { defaultLocale, locales, routing } from "@/i18n/routing"
 
 const handleI18nRouting = createMiddleware(routing)
 
-const checkPathIsInLocale = (path:string) => {
-  return locales.some(item => {
+const checkPathIsInLocale = (path: string) => {
+  return locales.some((item) => {
     return path.startsWith(`/${item}`)
   })
 }
 
-const isUnauthorizedPath = (locale:string,path:string) => {
+const isUnauthorizedPath = (locale: string, path: string) => {
   return `/${locale}/system/403` === path
 }
 
@@ -25,10 +25,10 @@ export async function middleware(request: NextRequest) {
   const hasLocale = checkPathIsInLocale(pathname)
   if (!hasLocale) {
     const redirectUrl = request.nextUrl.clone()
-    redirectUrl.pathname = `/${locale}/${pathname}`
-    return NextResponse.rewrite(redirectUrl)
+    redirectUrl.pathname = `/${defaultLocale}/${pathname}`
+    return NextResponse.redirect(redirectUrl)
   }
-  const pathValidation = isUnauthorizedPath(locale,pathname)
+  const pathValidation = isUnauthorizedPath(locale, pathname)
   const url = new URL(request.url)
 
   if (pathValidation || url.pathname.startsWith("/api")) {
@@ -50,5 +50,5 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-  matcher: ["/", "/(zh|en)/:path*","/((?!_next/static|_next/image|.*\\.png$|api).*)"]
+  matcher: ["/", "/(zh|en)/:path*", "/((?!_next/static|_next/image|.*\\.png$|api).*)"]
 }
