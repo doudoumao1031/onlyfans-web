@@ -212,17 +212,17 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
           <div className="my-[40px]  self-center">
             <div className="relative">
               <button
+                type={"button"}
                 disabled={amount === 0}
                 className="w-[295px] h-[49px] p-2 bg-background-pink text-white text-base font-medium rounded-full"
-                onTouchEnd={(e) => {
-                  e.preventDefault()
+                onTouchEnd={() => {
                   handleSubmit()
                 }}
               >
                 确认支付 {amount} USDT
               </button>
               {showDiscount(discount) && (
-                <div className="absolute bg-orange h-4 px-2 -top-1 right-4 rounded-t-full rounded-br-full flex justify-center items-center">
+                <div className="absolute bg-orange h-4 px-2 -top-2 right-5 rounded-full flex justify-center items-center">
                   <span className="text-white text-xs text-center text-nowrap">已省 ${diff}</span>
                 </div>
               )}

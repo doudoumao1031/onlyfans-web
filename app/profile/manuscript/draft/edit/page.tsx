@@ -273,7 +273,7 @@ const AddVoteModal = ({
                     >
                       <div
                         className={field.value ? "" : "text-gray-500"}
-                      >{field.value ? dayjs(field.value * 1000).format("YYYY-MM-DD HH:mm") : "请选择"}</div>
+                      >{field.value ? dayjs(field.value).format("YYYY-MM-DD HH:mm") : "请选择"}</div>
                     </DateTimePicker>
                   )
                 }}
