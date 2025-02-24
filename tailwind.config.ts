@@ -16,6 +16,7 @@ export default {
         orange: "var(--orange)",
         green: "var(--green)",
         // black: "var(--black)",
+        theme: "var(--theme)",
         gray: {
           primary: "var(--gray-primary)",
           secondary: "var(--gray-secondary)",
@@ -30,7 +31,9 @@ export default {
 		  DEFAULT: "hsl(var(--background))",
           primary: "var(--background-primary)",
           secondary: "var(--background-secondary)",
-		  pink: "var(--background-pink)"
+		  pink: "var(--background-pink)",
+		  blue: "var(--background-blue)",
+		  theme: "var(--background-theme)"
         },
         "white-80": "var(--white-80)",
         "white-20": "var(--white-20)",
@@ -42,11 +45,14 @@ export default {
           link: "var(--text-link)",          // 链接文本、提示弹窗按钮颜色
           light: "var(--text-light)",        // 深色背景下文字标题色
           "light-secondary": "var(--text-light-secondary)", // 深色背景下次要文本颜色
-		  pink: "var(--text-pink)"
+		  pink: "var(--text-pink)",
+		  blue: "var(--text-blue)",
+		  theme: "var(--text-theme)"
         },
         border: {
 		  DEFAULT: "var(--border)",
-		  pink: "var(--border-pink)"
+		  pink: "var(--border-pink)",
+		  blue: "var(--border-blue)"
         }
       },
   	  borderRadius: {
