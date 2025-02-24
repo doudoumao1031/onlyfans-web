@@ -35,6 +35,7 @@
     "lodash": "^4.17.21",
     "lucide-react": "^0.468.0",
     "next": "15.1.1-canary.14",
+    "next-intl": "^3.26.5",
     "node-fetch": "^3.3.2",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.2.0",
