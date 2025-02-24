@@ -2,30 +2,42 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
-import { useMemo } from "react"
+import { useEffect, useMemo, useRef } from "react"
+import { useLocale, useTranslations } from "next-intl"
 
 export default function NavLinks({ isFind }: { isFind?: boolean }) {
-  const links = [
-    { name: "已订阅", href: "/explore/subscribed" },
-    { name: "关注", href: "/explore/followed" },
-    { name: isFind ? "热门" : "精彩贴文", href: "/explore/feed" },
-    { name: "推荐博主", href: "/explore/recommended/hot" }
-  ]
+  const locale = useLocale()
+  const t = useTranslations("Explore")
   const pathName = usePathname()
+  const activeLinkRef = useRef<HTMLAnchorElement>(null)
+  const links = useMemo(
+    () => [
+      { name: t("Subscribed"), href: `/${locale}/explore/subscribed` },
+      { name: t("Followed"), href: `/${locale}/explore/followed` },
+      { name: isFind ? t("hot") : t("Feed"), href: `/${locale}/explore/feed` },
+      { name: t("Recommended"), href: `/${locale}/explore/recommended/hot` }
+    ],
+    [isFind, locale, t]
+  )
   const memoLink = useMemo(() => {
     return (isFind ? links.slice(1) : links).map((link) => {
       return {
         ...link,
         active:
           pathName === link.href ||
-          (link.href.startsWith("/explore/recommended") &&
-            pathName.startsWith("/explore/recommended"))
+          (link.href.startsWith(`/${locale}/explore/recommended`) &&
+            pathName.startsWith(`/${locale}/explore/recommended`))
       }
     })
-  }, [pathName])
+  }, [pathName, isFind, links, locale])
+  useEffect(() => {
+    if (activeLinkRef.current) {
+      activeLinkRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
+  }, [memoLink])
   return (
     <div
-      className={`w-full flex  text-center border-b border-gray-100 sticky z-30 bg-white ${
+      className={`w-full flex  text-center border-b border-gray-100 sticky z-30 bg-white overflow-x-auto gap-3  ${
         isFind ? "justify-start" : "justify-around"
       }`}
     >
@@ -34,6 +46,7 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
           prefetch={true}
           key={link.name}
           href={link.href}
+          ref={link.active ? activeLinkRef : null}
           className={clsx(
             "pt-3.5 pb-3.5 text-[20px] relative",
             link.active ? "font-bold text-black" : "text-[#777] font-normal",

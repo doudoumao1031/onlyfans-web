@@ -47,7 +47,7 @@ export default function Layout(props: {
           />
         )}
         <div
-          className={`flex flex-col w-full  justify-start items-center ${
+          className={`flex flex-col w-full overflow-x-hidden justify-start items-center ${
             isFind ? "h-[calc(100vh-94px)]" : "h-[calc(100vh-44px)]"
           }`}
         >

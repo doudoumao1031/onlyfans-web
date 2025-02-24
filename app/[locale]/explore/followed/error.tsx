@@ -9,6 +9,6 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
-  const t = useTranslations("Explore.postLoadError")
+  const t = useTranslations("Common")
   return <ErrorPage reset={reset} error={error} text={t("postLoadError")} />
 }
