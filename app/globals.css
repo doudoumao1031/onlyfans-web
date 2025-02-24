@@ -12,7 +12,8 @@ body {
   --theme: #00AEF3;
   --adm-color-primary: #000;
   --red: #FF8492;
-  --blue: #00AEF3;
+  --pink: #FF8492;
+  --blue: var(--theme);
   --orange: #FFA94B;
   --green: #0DC28A;
   --black: #222222;
@@ -24,24 +25,25 @@ body {
   --white-80: #FFFFFFcc;
   --white-20: #FFFFFF33;
   --background-primary: #FFFFFF;
-  --background-secondary: #F8F8F8;
-  --background-pink: #FF8492;
-  --background-blue: #00AEF3;
+  --background-secondary: #D3F3FF;
+  --background-pink: var(--pink);
+  --background-blue: var(--blue);
+  --background-theme: var(--blue);
   /* Text Colors */
   --text-title: #222222;
   --text-subtitle: #444444;
   --text-desc: #6D7781;
   --text-disabled: #999999;
-  --text-link: #FF8492;
+  --text-link: var(--theme);
   --text-light: #FFFFFF;
   --text-light-secondary: #FFFFFFcc;
-  --text-pink: #FF8492;
-  --text-blue: #00AEF3;
-  --text-theme: #00AEF3;
+  --text-pink: var(--pink);
+  --text-blue: var(--blue);
+  --text-theme: var(--blue);
 
   --border: #DDDDDD;
-  --border-pink: #FF8492;
-  --border-blue: #00AEF3;
+  --border-pink: var(--pink);
+  --border-blue: var(--blue);
 
   --radius: 0.5rem;
 }

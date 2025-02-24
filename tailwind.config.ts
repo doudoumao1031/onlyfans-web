@@ -28,12 +28,12 @@ export default {
         },
         background: {
         //   DEFAULT: "var(--background-primary)",
-		  DEFAULT: "hsl(var(--background))",
+          DEFAULT: "hsl(var(--background))",
           primary: "var(--background-primary)",
           secondary: "var(--background-secondary)",
-		  pink: "var(--background-pink)",
-		  blue: "var(--background-blue)",
-		  theme: "var(--background-theme)"
+          pink: "var(--background-pink)",
+          blue: "var(--background-theme)",
+          theme: "var(--background-theme)"
         },
         "white-80": "var(--white-80)",
         "white-20": "var(--white-20)",
@@ -45,21 +45,21 @@ export default {
           link: "var(--text-link)",          // 链接文本、提示弹窗按钮颜色
           light: "var(--text-light)",        // 深色背景下文字标题色
           "light-secondary": "var(--text-light-secondary)", // 深色背景下次要文本颜色
-		  pink: "var(--text-pink)",
-		  blue: "var(--text-blue)",
-		  theme: "var(--text-theme)"
+          pink: "var(--text-pink)",
+          blue: "var(--text-theme)",
+          theme: "var(--text-theme)"
         },
         border: {
-		  DEFAULT: "var(--border)",
-		  pink: "var(--border-pink)",
-		  blue: "var(--border-blue)"
+          DEFAULT: "var(--border)",
+          pink: "var(--border-pink)",
+          blue: "var(--border-theme)"
         }
       },
   	  borderRadius: {
-  		lg: "var(--radius)",
-  		md: "calc(var(--radius) - 2px)",
-  		sm: "calc(var(--radius) - 4px)"
-	  }
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)"
+      }
       // colors: {
   		// 	background: "hsl(var(--background))",
   		// 	foreground: "hsl(var(--foreground))",

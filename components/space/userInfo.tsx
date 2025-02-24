@@ -68,7 +68,7 @@ export default function UserInfo({
             !isSelf && !data.sub && (
               <SubscribedDrawer userId={data.id} name={data.username} free={data.sub_price === 0} setRechargeModel={setVisible} flush={router.refresh}>
                 <div
-                  className="w-full h-12 bg-[#ff8492] rounded-lg  pl-4 mt-2 flex flex-col justify-center items-start text-white bg-[url('/icons/space/bg_space_subscription.png')] bg-cover"
+                  className="w-full h-12 rounded-lg  pl-4 mt-2 flex flex-col justify-center items-start text-white bg-[url('/theme/bg_space_subscription@3x.png')] bg-cover"
                 >
                   <div>订阅</div>
                   <div className="text-xs">{data.sub_price === 0 ? "免费" : `${data.sub_price} USDT/月`}</div>
