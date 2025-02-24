@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import Image from "next/image"
 import { CommentInfo, fetchPostComments, PostData } from "@/lib"
 import Comments from "./comment"
@@ -18,6 +18,7 @@ import Save from "./save"
 import Link from "next/link"
 import CommentSkeleton from "./comment-skeleton"
 import { useGlobal } from "@/lib/contexts/global-context"
+import useCommonMessage, { CommonMessageContext } from "@/components/common/common-message"
 
 export default function Post({
   data,
@@ -62,64 +63,71 @@ export default function Post({
     }
   }, [post.id, isInfoPage])
 
-  return (
-    <div className="w-full flex flex-col gap-2 mb-2">
-      {!isInfoPage && <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} space={space} />}
+  const { showMessage, renderNode } = useCommonMessage()
 
-      <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
-      <UserHomePageLink userId={user.id.toString()} postId={post.id} />
-      {post_attachment && post_attachment.length > 0 && (
-        <Media data={post_attachment} post={post} user={user} isInfoPage={isInfoPage}/>
-      )}
-      {hasSubscribe && mention_user && mention_user.length > 0 && (
-        <div className={"grid gap-2"}>
-          {mention_user.map((user) => (
-            <Subscribe key={user.id} user={user} />
-          ))}
-        </div>
-      )}
-      {hasSubscribe && user && !user?.sub && !mention_user && (
-        <div>
-          <Subscribe user={user} />
-        </div>
-      )}
-      {hasVote && post_vote && (
-        <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
-          <Image src="/icons/vote.png" alt="" width={20} height={20} />
-          <div className="text-pink text-sm">投票</div>
-          {showVote ? (
-            <Image src="/icons/arrow_up.png" alt="" width={20} height={20} />
-          ) : (
-            <Image src="/icons/arrow_down.png" alt="" width={20} height={20} />
-          )}
-        </div>
-      )}
-      {hasVote && showVote && <Vote postId={post.id} />}
-      <div className="flex gap-4 justify-between pt-2 pb-4 border-b border-black/5">
-        <Like count={thumbs_up_count} liked={star} postId={post.id} outLike={!star && tipStar} />
-        {isInfoPage ? (
-          <CommentStats count={comment_count} onClick={toggleComments} />
-        ) : (
-          <Link href={`/postInfo/${post.id}`} className="flex items-end">
-            <CommentStats count={comment_count} />
-          </Link>
+  return (
+    <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
+      {renderNode}
+      <div className="w-full flex flex-col gap-2 mb-2">
+        {!isInfoPage && (
+          <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} space={space} />
         )}
-        <Tip count={tip_count} postId={post.id} self={sid === user.id} tipStar={setTipStar} />
-        <Share count={share_count} postId={post.id} />
-        <Save count={collection_count} saved={collection} postId={post.id} />
+
+        <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
+        <UserHomePageLink userId={user.id.toString()} postId={post.id} />
+        {post_attachment && post_attachment.length > 0 && (
+          <Media data={post_attachment} post={post} user={user} isInfoPage={isInfoPage} />
+        )}
+        {hasSubscribe && mention_user && mention_user.length > 0 && (
+          <div className={"grid gap-2"}>
+            {mention_user.map((user) => (
+              <Subscribe key={user.id} user={user} />
+            ))}
+          </div>
+        )}
+        {hasSubscribe && user && !user?.sub && !mention_user && (
+          <div>
+            <Subscribe user={user} />
+          </div>
+        )}
+        {hasVote && post_vote && (
+          <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
+            <Image src="/icons/vote.png" alt="" width={20} height={20} />
+            <div className="text-pink text-sm">投票</div>
+            {showVote ? (
+              <Image src="/icons/arrow_up.png" alt="" width={20} height={20} />
+            ) : (
+              <Image src="/icons/arrow_down.png" alt="" width={20} height={20} />
+            )}
+          </div>
+        )}
+        {hasVote && showVote && <Vote postId={post.id} />}
+        <div className="flex gap-4 justify-between pt-2 pb-4 border-b border-black/5">
+          <Like count={thumbs_up_count} liked={star} postId={post.id} outLike={!star && tipStar} />
+          {isInfoPage ? (
+            <CommentStats count={comment_count} onClick={toggleComments} />
+          ) : (
+            <Link href={`/postInfo/${post.id}`} className="flex items-end">
+              <CommentStats count={comment_count} />
+            </Link>
+          )}
+          <Tip count={tip_count} postId={post.id} self={sid === user.id} tipStar={setTipStar} />
+          <Share count={share_count} postId={post.id} />
+          <Save count={collection_count} saved={collection} postId={post.id} />
+        </div>
+        {showComments &&
+          (commentsLoading ? (
+            <CommentSkeleton></CommentSkeleton>
+          ) : (
+            <Comments
+              post_id={post.id}
+              comments={comments || []}
+              removeComment={removeComment}
+              fetchComments={async () => setComments(await fetchPostComments(post.id))}
+            />
+          ))}
       </div>
-      {showComments &&
-        (commentsLoading ? (
-          <CommentSkeleton></CommentSkeleton>
-        ) : (
-          <Comments
-            post_id={post.id}
-            comments={comments || []}
-            removeComment={removeComment}
-            fetchComments={async () => setComments(await fetchPostComments(post.id))}
-          />
-        ))}
-    </div>
+    </CommonMessageContext.Provider>
   )
 
   function removeComment(id: number) {
