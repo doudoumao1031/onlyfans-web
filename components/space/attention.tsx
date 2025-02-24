@@ -78,28 +78,28 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
         onClick={() => {
           handleFllowing()
         }}
-        className={`w-20 h-8 rounded-full border border-[#ff8492] flex justify-center items-center  ${
-          isFocus ? "" : "bg-[#ff8492]"
+        className={`w-20 h-8 rounded-full border border-theme flex justify-center items-center  ${
+          isFocus ? "" : "bg-theme"
         }`}
       >
         <IconWithImage
           url={
-            isFocus ? "/icons/icon_info_followed_white.png" : "/icons/icon_info_follow_white.png"
+            isFocus ? "/theme/icon_info_followed_white@3x.png" : "/theme/icon_info_follow_white@3x.png"
           }
           width={20}
           height={20}
-          color={isFocus ? "#ff8492" : "#fff"}
+          color={isFocus ? "var(--theme)" : "var(----white)"}
         />
-        <span className={isFocus ? "text-[#ff8492]" : "text-white"}>
+        <span className={isFocus ? "text-theme" : "text-white"}>
           {isFocus ? "已关注" : "关注"}
         </span>
       </div>
       {data?.sub && (
-        <div className="flex text-text-pink text-xs mt-3 items-center">
+        <div className="flex text-text-theme text-xs mt-3 items-center">
           <span className="pr-1">
             订阅：{dayjs((data && data?.sub_end_time * 1000) || 0).diff(dayjs(), "days")}天
           </span>
-          <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="#ff8492" />
+          <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="var(--theme)" />
         </div>
       )}
 
