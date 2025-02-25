@@ -6,8 +6,18 @@ import { usePathname, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react"
 import { userProfile } from "@/lib/actions/profile"
 
-export default function Layout(props: {
+export default function Layout({
+  children,
+  feed,
+  followed,
+  recommended,
+  subscribed
+}: {
   children: React.ReactNode
+  feed: React.ReactNode
+  followed: React.ReactNode
+  recommended: React.ReactNode
+  subscribed: React.ReactNode
   // modal: React.ReactNode;
 }) {
   const searchParams = useSearchParams()
@@ -28,7 +38,7 @@ export default function Layout(props: {
   return (
     <>
       {/* {props.modal} */}
-      <div className="h-screen flex flex-col w-full">
+      <div className=" h-screen flex flex-col w-full">
         {!isFind && (
           <Header
             title="Fans"
@@ -48,11 +58,34 @@ export default function Layout(props: {
         )}
         <div
           className={`flex flex-col w-full  justify-start items-center ${
-            isFind ? "h-[calc(100vh-94px)]" : "h-[calc(100vh-44px)]"
+            isFind ? "h-[calc(100vh-94px)]" : "h-[calc(100vh-49px)]"
           }`}
         >
           <Nav isFind={!!isFind} />
-          <div className="grow px-4 py-3 w-full h-full">{props.children}</div>
+          <div className="grow px-4 py-3 w-full h-[calc(100%-60px)]">
+            <div className={`w-full h-full ${path === "/explore/feed" ? "" : "hidden"}`}>
+              {feed}
+            </div>
+            <div className={`w-full h-full ${path === "/explore/followed" ? "" : "hidden"}`}>
+              {followed}
+            </div>
+            <div
+              className={`w-full h-full ${
+                [
+                  "/explore/recommended/hot",
+                  "/explore/recommended/new",
+                  "/explore/recommended/popular"
+                ].includes(path)
+                  ? ""
+                  : "hidden"
+              }`}
+            >
+              {recommended}
+            </div>
+            <div className={`w-full h-full ${path === "/explore/subscribed" ? "" : "hidden"}`}>
+              {subscribed}
+            </div>
+          </div>
         </div>
       </div>
       {/* <div id="modal-root"/> */}
