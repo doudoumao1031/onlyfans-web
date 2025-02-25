@@ -5,7 +5,7 @@ import { ListEnd, ListError, ListLoading } from "@/components/explore/list-state
 import MediaItem from "@/components/space/mediaItem"
 import { PageInfo, PageResponse, PostData } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import { Fragment, useCallback, useEffect, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { userMediaPosts } from "@/lib/actions/space"
 type FeedParams = PageInfo & {
@@ -16,24 +16,18 @@ export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const { id } = useParams()
 
-  const getInitData = useCallback(async () => {
+  useEffect(() => {
     const params: FeedParams = {
       page: 1,
       pageSize: 10,
       from_id: 0,
       user_id: Number(id)
     }
-    const res = await userMediaPosts(params)
-    setInitData(res)
+    userMediaPosts(params)
+      .then(res => {
+        setInitData(res)
+      })
   }, [id])
-
-  useEffect(() => {
-    getInitData()
-  }, [getInitData])
-
-  useEffect(() => {
-    getInitData()
-  }, [getInitData])
 
   const infiniteFetchMedia = useInfiniteFetch({
     fetchFn: userMediaPosts,

@@ -1,12 +1,13 @@
+"use client"
 import IconWithImage from "../profile/icon"
 import { FileType, PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
 import { Link } from "@/i18n/routing"
 import LazyImg from "../common/lazy-img"
-import { getTranslations } from "next-intl/server"
-export default async function Page({ item }: { item: PostData }) {
+import { useTranslations } from "next-intl"
+export default function MediaItem({ item }: { item: PostData }) {
+  const t = useTranslations("Space")
   if (!item) return null
-  const t = await getTranslations("Space")
   const { post_attachment, post_price, user, post, post_metric } = item
   const showIds = post_attachment.map((v) => v.file_id).join("_")
   // 是否不可查看

@@ -19,21 +19,17 @@ type FeedParams = PageInfo & {
 export default function FeedList() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const { id } = useParams()
-
-  const getInitData = async () => {
-    const params: FeedParams = {
+  useEffect(() => {
+    getUserPosts({
       page: 1,
       pageSize: 10,
       from_id: 0,
       user_id: Number(id),
       post_status: 1
-    }
-    const res = await getUserPosts(params)
-    setInitData(res)
-  }
-  useEffect(() => {
-    getInitData()
-  }, [])
+    } as FeedParams).then(res => {
+      setInitData(res)
+    })
+  }, [id])
 
   const infiniteFetchPosts = useInfiniteFetch<FeedParams, PostData>({
     fetchFn: getUserPosts,

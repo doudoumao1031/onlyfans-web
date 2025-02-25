@@ -14,7 +14,7 @@ export default function TabLinks({ id, data }: { id: string; data: UserProfile |
   const t = useTranslations("Space")
   const pathNameClass = useCallback(
     (href: string) => {
-      if (pathName === href) {
+      if (pathName.endsWith(href)) {
         return "font-bold text-black "
       }
       return "text-[#777] font-normal"
@@ -39,7 +39,7 @@ export default function TabLinks({ id, data }: { id: string; data: UserProfile |
           <span
             className={clsx(
               "absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-black w-[40px] ml-[-20px]",
-              pathName === link.href ? "block" : "hidden"
+              pathName.endsWith(link.href) ? "block" : "hidden"
             )}
           ></span>
         </Link>

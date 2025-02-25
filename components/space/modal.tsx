@@ -1,5 +1,6 @@
-import { getTranslations } from "next-intl/server"
+"use client"
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 
 export type TModalProps = {
   visible?: boolean
@@ -14,7 +15,7 @@ export type TModalProps = {
   cancel?: () => void
   confirm?: () => void
 }
-export default async function Page({
+export default function Page({
   children = null,
   visible = false,
   closeModal = true,
@@ -27,8 +28,8 @@ export default async function Page({
   cancel = () => {},
   confirm = () => {}
 }: TModalProps) {
+  const t = useTranslations("Space")
   if (!visible) return null
-  const t = await getTranslations("Space")
   const DefaultFooter = () => {
     return (
       <div className="w-full flex items-center justify-center text-[16px] border-t border-[#ebeced] h-[44px]">

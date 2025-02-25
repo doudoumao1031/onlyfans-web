@@ -1,3 +1,4 @@
+"use client"
 import Modal from "@/components/space/modal"
 import RechargeDrawer from "@/components/profile/recharge-drawer"
 
