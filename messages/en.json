@@ -88,6 +88,7 @@
     "moreInfo": "More Info",
     "foldInfo": "Fold Info",
     "month": "Month",
+    "month1": "Month",
     "saved": "Saved",
     "subscribe": "Subscribe",
     "posts": "Posts",
@@ -103,6 +104,8 @@
     "fllowed": "Followed",
     "subscribeSuccess": "Subscribe Success",
     "fllowSuccess": "Follow Success",
-    "cancelled": "Cancelled"
+    "cancelled": "Cancelled",
+    "day": "Day",
+    "free": "Free"
   }
 }

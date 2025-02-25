@@ -93,13 +93,15 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
           color={isFocus ? "#ff8492" : "#fff"}
         />
         <span className={isFocus ? "text-[#ff8492]" : "text-white"}>
-          {isFocus ? "已关注" : "关注"}
+          {isFocus ? t("fllowed") : t("fllow")}
         </span>
       </div>
       {data?.sub && (
         <div className="flex text-text-pink text-xs mt-3 items-center">
           <span className="pr-1">
-            订阅：{dayjs((data && data?.sub_end_time * 1000) || 0).diff(dayjs(), "days")}天
+            {t("subscribe")}：
+            {dayjs((data && data?.sub_end_time * 1000) || 0).diff(dayjs(), "days")}
+            {t("day")}
           </span>
           <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="#ff8492" />
         </div>

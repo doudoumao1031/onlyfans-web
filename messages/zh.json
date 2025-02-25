@@ -87,7 +87,8 @@
   "Space": {
     "moreInfo": "更多信息",
     "foldInfo": "折叠信息",
-    "month": "个月",
+    "month": "月",
+    "month1": "个月",
     "confirmAndPay": "确认并支付",
     "saved": "已省",
     "subscribe": "订阅",
@@ -104,6 +105,8 @@
     "fllowed": "已关注",
     "subscribeSuccess": "订阅成功",
     "fllowSuccess": "关注成功",
-    "cancelled": "取消成功"
+    "cancelled": "取消成功",
+    "day": "天",
+    "free": "免费"
   }
 }

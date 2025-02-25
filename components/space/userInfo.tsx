@@ -9,6 +9,7 @@ import { useState } from "react"
 import SubscribedDrawer from "@/components/explore/subscribed-drawer"
 import CommonRecharge from "@/components/post/common-recharge"
 import { useRouter } from "next/navigation"
+import { useTranslations } from "next-intl"
 
 export default function UserInfo({
   data,
@@ -22,6 +23,7 @@ export default function UserInfo({
   if (!data) {
     throw new Error()
   }
+  const t = useTranslations("Space")
   const router = useRouter()
   const tabs = [
     { icon: "/icons/space/icon_info_video@3x.png", num: data.video_count }, //视频
@@ -37,14 +39,14 @@ export default function UserInfo({
       <SpaceHeader data={data} />
       <section className="mt-[-47px] rounded-t-3xl bg-white relative  pt-12 text-black " id="refEl">
         <section className="pl-4 pr-4 pb-3 ">
-          <Avatar showLive={data.live_certification} fileId={data.photo}/>
+          <Avatar showLive={data.live_certification} fileId={data.photo} />
 
           <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
             <span>
               {data.first_name} {data.last_name}
             </span>
           </h1>
-          {!isSelf && <Attention data={data}/>}
+          {!isSelf && <Attention data={data} />}
           <div className="text-center text-gray-400 text-xs">@{data.username}</div>
           <div className="flex justify-center mt-1">
             <IconWithImage
@@ -58,27 +60,36 @@ export default function UserInfo({
           <div className="flex justify-between mt-6 mb-6 px-1">
             {tabs.map((v) => (
               <div key={v.icon} className="flex justify-center items-center">
-                <IconWithImage url={v.icon} width={20} height={20} color="#222"/>
+                <IconWithImage url={v.icon} width={20} height={20} color="#222" />
                 <span className="ml-1 text-[#777]">{v.num}</span>
               </div>
             ))}
           </div>
-          <Directions about={data.about}/>
-          {
-            !isSelf && !data.sub && (
-              <SubscribedDrawer userId={data.id} name={data.username} free={data.sub_price === 0} setRechargeModel={setVisible} flush={router.refresh}>
-                <div
-                  className="w-full h-12 bg-[#ff8492] rounded-lg  pl-4 mt-2 flex flex-col justify-center items-start text-white bg-[url('/icons/space/bg_space_subscription.png')] bg-cover"
-                >
-                  <div>订阅</div>
-                  <div className="text-xs">{data.sub_price === 0 ? "免费" : `${data.sub_price} USDT/月`}</div>
+          <Directions about={data.about} />
+          {!isSelf && !data.sub && (
+            <SubscribedDrawer
+              userId={data.id}
+              name={data.username}
+              free={data.sub_price === 0}
+              setRechargeModel={setVisible}
+              flush={router.refresh}
+            >
+              <div className="w-full h-12 bg-[#ff8492] rounded-lg  pl-4 mt-2 flex flex-col justify-center items-start text-white bg-[url('/icons/space/bg_space_subscription.png')] bg-cover">
+                <div>{t("subscribe")}</div>
+                <div className="text-xs">
+                  {data.sub_price === 0 ? t("free") : `${data.sub_price} USDT/${t("month")}`}
                 </div>
-              </SubscribedDrawer>
-            )
-          }
+              </div>
+            </SubscribedDrawer>
+          )}
         </section>
       </section>
-      <CommonRecharge visible={visible} setVisible={setVisible} recharge={recharge} setRecharge={setRecharge} />
+      <CommonRecharge
+        visible={visible}
+        setVisible={setVisible}
+        recharge={recharge}
+        setRecharge={setRecharge}
+      />
     </div>
   )
 }
