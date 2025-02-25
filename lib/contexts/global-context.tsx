@@ -25,11 +25,7 @@ export function GlobalProvider({ children }: GlobalProviderProps) {
     }
     initData()
   }, [])
-  return (
-    <GlobalContext.Provider value={{ sid, setSid }}>
-      {children}
-    </GlobalContext.Provider>
-  )
+  return <GlobalContext.Provider value={{ sid, setSid }}>{children}</GlobalContext.Provider>
 }
 
 export function useGlobal() {

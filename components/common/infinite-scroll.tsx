@@ -8,14 +8,14 @@ import clsx from "clsx"
 export interface InfiniteScrollProps<T> {
   initialItems: T[]
   initialHasMore: boolean
-  fetcherFn: (page: number) => Promise<{ items: T[], hasMore: boolean }>
+  fetcherFn: (page: number) => Promise<{ items: T[]; hasMore: boolean }>
   children: (props: {
     items: T[]
     isLoading: boolean
     hasMore: boolean
     error: unknown
     isRefreshing: boolean
-  }) => React.ReactNode,
+  }) => React.ReactNode
   className?: string
 }
 
@@ -100,10 +100,7 @@ export default function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
   return (
     <div
       ref={containerRef}
-      className={clsx(
-        "w-full h-full overflow-y-auto relative",
-        className
-      )}
+      className={clsx("w-full h-full overflow-y-auto relative list-scroll-box", className)}
       style={{ transition: "transform 0.2s ease-out" }}
     >
       {isRefreshing && (
