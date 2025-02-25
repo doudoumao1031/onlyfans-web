@@ -62,6 +62,7 @@ export default function Media(props: MediaProps) {
       )}
       {(post.visibility === 0 || (post.visibility === 1 && user.sub)) && (
         <div className="grid grid-cols-3 gap-2 relative">{
+          /*详情页面 && 订阅需要付费 && 帖子无需付费 => 打开确认关注modal */
           isInfoPage && user.sub_price > 0 && !user.following && !user.sub
             ? (
               <>
@@ -95,7 +96,6 @@ export default function Media(props: MediaProps) {
                 {data.map(({ file_id, file_type, thumb_id }, i) => {
                   /*订阅需要付费 && 帖子无需付费 => 只需要关注则可查看 */
                   const toDetail = !isInfoPage && ((user.sub_price > 0 && !user.following) || (user.sub_price === 0 && !user.sub))
-                  /*详情页面 && 订阅需要付费 && 帖子无需付费 => 打开确认关注modal */
                   return (
                     <Link
                       key={i}

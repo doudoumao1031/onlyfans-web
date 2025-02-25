@@ -4,7 +4,7 @@ import Empty from "@/components/common/empty"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import LoadingMask from "@/components/common/loading-mask"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
-import { getExpenses, PageResponse, StatementResp } from "@/lib"
+import { getExpenses, PageResponse, StatementResp, StatementTypeList } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import dayjs from "dayjs"
 import { Fragment, useEffect, useState } from "react"
@@ -66,7 +66,9 @@ export default function Page() {
                     </div>
                     <div className="flex justify-between text-xs mt-1">
                       <span className="text-[#979799]">余额：{v.balance_snapshot}</span>
-                      <span className="text-[#FFA94B]">{v.reason}</span>
+                      {v.from_user && (
+                        <span className="text-orange">`${StatementTypeList[v.change_type].desc} ${v.from_user}`</span>
+                      )}
                     </div>
                   </div>
                 ))}

@@ -7,7 +7,7 @@ export default function RechargePanel({ amount }: {amount: number}) {
   return (
     <div className={"p-4"}>
       <div
-        className={"bg-[url('/icons/profile/bg_wallet.png')] bg-cover rounded-xl text-white flex justify-between items-center w-full px-[20px] pt-[10px] pb-[20px]"}
+        className={"bg-[url('/theme/bg_wallet@3x.png')] bg-cover rounded-xl text-white flex justify-between items-center w-full px-[20px] pt-[10px] pb-[20px]"}
       >
         <div className={"flx flex-col justify-start"}>
           <span className={"text-xs"}>唯粉余额</span>

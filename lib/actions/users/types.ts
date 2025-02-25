@@ -107,6 +107,26 @@ export type StatementReq  = PageInfo &  {
   start_time?: number
   end_time?: number
 }
+enum ChangeType {
+  RECHARGE = 1,
+  BUY_VIP = 2,
+  REWARD = 3,
+  PAY_POST = 4,
+  WITHDRAW = 5
+}
+
+export type ChangeTypeDesc = {
+  type: number
+  desc: string
+}
+
+export const StatementTypeList: ChangeTypeDesc[] = [
+  { type: ChangeType.RECHARGE, desc: "充值" },
+  { type: ChangeType.BUY_VIP, desc: "购买会员" },
+  { type: ChangeType.REWARD, desc: "打赏" },
+  { type: ChangeType.PAY_POST, desc: "帖子付费" },
+  { type: ChangeType.WITHDRAW, desc: "提现" }
+]
 
 /**
  * 收支明细返回
@@ -114,12 +134,13 @@ export type StatementReq  = PageInfo &  {
 export interface StatementResp {
   balance_snapshot: number //资金快照
   change_amount: number // 变动金额
-  change_type: number // 1 充值 2购买会员 3 打赏 4 帖子付费 5 提现
+  change_type: number // 1 充值 2订阅 3 打赏 4 帖子付费 5 提现
   id: number
   reason: string // 变动原因
   user_id: number
   trade_time: number // 交易时间
   trade_status: number // 0 成功 1 审核中 2 失败
+  from_user: string // 交易方
 }
 
 export interface UserMetricDayReq {

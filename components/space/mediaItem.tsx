@@ -9,6 +9,8 @@ export default function Page({ item }: { item: PostData }) {
   const showIds = post_attachment.map((v) => v.file_id).join("_")
   // 是否不可查看
   const lock = (post.visibility === 1 && !user.sub) || post.visibility === 2
+  /*（订阅需要付费 && 未关注博主 && 未订阅博主） || （订阅不需要付费 && 未订阅） => 跳转详情页 */
+  const toDetail =  (user.sub_price > 0 && !user.following && !user.sub) || (user.sub_price === 0 && !user.sub)
   return (
     <div className="w-[calc(50%_-_8px)] h-[220px] mt-4">
       <div
@@ -33,7 +35,7 @@ export default function Page({ item }: { item: PostData }) {
           href={
             lock
               ? "javascript:void(0);"
-              : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0}}`
+              : toDetail ? `/postInfo/${post.id}` : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0}}`
           }
         >
           <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
