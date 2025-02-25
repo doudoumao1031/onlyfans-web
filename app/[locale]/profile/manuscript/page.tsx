@@ -11,6 +11,7 @@ import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { LazyImageWithFileId } from "@/components/common/lazy-img"
+import { useTranslations } from "next-intl"
 
 enum ACTIVE_TYPE {
   POST = "POST",
@@ -21,7 +22,8 @@ const ManuscriptPost = () => {
   const [timeSort, setTimeSort] = useState<boolean>(false)
   const [title, setTitle] = useState<string>("")
   const [initData, setInitData] = useState<PageResponse<PostData>>()
-
+  const t = useTranslations("Profile.manuscript")
+  const commonTrans = useTranslations("Common")
   const fetchInitData = () => {
     myPosts({
       title,
@@ -63,7 +65,7 @@ const ManuscriptPost = () => {
             />
             <input value={title} onChange={(event) => {
               setTitle(event.target.value)
-            }} placeholder="输入博文内容" className="w-full bg-transparent flex pl-0.5"
+            }} placeholder={t("searchPlaceHolder")} className="w-full bg-transparent flex pl-0.5"
             />
           </div>
 
@@ -77,7 +79,7 @@ const ManuscriptPost = () => {
                 width={20} height={20}
               />
             </div>
-            <span className="text-text-pink text-xs">创建时间</span>
+            <span className="text-text-pink text-xs">{commonTrans("createTime")}</span>
           </button>
         </section>
       </form>
@@ -102,6 +104,8 @@ const ManuscriptPost = () => {
 const ManuscriptMedia = () => {
   const [timeSort, setTimeSort] = useState<boolean>(false)
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
+  const commonTrans = useTranslations("Common")
+  const t = useTranslations("Profile.manuscript")
   useEffect(() => {
     myMediaPosts({
       page: 1,
@@ -132,7 +136,7 @@ const ManuscriptMedia = () => {
               width={20} height={20}
             />
           </div>
-          <span className="text-text-pink text-xs">创建时间</span>
+          <span className="text-text-pink text-xs">{commonTrans("createTime")}</span>
         </button>
       </div>
       <section className="">
@@ -188,7 +192,7 @@ const ManuscriptMedia = () => {
                       className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-pink border-2 text-text-pink w-full mt-2"
                     >
                       <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"} />
-                      <span>编辑</span>
+                      <span>{t("itemActions.edit")}</span>
                     </Link>
                   </section>
                 ))}
@@ -204,15 +208,16 @@ const ManuscriptMedia = () => {
 }
 
 export default function Page() {
+  const t = useTranslations("Profile.manuscript")
   const [active, setActive] = useState<string>(ACTIVE_TYPE.POST)
   const tabOptions: iTabTitleOption[] = [
-    { label: "帖子", name: ACTIVE_TYPE.POST },
-    { label: "媒体", name: ACTIVE_TYPE.MEDIA }
+    { label: t("post"), name: ACTIVE_TYPE.POST },
+    { label: t("media"), name: ACTIVE_TYPE.MEDIA }
   ]
 
   return (
     <div>
-      <Header title="稿件管理" titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-text-pink text-base">草稿</Link>}>
+      <Header title={t("title")} titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-text-pink text-base">{t("draft")}</Link>}>
       </Header>
       <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
       {active === ACTIVE_TYPE.POST && <ManuscriptPost />}

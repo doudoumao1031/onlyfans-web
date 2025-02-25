@@ -4,13 +4,16 @@
     "updateSuccess": "更新成功",
     "updateFail": "更新失败",
     "save": "保存",
+    "add": "添加",
     "publish": "发布",
     "back": "返回",
+    "createTime": "创建时间",
     "confirm": "确定",
     "cancel": "取消",
     "postLoadError": "帖子内容加载失败",
     "ContentLoadingFailed": "内容加载失败",
-    "FreeAndSubscription": "免费/订阅"
+    "FreeAndSubscription": "免费/订阅",
+    "potatoWallet": "Potato 钱包"
   },
   "Explore": {
     "BecomeABlogger": "成为博主",
@@ -82,6 +85,67 @@
         "liveAuth": "直播认证",
         "liveShow": "直播展示"
       }
+    },
+    "manuscript": {
+      "title": "稿件管理",
+      "post": "帖子",
+      "media": "媒体",
+      "draft": "草稿",
+      "searchPlaceHolder": "输入博文内容",
+      "pinned": "置顶成功",
+      "itemActions": {
+        "share": "分享",
+        "pinned": "置顶",
+        "data": "数据",
+        "edit": "编辑"
+      },
+      "itemState": {
+        "auditing": "审核中",
+        "rejected": "未通过"
+      },
+      "saveAt": "保存于"
+    },
+    "recharge": {
+      "title": "充值",
+      "details": "明细",
+      "error": "充值失败",
+      "success": "充值成功",
+      "fansRecharge": "唯粉充值",
+      "service": "服务",
+      "walletBalance": "钱包余额",
+      "fansxBalance": "唯粉余额",
+      "rate": "总的比例",
+      "all": "全部",
+      "rechargeValuePlaceholder": "请输入充值金额",
+      "confirm": "确认充值"
+    },
+    "order": {
+      "title": "订阅管理",
+      "complete": "完成",
+      "baseSub": "基本订阅",
+      "baseSubLimit": "最小价格$1.99 USDT 或免费",
+      "free": "免费",
+      "monthlyPrice": "每月价格",
+      "shouldBe1": "您必须先开通",
+      "shouldBe2": "然后才能设置订阅价格或收取打赏",
+      "bundleSub": "捆绑订阅",
+      "price": "价格",
+      "emptyBundle": "提供几个月的订阅作为折扣捆绑",
+      "avg": "平均",
+      "month": "月",
+      "monthUnit": "个",
+      "subTimeLimit": "订阅时限",
+      "subPrice": "订阅价格",
+      "bundleSubPriceDescription": "最小价格$1.99 USDT，最高价格不超过999.99 价格保留小数点2位数",
+      "discount": "促销",
+      "discountActivities": "促销活动",
+      "emptyDiscount": "为用户提供订阅的促销活动，可以为您吸引更多的订阅用户",
+      "discountBaseOnLabel": "促销价格选择",
+      "discountBaseOnDescription": "在基本订阅和捆绑订阅中已经设定好的价格",
+      "discountPromotional": "促销折扣",
+      "discountPromotionalDescription": "百分比，最高不超过90%",
+      "discountStartTime": "促销开始时间",
+      "discountEndTime": "促销结束时间"
     }
   },
   "Space": {

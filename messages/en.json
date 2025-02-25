@@ -4,13 +4,16 @@
     "updateSuccess": "Update Success",
     "updateFail": "Update Fail",
     "save": "Save",
+    "add": "Add",
     "publish": "Publish",
     "back": "Back",
     "confirm": "Confirm",
     "cancel": "Cancel",
     "postLoadError": "Failed to load post content",
     "ContentLoadingFailed": "Content loading failed",
-    "FreeAndSubscription": "Free/Subscription"
+    "FreeAndSubscription": "Free/Subscription",
+    "createTime": "Create Time",
+    "potatoWallet": "Potato Wallet"
   },
   "Explore": {
     "BecomeABlogger": "Become a blogger",
@@ -82,6 +85,67 @@
         "liveAuth": "Live certification",
         "liveShow": "Live Show"
       }
+    },
+    "manuscript": {
+      "title": "Manuscript",
+      "post": "Posts",
+      "media": "Media",
+      "draft": "Draft",
+      "searchPlaceHolder": "Enter blog post content",
+      "pinned": "Pinned success",
+      "itemActions": {
+        "share": "Share",
+        "pinned": "Pinned",
+        "data": "Data",
+        "edit": "Edit"
+      },
+      "itemState": {
+        "auditing": "In Review",
+        "rejected": "Not passed"
+      },
+      "saveAt": "Save at"
+    },
+    "recharge": {
+      "title": "Recharge",
+      "error": "Recharge Fail",
+      "details": "Details",
+      "success": "Recharge Success",
+      "fansRecharge": "FansX Recharge",
+      "service": "Service",
+      "walletBalance": "Wallet balance",
+      "fansxBalance": "FansX balance",
+      "rate": "Rate",
+      "all": "All",
+      "rechargeValuePlaceholder": "Please enter the recharge amount",
+      "confirm": "Confirm to Recharge"
+    },
+    "order": {
+      "title": "Subscribe Management",
+      "complete": "Complete",
+      "baseSub": "Base Subscribe",
+      "baseSubLimit": "",
+      "free": "Free",
+      "monthlyPrice": "Monthly Price",
+      "shouldBe1": "You must first open",
+      "shouldBe2": "Then you can set the subscription price or collect the reward.",
+      "bundleSub": "Bundle Subscribe",
+      "price": "Price",
+      "emptyBundle": "Offer a few months subscription as a discount bundle",
+      "avg": "Average",
+      "month": "Month",
+      "monthUnit": "",
+      "subTimeLimit": "Subscription Time Limit",
+      "subPrice": "Subscription Price",
+      "bundleSubPriceDescription": "The minimum price is $1.99 USDT, the maximum price does not exceed the 999.99 price to keep 2 decimal places",
+      "discount": "Discount",
+      "discountActivities": "Discount Activities",
+      "emptyDiscount": "Subscribed promotions for users can attract more subscribers for you",
+      "discountBaseOnLabel": "Promotion price selection",
+      "discountBaseOnDescription": "Prices already set in basic and bundled subscriptions",
+      "discountPromotional": "promotional discount",
+      "discountPromotionalDescription": "Percentage, up to 90%",
+      "discountStartTime": "Promotion start time",
+      "discountEndTime": "Promotion end time"
     }
   },
   "Space": {

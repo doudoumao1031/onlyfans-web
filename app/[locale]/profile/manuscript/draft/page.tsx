@@ -11,8 +11,10 @@ import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { LazyImageWithFileId } from "@/components/common/lazy-img"
 import { TIME_FORMAT } from "@/lib/utils"
 import dayjs from "dayjs"
+import { useTranslations } from "next-intl"
 
 const DraftItem = ({ data }:{data:PostData}) => {
+  const t = useTranslations("Profile.manuscript")
   const pathname = usePathname()
   return (
     <Link href={`${pathname}/edit?id=${data.post.id}`} className="pt-2.5 pb-2.5 border-b border-gray-100 flex gap-2.5">
@@ -22,12 +24,13 @@ const DraftItem = ({ data }:{data:PostData}) => {
       </div>
       <div className="flex-col justify-between flex flex-1 w-0">
         <div className="text-[#333] line-clamp-[2] ">{data.post.title}</div>
-        <div className="pb-2.5 text-xs text-[#bbb]">保存于：{dayjs(data.post.last_update_time * 1000).format(TIME_FORMAT)}</div>
+        <div className="pb-2.5 text-xs text-[#bbb]">{t("saveAt")}：{dayjs(data.post.last_update_time * 1000).format(TIME_FORMAT)}</div>
       </div>
     </Link>
   )
 }
 export default function Page() {
+  const t = useTranslations("Profile.manuscript")
   const [initData, setInitData] = useState<PageResponse<PostData>>()
 
   const defaultParams = {
@@ -52,7 +55,7 @@ export default function Page() {
   })
   return (
     <div>
-      <Header title="草稿" titleColor={"#000"}/>
+      <Header title={t("draft")} titleColor={"#000"}/>
       <div className="pl-4 pr-4">
         {initData && (
           <InfiniteScroll<PostData> fetcherFn={infiniteFetchMyPosts} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>

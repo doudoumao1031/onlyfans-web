@@ -6,6 +6,8 @@ import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib
 import { useCommonMessageContext } from "@/components/common/common-message"
 import Link from "next/link"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import React from "react"
+import { useTranslations } from "next-intl"
 
 interface RechargeProps {
   children: React.ReactNode
@@ -21,10 +23,10 @@ export default function RechargeDrawer(props: RechargeProps) {
   const [ptBalance, setPtBalance] = useState<number>(0)
   const [wfBalance, setWfBalance] = useState<number>(0)
   const [rate, setRate] = useState<string>("1:1")
+  const t = useTranslations("Profile.recharge")
   const {  withLoading } = useLoadingHandler({
-    onError: (error) => {
-      console.error("Recharge error:", error)
-      showMessage("充值失败")
+    onError: () => {
+      showMessage(t("error"))
     }
   })
   useEffect(() => {
@@ -43,10 +45,10 @@ export default function RechargeDrawer(props: RechargeProps) {
     })
   }
   const columns: { title: string; desc: string }[] = [
-    { title: "服务", desc: "唯粉充值" },
-    { title: "钱包余额", desc: ptBalance.toFixed(2).toString() + " USDT" },
-    { title: "唯粉余额", desc: wfBalance.toFixed(2).toString() + " USDT" },
-    { title: "总的比例", desc: rate }
+    { title: t("service"), desc: t("fansRecharge") },
+    { title: t("walletBalance"), desc: ptBalance.toFixed(2).toString() + " USDT" },
+    { title: t("fansxBalance"), desc: wfBalance.toFixed(2).toString() + " USDT" },
+    { title: t("rate"), desc: rate }
   ]
 
   async function handleRecharge(amount: number) {
@@ -60,13 +62,12 @@ export default function RechargeDrawer(props: RechargeProps) {
 
       await handleRechargeOrderCallback({ trade_no: tradeNo }).then((result) => {
         if (result && result.code === 0) {
-          showMessage("充值成功", "success")
+          showMessage(t("success"), "success")
           getSettingData()
           setAmount(0)
           setIsOpen(false)
         } else {
-          console.log("充值失败:")
-          showMessage("充值失败")
+          showMessage(t("error"))
         }
       })
     })
@@ -83,7 +84,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         {children}
       </button>
       <FormDrawer
-        title={<span className={"text-[18px] font-semibold"}>充值</span>}
+        title={<span className={"text-[18px] font-semibold"}>{t("title")}</span>}
         headerLeft={(close) => {
           return (
             <button
@@ -105,7 +106,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         headerRight={() => {
           return (
             <Link href={"/profile/withdrawalInfo?changeType=1"} prefetch={false}>
-              <button className={"text-base text-text-pink"}>明细</button>
+              <button className={"text-base text-text-pink"}>{t("details")}</button>
             </Link>
           )
         }}
@@ -136,7 +137,7 @@ export default function RechargeDrawer(props: RechargeProps) {
               id="amount"
               type="number"
               className="w-full py-2 pl-4 pr-16 border-0 bg-white rounded-lg text-left h-[49px] placeholder:text-gray-400 text-base"
-              placeholder="请输入充值金额"
+              placeholder={t("rechargeValuePlaceholder")}
               value={amount == 0 ? "" : amount.toString()}
               onChange={(event) => {
                 const money = event.target.value.replace(/[^0-9.]/g, "")
@@ -156,7 +157,7 @@ export default function RechargeDrawer(props: RechargeProps) {
                     setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
                   }}
                 >
-                  全部
+                  {t("all")}
                 </button>
               )
             }
@@ -177,7 +178,7 @@ export default function RechargeDrawer(props: RechargeProps) {
               }}
             >
               {/*{amount > ptBalance ? "充值金额不能大于钱包余额" : "确认充值"}*/}
-              确认充值
+              {t("confirm")}
             </button>
           </div>
         </div>
