@@ -7,6 +7,7 @@ import { getUserMetricDay, UserMetricDay, UserMetricDayReq } from "@/lib"
 import dayjs from "dayjs"
 import { Line } from "react-chartjs-2"
 import { getEvenlySpacedPoints } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 export type TProos = {
   tabs: Record<string, string>,
   title: string
@@ -14,34 +15,35 @@ export type TProos = {
 const DATE_FORMAT = "YYYY-MM-DD"
 
 export default function Page({ tabs, title }: TProos) {
+  const t = useTranslations("Profile")
   const now = dayjs()
   const dateTabs: Array<{ label: string, key: number, value: UserMetricDayReq | null }> = [
     {
-      label: "昨日", key: 0, value: {
+      label: t("dataCenter.yesterday"), key: 0, value: {
         start: now.add(-1, "day").format(DATE_FORMAT),
         end: now.add(-1, "day").format(DATE_FORMAT)
       }
     },
     {
-      label: "近7日", key: 1, value: {
+      label: t("dataCenter.last7Days"), key: 1, value: {
         start: now.add(-7, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近15日", key: 2, value: {
+      label: t("dataCenter.last15Days"), key: 2, value: {
         start: now.add(-15, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近30日", key: 3, value: {
+      label: t("dataCenter.last30Days"), key: 3, value: {
         start: now.add(-30, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近90日", key: 4, value: {
+      label: t("dataCenter.last90Days"), key: 4, value: {
         start: now.add(-90, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
@@ -77,7 +79,7 @@ export default function Page({ tabs, title }: TProos) {
         }
       ]
     }
-  }, [dataInfo, active])
+  }, [dataInfo, tabs, active])
 
   const statistics = useMemo(() => {
     return Object.keys(tabs).reduce((pre, cur) => {
@@ -90,16 +92,16 @@ export default function Page({ tabs, title }: TProos) {
       }
       return pre
     }, {} as { [key: string]: number })
-  }, [dataInfo])
+  }, [dataInfo, tabs])
   return (
     <div className="p-4">
       <div className="flex justify-between">
         <div className="flex items-end">
           <h1 className="text-base font-medium">{title}</h1>
-          <div className="ml-2 text-[#BBB] text-xs ">凌晨2点更新</div>
+          <div className="ml-2 text-[#BBB] text-xs ">{t("dataCenter.updateAt2AM")}</div>
         </div>
         <InputWithLabel
-          placeholder={"日期范围"}
+          placeholder={t("dataCenter.dateRange")}
           labelClass="border-0 pl-0 pr-0 pb-0 pt-[0px] text-[#6D7781]"
           iconSize={16}
           onInputChange={(e) => {

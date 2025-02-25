@@ -1,5 +1,5 @@
 "use client"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import clsx from "clsx"
 import { useCallback } from "react"
 import { usePathname } from "next/navigation"

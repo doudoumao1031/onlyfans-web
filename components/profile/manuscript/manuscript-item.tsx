@@ -1,7 +1,7 @@
 // 稿件
 import Image from "next/image"
 import IconWithImage from "@/components/profile/icon"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { clsx } from "clsx"
 import { FileType, PostData, postPined } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"

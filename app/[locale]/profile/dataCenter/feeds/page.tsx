@@ -7,36 +7,38 @@ import InputWithLabel from "@/components/profile/input-with-label"
 import { PageResponse, PostData } from "@/lib"
 import { getMyFeeds } from "@/lib/actions/space"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import Link from "next/link"
+import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/routing"
 import { Fragment, useEffect, useMemo, useState } from "react"
 
-const filterTypes = [
-  { label: "最新发布", value: 0 },
-  { label: "总播放量", value: 1 },
-  { label: "总评论", value: 2 },
-  { label: "总点赞", value: 3 }
-]
+
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const [type, setType] = useState<number>(0)
-
+  const t = useTranslations("Profile")
   useEffect(() => {
-    getData()
-  }, [type])
-  const getData = async () => {
-    const params = {
+    getMyFeeds({
       page: 1,
       pageSize: 10,
       from_id: 0,
       sort_type: type
-    }
-    const res = await getMyFeeds(params)
-    setInitData(res)
-  }
+    }).then((res) => {
+      setInitData(res)
+    })
+  }, [type])
+  const filterTypes = useMemo(() => {
+    return [
+      { label: t("dataCenter.latestRelease"), value: 0 },
+      { label: t("dataCenter.totalPlayCount"), value: 1 },
+      { label: t("dataCenter.totalComment"), value: 2 },
+      { label: t("dataCenter.totalLike"), value: 3 }
+    ]
+  }, [t])
+
   const title = useMemo(() => {
     const cur = filterTypes.find((v) => v.value === type)
-    return cur ? cur.label : "最新发布"
-  }, [type])
+    return cur ? cur.label : t("dataCenter.latestRelease")
+  }, [filterTypes, t, type])
 
   const infiniteFetchPosts = useInfiniteFetch({
     fetchFn: getMyFeeds,
@@ -60,11 +62,11 @@ export default function Page() {
               {Boolean(error) && <ListError />}
               <div className="flex justify-between mb-4 px-4">
                 <div className="flex items-end">
-                  <h1 className="text-base font-medium">帖子列表</h1>
-                  <div className="ml-2 text-[#BBB] text-xs ">{`展示${title}的前20个帖子`}</div>
+                  <h1 className="text-base font-medium">{t("dataCenter.posts")}</h1>
+                  <div className="ml-2 text-[#BBB] text-xs ">{`${t("dataCenter.show")}${title}${t("dataCenter.recent")}`}</div>
                 </div>
                 <InputWithLabel
-                  placeholder={"日期范围"}
+                  placeholder={t("dataCenter.dateRange")}
                   labelClass="border-0 pl-0 pr-0 pb-0 pt-[0px] text-[#6D7781]"
                   iconSize={16}
                   onInputChange={(e) => {

@@ -1,20 +1,22 @@
 import DataViewItem from "@/components/profile/dataCenter/dataViewItem"
+import { getTranslations } from "next-intl/server"
 
-export default function Page() {
+export default async function Page() {
+  const t = await getTranslations("Profile")
   const dataOptions = {
-    play_count: "播放量",
-    access_count: "空间访客",
-    subscribe_count: "订阅量"
+    play_count: t("dataCenter.playCount"),
+    access_count: t("dataCenter.accessCount"),
+    subscribe_count: t("dataCenter.subscribeCount")
   }
   const focusOptions = {
-    following_count: "新增关注",
-    following_del_count: "取消关注",
-    following_all_count: "总关注"
+    following_count: t("dataCenter.followingCount"),
+    following_del_count: t("dataCenter.followingDelCount"),
+    following_all_count: t("dataCenter.followingAllCount")
   }
   return (
     <>
-      <DataViewItem title="数据流量" tabs={dataOptions} />
-      <DataViewItem title="关注变化" tabs={focusOptions} />
+      <DataViewItem title={t("dataCenter.dataTraffic")} tabs={dataOptions} />
+      <DataViewItem title={t("dataCenter.focusChange")} tabs={focusOptions} />
     </>
   )
 }

@@ -1,6 +1,6 @@
 "use client"
 import Header from "@/components/common/header"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import Nav from "@/components/explore/nav"
 import { usePathname, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react"

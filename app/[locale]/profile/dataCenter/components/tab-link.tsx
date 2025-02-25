@@ -1,19 +1,21 @@
 "use client"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import clsx from "clsx"
 import { useCallback } from "react"
 import { usePathname } from "next/navigation"
+import { useTranslations } from "next-intl"
 export default function TabLinks() {
+  const t = useTranslations("Profile")
   const pathName = usePathname()
   const pathNameClass = useCallback((href: string) => {
-    if (pathName === href) {
+    if (pathName.endsWith(href)) {
       return "font-bold text-black "
     }
     return "text-[#777] font-normal"
   }, [pathName])
   const links = [
-    { name: "数据概览", href: "/profile/dataCenter/dataView" },
-    { name: "帖子情况", href: "/profile/dataCenter/feeds" }
+    { name: t("dataCenter.dataView"), href: "/profile/dataCenter/dataView" },
+    { name: t("dataCenter.feeds"), href: "/profile/dataCenter/feeds" }
   ]
   return (
     <div className="w-full text-center grid grid-cols-2 border-b border-gray-100">
@@ -26,7 +28,7 @@ export default function TabLinks() {
           className={clsx("pt-3.5 pb-3.5 text-[20px] relative", pathNameClass(link.href))}
         >
           {`${link.name}`}
-          <span className={clsx("absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-black w-[40px] ml-[-20px]", pathName === link.href ? "block" : "hidden")}></span>
+          <span className={clsx("absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-black w-[40px] ml-[-20px]", pathName.endsWith(link.href) ? "block" : "hidden")}></span>
         </Link>
       ))}
     </div>

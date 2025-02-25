@@ -3,15 +3,17 @@ import UserCard from "@/components/user/user-card"
 import SearchInput from "@/components/explore/search-input"
 import Post from "@/components/post/post"
 import { searchPost, searchUser } from "@/lib"
+import { getTranslations } from "next-intl/server"
 
 export default async function Page(props: {
   searchParams?: Promise<{
     search?: string
   }>
 }) {
+  const t = await getTranslations("Search")
+
   const searchParams = await props.searchParams
   const query = searchParams?.search || ""
-  console.log(query)
   // 用户搜索
   let users
   if (query !== "") {
@@ -28,9 +30,9 @@ export default async function Page(props: {
   return (
     /** 搜索 */
     <div className="w-full flex flex-col justify-center">
-      <SearchInput placeholder={"搜索"} />
+      <SearchInput placeholder={t("inputPlaceholder")} />
       {query === "" && (
-        <span className="mt-16 text-gray-500 text-center">输入博主的昵称或用户名进行搜索</span>
+        <span className="mt-16 text-gray-500 text-center">{t("description")}</span>
       )}
       {query !== "" && users && !users.list && users.total === 0 && posts && posts.total === 0 && (
         <div className="flex flex-col justify-center items-center justify-items-center mt-40">
@@ -40,12 +42,12 @@ export default async function Page(props: {
             width={200}
             height={150}
           />
-          <span className="mt-6 text-gray-500 text-center">没有搜到相关博主，请尝试别的搜索词</span>
+          <span className="mt-6 text-gray-500 text-center">{t("noResult")}</span>
         </div>
       )}
       {query !== "" && users && users.total > 0 && users.list && (
         <div className="flex flex-col justify-start px-4 pt-[20px]">
-          <span className="font-medium text-left text-[#6D7781]">用户</span>
+          <span className="font-medium text-left text-[#6D7781]">{t("users")}</span>
           <div className="w-full mt-[10px]">
             {users.list.map((item, index) => (
               <div key={index} className="w-full mb-[10px]">
@@ -61,7 +63,7 @@ export default async function Page(props: {
       {query !== "" && posts && posts.total > 0 && (
         <>
           <div className="flex flex-col justify-start px-4">
-            <span className="font-medium text-left text-[#6D7781]">博文</span>
+            <span className="font-medium text-left text-[#6D7781]">{t("posts")}</span>
           </div>
           <div className="w-full mt-[10px]">
             {posts.list.map((item, index) => (

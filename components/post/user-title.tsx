@@ -3,7 +3,7 @@ import { buildMention } from "./utils"
 import dayjs from "dayjs"
 import CommonAvatar from "@/components/common/common-avatar"
 import IconWithImage from "../profile/icon"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 
 export default function UserTitle({
   user,

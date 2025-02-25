@@ -3,7 +3,7 @@ import Image from "next/image"
 import { BloggerInfo } from "@/lib"
 import IconWithImage from "@/components/profile/icon"
 import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { useTranslations } from "next-intl"
 /**
  * 博主名片

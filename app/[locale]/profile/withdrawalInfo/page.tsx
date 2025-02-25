@@ -6,14 +6,15 @@ import { StatementResp, userStatement } from "@/lib"
 import dayjs from "dayjs"
 import { useState, useEffect, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
+import { useTranslations } from "next-intl"
 
 function WithdrawalInfoContent() {
+  const t = useTranslations("Profile")
   const searchParams = useSearchParams()
   const changeType = Number(searchParams.get("changeType"))
   const [list, setList] = useState<StatementResp[]>()
 
   useEffect(() => {
-    console.log("useEffect called with changeType:", changeType)
     const statementList = async () => {
       try {
         const list = await userStatement({
@@ -49,9 +50,9 @@ function WithdrawalInfoContent() {
       <div className="p-4 pt-0">
         {list.map((v, i) => {
           const types = [
-            { color: "text-[#0DC28A]", value: "成功" },
-            { color: "text-[#FFA94B]", value: "审核中" },
-            { color: "text-[#BBBBBB]", value: "失败" }
+            { color: "text-[#0DC28A]", value: t("withdrawalInfo.success") },
+            { color: "text-[#FFA94B]", value: t("withdrawalInfo.reviewing") },
+            { color: "text-[#BBBBBB]", value: t("withdrawalInfo.failed") }
           ]
           return (
             <div key={i} className="mb-4">
@@ -60,7 +61,7 @@ function WithdrawalInfoContent() {
                 <span className="text-xs text-[#323232]">{v.change_amount} USDT</span>
               </div>
               <div className="flex justify-between text-xs mt-1">
-                <span className="text-[#979799]">余额：{v.balance_snapshot}</span>
+                <span className="text-[#979799]">{t("withdrawalInfo.balance")}：{v.balance_snapshot}</span>
                 <span className={`${types[v.trade_status].color}`}>
                   {types[v.trade_status].value}
                 </span>
@@ -74,9 +75,10 @@ function WithdrawalInfoContent() {
 }
 
 export default function Page() {
+  const t = useTranslations("Profile")
   return (
     <div>
-      <Header title="明细" titleColor="#000" />
+      <Header title={t("withdrawalInfo.title")} titleColor="#000" />
       <Suspense fallback={<div className="flex justify-center p-4">Loading...</div>}>
         <WithdrawalInfoContent />
       </Suspense>

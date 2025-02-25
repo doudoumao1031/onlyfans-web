@@ -1,7 +1,7 @@
 import Header from "@/components/common/header"
 import Avatar from "@/components/profile/avatar"
 import IconWithImage from "@/components/profile/icon"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { userProfile } from "@/lib/actions/profile"
 import { userWallet } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"

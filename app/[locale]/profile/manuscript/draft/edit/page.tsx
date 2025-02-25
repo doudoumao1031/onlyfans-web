@@ -30,6 +30,7 @@ import { getFollowedUsers, SubscribeUserInfo } from "@/lib"
 import Empty from "@/components/common/empty"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { useTranslations } from "next-intl"
 
 const ItemEditTitle = ({
   title,
@@ -128,6 +129,9 @@ const AddVoteModal = ({
 
   const minTime = new Date()
 
+  const t = useTranslations("Profile")
+  const commonTrans = useTranslations("Common")
+
   return (
     <>
       <button
@@ -138,7 +142,7 @@ const AddVoteModal = ({
         {children}
       </button>
       <FormDrawer
-        title={"发起投票"}
+        title={t("manuscript.itemActions.addVote")}
         isOpen={open}
         setIsOpen={setIsOpen}
         outerControl
@@ -176,7 +180,7 @@ const AddVoteModal = ({
               }}
               className={"text-base text-text-pink"}
             >
-              确定
+              {commonTrans("confirm")}
             </button>
           )
         }}
@@ -190,7 +194,7 @@ const AddVoteModal = ({
                 <InputWithLabel
                   value={field.value}
                   onInputChange={field.onChange}
-                  label={"投票标题"}
+                  label={t("manuscript.itemActions.voteTitle")}
                 />
               )
             }}
@@ -202,9 +206,9 @@ const AddVoteModal = ({
         </section>
         <section className={"py-5 px-4 border-b border-[#ddd]"}>
           <h3 className="font-medium text-base mb-2">
-            投票内容
+            {t("manuscript.itemActions.voteContent")}
             {watch("items")?.filter(item => !!item.content)?.length < 2 && (
-              <span className="text-xs text-pink ml-2 font-normal">最少2个选项</span>
+              <span className="text-xs text-pink ml-2 font-normal">{t("manuscript.itemActions.voteContentMin")}</span>
             )}
           </h3>
           <section className="flex flex-col gap-5 mt-2">
@@ -219,7 +223,7 @@ const AddVoteModal = ({
                       <InputWithLabel
                         value={field.value}
                         onInputChange={field.onChange}
-                        label={"请输入投票内容"}
+                        label={t("manuscript.itemActions.voteContentInput")}
                       />
                     )
                   }}
@@ -238,7 +242,7 @@ const AddVoteModal = ({
                 width={20}
                 height={20}
               />
-              添加选项
+              {t("manuscript.itemActions.addVoteOption")}
             </button>
           </section>
         </section>
@@ -249,11 +253,11 @@ const AddVoteModal = ({
               return (
                 <FormItemWithSelect
                   onValueChange={field.onChange}
-                  label={"单选/多选"}
+                  label={t("manuscript.itemActions.voteSelect")}
                   value={field.value}
                   options={[
-                    { label: "单选", value: false },
-                    { label: "多选", value: true }
+                    { label: t("manuscript.itemActions.voteSelectSingle"), value: false },
+                    { label: t("manuscript.itemActions.voteSelectMultiple"), value: true }
                   ]}
                 />
               )
@@ -261,7 +265,7 @@ const AddVoteModal = ({
             name={"mu_select"}
           />
           <section className="flex justify-between items-center border-b border-[#ddd] py-4">
-            <div>截止时间</div>
+            <div>{t("manuscript.itemActions.voteEndTime")}</div>
             <div className={""}>
               <Controller
                 control={control}
@@ -326,10 +330,12 @@ const ReadSettings = ({
   initFormData?: iPostPrice[]
   updatePrice: (price: iPostPrice[]) => void
 }) => {
+  const t = useTranslations("Profile")
+  const commonTrans = useTranslations("Common")
   const [open, setIsOpen] = useState<boolean>(false)
   const selectOptions = [
-    { label: "所有人", value: 0 },
-    { label: "订阅者", value: 1 }
+    { label: t("manuscript.itemActions.priceSelectAll"), value: 0 },
+    { label: t("manuscript.itemActions.priceSelectSubscriber"), value: 1 }
     // {label: "非订阅", value: 2}
   ]
   const priceForm = useForm<{ priceList: iPostPrice[] }>({
@@ -364,12 +370,12 @@ const ReadSettings = ({
     }
     if (userType === 1) {
       return [
-        { label: "非订阅者", value: 2 },
-        { label: "非订阅者无法浏览", value: 3 } // 特殊处理
+        { label: t("manuscript.itemActions.priceSelectNonSubscriber"), value: 2 },
+        { label: t("manuscript.itemActions.priceSelectNonSubscriberCannotView"), value: 3 } // 特殊处理
       ]
     }
     return []
-  }, [userType])
+  }, [t, userType])
 
   useEffect(() => {
     if (formValues.priceList.length === 0) {
@@ -406,7 +412,7 @@ const ReadSettings = ({
         isOpen={open}
         setIsOpen={setIsOpen}
         outerControl
-        title={"阅览设置"}
+        title={t("manuscript.itemActions.priceSetting")}
         headerLeft={(close) => {
           return (
             <button onTouchEnd={close} className={"text-base text-[#777]"}>
@@ -442,7 +448,7 @@ const ReadSettings = ({
               }}
               className={"text-base text-text-pink"}
             >
-              确定
+              {commonTrans("confirm")}
             </button>
           )
         }}
@@ -455,13 +461,13 @@ const ReadSettings = ({
               key={item.id}
             >
               <h3>
-                付费设置{index + 1} {disableOption2 && index === 1 ? "(无效)" : ""}
+                {t("manuscript.paySetting")} {index + 1} {disableOption2 && index === 1 ? `(${t("manuscript.invalid")})` : ""}
               </h3>
               <Controller
                 render={({ field }) => {
                   return (
                     <FormItemWithSelect
-                      label={"付费对象"}
+                      label={t("manuscript.payObject")}
                       value={field.value}
                       onValueChange={field.onChange}
                       options={
@@ -476,7 +482,7 @@ const ReadSettings = ({
               {/*<FormItemWithSelect label={"付费金额"} value={"0"} options={[{label: "0", value: "0"}, {label: "2", value: "2"}]}/>*/}
               <section className={"relative"}>
                 <section className="flex justify-between items-center border-b border-[#ddd] py-4">
-                  <div className="shrink-0">付费金额</div>
+                  <div className="shrink-0">{t("manuscript.payPrice")}</div>
                   <Controller
                     control={control}
                     render={({ field }) => {
@@ -509,7 +515,7 @@ const ReadSettings = ({
                   {errors.priceList?.[index]?.price?.message}
                 </section>
               </section>
-              <section className={"text-xs text-[#777] mt-1.5"}>金额0时，为免费</section>
+              <section className={"text-xs text-[#777] mt-1.5"}>{t("manuscript.priceFree")}</section>
             </section>
           )
         })}
@@ -520,6 +526,7 @@ const ReadSettings = ({
 
 const UploadMedia = () => {
   const { showMessage } = useCommonMessageContext()
+  const t = useTranslations("Profile")
   const [uploading, setIsUploading] = useState<boolean>(false)
   const [firstMediaType, setFirstMediaType] = useState<UPLOAD_MEDIA_TYPE | undefined>(undefined)
   const { control } = useFormContext<iPost>()
@@ -546,10 +553,10 @@ const UploadMedia = () => {
     } else {
       if (fileType !== firstMediaType) {
         if (fileType === UPLOAD_MEDIA_TYPE.PIC) {
-          showMessage("请先删除视频内容")
+          showMessage(t("manuscript.deleteVideoContent"), "error")
         }
         if (fileType === UPLOAD_MEDIA_TYPE.VIDEO) {
-          showMessage("请先删除图片内容")
+          showMessage(t("manuscript.deleteImageContent"), "error")
         }
         return
       }
@@ -617,7 +624,7 @@ const UploadMedia = () => {
       })}
       {uploading && (
         <div className={"w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "}>
-          上传中...
+          {t("manuscript.uploading")}
         </div>
       )}
       {!uploading && itemsList.length < 9 && (
@@ -639,7 +646,7 @@ const UploadMedia = () => {
             height={24}
             color={"#000"}
           />
-          <div className="text-[#bbb] text-xs text-center absolute bottom-2">视频/图片</div>
+          <div className="text-[#bbb] text-xs text-center absolute bottom-2">{t("manuscript.videoImage")}</div>
         </div>
       )}
     </>
@@ -665,11 +672,12 @@ const initPostFormData: iPost = {
 }
 
 const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
+  const t = useTranslations("Profile")
   const selectOptions = [
-    { label: "所有人", value: 0, visibility: true },
-    { label: "订阅者", value: 1, visibility: true },
-    { label: "非订阅者", value: 2, visibility: true },
-    { label: "非订阅者无法浏览", value: 2, visibility: false }
+    { label: t("manuscript.itemActions.priceSelectAll"), value: 0, visibility: true },
+    { label: t("manuscript.itemActions.priceSelectSubscriber"), value: 1, visibility: true },
+    { label: t("manuscript.itemActions.priceSelectNonSubscriber"), value: 2, visibility: true },
+    { label: t("manuscript.itemActions.priceSelectNonSubscriberCannotView"), value: 2, visibility: false }
   ]
   const { price, user_type, visibility } = postPrice
   const option = selectOptions.find(
@@ -684,8 +692,8 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
         color={"#FF8492"}
       />
       <label className={"text-text-pink"}>
-        {option?.label}
-        {Number(price) === 0 ? "免费" : price}
+        {option?.label}&nbsp;
+        {Number(price) === 0 ? t("manuscript.free") : price}
       </label>
     </section>
   )
@@ -699,6 +707,7 @@ function SelectMotionUser({
   subUsers: SubscribeUserInfo[],
   updateMentionUserIds: (id: number) => void
 }) {
+  const t = useTranslations("Profile")
   const [filterValue, setFilterValue] = useState<string>("")
 
   const filteredData = useMemo(() => {
@@ -707,7 +716,7 @@ function SelectMotionUser({
   }, [filterValue, subUsers])
 
   return (
-    <FormDrawer title={"已关注用户"} outerControl trigger={<></>} isOpen={isOpen} setIsOpen={setIsOpen}>
+    <FormDrawer title={t("manuscript.motionUser")} outerControl trigger={<></>} isOpen={isOpen} setIsOpen={setIsOpen}>
       <section className="h-full flex flex-col">
         <section className={"flex-shrink-0 px-4 mb-2.5"}>
           <input className={"block w-full rounded-full h-9 px-4 bg-[#f8f8f8]"} value={filterValue} onChange={event => {
@@ -771,7 +780,8 @@ const EditPageContent = () => {
     })
   }, [])
   const selectionStart = useRef<number>(0)
-
+  const t = useTranslations("Profile")
+  const commonTrans = useTranslations("Common")
   const getSubmitFormData = (formData: iPost) => {
     const { post_mention_user = [], post: { title } } = formData
     const mentionUsers = post_mention_user?.map(item => subUsers.find(sub => sub.user.id === item.user_id))?.filter(item => !!item)
@@ -786,10 +796,12 @@ const EditPageContent = () => {
 
   const { withLoading } = useLoadingHandler({
     onError: (message) => {
-      showMessage(typeof message === "string" ? message : "保存失败")
+      showMessage(typeof message === "string" ? message : commonTrans("saveFail"), "error", {
+        afterDuration: router.back
+      })
     },
     onSuccess: (message) => {
-      showMessage(typeof message === "string" ? message : "保存成功", "success", {
+      showMessage(typeof message === "string" ? message : commonTrans("saveSuccess"), "success", {
         afterDuration: router.back
       })
     }
@@ -802,17 +814,17 @@ const EditPageContent = () => {
       try {
         addPostResponse = await addPost(params)
       } catch {
-        throw "保存帖子失败"
+        throw t("manuscript.publishFail")
       }
       if (addPostResponse?.code === 0 && addPostResponse?.data?.post?.id) {
         try {
           await pubPost(addPostResponse.data.post.id)
-          return "发布成功"
+          return t("manuscript.publishSuccess")
         } catch {
-          throw "发布失败"
+          throw t("manuscript.publishFail")
         }
       } else {
-        throw "保存帖子失败"
+        throw t("manuscript.publishFail")
       }
     })
   }
@@ -855,9 +867,9 @@ const EditPageContent = () => {
     await withLoading(async () => {
       try {
         await addPost(getSubmitFormData(formValues))
-        return "草稿保存成功"
+        return t("manuscript.saveDraftSuccess")
       } catch {
-        throw "草稿保存失败"
+        throw t("manuscript.saveDraftFail")
       }
     })
   }
@@ -879,7 +891,7 @@ const EditPageContent = () => {
           {
             showSaveDraft ? (
               <ConfirmModal
-                content={"未发布的内容是否保存到草稿中？"}
+                content={t("manuscript.saveDraftConfirm")}
                 confirm={handleSaveDraft}
                 cancel={router.back}
                 trigger={
@@ -906,7 +918,7 @@ const EditPageContent = () => {
               )
           }
           <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-text-pink")}>
-            发布
+            {t("manuscript.itemActions.publish")}
           </button>
         </section>
 
@@ -919,7 +931,7 @@ const EditPageContent = () => {
             {...register("post.title")}
             className="resize-none block w-full"
             maxLength={999}
-            placeholder="分享我的感受"
+            placeholder={t("manuscript.shareMyFeelings")}
             rows={5}
             onKeyUp={event => {
               if (event.key === "@") {
@@ -936,7 +948,7 @@ const EditPageContent = () => {
           <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
             <section className="flex justify-between">
               <div className="flex gap-2.5 items-center">
-                <div className="font-bold text-base">发起了一个投票:</div>
+                <div className="font-bold text-base">{t("manuscript.addedVote")}:</div>
                 <AddVoteModal
                   initFormData={formValues.post_vote}
                   updateVoteData={(data) => {
@@ -981,7 +993,7 @@ const EditPageContent = () => {
                 {formValues.post_vote?.stop_time
                   ? dayjs(formValues.post_vote?.stop_time * 1000).format("YYYY-MM-DD HH:mm")
                   : ""}{" "}
-                结束
+                {t("manuscript.voteEndTime")}
               </div>
             </section>
           </section>
@@ -989,7 +1001,7 @@ const EditPageContent = () => {
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
           {/*<ItemEditTitle title={"阅览设置："}/>*/}
           <div className="flex gap-2.5 items-center">
-            <div className="font-bold text-base">阅览设置：</div>
+            <div className="font-bold text-base">{t("manuscript.itemActions.priceSetting")}：</div>
             <ReadSettings
               initFormData={formValues.post_price}
               updatePrice={(value) => {
@@ -1016,9 +1028,9 @@ const EditPageContent = () => {
           </section>
         </section>
         <section className="pt-5 pb-5 pl-4 pr-4 ">
-          <ItemEditTitle showIcon={false} title={"发布通知"} />
+          <ItemEditTitle showIcon={false} title={t("manuscript.publishNotice")} />
           <section className="border-b border-gray-200 flex justify-between items-center py-3">
-            <div>订阅者</div>
+            <div>{t("manuscript.subscriber")}</div>
             <Switch
               className={"custom-switch"}
               {...noticeRegister}
@@ -1044,7 +1056,7 @@ const EditPageContent = () => {
                   height={20}
                   color={"#999"}
                 />
-                投票
+                {t("manuscript.vote")}
               </span>
             )}
           </AddVoteModal>

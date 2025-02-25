@@ -8,12 +8,12 @@ import {
   userCollectionUsers
 } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Fragment, useEffect, useState } from "react"
 import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
 import IconWithImage from "@/components/profile/icon"
 import CommonAvatar from "@/components/common/common-avatar"
-
+import { useTranslations } from "next-intl"
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<BloggerInfo> | null>()
   useEffect(() => {
@@ -26,8 +26,6 @@ export default function Page() {
       from_id: 0
     }
     const res = await userCollectionUsers(params)
-    console.log(res, "res------")
-
     setInitData(res)
   }
 
@@ -38,6 +36,8 @@ export default function Page() {
       from_id: 0
     }
   })
+  const t = useTranslations("Profile")
+  const spaceTrans = useTranslations("Space")
   return (
     <div className="mt-4 px-4  h-[calc(100vh-145px)]">
       {initData && (
@@ -51,7 +51,7 @@ export default function Page() {
             <Fragment>
               {Boolean(error) && <ListError />}
               <div className="total-num p-4 pt-0">
-                <span className="text-gray-400">总数：</span>
+                <span className="text-gray-400">{t("collect.total")}：</span>
                 {initData?.total ?? 0}
               </div>
               {items.map((v, i) => (
@@ -106,7 +106,7 @@ export default function Page() {
 
                           {!v.sub && (
                             <div className="bg-black rounded-full bg-opacity-20 py-1 px-3 ml-2 text-xs">
-                              免费/订阅
+                              {spaceTrans("FreeAndSubscription")}
                             </div>
                             // <div
                             //   onClick={(e) => {

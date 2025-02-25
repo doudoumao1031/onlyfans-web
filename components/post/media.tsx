@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Attachment, FileType, TPost } from "./types"
 import { buildImageUrl } from "@/lib/utils"
 import { VideoPreview } from "./video-preview"

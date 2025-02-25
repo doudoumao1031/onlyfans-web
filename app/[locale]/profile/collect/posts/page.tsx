@@ -4,16 +4,19 @@ import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { PageResponse, PostData, userCollectionPost, userCollectionPosts } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Fragment, useEffect, useState } from "react"
 import { buildImageUrl } from "@/lib/utils"
 import CommonAvatar from "../../../../../components/common/common-avatar"
 import LazyImg from "@/components/common/lazy-img"
 import DelItem from "@/components/profile/del-item"
 import LoadingMask from "@/components/common/loading-mask"
+import { useTranslations } from "next-intl"
+
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const t = useTranslations("Profile")
   useEffect(() => {
     getData()
   }, [])
@@ -40,7 +43,7 @@ export default function Page() {
       await userCollectionPost({ post_id, collection: false })
       getData()
       setIsLoading(false)
-    } catch (error) {
+    } catch {
       setIsLoading(false)
     }
   }
@@ -58,7 +61,7 @@ export default function Page() {
             <Fragment>
               {Boolean(error) && <ListError />}
               <div className="total-num p-4 pt-0 px-8">
-                <span className="text-gray-400">总数：</span>
+                <span className="text-gray-400">{t("collect.total")}：</span>
                 {initData?.total ?? 0}
               </div>
               {items.map((v) => (
@@ -87,7 +90,7 @@ export default function Page() {
                       </div>
                       <div className="flex flex-col justify-between flex-1">
                         <div className="line-clamp-2">{v.post.title}</div>
-                        <div className="flex items-center">
+                        <div className="flex items-center gap-2">
                           {/* <Image
                           src={v.user.photo?buildImageUrl(v.user.photo)}
                           className={"w-6 h-6 rounded-full mr-2 bg-cover "}

@@ -1,7 +1,7 @@
 import IconWithImage from "../profile/icon"
 import { FileType, PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import LazyImg from "../common/lazy-img"
 import { getTranslations } from "next-intl/server"
 export default async function Page({ item }: { item: PostData }) {
@@ -34,8 +34,8 @@ export default async function Page({ item }: { item: PostData }) {
             lock
               ? "javascript:void(0);"
               : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${
-                  post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0
-                }}`
+                post_attachment[0]?.file_type === FileType.Video ? showIds : showIds + "_" + 0
+              }}`
           }
         >
           <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">

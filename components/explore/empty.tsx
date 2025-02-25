@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import Image from "next/image"
 import { getTranslations } from "next-intl/server"
 export default async function Empty({ text }: { text: string }) {

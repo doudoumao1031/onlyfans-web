@@ -2,7 +2,7 @@ import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
 import { User } from "@/lib/actions/users/types"
 import Avatar from "./avatar"
 import Image from "next/image"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { buildMention } from "./utils"
 import { useTranslations } from "next-intl"
 

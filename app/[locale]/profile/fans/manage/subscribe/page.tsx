@@ -5,6 +5,7 @@ import FansListItem from "@/components/profile/fans/fans-list-item"
 import { getSubscribedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
+import { useTranslations } from "next-intl"
 
 interface SubscribeUsersProps {
   initialHasMore: boolean;
@@ -33,7 +34,7 @@ function SubscribeUsers({ initialItems, initialHasMore, fetchData }: SubscribeUs
 export default function Page() {
   const [data,setData] = useState<PageResponse<SubscribeUserInfo> | null>(null)
   const [sortDesc,setSortDesc] = useState<boolean>(true)
-
+  const t = useTranslations("Profile.fans")
   const fetchSubscribedUsers = useCallback(async (page:number) => {
     const data = await getSubscribedUsers({ page, pageSize: 10, from_id: 0,desc: sortDesc })
     return {
@@ -56,10 +57,10 @@ export default function Page() {
     <div className={"px-4"}>
       <div className="flex justify-between py-4 items-center">
         <span>
-          <span className={"text-[#777]"}>订阅总数：</span>
+          <span className={"text-[#777]"}>{t("subTotal")}：</span>
           {data?.total ?? 0}
         </span>
-        <TimeSort sortDesc={sortDesc} handleSortChange={setSortDesc}>最近订阅</TimeSort>
+        <TimeSort sortDesc={sortDesc} handleSortChange={setSortDesc}>{t("recentSubscriptions")}</TimeSort>
       </div>
       <SubscribeUsers initialHasMore={Number(data?.total) > Number(data?.list?.length)} initialItems={data?.list ?? []} fetchData={fetchSubscribedUsers}/>
     </div>

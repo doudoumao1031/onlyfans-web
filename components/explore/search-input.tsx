@@ -3,8 +3,10 @@
 import { useSearchParams, usePathname, useRouter } from "next/navigation"
 import { useDebouncedCallback } from "use-debounce"
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 
 export default function SearchInput({ placeholder }: { placeholder: string }) {
+  const t = useTranslations("Common")
   const searchParams = useSearchParams()
   const pathname = usePathname()
   const { replace, back } = useRouter()
@@ -32,7 +34,7 @@ export default function SearchInput({ placeholder }: { placeholder: string }) {
         className="absolute top-1/3 left-6"
       />
       <button onClick={() => {back()}}>
-        <span className="text-text-pink text-lg font-normal text-nowrap w-8">取消</span>
+        <span className="text-text-pink text-lg font-normal text-nowrap w-8">{t("cancel")}</span>
       </button>
     </div>
   )

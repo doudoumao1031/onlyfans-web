@@ -5,6 +5,7 @@ import { getFollowedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import FansListItem from "@/components/profile/fans/fans-list-item"
+import { useTranslations } from "next-intl"
 
 interface FollowedUsersProps {
   initialItems: SubscribeUserInfo[];
@@ -35,7 +36,7 @@ function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsers
 export default function Page() {
   const [data,setData] = useState<PageResponse<SubscribeUserInfo> | null>(null)
   const [sortDesc,setSortDesc] = useState<boolean>(true)
-
+  const t = useTranslations("Profile.fans")
   const fetcherFn = useCallback(async(page:number) => {
     const data = await getFollowedUsers({ page, pageSize: 10, from_id: 0,desc: sortDesc })
     return {
@@ -56,10 +57,10 @@ export default function Page() {
     <div className={"px-4"}>
       <div className="flex justify-between py-4 items-center">
         <span>
-          <span className={"text-[#777]"}>关注总数：</span>
+          <span className={"text-[#777]"}>{t("followTotal")}：</span>
           {data?.total}
         </span>
-        <TimeSort sortDesc={sortDesc} handleSortChange={setSortDesc}>关注时间升序</TimeSort>
+        <TimeSort sortDesc={sortDesc} handleSortChange={setSortDesc}>{t("followedTime")}</TimeSort>
       </div>
       {data && <FollowedUsers initialHasMore={Number(data?.total) > Number(data?.list?.length)} initialItems={data?.list ?? []} fetcherFn={fetcherFn}/>}
     </div>

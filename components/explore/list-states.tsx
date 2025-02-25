@@ -1,13 +1,13 @@
-import React from "react"
-import { getTranslations } from "next-intl/server"
+"use client"
+import { useTranslations } from "next-intl"
 
-export async function ListError() {
-  const t = await getTranslations("Common")
+export function ListError() {
+  const t = useTranslations("Common")
   return <div className="text-center mt-4 text-pink">{t("listError")}</div>
 }
 
-export async function ListLoading() {
-  const t = await getTranslations("Common")
+export function ListLoading() {
+  const t = useTranslations("Common")
   return (
     <div className="text-center mt-4">
       <button className="btn btn-primary loading">{t("loading1")}</button>
@@ -15,8 +15,8 @@ export async function ListLoading() {
   )
 }
 
-export async function ListEnd() {
-  const t = await getTranslations("Common")
+export function ListEnd() {
+  const t = useTranslations("Common")
   return (
     <div className="text-center mt-4">
       <p className="text-gray-500">{t("listEnd")}</p>

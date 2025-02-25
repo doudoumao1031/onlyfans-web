@@ -8,21 +8,9 @@ import IconWithImage from "@/components/profile/icon"
 import { getExpenses, PageResponse, StatementResp } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import dayjs from "dayjs"
+import { useTranslations } from "next-intl"
 import { Fragment, useEffect, useState } from "react"
-const months = [
-  { label: "一月", value: 1 },
-  { label: "二月", value: 2 },
-  { label: "三月", value: 3 },
-  { label: "四月", value: 4 },
-  { label: "五月", value: 5 },
-  { label: "六月", value: 6 },
-  { label: "七月", value: 7 },
-  { label: "八月", value: 8 },
-  { label: "九月", value: 9 },
-  { label: "十月", value: 10 },
-  { label: "十一月", value: 11 },
-  { label: "十二月", value: 12 }
-]
+
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<StatementResp> | null>()
   const [date, setDate] = useState("2025-1")
@@ -30,10 +18,25 @@ export default function Page() {
   const [month, setMonth] = useState<number>(1)
   const [loading, setLoading] = useState(false)
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
+  const t = useTranslations("Profile.income")
+  const commonTrans = useTranslations("Common")
+  const months = [
+    { label: t("january"), value: 1 },
+    { label: t("february"), value: 2 },
+    { label: t("march"), value: 3 },
+    { label: t("april"), value: 4 },
+    { label: t("may"), value: 5 },
+    { label: t("june"), value: 6 },
+    { label: t("july"), value: 7 },
+    { label: t("august"), value: 8 },
+    { label: t("september"), value: 9 },
+    { label: t("october"), value: 10 },
+    { label: t("november"), value: 11 },
+    { label: t("december"), value: 12 }
+  ]
+
   useEffect(() => {
-    getData()
-  }, [date])
-  const getData = async () => {
+    setLoading(true)
     const params = {
       page: 1,
       pageSize: 20,
@@ -41,12 +44,14 @@ export default function Page() {
       start_time: Math.floor(dayjs(date).startOf("month").valueOf() / 1000),
       end_time: Math.floor(dayjs(date).endOf("month").valueOf() / 1000)
     }
-    setLoading(true)
-    const res = await getExpenses(params)
-    setLoading(false)
-    setInitData(res)
-  }
-
+    getExpenses(params)
+      .then((res) => {
+        setInitData(res)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }, [date])
   const infiniteFetchPosts = useInfiniteFetch({
     fetchFn: getExpenses,
     params: {
@@ -80,7 +85,7 @@ export default function Page() {
               >
                 <span className="flex items-center text-[#222]">
                   <span className="mr-3">
-                    {curYear}年{curMonth}月
+                    {curYear}/{curMonth}
                   </span>
                   <IconWithImage
                     url="/icons/profile/icon-bt.png"
@@ -98,7 +103,9 @@ export default function Page() {
                       <span className="text-xs text-[#323232]">{v.change_amount} USDT</span>
                     </div>
                     <div className="flex justify-between text-xs mt-1">
-                      <span className="text-[#979799]">余额：{v.balance_snapshot}</span>
+                      <span className="text-[#979799]">
+                        {t("balance")}:{v.balance_snapshot}
+                      </span>
                       <span className="text-[#FFA94B]">{v.reason}</span>
                     </div>
                   </div>
@@ -132,7 +139,7 @@ export default function Page() {
         }}
         title={
           <div className="w-full flex justify-between text-[#222]">
-            <span className="mr-3 flex-1">{year}年</span>
+            <span className="mr-3 flex-1">{year}</span>
           </div>
         }
         headerRight={() => {
@@ -180,7 +187,7 @@ export default function Page() {
               }}
               className="w-[78%] h-[50px] bg-pink text-white rounded-full flex justify-center items-center"
             >
-              确定
+              {commonTrans("confirm")}
             </div>
           </div>
         </div>

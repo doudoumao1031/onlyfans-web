@@ -4,7 +4,6 @@ import React, { useEffect, useMemo, useState } from "react"
 import { options } from "@/components/profile/chart-line"
 import FormDrawer from "@/components/common/form-drawer"
 import { Input } from "@/components/ui/input"
-import Link from "next/link"
 import { Line } from "react-chartjs-2"
 import {
   addWalletDownOrder,
@@ -26,6 +25,8 @@ import { getEvenlySpacedPoints } from "@/lib/utils"
 import { clsx } from "clsx"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import LoadingMask from "@/components/common/loading-mask"
+import { Link } from "@/i18n/routing"
+import { useTranslations } from "next-intl"
 
 const Withdrawal = ({
   children,
@@ -36,16 +37,17 @@ const Withdrawal = ({
   info: WalletInfo
   refresh: () => void
 }) => {
+  const t = useTranslations("Profile.income")
   const schemas = useMemo(() => {
     return z.object({
       amount: z
-        .string({ message: "请输入提现金额" })
-        .refine((data) => Number(data) > 0.01, { message: "提现金额不能小于0.01USDT" })
+        .string({ message: t("withdrawalAmount") })
+        .refine((data) => Number(data) > 0.01, { message: t("withdrawalAmountError") })
         .refine((data) => Number(data) <= info.amount - (info?.freeze ?? 0), {
-          message: "提现金额不能大于可提现余额"
+          message: t("withdrawalAmountMax")
         })
     })
-  }, [info])
+  }, [info.amount, info?.freeze, t])
   const withdrawalForm = useForm<{ amount: string }>({
     mode: "all",
     defaultValues: {
@@ -73,12 +75,12 @@ const Withdrawal = ({
 
   const { isLoading, withLoading } = useLoadingHandler({
     onError: () => {
-      showMessage("提现失败")
+      showMessage(t("withdrawalAmountFailed"))
     },
     onSuccess: () => {
       refresh()
       setOpenState(false)
-      showMessage("提现成功，等待人工审核", "success")
+      showMessage(t("withdrawalAmountSuccess"), "success")
     }
   })
 
@@ -98,7 +100,7 @@ const Withdrawal = ({
         isOpen={openState}
         setIsOpen={setOpenState}
         outerControl={true}
-        title={"提现"}
+        title={t("withdrawal")}
         headerLeft={(close) => {
           return (
             <button onTouchEnd={close} className={"text-base text-[#777]"}>
@@ -114,7 +116,7 @@ const Withdrawal = ({
         headerRight={() => {
           return (
             <Link href={"/profile/withdrawalInfo"}>
-              <button className={"text-base text-text-pink"}>明细</button>
+              <button className={"text-base text-text-pink"}>{t("withdrawalAmountDetail")}</button>
             </Link>
           )
         }}
@@ -135,16 +137,16 @@ const Withdrawal = ({
         <div className="p-8">
           <div className="flex justify-between mt-4">
             <div className="flex flex-col items-center">
-              <span className="text-xs text-[#777] mb-2">可提现余额</span>
+              <span className="text-xs text-[#777] mb-2">{t("withdrawalAmountAvailable")}</span>
               <span className="text-[20px]">{info.amount - (info?.freeze ?? 0)} USDT</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-xs text-[#777] mb-2">审核中的余额</span>
+              <span className="text-xs text-[#777] mb-2">{t("withdrawalAmountFreeze")}</span>
               <span className="text-[20px]">{info.freeze} USDT</span>
             </div>
           </div>
           <div className="flex justify-between items-center mt-10 relative">
-            <span className="font-bold text-base">提现</span>
+            <span className="font-bold text-base">{t("withdrawal")}</span>
             <span className="flex items-center flex-1 justify-end">
               <Controller
                 control={withdrawalForm.control}
@@ -184,7 +186,7 @@ const Withdrawal = ({
                 !!errorMessage ? "bg-[#ddd]" : "bg-background-pink "
               )}
             >
-              {errorMessage ? errorMessage : "提现"}
+              {errorMessage ? errorMessage : t("withdrawal")}
             </button>
           </div>
         </div>
@@ -229,24 +231,25 @@ function ChartData({ params }: { params: UserMetricDayReq }) {
 }
 
 export default function Page() {
+  const t = useTranslations("Profile.income")
   const now = dayjs()
   const dateTabs: Array<{ label: string; value: UserMetricDayReq }> = [
     {
-      label: "近7日",
+      label: t("recent7Days"),
       value: {
         start: now.add(-7, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近15日",
+      label: t("recent15Days"),
       value: {
         start: now.add(-15, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
       }
     },
     {
-      label: "近30日",
+      label: t("recent30Days"),
       value: {
         start: now.add(-30, "day").format(DATE_FORMAT),
         end: now.format(DATE_FORMAT)
@@ -255,10 +258,12 @@ export default function Page() {
   ]
   const [dateActive, setDateActive] = useState<UserMetricDayReq>(dateTabs[0].value)
   const [activeKey, setActiveKey] = useState<number>(0)
-
+  const currentLabel = useMemo(() => {
+    return [t("today"), t("diff30Days"), t("diff1Year")].at(activeKey)
+  }, [activeKey, t])
   const tabs: Array<{ label: string; key: number; value: UserMetricDayReq }> = [
     {
-      label: "今天",
+      label: t("today"),
       key: 0,
       value: {
         start: now.format(DATE_FORMAT),
@@ -266,7 +271,7 @@ export default function Page() {
       }
     },
     {
-      label: "近30日",
+      label: t("recent30Days"),
       key: 1,
       value: {
         start: now.add(-30, "day").format(DATE_FORMAT),
@@ -274,7 +279,7 @@ export default function Page() {
       }
     },
     {
-      label: "近一年",
+      label: t("recent1Year"),
       key: 2,
       value: {
         start: now.add(-1, "year").format(DATE_FORMAT),
@@ -322,7 +327,7 @@ export default function Page() {
                 setActiveKey(v.key)
               }}
               key={v.value.start}
-              className={`w-20 h-8 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""}`}
+              className={`h-8 px-4 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""}`}
             >
               {v.label}
             </button>
@@ -334,13 +339,13 @@ export default function Page() {
         </div>
         <div className="pl-4 pr-4 flex justify-between items-center mt-2 mb-12">
           <span className="text-xs">
-            <span className="text-[#777] ">{["今日", "较前30日", "较前一年"][activeKey]}</span>
+            <span className="text-[#777] ">{currentLabel}</span>
             <span className="text-text-pink ml-2">+{inCome}</span>
           </span>
           {walletInfo && (
             <Withdrawal info={walletInfo} refresh={refreshWalletInfo}>
               <span className="text-xs flex">
-                <span className="text-[#777] ">可提现</span>
+                <span className="text-[#777] ">{t("withdrawalAmountAvailable")}</span>
                 <span className="ml-2 mr-2">
                   {Number(walletInfo?.amount) - (walletInfo?.freeze ?? 0)}
                 </span>
@@ -356,9 +361,9 @@ export default function Page() {
             </Withdrawal>
           )}
         </div>
-        <div className="pl-4 font-bold text-base">收益趋势</div>
+        <div className="pl-4 font-bold text-base">{t("incomeTrend")}</div>
         <div className="p-4 flex">
-          <span className="mr-8">收益时间</span>
+          <span className="mr-8">{t("incomeTime")}</span>
           {dateTabs.map((v, index) => (
             <button
               type={"button"}

@@ -1,5 +1,5 @@
 "use client"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
 import { useEffect, useMemo, useRef } from "react"

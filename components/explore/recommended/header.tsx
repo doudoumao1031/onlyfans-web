@@ -1,6 +1,6 @@
 "use client"
 import { useLocale, useTranslations } from "next-intl"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
 

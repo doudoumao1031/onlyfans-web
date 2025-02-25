@@ -2,7 +2,7 @@
 // 草稿
 import Header from "@/components/common/header"
 import React, { Fragment, useEffect, useState } from "react"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { usePathname } from "next/navigation"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { myDraftPosts, myPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
