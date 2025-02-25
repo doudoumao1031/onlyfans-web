@@ -39,6 +39,7 @@ import {
 import { z } from "zod"
 import { omit } from "lodash"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { useTranslations } from "next-intl"
 
 const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 
@@ -51,7 +52,8 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
   setOpenState: (val: boolean) => void,
   basePrice: number
 }) => {
-
+  const t = useTranslations("Profile.order")
+  const commonTrans = useTranslations("Common")
   const hasSub = currentDiscounts.filter(item => item.month_count !== undefined).map(item => item.month_count)
 
   const minId = useMemo(() => {
@@ -74,13 +76,14 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
   }, [openState, form])
 
   const monthSelections = useMemo(() => {
-    return [
-      { label: "2个月", value: "2" },
-      { label: "3个月", value: "3" },
-      { label: "6个月", value: "6" },
-      { label: "6个月", value: "9" },
-      { label: "12个月", value: "12" }
-    ].filter(item => !hasSub.includes(Number(item.value)))
+    const arr = [2,3,6,9,12]
+    return arr.map(month => {
+      return {
+        label: `${month}${t("monthUnit")}`,
+        value: month
+      }
+    })
+      .filter(item => !hasSub.includes(Number(item.value)))
   }, [hasSub])
 
   return (
@@ -107,15 +110,15 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
             setOpenState(false)
           })}
           >
-            <ModalHeader title={"捆绑订阅"}
+            <ModalHeader title={t("bundleSub")}
               left={<button type={"button"} onTouchEnd={() => {
                 setOpenState(false)
               }} className={"text-base text-[#777]"}
-              >取消</button>}
+              >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-base text-text-pink"}
-                >保存</button>
+                >{commonTrans("save")}</button>
               )}
             ></ModalHeader>
 
@@ -123,9 +126,9 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
               <Controller render={({ field, fieldState }) => {
                 return (
                   initData ? (
-                    <InputWithLabel placeholder={"订阅时限"} value={`${field.value}个月`} disabled/>
+                    <InputWithLabel placeholder={t("subTimeLimit")} value={`${field.value} ${t("monthUnit")}${t("month")}`} disabled/>
                   ) : (
-                    <InputWithLabel errorMessage={fieldState.error?.message} placeholder={"订阅时限"}
+                    <InputWithLabel errorMessage={fieldState.error?.message} placeholder={t("subTimeLimit")}
                       onInputChange={(value) => {
                         field.onChange(value)
                         form.setValue("price", Number((Number(value) * basePrice).toFixed(2)))
@@ -143,8 +146,8 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
                     errorMessage={form.formState.errors?.price?.message} onBlur={event => {
                       field.onChange(Number(event.target.value).toFixed(2))
                     }}
-                    value={field.value ||""} onInputChange={field.onChange} placeholder={"订阅价格"}
-                    description={"最小价格$1.99 USDT，最高价格不超过999.99 价格保留小数点2位数"}
+                    value={field.value ||""} onInputChange={field.onChange} placeholder={t("subPrice")}
+                    description={t("bundleSubPriceDescription")}
                   />
                 )} name={"price"} control={form.control}
                 />
@@ -164,6 +167,9 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
   setOpenState: (val: boolean) => void,
   initData?: DiscountInfo
 }) => {
+
+  const t = useTranslations("Profile.order")
+  const commonTrans = useTranslations("Common")
   const addForm = useForm<DiscountInfo>({
     mode: "all",
     resolver: zodResolver(addDiscount),
@@ -173,13 +179,13 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
   const priceOptions: ISelectOption[] = useMemo(() => {
     return items.filter(item => item.discount_per === 0).map(item => {
       return {
-        label: <div className={"text-left"}>${item.discount_price} {item.month_count}个月 <span
+        label: <div className={"text-left"}>${item.discount_price} {item.month_count}{t("monthUnit")}{t("month")} <span
           className={"text-[#bbb]"}
-        >（平均约${calcAvg(Number(item.discount_price), item.month_count)}/月）</span></div>,
+        >（{t("avg")}${calcAvg(Number(item.discount_price), item.month_count)}/{t("month")}）</span></div>,
         value: item.id
       }
     })
-  }, [items])
+  }, [items, t])
 
 
 
@@ -194,10 +200,10 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
   const disableShowText = useMemo(() => {
     const item = items.find(d => d.id === id)
     if (item) {
-      return `${item.discount_price} ${item.month_count}个月 （平均约${calcAvg(Number(item.discount_price), item.month_count)}/月）`
+      return `${item.discount_price} ${item.month_count}${t("monthUnit")}${t("month")} （${t("avg")}${calcAvg(Number(item.discount_price), item.month_count)}/${t("month")}）`
     }
     return ""
-  },[id, items])
+  },[id, items, t])
 
   return (
     <Drawer open={openState} onOpenChange={setOpenState}>
@@ -236,15 +242,15 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
             // })
           })}
           >
-            <ModalHeader title={"促销活动"}
+            <ModalHeader title={t("discountActivities")}
               left={<button onTouchEnd={() => {
                 setOpenState(false)
               }} className={"text-base text-[#777]"}
-              >取消</button>}
+              >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-base text-text-pink"}
-                >保存</button>
+                >{commonTrans("save")}</button>
               )}
             ></ModalHeader>
 
@@ -256,15 +262,15 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
                       <InputWithLabel
                         disabled
                         errorMessage={fieldState.error?.message}
-                        description={"在基本订阅和捆绑订阅中已经设定好的价格"}
-                        label={"促销价格选择"}
+                        description={t("discountBaseOnDescription")}
+                        label={t("discountBaseOnLabel")}
                         value={disableShowText}
                       />
                     ) : (
                       <InputWithLabel
                         errorMessage={fieldState.error?.message}
-                        description={"在基本订阅和捆绑订阅中已经设定好的价格"}
-                        label={"促销价格选择"}
+                        description={t("discountBaseOnDescription")}
+                        label={t("discountBaseOnLabel")}
                         value={field.value}
                         onInputChange={field.onChange}
                         options={priceOptions}
@@ -281,7 +287,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
                     <InputWithLabel
                       disabled={!id}
                       errorMessage={fieldState.error?.message}
-                      value={field.value || ""} label={"促销折扣"} max={90}
+                      value={field.value || ""} label={t("discountPromotional")} max={90}
                       onInputChange={field.onChange}
                       onBlur={event => {
                         const value = event.target.value
@@ -290,7 +296,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
                           field.onChange(`${numberVal > 90 ? 90 : numberVal}`)
                         }
                       }}
-                      description={"百分比，最高不超过90%"}
+                      description={t("discountPromotionalDescription")}
                     />
                   )
                 }} name="discount_per"
@@ -300,14 +306,14 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
                 <Controller render={({ field }) => {
                   // <InputWithLabel value={field.value} onInputChange={field.onChange} label={"促销开始时间"}/>
                   return (
-                    <TopLabelWrapper label="促销开始时间">
+                    <TopLabelWrapper label={t("discountStartTime")}>
                       <DateTimePicker min={minTime} disabled={!id} value={field.value * 1000} dateChange={value => {
                         field.onChange(value / 1000)
                       }}
                       >
                         <div
                           className={field.value ? "" : "text-gray-500"}
-                        >{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
+                        >{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : ""}</div>
                       </DateTimePicker>
                     </TopLabelWrapper>
                   )
@@ -317,7 +323,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
               <section className={"mt-[30px]"}>
                 <Controller render={({ field, fieldState }) => {
                   return (
-                    <TopLabelWrapper label="促销结束时间" errorMessage={fieldState.error?.message}>
+                    <TopLabelWrapper label={t("discountEndTime")} errorMessage={fieldState.error?.message}>
                       <DateTimePicker min={minTime} disabled={!id} value={field.value * 1000} dateChange={value => {
                         field.onChange(value / 1000)
                       }}
@@ -372,6 +378,8 @@ function SubscribeBundle({ items,initSettings, userId, updateItems,basePrice }: 
   updateItems: (items: DiscountInfo[]) => void,
   basePrice: number
 }) {
+  const t = useTranslations("Profile.order")
+  const commonTrans = useTranslations("Common")
   const bundleForm = useForm<{ list: DiscountInfo[] }>({
     mode: "all",
     defaultValues: {
@@ -431,34 +439,35 @@ function SubscribeBundle({ items,initSettings, userId, updateItems,basePrice }: 
       <form>
         <section className="pl-4 pr-4">
           <section className="flex justify-between items-center">
-            <h1 className="text-base font-medium">捆绑订阅</h1>
+            <h1 className="text-base font-medium">{t("bundleSub")}</h1>
             {fields.length < 5 && (
               <button
                 onTouchEnd={() => {
                   openEditModal()
                 }}
                 className="rounded-full border border-border-pink text-text-pink pl-4 pr-4 pt-0.5 pb-0.5"
-              >添加
+              >{commonTrans("add")}
               </button>
             )}
           </section>
           {fields.length === 0 && (
             <section className={"text-xs text-[#777]"}>
-              提供几个月的订阅作为折扣捆绑
+              {/*提供几个月的订阅作为折扣捆绑*/}
+              {t("emptyBundle")}
             </section>
           )}
           {fields.map((discount, index) => (
             <Controller key={index} control={bundleForm.control} render={({ field }) => {
               return (
-                <TopLabelWrapper label={`价格${index + 1}`}>
+                <TopLabelWrapper label={`${t("price")}${index + 1}`}>
                   <section className={"flex items-center justify-between w-full"}>
                     <button type={"button"} onTouchEnd={() => {
                       openEditModal(discount)
                     }} className={"flex-1 text-left"}
                     >
-                      ${discount.price}&nbsp;&nbsp;{discount.month_count}个月&nbsp;&nbsp;<span
+                      ${discount.price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;<span
                         className="text-[#6D7781]"
-                      >(平均${calcAvg(discount.price, discount.month_count)}/月)</span>
+                      >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
                     </button>
                     <Switch className={"custom-switch"} checked={!field.value.item_status} onCheckedChange={(value) => {
                       field.onChange({
@@ -482,9 +491,10 @@ function SubscribeBundle({ items,initSettings, userId, updateItems,basePrice }: 
 }
 
 function DiscountPercentLabel ({ index,percent }:{index:number,percent:number}) {
+  const t = useTranslations("Profile.order")
   return (
     <div className={"flex gap-1 items-center"}>
-      <div>促销{index}</div>
+      <div>{t("discount")}{index}</div>
       <div className={"rounded-tl-full rounded-tr-full rounded-br-full bg-[#F7B500] text-white px-1.5 py-0.5 text-xs"}>{percent}% off</div>
     </div>
   )
@@ -494,6 +504,8 @@ function PromotionalActivities({ updateItems, items }: {
   items: DiscountInfo[]
   updateItems: (values: DiscountInfo[]) => void
 }) {
+  const t = useTranslations("Profile.order")
+  const commonTrans = useTranslations("Common")
   const discountList = useMemo(() => {
     return items.filter(item => item.discount_per > 0)
   },[items])
@@ -513,20 +525,20 @@ function PromotionalActivities({ updateItems, items }: {
       <EditPromotionalActivities initData={editData} items={items} updateItems={updateItems} openState={openState} setOpenState={setOpenState}/>
       <section className="pl-4 pr-4">
         <section className="flex justify-between items-center">
-          <h1 className="text-base font-medium">促销活动</h1>
+          <h1 className="text-base font-medium">{t("discountActivities")}</h1>
           {noDiscountList.length > 0 && (
             <button
               onTouchEnd={() => {
                 openEditModal()
               }}
               className="rounded-full border border-border-pink text-text-pink pl-4 pr-4 pt-0.5 pb-0.5"
-            >添加
+            >{commonTrans("add")}
             </button>
           )}
         </section>
         {discountList.length === 0 && (
           <section className={"text-xs text-[#777]"}>
-            为用户提供订阅的促销活动，可以为您吸引更多的订阅用户
+            {t("emptyDiscount")}
           </section>
         )}
         {items.filter(d => d.discount_per > 0).map((discount, index) => {
@@ -537,9 +549,9 @@ function PromotionalActivities({ updateItems, items }: {
               }}
               >
                 <div>
-                  {discount.discount_price}&nbsp;&nbsp;{discount.month_count}个月&nbsp;&nbsp;<span
+                  {discount.discount_price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;<span
                     className="text-[#6D7781]"
-                  >(平均${calcAvg(Number(discount.discount_price), discount.month_count)}/月)</span>
+                  >({t("avg")} ${calcAvg(Number(discount.discount_price), discount.month_count)}/{t("month")})</span>
                 </div>
                 <div className="text-[#6D7781]">
                   {dayjs(discount.discount_start_time * 1000).format(DATE_TIME_FORMAT)} {dayjs(discount.discount_end_time * 1000).format(DATE_TIME_FORMAT)}
@@ -664,6 +676,8 @@ export default function Page() {
   const [userInfo, setUserInfo] = useState<UserProfile>()
   const [defaultSettings, setDefaultSettings] = useState<SubscribeSetting | null>()
   const { showMessage } = useCommonMessageContext()
+  const t = useTranslations("Profile.order")
+  const commonTrans = useTranslations("Common")
   const refreshDefaultSettings = () => {
     getSubscribeSetting().then(response => {
       if (response) {
@@ -706,17 +720,17 @@ export default function Page() {
 
   const showBaseValue = useMemo(() => {
     if (Number(realPrice) === 0) {
-      return "免费"
+      return t("free")
     }
     return realPrice.toFixed(2)
-  }, [realPrice])
+  }, [realPrice, t])
 
   const { withLoading } = useLoadingHandler({
     onError: (message) => {
-      showMessage(typeof message === "string" ? message : "更新失败")
+      showMessage(typeof message === "string" ? message : commonTrans("updateFail"))
     },
     onSuccess: (message) => {
-      showMessage(typeof message === "string" ? message : "更新成功", "success", {
+      showMessage(typeof message === "string" ? message : commonTrans("updateSuccess"), "success", {
         afterDuration: router.back
       })
     }
@@ -748,7 +762,7 @@ export default function Page() {
 
   return (
     <div>
-      <Header title={"订阅管理"} titleColor={"#000"}
+      <Header title={t("title")} titleColor={"#000"}
         right={<button onTouchEnd={() => {
           baseFeeForm.trigger().then(async(valid) => {
             if (valid) {
@@ -756,11 +770,11 @@ export default function Page() {
             }
           })
         }} className="text-text-pink text-base"
-        >完成</button>}
+        >{t("complete")}</button>}
       />
       <section className="mt-5 text-black">
         <section className="pl-4 pr-4 pb-5 border-b border-gray-100">
-          <h1 className="text-base font-medium">基本订阅</h1>
+          <h1 className="text-base font-medium">{t("baseSub")}</h1>
           <form>
             <section className="mt-2.5">
               <Controller render={({ field }) => {
@@ -778,7 +792,7 @@ export default function Page() {
                           "absolute bg-white left-4 leading-none font-normal z-30 transition text-[#6D7781]",
                         )}
                       >
-                        每月价格
+                        {t("monthlyPrice")}
                       </label>
                       <section
                         className={
@@ -793,8 +807,8 @@ export default function Page() {
                       </section>
                     </section>
                     <section className="text-[#6D7781] text-xs px-4 mt-1.5">
-                      <div>最小价格$1.99 USDT 或免费</div>
-                      <div>您必须先开通 <span className="text-text-pink">Potato钱包</span>，然后才能设置订阅价格或收取打赏
+                      <div>{t("baseSubLimit")}</div>
+                      <div>{t("shouldBe1")} <span className="text-text-pink">{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
                       </div>
                     </section>
                   </section>

@@ -7,6 +7,7 @@ import { FileType, PostData, postPined } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
   return (
@@ -18,13 +19,13 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
 }
 
 const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, postStatus: number, refresh?: () => void ,pinned: boolean}) => {
-
+  const t = useTranslations("Profile.manuscript")
   const { showMessage } = useCommonMessageContext()
   const isAuditing = postStatus === 2
   const handlePined = () => {
     postPined(id).then((data) => {
       if (data?.code === 0) {
-        showMessage("置顶成功", "", {
+        showMessage(t("pinned"), "", {
           afterDuration: () => {
             refresh?.()
           }
@@ -38,19 +39,19 @@ const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, pos
       <section className="flex opacity-50">
         <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
           <IconWithImage url={"/icons/profile/icon_fans_share@3x.png"} width={20} height={20} color={"#222"}/>
-          <span>分享</span>
+          <span>{t("itemActions.share")}</span>
         </button>
         <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
           <IconWithImage url={"/icons/profile/icon_fans_stick_gray@3x.png"} width={20} height={20} color={"#222"}/>
-          <span>置顶</span>
+          <span>{t("itemActions.pinned")}</span>
         </button>
         <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
           <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
-          <span>数据</span>
+          <span>{t("itemActions.data")}</span>
         </button>
         <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 ">
           <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#222"}/>
-          <span>编辑</span>
+          <span>{t("itemActions.edit")}</span>
         </button>
       </section>
     )
@@ -59,30 +60,30 @@ const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, pos
     <section className="flex">
       <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
         <IconWithImage url={"/icons/profile/icon_fans_share@3x.png"} width={20} height={20} color={"#222"}/>
-        <span>分享</span>
+        <span>{t("itemActions.share")}</span>
       </button>
       <button onTouchEnd={handlePined} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
         <IconWithImage url={"/icons/profile/icon_fans_stick_gray@3x.png"} width={20} height={20} color={ pinned ? "#FF8492":"#222"}/>
         <span className={clsx(
           pinned ? "text-text-pink":""
         )}
-        >置顶</span>
+        >{t("itemActions.pinned")}</span>
       </button>
       <Link href={`/profile/dataCenter/feeds?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
         <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
-        <span>数据</span>
+        <span>{t("itemActions.data")}</span>
       </Link>
       {[0, 3].includes(postStatus) ? (
         <Link href={`/profile/manuscript/draft/edit?id=${id}`}
           className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-text-pink"
         >
           <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
-          <span>编辑</span>
+          <span>{t("itemActions.edit")}</span>
         </Link>
       ) : (
         <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-gray-300">
           <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#6b7280"}/>
-          <span>编辑</span>
+          <span>{t("itemActions.edit")}</span>
         </button>
       )}
     </section>
@@ -90,10 +91,11 @@ const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, pos
 }
 
 const ManuscriptItemState = ({ state }: { state: number }) => {
+  const t = useTranslations("Profile.manuscript")
   if (![2, 3].includes(state)) return null
   const textMap = {
-    "2": "审核中",
-    "3": "未通过"
+    "2": t("itemState.auditing"),
+    "3": t("itemState.rejected")
   }
   return (
     <span className={clsx(
