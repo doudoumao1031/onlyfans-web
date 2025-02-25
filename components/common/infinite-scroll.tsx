@@ -15,6 +15,8 @@ export interface InfiniteScrollProps<T> {
     hasMore: boolean
     error: unknown
     isRefreshing: boolean
+    refresh: () => Promise<void>
+    scrollToTop: () => void
   }) => React.ReactNode
   className?: string
 }
@@ -25,6 +27,15 @@ export default function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
   const touchStartY = useRef(0)
   const pullDistance = useRef(0)
   const isPulling = useRef(false)
+
+  const scrollToTop = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      })
+    }
+  }
 
   const { items, isLoading, hasMore, error, isRefreshing, loadMore, refresh } = useInfiniteScroll({
     initialItems,
@@ -113,7 +124,9 @@ export default function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
         isLoading,
         hasMore,
         error,
-        isRefreshing
+        isRefreshing,
+        refresh,
+        scrollToTop
       })}
     </div>
   )
