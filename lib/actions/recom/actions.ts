@@ -150,31 +150,55 @@ export const getSystemPosts = (params: PageInfo) =>
     }
   )
 
+// export const fetchFeeds = async (page: number, fromId: number = 0) => {
+//   const pageSize = 3
+//   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${ENDPOINTS.RECOM.SYSTEM_POST}`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//       "X-Token": process.env.NEXT_PUBLIC_TOKEN ?? ""
+//     },
+//     body: JSON.stringify({
+//       from_id: fromId,
+//       page,
+//       pageSize
+//     }),
+//     next: {
+//       tags: ["explore-feeds"]
+//     }
+//   })
+//   if (!response || !response.ok) {
+//     return {
+//       items: [],
+//       hasMore: false
+//     }
+//   }
+//   const data = await response.json()
+//   const { list, total } = data?.data || { list: [], total: 0 }
+//   const hasMore = page * pageSize < total
+//   return {
+//     items: list,
+//     hasMore
+//   }
+// }
+
 export const fetchFeeds = async (page: number, fromId: number = 0) => {
   const pageSize = 3
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${ENDPOINTS.RECOM.SYSTEM_POST}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Token": process.env.NEXT_PUBLIC_TOKEN ?? ""
-    },
-    body: JSON.stringify({
-      from_id: fromId,
-      page,
-      pageSize
-    }),
-    next: {
-      tags: ["explore-feeds"]
-    }
+  const response = await getSystemPosts({
+    from_id: fromId,
+    page,
+    pageSize: pageSize
   })
-  if (!response || !response.ok) {
+
+  if (!response) {
     return {
       items: [],
       hasMore: false
     }
   }
-  const data = await response.json()
-  const { list, total } = data?.data || { list: [], total: 0 }
+
+  const { list, total } = response
+
   const hasMore = page * pageSize < total
   return {
     items: list,
