@@ -13,6 +13,8 @@ import {
 import { useState } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
 import CommentSkeleton from "./comment-skeleton"
+import SheetSelect from "../common/sheet-select"
+import IconWithImage from "../profile/icon"
 
 export default function Comments({
   post_id,
@@ -30,20 +32,22 @@ export default function Comments({
   const [input, setInput] = useState("")
 
   return (
-    <div className="flex flex-col gap-6 p-4">
-      <div className="flex gap-2">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          className="grow"
-          placeholder="发表评论,文明发言"
-        />
-        <button onClick={sendComment}>发送评论</button>
+    <>
+      <div className="flex flex-col gap-6 p-4">
+        <div className="flex gap-2">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            className="grow"
+            placeholder="发表评论,文明发言"
+          />
+          <button onClick={sendComment}>发送评论</button>
+        </div>
+        {comments.map((comment) => (
+          <Comment key={comment.id} comment={comment} removed={removeComment} />
+        ))}
       </div>
-      {comments.map((comment) => (
-        <Comment key={comment.id} comment={comment} removed={removeComment} />
-      ))}
-    </div>
+    </>
   )
 
   async function sendComment() {
@@ -73,59 +77,81 @@ function Comment({
   const [replies, setReplies] = useState<CommentReplyInfo[] | undefined>(undefined)
   const [showReplies, setShowReplies] = useState(false)
 
+  const [openCofirmDeleteComment, setOpenConfirmDeleteComment] = useState<boolean>(false)
+
   return (
-    <div className="flex flex-col gap-2">
-      {!loading ? (
-        <div className="flex justify-between">
-          <div className="flex gap-2">
-            {/*<Avatar fileId={photo} width={9} />*/}
-            <div className={"shrink-0"}>
-              <CommonAvatar photoFileId={photo} size={36} />
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="text-xs text-[#FF8492]">{username}</div>
-              <div className="text-sm">{content}</div>
-              <div className="flex gap-4 text-xs text-[#6D7781]">
-                {reply_count > 0 && (
-                  <div onClick={toggleReplies} className="text-[#FF8492]">
-                    {reply_count}条回复
-                  </div>
-                )}
-                <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
-                {is_self && <div onClick={removeComment}>删除</div>}
+    <>
+      <SheetSelect
+        isOpen={openCofirmDeleteComment}
+        setIsOpen={setOpenConfirmDeleteComment}
+        onInputChange={(v) => v === 0 && removeComment()}
+        options={[
+          {
+            label: "",
+            description: `${username}: ${content}`,
+            value: -1
+          },
+          {
+            label: "删除",
+            value: 0
+          }
+        ]}
+      >
+        <></>
+      </SheetSelect>
+      <div className="flex flex-col gap-2">
+        {!loading ? (
+          <div className="flex justify-between">
+            <div className="flex gap-2">
+              {/*<Avatar fileId={photo} width={9} />*/}
+              <div className={"shrink-0"}>
+                <CommonAvatar photoFileId={photo} size={36} />
+              </div>
+              <div className="flex flex-col gap-2">
+                <div className="text-xs text-[#FF8492]">{username}</div>
+                <div className="text-sm">{content}</div>
+                <div className="flex gap-4 text-xs text-[#6D7781]">
+                  {reply_count > 0 && (
+                    <div onClick={toggleReplies} className="text-[#FF8492]">
+                      {reply_count}条回复
+                    </div>
+                  )}
+                  <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
+                  {is_self && <div onClick={() => setOpenConfirmDeleteComment(true)}>删除</div>}
+                </div>
               </div>
             </div>
+            <Thumbup thumbupCount={thumbupCount} isThumbupped={isThumbupped} thumbup={thumbup} />
           </div>
-          <Thumbup thumbupCount={thumbupCount} isThumbupped={isThumbupped} thumbup={thumbup} />
-        </div>
-      ) : (
-        <CommentSkeleton></CommentSkeleton>
-      )}
-      {showReplyInput && (
-        <div className="flex gap-2 p-4">
-          <input
-            value={replyInput}
-            onChange={(e) => setReplyInput(e.target.value)}
-            className="grow"
-            placeholder="发表回复,文明发言"
-          />
-          <button onClick={sendReply}>发送回复</button>
-        </div>
-      )}
-      {showReplies && replies?.length && (
-        <div className="pl-10 py-4 flex flex-col gap-3">
-          {replies.map((reply) => (
-            <Reply
-              key={reply.id}
-              reply={reply}
-              post_id={post_id}
-              removed={removeReply}
-              fetchReplies={fetchReplies}
+        ) : (
+          <CommentSkeleton></CommentSkeleton>
+        )}
+        {showReplyInput && (
+          <div className="flex gap-2 p-4">
+            <input
+              value={replyInput}
+              onChange={(e) => setReplyInput(e.target.value)}
+              className="grow"
+              placeholder="发表回复,文明发言"
             />
-          ))}
-        </div>
-      )}
-    </div>
+            <button onClick={sendReply}>发送回复</button>
+          </div>
+        )}
+        {showReplies && replies?.length && (
+          <div className="pl-10 py-4 flex flex-col gap-3">
+            {replies.map((reply) => (
+              <Reply
+                key={reply.id}
+                reply={reply}
+                post_id={post_id}
+                removed={removeReply}
+                fetchReplies={fetchReplies}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </>
   )
 
   function removeReply(replyId: number) {
