@@ -13,7 +13,11 @@
     "postLoadError": "帖子内容加载失败",
     "ContentLoadingFailed": "内容加载失败",
     "FreeAndSubscription": "免费/订阅",
-    "potatoWallet": "Potato 钱包"
+    "potatoWallet": "Potato 钱包",
+    "reload": "重新加载",
+    "listError": "加载数据失败。请重试。",
+    "loading1": "加载中...",
+    "listEnd": "你已经到达底部"
   },
   "Explore": {
     "BecomeABlogger": "成为博主",
