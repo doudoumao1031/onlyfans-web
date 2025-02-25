@@ -23,9 +23,17 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
       }
     })
   }, [pathName])
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathName === href) {
+      e.preventDefault()
+      window.dispatchEvent(new Event("feed-action-scroll-top"))
+    }
+  }
+
   return (
     <div
-      className={`w-full flex  text-center border-b border-gray-100 sticky z-30 bg-white ${
+      className={`w-full flex text-center border-b border-gray-100 sticky z-30 bg-white ${
         isFind ? "justify-start" : "justify-around"
       }`}
     >
@@ -34,6 +42,7 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
           prefetch={true}
           key={link.name}
           href={link.href}
+          onClick={(e) => handleNavClick(e, link.href)}
           className={clsx(
             "pt-3.5 pb-3.5 text-[20px] relative",
             link.active ? "font-bold text-black" : "text-[#777] font-normal",
