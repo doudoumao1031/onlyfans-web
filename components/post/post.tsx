@@ -67,6 +67,8 @@ export default function Post({
 
   const { showMessage, renderNode } = useCommonMessage()
 
+  const [adjustCommentCount, setAdjustCommentCount] = useState(0)
+
   return (
     <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
       {renderNode}
@@ -78,7 +80,13 @@ export default function Post({
         <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
         <UserHomePageLink userId={user.id.toString()} postId={post.id} />
         {post_attachment && post_attachment.length > 0 && (
-          <Media data={post_attachment} post={post} user={user} isInfoPage={isInfoPage} followConfirm={followConfirm} />
+          <Media
+            data={post_attachment}
+            post={post}
+            user={user}
+            isInfoPage={isInfoPage}
+            followConfirm={followConfirm}
+          />
         )}
         {hasSubscribe && mention_user && mention_user.length > 0 && (
           <div className={"grid gap-2"}>
@@ -107,10 +115,10 @@ export default function Post({
         <div className="flex gap-4 justify-between pt-2 pb-4 border-b border-black/5">
           <Like count={thumbs_up_count} liked={star} postId={post.id} outLike={!star && tipStar} />
           {isInfoPage ? (
-            <CommentStats count={comment_count} onClick={toggleComments} />
+            <CommentStats count={comment_count + adjustCommentCount} onClick={toggleComments} />
           ) : (
             <Link href={`/postInfo/${post.id}`} className="flex items-end">
-              <CommentStats count={comment_count} />
+              <CommentStats count={comment_count + adjustCommentCount} />
             </Link>
           )}
           <Tip count={tip_count} postId={post.id} self={sid === user.id} tipStar={setTipStar} />
@@ -126,6 +134,7 @@ export default function Post({
               comments={comments || []}
               removeComment={removeComment}
               fetchComments={async () => setComments(await fetchPostComments(post.id))}
+              increaseCommentCount={() => setAdjustCommentCount((c) => c + 1)}
             />
           ))}
       </div>
@@ -134,6 +143,7 @@ export default function Post({
 
   function removeComment(id: number) {
     setComments(comments?.filter((c) => c.id !== id))
+    setAdjustCommentCount((c) => c - 1)
   }
 
   async function toggleComments() {

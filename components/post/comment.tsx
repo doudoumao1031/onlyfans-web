@@ -18,12 +18,14 @@ export default function Comments({
   post_id,
   comments,
   removeComment,
-  fetchComments
+  fetchComments,
+  increaseCommentCount
 }: {
   post_id: number
   comments: CommentInfo[]
   removeComment: (id: number) => void
   fetchComments: () => void
+  increaseCommentCount: (n: number) => void
 }) {
   const [input, setInput] = useState("")
 
@@ -48,6 +50,7 @@ export default function Comments({
     const success = await addComment({ post_id, content: input })
     if (success) {
       fetchComments()
+      increaseCommentCount(1)
       setInput("")
     }
   }
