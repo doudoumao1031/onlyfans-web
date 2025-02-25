@@ -88,7 +88,7 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
           }
           width={20}
           height={20}
-          color={isFocus ? "var(--theme)" : "var(----white)"}
+          color={isFocus ? "var(--theme)" : "var(--white)"}
         />
         <span className={isFocus ? "text-theme" : "text-white"}>
           {isFocus ? "已关注" : "关注"}
