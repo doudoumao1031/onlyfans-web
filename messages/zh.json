@@ -21,11 +21,34 @@
     "listEnd": "你已经到达底部",
     "saveSuccess": "保存成功",
     "saveFail": "保存失败",
-    "post":{
+    "post": {
       "recharge": "充值",
       "insufficientBalance": "余额不足",
       "unliked": "已取消点赞",
-      "liked": "感谢支持"
+      "liked": "感谢支持",
+      "commentPlaceholder": "发表评论,文明发言",
+      "sendComment": "发送评论",
+      "sendReply": "发送回复",
+      "delete": "删除",
+      "deleteConfirm": "确定删除此评论吗？",
+      "reply": "回复",
+      "replyCount": "{count}条回复",
+      "replyPlaceholder": "发表回复,文明发言",
+      "vote": "投票",
+      "viewAllOptions": "查看全部选项",
+      "voteCount": "{count}人参与",
+      "voteEndTime": "还有{count}小时结束",
+      "voteEnded": "投票已结束",
+      "votes": "票",
+      "tipAmount": "打赏金额",
+      "likeAtTheSameTime": "同时点赞",
+      "tipSuccess": "打赏成功",
+      "tipFailed": "打赏失败",
+      "tipConfirm": "确认支付{amount} {currency}",
+      "confirmTip": "确认支付",
+      "custom": "自定义",
+      "saved": "已收藏",
+      "cancelSaved": "已取消收藏"
     }
   },
   "Explore": {
@@ -249,7 +272,6 @@
       "year": "年",
       "month": "月",
       "balance": "余额"
-
     },
     "collect": {
       "collect": "收藏夹",

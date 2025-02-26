@@ -19,6 +19,7 @@ import { Link } from "@/i18n/routing"
 import CommentSkeleton from "./comment-skeleton"
 import { useGlobal } from "@/lib/contexts/global-context"
 import useCommonMessage, { CommonMessageContext } from "@/components/common/common-message"
+import { useTranslations } from "next-intl"
 
 export default function Post({
   data,
@@ -35,6 +36,7 @@ export default function Post({
   space?: boolean //是否空间
   followConfirm?: () => void //点击媒体关注弹出确认
 }) {
+  const t = useTranslations("Common.post")
   const { sid } = useGlobal()
   const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
     data
@@ -103,7 +105,7 @@ export default function Post({
         {hasVote && post_vote && (
           <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
             <Image src="/icons/vote.png" alt="" width={20} height={20} />
-            <div className="text-pink text-sm">投票</div>
+            <div className="text-pink text-sm">{t("vote")}</div>
             {showVote ? (
               <Image src="/icons/arrow_up.png" alt="" width={20} height={20} />
             ) : (

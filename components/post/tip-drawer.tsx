@@ -1,14 +1,15 @@
 "use client"
 import { Label } from "@/components/ui/label"
-import React,{ useState } from "react"
+import React, { useState } from "react"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import CheckboxLabel from "@/components/user/checkbox-label"
 import { addPostTip, starPost } from "@/lib"
 import FormDrawer from "@/components/common/form-drawer"
-import  { useCommonMessageContext } from "@/components/common/common-message"
+import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import CommonRecharge from "@/components/post/common-recharge"
 import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
+import { useTranslations } from "next-intl"
 
 interface TipDrawerProps {
   postId: number
@@ -19,6 +20,7 @@ interface TipDrawerProps {
 }
 
 export default function TipDrawer(props: TipDrawerProps) {
+  const t = useTranslations("Common.post")
   const { postId, refresh, tipStar, notice, children } = props
   const { addToActionQueue } = useGlobal()
   const [amount, setAmount] = useState<number>(0)
@@ -30,7 +32,7 @@ export default function TipDrawer(props: TipDrawerProps) {
   const { withLoading } = useLoadingHandler({
     onError: (error) => {
       console.error("Recharge error:", error)
-      showMessage("打赏失败")
+      showMessage(t("tipFailed"), "error")
     }
   })
   async function handTip() {
@@ -44,7 +46,12 @@ export default function TipDrawer(props: TipDrawerProps) {
           }
         }
         setDrawerOpen(false)
-        showMessage("打赏成功", "success", { afterDuration: () => {refresh(amount) }, duration: 1500 })
+        showMessage(t("tipSuccess"), "success", {
+          afterDuration: () => {
+            refresh(amount)
+          },
+          duration: 1500
+        })
       } else if (res?.message == "NOT_ENOUGH_BALANCE") {
         setDrawerOpen(false)
         setVisible(true)
@@ -66,7 +73,12 @@ export default function TipDrawer(props: TipDrawerProps) {
   }
   return (
     <>
-      <CommonRecharge visible={visible} setVisible={setVisible} recharge={recharge} setRecharge={setRecharge} />
+      <CommonRecharge
+        visible={visible}
+        setVisible={setVisible}
+        recharge={recharge}
+        setRecharge={setRecharge}
+      />
       <button
         onTouchEnd={() => {
           setDrawerOpen(true)
@@ -79,13 +91,13 @@ export default function TipDrawer(props: TipDrawerProps) {
         trigger={children}
         isAutoHeight
         headerLeft={() => {
-          return <span className="font-semibold text-lg">打赏金额</span>
+          return <span className="font-semibold text-lg">{t("tipAmount")}</span>
         }}
         headerRight={() => {
           return (
             <>
               <CheckboxLabel
-                label="同时点赞"
+                label={t("likeAtTheSameTime")}
                 checked={check}
                 change={(val) => {
                   setCheck(val)
@@ -141,7 +153,7 @@ export default function TipDrawer(props: TipDrawerProps) {
               htmlFor="amount"
               className="absolute left-6 top-1/2 transform -translate-y-1/2 text-left font-medium text-lg pointer-events-none pr-12"
             >
-              自定义
+              {t("custom")}
             </Label>
             <span className="absolute right-6 top-1/2 transform -translate-y-1/2 text-lg font-normal pointer-events-none z-0">
               USDT
@@ -161,7 +173,7 @@ export default function TipDrawer(props: TipDrawerProps) {
                 }
               }}
             >
-              { amount > 0 ? `确认支付${amount}USDT`: "确认支付"}
+              {amount > 0 ? t("tipConfirm", { amount, currency: "USDT" }) : t("confirmTip")}
             </button>
           </div>
         </div>
