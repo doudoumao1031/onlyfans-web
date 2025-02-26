@@ -11,6 +11,7 @@
     "confirm": "确定",
     "cancel": "取消",
     "postLoadError": "帖子内容加载失败",
+    "detailLoadError": "详情加载失败",
     "ContentLoadingFailed": "内容加载失败",
     "FreeAndSubscription": "免费/订阅",
     "potatoWallet": "Potato 钱包",
@@ -40,7 +41,8 @@
     "SubscribeFailed": "订阅失败",
     "Month": "个月",
     "ConfirmPayment": "确认支付",
-    "Saved": "已省"
+    "Saved": "已省",
+    "SubscribeEmpty": "您尚未订阅任何博主，快去看看"
   },
   "Profile": {
     "mainTitle": "我的",

@@ -10,6 +10,7 @@
     "confirm": "Confirm",
     "cancel": "Cancel",
     "postLoadError": "Failed to load post content",
+    "detailLoadError": "Failed to load detail",
     "ContentLoadingFailed": "Content loading failed",
     "FreeAndSubscription": "Free/Subscription",
     "createTime": "Create Time",
@@ -40,7 +41,8 @@
     "SubscribeFailed": "Subscribe Failed",
     "Month": "Month",
     "ConfirmPayment": "Confirm Payment",
-    "Saved": "Saved"
+    "Saved": "Saved",
+    "SubscribeEmpty": "You have not subscribed to any bloggers yet, please check it out"
   },
   "Profile": {
     "mainTitle": "My",
