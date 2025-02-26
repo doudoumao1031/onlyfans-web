@@ -4,6 +4,7 @@ import IconWithImage from "@/components/profile/icon"
 import { addPostPayOrder } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { useTranslations } from "next-intl"
 interface PostPayDrawerProps {
   post_id: number
   amount: number
@@ -13,30 +14,31 @@ interface PostPayDrawerProps {
   setRechargeModel: (val: boolean) => void
 }
 export default function PostPayDrawer(props: PostPayDrawerProps) {
+  const t = useTranslations("PostInfo")
   const { post_id, amount, flush, isOpen, setIsOpen, setRechargeModel } = props
   const { showMessage } = useCommonMessageContext()
   const { withLoading } = useLoadingHandler({
     onError: (error) => {
       console.error("post pay error:", error)
-      showMessage("支付失败")
+      showMessage(t("payFailed"))
     }
   })
 
-  async function handleSubmit () {
+  async function handleSubmit() {
     await withLoading(async () => {
       await addPostPayOrder({ post_id: post_id, amount: amount }).then((result) => {
         if (result && result.code === 0) {
           console.log("支付成功")
           flush()
           setIsOpen(false)
-          showMessage("支付成功", "success", { afterDuration: () => flush() })
+          showMessage(t("paySuccess"), "success", { afterDuration: () => flush() })
         } else if (result?.message === "NOT_ENOUGH_BALANCE") {
           setIsOpen(false)
           setRechargeModel(true)
         } else {
           setIsOpen(false)
           console.log("支付失败:", result?.message)
-          showMessage("支付失败")
+          showMessage(t("payFailed"))
         }
       })
     })
@@ -46,7 +48,7 @@ export default function PostPayDrawer(props: PostPayDrawerProps) {
       <FormDrawer
         title={
           <div>
-            <span className="text-lg font-semibold">付费浏览此视频</span>
+            <span className="text-lg font-semibold">{t("payTitle")}</span>
           </div>
         }
         headerLeft={(close) => {
@@ -92,7 +94,7 @@ export default function PostPayDrawer(props: PostPayDrawerProps) {
                   handleSubmit()
                 }}
               >
-                确认支付 {amount} USDT
+                {t("confirmPay", { amount, currency: "USDT" })}
               </button>
             </div>
           </div>

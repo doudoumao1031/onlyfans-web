@@ -20,7 +20,13 @@
     "loading1": "Loading...",
     "listEnd": "You have reached the end",
     "saveSuccess": "Save Success",
-    "saveFail": "Save Fail"
+    "saveFail": "Save Fail",
+    "post": {
+      "recharge": "Recharge",
+      "insufficientBalance": "Insufficient Balance",
+      "unliked": "Like has been cancelled",
+      "liked": "Liked"
+    }
   },
   "Explore": {
     "BecomeABlogger": "Become a blogger",
@@ -322,5 +328,24 @@
     "noResult": "No results found, please try another search term",
     "users": "Users",
     "posts": "Posts"
+  },
+  "PostInfo": {
+    "btnText1": "Pay {price} {currency} to view this post",
+    "btnText2": "Subscribe to view blogger's posts",
+    "btnText3": "Follow to unlock more content",
+    "btnText4": "Subscribe to unlock more content",
+    "btnText5": "Subscribe to unlock more content",
+    "operationFailed": "Operation Failed",
+    "followSuccess": "Follow Success",
+    "followFailed": "Follow Failed",
+    "subscribeSuccess": "Subscribe Success",
+    "subscribeFailed": "Subscribe Failed",
+    "subscribeRemaining": "Subscribe Remaining: {x} days",
+    "fllow": "Follow",
+    "fllowed": "Followed",
+    "paySuccess": "Pay Success",
+    "payFailed": "Pay Failed",
+    "payTitle": "Pay to view this post",
+    "confirmPay": "Confirm Pay {amount} {currency}"
   }
 }

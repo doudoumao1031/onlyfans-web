@@ -85,7 +85,7 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
         onClick={async () => {
           await handleFollowing()
         }}
-        className={`w-20 h-8 rounded-full border border-theme flex justify-center items-center  ${
+        className={`min-w-20 px-2 h-8 rounded-full border border-theme flex justify-center items-center  ${
           isFocus ? "" : "bg-theme"
         }`}
       >
