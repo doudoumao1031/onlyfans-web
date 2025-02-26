@@ -141,7 +141,7 @@ export default function Page({ postData }: { postData: PostData }) {
               }}
               className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${
                 isFocus
-                  ? "bg-white border border-border-pink text-text-pink"
+                  ? "bg-white border border-border-pink text-text-theme"
                   : " bg-background-pink text-white"
               }`}
             >
@@ -156,7 +156,7 @@ export default function Page({ postData }: { postData: PostData }) {
               <span className="ml-1">{isFocus ? "已关注" : "关注"}</span>
             </div>
             {sub && (
-              <div className="text-[10px] text-text-pink mt-1">
+              <div className="text-[10px] text-text-theme mt-1">
                 订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}
                 天
               </div>

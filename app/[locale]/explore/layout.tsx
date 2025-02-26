@@ -38,11 +38,11 @@ export default function Layout(props: {
             titleColor="#000"
             right={
               path === `/${locale}/explore/subscribed` && !isBlogger ? (
-                <Link href="/profile/order" className="text-text-pink text-base">
+                <Link href="/profile/order" className="text-text-theme text-base">
                   {t("BecomeABlogger")}
                 </Link>
               ) : (
-                <Link href="/profile" className="text-text-pink text-base">
+                <Link href="/profile" className="text-text-theme text-base">
                   {t("My")}
                 </Link>
               )

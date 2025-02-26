@@ -91,7 +91,7 @@ export default async function Page() {
           <div className="text-center text-[#6D7781] text-xs">@{data.username}</div>
           <Link href={`/space/${data.id}/feed`}>
             <div className="flex justify-center mt-2">
-              <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-pink text-text-pink">
+              <button className=" py-1 rounded-2xl pl-8 pr-8 border border-theme text-text-theme">
                 {t("actions.enter")}
               </button>
             </div>
@@ -138,7 +138,7 @@ export default async function Page() {
           <div className="grid grid-cols-2 gap-3">
             <Link
               href={"/profile/collect/blogger"}
-              className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-blogger.png')] bg-cover"
+              className="rounded-xl pt-1.5 pl-4 bg-[url('/theme/bg_collect_blogger@3x.png')] bg-cover"
             >
               <div className="text-xs text-[rgba(34,34,34,0.70)]">{t("favorites.blogger")}</div>
               <div className="font-medium text-[#2b2b2b] text-[34px] ">
@@ -147,7 +147,7 @@ export default async function Page() {
             </Link>
             <Link
               href={"/profile/collect/posts"}
-              className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-posts.png')] bg-cover"
+              className="rounded-xl pt-1.5 pl-4 bg-[url('/theme/bg_collect_posts@3x.png')] bg-cover"
             >
               <div className="text-xs text-[rgba(34,34,34,0.70)]">{t("favorites.posts")}</div>
               <div className="font-medium text-[#2b2b2b] text-[34px] ">

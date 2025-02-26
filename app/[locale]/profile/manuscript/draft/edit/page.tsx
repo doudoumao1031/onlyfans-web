@@ -178,7 +178,7 @@ const AddVoteModal = ({
                   }
                 })
               }}
-              className={"text-base text-text-pink"}
+              className={"text-base text-text-theme"}
             >
               {commonTrans("confirm")}
             </button>
@@ -234,7 +234,7 @@ const AddVoteModal = ({
               onTouchEnd={() => {
                 append({ content: "" })
               }}
-              className="flex gap-1.5 w-full rounded-xl border border-border-pink justify-center items-center py-2.5 text-text-pink"
+              className="flex gap-1.5 w-full rounded-xl border border-border-pink justify-center items-center py-2.5 text-text-theme"
             >
               <IconWithImage
                 url={"/icons/profile/icon_add@3x.png"}
@@ -446,7 +446,7 @@ const ReadSettings = ({
                   }
                 })
               }}
-              className={"text-base text-text-pink"}
+              className={"text-base text-text-theme"}
             >
               {commonTrans("confirm")}
             </button>
@@ -511,7 +511,7 @@ const ReadSettings = ({
                     />
                   </div>
                 </section>
-                <section className="text-xs text-pink absolute right-4 bottom-0">
+                <section className="text-xs text-text-theme absolute right-4 bottom-0">
                   {errors.priceList?.[index]?.price?.message}
                 </section>
               </section>
@@ -689,9 +689,9 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
         url={"/icons/profile/icon-reading.png"}
         width={20}
         height={20}
-        color={"#FF8492"}
+        className={"bg-background-theme"}
       />
-      <label className={"text-text-pink"}>
+      <label className={"text-text-theme"}>
         {option?.label}&nbsp;
         {Number(price) === 0 ? t("manuscript.free") : price}
       </label>
@@ -917,7 +917,7 @@ const EditPageContent = () => {
                 </button>
               )
           }
-          <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-text-pink")}>
+          <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-text-theme")}>
             {t("manuscript.itemActions.publish")}
           </button>
         </section>
@@ -982,13 +982,13 @@ const EditPageContent = () => {
                   url={"/icons/profile/icon_fans_vote@3x.png"}
                   width={20}
                   height={20}
-                  color={"#FF8492"}
+                  className={"bg-background-theme"}
                 />
-                <span className="font-bold text-text-pink text-base">
+                <span className="font-bold text-text-theme text-base">
                   {formValues.post_vote?.title}
                 </span>
               </div>
-              <div className="text-xs text-[#999] mt-1.5">
+              <div className="text-xs mt-1.5">
                 截止：
                 {formValues.post_vote?.stop_time
                   ? dayjs(formValues.post_vote?.stop_time * 1000).format("YYYY-MM-DD HH:mm")
@@ -1023,7 +1023,7 @@ const EditPageContent = () => {
             {/*<div className="flex items-center space-x-2">*/}
             {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
             {/*                   color={'#FF8492'}/>*/}
-            {/*    <label className={"text-text-pink"}>免费订阅</label>*/}
+            {/*    <label className={"text-text-theme"}>免费订阅</label>*/}
             {/*</div>*/}
           </section>
         </section>

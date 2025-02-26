@@ -79,7 +79,7 @@ const ManuscriptPost = () => {
                 width={20} height={20}
               />
             </div>
-            <span className="text-text-pink text-xs">{commonTrans("createTime")}</span>
+            <span className="text-text-theme text-xs">{commonTrans("createTime")}</span>
           </button>
         </section>
       </form>
@@ -136,7 +136,7 @@ const ManuscriptMedia = () => {
               width={20} height={20}
             />
           </div>
-          <span className="text-text-pink text-xs">{commonTrans("createTime")}</span>
+          <span className="text-text-theme text-xs">{commonTrans("createTime")}</span>
         </button>
       </div>
       <section className="">
@@ -189,9 +189,9 @@ const ManuscriptMedia = () => {
                       </section>
                     </section>
                     <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
-                      className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-pink border-2 text-text-pink w-full mt-2"
+                      className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-theme border-2 text-text-theme w-full mt-2"
                     >
-                      <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"} />
+                      <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
                       <span>{t("itemActions.edit")}</span>
                     </Link>
                   </section>
@@ -217,7 +217,7 @@ export default function Page() {
 
   return (
     <div>
-      <Header title={t("title")} titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-text-pink text-base">{t("draft")}</Link>}>
+      <Header title={t("title")} titleColor={"#000"} right={<Link href={"/profile/manuscript/draft"} className="text-text-theme text-base">{t("draft")}</Link>}>
       </Header>
       <TabTitle tabOptions={tabOptions} active={active} activeChange={setActive} />
       {active === ACTIVE_TYPE.POST && <ManuscriptPost />}

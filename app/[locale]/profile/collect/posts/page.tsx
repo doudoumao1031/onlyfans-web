@@ -99,7 +99,7 @@ export default function Page() {
                           alt={"user avatar"}
                         /> */}
                           <CommonAvatar photoFileId={v.user.photo} size={24} />
-                          <span className="text-text-pink text-xs">{v.user.username}</span>
+                          <span className="text-text-theme text-xs">{v.user.username}</span>
                         </div>
                       </div>
                     </div>

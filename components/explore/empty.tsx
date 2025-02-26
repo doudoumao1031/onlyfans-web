@@ -9,7 +9,7 @@ export default async function Empty({ text }: { text: string }) {
       <span className="mt-6 text-gray-500 text-center">
         {text}
         <Link href="/explore/feed">
-          <span className="text-text-pink">{t("Feed")}</span>
+          <span className="text-text-theme">{t("Feed")}</span>
         </Link>
       </span>
     </div>

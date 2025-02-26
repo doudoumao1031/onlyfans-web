@@ -67,7 +67,7 @@ export default function SubScribeConfirm({
                 }${t("month")}`}</span>
                 <span
                   className={`text-[20px] font-bold my-4] ${
-                    active === i ? "text-text-pink" : "text-[#222222"
+                    active === i ? "text-text-theme" : "text-[#222222"
                   }`}
                 >{`$${v.price}`}</span>
                 <span className="text-[#6D7781] text-xs">{v.discount ? `$${v.discount}` : ""}</span>
@@ -94,7 +94,7 @@ export default function SubScribeConfirm({
       title={
         <div>
           {t("subscribe")}
-          <span className="ml-1 text-[15px] text-text-pink">{data?.first_name}</span>
+          <span className="ml-1 text-[15px] text-text-theme">{data?.first_name}</span>
         </div>
       }
       headerLeft={(close) => {

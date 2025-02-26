@@ -123,6 +123,10 @@
         "rejected": "Not passed",
         "publish": "Publish"
       },
+      "itemState": {
+        "auditing": "auditing",
+        "rejected": "rejected"
+      },
       "publishSuccess": "Publish Success",
       "publishFail": "Publish Fail",
       "saveAt": "Save at",

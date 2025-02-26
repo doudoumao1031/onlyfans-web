@@ -17,7 +17,7 @@ export default async function Layout({ children }: {
   return (
     <>
       <Header title={t("title")} titleColor={"#000"}
-        right={<Link href={"/profile/fans/reply"} className="text-text-pink text-base">{t("msgReply")}</Link>}
+        right={<Link href={"/profile/fans/reply"} className="text-text-theme text-base">{t("msgReply")}</Link>}
       >
       </Header>
       <TopTab tabOptions={[

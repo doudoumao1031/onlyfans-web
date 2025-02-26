@@ -66,7 +66,7 @@ export default function Page() {
       <LoadingMask isLoading={isLoading} />
       <form onSubmit={formSubmit}>
         <Header title={t("msgReply")}
-          right={<button type={"submit"} className={"text-text-pink text-base"}>{commonTrans("save")}</button>}
+          right={<button type={"submit"} className={"text-text-theme text-base"}>{commonTrans("save")}</button>}
         />
         <section className={"py-5 px-4"}>
           {t("replyDescription")}：

@@ -11,7 +11,7 @@ export default async function Page() {
           <Link href={"/profile/order"} className="flex justify-center flex-col items-center gap-2">
             <div>
               <Image
-                src="/icons/profile/icon-subscription-management.png"
+                src="/theme/icon_fans_mine_subscription@3x.png"
                 alt="subscription-management"
                 width={50}
                 height={50}
@@ -25,7 +25,7 @@ export default async function Page() {
           >
             <div>
               <Image
-                src="/icons/profile/icon-manuscript-management.png"
+                src="/theme/icon_fans_mine_manuscript@3x.png"
                 alt="icon-manuscript-management"
                 width={50}
                 height={50}
@@ -39,7 +39,7 @@ export default async function Page() {
           >
             <div>
               <Image
-                src="/icons/profile/icon-fan-management.png"
+                src="/theme/icon_fans_mine_fans@3x.png"
                 alt="icon-fan-management"
                 width={50}
                 height={50}
@@ -53,7 +53,7 @@ export default async function Page() {
           >
             <div>
               <Image
-                src="/icons/profile/icon-revenue-center.png"
+                src="/theme/icon_fans_mine_income@3x.png"
                 alt="icon-revenue-center"
                 width={50}
                 height={50}
@@ -67,7 +67,7 @@ export default async function Page() {
           >
             <div>
               <Image
-                src="/icons/profile/icon-data-analysis.png"
+                src="/theme/icon_fans_mine_record@3x.png"
                 alt="icon-data-analysis"
                 width={50}
                 height={50}
