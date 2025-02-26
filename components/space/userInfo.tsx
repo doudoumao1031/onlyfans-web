@@ -9,6 +9,7 @@ import { useState } from "react"
 import SubscribedDrawer from "@/components/explore/subscribed-drawer"
 import CommonRecharge from "@/components/post/common-recharge"
 import { useRouter } from "next/navigation"
+import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
 
 export default function UserInfo({
   data,
@@ -23,6 +24,7 @@ export default function UserInfo({
     throw new Error()
   }
   const router = useRouter()
+  const { addToActionQueue } = useGlobal()
   const tabs = [
     { icon: "/icons/space/icon_info_video@3x.png", num: data.video_count }, //视频
     { icon: "/icons/space/icon_info_photo@3x.png", num: data.img_count }, //图片
@@ -66,7 +68,13 @@ export default function UserInfo({
           <Directions about={data.about}/>
           {
             !isSelf && !data.sub && (
-              <SubscribedDrawer userId={data.id} name={data.username} free={data.sub_price === 0} setRechargeModel={setVisible} flush={router.refresh}>
+              <SubscribedDrawer userId={data.id} name={data.username} free={data.sub_price === 0} setRechargeModel={setVisible} flush={() => {
+                router.refresh()
+                addToActionQueue({
+                  type: ActionTypes.SPACE.REFRESH
+                })
+              }}
+              >
                 <div
                   className="w-full h-12 rounded-lg  pl-4 mt-2 flex flex-col justify-center items-start text-white bg-[url('/theme/bg_space_subscription@3x.png')] bg-cover"
                 >

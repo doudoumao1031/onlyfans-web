@@ -3,21 +3,25 @@ import { useState } from "react"
 import Stats from "./stats"
 import { useMemo } from "react"
 import { useCommonMessageContext } from "@/components/common/common-message"
+import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
 
 export default function Like({
   count,
   liked,
   postId,
+  notice,
   outLike
 }: {
   count: number
   liked: boolean
   postId: number
-  outLike: boolean
+  notice?: boolean
+  outLike: boolean // 外部点赞(打赏同时点赞)
 }) {
   // 添加点赞状态
   const [likes, setLikes] = useState(count)
   const [isLiked, setIsLiked] = useState(liked)
+  const { addToActionQueue } = useGlobal()
   useMemo(() => {
     if (outLike) {
       setIsLiked(true)
@@ -47,6 +51,11 @@ export default function Like({
       // 如果点赞失败，恢复之前的点赞状态
       setLikes((prevLikes) => (isLiked ? prevLikes + 1 : prevLikes - 1))
       setIsLiked(isLiked)
+    }
+    if (notice) {
+      addToActionQueue({
+        type: ActionTypes.EXPLORE.REFRESH
+      })
     }
   }
   return (

@@ -6,10 +6,11 @@ interface TipProps {
   postId: number
   self: boolean
   tipStar: (star: boolean) => void
+  notice?: boolean
 }
 
 export default function Tip(props: TipProps) {
-  const { count, postId, self, tipStar } = props
+  const { count, postId, self, tipStar, notice } = props
   const [amount, setAmount] = useState<number>(count)
   const content = (
     <div>
@@ -18,7 +19,7 @@ export default function Tip(props: TipProps) {
   )
   return self ? content :
     (
-      <TipDrawer postId={postId} refresh={(t) => setAmount(amount + t)} tipStar={tipStar}>
+      <TipDrawer postId={postId} refresh={(t) => setAmount(amount + t)} tipStar={tipStar} notice={notice}>
         {content}
       </TipDrawer>
     )

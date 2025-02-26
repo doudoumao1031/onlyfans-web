@@ -8,16 +8,19 @@ import FormDrawer from "@/components/common/form-drawer"
 import  { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import CommonRecharge from "@/components/post/common-recharge"
+import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
 
 interface TipDrawerProps {
   postId: number
   refresh: (amount: number) => void
   tipStar: (star: boolean) => void
+  notice?: boolean //是否发送通知事件
   children?: React.ReactNode
 }
 
 export default function TipDrawer(props: TipDrawerProps) {
-  const { postId, refresh, tipStar, children } = props
+  const { postId, refresh, tipStar, notice, children } = props
+  const { addToActionQueue } = useGlobal()
   const [amount, setAmount] = useState<number>(0)
   const [check, setCheck] = useState<boolean>(true)
   const [visible, setVisible] = useState<boolean>(false)
@@ -47,6 +50,11 @@ export default function TipDrawer(props: TipDrawerProps) {
         setVisible(true)
       }
     })
+    if (notice) {
+      addToActionQueue({
+        type: ActionTypes.EXPLORE.REFRESH
+      })
+    }
   }
 
   const handleToggleValue = (value: string) => {

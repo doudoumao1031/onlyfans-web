@@ -4,11 +4,12 @@ import Modal, { TModalProps } from "@/components/space/modal"
 import { useState } from "react"
 import dayjs from "dayjs"
 import { useParams } from "next/navigation"
-
-// import SubScribeConfirm from '@/components/space/subscribe-confirm'
 import { userDelFollowing, userFollowing } from "@/lib/actions/space/actions"
 import { UserProfile } from "@/lib/actions/profile"
+import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
+
 export default function Page({ data }: { data: UserProfile | undefined }) {
+  const { addToActionQueue } = useGlobal()
   const [isFocus, setIsFocus] = useState<boolean>(data?.following || false)
   const [visible, setVisible] = useState<boolean>(false)
   const [modalType, setModalType] = useState<number>(0)
@@ -55,7 +56,7 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
     }
   ]
 
-  const handleFllowing = async () => {
+  const handleFollowing = async () => {
     setIsFocus(!isFocus)
     try {
       const res = isFocus
@@ -70,13 +71,17 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
     } catch (error) {
       console.log("FETCH_ERROR,", error)
     }
+    // 发送通知为关注了刷新当前页帖子列表
+    addToActionQueue({
+      type: ActionTypes.SPACE.REFRESH
+    })
   }
 
   return (
     <div className="absolute top-4 right-4 flex flex-col items-end ">
       <div
-        onClick={() => {
-          handleFllowing()
+        onClick={async () => {
+          await handleFollowing()
         }}
         className={`w-20 h-8 rounded-full border border-theme flex justify-center items-center  ${
           isFocus ? "" : "bg-theme"
