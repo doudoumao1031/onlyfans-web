@@ -1,5 +1,4 @@
-"use client"
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { Attachment, FileType, TPost } from "./types"
 import { buildImageUrl } from "@/lib/utils"
 import { VideoPreview } from "./video-preview"
@@ -93,9 +92,8 @@ export default function Media(props: MediaProps) {
                       href={
                         toDetail
                           ? `/postInfo/${post.id}`
-                          : `/media/${file_type === FileType.Video ? "video" : "image"}/${
-                              file_type === FileType.Video ? showIds : showIds + "_" + i
-                            }`
+                          : `/media/${file_type === FileType.Video ? "video" : "image"}/${file_type === FileType.Video ? showIds : showIds + "_" + i
+                          }`
                       }
                       className={file_type === FileType.Video ? "col-span-3" : "block"}
                     >
