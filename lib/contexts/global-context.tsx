@@ -1,6 +1,13 @@
 "use client"
 
-import React, { createContext, useContext, ReactNode, useState, useEffect, useCallback } from "react"
+import React, {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useEffect,
+  useCallback
+} from "react"
 import { getSelfId } from "@/lib/actions/server-actions"
 
 // Action Types
@@ -12,6 +19,10 @@ export const ActionTypes = {
   // 空间帖子列表
   SPACE: {
     REFRESH: "space-action-refresh"
+  },
+  Followed: {
+    SCROLL_TO_TOP: "followed-action-scroll-top",
+    REFRESH: "followed-action-refresh"
   },
   Feed: {
     SCROLL_TO_TOP: "feed-action-scroll-top",
@@ -37,7 +48,8 @@ export const ActionTypes = {
   }
 } as const
 
-type ActionType = typeof ActionTypes[keyof typeof ActionTypes][keyof typeof ActionTypes[keyof typeof ActionTypes]]
+type ActionType =
+  (typeof ActionTypes)[keyof typeof ActionTypes][keyof (typeof ActionTypes)[keyof typeof ActionTypes]]
 
 interface ActionItem {
   type: string
@@ -73,7 +85,7 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
       ...action,
       timestamp: Date.now()
     }
-    setActionQueue(prev => [...prev, actionItem])
+    setActionQueue((prev) => [...prev, actionItem])
 
     // Dispatch the event for backward compatibility
     window.dispatchEvent(new Event(action.type))
@@ -85,7 +97,7 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
       // Here you can add any global action processing logic
       // For now, we'll just keep the last 100 actions
       if (actionQueue.length > 100) {
-        setActionQueue(prev => prev.slice(-100))
+        setActionQueue((prev) => prev.slice(-100))
       }
     }
   }, [actionQueue])
