@@ -9,6 +9,7 @@ import { useState } from "react"
 import SubscribedDrawer from "@/components/explore/subscribed-drawer"
 import CommonRecharge from "@/components/post/common-recharge"
 import { useRouter } from "next/navigation"
+import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
 import { useTranslations } from "next-intl"
 
 export default function UserInfo({
@@ -25,6 +26,7 @@ export default function UserInfo({
   }
   const t = useTranslations("Space")
   const router = useRouter()
+  const { addToActionQueue } = useGlobal()
   const tabs = [
     { icon: "/icons/space/icon_info_video@3x.png", num: data.video_count }, //视频
     { icon: "/icons/space/icon_info_photo@3x.png", num: data.img_count }, //图片
@@ -72,9 +74,14 @@ export default function UserInfo({
               name={data.username}
               free={data.sub_price === 0}
               setRechargeModel={setVisible}
-              flush={router.refresh}
+              flush={() => {
+                router.refresh()
+                addToActionQueue({
+                  type: ActionTypes.SPACE.REFRESH
+                })
+              }}
             >
-              <div className="w-full h-12 bg-[#ff8492] rounded-lg  pl-4 mt-2 flex flex-col justify-center items-start text-white bg-[url('/icons/space/bg_space_subscription.png')] bg-cover">
+              <div className="w-full h-12 rounded-lg  pl-4 mt-2 flex flex-col justify-center items-start text-white bg-[url('/theme/bg_space_subscription@3x.png')] bg-cover">
                 <div>{t("subscribe")}</div>
                 <div className="text-xs">
                   {data.sub_price === 0 ? t("free") : `${data.sub_price} USDT/${t("month")}`}

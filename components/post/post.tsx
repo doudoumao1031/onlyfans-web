@@ -113,7 +113,7 @@ export default function Post({
         )}
         {hasVote && showVote && <Vote postId={post.id} />}
         <div className="flex gap-4 justify-between pt-2 pb-4 border-b border-black/5">
-          <Like count={thumbs_up_count} liked={star} postId={post.id} outLike={!star && tipStar} />
+          <Like count={thumbs_up_count} liked={star} postId={post.id} notice={isInfoPage} outLike={!star && tipStar} />
           {isInfoPage ? (
             <CommentStats count={comment_count + adjustCommentCount} onClick={toggleComments} />
           ) : (
@@ -121,9 +121,9 @@ export default function Post({
               <CommentStats count={comment_count + adjustCommentCount} />
             </Link>
           )}
-          <Tip count={tip_count} postId={post.id} self={sid === user.id} tipStar={setTipStar} />
+          <Tip count={tip_count} postId={post.id} self={sid === user.id} tipStar={setTipStar} notice={isInfoPage} />
           <Share count={share_count} postId={post.id} />
-          <Save count={collection_count} saved={collection} postId={post.id} />
+          <Save count={collection_count} saved={collection} postId={post.id} notice={isInfoPage} />
         </div>
         {showComments &&
           (commentsLoading ? (

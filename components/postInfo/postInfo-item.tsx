@@ -12,14 +12,14 @@ import { useState, useMemo } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
 import { postDetail } from "@/lib/actions/profile"
 import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
-import { Link } from "@/i18n/routing"
-import { useGlobal } from "@/lib/contexts/global-context"
+import Link from "next/link"
+import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
 import CommonRecharge from "@/components/post/common-recharge"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 
 export default function Page({ postData }: { postData: PostData }) {
   const [postInfo, setPostInfo] = useState<PostData>(postData)
-  const { sid } = useGlobal()
+  const { sid, addToActionQueue } = useGlobal()
   const { showMessage } = useCommonMessageContext()
   const [isFocus, setIsFocus] = useState<boolean>(postInfo.user?.following as boolean)
   const [drawer, setDrawer] = useState<boolean>(false)
@@ -72,10 +72,14 @@ export default function Page({ postData }: { postData: PostData }) {
     }
   }, [postInfo.post, postInfo.post_price, postInfo.user, price, sid])
 
-  const flush = async () => {
+  /** 刷新当前页数据 */
+  const refresh = async () => {
     const res = await postDetail(Number(postInfo.post.id))
     const result = res?.data as unknown as PostData
     setPostInfo(result)
+    addToActionQueue({
+      type: ActionTypes.EXPLORE.REFRESH
+    })
   }
 
   const { withLoading } = useLoadingHandler({
@@ -95,7 +99,7 @@ export default function Page({ postData }: { postData: PostData }) {
       if (!isFocus) {
         setFollow(false)
       }
-      await flush()
+      await refresh()
       showMessage(!isFocus ? "关注成功" : "取消成功")
     })
   }
@@ -132,8 +136,8 @@ export default function Page({ postData }: { postData: PostData }) {
         {sid !== id && (
           <div className="focus">
             <div
-              onClick={() => {
-                handleFollowing()
+              onClick={async () => {
+                await handleFollowing()
               }}
               className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${
                 isFocus
@@ -153,7 +157,8 @@ export default function Page({ postData }: { postData: PostData }) {
             </div>
             {sub && (
               <div className="text-[10px] text-text-pink mt-1">
-                订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}天
+                订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}
+                天
               </div>
             )}
           </div>
@@ -165,17 +170,23 @@ export default function Page({ postData }: { postData: PostData }) {
 
   return (
     <div className="p-4 pt-20">
-      <Header/>
-      <Post data={postInfo as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} followConfirm={handleFollowing}/>
+      <Header />
+      <Post
+        data={postInfo as unknown as PostData}
+        hasSubscribe={false}
+        hasVote
+        isInfoPage={true}
+        followConfirm={handleFollowing}
+      />
       {btnText !== "" && (
         <div className="flex justify-center items-center mt-2">
           <div
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault()
               if (pay) {
                 setPayDrawer(true)
               } else if (follow) {
-                handleFollowing()
+                await handleFollowing()
               } else {
                 setDrawer(true)
               }
@@ -191,7 +202,7 @@ export default function Page({ postData }: { postData: PostData }) {
           userId={postInfo.user.id}
           name={postInfo.user.username}
           free={postInfo.user.sub_price === 0}
-          flush={flush}
+          flush={refresh}
           isOpen={drawer}
           setIsOpen={setDrawer}
           setRechargeModel={setVisible}
@@ -201,13 +212,18 @@ export default function Page({ postData }: { postData: PostData }) {
         <PostPayDrawer
           post_id={postInfo.post.id}
           amount={price}
-          flush={flush}
+          flush={refresh}
           isOpen={payDrawer}
           setIsOpen={setPayDrawer}
           setRechargeModel={setVisible}
         />
       )}
-      <CommonRecharge visible={visible} setVisible={setVisible} recharge={recharge} setRecharge={setRecharge}/>
+      <CommonRecharge
+        visible={visible}
+        setVisible={setVisible}
+        recharge={recharge}
+        setRecharge={setRecharge}
+      />
     </div>
   )
 }

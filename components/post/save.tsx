@@ -2,16 +2,20 @@ import { userCollectionPost } from "@/lib"
 import { useState } from "react"
 import Stats from "./stats"
 import { useCommonMessageContext } from "@/components/common/common-message"
+import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
 
 export default function Save({
   count,
   saved,
+  notice,
   postId
 }: {
   count: number
   saved: boolean
+  notice?: boolean
   postId: number
 }) {
+  const { addToActionQueue } = useGlobal()
   const [saves, setSaves] = useState(count)
   const [isSaved, setIsSaved] = useState(saved)
   const { showMessage } = useCommonMessageContext()
@@ -34,6 +38,11 @@ export default function Save({
       // 如果点赞失败，恢复之前的点赞状态
       setSaves((prevSaves) => (isSaved ? prevSaves + 1 : prevSaves - 1))
       setIsSaved(isSaved)
+    }
+    if (notice) {
+      addToActionQueue({
+        type: ActionTypes.EXPLORE.REFRESH
+      })
     }
   }
   return (

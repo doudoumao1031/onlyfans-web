@@ -5,6 +5,14 @@ import { getSelfId } from "@/lib/actions/server-actions"
 
 // Action Types
 export const ActionTypes = {
+  // 主页的订阅/关注/推荐 列表
+  EXPLORE: {
+    REFRESH: "explore-action-refresh"
+  },
+  // 空间帖子列表
+  SPACE: {
+    REFRESH: "space-action-refresh"
+  },
   Feed: {
     SCROLL_TO_TOP: "feed-action-scroll-top",
     REFRESH: "feed-action-refresh",
@@ -32,9 +40,9 @@ export const ActionTypes = {
 type ActionType = typeof ActionTypes[keyof typeof ActionTypes][keyof typeof ActionTypes[keyof typeof ActionTypes]]
 
 interface ActionItem {
-  type: ActionType
+  type: string
   payload?: unknown
-  timestamp: number
+  timestamp?: number
 }
 
 interface GlobalContextType {
