@@ -28,7 +28,7 @@ export default function Page({
   cancel = () => {},
   confirm = () => {}
 }: TModalProps) {
-  const t = useTranslations("Space")
+  const t = useTranslations("Common")
   if (!visible) return null
   const DefaultFooter = () => {
     return (
