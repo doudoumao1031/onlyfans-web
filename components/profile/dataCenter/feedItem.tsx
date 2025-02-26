@@ -3,20 +3,23 @@ import IconWithImage from "../icon"
 import { PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
 import LazyImg from "../../common/lazy-img"
+import { useTranslations } from "next-intl"
 type TProps = {
   item: PostData
 }
 
-const countTypes = {
-  play_count: "播放",
-  comment_count: "评论",
-  thumbs_up_count: "点赞",
-  share_count: "分享",
-  tip_count: "打赏",
-  collection_count: "收藏"
-}
 
 export default function Page({ item }: TProps) {
+  const t = useTranslations("Profile")
+  const countTypes = {
+    play_count: t("dataCenter.playCount1"),
+    comment_count: t("dataCenter.commentCount"),
+    thumbs_up_count: t("dataCenter.thumbsUpCount"),
+    share_count: t("dataCenter.shareCount"),
+    tip_count: t("dataCenter.tipCount"),
+    collection_count: t("dataCenter.collectionCount")
+  }
+
   const { post_attachment, post, post_metric } = item
   const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
@@ -45,7 +48,7 @@ export default function Page({ item }: TProps) {
                 <span className="text-[#BBB] text-xs ml-2">{post_metric.play_count}</span>
               </div>
               <div className="text-[#BBB] flex items-center" onClick={() => { setIsOpen(!isOpen) }}>
-                <span>{isOpen ? "收起" : "详细"}</span>
+                <span>{isOpen ? t("dataCenter.fold") : t("dataCenter.detail")}</span>
                 <IconWithImage url="/icons/profile/icon-bt.png" width={14} height={14} color={"#BBB"} />
               </div>
             </div>

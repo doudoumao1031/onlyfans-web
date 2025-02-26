@@ -2,20 +2,24 @@ import IconWithImage from "@/components/profile/icon"
 import { SubscribeUserInfo } from "@/lib"
 import dayjs from "dayjs"
 import CommonAvatar from "@/components/common/common-avatar"
+import { useTranslations } from "next-intl"
 
 
-const showTime = (startTime: number) => {
-  const diff = dayjs(startTime * 1000).diff(dayjs(), "months")
-  if (diff === 0) {
-    return "最近关注"
-  }
-  return `${diff}个月`
-}
+
 
 export default function FansListItem({ isSubscribe, data }: {
   isSubscribe?: boolean,
   data: SubscribeUserInfo
 }) {
+  const t = useTranslations("Profile.fans")
+  const orderTrans = useTranslations("Profile.order")
+  const showTime = (startTime: number ) => {
+    const diff = dayjs(startTime * 1000).diff(dayjs(), "months")
+    if (diff === 0) {
+      return `${t("Recent")} ${isSubscribe ? t("subscribe") : t("follow")}`
+    }
+    return `${diff}${orderTrans("monthUnit")}${orderTrans("month")}`
+  }
   return (
     <div className={"flex gap-4 items-center"}>
       <div className={" shrink-0"}>

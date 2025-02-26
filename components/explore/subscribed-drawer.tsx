@@ -10,6 +10,7 @@ import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import LoadingPage from "@/components/common/loading-page"
+import { useTranslations } from "next-intl"
 
 interface SubscribedDrawerProps {
   userId: number
@@ -24,7 +25,8 @@ interface SubscribedDrawerProps {
 
 export default function SubscribedDrawer(props: SubscribedDrawerProps) {
   const { userId, name, free, isOpen, setIsOpen, setRechargeModel, flush, children } = props
-  const { showMessage  } = useCommonMessageContext()
+  const { showMessage } = useCommonMessageContext()
+  const t = useTranslations("Explore")
   const [drawer, setDrawer] = useState<boolean>(false)
   const [items, setItems] = useState<DiscountInfo[]>([])
   const [discount, setDiscount] = useState<DiscountInfo>()
@@ -33,7 +35,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
   useEffect(() => {
     getSettingData()
   }, [])
-  async function getSettingData () {
+  async function getSettingData() {
     setLoading(true)
     try {
       const settings = await viewUserSubscribeSetting({ user_id: userId })
@@ -85,7 +87,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
   const { withLoading } = useLoadingHandler({
     onError: (error) => {
       console.error("post pay error:", error)
-      showMessage("订阅失败")
+      showMessage(t("SubscribeFailed"))
     }
   })
   async function handleSubmit() {
@@ -100,14 +102,14 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
           console.log("订阅成功")
           setIsOpen?.(false)
           setDrawer(false)
-          showMessage("订阅成功", "success", { afterDuration: () => flush?.() })
+          showMessage(t("SubscribeSuccess"), "success", { afterDuration: () => flush?.() })
         } else if (result?.message === "NOT_ENOUGH_BALANCE") {
           setDrawer(false)
           setIsOpen?.(false)
           setRechargeModel?.(true)
         } else {
           console.log("订阅失败:", result?.message)
-          showMessage("订阅失败")
+          showMessage(t("SubscribeFailed"))
         }
       })
     })
@@ -130,7 +132,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
         isAutoHeight
         title={
           <div>
-            <span className="text-lg font-semibold">订阅</span>
+            <span className="text-lg font-semibold">{t("Subscribe")}</span>
             <span className="text-text-theme font-normal text-[15px]">{name}</span>
           </div>
         }
@@ -159,9 +161,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
       >
         <input hidden={true} name="user_id" defaultValue={userId} />
         <div className="flex flex-col items-center text-black text-2xl bg-slate-50">
-          {loading && (
-            <LoadingPage height={"h-18"} />
-          )}
+          {loading && <LoadingPage height={"h-18"} />}
           {!loading && (
             <ToggleGroupSubscribed
               type="single"
@@ -181,7 +181,9 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
                 <ToggleGroupSubscribedItem key={item.id} value={String(item.id)}>
                   <div className="relative w-full col-span-3">
                     <div className="h-full flex flex-col justify-center items-center text-black">
-                      <span className="text-nowrap text-xs">{item.month_count}个月</span>
+                      <span className="text-nowrap text-xs">
+                        {item.month_count} {t("Month")}
+                      </span>
                       <span
                         className={`text-nowrap text-xl my-4 ${
                           item.id === discount?.id ? "text-text-theme" : "text-black"
@@ -219,11 +221,13 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
                   handleSubmit()
                 }}
               >
-                确认支付 {amount} USDT
+                {t("ConfirmPayment")} {amount} USDT
               </button>
               {showDiscount(discount) && (
                 <div className="absolute bg-orange h-4 px-2 -top-2 right-5 rounded-full flex justify-center items-center">
-                  <span className="text-white text-xs text-center text-nowrap">已省 ${diff}</span>
+                  <span className="text-white text-xs text-center text-nowrap">
+                    {t("Saved")} ${diff}
+                  </span>
                 </div>
               )}
             </div>

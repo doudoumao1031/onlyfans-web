@@ -8,11 +8,13 @@ import { useParams } from "next/navigation"
 // import SubScribeConfirm from '@/components/space/subscribe-confirm'
 import { userDelFollowing, userFollowing } from "@/lib/actions/space/actions"
 import { UserProfile } from "@/lib/actions/profile"
+import { useTranslations } from "next-intl"
 export default function Page({ data }: { data: UserProfile | undefined }) {
   const [isFocus, setIsFocus] = useState<boolean>(data?.following || false)
   const [visible, setVisible] = useState<boolean>(false)
   const [modalType, setModalType] = useState<number>(0)
   const params = useParams()
+  const t = useTranslations("Space")
   const id = params.id // Access the dynamic route parameter
   const handleFocus = () => {
     setVisible(false)
@@ -24,34 +26,34 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
     {
       type: "modal",
       closeModal: false,
-      content: <div className="p-4 pb-6">订阅博主与Ta畅谈</div>,
-      okText: "免费/订阅",
+      content: <div className="p-4 pb-6">{t("tip3")}</div>,
+      okText: t("FreeAndSubscription"),
       confirm: () => handleFocus()
     },
     {
       type: "modal",
       closeModal: false,
-      content: <div className="p-4 pb-6">订阅博主与Ta畅谈</div>,
+      content: <div className="p-4 pb-6">{t("tip3")}</div>,
       confirm: () => handleFocus()
     },
     {
       type: "modal",
       closeModal: false,
-      content: <div className="p-4 pb-6">余额不足</div>,
-      okText: "充值",
+      content: <div className="p-4 pb-6"> </div>,
+      okText: t("topUp"),
       confirm: () => handleTopUp()
     },
     {
       type: "toast",
-      content: "订阅成功"
+      content: t("subscribeSuccess")
     },
     {
       type: "toast",
-      content: "关注成功"
+      content: t("fllowSuccess")
     },
     {
       type: "toast",
-      content: "取消成功"
+      content: t("cancelled")
     }
   ]
 
@@ -84,22 +86,24 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
       >
         <IconWithImage
           url={
-            isFocus ? "/theme/icon_info_followed_white@3x.png" : "/theme/icon_info_follow_white@3x.png"
+            isFocus ? "/icons/icon_info_followed_white.png" : "/icons/icon_info_follow_white.png"
           }
           width={20}
           height={20}
           color={isFocus ? "var(--theme)" : "var(----white)"}
         />
         <span className={isFocus ? "text-theme" : "text-white"}>
-          {isFocus ? "已关注" : "关注"}
+          {isFocus ? t("fllowed") : t("fllow")}
         </span>
       </div>
       {data?.sub && (
         <div className="flex text-text-theme text-xs mt-3 items-center">
           <span className="pr-1">
-            订阅：{dayjs((data && data?.sub_end_time * 1000) || 0).diff(dayjs(), "days")}天
+            {t("subscribe")}：
+            {dayjs((data && data?.sub_end_time * 1000) || 0).diff(dayjs(), "days")}
+            {t("day")}
           </span>
-          <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="var(--theme)" />
+          <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="#ff8492" />
         </div>
       )}
 

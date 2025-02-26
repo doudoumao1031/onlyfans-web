@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
 import { buildUserHomePagePath, getUserIdFromMention, isMention } from "./utils"
 
 export default function Description({

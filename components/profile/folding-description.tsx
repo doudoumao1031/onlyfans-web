@@ -1,8 +1,10 @@
 "use client"
 import { useState } from "react"
 import IconWithImage from "@/components/profile/icon"
+import { useTranslations } from "next-intl"
 
 export default function FoldingDescription ({ about,location }:{about:string,location: string}) {
+  const t = useTranslations("Profile")
   const [hideState,setHideState] = useState(true)
   return (
     <>
@@ -26,7 +28,7 @@ export default function FoldingDescription ({ about,location }:{about:string,loc
         <button className="text-text-pink mt-1" type={"button"} onTouchEnd={() => {
           setHideState(false)
         }}
-        >更多信息</button>
+        >{t("actions.moreInfo")}</button>
       )}
     </>
   )

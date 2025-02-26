@@ -1,7 +1,9 @@
 import { getSubscribeSetting, myPosts } from "@/lib"
 import PostsCard from "./posts-card"
+import { getTranslations } from "next-intl/server"
 
 export default async function Page() {
+  const t = await getTranslations("Profile.postCard")
   const subscribeSettings = await getSubscribeSetting()
   const posts = await myPosts({
     title: "",
@@ -27,9 +29,9 @@ export default async function Page() {
         totalPosts > 0 && canPub && (
           <PostsCard
             link={"/profile/manuscript/draft/edit"}
-            description={"通过订阅、打赏都可以赚取现金"}
-            title={"发布你的帖子"}
-            actionButton={"发布帖子"}
+            description={t("description1")}
+            title={t("title1")}
+            actionButton={t("button1")}
           />
         )
       }
@@ -37,18 +39,18 @@ export default async function Page() {
       {!canPub && (
         <PostsCard
           link={"/profile/order"}
-          description={"成为唯粉博主，启航个人新旅途"}
-          title={"开启的唯粉创作之路"}
-          actionButton={"开启订阅"}
+          description={t("description2")}
+          title={t("title2")}
+          actionButton={t("button2")}
         />
       )}
       {/*已开启订阅，但未发布帖子*/}
       {canPub && totalPosts === 0 && (
         <PostsCard
           link={"/profile/manuscript/draft/edit"}
-          description={"分享你的帖子，赚取真金白银"}
-          title={"发布你的第一个帖子"}
-          actionButton={"立即参与"}
+          description={t("description3")}
+          title={t("title3")}
+          actionButton={t("button3")}
         />
       )}
     </div>

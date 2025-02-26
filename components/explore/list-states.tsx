@@ -1,25 +1,25 @@
-import React from "react"
+"use client"
+import { useTranslations } from "next-intl"
 
 export function ListError() {
-  return (
-    <div className="text-center mt-4 text-pink">
-      Failed to load data. Please try again.
-    </div>
-  )
+  const t = useTranslations("Common")
+  return <div className="text-center mt-4 text-pink">{t("listError")}</div>
 }
 
 export function ListLoading() {
+  const t = useTranslations("Common")
   return (
     <div className="text-center mt-4">
-      <button className="btn btn-primary loading">Loading...</button>
+      <button className="btn btn-primary loading">{t("loading1")}</button>
     </div>
   )
 }
 
 export function ListEnd() {
+  const t = useTranslations("Common")
   return (
     <div className="text-center mt-4">
-      <p className="text-gray-500">You have reached the end.</p>
+      <p className="text-gray-500">{t("listEnd")}</p>
     </div>
   )
 }

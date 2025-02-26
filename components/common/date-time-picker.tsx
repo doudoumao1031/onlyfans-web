@@ -8,19 +8,21 @@ import {
   DrawerHeader,
   DrawerTitle
 } from "@/components/ui/drawer"
+import { useTranslations } from "next-intl"
 
 export default function DateTimePicker(props: {
-  className?: string,
-  value: number,
-  dateChange: (value: number) => void,
-  disabled?: boolean,
-  children: ReactNode,
-  max?: Date,
+  className?: string
+  value: number
+  dateChange: (value: number) => void
+  disabled?: boolean
+  children: ReactNode
+  max?: Date
   min?: Date
-} ) {
-  const [visible,setVisible] = useState<boolean>(false)
-  const {  value, dateChange ,children,max,min } = props
+}) {
+  const [visible, setVisible] = useState<boolean>(false)
+  const { value, dateChange, children, max, min } = props
   const [inputValue, setInputValue] = useState<Date>()
+  const t = useTranslations("Common")
   useEffect(() => {
     if (value > 0) {
       setInputValue(new Date(value))
@@ -29,10 +31,15 @@ export default function DateTimePicker(props: {
 
   return (
     <>
-      <button type={"button"} className={"block w-full text-left"} onTouchEnd={() => {
-        setVisible(true)
-      }}
-      >{children}</button>
+      <button
+        type={"button"}
+        className={"block w-full text-left"}
+        onTouchEnd={() => {
+          setVisible(true)
+        }}
+      >
+        {children}
+      </button>
       <Drawer open={visible} onOpenChange={setVisible}>
         <DrawerContent className={"bg-white"}>
           <section className={"flex-1"}>
@@ -41,19 +48,34 @@ export default function DateTimePicker(props: {
               <DrawerDescription></DrawerDescription>
             </DrawerHeader>
             <section className={"flex justify-between px-4"}>
-              <button type={"button"} onTouchEnd={() => {
-                setVisible(false)
-              }}
-              >取消</button>
-              <button className={"text-text-pink"} type={"button"} onTouchEnd={() => {
-                setVisible(false)
-                if (inputValue) {
-                  dateChange(inputValue.valueOf())
-                }
-              }}
-              >确定</button>
+              <button
+                type={"button"}
+                onTouchEnd={() => {
+                  setVisible(false)
+                }}
+              >
+                {t("cancel")}
+              </button>
+              <button
+                className={"text-text-pink"}
+                type={"button"}
+                onTouchEnd={() => {
+                  setVisible(false)
+                  if (inputValue) {
+                    dateChange(inputValue.valueOf())
+                  }
+                }}
+              >
+                {t("confirm")}
+              </button>
             </section>
-            <DatePickerView precision={"minute"} value={inputValue} onChange={setInputValue} max={max} min={min}/>
+            <DatePickerView
+              precision={"minute"}
+              value={inputValue}
+              onChange={setInputValue}
+              max={max}
+              min={min}
+            />
           </section>
         </DrawerContent>
       </Drawer>

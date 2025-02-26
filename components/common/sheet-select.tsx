@@ -5,6 +5,7 @@ import {
 } from "@/components/ui/sheet"
 import React, { useState } from "react"
 import clsx from "clsx"
+import { useTranslations } from "next-intl"
 
 export interface ISelectOption {
     label: React.ReactNode,
@@ -24,7 +25,7 @@ export default function SheetSelect({ children, options, onInputChange, isOpen, 
   const [sheetState, setSheetState] = useState<boolean>(false)
   const openState = outerControl ? isOpen : sheetState
   const changeState = outerControl ? setIsOpen : setSheetState
-
+  const commonTrans = useTranslations("Common")
   // const [isOpen,setIsOpen] = useState<boolean>(false)
   return (
     <>
@@ -68,7 +69,7 @@ export default function SheetSelect({ children, options, onInputChange, isOpen, 
               {/*<Button type="submit">Save changes</Button>*/}
               <button
                 className={"block font-bold bg-white rounded-2xl w-full pl-8 pr-8 pt-4 pb-4 text-text-pink text-base"}
-              >取消
+              >{commonTrans("cancel")}
               </button>
             </SheetClose>
           </SheetFooter>

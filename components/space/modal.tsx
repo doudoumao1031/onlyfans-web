@@ -1,4 +1,6 @@
+"use client"
 import Image from "next/image"
+import { useTranslations } from "next-intl"
 
 export type TModalProps = {
   visible?: boolean
@@ -26,6 +28,7 @@ export default function Page({
   cancel = () => {},
   confirm = () => {}
 }: TModalProps) {
+  const t = useTranslations("Space")
   if (!visible) return null
   const DefaultFooter = () => {
     return (
@@ -36,7 +39,7 @@ export default function Page({
           }}
           className="h-full flex justify-center items-center flex-1 text-center text-[#6D7781] border-r border-[#ebeced]"
         >
-          {cancelText || "取消"}
+          {cancelText || t("cancel")}
         </div>
         <div
           onClick={() => {
@@ -44,7 +47,7 @@ export default function Page({
           }}
           className="h-full flex justify-center items-center flex-1 text-center text-text-pink"
         >
-          {okText || "确定"}
+          {okText || t("confirm")}
         </div>
       </div>
     )
