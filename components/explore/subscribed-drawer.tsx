@@ -1,10 +1,6 @@
 "use client"
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
-import {
-  ToggleGroupSubscribed,
-  ToggleGroupSubscribedItem
-} from "@/components/ui/toggle-group-subcribed"
 import { useState, useMemo, useEffect } from "react"
 import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
@@ -29,6 +25,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
   const t = useTranslations("Explore")
   const [drawer, setDrawer] = useState<boolean>(false)
   const [items, setItems] = useState<DiscountInfo[]>([])
+  const [active, setActive] = useState<number>(0)
   const [discount, setDiscount] = useState<DiscountInfo>()
   const [amount, setAmount] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(false)
@@ -74,15 +71,6 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
     const diff = discount ? (discount.price - discount?.discount_price).toFixed(2) : "0"
     setDiff(parseFloat(diff))
   }, [discount])
-  useMemo(() => {
-    if (discount && !discount.item_status) {
-      if (showDiscount(discount)) {
-        setAmount(discount?.discount_price ?? 0)
-      } else {
-        setAmount(discount?.price ?? 0)
-      }
-    }
-  }, [discount])
 
   const { withLoading } = useLoadingHandler({
     onError: (error) => {
@@ -118,9 +106,9 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
     <>
       <button
         className={"w-full"}
-        onClick={() => {
+        onClick={async () => {
           if (free) {
-            handleSubmit()
+            await handleSubmit()
           } else {
             setDrawer(true)
           }
@@ -139,8 +127,8 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
         headerLeft={(close) => {
           return (
             <button
-              onTouchEnd={(e) => {
-                e.preventDefault()
+              type={"button"}
+              onTouchEnd={() => {
                 close()
               }}
               className={"text-base text-[#777]"}
@@ -161,55 +149,47 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
       >
         <input hidden={true} name="user_id" defaultValue={userId} />
         <div className="flex flex-col items-center text-black text-2xl bg-slate-50">
-          {loading && <LoadingPage height={"h-18"} />}
-          {!loading && (
-            <ToggleGroupSubscribed
-              type="single"
-              variant="default"
-              id="select_pirce"
-              defaultValue={discount?.id + Math.random().toString(36).substring(2, 9)}
-              className="w-full mt-[20px] px-4 grid grid-cols-3 gap-x-3 gap-y-5"
-              onValueChange={(value) => {
-                if (value) {
-                  setDiscount(items.find((item) => item.id === Number(value)) ?? items[0])
-                } else {
-                  setDiscount(undefined)
-                }
-              }}
-            >
-              {items.map((item) => (
-                <ToggleGroupSubscribedItem key={item.id} value={String(item.id)}>
-                  <div className="relative w-full col-span-3">
+          {loading ? <LoadingPage height={"h-18"} /> : (
+            <div className={"w-full mt-[20px] px-4 grid grid-cols-3 gap-x-3 gap-y-5"}>
+              {items.map((item,i) => {
+                return (
+                  <button
+                    key={i}
+                    type={"button"}
+                    className={`relative w-full h-[140px] rounded-lg ${active === item.id ? "bg-background-secondary" : "bg-white"}`}
+                    onTouchEnd={() => {
+                      setActive(item.id)
+                      setAmount(item.discount_price)
+                      setDiscount(item)
+                    }}
+                  >
                     <div className="h-full flex flex-col justify-center items-center text-black">
-                      <span className="text-nowrap text-xs">
+                      <span className={`text-nowrap text-xs ${item.id === active ? "text-text-title": "text-text-desc"}`}>
                         {item.month_count} {t("Month")}
                       </span>
                       <span
-                        className={`text-nowrap text-xl my-4 ${
-                          item.id === discount?.id ? "text-text-theme" : "text-black"
-                        }`}
+                        className={`text-nowrap text-xl my-4 ${item.id === active ? "text-text-theme" : "text-text-title"}`}
                       >
                         ${item.discount_price}
                       </span>
                       <span className="text-nowrap text-xs block">
                         {showDiscount(item) ? (
-                          <s className="text-xs text-gray-500">${item.price}</s>
+                          <s className="text-xs text-text-desc">${item.price}</s>
                         ) : (
                           <span>&nbsp;</span>
                         )}
                       </span>
                     </div>
                     {showDiscount(item) && (
-                      <div className="absolute bg-orange h-4 w-16 -top-9 left-0 rounded-t-full rounded-br-full flex justify-center items-center">
+                      <div className="absolute bg-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center">
                         <span className="text-white text-xs text-center">
                           {item.discount_per}% off
                         </span>
                       </div>
                     )}
-                  </div>
-                </ToggleGroupSubscribedItem>
-              ))}
-            </ToggleGroupSubscribed>
+                  </button>
+                )})}
+            </div>
           )}
           <div className="my-[40px]  self-center">
             <div className="relative">
@@ -217,8 +197,8 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
                 type={"button"}
                 disabled={amount === 0}
                 className="w-[295px] h-[49px] p-2 bg-background-theme text-white text-base font-medium rounded-full"
-                onTouchEnd={() => {
-                  handleSubmit()
+                onTouchEnd={async () => {
+                  await handleSubmit()
                 }}
               >
                 {t("ConfirmPayment")} {amount} USDT

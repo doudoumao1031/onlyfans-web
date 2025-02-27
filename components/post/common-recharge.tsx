@@ -1,6 +1,7 @@
 "use client"
 import Modal from "@/components/space/modal"
 import RechargeDrawer from "@/components/profile/recharge-drawer"
+import { useTranslations } from "next-intl"
 
 interface CommonRechargeProps {
   visible: boolean
@@ -11,6 +12,7 @@ interface CommonRechargeProps {
 
 export default function CommonRecharge(props: CommonRechargeProps) {
   const { visible, setVisible, recharge, setRecharge } = props
+  const t = useTranslations("Common.post")
   return (
     <>
       <Modal
@@ -19,8 +21,8 @@ export default function CommonRecharge(props: CommonRechargeProps) {
           setVisible(false)
         }}
         type={"modal"}
-        content={<div className="p-4 pb-6">余额不足</div>}
-        okText="充值"
+        content={<div className="p-4 pb-6">{t("insufficientBalance")}</div>}
+        okText={t("recharge")}
         confirm={() => {
           setVisible(false)
           setRecharge(true)
@@ -34,7 +36,7 @@ export default function CommonRecharge(props: CommonRechargeProps) {
               setRecharge(true)
             }}
           >
-            充值
+            {t("recharge")}
           </div>
         </RechargeDrawer>
       )}

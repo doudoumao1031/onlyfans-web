@@ -6,6 +6,7 @@ import InfiniteScroll from "../common/infinite-scroll"
 import { ListError, ListLoading, ListEnd } from "./list-states"
 import { PostData } from "@/lib"
 import { recomActions } from "@/lib/actions"
+import { ActionTypes } from "@/lib/contexts/global-context"
 
 interface FeedListProps {
   initialItems: PostData[]
@@ -20,12 +21,12 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
     const handleScrollTop = () => scrollToTopFn.current?.()
     const handleRefresh = () => refreshFn.current?.()
 
-    window.addEventListener("feed-action-scroll-top", handleScrollTop)
-    window.addEventListener("feed-action-refresh", handleRefresh)
+    window.addEventListener(ActionTypes.Feed.SCROLL_TO_TOP, handleScrollTop)
+    window.addEventListener(ActionTypes.Feed.REFRESH, handleRefresh)
 
     return () => {
-      window.removeEventListener("feed-action-scroll-top", handleScrollTop)
-      window.removeEventListener("feed-action-refresh", handleRefresh)
+      window.removeEventListener(ActionTypes.Feed.SCROLL_TO_TOP, handleScrollTop)
+      window.removeEventListener(ActionTypes.Feed.REFRESH, handleRefresh)
     }
   }, [])
 

@@ -173,7 +173,7 @@ const Withdrawal = ({
               />
               <span>USDT</span>
             </span>
-            {/*<section className={"absolute bottom-[-12px] text-pink text-xs"}>*/}
+            {/*<section className={"absolute bottom-[-12px] text-theme text-xs"}>*/}
             {/*  {withdrawalForm.formState.errors?.amount?.message}*/}
             {/*</section>*/}
           </div>
@@ -183,7 +183,7 @@ const Withdrawal = ({
               type={"submit"}
               className={clsx(
                 "w-full transition-all h-12 rounded-full text-white flex justify-center items-center ",
-                !!errorMessage ? "bg-[#ddd]" : "bg-background-pink "
+                !!errorMessage ? "bg-[#ddd]" : "bg-background-theme "
               )}
             >
               {errorMessage ? errorMessage : t("withdrawal")}

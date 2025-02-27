@@ -13,7 +13,7 @@ export default function Avatar() {
       />
       <div className="absolute right-0 bottom-2 rounded-full p-1.5 bg-white">
         <Image
-          src="/icons/profile/icon-game-live.png"
+          src="/theme/icon_sign_gamevlog@3x.png"
           width={20}
           height={20}
           alt="live"

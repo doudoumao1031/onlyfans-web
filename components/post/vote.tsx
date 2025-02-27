@@ -1,10 +1,13 @@
+"use client"
 import { useCallback, useEffect, useState } from "react"
 import Image from "next/image"
 import { Vote as VoteData, VoteParams } from "./types"
 import { ApiResponse, fetchWithPost } from "@/lib"
 import VoteSkeleton from "./vote-skeleton"
+import { useTranslations } from "next-intl"
 
 export default function Vote({ postId }: { postId: number }) {
+  const t = useTranslations("Common.post")
   const [vote, setVote] = useState<VoteData>()
   const [loading, setLoading] = useState<boolean>(false)
   const { title, items, stop_time, mu_select } = vote || { items: [], stop_time: 0 }
@@ -48,7 +51,9 @@ export default function Vote({ postId }: { postId: number }) {
                 {select && <Image src="/icons/select.png" alt="" width={20} height={20} />}
                 <div>{content}</div>
               </div>
-              <div className="pr-3">{vote_count}票</div>
+              <div className="pr-3">
+                {vote_count} {t("votes")}
+              </div>
             </div>
           ) : (
             <div
@@ -65,12 +70,14 @@ export default function Vote({ postId }: { postId: number }) {
             className="w-full h-11 border border-[#DDDDDD] rounded-md flex justify-center items-center"
             onClick={() => setShowOptionAmount(items.length)}
           >
-            <div>查看全部选项</div>
+            <div>{t("viewAllOptions")}</div>
           </div>
         )}
         <div className="mt-2 text-[#999999]">
-          {totalVotes}人参与{" "}
-          {canVote ? `还有${Math.floor(secondsToExpire / 3600)}小时结束` : "投票已结束"}
+          {t("voteCount", { count: totalVotes })}{" "}
+          {canVote
+            ? t("voteEndTime", { count: Math.floor(secondsToExpire / 3600) })
+            : t("voteEnded")}
         </div>
       </div>
     </div>

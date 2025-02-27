@@ -18,7 +18,7 @@ export default async function Page() {
             <UserCard user={info.user} subscribe={false} />
           </div>
         ))}
-      {!bloggers || (bloggers?.total === 0 && <Empty text={t("SubscribedEmpty")} />)}
+      {!bloggers || (bloggers?.total === 0 && <Empty text={t("SubscribeEmpty")} />)}
     </>
   )
 }

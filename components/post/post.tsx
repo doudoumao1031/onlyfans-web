@@ -19,6 +19,7 @@ import { Link } from "@/i18n/routing"
 import CommentSkeleton from "./comment-skeleton"
 import { useGlobal } from "@/lib/contexts/global-context"
 import useCommonMessage, { CommonMessageContext } from "@/components/common/common-message"
+import { useTranslations } from "next-intl"
 
 export default function Post({
   data,
@@ -35,6 +36,7 @@ export default function Post({
   space?: boolean //是否空间
   followConfirm?: () => void //点击媒体关注弹出确认
 }) {
+  const t = useTranslations("Common.post")
   const { sid } = useGlobal()
   const { user, post, post_attachment, post_metric, mention_user, collection, star, post_vote } =
     data
@@ -102,18 +104,24 @@ export default function Post({
         )}
         {hasVote && post_vote && (
           <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
-            <Image src="/icons/vote.png" alt="" width={20} height={20} />
-            <div className="text-pink text-sm">投票</div>
+            <Image src="/theme/icon_fans_vote_red@3x.png" alt="" width={20} height={20} />
+            <div className="text-theme text-sm">{t("vote")}</div>
             {showVote ? (
-              <Image src="/icons/arrow_up.png" alt="" width={20} height={20} />
+              <Image src="/theme/icon_arrow_up_fold@3x.png" alt="" width={20} height={20} />
             ) : (
-              <Image src="/icons/arrow_down.png" alt="" width={20} height={20} />
+              <Image src="/theme/icon_arrow_unfold@3x.png" alt="" width={20} height={20} />
             )}
           </div>
         )}
         {hasVote && showVote && <Vote postId={post.id} />}
         <div className="flex gap-4 justify-between pt-2 pb-4 border-b border-black/5">
-          <Like count={thumbs_up_count} liked={star} postId={post.id} notice={isInfoPage} outLike={!star && tipStar} />
+          <Like
+            count={thumbs_up_count}
+            liked={star}
+            postId={post.id}
+            notice={isInfoPage}
+            outLike={!star && tipStar}
+          />
           {isInfoPage ? (
             <CommentStats count={comment_count + adjustCommentCount} onClick={toggleComments} />
           ) : (
@@ -121,7 +129,13 @@ export default function Post({
               <CommentStats count={comment_count + adjustCommentCount} />
             </Link>
           )}
-          <Tip count={tip_count} postId={post.id} self={sid === user.id} tipStar={setTipStar} notice={isInfoPage} />
+          <Tip
+            count={tip_count}
+            postId={post.id}
+            self={sid === user.id}
+            tipStar={setTipStar}
+            notice={isInfoPage}
+          />
           <Share count={share_count} postId={post.id} />
           <Save count={collection_count} saved={collection} postId={post.id} notice={isInfoPage} />
         </div>
