@@ -22,7 +22,7 @@ export default function CheckboxLabel({ disabled = false, checked, label, change
         className="hidden"
       />
       <Image
-        src={checkedState ? "/icons/checkbox_select@3x.png" : "/icons/checkbox_normal@3x.png"}
+        src={checkedState ? "/theme/checkbox_select@3x.png" : "/theme/checkbox_normal@3x.png"}
         width={20}
         height={20}
         alt="select"
