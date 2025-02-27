@@ -32,7 +32,10 @@
       "hot": "热门推荐",
       "new": "新人推荐",
       "popular": "🔥人气博主",
-      "FreeAndSubscription": "免费/订阅"
+      "freeAndSubscription": "免费/订阅",
+      "free": "免费",
+      "subscription": "订阅",
+      "subscribed": "已订阅"
     },
     "FollowedEmpty": "您尚未关注任何博主，快去看看",
     "SubscribedEmpty": "您尚未订阅任何博主，快去看看",
@@ -41,7 +44,8 @@
     "SubscribeFailed": "订阅失败",
     "Month": "个月",
     "ConfirmPayment": "确认支付",
-    "Saved": "已省"
+    "Saved": "已省",
+    "TodayAdded": "今日新增"
   },
   "Profile": {
     "mainTitle": "我的",
