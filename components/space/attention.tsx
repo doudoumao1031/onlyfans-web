@@ -108,7 +108,7 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
             {dayjs((data && data?.sub_end_time * 1000) || 0).diff(dayjs(), "days")}
             {t("day")}
           </span>
-          <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="#ff8492" />
+          <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="#00AEF3" />
         </div>
       )}
 

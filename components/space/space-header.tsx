@@ -68,23 +68,27 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
                   color={isTop ? "#222" : "#fff"}
                 />
               </Link>
-              <IconWithImage
-                url="/icons/space/icon_nav_code_black@3x.png"
-                width={22}
-                height={22}
-                color={isTop ? "#222" : "#fff"}
-              />
-              <IconWithImage
-                url="/icons/space/icon_fans_share_normal@3x.png"
-                width={22}
-                height={22}
-                color={isTop ? "#222" : "#fff"}
-              />
+              <div>
+                <IconWithImage
+                  url="/icons/space/icon_nav_code_black@3x.png"
+                  width={22}
+                  height={22}
+                  color={isTop ? "#222" : "#fff"}
+                />
+              </div>
+              <div>
+                <IconWithImage
+                  url="/icons/space/icon_fans_share_normal@3x.png"
+                  width={22}
+                  height={22}
+                  color={isTop ? "#222" : "#fff"}
+                />
+              </div>
             </>
           }
           backIconColor={isTop ? "#222" : "#fff"}
         />
-        <div className={`text-xs pl-6 pr-6 pb-2 ${isTop ? "text-text-theme" : "text-white"}`}>
+        <div className={`text-xs pl-6 pr-6 pb-2 ${isTop ? "text-theme" : "text-white"}`}>
           {data.top_info}
         </div>
       </div>
