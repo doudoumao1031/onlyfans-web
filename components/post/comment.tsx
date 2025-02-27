@@ -112,11 +112,11 @@ function Comment({
                 <CommonAvatar photoFileId={photo} size={36} />
               </div>
               <div className="flex flex-col gap-2">
-                <div className="text-xs text-[#FF8492]">{username}</div>
+                <div className="text-xs text-theme">{username}</div>
                 <div className="text-sm">{content}</div>
                 <div className="flex gap-4 text-xs text-[#6D7781]">
                   {reply_count > 0 && (
-                    <div onClick={toggleReplies} className="text-[#FF8492]">
+                    <div onClick={toggleReplies} className="text-theme">
                       {t("replyCount", { count: reply_count })}
                     </div>
                   )}
@@ -260,7 +260,7 @@ function Reply({
         <div className="flex gap-2">
           <Avatar fileId={photo} width={9} height={9} />
           <div className="flex flex-col gap-2">
-            <div className="text-xs text-[#FF8492]">{username}</div>
+            <div className="text-xs text-theme">{username}</div>
             <div className="text-sm flex gap-2">
               {reply_user && <div className="text-[#6D7781]">{reply_user.username}</div>}
               <div>{content}</div>
@@ -349,13 +349,13 @@ function Thumbup({
   return (
     <div className="flex flex-col items-center ml-2" onClick={thumbup}>
       <Image
-        src={`${isThumbupped ? "/icons/thumbup_active.png" : "/icons/thumbup.png"}`}
+        src={`${isThumbupped ? "/theme/icon_info_good_red@3x.png" : "/icons/thumbup.png"}`}
         width={20}
         height={20}
         alt=""
         className="max-w-4"
       />
-      <div className={`text-[10px] ${isThumbupped ? "text-[#FF8492]" : "text-[#6D7781]"}`}>
+      <div className={`text-[10px] ${isThumbupped ? "text-theme" : "text-[#6D7781]"}`}>
         {thumbupCount}
       </div>
     </div>

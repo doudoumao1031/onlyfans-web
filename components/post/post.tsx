@@ -104,12 +104,12 @@ export default function Post({
         )}
         {hasVote && post_vote && (
           <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
-            <Image src="/icons/vote.png" alt="" width={20} height={20} />
-            <div className="text-pink text-sm">{t("vote")}</div>
+            <Image src="/theme/icon_fans_vote_red@3x.png" alt="" width={20} height={20} />
+            <div className="text-theme text-sm">{t("vote")}</div>
             {showVote ? (
-              <Image src="/icons/arrow_up.png" alt="" width={20} height={20} />
+              <Image src="/theme/icon_arrow_up_fold@3x.png" alt="" width={20} height={20} />
             ) : (
-              <Image src="/icons/arrow_down.png" alt="" width={20} height={20} />
+              <Image src="/theme/icon_arrow_unfold@3x.png" alt="" width={20} height={20} />
             )}
           </div>
         )}
