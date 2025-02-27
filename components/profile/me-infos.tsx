@@ -55,12 +55,12 @@ export default async function Page() {
             right={
               <>
                 <IconWithImage
-                  url="/icons/profile/icon_nav_code_white@3x.png"
+                  url="/theme/icon_nav_code_white@3x.png"
                   width={22}
                   height={22}
                 />
                 <IconWithImage
-                  url="/icons/profile/icon_nav_share_white@3x.png"
+                  url="/theme/icon_nav_share_white@3x.png"
                   width={22}
                   height={22}
                 />
@@ -81,17 +81,17 @@ export default async function Page() {
             </span>
             <Link href={"/profile/edit"}>
               <IconWithImage
-                url={"/icons/profile/icon_edit_gray@3x.png"}
+                url={"/theme/icon_edit_gray@3x.png"}
                 width={20}
                 height={20}
                 color={"#bbb"}
               />
             </Link>
           </h1>
-          <div className="text-center text-[#6D7781] text-xs">@{data.username}</div>
+          <div className="text-center text-text-desc text-xs">@{data.username}</div>
           <Link href={`/space/${data.id}/feed`}>
             <div className="flex justify-center mt-2">
-              <button className=" py-1 rounded-2xl pl-8 pr-8 border border-theme text-text-theme">
+              <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-theme text-text-theme">
                 {t("actions.enter")}
               </button>
             </div>
@@ -127,7 +127,7 @@ export default async function Page() {
             <h3 className="text-[15px] font-bold">{t("favorites.title")}</h3>
             <Link href={"/profile/collect/posts"} className="text-gray-300">
               <IconWithImage
-                url={"/icons/profile/icon_arrow_right@3x.png"}
+                url={"/theme/icon_arrow_right_gray@3x.png"}
                 width={16}
                 height={16}
                 color={"#ddd"}

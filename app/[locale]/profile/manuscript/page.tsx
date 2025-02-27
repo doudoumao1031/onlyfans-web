@@ -189,7 +189,7 @@ const ManuscriptMedia = () => {
                       </section>
                     </section>
                     <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
-                      className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-theme border-2 text-text-theme w-full mt-2"
+                      className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
                     >
                       <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
                       <span>{t("itemActions.edit")}</span>

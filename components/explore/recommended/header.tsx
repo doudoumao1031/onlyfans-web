@@ -30,9 +30,9 @@ export default function Header() {
           ref={pathname.endsWith(tab.path) ? activeTabRef : null}
           className={`flex flex-shrink-0 whitespace-nowrap items-center justify-center ${
             pathname.endsWith(tab.path)
-              ? "bg-background-pink text-white"
+              ? "bg-background-theme text-white"
               : "bg-white text-text-theme"
-          } border border-border-pink rounded-full px-5 py-1`}
+          } border border-border-theme rounded-full px-5 py-1`}
         >
           <span className="text-nowrap font-medium text-base">{tab.label}</span>
         </Link>

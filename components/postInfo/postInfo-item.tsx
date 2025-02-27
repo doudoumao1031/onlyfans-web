@@ -16,8 +16,10 @@ import Link from "next/link"
 import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
 import CommonRecharge from "@/components/post/common-recharge"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { useTranslations } from "next-intl"
 
 export default function Page({ postData }: { postData: PostData }) {
+  const t = useTranslations("PostInfo")
   const [postInfo, setPostInfo] = useState<PostData>(postData)
   const { sid, addToActionQueue } = useGlobal()
   const { showMessage } = useCommonMessageContext()
@@ -54,23 +56,23 @@ export default function Page({ postData }: { postData: PostData }) {
     })
     if (visibility === 2 && price > 0) {
       setPay(true)
-      setBtnText(`支付${price || 0} USDT 浏览该帖子`)
+      setBtnText(t("btnText1", { price: price || 0, currency: "USDT" }))
     } else if (visibility === 1 && !sub) {
       setPay(false)
-      setBtnText("订阅后浏览博主的帖子")
+      setBtnText(t("btnText2"))
     } else if (visibility === 0) {
       if (sub_price > 0 && !following) {
         setFollow(true)
-        setBtnText("关注后解锁更多内容")
+        setBtnText(t("btnText3"))
       } else if (!sub) {
         setPay(false)
-        setBtnText("订阅后解锁更多内容")
+        setBtnText(t("btnText4"))
       }
     } else {
       setPay(false)
       setBtnText("")
     }
-  }, [postInfo.post, postInfo.post_price, postInfo.user, price, sid])
+  }, [postInfo.post, postInfo.post_price, postInfo.user, price, sid, t])
 
   /** 刷新当前页数据 */
   const refresh = async () => {
@@ -85,7 +87,7 @@ export default function Page({ postData }: { postData: PostData }) {
   const { withLoading } = useLoadingHandler({
     onError: (error) => {
       console.error("follow error:", error)
-      showMessage("操作失败")
+      showMessage(t("operationFailed"))
     }
   })
 
@@ -100,7 +102,7 @@ export default function Page({ postData }: { postData: PostData }) {
         setFollow(false)
       }
       await refresh()
-      showMessage(!isFocus ? "关注成功" : "取消成功")
+      showMessage(!isFocus ? t("followSuccess") : t("followFailed"))
     })
   }
 
@@ -134,15 +136,15 @@ export default function Page({ postData }: { postData: PostData }) {
           </div>
         </Link>
         {sid !== id && (
-          <div className="focus">
+          <div className="focus flex flex-col items-end">
             <div
               onClick={async () => {
                 await handleFollowing()
               }}
-              className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${
+              className={`h-[26px] min-w-[80px] px-2 flex justify-center items-center rounded-full ${
                 isFocus
-                  ? "bg-white border border-border-pink text-text-theme"
-                  : " bg-background-pink text-white"
+                  ? "bg-white border border-border-theme text-text-theme"
+                  : " bg-background-theme text-white"
               }`}
             >
               <IconWithImage
@@ -153,12 +155,13 @@ export default function Page({ postData }: { postData: PostData }) {
                 height={20}
                 color={isFocus ? "#f08b94" : "#fff"}
               />
-              <span className="ml-1">{isFocus ? "已关注" : "关注"}</span>
+              <span className="ml-1">{isFocus ? t("fllowed") : t("fllow")}</span>
             </div>
             {sub && (
               <div className="text-[10px] text-text-theme mt-1">
-                订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}
-                天
+                {t("subscribeRemaining", {
+                  x: sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0
+                })}
               </div>
             )}
           </div>
@@ -191,7 +194,7 @@ export default function Page({ postData }: { postData: PostData }) {
                 setDrawer(true)
               }
             }}
-            className="w-[295px] h-[50px] bg-background-pink  text-white rounded-full text-[15px] flex justify-center items-center"
+            className="w-[295px] h-[50px] bg-background-theme  text-white rounded-full text-[15px] flex justify-center items-center"
           >
             {btnText}
           </div>

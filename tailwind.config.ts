@@ -11,12 +11,10 @@ export default {
   theme: {
   	extend: {
       colors: {
-        red: "var(--red)",
-        pink: "var(--red)",
+        theme: "var(--theme)",
+        pink: "var(--pink)",
         orange: "var(--orange)",
         green: "var(--green)",
-        // black: "var(--black)",
-        theme: "var(--theme)",
         "theme/10":"var(--theme-10)",
         "theme/20":"var(--theme-20)",
         "theme/30":"var(--theme-30)",
@@ -61,7 +59,8 @@ export default {
         border: {
           DEFAULT: "var(--border)",
           pink: "var(--border-pink)",
-          blue: "var(--border-theme)"
+          blue: "var(--border-blue)",
+          theme: "var(--border-theme)"
         }
       },
   	  borderRadius: {
