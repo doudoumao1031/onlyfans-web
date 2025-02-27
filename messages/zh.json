@@ -35,6 +35,7 @@
       "FreeAndSubscription": "免费/订阅"
     },
     "FollowedEmpty": "您尚未关注任何博主，快去看看",
+    "SubscribedEmpty": "您尚未订阅任何博主，快去看看",
     "Subscribe": "订阅",
     "SubscribeSuccess": "订阅成功",
     "SubscribeFailed": "订阅失败",

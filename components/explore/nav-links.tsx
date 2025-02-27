@@ -3,7 +3,7 @@ import { Link } from "@/i18n/routing"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
 import { useEffect, useMemo, useRef } from "react"
-import { useLocale, useTranslations } from "next-intl"
+import { useTranslations } from "next-intl"
 
 export default function NavLinks({ isFind }: { isFind?: boolean }) {
   const t = useTranslations("Explore")

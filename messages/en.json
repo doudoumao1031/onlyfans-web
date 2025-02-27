@@ -35,6 +35,7 @@
       "FreeAndSubscription": "Free/Subscription"
     },
     "FollowedEmpty": "You have not followed any bloggers yet, please check it out",
+    "SubscribedEmpty": "You have not subscribed to any bloggers yet, please check it out",
     "Subscribe": "Subscribe",
     "SubscribeSuccess": "Subscribe Success",
     "SubscribeFailed": "Subscribe Failed",
