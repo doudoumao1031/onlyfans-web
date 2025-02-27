@@ -22,7 +22,7 @@ export default function Header() {
   }, [pathname])
 
   return (
-    <div className="flex gap-3 w-full mb-4 justify-around overflow-x-auto">
+    <div className="flex gap-3 w-full mb-4 overflow-x-auto">
       {tabs.map((tab) => (
         <Link
           key={tab.path}
