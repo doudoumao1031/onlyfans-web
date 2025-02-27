@@ -153,7 +153,7 @@ export default function Page({ postData }: { postData: PostData }) {
                 }`}
                 width={20}
                 height={20}
-                color={isFocus ? "#f08b94" : "#fff"}
+                color={isFocus ? "#00AEF3" : "#fff"}
               />
               <span className="ml-1">{isFocus ? t("fllowed") : t("fllow")}</span>
             </div>
