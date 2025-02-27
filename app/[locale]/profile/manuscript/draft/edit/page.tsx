@@ -238,7 +238,7 @@ const AddVoteModal = ({
             >
               <IconWithImage
                 url={"/icons/profile/icon_add@3x.png"}
-                color={"#FF8492"}
+                className={"bg-theme"}
                 width={20}
                 height={20}
               />
