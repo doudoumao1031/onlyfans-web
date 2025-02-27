@@ -321,6 +321,14 @@
       "reviewing": "审核中",
       "failed": "失败",
       "balance": "余额"
+    },
+    "statement": {
+      "title": "充值明细",
+      "title1": "收益明细",
+      "success": "成功",
+      "reviewing": "审核中",
+      "failed": "失败",
+      "balance": "余额"
     }
   },
   "Space": {

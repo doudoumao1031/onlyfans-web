@@ -319,6 +319,14 @@
       "reviewing": "Reviewing",
       "failed": "Failed",
       "balance": "Balance"
+    },
+    "statement": {
+      "title": "Recharge Detail",
+      "title1": "Income Detail",
+      "success": "Success",
+      "reviewing": "Reviewing",
+      "failed": "Failed",
+      "balance": "Balance"
     }
   },
   "Space": {

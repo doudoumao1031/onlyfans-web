@@ -10,14 +10,15 @@ import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { useTranslations } from "next-intl"
 
 export default function Page() {
+  const t = useTranslations("Profile.statement")
   const searchParams = useSearchParams()
   const changeType = Number(searchParams.get("changeType"))
   const [list, setList] = useState<PageResponse<StatementResp> | null>()
   const [date, setDate] = useState<string>(dayjs().format("YYYY-MM"))
-  const { withLoading } = useLoadingHandler({
-  })
+  const { withLoading } = useLoadingHandler({})
   useEffect(() => {
     console.log("useEffect called with changeType:", changeType)
     const statementList = async () => {
@@ -53,7 +54,7 @@ export default function Page() {
 
   return (
     <div>
-      <Header title={changeType === 1 ? "充值明细": "提现明细"} titleColor="#000"/>
+      <Header title={changeType === 1 ? t("title") : t("title1")} titleColor="#000" />
       <Suspense fallback={<div className="flex justify-center p-4">Loading...</div>}>
         <div className="w-full h-[calc(100vh-153px)]">
           {list && (
@@ -65,7 +66,7 @@ export default function Page() {
             >
               {({ items, isLoading, hasMore, error }) => (
                 <Fragment>
-                  {Boolean(error) && <ListError/>}
+                  {Boolean(error) && <ListError />}
                   <DatePicker
                     defVal={date}
                     confirm={(e) => {
@@ -75,9 +76,9 @@ export default function Page() {
                   <div className="p-4 pt-0">
                     {items.map((v, i) => {
                       const types = [
-                        { color: "text-[#0DC28A]", value: "成功" },
-                        { color: "text-[#FFA94B]", value: "审核中" },
-                        { color: "text-[#BBBBBB]", value: "失败" }
+                        { color: "text-[#0DC28A]", value: t("success") },
+                        { color: "text-[#FFA94B]", value: t("reviewing") },
+                        { color: "text-[#BBBBBB]", value: t("failed") }
                       ]
                       return (
                         <div key={i} className="mb-4">
@@ -86,7 +87,9 @@ export default function Page() {
                             <span className="text-xs text-[#323232]">{v.change_amount} USDT</span>
                           </div>
                           <div className="flex justify-between text-xs mt-1">
-                            <span className="text-[#979799]">余额：{v.balance_snapshot}</span>
+                            <span className="text-[#979799]">
+                              {t("balance")}：{v.balance_snapshot}
+                            </span>
                             <span className={`${types[v.trade_status].color}`}>
                               {types[v.trade_status].value}
                             </span>
@@ -95,9 +98,9 @@ export default function Page() {
                       )
                     })}
                   </div>
-                  {isLoading && <ListLoading/>}
-                  {!hasMore && items?.length > 0 && <ListEnd/>}
-                  {(!items || !items?.length) && <Empty top={20}/>}
+                  {isLoading && <ListLoading />}
+                  {!hasMore && items?.length > 0 && <ListEnd />}
+                  {(!items || !items?.length) && <Empty top={20} />}
                 </Fragment>
               )}
             </InfiniteScroll>
