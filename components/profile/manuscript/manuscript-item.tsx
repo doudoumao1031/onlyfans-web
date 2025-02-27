@@ -65,7 +65,7 @@ const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, pos
       <button onTouchEnd={handlePined} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
         <IconWithImage url={"/icons/profile/icon_fans_stick_gray@3x.png"} width={20} height={20} color={ pinned ? "#FF8492":"#222"}/>
         <span className={clsx(
-          pinned ? "text-text-pink":""
+          pinned ? "text-text-theme":""
         )}
         >{t("itemActions.pinned")}</span>
       </button>
@@ -75,7 +75,7 @@ const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, pos
       </Link>
       {[0, 3].includes(postStatus) ? (
         <Link href={`/profile/manuscript/draft/edit?id=${id}`}
-          className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-text-pink"
+          className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-text-theme"
         >
           <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
           <span>{t("itemActions.edit")}</span>

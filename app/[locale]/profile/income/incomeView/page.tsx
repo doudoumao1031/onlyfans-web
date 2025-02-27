@@ -116,7 +116,7 @@ const Withdrawal = ({
         headerRight={() => {
           return (
             <Link href={"/profile/withdrawalInfo"}>
-              <button className={"text-base text-text-pink"}>{t("withdrawalAmountDetail")}</button>
+              <button className={"text-base text-text-theme"}>{t("withdrawalAmountDetail")}</button>
             </Link>
           )
         }}
@@ -173,7 +173,7 @@ const Withdrawal = ({
               />
               <span>USDT</span>
             </span>
-            {/*<section className={"absolute bottom-[-12px] text-pink text-xs"}>*/}
+            {/*<section className={"absolute bottom-[-12px] text-theme text-xs"}>*/}
             {/*  {withdrawalForm.formState.errors?.amount?.message}*/}
             {/*</section>*/}
           </div>
@@ -183,7 +183,7 @@ const Withdrawal = ({
               type={"submit"}
               className={clsx(
                 "w-full transition-all h-12 rounded-full text-white flex justify-center items-center ",
-                !!errorMessage ? "bg-[#ddd]" : "bg-background-pink "
+                !!errorMessage ? "bg-[#ddd]" : "bg-background-theme "
               )}
             >
               {errorMessage ? errorMessage : t("withdrawal")}
@@ -342,7 +342,7 @@ export default function Page() {
         <div className="pl-4 pr-4 flex justify-between items-center mt-2 mb-12">
           <span className="text-xs">
             <span className="text-[#777] ">{currentLabel}</span>
-            <span className="text-text-pink ml-2">+{inCome}</span>
+            <span className="text-text-theme ml-2">+{inCome}</span>
           </span>
           {walletInfo && (
             <Withdrawal info={walletInfo} refresh={refreshWalletInfo}>
@@ -374,7 +374,7 @@ export default function Page() {
               }}
               key={index}
               className={`mr-8 text-[#bbb] ${
-                dateActive.start === v.value.start ? "text-text-pink" : ""
+                dateActive.start === v.value.start ? "text-text-theme" : ""
               }`}
             >
               {v.label}

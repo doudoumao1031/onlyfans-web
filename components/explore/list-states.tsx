@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl"
 
 export function ListError() {
   const t = useTranslations("Common")
-  return <div className="text-center mt-4 text-pink">{t("listError")}</div>
+  return <div className="text-center mt-4 text-theme">{t("listError")}</div>
 }
 
 export function ListLoading() {

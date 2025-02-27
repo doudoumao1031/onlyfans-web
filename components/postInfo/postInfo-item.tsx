@@ -72,7 +72,7 @@ export default function Page({ postData }: { postData: PostData }) {
       setPay(false)
       setBtnText("")
     }
-  }, [postInfo.post, postInfo.post_price, postInfo.user, price, sid])
+  }, [postInfo.post, postInfo.post_price, postInfo.user, price, sid, t])
 
   /** 刷新当前页数据 */
   const refresh = async () => {
@@ -143,8 +143,8 @@ export default function Page({ postData }: { postData: PostData }) {
               }}
               className={`h-[26px] min-w-[80px] px-2 flex justify-center items-center rounded-full ${
                 isFocus
-                  ? "bg-white border border-border-pink text-text-pink"
-                  : " bg-background-pink text-white"
+                  ? "bg-white border border-border-theme text-text-theme"
+                  : " bg-background-theme text-white"
               }`}
             >
               <IconWithImage
@@ -158,7 +158,7 @@ export default function Page({ postData }: { postData: PostData }) {
               <span className="ml-1">{isFocus ? t("fllowed") : t("fllow")}</span>
             </div>
             {sub && (
-              <div className="text-[10px] text-text-pink mt-1">
+              <div className="text-[10px] text-text-theme mt-1">
                 {t("subscribeRemaining", {
                   x: sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0
                 })}
@@ -194,7 +194,7 @@ export default function Page({ postData }: { postData: PostData }) {
                 setDrawer(true)
               }
             }}
-            className="w-[295px] h-[50px] bg-background-pink  text-white rounded-full text-[15px] flex justify-center items-center"
+            className="w-[295px] h-[50px] bg-background-theme  text-white rounded-full text-[15px] flex justify-center items-center"
           >
             {btnText}
           </div>

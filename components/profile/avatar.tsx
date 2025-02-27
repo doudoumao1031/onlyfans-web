@@ -1,9 +1,8 @@
 import Image from "next/image"
 import IconWithImage from "@/components/profile/icon"
-import { commonUploadFile } from "@/lib/utils"
+import { buildImageUrl, commonUploadFile } from "@/lib/utils"
 import LazyImg from "../common/lazy-img"
 
-const IMAGE_PREFIX = `${process.env.NEXT_PUBLIC_API_URL}/media/img/`
 export default function Avatar({
   showEdit,
   showLive,
@@ -27,7 +26,7 @@ export default function Avatar({
       <section className="w-full h-full relative rounded-full">
         {fileId && (
           <LazyImg
-            src={`${IMAGE_PREFIX}${fileId}`}
+            src={buildImageUrl(fileId)}
             alt=""
             className="rounded-full w-full h-full"
             width={90}
@@ -38,7 +37,7 @@ export default function Avatar({
           <div className="absolute right-0 bottom-2 rounded-full p-1.5 bg-white">
             <Image
               className="rounded-full"
-              src="/icons/profile/icon-game-live.png"
+              src="/theme/icon_sign_gamevlog@3x.png"
               width={20}
               height={20}
               alt="live"
@@ -47,7 +46,7 @@ export default function Avatar({
         )}
         {showEdit && (
           <div className="absolute rounded-bl-full rounded-br-full left-0 bottom-0 h-[40px] w-full bg-[rgba(0,0,0,0.5)] text-white flex items-center justify-center">
-            <IconWithImage url="/icons/profile/icon_camera@3x.png" width={24} height={24} />
+            <IconWithImage url="/theme/icon_camera@3x.png" width={24} height={24} />
             <input
               type="file"
               accept="image/*"

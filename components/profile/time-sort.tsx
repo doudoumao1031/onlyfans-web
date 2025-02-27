@@ -13,7 +13,7 @@ export default function TimeSort({ handleSortChange, sortDesc, children }: {
       handleSortChange?.(!sortDesc)
     }}
     >
-      <span className="text-text-pink text-xs">{children}</span>
+      <span className="text-text-theme text-xs">{children}</span>
       <div className="flex items-center justify-center">
         <IconWithImage
           url={`/icons/profile/${sortDesc ? "icon_gradedown" : "icon_gradeup"}@3x.png`} color={"#000"}

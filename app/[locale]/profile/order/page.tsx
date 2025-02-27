@@ -117,7 +117,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
               >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
-                  className={"text-base text-text-pink"}
+                  className={"text-base text-text-theme"}
                 >{commonTrans("save")}</button>
               )}
             ></ModalHeader>
@@ -249,7 +249,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
               >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
-                  className={"text-base text-text-pink"}
+                  className={"text-base text-text-theme"}
                 >{commonTrans("save")}</button>
               )}
             ></ModalHeader>
@@ -366,7 +366,7 @@ function TopLabelWrapper({ label, children, errorMessage }: {
       >
         {children}
       </section>
-      {errorMessage && <div className="text-pink text-xs px-4 mt-1.5">{errorMessage}</div>}
+      {errorMessage && <div className="text-theme text-xs px-4 mt-1.5">{errorMessage}</div>}
     </section>
   )
 }
@@ -445,7 +445,7 @@ function SubscribeBundle({ items,initSettings, userId, updateItems,basePrice }: 
                 onTouchEnd={() => {
                   openEditModal()
                 }}
-                className="rounded-full border border-border-pink text-text-pink pl-4 pr-4 pt-0.5 pb-0.5"
+                className="rounded-full border border-border-theme text-text-theme pl-4 pr-4 pt-0.5 pb-0.5"
               >{commonTrans("add")}
               </button>
             )}
@@ -531,7 +531,7 @@ function PromotionalActivities({ updateItems, items }: {
               onTouchEnd={() => {
                 openEditModal()
               }}
-              className="rounded-full border border-border-pink text-text-pink pl-4 pr-4 pt-0.5 pb-0.5"
+              className="rounded-full border border-border-theme text-text-theme pl-4 pr-4 pt-0.5 pb-0.5"
             >{commonTrans("add")}
             </button>
           )}
@@ -646,7 +646,7 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
                   }} name={"price"}
                   />
                   {formState.errors.price?.message &&
-                    <div className={"text-xs text-pink mt-1.5 px-1"}>{formState.errors.price.message}</div>}
+                    <div className={"text-xs text-theme mt-1.5 px-1"}>{formState.errors.price.message}</div>}
                 </div>
               </div>
               <div className="grid grid-cols-2 text-base border-t border-[#ddd]">
@@ -655,7 +655,7 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
                 }} className={"py-3.5 border-r border-[#ddd]"}
                 >取消
                 </button>
-                <button type={"submit"} className={"py-3.5 text-text-pink font-medium"}>确定
+                <button type={"submit"} className={"py-3.5 text-text-theme font-medium"}>确定
                 </button>
               </div>
             </div>
@@ -769,7 +769,7 @@ export default function Page() {
               await updateSubscribeSettings()
             }
           })
-        }} className="text-text-pink text-base"
+        }} className="text-text-theme text-base"
         >{t("complete")}</button>}
       />
       <section className="mt-5 text-black">
@@ -808,7 +808,7 @@ export default function Page() {
                     </section>
                     <section className="text-[#6D7781] text-xs px-4 mt-1.5">
                       <div>{t("baseSubLimit")}</div>
-                      <div>{t("shouldBe1")} <span className="text-text-pink">{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
+                      <div>{t("shouldBe1")} <span className="text-text-theme">{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
                       </div>
                     </section>
                   </section>

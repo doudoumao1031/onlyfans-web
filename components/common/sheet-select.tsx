@@ -68,7 +68,7 @@ export default function SheetSelect({ children, options, onInputChange, isOpen, 
             <SheetClose asChild>
               {/*<Button type="submit">Save changes</Button>*/}
               <button
-                className={"block font-bold bg-white rounded-2xl w-full pl-8 pr-8 pt-4 pb-4 text-text-pink text-base"}
+                className={"block font-bold bg-white rounded-2xl w-full pl-8 pr-8 pt-4 pb-4 text-text-theme text-base"}
               >{commonTrans("cancel")}
               </button>
             </SheetClose>

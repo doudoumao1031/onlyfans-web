@@ -44,7 +44,7 @@ export default function ConfirmModal({
                 confirm?.()
                 setOpenState(false)
               }}
-              className={"py-3.5 text-text-pink font-medium"}
+              className={"py-3.5 text-text-theme font-medium"}
             >
               {t("confirm")}
             </button>

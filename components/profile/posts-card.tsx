@@ -14,7 +14,7 @@ export default function PostsCard({ description, title, actionButton ,link }: {
         <div className="text-[16px]">{title}</div>
         <div className="text-xs">{description}</div>
       </div>
-      <span className="rounded-2xl bg-white pt-1.5 pb-1.5 pl-4 pr-4 text-text-pink">{actionButton}</span>
+      <span className="rounded-2xl bg-white pt-1.5 pb-1.5 pl-4 pr-4 text-text-theme">{actionButton}</span>
     </Link>
   )
 }

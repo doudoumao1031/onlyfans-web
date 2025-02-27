@@ -106,7 +106,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         headerRight={() => {
           return (
             <Link href={"/profile/statement?changeType=1"} prefetch={false}>
-              <button className={"text-base text-text-pink"}>{t("details")}</button>
+              <button className={"text-base text-text-theme"}>{t("details")}</button>
             </Link>
           )
         }}

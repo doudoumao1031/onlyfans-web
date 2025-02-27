@@ -6,7 +6,6 @@ import { usePathname, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react"
 import { userProfile } from "@/lib/actions/profile"
 import { useTranslations } from "next-intl"
-
 export default function Layout({
   children,
   feed,
@@ -47,11 +46,11 @@ export default function Layout({
             titleColor="#000"
             right={
               path === "/explore/subscribed" && !isBlogger ? (
-                <Link href="/profile/order" className="text-text-pink text-base">
+                <Link href="/profile/order" className="text-theme text-base">
                   {t("BecomeABlogger")}
                 </Link>
               ) : (
-                <Link href="/profile" className="text-text-pink text-base">
+                <Link href="/profile" className="text-theme text-base">
                   {t("My")}
                 </Link>
               )
