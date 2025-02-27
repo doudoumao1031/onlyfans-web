@@ -33,8 +33,7 @@ export default function Media(props: MediaProps) {
       {((post.visibility === 1 && !user.sub) || post.visibility === 2) && (
         <div className="w-full h-[200px] relative">
           {/*帖子详情正常查看 ｜ 推荐/空间点击媒体到帖子详情*/}
-          {isInfoPage && content}
-          {!isInfoPage && !user.sub && <Link href={`/postInfo/${post.id}`}>{content}</Link>}
+          {isInfoPage ? content : (<Link href={`/postInfo/${post.id}`}>{content}</Link>)}
           <LazyImg
             className={"aspect-square rounded-md block"}
             src={"/icons/default/img_media_default.png"}
