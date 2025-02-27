@@ -7,6 +7,7 @@ import IconWithImage from "../profile/icon"
 import { User } from "@/lib"
 import Modal from "@/components/space/modal"
 import { useState } from "react"
+import { useTranslations } from "next-intl"
 
 interface MediaProps {
   data: Attachment[]
@@ -16,6 +17,8 @@ interface MediaProps {
   followConfirm?: () => void
 }
 export default function Media(props: MediaProps) {
+  const t = useTranslations("PostInfo")
+  const tSpace = useTranslations("Space")
   const { data, post, user, isInfoPage, followConfirm } = props
   const showIds = data.map((v) => v.file_id).join("_")
   const [followModal, setFollowModal] = useState<boolean>(false)
@@ -23,7 +26,7 @@ export default function Media(props: MediaProps) {
     <div className="w-full h-full bg-black bg-opacity-[30%] rounded-lg backdrop-blur absolute top-0 left-0 z-20 flex flex-col items-center justify-center">
       <IconWithImage url="/icons/icon_info_lock_white.png" width={32} color="#fff" height={32} />
       <span className="mt-2 text-white">
-        {post.visibility === 2 ? "付费内容，请付费后查看" : "订阅内容，请订阅后查看"}
+        {post.visibility === 2 ? tSpace("tip1") : tSpace("tip2")}
       </span>
     </div>
   )
@@ -122,8 +125,8 @@ export default function Media(props: MediaProps) {
           setFollowModal(false)
         }}
         type={"modal"}
-        content={<div className="p-4 pb-6">关注后可观看此内容</div>}
-        okText="免费关注"
+        content={<div className="p-4 pb-6">{t("followedView")}</div>}
+        okText={t("freeFollow")}
         confirm={() => {
           setFollowModal(false)
           followConfirm?.()

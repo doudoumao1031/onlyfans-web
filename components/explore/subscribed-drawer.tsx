@@ -36,23 +36,26 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
     setLoading(true)
     try {
       const settings = await viewUserSubscribeSetting({ user_id: userId })
-      if (settings?.items) {
-        const list: DiscountInfo[] = []
-        list.push({
-          id: 0,
-          item_status: false,
-          month_count: 1,
-          price: settings?.price ?? 0,
-          discount_per: 0,
-          discount_price: settings?.price ?? 0,
-          discount_start_time: 0,
-          discount_end_time: 0,
-          discount_status: true,
-          user_id: userId
-        })
-        list.push(...settings.items.filter((t) => !t.item_status))
-        if (settings?.items) setItems(list)
+      if (settings?.price) {
+        setAmount(settings?.price ?? 0)
       }
+      const list: DiscountInfo[] = []
+      list.push({
+        id: 0,
+        item_status: false,
+        month_count: 1,
+        price: settings?.price ?? 0,
+        discount_per: 0,
+        discount_price: settings?.price ?? 0,
+        discount_start_time: 0,
+        discount_end_time: 0,
+        discount_status: true,
+        user_id: userId
+      })
+      if (settings?.items) {
+        list.push(...settings.items.filter((t) => !t.item_status))
+      }
+      setItems(list)
     } finally {
       setLoading(false)
     }
@@ -196,7 +199,8 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
               <button
                 type={"button"}
                 disabled={amount === 0}
-                className="w-[295px] h-[49px] p-2 bg-background-theme text-white text-base font-medium rounded-full"
+                className={`w-[295px] h-[49px] p-2 bg-background-theme text-white text-base font-medium rounded-full
+                 ${amount === 0 ? "bg-[#dddddd]" : "bg-background-theme"}`}
                 onTouchEnd={async () => {
                   await handleSubmit()
                 }}

@@ -404,6 +404,8 @@
     "paySuccess": "Pay Success",
     "payFailed": "Pay Failed",
     "payTitle": "Pay to view this post",
-    "confirmPay": "Confirm Pay {amount} {currency}"
+    "confirmPay": "Confirm Pay {amount} {currency}",
+    "freeFollow": "Free follow",
+    "followedView": "Follow us to watch this content"
   }
 }
