@@ -102,7 +102,7 @@ export default function DatePicker(props: DatePickerProps) {
                   setMonth(v.value)
                 }}
                 className={`mt-4 w-[22%] h-[50px] flex justify-center items-center rounded-lg  ${
-                  month === v.value ? "bg-pink text-[#fff]" : "bg-white"
+                  month === v.value ? "bg-theme text-white" : "bg-white"
                 }`}
               >
                 {v.label}
@@ -116,7 +116,7 @@ export default function DatePicker(props: DatePickerProps) {
                 setDate(year + "-" + month)
                 confirm(year + "-" + month)
               }}
-              className="w-[78%] h-[50px] bg-pink text-white rounded-full flex justify-center items-center"
+              className="w-[78%] h-[50px] bg-theme text-white rounded-full flex justify-center items-center"
             >
               确定
             </div>
