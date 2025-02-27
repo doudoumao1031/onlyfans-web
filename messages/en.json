@@ -32,7 +32,10 @@
       "hot": "Hot Recommend",
       "new": "New Blogger",
       "popular": "🔥Popular Blogger",
-      "FreeAndSubscription": "Free/Subscription"
+      "freeAndSubscription": "Free/Subscription",
+      "free": "Free",
+      "subscription": "Subscription",
+      "subscribed": "Subscribed"
     },
     "FollowedEmpty": "You have not followed any bloggers yet, please check it out",
     "Subscribe": "Subscribe",
@@ -40,7 +43,8 @@
     "SubscribeFailed": "Subscribe Failed",
     "Month": "Month",
     "ConfirmPayment": "Confirm Payment",
-    "Saved": "Saved"
+    "Saved": "Saved",
+    "TodayAdded": "Today added"
   },
   "Profile": {
     "mainTitle": "My",
@@ -122,10 +126,6 @@
         "auditing": "In Review",
         "rejected": "Not passed",
         "publish": "Publish"
-      },
-      "itemState": {
-        "auditing": "auditing",
-        "rejected": "rejected"
       },
       "publishSuccess": "Publish Success",
       "publishFail": "Publish Fail",
