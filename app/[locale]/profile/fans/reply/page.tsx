@@ -84,7 +84,7 @@ export default function Page() {
             placeholder={t("replyExample")} rows={4}
           />
           {replyForm.formState?.errors?.sub_reply?.message &&
-            <div className={"text-xs text-pink"}>{replyForm.formState.errors.sub_reply.message}</div>}
+            <div className={"text-xs text-theme"}>{replyForm.formState.errors.sub_reply.message}</div>}
         </section>
       </form>
     </>

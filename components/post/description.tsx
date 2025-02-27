@@ -27,7 +27,7 @@ function DescriptionSegment({
   linkRender?: (content: string) => React.ReactNode
 }) {
   return isMention(content) ? (
-    <Link href={buildUserHomePagePath(getUserIdFromMention(content))} className="text-[#FF8492]">
+    <Link href={buildUserHomePagePath(getUserIdFromMention(content))} className="text-theme">
       {content}{" "}
     </Link>
   ) : linkRender ? (

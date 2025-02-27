@@ -1,3 +1,4 @@
+"use client"
 import Image from "next/image"
 import Avatar from "./avatar"
 import {
@@ -15,6 +16,7 @@ import CommonAvatar from "@/components/common/common-avatar"
 import CommentSkeleton from "./comment-skeleton"
 import SheetSelect from "../common/sheet-select"
 import IconWithImage from "../profile/icon"
+import { useTranslations } from "next-intl"
 
 export default function Comments({
   post_id,
@@ -29,6 +31,7 @@ export default function Comments({
   fetchComments: () => void
   increaseCommentCount: (n: number) => void
 }) {
+  const t = useTranslations("Common.post")
   const [input, setInput] = useState("")
 
   return (
@@ -39,9 +42,9 @@ export default function Comments({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             className="grow"
-            placeholder="发表评论,文明发言"
+            placeholder={t("commentPlaceholder")}
           />
-          <button onClick={sendComment}>发送评论</button>
+          <button onClick={sendComment}>{t("sendComment")}</button>
         </div>
         {comments.map((comment) => (
           <Comment key={comment.id} comment={comment} removed={removeComment} />
@@ -67,6 +70,7 @@ function Comment({
   comment: CommentInfo
   removed: (comment_id: number) => void
 }) {
+  const t = useTranslations("Common.post")
   const { user, content, thumbs_up_count, thumb_up, id, post_id, is_self, reply_count } = comment
   const { photo, username } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
@@ -92,7 +96,7 @@ function Comment({
             value: -1
           },
           {
-            label: "删除",
+            label: t("delete"),
             value: 0
           }
         ]}
@@ -108,16 +112,18 @@ function Comment({
                 <CommonAvatar photoFileId={photo} size={36} />
               </div>
               <div className="flex flex-col gap-2">
-                <div className="text-xs text-[#FF8492]">{username}</div>
+                <div className="text-xs text-theme">{username}</div>
                 <div className="text-sm">{content}</div>
                 <div className="flex gap-4 text-xs text-[#6D7781]">
                   {reply_count > 0 && (
-                    <div onClick={toggleReplies} className="text-[#FF8492]">
-                      {reply_count}条回复
+                    <div onClick={toggleReplies} className="text-theme">
+                      {t("replyCount", { count: reply_count })}
                     </div>
                   )}
-                  <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
-                  {is_self && <div onClick={() => setOpenConfirmDeleteComment(true)}>删除</div>}
+                  <div onClick={() => setShowReplyInput(!showReplyInput)}>{t("reply")}</div>
+                  {is_self && (
+                    <div onClick={() => setOpenConfirmDeleteComment(true)}>{t("delete")}</div>
+                  )}
                 </div>
               </div>
             </div>
@@ -132,9 +138,9 @@ function Comment({
               value={replyInput}
               onChange={(e) => setReplyInput(e.target.value)}
               className="grow"
-              placeholder="发表回复,文明发言"
+              placeholder={t("replyPlaceholder")}
             />
-            <button onClick={sendReply}>发送回复</button>
+            <button onClick={sendReply}>{t("sendReply")}</button>
           </div>
         )}
         {showReplies && replies?.length && (
@@ -240,6 +246,7 @@ function Reply({
   removed: (replyId: number) => void
   fetchReplies: () => void
 }) {
+  const t = useTranslations("Common.post")
   const { user, content, thumbs_up_count, thumb_up, id, comment_id, is_self, reply_user } = reply
   const { photo, username } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
@@ -253,14 +260,14 @@ function Reply({
         <div className="flex gap-2">
           <Avatar fileId={photo} width={9} height={9} />
           <div className="flex flex-col gap-2">
-            <div className="text-xs text-[#FF8492]">{username}</div>
+            <div className="text-xs text-theme">{username}</div>
             <div className="text-sm flex gap-2">
               {reply_user && <div className="text-[#6D7781]">{reply_user.username}</div>}
               <div>{content}</div>
             </div>
             <div className="flex gap-4 text-xs text-[#6D7781]">
-              <div onClick={() => setShowReplyInput(!showReplyInput)}>回复</div>
-              {is_self && <div onClick={removeReply}>删除</div>}
+              <div onClick={() => setShowReplyInput(!showReplyInput)}>{t("reply")}</div>
+              {is_self && <div onClick={removeReply}>{t("delete")}</div>}
             </div>
           </div>
         </div>
@@ -272,9 +279,9 @@ function Reply({
             value={replyInput}
             onChange={(e) => setReplyInput(e.target.value)}
             className="grow"
-            placeholder="发表回复,文明发言"
+            placeholder={t("replyPlaceholder")}
           />
-          <button onClick={sendReply}>发送回复</button>
+          <button onClick={sendReply}>{t("sendReply")}</button>
         </div>
       )}
     </div>
@@ -342,13 +349,13 @@ function Thumbup({
   return (
     <div className="flex flex-col items-center ml-2" onClick={thumbup}>
       <Image
-        src={`${isThumbupped ? "/icons/thumbup_active.png" : "/icons/thumbup.png"}`}
+        src={`${isThumbupped ? "/theme/icon_info_good_red@3x.png" : "/icons/thumbup.png"}`}
         width={20}
         height={20}
         alt=""
         className="max-w-4"
       />
-      <div className={`text-[10px] ${isThumbupped ? "text-[#FF8492]" : "text-[#6D7781]"}`}>
+      <div className={`text-[10px] ${isThumbupped ? "text-theme" : "text-[#6D7781]"}`}>
         {thumbupCount}
       </div>
     </div>

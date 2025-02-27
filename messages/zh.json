@@ -11,6 +11,7 @@
     "confirm": "确定",
     "cancel": "取消",
     "postLoadError": "帖子内容加载失败",
+    "detailLoadError": "详情加载失败",
     "ContentLoadingFailed": "内容加载失败",
     "FreeAndSubscription": "免费/订阅",
     "potatoWallet": "Potato 钱包",
@@ -19,7 +20,54 @@
     "loading1": "加载中...",
     "listEnd": "你已经到达底部",
     "saveSuccess": "保存成功",
-    "saveFail": "保存失败"
+    "saveFail": "保存失败",
+    "post": {
+      "recharge": "充值",
+      "insufficientBalance": "余额不足",
+      "unliked": "已取消点赞",
+      "liked": "感谢支持",
+      "commentPlaceholder": "发表评论,文明发言",
+      "sendComment": "发送评论",
+      "sendReply": "发送回复",
+      "delete": "删除",
+      "deleteConfirm": "确定删除此评论吗？",
+      "reply": "回复",
+      "replyCount": "{count}条回复",
+      "replyPlaceholder": "发表回复,文明发言",
+      "vote": "投票",
+      "viewAllOptions": "查看全部选项",
+      "voteCount": "{count}人参与",
+      "voteEndTime": "还有{count}小时结束",
+      "voteEnded": "投票已结束",
+      "votes": "票",
+      "tipAmount": "打赏金额",
+      "likeAtTheSameTime": "同时点赞",
+      "tipSuccess": "打赏成功",
+      "tipFailed": "打赏失败",
+      "tipConfirm": "确认支付{amount} {currency}",
+      "confirmTip": "确认支付",
+      "custom": "自定义",
+      "saved": "已收藏",
+      "cancelSaved": "已取消收藏"
+    },
+    "datePicker": {
+      "Year":"年",
+      "Year1":"年",
+      "year": "年",
+      "month": "月",
+      "january": "一月",
+      "february": "二月",
+      "march": "三月",
+      "april": "四月",
+      "may": "五月",
+      "june": "六月",
+      "july": "七月",
+      "august": "八月",
+      "september": "九月",
+      "october": "十月",
+      "november": "十一月",
+      "december": "十二月"
+    }
   },
   "Explore": {
     "BecomeABlogger": "成为博主",
@@ -40,7 +88,8 @@
     "SubscribeFailed": "订阅失败",
     "Month": "个月",
     "ConfirmPayment": "确认支付",
-    "Saved": "已省"
+    "Saved": "已省",
+    "SubscribeEmpty": "您尚未订阅任何博主，快去看看"
   },
   "Profile": {
     "mainTitle": "我的",
@@ -241,7 +290,6 @@
       "year": "年",
       "month": "月",
       "balance": "余额"
-
     },
     "collect": {
       "collect": "收藏夹",
@@ -291,6 +339,14 @@
       "reviewing": "审核中",
       "failed": "失败",
       "balance": "余额"
+    },
+    "statement": {
+      "title": "充值明细",
+      "title1": "收益明细",
+      "success": "成功",
+      "reviewing": "审核中",
+      "failed": "失败",
+      "balance": "余额"
     }
   },
   "Space": {
@@ -324,6 +380,24 @@
     "noResult": "没有搜到相关博主，请尝试别的搜索词",
     "users": "博主",
     "posts": "帖子"
+  },
+  "PostInfo": {
+    "btnText1": "支付{price} {currency} 浏览该帖子",
+    "btnText2": "订阅后浏览博主的帖子",
+    "btnText3": "关注后解锁更多内容",
+    "btnText4": "订阅后解锁更多内容",
+    "btnText5": "订阅后解锁更多内容",
+    "operationFailed": "操作失败",
+    "followSuccess": "关注成功",
+    "followFailed": "关注失败",
+    "subscribeSuccess": "订阅成功",
+    "subscribeFailed": "订阅失败",
+    "subscribeRemaining": "订阅剩余：{x}天",
+    "fllow": "关注",
+    "fllowed": "已关注",
+    "paySuccess": "支付成功",
+    "payFailed": "支付失败",
+    "payTitle": "付费浏览此视频",
+    "confirmPay": "确认支付 {amount} {currency}"
   }
-
 }

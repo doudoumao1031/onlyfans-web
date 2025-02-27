@@ -1,8 +1,11 @@
+"use client"
+
 import { userCollectionPost } from "@/lib"
 import { useState } from "react"
 import Stats from "./stats"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
+import { useTranslations } from "next-intl"
 
 export default function Save({
   count,
@@ -15,6 +18,7 @@ export default function Save({
   notice?: boolean
   postId: number
 }) {
+  const t = useTranslations("Common.post")
   const { addToActionQueue } = useGlobal()
   const [saves, setSaves] = useState(count)
   const [isSaved, setIsSaved] = useState(saved)
@@ -24,12 +28,12 @@ export default function Save({
     if (isSaved) {
       setSaves((prevSaves) => prevSaves - 1)
       setIsSaved(false)
-      showMessage("已取消收藏")
+      showMessage(t("cancelSaved"))
     } else {
       // 如果未点赞，增加点赞
       setSaves((prevSaves) => prevSaves + 1)
       setIsSaved(true)
-      showMessage("已收藏")
+      showMessage(t("saved"))
     }
     try {
       await userCollectionPost({ post_id: postId, collection: !isSaved, user_id: 1 })

@@ -58,7 +58,7 @@ export default function SubScribeConfirm({
               <div
                 onClick={() => setActive(i)}
                 key={i}
-                className={`relative w-[32%] h-36 rounded-lg border-border-pink flex flex-col justify-center items-center ${
+                className={`relative w-[32%] h-36 rounded-lg border-border-theme flex flex-col justify-center items-center ${
                   active === i && "border"
                 }`}
               >
@@ -79,7 +79,7 @@ export default function SubScribeConfirm({
           })}
         </div>
         <div className="flex justify-center">
-          <div className=" relative w-72 h-[50px] rounded-full bg-background-pink text-white flex justify-center items-center mt-10 text-[15px] font-semibold">
+          <div className=" relative w-72 h-[50px] rounded-full bg-background-theme text-white flex justify-center items-center mt-10 text-[15px] font-semibold">
             {t("confirmAndPay")} 999.99 USDT
             <div className=" absolute top-[-14px] right-6 py-1 px-2 bg-[#F7B500] flex justify-center items-center text-xs rounded-full">
               {t("saved")} $99.99
@@ -110,7 +110,7 @@ export default function SubScribeConfirm({
         )
       }}
       trigger={children}
-      outerControl={setIsOpen ? true : false}
+      outerControl={!!setIsOpen}
       isOpen={isOpen}
       setIsOpen={setIsOpen}
       className="h-[50vh] border-0"

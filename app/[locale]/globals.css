@@ -20,7 +20,6 @@ body {
   --theme-80: rgba(0, 174, 243, 0.8);
   --theme-90: rgba(0, 174, 243, 0.9);
   --adm-color-primary: #000;
-  --red: #FF8492;
   --pink: #FF8492;
   --blue: var(--theme);
   --orange: #FFA94B;
@@ -53,6 +52,7 @@ body {
   --border: #DDDDDD;
   --border-pink: var(--pink);
   --border-blue: var(--blue);
+  --border-theme: var(--blue);
 
   --radius: 0.5rem;
 }

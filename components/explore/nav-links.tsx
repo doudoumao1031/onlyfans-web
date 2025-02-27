@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation"
 import clsx from "clsx"
 import { useEffect, useMemo, useRef } from "react"
 import { useLocale, useTranslations } from "next-intl"
+import { ActionTypes } from "@/lib/contexts/global-context"
 
 export default function NavLinks({ isFind }: { isFind?: boolean }) {
   const t = useTranslations("Explore")
@@ -12,8 +13,12 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
   const links = useMemo(
     () => [
       { name: t("Subscribed"), href: "/explore/subscribed" },
-      { name: t("Followed"), href: "/explore/followed" },
-      { name: isFind ? t("hot") : t("Feed"), href: "/explore/feed" },
+      { name: t("Followed"), href: "/explore/followed", event: ActionTypes.Followed.SCROLL_TO_TOP },
+      {
+        name: isFind ? t("hot") : t("Feed"),
+        href: "/explore/feed",
+        event: ActionTypes.Feed.SCROLL_TO_TOP
+      },
       { name: t("Recommended"), href: "/explore/recommended/hot" }
     ],
     [isFind, t]
@@ -34,10 +39,14 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
     }
   }, [memoLink])
 
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (pathName === href) {
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+    event: string | undefined
+  ) => {
+    if (pathName.indexOf(href) > -1 && event) {
       e.preventDefault()
-      window.dispatchEvent(new Event("feed-action-scroll-top"))
+      window.dispatchEvent(new Event(event))
     }
   }
 
@@ -53,7 +62,7 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
           key={link.name}
           href={link.href}
           ref={link.active ? activeLinkRef : null}
-          onClick={(e) => handleNavClick(e, link.href)}
+          onClick={(e) => handleNavClick(e, link.href, link?.event)}
           className={clsx(
             "pt-3.5 pb-3.5 text-[20px] relative",
             link.active ? "font-bold text-black" : "text-[#777] font-normal",
