@@ -220,8 +220,8 @@ function ChartData({ params }: { params: UserMetricDayReq }) {
         {
           label: "播放量",
           data: data?.map((item) => item.income),
-          borderColor: "rgb(255, 99, 132)",
-          backgroundColor: "rgba(255, 99, 132, 0.5)",
+          borderColor: "#00AEF3",
+          backgroundColor: "rgba(0,174,243,0.2)",
           yAxisID: "y"
         }
       ]
@@ -327,8 +327,8 @@ export default function Page() {
                 setActiveKey(v.key)
               }}
               key={v.value.start}
-              className={`h-8 px-4 flex justify-center items-center border border-[#FF8492] text-[#ff8492] rounded-full mr-3 ${
-                active.start === v.value.start ? "bg-[#ff8492] text-[#fff]" : ""
+              className={`h-8 px-4 flex justify-center items-center border border-theme rounded-full mr-3 ${
+                active.start === v.value.start ? "bg-theme text-white" : "text-text-theme "
               }`}
             >
               {v.label}

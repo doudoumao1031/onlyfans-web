@@ -76,8 +76,8 @@ export const data = {
     {
       label: "播放量",
       data: [188, 233, 555, 767, 111, 222, 666],
-      borderColor: "rgb(255, 99, 132)",
-      backgroundColor: "rgba(255, 99, 132, 0.5)",
+      // borderColor: "#00AEF3",
+      // backgroundColor: "rgba(255, 99, 132, 0.5)",
       yAxisID: "y"
     }
   ]

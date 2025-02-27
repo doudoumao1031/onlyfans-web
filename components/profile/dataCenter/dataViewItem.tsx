@@ -73,8 +73,8 @@ export default function Page({ tabs, title }: TProos) {
         {
           label: tabs[active],
           data: dataInfo?.map(item => item[active as keyof typeof item]),
-          borderColor: "rgb(255, 99, 132)",
-          backgroundColor: "rgba(255, 99, 132, 0.5)",
+          borderColor: "#00AEF3",
+          backgroundColor: "rgba(0,174,243,0.2)",
           yAxisID: "y"
         }
       ]
@@ -113,9 +113,9 @@ export default function Page({ tabs, title }: TProos) {
       </div>
       <div className="flex justify-between m-4">
         {Object.keys(tabs).map(v => (
-          <div onClick={() => { setActive(v) }} key={v} className={`w-32 h-16 flex justify-center flex-col items-center ${active === v && "border-[#FF8492] bg-[#FF8492] bg-opacity-20 border rounded-md "}`}>
+          <div onClick={() => { setActive(v) }} key={v} className={`w-32 h-16 flex justify-center flex-col items-center ${active === v && "border-theme bg-theme/20 border rounded-md "}`}>
             <span className="text-xl font-medium">{statistics[v] || "0"}</span>
-            <span className="text-xs text-[#6D7781]">{tabs[v]}</span>
+            <span className="text-xs text-text-subtitle">{tabs[v]}</span>
           </div>
         ))}
 

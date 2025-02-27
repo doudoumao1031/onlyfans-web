@@ -10,6 +10,15 @@ body {
 /*antd mobile override*/
 :root:root {
   --theme: #00AEF3;
+  --theme-10: rgba(0, 174, 243, 0.1);
+  --theme-20: rgba(0, 174, 243, 0.2);
+  --theme-30: rgba(0, 174, 243, 0.3);
+  --theme-40: rgba(0, 174, 243, 0.4);
+  --theme-50: rgba(0, 174, 243, 0.5);
+  --theme-60: rgba(0, 174, 243, 0.6);
+  --theme-70: rgba(0, 174, 243, 0.7);
+  --theme-80: rgba(0, 174, 243, 0.8);
+  --theme-90: rgba(0, 174, 243, 0.9);
   --adm-color-primary: #000;
   --red: #FF8492;
   --pink: #FF8492;
