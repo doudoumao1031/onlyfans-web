@@ -44,7 +44,7 @@ export default function Page() {
               <div className="">{v.msg}</div>
               <div className="flex items-center">
                 <div className={`w-6 h-6 rounded-full mr-2 ${v.avtar} bg-cover `}></div>
-                <span className="text-text-pink text-xs">{v.name}</span>
+                <span className="text-text-theme text-xs">{v.name}</span>
               </div>
             </div>
           </div>

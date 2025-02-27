@@ -25,7 +25,7 @@ export default function FoldingDescription ({ about,location }:{about:string,loc
         )
       }
       {about && hideState && (
-        <button className="text-text-pink mt-1" type={"button"} onTouchEnd={() => {
+        <button className="text-text-theme mt-1" type={"button"} onTouchEnd={() => {
           setHideState(false)
         }}
         >{t("actions.moreInfo")}</button>

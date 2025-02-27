@@ -45,7 +45,7 @@ export default function Page({
           onClick={() => {
             confirm()
           }}
-          className="h-full flex justify-center items-center flex-1 text-center text-text-pink"
+          className="h-full flex justify-center items-center flex-1 text-center text-text-theme"
         >
           {okText || t("confirm")}
         </div>

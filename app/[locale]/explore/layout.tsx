@@ -45,11 +45,11 @@ export default function Layout({
             titleColor="#000"
             right={
               path === "/explore/subscribed" && !isBlogger ? (
-                <Link href="/profile/order" className="text-text-pink text-base">
+                <Link href="/profile/order" className="text-text-theme text-base">
                   成为博主
                 </Link>
               ) : (
-                <Link href="/profile" className="text-text-pink text-base">
+                <Link href="/profile" className="text-text-theme text-base">
                   我的
                 </Link>
               )

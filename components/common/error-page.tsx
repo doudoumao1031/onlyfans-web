@@ -24,7 +24,7 @@ export default function Error(props: ErrorProps) {
     >
       <p className="text-[#6D7781] mb-4 text-[15px]">{text || t("ContentLoadingFailed")}</p>
       <button
-        className="px-4 py-2 bg-background-pink text-white rounded-full hover:bg-opacity-90 flex items-center"
+        className="px-4 py-2 bg-background-theme text-white rounded-full hover:bg-opacity-90 flex items-center"
         onClick={() => {
           reset()
         }}

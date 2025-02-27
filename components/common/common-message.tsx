@@ -46,7 +46,7 @@ export default function useCommonMessage() {
         <div
           className={`absolute z-[9999] left-1/2 -translate-x-1/2 top-[50vh] rounded-full px-4 py-2 text-white transition-all duration-300 ease-in-out transform ${
             isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-          } ${type === "love" ? "bg-red" : "bg-black/80"}`}
+          } ${type === "love" ? "bg-theme" : "bg-black/80"}`}
         >
           {
             type === "default" && (
@@ -56,7 +56,7 @@ export default function useCommonMessage() {
           {
             type === "success" && (
               <div className="flex items-center gap-2 whitespace-nowrap">
-                <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20}/>
+                <IconWithImage url={"/theme/checkbox_select_white@3x.png"} height={20} width={20}/>
                 <span className="text-white font-medium text-base">{content}</span>
               </div>
             )
@@ -64,7 +64,7 @@ export default function useCommonMessage() {
           {
             type === "love" && (
               <div className="flex items-center gap-2 whitespace-nowrap">
-                <IconWithImage url={"/icons/icon_fans_like_highlight@3x.png"} height={20} width={20}/>
+                <IconWithImage url={"/theme/icon_fans_like_highlight@3x.png"} height={20} width={20}/>
                 <span className="text-white font-medium text-base">{content}</span>
               </div>
             )

@@ -178,7 +178,7 @@ const AddVoteModal = ({
                   }
                 })
               }}
-              className={"text-base text-text-pink"}
+              className={"text-base text-text-theme"}
             >
               {commonTrans("confirm")}
             </button>
@@ -200,7 +200,7 @@ const AddVoteModal = ({
             }}
             name="title"
           />
-          <div className=" absolute left-8 bottom-0 text-xs text-pink">
+          <div className=" absolute left-8 bottom-0 text-xs text-theme">
             {formState.errors.title?.message}
           </div>
         </section>
@@ -208,7 +208,7 @@ const AddVoteModal = ({
           <h3 className="font-medium text-base mb-2">
             {t("manuscript.itemActions.voteContent")}
             {watch("items")?.filter(item => !!item.content)?.length < 2 && (
-              <span className="text-xs text-pink ml-2 font-normal">{t("manuscript.itemActions.voteContentMin")}</span>
+              <span className="text-xs text-theme ml-2 font-normal">{t("manuscript.itemActions.voteContentMin")}</span>
             )}
           </h3>
           <section className="flex flex-col gap-5 mt-2">
@@ -234,7 +234,7 @@ const AddVoteModal = ({
               onTouchEnd={() => {
                 append({ content: "" })
               }}
-              className="flex gap-1.5 w-full rounded-xl border border-border-pink justify-center items-center py-2.5 text-text-pink"
+              className="flex gap-1.5 w-full rounded-xl border border-border-theme justify-center items-center py-2.5 text-text-theme"
             >
               <IconWithImage
                 url={"/icons/profile/icon_add@3x.png"}
@@ -446,7 +446,7 @@ const ReadSettings = ({
                   }
                 })
               }}
-              className={"text-base text-text-pink"}
+              className={"text-base text-text-theme"}
             >
               {commonTrans("confirm")}
             </button>
@@ -511,7 +511,7 @@ const ReadSettings = ({
                     />
                   </div>
                 </section>
-                <section className="text-xs text-pink absolute right-4 bottom-0">
+                <section className="text-xs text-theme absolute right-4 bottom-0">
                   {errors.priceList?.[index]?.price?.message}
                 </section>
               </section>
@@ -691,7 +691,7 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
         height={20}
         color={"#FF8492"}
       />
-      <label className={"text-text-pink"}>
+      <label className={"text-text-theme"}>
         {option?.label}&nbsp;
         {Number(price) === 0 ? t("manuscript.free") : price}
       </label>
@@ -917,7 +917,7 @@ const EditPageContent = () => {
                 </button>
               )
           }
-          <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-text-pink")}>
+          <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-text-theme")}>
             {t("manuscript.itemActions.publish")}
           </button>
         </section>
@@ -940,7 +940,7 @@ const EditPageContent = () => {
               }
             }}
           />
-          <div className="absolute left-4 bottom-1.5 text-pink text-xs">
+          <div className="absolute left-4 bottom-1.5 text-theme text-xs">
             {formState?.errors?.post?.title?.message}
           </div>
         </section>
@@ -984,7 +984,7 @@ const EditPageContent = () => {
                   height={20}
                   color={"#FF8492"}
                 />
-                <span className="font-bold text-text-pink text-base">
+                <span className="font-bold text-text-theme text-base">
                   {formValues.post_vote?.title}
                 </span>
               </div>
@@ -1023,7 +1023,7 @@ const EditPageContent = () => {
             {/*<div className="flex items-center space-x-2">*/}
             {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
             {/*                   color={'#FF8492'}/>*/}
-            {/*    <label className={"text-text-pink"}>免费订阅</label>*/}
+            {/*    <label className={"text-text-theme"}>免费订阅</label>*/}
             {/*</div>*/}
           </section>
         </section>

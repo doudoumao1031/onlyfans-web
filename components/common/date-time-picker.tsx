@@ -57,7 +57,7 @@ export default function DateTimePicker(props: {
                 {t("cancel")}
               </button>
               <button
-                className={"text-text-pink"}
+                className={"text-text-theme"}
                 type={"button"}
                 onTouchEnd={() => {
                   setVisible(false)
