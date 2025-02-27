@@ -49,6 +49,24 @@
       "custom": "Custom",
       "saved": "Saved",
       "cancelSaved": "Cancel saved"
+    },
+    "datePicker": {
+      "Year":"Year",
+      "Year1":"",
+      "year": "-",
+      "month": "",
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
     }
   },
   "Explore": {

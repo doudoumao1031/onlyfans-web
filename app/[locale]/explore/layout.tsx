@@ -5,6 +5,7 @@ import Nav from "@/components/explore/nav"
 import { usePathname, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react"
 import { userProfile } from "@/lib/actions/profile"
+import { useTranslations } from "next-intl"
 
 export default function Layout({
   children,
@@ -20,6 +21,7 @@ export default function Layout({
   subscribed: React.ReactNode
   // modal: React.ReactNode;
 }) {
+  const t = useTranslations("Explore")
   const searchParams = useSearchParams()
   const isFind = searchParams.get("isFind")
   const path = usePathname()
@@ -46,11 +48,11 @@ export default function Layout({
             right={
               path === "/explore/subscribed" && !isBlogger ? (
                 <Link href="/profile/order" className="text-text-pink text-base">
-                  成为博主
+                  {t("BecomeABlogger")}
                 </Link>
               ) : (
                 <Link href="/profile" className="text-text-pink text-base">
-                  我的
+                  {t("My")}
                 </Link>
               )
             }
