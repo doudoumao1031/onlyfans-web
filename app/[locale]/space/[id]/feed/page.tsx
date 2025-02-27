@@ -60,6 +60,7 @@ export default function FeedList() {
                     hasSubscribe={false}
                     hasVote
                     space
+                    isInfoPage={false}
                   />
                 ))}
               </div>
