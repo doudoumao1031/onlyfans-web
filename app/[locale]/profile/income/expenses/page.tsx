@@ -4,7 +4,7 @@ import Empty from "@/components/common/empty"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import LoadingMask from "@/components/common/loading-mask"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
-import { getExpenses, PageResponse, StatementResp } from "@/lib"
+import { ChangeType, ChangeTypeDesc, getExpenses, PageResponse, StatementResp } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import dayjs from "dayjs"
 import { useTranslations } from "next-intl"
@@ -41,6 +41,14 @@ export default function Page() {
       end_time: Math.floor(dayjs(date).endOf("month").valueOf() / 1000)
     }
   })
+
+  const StatementTypeList: ChangeTypeDesc[] = [
+    { type: ChangeType.RECHARGE, desc: t("recharge") },
+    { type: ChangeType.BUY_VIP, desc: t("subscribe") },
+    { type: ChangeType.REWARD, desc: t("tip") },
+    { type: ChangeType.PAY_POST, desc: t("postPay") },
+    { type: ChangeType.WITHDRAW, desc: t("withdrawal") }
+  ]
   return (
     <div className="w-full h-[calc(100vh-153px)]">
       {initData && (
@@ -71,7 +79,9 @@ export default function Page() {
                         {" "}
                         {t("balance")}:{v.balance_snapshot}
                       </span>
-                      <span className="text-[#FFA94B]">{v.reason}</span>
+                      {v.from_user && (
+                        <span className="text-orange">`${StatementTypeList[v.change_type].desc} ${v.from_user}`</span>
+                      )}
                     </div>
                   </div>
                 ))}

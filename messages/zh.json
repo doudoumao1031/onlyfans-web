@@ -294,7 +294,11 @@
       "december": "十二月",
       "year": "年",
       "month": "月",
-      "balance": "余额"
+      "balance": "余额",
+      "recharge": "充值",
+      "subscribe": "订阅",
+      "tip": "打赏",
+      "postPay": "帖子付费"
     },
     "collect": {
       "collect": "收藏夹",
@@ -347,7 +351,7 @@
     },
     "statement": {
       "title": "充值明细",
-      "title1": "收益明细",
+      "title1": "提现明细",
       "success": "成功",
       "reviewing": "审核中",
       "failed": "失败",

@@ -107,7 +107,7 @@ export type StatementReq  = PageInfo &  {
   start_time?: number
   end_time?: number
 }
-enum ChangeType {
+export enum ChangeType {
   RECHARGE = 1,
   BUY_VIP = 2,
   REWARD = 3,
@@ -119,14 +119,6 @@ export type ChangeTypeDesc = {
   type: number
   desc: string
 }
-
-export const StatementTypeList: ChangeTypeDesc[] = [
-  { type: ChangeType.RECHARGE, desc: "充值" },
-  { type: ChangeType.BUY_VIP, desc: "购买会员" },
-  { type: ChangeType.REWARD, desc: "打赏" },
-  { type: ChangeType.PAY_POST, desc: "帖子付费" },
-  { type: ChangeType.WITHDRAW, desc: "提现" }
-]
 
 /**
  * 收支明细返回

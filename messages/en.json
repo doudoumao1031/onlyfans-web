@@ -296,7 +296,11 @@
       "december": "December",
       "year": "Year",
       "month": "Month",
-      "balance": "Balance"
+      "balance": "Balance",
+      "recharge": "Recharge",
+      "subscribe": "Subscribe",
+      "tip": "Reward",
+      "postPay": "Post pay"
     },
     "collect": {
       "collect": "Collect",
@@ -349,7 +353,7 @@
     },
     "statement": {
       "title": "Recharge Detail",
-      "title1": "Income Detail",
+      "title1": "Withdraw Detail",
       "success": "Success",
       "reviewing": "Reviewing",
       "failed": "Failed",
