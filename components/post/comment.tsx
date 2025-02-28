@@ -15,7 +15,6 @@ import { useState } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
 import CommentSkeleton from "./comment-skeleton"
 import SheetSelect from "../common/sheet-select"
-import IconWithImage from "../profile/icon"
 import { useTranslations } from "next-intl"
 
 export default function Comments({
@@ -143,7 +142,7 @@ function Comment({
             <button onClick={sendReply}>{t("sendReply")}</button>
           </div>
         )}
-        {showReplies && replies?.length && (
+        {showReplies && !!replies?.length && (
           <div className="pl-10 py-4 flex flex-col gap-3">
             {replies.map((reply) => (
               <Reply
@@ -254,37 +253,61 @@ function Reply({
   const [thumbupCount, setThumbupCount] = useState(thumbs_up_count)
   const [isThumbupped, setIsThumbupped] = useState(thumb_up)
 
+  const [openCofirmDeleteReply, setOpenConfirmDeleteReply] = useState<boolean>(false)
+
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex justify-between">
-        <div className="flex gap-2">
-          <Avatar fileId={photo} width={9} height={9} />
-          <div className="flex flex-col gap-2">
-            <div className="text-xs text-theme">{username}</div>
-            <div className="text-sm flex gap-2">
-              {reply_user && <div className="text-[#6D7781]">{reply_user.username}</div>}
-              <div>{content}</div>
-            </div>
-            <div className="flex gap-4 text-xs text-[#6D7781]">
-              <div onClick={() => setShowReplyInput(!showReplyInput)}>{t("reply")}</div>
-              {is_self && <div onClick={removeReply}>{t("delete")}</div>}
+    <>
+      <SheetSelect
+        isOpen={openCofirmDeleteReply}
+        setIsOpen={setOpenConfirmDeleteReply}
+        onInputChange={(v) => v === 0 && removeReply()}
+        options={[
+          {
+            label: "",
+            description: `${username}: ${content}`,
+            value: -1
+          },
+          {
+            label: t("delete"),
+            value: 0
+          }
+        ]}
+      >
+        <></>
+      </SheetSelect>
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between">
+          <div className="flex gap-2">
+            <Avatar fileId={photo} width={9} height={9} />
+            <div className="flex flex-col gap-2">
+              <div className="text-xs text-theme">{username}</div>
+              <div className="text-sm flex gap-2">
+                {reply_user && <div className="text-[#6D7781]">{reply_user.username}</div>}
+                <div>{content}</div>
+              </div>
+              <div className="flex gap-4 text-xs text-[#6D7781]">
+                <div onClick={() => setShowReplyInput(!showReplyInput)}>{t("reply")}</div>
+                {is_self && (
+                  <div onClick={() => setOpenConfirmDeleteReply(true)}>{t("delete")}</div>
+                )}
+              </div>
             </div>
           </div>
+          <Thumbup thumbupCount={thumbupCount} isThumbupped={isThumbupped} thumbup={thumbup} />
         </div>
-        <Thumbup thumbupCount={thumbupCount} isThumbupped={isThumbupped} thumbup={thumbup} />
+        {showReplyInput && (
+          <div className="flex gap-2 p-4">
+            <input
+              value={replyInput}
+              onChange={(e) => setReplyInput(e.target.value)}
+              className="grow"
+              placeholder={t("replyPlaceholder")}
+            />
+            <button onClick={sendReply}>{t("sendReply")}</button>
+          </div>
+        )}
       </div>
-      {showReplyInput && (
-        <div className="flex gap-2 p-4">
-          <input
-            value={replyInput}
-            onChange={(e) => setReplyInput(e.target.value)}
-            className="grow"
-            placeholder={t("replyPlaceholder")}
-          />
-          <button onClick={sendReply}>{t("sendReply")}</button>
-        </div>
-      )}
-    </div>
+    </>
   )
 
   async function sendReply() {
