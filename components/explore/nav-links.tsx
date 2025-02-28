@@ -53,7 +53,7 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
   return (
     <div
       className={`w-full flex text-center border-b border-gray-100 sticky z-30 bg-white overflow-x-auto gap-3 ${
-        isFind ? "justify-start" : "justify-around"
+        isFind ? "justify-start" : "justify-between"
       }`}
     >
       {memoLink.map((link) => (
