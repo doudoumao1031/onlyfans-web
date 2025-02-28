@@ -8,7 +8,6 @@ import {
   userCollectionUsers
 } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import { Link } from "@/i18n/routing"
 import { Fragment, useEffect, useState } from "react"
 import { useTranslations } from "next-intl"
 import UserCard from "@/components/user/user-card"
