@@ -33,19 +33,33 @@ function createKey(): void {
     for (let j = 0; j < simpleKey.length; j++) {
       d ^= simpleKey.charCodeAt(j)
     }
-    entData[i] = d
+    // Ensure the result is within valid range (0-255)
+    entData[i] = d & 0xFF
   }
 
   // Create decryption mapping (inverse of encryption)
   for (let i = 0; i < 256; i++) {
-    decData[entData[i]] = i
+    const encryptedValue = entData[i]
+    decData[encryptedValue] = i
+  }
+
+  // Verify the mappings are complete
+  for (let i = 0; i < 256; i++) {
+    // Check if every possible byte value has a mapping
+    if (decData[i] === undefined) {
+      console.warn(`Warning: No decryption mapping for byte value ${i}`)
+      // Provide a fallback mapping to prevent data loss
+      decData[i] = i
+    }
   }
 }
 
 function simpleEncrypt(src: Uint8Array): Uint8Array {
   const result = new Uint8Array(src.length)
   for (let i = 0; i < src.length; i++) {
-    result[i] = entData[src[i]]
+    // Ensure the byte value is within valid range (0-255)
+    const byteValue = src[i] & 0xFF
+    result[i] = entData[byteValue]
   }
   return result
 }
@@ -53,7 +67,9 @@ function simpleEncrypt(src: Uint8Array): Uint8Array {
 function simpleDecrypt(src: Uint8Array): Uint8Array {
   const result = new Uint8Array(src.length)
   for (let i = 0; i < src.length; i++) {
-    result[i] = decData[src[i]]
+    // Ensure the byte value is within valid range (0-255)
+    const byteValue = src[i] & 0xFF
+    result[i] = decData[byteValue]
   }
   return result
 }

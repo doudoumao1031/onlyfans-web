@@ -19,6 +19,13 @@ export default function DataCryptoPage() {
   const [isInputBytes, setIsInputBytes] = useState(false)
   const [fileName, setFileName] = useState("")
   const [originalBytes, setOriginalBytes] = useState<number[]>([])
+  const [encryptedBytes, setEncryptedBytes] = useState<number[]>([])
+  const [performanceStats, setPerformanceStats] = useState<{
+    fileLoadTime?: number;
+    encryptionTime?: number;
+    decryptionTime?: number;
+    fileSize?: number;
+  }>({})
 
   // Set up the crypto module
   useEffect(() => {
@@ -46,13 +53,13 @@ export default function DataCryptoPage() {
       } else {
         setIsInputBytes(false)
         // For text input, convert to bytes for storage
-        if (originalData) {
-          const encoder = new TextEncoder()
-          const bytes = Array.from(encoder.encode(originalData))
-          setOriginalBytes(bytes)
-        } else {
-          setOriginalBytes([])
-        }
+        // if (originalData) {
+        //   const encoder = new TextEncoder()
+        //   const bytes = Array.from(encoder.encode(originalData))
+        //   setOriginalBytes(bytes)
+        // } else {
+        //   setOriginalBytes([])
+        // }
       }
     } catch (err) {
       // If parsing fails, it's probably not a valid byte array
@@ -86,21 +93,61 @@ export default function DataCryptoPage() {
   const handleEncrypt = () => {
     try {
       setError("")
-      if (!originalData.trim()) {
+      if (!originalData.trim() && originalBytes.length === 0) {
         setError("Please enter data to encrypt")
         return
       }
 
-      // Get the bytes to encrypt
-      const bytesToEncrypt = isInputBytes
-        ? parseByteArray(originalData)
-        : Array.from(new TextEncoder().encode(originalData))
+      // Get the bytes to encrypt - use originalBytes if available (for large files)
+      const bytesToEncrypt = originalBytes.length > 0
+        ? originalBytes
+        : isInputBytes
+          ? parseByteArray(originalData)
+          : Array.from(new TextEncoder().encode(originalData))
+
+      // Validate bytes - ensure all values are between 0-255
+      for (let i = 0; i < bytesToEncrypt.length; i++) {
+        if (bytesToEncrypt[i] < 0 || bytesToEncrypt[i] > 255) {
+          setError(`Invalid byte value at position ${i}: ${bytesToEncrypt[i]}. Must be between 0-255.`)
+          return
+        }
+      }
+
+      // Measure encryption time
+      const startTime = performance.now()
 
       // Encrypt the data
-      const encryptedBytes = Array.from(cryptoModule.simpleEncrypt(new Uint8Array(bytesToEncrypt)))
+      const encryptedResult = Array.from(cryptoModule.simpleEncrypt(new Uint8Array(bytesToEncrypt)))
 
-      // Convert to string for display
-      setEncryptedData(encryptedBytes.join(", "))
+      // Verify the sizes match
+      if (encryptedResult.length !== bytesToEncrypt.length) {
+        setError(`Size mismatch: Original data has ${bytesToEncrypt.length} bytes, but encrypted data has ${encryptedResult.length} bytes.`)
+        return
+      }
+
+      // Store the full encrypted bytes
+      setEncryptedBytes(encryptedResult)
+
+      // Calculate encryption time
+      const endTime = performance.now()
+      const encryptionTime = endTime - startTime
+
+      // Update performance stats
+      setPerformanceStats(prev => ({
+        ...prev,
+        encryptionTime
+      }))
+
+      // Convert to string for display - limit to first 1000 bytes for very large files
+      const displayBytes = encryptedResult.slice(0, 1000)
+      if (encryptedResult.length > 1000) {
+        setEncryptedData(displayBytes.join(", ") + ` ... (${encryptedResult.length - 1000} more bytes)`)
+      } else {
+        setEncryptedData(encryptedResult.join(", "))
+      }
+
+      // Show performance info
+      setError(`Encryption completed in ${encryptionTime.toFixed(2)}ms for ${bytesToEncrypt.length.toLocaleString()} bytes. Original: ${bytesToEncrypt.length}, Encrypted: ${encryptedResult.length}`)
     } catch (err) {
       console.error("Encryption error:", err)
       setError(`Encryption failed: ${err instanceof Error ? err.message : String(err)}`)
@@ -110,35 +157,59 @@ export default function DataCryptoPage() {
   const handleDecrypt = () => {
     try {
       setError("")
-      if (!encryptedData) {
-        setError("Please provide encrypted data to decrypt.")
+      if (!encryptedData.trim() && encryptedBytes.length === 0) {
+        setError("Please encrypt data first")
         return
       }
 
-      // Parse the encrypted data string into a byte array
-      const encryptedBytes = parseByteArray(encryptedData)
+      // Get the bytes to decrypt - use encryptedBytes if available (for large files)
+      const bytesToDecrypt = encryptedBytes.length > 0
+        ? encryptedBytes
+        : parseByteArray(encryptedData)
 
-      // Decrypt the data
-      const decryptedBytes = Array.from(cryptoModule.simpleDecrypt(new Uint8Array(encryptedBytes)))
-
-      // Try to convert to text if it seems like text data
-      // Check if the decrypted bytes look like text (ASCII range)
-      const isLikelyText = decryptedBytes.every(byte =>
-        (byte >= 32 && byte <= 126) || // printable ASCII
-        [9, 10, 13].includes(byte)     // tab, newline, carriage return
-      )
-
-      if (isLikelyText) {
-        // If it looks like text, convert to string
-        const decoder = new TextDecoder()
-        setDecryptedData(decoder.decode(new Uint8Array(decryptedBytes)))
-      } else {
-        // If it looks like binary data, keep as byte array
-        setDecryptedData(decryptedBytes.join(", "))
+      // Validate bytes - ensure all values are between 0-255
+      for (let i = 0; i < bytesToDecrypt.length; i++) {
+        if (bytesToDecrypt[i] < 0 || bytesToDecrypt[i] > 255) {
+          setError(`Invalid byte value at position ${i}: ${bytesToDecrypt[i]}. Must be between 0-255.`)
+          return
+        }
       }
 
-      // Store the original format for download purposes
-      setDecryptedBytes(decryptedBytes)
+      // Measure decryption time
+      const startTime = performance.now()
+
+      // Decrypt the data
+      const decryptedResult = Array.from(cryptoModule.simpleDecrypt(new Uint8Array(bytesToDecrypt)))
+
+      // Verify the sizes match
+      if (decryptedResult.length !== bytesToDecrypt.length) {
+        setError(`Size mismatch: Encrypted data has ${bytesToDecrypt.length} bytes, but decrypted data has ${decryptedResult.length} bytes.`)
+        return
+      }
+
+      // Store the full decrypted bytes
+      setDecryptedBytes(decryptedResult)
+
+      // Calculate decryption time
+      const endTime = performance.now()
+      const decryptionTime = endTime - startTime
+
+      // Update performance stats
+      setPerformanceStats(prev => ({
+        ...prev,
+        decryptionTime
+      }))
+
+      // Convert to string for display - limit to first 1000 bytes for very large files
+      const displayBytes = decryptedResult.slice(0, 1000)
+      if (decryptedResult.length > 1000) {
+        setDecryptedData(displayBytes.join(", ") + ` ... (${decryptedResult.length - 1000} more bytes)`)
+      } else {
+        setDecryptedData(decryptedResult.join(", "))
+      }
+
+      // Show performance info
+      setError(`Decryption completed in ${decryptionTime.toFixed(2)}ms for ${bytesToDecrypt.length.toLocaleString()} bytes. Encrypted: ${bytesToDecrypt.length}, Decrypted: ${decryptedResult.length}`)
     } catch (err) {
       console.error("Decryption error:", err)
       setError(`Decryption failed: ${err instanceof Error ? err.message : String(err)}`)
@@ -174,9 +245,16 @@ export default function DataCryptoPage() {
     setDecryptedData("")
     setDecryptedBytes([])
     setOriginalBytes([])
+    setEncryptedBytes([])
     setError("")
     setFileName("")
     setIsInputBytes(false)
+    setPerformanceStats({
+      fileLoadTime: 0,
+      encryptionTime: 0,
+      decryptionTime: 0,
+      fileSize: 0
+    })
   }
 
   // Load a test case
@@ -201,7 +279,18 @@ export default function DataCryptoPage() {
     const file = event.target.files?.[0]
     if (!file) return
 
+    // Check file size (200MB limit)
+    const MAX_FILE_SIZE = 200 * 1024 * 1024 // 200MB in bytes
+    if (file.size > MAX_FILE_SIZE) {
+      setError(`File too large: ${(file.size / (1024 * 1024)).toFixed(2)}MB. Maximum size is 200MB.`)
+      return
+    }
+
     setFileName(file.name)
+    setError(`Loading file: ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)}MB)...`)
+
+    // Start timing
+    const startTime = performance.now()
 
     const reader = new FileReader()
     reader.onload = (e) => {
@@ -210,6 +299,16 @@ export default function DataCryptoPage() {
         setError("Failed to read file")
         return
       }
+
+      // Calculate load time
+      const endTime = performance.now()
+      const fileLoadTime = endTime - startTime
+
+      // Update performance stats
+      setPerformanceStats({
+        fileLoadTime,
+        fileSize: file.size
+      })
 
       // Convert to byte array
       const bytes = Array.from(new Uint8Array(arrayBuffer))
@@ -227,6 +326,15 @@ export default function DataCryptoPage() {
       // Store the full bytes for encryption
       setOriginalBytes(bytes)
       setIsInputBytes(true)
+
+      // Clear any previous encryption/decryption data
+      setEncryptedData("")
+      setEncryptedBytes([])
+      setDecryptedData("")
+      setDecryptedBytes([])
+
+      // Show performance info
+      setError(`File loaded in ${fileLoadTime.toFixed(2)}ms: ${file.name} (${(file.size / (1024 * 1024)).toFixed(2)}MB, ${bytes.length.toLocaleString()} bytes)`)
     }
 
     reader.onerror = () => {
@@ -238,17 +346,19 @@ export default function DataCryptoPage() {
 
   // Function to download the encrypted file
   const downloadEncryptedFile = () => {
-    if (!encryptedData) {
+    if (!encryptedData && encryptedBytes.length === 0) {
       setError("No encrypted data to download")
       return
     }
 
     try {
-      // Parse the encrypted data string into a byte array
-      const encryptedBytes = parseByteArray(encryptedData)
+      // Use stored encrypted bytes if available, otherwise parse from display
+      const bytes = encryptedBytes.length > 0
+        ? encryptedBytes
+        : parseByteArray(encryptedData)
 
       // Create a Blob from the encrypted bytes
-      const blob = new Blob([new Uint8Array(encryptedBytes)])
+      const blob = new Blob([new Uint8Array(bytes)])
 
       // Create a download link
       const url = URL.createObjectURL(blob)
@@ -275,35 +385,31 @@ export default function DataCryptoPage() {
 
   // Function to download decrypted data as a file
   const downloadDecryptedFile = () => {
-    if (!decryptedBytes || decryptedBytes.length === 0) {
-      setError("No decrypted data to download.")
-      return
-    }
-
     try {
-      // Create a Blob from the decrypted bytes
+      if (decryptedBytes.length === 0) {
+        setError("Please decrypt data first")
+        return
+      }
+
+      // Create a blob from the decrypted bytes
       const blob = new Blob([new Uint8Array(decryptedBytes)])
 
       // Create a download link
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url
-
-      // Use the original filename if available, otherwise use a default name
-      const downloadName = fileName ?
-        `decrypted_${fileName}` :
-        `decrypted_file${isInputBytes ? ".bin" : ".txt"}`
-
-      a.download = downloadName
+      a.download = fileName || "decrypted_file"
       document.body.appendChild(a)
       a.click()
 
       // Clean up
       URL.revokeObjectURL(url)
       document.body.removeChild(a)
+
+      setError(`File downloaded: ${fileName || "decrypted_file"} (${decryptedBytes.length.toLocaleString()} bytes)`)
     } catch (err) {
       console.error("Download error:", err)
-      setError(`Failed to download file: ${err instanceof Error ? err.message : String(err)}`)
+      setError(`Download failed: ${err instanceof Error ? err.message : String(err)}`)
     }
   }
 
@@ -459,10 +565,53 @@ export default function DataCryptoPage() {
             >
               Clear All
             </button>
-            <p className="text-sm text-gray-600 mt-2 flex-grow">
+            <p className="text-sm text-gray-tertiary mt-2 flex-grow">
               Loads a predefined test case with known input and expected output for testing and demonstration purposes.
             </p>
           </div>
+
+          {(performanceStats.fileLoadTime !== undefined ||
+            performanceStats.encryptionTime !== undefined ||
+            performanceStats.decryptionTime !== undefined) && (
+            <div className="mb-4 p-4 bg-background-primary rounded-md border border-gray-quaternary">
+              <h2 className="text-lg font-semibold mb-2 text-gray-primary">Performance Statistics</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {performanceStats.fileLoadTime !== undefined && (
+                  <div>
+                    <p className="text-sm font-medium text-gray-secondary">File Load Time</p>
+                    <p className="text-lg text-theme">{performanceStats.fileLoadTime.toFixed(2)} ms</p>
+                    {performanceStats.fileSize && (
+                      <p className="text-xs text-gray-tertiary">
+                        File size: {(performanceStats.fileSize / (1024 * 1024)).toFixed(2)} MB
+                      </p>
+                    )}
+                  </div>
+                )}
+                {performanceStats.encryptionTime !== undefined && (
+                  <div>
+                    <p className="text-sm font-medium text-gray-secondary">Encryption Time</p>
+                    <p className="text-lg text-theme">{performanceStats.encryptionTime.toFixed(2)} ms</p>
+                    {originalBytes.length > 0 && (
+                      <p className="text-xs text-gray-tertiary">
+                        {originalBytes.length.toLocaleString()} bytes processed
+                      </p>
+                    )}
+                  </div>
+                )}
+                {performanceStats.decryptionTime !== undefined && (
+                  <div>
+                    <p className="text-sm font-medium text-gray-secondary">Decryption Time</p>
+                    <p className="text-lg text-theme">{performanceStats.decryptionTime.toFixed(2)} ms</p>
+                    {decryptedBytes.length > 0 && (
+                      <p className="text-xs text-gray-tertiary">
+                        {decryptedBytes.length.toLocaleString()} bytes processed
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           <div className="bg-background-primary p-4 rounded-md border border-gray-quaternary">
             <h2 className="text-lg font-semibold mb-2 text-gray-primary">How to use:</h2>
@@ -480,6 +629,14 @@ export default function DataCryptoPage() {
               <li>Use &quot;Download Encrypted File&quot; to save the encrypted data as a file</li>
               <li>Use &quot;Download Decrypted File&quot; to save the decrypted data as a file</li>
             </ol>
+            <div className="mt-4 p-3 bg-theme/10 rounded-md border border-theme/30">
+              <h3 className="text-sm font-semibold text-theme mb-1">Large File Support</h3>
+              <p className="text-xs text-gray-secondary">
+                This tool supports files up to 200MB. For large files, only the first 1000 bytes are displayed in the text areas,
+                but the entire file is processed during encryption and decryption. Performance statistics are shown to help assess
+                processing time for different file sizes.
+              </p>
+            </div>
           </div>
         </div>
       </div>
