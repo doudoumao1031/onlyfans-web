@@ -1,10 +1,10 @@
-import Avatar from "@/components/user/avatar"
 import Image from "next/image"
 import { BloggerInfo } from "@/lib"
 import IconWithImage from "@/components/profile/icon"
 import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
 import { Link } from "@/i18n/routing"
 import { useTranslations } from "next-intl"
+import AvatarVlog from "@/components/user/avatar-vlog"
 /**
  * 博主名片
  * @param user 用户信息
@@ -28,12 +28,12 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
           <div className="w-full">
             <div className="flex px-3 items-center justify-start">
               <div className="w-1/4">
-                <Avatar src={user.photo} vlog={user.live_certification} />
+                <AvatarVlog src={user.photo} vlog={user.live_certification} />
               </div>
               <div className="flex-col w-3/4">
                 <div>
-                  <div className="font-medium">{user.first_name}</div>
-                  <div className="font-normal">
+                  <div className="font-medium text-sm">{user.first_name}</div>
+                  <div className="font-normal text-xs">
                     {user.username ? `@${user.username}` : `@${user.first_name}`}
                   </div>
                 </div>
@@ -80,7 +80,7 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
           <div className="absolute right-4 bottom-4 z-10">
             {/*<SubscribedButton userId={user.id} name={user.first_name} subPrice={user.sub_price} type={"button"}/>*/}
             <div className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white">
-              <span className="text-xs text-nowrap">{user.sub ? t("recommended.subscribed") : user.sub_price > 0 ? t("recommended.subscription") : t("recommended.free")}</span>
+              <span className="text-xs text-nowrap">{user.sub ? t("recommended.subscribed") : user.sub_price > 0 ? t("recommended.freeAndSubscription") : t("recommended.free")}</span>
             </div>
           </div>
         )}

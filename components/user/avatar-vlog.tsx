@@ -1,14 +1,14 @@
 import Image from "next/image"
 import CommonAvatar from "@/components/common/common-avatar"
 
-export default function Avatar({ src, vlog = false }: {
+export default function AvatarVlog({ src, vlog = false }: {
   src?: string,
   vlog?: boolean
 }) {
   return (
     <div className={"relative"}>
       <div className={"w-[66px] h-[66px] rounded-full border-2 border-white"}>
-        <CommonAvatar photoFileId={src} size={62} />
+        <CommonAvatar photoFileId={src} size={66} />
       </div>
       {vlog && (
         <div
