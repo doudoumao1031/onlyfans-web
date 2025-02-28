@@ -52,11 +52,9 @@ export default function Page() {
                 {initData?.total ?? 0}
               </div>
               {items.map((v, i) => (
-                <Link key={i} href={`/space/${v.id}/feed`}>
-                  <div className={"w-full mb-[10px]"}>
-                    <UserCard user={v} subscribe={true} />
-                  </div>
-                </Link>
+                <div key={i} className={"w-full mb-[10px]"}>
+                  <UserCard user={v} subscribe={true} />
+                </div>
               ))}
               {isLoading && <ListLoading />}
               {!hasMore && items?.length > 0 && <ListEnd />}
