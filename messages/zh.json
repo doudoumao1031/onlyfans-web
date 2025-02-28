@@ -403,6 +403,8 @@
     "paySuccess": "支付成功",
     "payFailed": "支付失败",
     "payTitle": "付费浏览此视频",
-    "confirmPay": "确认支付 {amount} {currency}"
+    "confirmPay": "确认支付 {amount} {currency}",
+    "freeFollow": "免费关注",
+    "followedView": "关注后可观看此内容"
   }
 }
