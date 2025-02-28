@@ -41,17 +41,17 @@ export default function Vote({ postId }: { postId: number }) {
               key={id}
               className="w-full h-11 border rounded-md px-2 flex justify-between items-center bg-no-repeat"
               style={{
-                backgroundImage: `${select ? "url(/icons/pink.png)" : "url(/icons/silver.png)"}`,
+                backgroundImage: `${select ? "url(/theme/blue.png)" : "url(/theme/silver.png)"}`,
                 backgroundSize: `${(totalVotes ? vote_count / totalVotes : 0) * 100}% 100%`,
-                borderColor: `${select ? "#FF8492" : "#DDDDDD"}`
+                borderColor: `${select ? "var(--theme)" : "var(--gray-quaternary)"}`
               }}
               onClick={() => handleClickOption(id)}
             >
               <div className="flex gap-1 h-full items-center">
-                {select && <Image src="/icons/select.png" alt="" width={20} height={20} />}
+                {select && <Image src="/theme/checkbox_select@3x.png" alt="" width={20} height={20} />}
                 <div>{content}</div>
               </div>
-              <div className="pr-3">
+              <div className={`pr-3 ${select ? "text-theme" : ""}`}>
                 {vote_count} {t("votes")}
               </div>
             </div>

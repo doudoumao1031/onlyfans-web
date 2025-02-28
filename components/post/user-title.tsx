@@ -20,12 +20,12 @@ export default function UserTitle({
   return (
     <div className={"flex justify-between"}>
       <Link href={`/space/${user.id}/feed`}>
-        <div className="flex gap-4 ">
+        <div className="flex gap-4">
           <div className="flex items-center">
             <CommonAvatar photoFileId={photo} size={40} />
           </div>
           <div>
-            <div className="text-lg">
+            <div className="text-base">
               {first_name} {last_name}
             </div>
             <div className="text-black/50 text-xs">{buildMention(username)}</div>
