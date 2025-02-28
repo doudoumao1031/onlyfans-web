@@ -115,7 +115,7 @@ const Withdrawal = ({
         }}
         headerRight={() => {
           return (
-            <Link href={"/profile/withdrawalInfo"}>
+            <Link href={"/profile/statement?changType=5"}>
               <button className={"text-base text-text-theme"}>{t("withdrawalAmountDetail")}</button>
             </Link>
           )
