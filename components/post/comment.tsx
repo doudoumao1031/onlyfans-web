@@ -16,6 +16,7 @@ import CommonAvatar from "@/components/common/common-avatar"
 import CommentSkeleton from "./comment-skeleton"
 import SheetSelect from "../common/sheet-select"
 import { useTranslations } from "next-intl"
+import { useCommonMessageContext } from "../common/common-message"
 
 export default function Comments({
   post_id,
@@ -30,6 +31,7 @@ export default function Comments({
   fetchComments: () => void
   increaseCommentCount: (n: number) => void
 }) {
+  const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Common.post")
   const [input, setInput] = useState("")
 
@@ -58,6 +60,7 @@ export default function Comments({
       fetchComments()
       increaseCommentCount(1)
       setInput("")
+      showMessage("感谢评论", "love")
     }
   }
 }
@@ -69,6 +72,7 @@ function Comment({
   comment: CommentInfo
   removed: (comment_id: number) => void
 }) {
+  const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Common.post")
   const { user, content, thumbs_up_count, thumb_up, id, post_id, is_self, reply_count } = comment
   const { photo, username } = user
@@ -193,6 +197,7 @@ function Comment({
     })
     if (success) {
       removed(id)
+      showMessage("已取删除评论")
     }
   }
 
@@ -212,11 +217,13 @@ function Comment({
 
   function toggleThumbup() {
     if (isThumbupped) {
-      setIsThumbupped(false)
+      setIsThumbupped((pre) => !pre)
       setThumbupCount((pre) => pre - 1)
+      showMessage("已取消点赞")
     } else {
-      setIsThumbupped(true)
+      setIsThumbupped((pre) => !pre)
       setThumbupCount((pre) => pre + 1)
+      showMessage("感谢支持", "love")
     }
   }
 
@@ -230,6 +237,7 @@ function Comment({
       setShowReplyInput(false)
       setReplyInput("")
       fetchReplies()
+      showMessage("感谢评论", "love")
     }
   }
 }
@@ -245,6 +253,7 @@ function Reply({
   removed: (replyId: number) => void
   fetchReplies: () => void
 }) {
+  const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Common.post")
   const { user, content, thumbs_up_count, thumb_up, id, comment_id, is_self, reply_user } = reply
   const { photo, username } = user
@@ -321,6 +330,7 @@ function Reply({
       setShowReplyInput(false)
       setReplyInput("")
       fetchReplies()
+      showMessage("感谢评论", "love")
     }
   }
 
@@ -332,6 +342,7 @@ function Reply({
     })
     if (success) {
       removed(id)
+      showMessage("已取删除评论回复")
     }
   }
 
@@ -351,11 +362,13 @@ function Reply({
 
   function toggleThumbup() {
     if (isThumbupped) {
-      setIsThumbupped(false)
+      setIsThumbupped((pre) => !pre)
       setThumbupCount((pre) => pre - 1)
+      showMessage("已取消点赞")
     } else {
-      setIsThumbupped(true)
+      setIsThumbupped((pre) => !pre)
       setThumbupCount((pre) => pre + 1)
+      showMessage("感谢支持", "love")
     }
   }
 }
