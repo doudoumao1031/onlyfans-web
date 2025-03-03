@@ -49,7 +49,11 @@ export default function UserInfo({
             </span>
           </h1>
           {!isSelf && <Attention data={data} />}
-          <div className="text-center text-gray-400 text-xs">@{data.username}</div>
+          <div className="text-center text-gray-400 text-xs">
+            {data.username
+              ? "@" + data.username
+              : "该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧..."}
+          </div>
           <div className="flex justify-center mt-1">
             <IconWithImage
               url="/icons/icon_info_location.png"

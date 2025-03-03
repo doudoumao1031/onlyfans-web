@@ -24,15 +24,13 @@ export default function Avatar({
   return (
     <div className="absolute rounded-full p-0.5 bg-white w-[90px] h-[90px] top-[-47px] left-[50%] ml-[-45px] ">
       <section className="w-full h-full relative rounded-full">
-        {fileId && (
-          <LazyImg
-            src={buildImageUrl(fileId)}
-            alt=""
-            className="rounded-full w-full h-full"
-            width={90}
-            height={90}
-          />
-        )}
+        <LazyImg
+          src={fileId ? buildImageUrl(fileId) : "/icons/icon_fansX_head.png"}
+          alt=""
+          className="rounded-full w-full h-full"
+          width={90}
+          height={90}
+        />
         {showLive && (
           <div className="absolute right-0 bottom-2 rounded-full p-1.5 bg-white">
             <Image
