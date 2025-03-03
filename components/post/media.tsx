@@ -36,7 +36,7 @@ export default function Media(props: MediaProps) {
       {((post.visibility === 1 && !user.sub) || post.visibility === 2) && (
         <div className="w-full h-[200px] relative">
           {/*帖子详情正常查看 ｜ 推荐/空间点击媒体到帖子详情*/}
-          {isInfoPage ? content : (<Link href={`/postInfo/${post.id}`}>{content}</Link>)}
+          {isInfoPage ? content : <Link href={`/postInfo/${post.id}`}>{content}</Link>}
           <LazyImg
             className={"aspect-square rounded-md block"}
             src={"/icons/default/img_media_default.png"}
@@ -69,13 +69,16 @@ export default function Media(props: MediaProps) {
                       {file_type === FileType.Video ? (
                         <VideoPreview fileId={file_id} thumbId={thumb_id} />
                       ) : (
-                        <LazyImg
-                          className="aspect-square rounded-md "
-                          src={buildImageUrl(file_id)}
-                          alt=""
-                          width={200}
-                          height={200}
-                        />
+                        <div className="w-full h-full">
+                          <LazyImg
+                            className="aspect-square rounded-md "
+                            src={buildImageUrl(file_id)}
+                            style={{ objectFit: "cover" }}
+                            alt=""
+                            width={200}
+                            height={200}
+                          />
+                        </div>
                       )}
                     </button>
                   )
@@ -94,8 +97,9 @@ export default function Media(props: MediaProps) {
                       href={
                         toDetail
                           ? `/postInfo/${post.id}`
-                          : `/media/${file_type === FileType.Video ? "video" : "image"}/${file_type === FileType.Video ? showIds : showIds + "_" + i
-                          }`
+                          : `/media/${file_type === FileType.Video ? "video" : "image"}/${
+                              file_type === FileType.Video ? showIds : showIds + "_" + i
+                            }`
                       }
                       className={file_type === FileType.Video ? "col-span-3" : "block"}
                     >
@@ -105,6 +109,7 @@ export default function Media(props: MediaProps) {
                         <LazyImg
                           className="aspect-square rounded-md "
                           src={buildImageUrl(file_id)}
+                          style={{ objectFit: "cover" }}
                           alt=""
                           width={200}
                           height={200}
