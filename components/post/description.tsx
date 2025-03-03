@@ -11,7 +11,7 @@ export default function Description({
   const mentionRegex = /(\B@\w+)/g
   const segments = content.split(mentionRegex)
   return (
-    <div className="">
+    <div className="whitespace-pre-wrap">
       {segments.map((s, i) => (
         <DescriptionSegment key={i} content={s} linkRender={linkRender} />
       ))}
