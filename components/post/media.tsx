@@ -98,8 +98,8 @@ export default function Media(props: MediaProps) {
                         toDetail
                           ? `/postInfo/${post.id}`
                           : `/media/${file_type === FileType.Video ? "video" : "image"}/${
-                              file_type === FileType.Video ? showIds : showIds + "_" + i
-                            }`
+                            file_type === FileType.Video ? showIds : showIds + "_" + i
+                          }`
                       }
                       className={file_type === FileType.Video ? "col-span-3" : "block"}
                     >
