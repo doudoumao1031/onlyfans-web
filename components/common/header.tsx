@@ -14,7 +14,7 @@ export default function Header({ handleBack, title, right, titleColor, backIconC
   const router = useRouter()
   const handleClickBack = handleBack ? handleBack : router.back
   return (
-    <section className="flex align-middle justify-between items-center w-screen px-4 text-black" style={{ aspectRatio: "375/44" }}>
+    <section className="flex align-middle justify-between items-center w-screen px-4 text-black max-w-lg" style={{ aspectRatio: "375/44" }}>
       <div className="flex justify-start shrink-0 w-1/5">
         <button onTouchEnd={handleClickBack}>
           <IconWithImage url="/icons/profile/icon_nav_back@3x.png" width={22} height={22} color={`${backIconColor ?? "#000"}`} />

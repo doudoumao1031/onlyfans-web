@@ -14,7 +14,7 @@ export default async function Page() {
       {bloggers &&
         bloggers?.total > 0 &&
         bloggers?.list.map((info) => (
-          <div key={info.user.id} className="w-full mb-[10px]">
+          <div key={info.user.id} className="w-full mb-[10px] max-w-lg mx-auto">
             <UserCard user={info.user} subscribe={false} />
           </div>
         ))}

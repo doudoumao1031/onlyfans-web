@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang="zh">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col max-w-lg mx-auto`}
         suppressHydrationWarning
       >
         <div className="h-full overflow-y-auto">
