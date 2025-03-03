@@ -8,7 +8,7 @@ export default function Page({ about }: { about: string }) {
   return (
     <div className="text-xs mt-2.5">
       <section
-        className={!isOpen ? "flex h-4 overflow-hidden text-ellipsis ..." : ""}
+        className={!isOpen ? "flex h-4 overflow-hidden text-ellipsis ..." : "whitespace-pre-wrap"}
         dangerouslySetInnerHTML={{ __html: about }}
       ></section>
       <button
