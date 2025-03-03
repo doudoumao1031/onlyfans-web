@@ -89,7 +89,7 @@ export default function TipDrawer(props: TipDrawerProps) {
         setRecharge={setRecharge}
       />
       <button
-        onTouchEnd={() => {
+        onClick={() => {
           setDrawerOpen(true)
         }}
       >
