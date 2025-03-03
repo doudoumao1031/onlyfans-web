@@ -8,7 +8,7 @@ export default function FoldingDescription ({ about,location }:{about:string,loc
   const [hideState,setHideState] = useState(true)
   return (
     <>
-      <section className={"overflow-hidden"} style={{ height: hideState ? "2.5em" : "auto" }} dangerouslySetInnerHTML={{ __html:about }}></section>
+      <section className={"overflow-hidden whitespace-pre-wrap"} style={{ height: hideState ? "2.5em" : "auto" }} dangerouslySetInnerHTML={{ __html:about }}></section>
       {
         !hideState && (
           <>
