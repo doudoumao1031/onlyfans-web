@@ -4,7 +4,7 @@ import "./globals.css"
 import "./profile.scss"
 import React from "react"
 import Providers from "@/lib/providers/providers"
-
+import Script from "next/script"
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -29,6 +29,7 @@ export const viewport: Viewport = {
   viewportFit: "cover"
 }
 
+
 export default function RootLayout({
   children,
   modal
@@ -38,6 +39,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh">
+      <head>
+        <Script
+          src="/init.js"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col max-w-lg mx-auto`}
         suppressHydrationWarning
