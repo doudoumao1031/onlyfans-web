@@ -80,7 +80,7 @@ const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, pos
         <Link href={`/profile/manuscript/draft/edit?id=${id}`}
           className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-text-theme"
         >
-          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#FF8492"}/>
+          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"}/>
           <span>{t("itemActions.edit")}</span>
         </Link>
       ) : (
@@ -102,8 +102,8 @@ const ManuscriptItemState = ({ state }: { state: number }) => {
   }
   return (
     <span className={clsx(
-      "leading-[15px] text-xs rounded-br rounded-tl px-1.5 text-white absolute left-0 top-0",
-      state === 2 ? "bg-[#58bf8e]" : "bg-[#FF8492]",
+      "leading-[15px] text-xs rounded-br rounded-tl px-1.5 text-white absolute left-0 top-0 z-10",
+      state === 2 ? "bg-[#58bf8e]" : "bg-background-theme",
     )}
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
