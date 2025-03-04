@@ -153,6 +153,7 @@
       "draft": "Draft",
       "searchPlaceHolder": "Enter blog post content",
       "pinned": "Pinned success",
+      "unpinned": "Tapping canceled",
       "itemActions": {
         "share": "Share",
         "pinned": "Pinned",

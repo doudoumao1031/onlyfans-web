@@ -153,6 +153,7 @@
       "draft": "草稿",
       "searchPlaceHolder": "输入博文内容",
       "pinned": "置顶成功",
+      "unpinned": "已取消置顶",
       "itemActions": {
         "share": "分享",
         "pinned": "置顶",

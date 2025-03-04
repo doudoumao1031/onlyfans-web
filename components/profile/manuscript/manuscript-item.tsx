@@ -6,8 +6,9 @@ import { clsx } from "clsx"
 import { FileType, PostData, postPined } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import LazyImg from "@/components/common/lazy-img"
-import { buildImageUrl } from "@/lib/utils"
+import { buildImageUrl, TIME_FORMAT } from "@/lib/utils"
 import { useTranslations } from "next-intl"
+import dayjs from "dayjs"
 
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
   return (
@@ -18,14 +19,15 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
   )
 }
 
-const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, postStatus: number, refresh?: () => void ,pinned: boolean}) => {
+const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, postStatus: number, refresh?: () => void ,pinned: boolean}) => {
   const t = useTranslations("Profile.manuscript")
   const { showMessage } = useCommonMessageContext()
   const isAuditing = postStatus === 2
   const handlePined = () => {
     postPined(id).then((data) => {
       if (data?.code === 0) {
-        showMessage(t("pinned"), "", {
+        showMessage(pinned ? t("unpinned") : t("pinned"), "", {
+          duration: 1500,
           afterDuration: () => {
             refresh?.()
           }
@@ -84,8 +86,8 @@ const ManuscriptActions = ({ id, postStatus, refresh,pinned }: { id: number, pos
           <span>{t("itemActions.edit")}</span>
         </Link>
       ) : (
-        <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-gray-300">
-          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#6b7280"}/>
+        <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 opacity-50">
+          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#222"}/>
           <span>{t("itemActions.edit")}</span>
         </button>
       )}
@@ -135,7 +137,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
         </div>
         <section className={"flex-1 h-full flex flex-col justify-between "}>
           <h3 className="line-clamp-[2]">{data.post.title}</h3>
-          <section className={"flex-1 flex items-center text-[#bbb]"}>2022-02-02 12:12:12</section>
+          <section className={"flex-1 flex items-center text-[#bbb]"}>{dayjs(data.post.last_update_time * 1000).format(TIME_FORMAT)}</section>
           <section className="flex gap-4 text-xs justify-around">
             <ShowNumberWithIcon number={data.post_metric?.thumbs_up_count ?? 0}
               icon={"/icons/profile/icon_fans_like_normal@3x.png"}
