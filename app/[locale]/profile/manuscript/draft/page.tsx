@@ -3,9 +3,8 @@
 import Header from "@/components/common/header"
 import React, { Fragment, useEffect, useState } from "react"
 import { Link } from "@/i18n/routing"
-import { usePathname } from "next/navigation"
 import InfiniteScroll from "@/components/common/infinite-scroll"
-import { myDraftPosts, myPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
+import { myDraftPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { LazyImageWithFileId } from "@/components/common/lazy-img"
@@ -15,9 +14,8 @@ import { useTranslations } from "next-intl"
 
 const DraftItem = ({ data }:{data:PostData}) => {
   const t = useTranslations("Profile.manuscript")
-  const pathname = usePathname()
   return (
-    <Link href={`${pathname}/edit?id=${data.post.id}`} className="pt-2.5 pb-2.5 border-b border-gray-100 flex gap-2.5">
+    <Link href={`./draft/edit?id=${data.post.id}`} className="pt-2.5 pb-2.5 border-b border-gray-100 flex gap-2.5">
       {/*<Image src={""} alt={"img"} width={100} height={100} className="rounded"/>*/}
       <div className={"w-[100px] h-[100px] shrink-0 overflow-hidden"}>
         <LazyImageWithFileId fileId={data.post_attachment?.[0].file_id} alt={data.post.title} width={100} height={100} className={"rounded"}/>
@@ -41,7 +39,7 @@ export default function Page() {
     post_status: 0
   }
   const fetchInitData = () => {
-    myPosts(defaultParams).then(response => {
+    myDraftPosts(defaultParams).then(response => {
       if (response) {
         setInitData(response)
       }

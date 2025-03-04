@@ -135,6 +135,7 @@ const AddVoteModal = ({
   return (
     <>
       <button
+        type={"button"}
         onTouchEnd={() => {
           setIsOpen(true)
         }}
@@ -148,7 +149,7 @@ const AddVoteModal = ({
         outerControl
         headerLeft={(close) => {
           return (
-            <button onTouchEnd={close} className={"text-base text-[#777]"}>
+            <button type={"button"} onTouchEnd={close} className={"text-base text-[#777]"}>
               <IconWithImage
                 url={"/icons/profile/icon_close@3x.png"}
                 width={24}
@@ -231,6 +232,7 @@ const AddVoteModal = ({
               )
             })}
             <button
+              type={"button"}
               onTouchEnd={() => {
                 append({ content: "" })
               }}
@@ -402,6 +404,7 @@ const ReadSettings = ({
   return (
     <>
       <button
+        type={"button"}
         onTouchEnd={() => {
           setIsOpen(true)
         }}
@@ -415,7 +418,7 @@ const ReadSettings = ({
         title={t("manuscript.itemActions.priceSetting")}
         headerLeft={(close) => {
           return (
-            <button onTouchEnd={close} className={"text-base text-[#777]"}>
+            <button type={"button"} onTouchEnd={close} className={"text-base text-[#777]"}>
               <IconWithImage
                 url={"/icons/profile/icon_close@3x.png"}
                 width={24}
@@ -563,15 +566,14 @@ const UploadMedia = () => {
     }
     setIsUploading(true)
     uploadFile(file).then((data) => {
-      console.log("upload file result: ", data)
       if (data && data?.file_id) {
         append({
           file_id: data?.file_id,
           file_type: data?.file_type
         })
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        ref.current.value = null
+        if (ref?.current) {
+          ref.current.value = ""
+        }
       } else {
         showMessage(t("manuscript.uploadFail"), "error")
       }
@@ -605,6 +607,7 @@ const UploadMedia = () => {
                     />
                   </section>
                   <button
+                    type={"button"}
                     className={"absolute right-[-4px] top-[-4px]"}
                     onTouchEnd={() => {
                       remove(index)
@@ -897,7 +900,7 @@ const EditPageContent = () => {
                 confirm={handleSaveDraft}
                 cancel={router.back}
                 trigger={
-                  <button>
+                  <button type={"button"}>
                     <IconWithImage
                       url={"/icons/profile/icon_close@3x.png"}
                       width={24}
@@ -909,7 +912,7 @@ const EditPageContent = () => {
               />
             )
               : (
-                <button onTouchEnd={router.back}>
+                <button type={"button"} onTouchEnd={router.back}>
                   <IconWithImage
                     url={"/icons/profile/icon_close@3x.png"}
                     width={24}
@@ -966,6 +969,7 @@ const EditPageContent = () => {
                 </AddVoteModal>
               </div>
               <button
+                type={"button"}
                 onTouchEnd={() => {
                   setValue("post_vote", undefined)
                 }}

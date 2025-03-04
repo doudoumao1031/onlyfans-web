@@ -12,7 +12,9 @@
     "type-check": "tsc --noEmit",
     "check-all": "npm run type-check && npm run lint",
     "zip": "zip -r dist.zip .next public package.json package-lock.json next.config.ts .env",
-    "zip-test": "zip -r dist.zip .next public package.json package-lock.json next.config.ts .env.test .env"
+    "zip-test": "zip -r dist.zip .next public package.json package-lock.json next.config.ts .env.test .env",
+    "build:clear": "rimraf .next dist.zip && yarn build",
+    "build:clearzip": "rimraf .next dist.zip && yarn build && zip -r dist.zip .next public package.json package-lock.json next.config.ts .env"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",

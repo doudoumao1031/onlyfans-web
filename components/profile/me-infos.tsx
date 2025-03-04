@@ -54,22 +54,14 @@ export default async function Page() {
           <Header
             right={
               <>
-                <IconWithImage
-                  url="/theme/icon_nav_code_white@3x.png"
-                  width={22}
-                  height={22}
-                />
-                <IconWithImage
-                  url="/theme/icon_nav_share_white@3x.png"
-                  width={22}
-                  height={22}
-                />
+                <IconWithImage url="/theme/icon_nav_code_white@3x.png" width={22} height={22} />
+                <IconWithImage url="/theme/icon_nav_share_white@3x.png" width={22} height={22} />
               </>
             }
             title={t("mainTitle")}
             backIconColor={"#fff"}
           />
-          <div className="text-xs pl-6 pr-6 text-white ">{data.top_info}</div>
+          <div className="text-xs pl-6 pr-6 text-white break-all ">{data.top_info}</div>
         </div>
       </div>
       <section className="mt-[-47px] rounded-t-3xl bg-white relative  pt-12 text-black ">
@@ -88,7 +80,11 @@ export default async function Page() {
               />
             </Link>
           </h1>
-          <div className="text-center text-text-desc text-xs">@{data.username}</div>
+          <div className="text-center text-text-desc text-xs">
+            {data.username
+              ? "@" + data.username
+              : "该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧..."}
+          </div>
           <Link href={`/space/${data.id}/feed`}>
             <div className="flex justify-center mt-2">
               <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-theme text-text-theme">

@@ -2,16 +2,14 @@
 import Header from "@/components/profile/header"
 import Avatar from "@/components/profile/avatar"
 import InputWithLabel from "@/components/profile/input-with-label"
-import IconWithImage from "@/components/profile/icon"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/profile"
 import { useRouter } from "next/navigation"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { commonUploadFile } from "@/lib/utils"
-import { Switch } from "@/components/ui/switch"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { useTranslations } from "next-intl"
 
@@ -82,6 +80,15 @@ export default function Page() {
     }
   })
 
+  const backImageStyle = useMemo(() => {
+    if (formValues.back_img) {
+      return {
+        backgroundImage: `url(${IMAGE_PREFIX}${formValues.back_img})`
+      }
+    }
+    return {}
+  },[formValues.back_img])
+
   return (
     <>
       <form
@@ -103,7 +110,7 @@ export default function Page() {
         <div className={"w-full left-0 top-0 absolute z-20 text-white"}>
           <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"}/>
         </div>
-        <div className="profile-content bg-[url('/demo/user_bg.png')] relative bg-cover" style={{ backgroundImage: `url(${IMAGE_PREFIX}${formValues.back_img})` }}>
+        <div className="profile-content bg-[url('/icons/image_fans_normal_05.png')] relative bg-cover" style={backImageStyle}>
           <input
             type="file"
             accept="image/*"
@@ -112,6 +119,7 @@ export default function Page() {
             onChange={(event) => {
               if (event.target.files?.length) {
                 handleUploadFile(event.target.files[0])
+                event.target.value = ""
               }
             }}
           />
@@ -194,32 +202,32 @@ export default function Page() {
                 />
               </section>
             </section>
-            <section className="border-t border-gray-100 mt-5 pl-4 pr-4">
-              <section>
-                <button
-                  type="button"
-                  className="pt-4 pb-4 text-base w-full border-b border-gray-100 flex justify-between items-center"
-                >
-                  <span>{t("form.liveAuth")}</span>
-                  <IconWithImage
-                    url={"/icons/profile/icon-more.png"}
-                    height={16}
-                    width={16}
-                    color={"#c0c0c0"}
-                  />
-                </button>
-              </section>
-              <section>
-                <div
-                  className="pt-4 pb-4 text-base w-full border-b border-gray-100 flex justify-between items-center"
-                >
-                  <span>{t("form.liveShow")}</span>
-                  <span>
-                    <Switch className={"custom-switch"}/>
-                  </span>
-                </div>
-              </section>
-            </section>
+            {/*<section className="border-t border-gray-100 mt-5 pl-4 pr-4">*/}
+            {/*  <section>*/}
+            {/*    <button*/}
+            {/*      type="button"*/}
+            {/*      className="pt-4 pb-4 text-base w-full border-b border-gray-100 flex justify-between items-center"*/}
+            {/*    >*/}
+            {/*      <span>{t("form.liveAuth")}</span>*/}
+            {/*      <IconWithImage*/}
+            {/*        url={"/icons/profile/icon-more.png"}*/}
+            {/*        height={16}*/}
+            {/*        width={16}*/}
+            {/*        color={"#c0c0c0"}*/}
+            {/*      />*/}
+            {/*    </button>*/}
+            {/*  </section>*/}
+            {/*  <section>*/}
+            {/*    <div*/}
+            {/*      className="pt-4 pb-4 text-base w-full border-b border-gray-100 flex justify-between items-center"*/}
+            {/*    >*/}
+            {/*      <span>{t("form.liveShow")}</span>*/}
+            {/*      <span>*/}
+            {/*        <Switch className={"custom-switch"}/>*/}
+            {/*      </span>*/}
+            {/*    </div>*/}
+            {/*  </section>*/}
+            {/*</section>*/}
           </section>
         </section>
       </form>
