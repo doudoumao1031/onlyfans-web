@@ -56,6 +56,7 @@ export default function Avatar({
               onChange={(event) => {
                 if (event.target.files?.length) {
                   handleUploadFile(event.target.files[0])
+                  event.target.value = ""
                 }
               }}
             />

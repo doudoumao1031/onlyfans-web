@@ -563,15 +563,14 @@ const UploadMedia = () => {
     }
     setIsUploading(true)
     uploadFile(file).then((data) => {
-      console.log("upload file result: ", data)
       if (data && data?.file_id) {
         append({
           file_id: data?.file_id,
           file_type: data?.file_type
         })
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        ref.current.value = null
+        if (ref?.current) {
+          ref.current.value = ""
+        }
       }
     }).finally(() => {
       setIsUploading(false)

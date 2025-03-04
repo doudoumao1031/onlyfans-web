@@ -131,7 +131,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
                     <InputWithLabel errorMessage={fieldState.error?.message} placeholder={t("subTimeLimit")}
                       onInputChange={(value) => {
                         field.onChange(value)
-                        form.setValue("price", Number((Number(value) * basePrice).toFixed(2)))
+                        form.setValue("price", Number((Number(value) * basePrice)))
                       }}
                       options={monthSelections}
                       value={field.value ?? ""}
@@ -179,9 +179,9 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
   const priceOptions: ISelectOption[] = useMemo(() => {
     return items.filter(item => item.discount_per === 0).map(item => {
       return {
-        label: <div className={"text-left"}>${item.discount_price} {item.month_count}{t("monthUnit")}{t("month")} <span
+        label: <div className={"text-left"}>${item.price} {item.month_count}{t("monthUnit")}{t("month")} <span
           className={"text-[#bbb]"}
-        >（{t("avg")}${calcAvg(Number(item.discount_price), item.month_count)}/{t("month")}）</span></div>,
+        >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
         value: item.id
       }
     })
@@ -285,14 +285,16 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
                 <Controller control={addForm.control} render={({ field, fieldState }) => {
                   return (
                     <InputWithLabel
-                      disabled={!id}
                       errorMessage={fieldState.error?.message}
                       value={field.value || ""} label={t("discountPromotional")} max={90}
                       onInputChange={field.onChange}
                       onBlur={event => {
                         const value = event.target.value
                         if (value !== "" && value !== undefined && value !== null) {
-                          const numberVal = parseInt(value)
+                          let numberVal = parseInt(value)
+                          if (isNaN(numberVal)) {
+                            numberVal = 1
+                          }
                           field.onChange(`${numberVal > 90 ? 90 : numberVal}`)
                         }
                       }}
@@ -313,7 +315,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
                       >
                         <div
                           className={field.value ? "" : "text-gray-500"}
-                        >{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : ""}</div>
+                        >{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
                       </DateTimePicker>
                     </TopLabelWrapper>
                   )
