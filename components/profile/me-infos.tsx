@@ -61,7 +61,7 @@ export default async function Page() {
             title={t("mainTitle")}
             backIconColor={"#fff"}
           />
-          <div className="text-xs pl-6 pr-6 text-white ">{data.top_info}</div>
+          <div className="text-xs pl-6 pr-6 text-white break-all ">{data.top_info}</div>
         </div>
       </div>
       <section className="mt-[-47px] rounded-t-3xl bg-white relative  pt-12 text-black ">

@@ -12,7 +12,6 @@ import { useCommonMessageContext } from "@/components/common/common-message"
 import { commonUploadFile } from "@/lib/utils"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { useTranslations } from "next-intl"
-import { revalidatePath } from "next/cache"
 
 type EditUserProfile = Pick<
   UserProfile,
@@ -76,10 +75,7 @@ export default function Page() {
     },
     onSuccess: () => {
       showMessage(commonTrans("updateSuccess"), "success", {
-        afterDuration: () => {
-          revalidatePath("/profile")
-          router.back()
-        }
+        afterDuration: router.back
       })
     }
   })
