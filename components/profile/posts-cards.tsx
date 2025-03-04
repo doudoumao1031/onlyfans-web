@@ -1,6 +1,7 @@
 import { getSubscribeSetting, myPosts } from "@/lib"
 import PostsCard from "./posts-card"
 import { getTranslations } from "next-intl/server"
+import { userProfile } from "@/lib/actions/profile"
 
 export default async function Page() {
   const t = await getTranslations("Profile.postCard")
@@ -15,18 +16,16 @@ export default async function Page() {
   if (!subscribeSettings || !posts) {
     throw new Error()
   }
+  const response = await userProfile()
+  const data = response?.data
   const totalPosts = posts.total
-  const { items = [], price } = subscribeSettings
-  let canPub = false
-  if (Number(price) === 0 || (price > 0 && items.length > 0)) {
-    canPub = true
-  }
+  const isBlogger = data?.blogger ?? false
 
   return (
     <div className="px-4">
       {/* 开启订阅之后才能发布 */}
       {
-        totalPosts > 0 && canPub && (
+        totalPosts > 0 && isBlogger && (
           <PostsCard
             link={"/profile/manuscript/draft/edit"}
             description={t("description1")}
@@ -36,7 +35,7 @@ export default async function Page() {
         )
       }
       {/* 未开启订阅 */}
-      {!canPub && (
+      {!isBlogger && (
         <PostsCard
           link={"/profile/order"}
           description={t("description2")}
@@ -45,7 +44,7 @@ export default async function Page() {
         />
       )}
       {/*已开启订阅，但未发布帖子*/}
-      {canPub && totalPosts === 0 && (
+      {isBlogger && totalPosts === 0 && (
         <PostsCard
           link={"/profile/manuscript/draft/edit"}
           description={t("description3")}

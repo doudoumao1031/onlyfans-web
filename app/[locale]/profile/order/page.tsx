@@ -683,7 +683,6 @@ export default function Page() {
   const refreshDefaultSettings = () => {
     getSubscribeSetting().then(response => {
       if (response) {
-        console.log(response.items)
         setDefaultSettings({
           ...response,
           items: response?.items || []

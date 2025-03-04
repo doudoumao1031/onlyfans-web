@@ -154,7 +154,7 @@ const ManuscriptMedia = () => {
                           <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
                             color={"#fff"}
                           />
-                          <span>989</span>
+                          <span>{item.post_metric.play_count}</span>
                         </section>
                         <section className="flex items-center gap-0.5">
                           <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
