@@ -572,6 +572,8 @@ const UploadMedia = () => {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         ref.current.value = null
+      } else {
+        showMessage(t("manuscript.uploadFail"), "error")
       }
     }).finally(() => {
       setIsUploading(false)

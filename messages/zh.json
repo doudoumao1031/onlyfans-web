@@ -194,6 +194,7 @@
       "deleteImageContent": "请先删除图片内容",
       "deleteVideoContent": "请先删除视频内容",
       "uploading": "上传中...",
+      "uploadFail": "上传失败",
       "videoImage": "视频/图片",
       "priceFree": "金额0时，为免费",
       "payPrice": "付费金额",

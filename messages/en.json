@@ -196,6 +196,7 @@
       "deleteImageContent": "Please delete the image content first",
       "deleteVideoContent": "Please delete the video content first",
       "uploading": "Uploading...",
+      "uploadFail": "Upload fail",
       "videoImage": "Video/Image",
       "priceFree": "Amount 0 is free",
       "payPrice": "Pay Price",
