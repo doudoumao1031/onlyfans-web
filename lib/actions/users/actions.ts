@@ -71,7 +71,12 @@ export const getSubscribeSetting = () =>
   )
 
 export const updateSubscribeSettingItem = (params: Partial<DiscountInfo>) =>
-  fetchWithPost<Partial<DiscountInfo>>(ENDPOINTS.USERS.ADD_SUBSCRIBE_SETTING_ITEM, params).then(
+  fetchWithPost<Partial<DiscountInfo>>(ENDPOINTS.USERS.ADD_SUBSCRIBE_SETTING_ITEM, {
+    ...params,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    discount_price: String(params.discount_price)
+  }).then(
     (response) => {
       if (response?.code === 0) {
         return response.data
