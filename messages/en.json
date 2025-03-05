@@ -98,6 +98,8 @@
   },
   "Profile": {
     "mainTitle": "My",
+    "moreInfo": "More Info",
+    "foldInfo": "Fold Info",
     "actions": {
       "enter": "Enter the Space",
       "moreInfo": "More Info",
