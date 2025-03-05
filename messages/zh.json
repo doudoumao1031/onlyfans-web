@@ -156,7 +156,8 @@
       "unpinned": "已取消置顶",
       "itemActions": {
         "share": "分享",
-        "pinned": "置顶",
+        "pinned": "已置顶",
+        "unpinned": "置顶",
         "data": "数据",
         "edit": "编辑",
         "addVote": "发起投票",

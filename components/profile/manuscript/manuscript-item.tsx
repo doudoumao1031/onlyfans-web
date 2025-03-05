@@ -40,19 +40,19 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, po
     return (
       <section className="flex opacity-50">
         <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-          <IconWithImage url={"/icons/profile/icon_fans_share@3x.png"} width={20} height={20} color={"#222"}/>
+          <IconWithImage url={"/theme/icon_fans_share_normal@3x.png"} width={20} height={20} color={"#222"}/>
           <span>{t("itemActions.share")}</span>
         </button>
         <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-          <IconWithImage url={"/icons/profile/icon_fans_stick_gray@3x.png"} width={20} height={20} color={"#222"}/>
-          <span>{t("itemActions.pinned")}</span>
+          <IconWithImage url={"/theme/icon_fans_stick_dark@3x.png"} width={20} height={20} color={"#222"}/>
+          <span>{pinned ? t("itemActions.pinned") : t("itemActions.unpinned")}</span>
         </button>
         <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
           <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
           <span>{t("itemActions.data")}</span>
         </button>
         <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 ">
-          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#222"}/>
+          <IconWithImage url={"/theme/icon_fans_edit_red@3x.png"} width={20} height={20} color={"#222"}/>
           <span>{t("itemActions.edit")}</span>
         </button>
       </section>
@@ -61,18 +61,18 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, po
   return (
     <section className="flex">
       <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-        <IconWithImage url={"/icons/profile/icon_fans_share@3x.png"} width={20} height={20} color={"#222"}/>
+        <IconWithImage url={"/theme/icon_fans_share_normal@3x.png"} width={20} height={20} color={"#222"}/>
         <span>{t("itemActions.share")}</span>
       </button>
       <button onTouchEnd={handlePined} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-        <IconWithImage url={"/icons/profile/icon_fans_stick_gray@3x.png"} width={20} height={20} className={clsx(
+        <IconWithImage url={pinned ? "/theme/icon_fans_stick_highlight@3x.png" :"/theme/icon_fans_stick_dark@3x.png"} width={20} height={20} className={clsx(
           pinned ? "bg-background-theme" : "bg-black"
         )}
         />
         <span className={clsx(
           pinned ? "text-text-theme":""
         )}
-        >{t("itemActions.pinned")}</span>
+        >{pinned ? t("itemActions.pinned") : t("itemActions.unpinned")}</span>
       </button>
       <Link href={`/profile/dataCenter/feeds?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
         <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
@@ -87,7 +87,7 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, po
         </Link>
       ) : (
         <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 opacity-50">
-          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} color={"#222"}/>
+          <IconWithImage url={"/theme/icon_fans_edit_red@3x.png"} width={20} height={20} color={"#222"}/>
           <span>{t("itemActions.edit")}</span>
         </button>
       )}
