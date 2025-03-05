@@ -51,7 +51,11 @@ export default function Media(props: MediaProps) {
         </div>
       )}
       {(post.visibility === 0 || (post.visibility === 1 && user.sub)) && (
-        <div className="grid grid-cols-3 gap-2 relative">
+        <div
+          className={
+            data.length > 1 ? "grid grid-cols-3  gap-2 relative " : "relative w-full h-full"
+          }
+        >
           {
             /*详情页面 && 订阅需要付费 && 帖子无需付费 => 打开确认关注modal */
             isInfoPage && user.sub_price > 0 && !user.following && !user.sub ? (
@@ -64,19 +68,36 @@ export default function Media(props: MediaProps) {
                       onClick={() => {
                         setFollowModal(true)
                       }}
-                      className={file_type === FileType.Video ? "col-span-3" : "block"}
+                      className={
+                        file_type === FileType.Video ? "col-span-3" : "block w-full h-full "
+                      }
                     >
                       {file_type === FileType.Video ? (
                         <VideoPreview fileId={file_id} thumbId={thumb_id} />
                       ) : (
-                        <div className="w-full h-full">
+                        <div className=" flex justify-center relative overflow-hidden">
+                          {data.length === 1 && (
+                            <div className="w-full h-full absolute top-0 left-0">
+                              <LazyImg
+                                className="aspect-square rounded-md w-full h-full  z-[-1] object-cover blur-[10px]"
+                                src={buildImageUrl(file_id)}
+                                alt=""
+                                width={200}
+                                height={200}
+                              />
+                            </div>
+                          )}
                           <LazyImg
-                            className="aspect-square rounded-md "
+                            className={`aspect-square  relative z-10 ${
+                              data.length === 1
+                                ? "object-contain max-h-[200px]"
+                                : "object-cover rounded-md"
+                            }`}
                             src={buildImageUrl(file_id)}
-                            style={{ objectFit: "cover" }}
                             alt=""
                             width={200}
                             height={200}
+                            layout="responsive"
                           />
                         </div>
                       )}
@@ -98,22 +119,43 @@ export default function Media(props: MediaProps) {
                         toDetail
                           ? `/postInfo/${post.id}`
                           : `/media/${file_type === FileType.Video ? "video" : "image"}/${
-                            file_type === FileType.Video ? showIds : showIds + "_" + i
-                          }`
+                              file_type === FileType.Video ? showIds : showIds + "_" + i
+                            }`
                       }
-                      className={file_type === FileType.Video ? "col-span-3" : "block"}
+                      className={
+                        file_type === FileType.Video
+                          ? "col-span-3 w-full h-full"
+                          : "block w-full h-full relative"
+                      }
                     >
                       {file_type === FileType.Video ? (
                         <VideoPreview fileId={file_id} thumbId={thumb_id} />
                       ) : (
-                        <LazyImg
-                          className="aspect-square rounded-md "
-                          src={buildImageUrl(file_id)}
-                          style={{ objectFit: "cover" }}
-                          alt=""
-                          width={200}
-                          height={200}
-                        />
+                        <div className=" flex justify-center relative overflow-hidden">
+                          {data.length === 1 && (
+                            <div className="w-full h-full absolute top-0 left-0">
+                              <LazyImg
+                                className="aspect-square rounded-md w-full h-full  z-[-1] object-cover blur-[10px]"
+                                src={buildImageUrl(file_id)}
+                                alt=""
+                                width={200}
+                                height={200}
+                              />
+                            </div>
+                          )}
+                          <LazyImg
+                            className={`aspect-square  relative z-10 ${
+                              data.length === 1
+                                ? "object-contain max-h-[200px]"
+                                : "object-cover rounded-md"
+                            }`}
+                            src={buildImageUrl(file_id)}
+                            alt=""
+                            width={200}
+                            height={200}
+                            layout="responsive"
+                          />
+                        </div>
                       )}
                     </Link>
                   )
