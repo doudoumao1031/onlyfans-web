@@ -35,6 +35,7 @@ const ManuscriptPost = () => {
       post_status: 1
     }).then(response => {
       if (response) {
+        console.log(response.list)
         setInitData(response)
       }
     })
@@ -153,7 +154,7 @@ const ManuscriptMedia = () => {
                           <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
                             color={"#fff"}
                           />
-                          <span>989</span>
+                          <span>{item.post_metric.play_count}</span>
                         </section>
                         <section className="flex items-center gap-0.5">
                           <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
@@ -188,12 +189,24 @@ const ManuscriptMedia = () => {
                         <LazyImageWithFileId fileId={item.post_attachment?.[0]?.file_id} alt={"post_attachment"} width={200} height={220} className="w-full h-full" />
                       </section>
                     </section>
-                    <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
-                      className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
-                    >
-                      <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
-                      <span>{t("itemActions.edit")}</span>
-                    </Link>
+                    {
+                      [0, 3].includes(item.post.post_status) ? (
+                        <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
+                          className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
+                        >
+                          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
+                          <span>{t("itemActions.edit")}</span>
+                        </Link>
+                      )
+                        : (
+                          <button type={"button"}
+                            className="rounded-[10px] grayscale gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
+                          >
+                            <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
+                            <span>{t("itemActions.edit")}</span>
+                          </button>
+                        )
+                    }
                   </section>
                 ))}
                 {isLoading && <ListLoading />}

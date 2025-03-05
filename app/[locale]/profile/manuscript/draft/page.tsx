@@ -4,7 +4,7 @@ import Header from "@/components/common/header"
 import React, { Fragment, useEffect, useState } from "react"
 import { Link } from "@/i18n/routing"
 import InfiniteScroll from "@/components/common/infinite-scroll"
-import { myDraftPosts, myPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
+import { myDraftPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { LazyImageWithFileId } from "@/components/common/lazy-img"
@@ -39,7 +39,7 @@ export default function Page() {
     post_status: 0
   }
   const fetchInitData = () => {
-    myPosts(defaultParams).then(response => {
+    myDraftPosts(defaultParams).then(response => {
       if (response) {
         setInitData(response)
       }

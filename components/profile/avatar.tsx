@@ -23,16 +23,28 @@ export default function Avatar({
   }
   return (
     <div className="absolute rounded-full p-0.5 bg-white w-[90px] h-[90px] top-[-47px] left-[50%] ml-[-45px] ">
+      {showEdit && (
+        <input
+          type="file"
+          accept="image/*"
+          multiple={false}
+          className="w-full h-full opacity-0 z-10 absolute"
+          onChange={(event) => {
+            if (event.target.files?.length) {
+              handleUploadFile(event.target.files[0])
+              event.target.value = ""
+            }
+          }}
+        />
+      )}
       <section className="w-full h-full relative rounded-full">
-        {fileId && (
-          <LazyImg
-            src={buildImageUrl(fileId)}
-            alt=""
-            className="rounded-full w-full h-full"
-            width={90}
-            height={90}
-          />
-        )}
+        <LazyImg
+          src={fileId ? buildImageUrl(fileId) : "/icons/icon_fansX_head.png"}
+          alt=""
+          className="rounded-full w-full h-full"
+          width={90}
+          height={90}
+        />
         {showLive && (
           <div className="absolute right-0 bottom-2 rounded-full p-1.5 bg-white">
             <Image
@@ -47,17 +59,6 @@ export default function Avatar({
         {showEdit && (
           <div className="absolute rounded-bl-full rounded-br-full left-0 bottom-0 h-[40px] w-full bg-[rgba(0,0,0,0.5)] text-white flex items-center justify-center">
             <IconWithImage url="/theme/icon_camera@3x.png" width={24} height={24} />
-            <input
-              type="file"
-              accept="image/*"
-              multiple={false}
-              className="w-full h-full opacity-0 z-10 absolute"
-              onChange={(event) => {
-                if (event.target.files?.length) {
-                  handleUploadFile(event.target.files[0])
-                }
-              }}
-            />
           </div>
         )}
       </section>

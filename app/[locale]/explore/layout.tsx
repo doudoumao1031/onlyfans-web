@@ -45,8 +45,8 @@ export default function Layout({
             title="Fans"
             titleColor="#000"
             right={
-              path === "/explore/subscribed" && !isBlogger ? (
-                <Link href="/profile/order" className="text-theme text-base">
+              !isBlogger ? (
+                <Link href="/profile" className="text-theme text-base">
                   {t("BecomeABlogger")}
                 </Link>
               ) : (
