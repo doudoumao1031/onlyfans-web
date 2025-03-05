@@ -157,6 +157,7 @@
       "itemActions": {
         "share": "Share",
         "pinned": "Pinned",
+        "unpinned": "Pin",
         "data": "Data",
         "edit": "Edit",
         "addVote": "Add Vote",

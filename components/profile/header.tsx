@@ -3,12 +3,26 @@ import React from "react"
 import IconWithImage from "./icon"
 import { useRouter } from "next/navigation"
 
-export default function Header({ right, title, backColor = "#222" }: { right?: React.ReactNode, title: React.ReactNode ,backColor?: string }) {
+export default function Header({
+  right, title, backColor = "#222"
+}: {
+  right?: React.ReactNode,
+  title: React.ReactNode ,
+  backColor?: string,
+}) {
   const router = useRouter()
+  const handleBack = () => {
+    const url = new URL(document.referrer)
+    if (url.pathname) {
+      router.replace(url.pathname)
+    } else {
+      router.back()
+    }
+  }
   return (
     <section className="flex align-middle justify-between items-center h-[44px] pl-4 pr-4">
       <div className="flex justify-start shrink-0 w-[30%]">
-        <button onClick={router.back} type={"button"}>
+        <button onClick={handleBack} type={"button"}>
           <IconWithImage url="/icons/profile/icon_nav_back@3x.png" width={22} height={22} color={backColor}/>
         </button>
       </div>
