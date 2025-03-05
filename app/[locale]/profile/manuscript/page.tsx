@@ -35,7 +35,6 @@ const ManuscriptPost = () => {
       post_status: 1
     }).then(response => {
       if (response) {
-        console.log(response.list)
         setInitData(response)
       }
     })

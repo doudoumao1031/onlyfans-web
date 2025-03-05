@@ -595,9 +595,9 @@ const UploadMedia = () => {
                     "relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5]  "
                   }
                 >
-                  <section className={"h-full w-full overflow-hidden rounded"}>
+                  <section className={"h-full w-full overflow-hidden rounded "}>
                     <Image
-                      className={"rounded-xl"}
+                      className={"rounded-xl max-h-full max-w-full object-contain"}
                       src={buildImageUrl(field.value)}
                       alt={"attachment"}
                       width={100}
