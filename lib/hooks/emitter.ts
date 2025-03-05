@@ -1,7 +1,7 @@
 import { BRIDGE_EVENT_NAME } from "../contexts/emitter-context"
 import Emittery from "emittery"
 import { useEffect } from "react"
-
+const IOS_FIX_TIMEOUT = 16.6
 export type SystemBars = {
   top: number
 }
@@ -41,11 +41,14 @@ export function getSystemBars(): SystemBars | null {
         }
       }
       if (isIOS) {
-        window.callAppApi("getSystemBars", "")
+        setTimeout(() => {
+          console.log("ios要加延迟", IOS_FIX_TIMEOUT)
+          window?.callAppApi("getSystemBars", "")
+        }, IOS_FIX_TIMEOUT)
         return info
       }
-    } catch {
-      console.log("GetSystemBars error")
+    } catch (e) {
+      console.log("GetSystemBars error", e)
       return info
     }
   }

@@ -1,29 +1,25 @@
+"use client"
+
+import { useRouter } from "@/i18n/routing"
+import { useEffect } from "react"
 const { log } = console
 const checkPlatform = () => {
   const isAndroid = !!window.Android
   const isIOS = !!window.webkit
   return { isAndroid, isIOS }
 }
-
-const documentIsReady = (fn) => {
-  if (typeof fn !== "function") return
-  if (document.readyState === "complete") {
-    fn()
-  }
-  document.addEventListener("DOMContentLoaded", fn, false)
-}
 const addAppApi = () => {
+  if (typeof window.callAppApi === "function") return
   const { isAndroid, isIOS } = checkPlatform()
-  debugger
   if (isAndroid) {
     window.callAppApi = (...args) => {
       log("call android api", args)
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       window.Android.doAction(...args)
     }
   } else if (isIOS) {
     window.callAppApi = (action, params) => {
-      log("call iOS api", { action, ...params })
-      debugger
       window.webkit.messageHandlers.doAction.postMessage({
         action,
         params
@@ -52,19 +48,16 @@ const checkEnv = () => {
   window.localStorage.setItem("PT_VERSION", isPtVersion.toString())
 }
 
-// const addHeightLimit = () => {
-//     const { isIOS } = checkPlatform()
-//     if (isIOS) {
-//         document.documentElement.style.setProperty("--iOS-height-fix", "100vh")
-//     }
-// }
-
 const init = () => {
-  log(123)
   checkEnv()
   addAppApi()
   notifyAppPageLoaded()
-  // addHeightLimit()
 }
-window.onload = init
-documentIsReady(init)
+
+export default function AppAdapter() {
+  const router = useRouter()
+  useEffect(() => {
+    init()
+  }, [router])
+  return null
+}

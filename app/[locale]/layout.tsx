@@ -5,6 +5,7 @@ import "./profile.scss"
 import React from "react"
 import Providers from "@/lib/providers/providers"
 import Script from "next/script"
+import AppAdapter from "@/components/common/init"
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -40,16 +41,13 @@ export default function RootLayout({
   return (
     <html lang="zh">
       <head>
-        <Script
-          src="/init.js"
-          strategy="beforeInteractive"
-        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col max-w-lg mx-auto`}
         suppressHydrationWarning
       >
-        <div className="h-full overflow-y-auto">
+        <div className="h-full overflow-y-auto" style={{ paddingTop: "var(--top-bar)" }}>
+          <AppAdapter />
           <Providers>
             {children}
             {modal}

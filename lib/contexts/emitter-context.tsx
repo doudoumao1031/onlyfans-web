@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useCallback
 } from "react"
-import { emitter, getSystemBars, SystemBars } from "@/lib/hooks/emitter"
+import { emitter, useAppLoaded } from "@/lib/hooks/emitter"
 
 const emitterContext = createContext(undefined)
 
@@ -16,9 +16,8 @@ export enum BRIDGE_EVENT_NAME {
 }
 
 export function EmitterProvider({ children }: { children: ReactNode }) {
-  const { top } = getSystemBars() as SystemBars
+  useAppLoaded()
   const handleGetSystemBarsInfo = useCallback((data: unknown) => {
-    console.log("handleGetSystemBarsInfo====================================", data)
     const htmlElement = document.documentElement
     if (typeof data === "string") {
       let info = {
@@ -45,7 +44,6 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
   }, [])
 
   useEffect(() => {
-    document?.documentElement.style.setProperty("--top-bar", `${top}vw`)
     emitter.on(
       BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
       handleGetSystemBarsInfo,
@@ -58,8 +56,7 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
 
     }
   }, [
-    handleGetSystemBarsInfo,
-    top
+    handleGetSystemBarsInfo
   ])
   return (
     <emitterContext.Provider value={undefined}>

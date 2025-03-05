@@ -1,7 +1,7 @@
 {
   "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
-    "indent": ["error", 2],
+    "indent": "off",
     "semi": ["error", "never"],
     "quotes": ["error", "double"],
     "no-trailing-spaces": "error",
