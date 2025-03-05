@@ -80,7 +80,7 @@ export default function Post({
         )}
 
         <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
-        <UserHomePageLink userId={user.id.toString()} postId={post.id} />
+        {/* <UserHomePageLink userId={user.id.toString()} postId={post.id} /> */}
         {post_attachment && post_attachment.length > 0 && (
           <Media
             data={post_attachment}
