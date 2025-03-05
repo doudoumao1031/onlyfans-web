@@ -103,7 +103,7 @@ export default async function Page() {
               <div className="text-xs text-[#333]">{t("moduleTypes.post")}</div>
             </div>
             <div className="border-r border-gray-100">
-              <div className="text-2xl">{displayNumber(data.video_count)}</div>
+              <div className="text-2xl">{displayNumber(data.media_count)}</div>
               <div className="text-xs text-[#333]">{t("moduleTypes.media")}</div>
             </div>
             <div className="border-r border-gray-100">
