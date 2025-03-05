@@ -88,11 +88,10 @@ export default function Media(props: MediaProps) {
                             </div>
                           )}
                           <LazyImg
-                            className={`aspect-square  relative z-10 ${
-                              data.length === 1
+                            className={`aspect-square  relative z-10 ${data.length === 1
                                 ? "object-contain max-h-[200px]"
                                 : "object-cover rounded-md"
-                            }`}
+                              }`}
                             src={buildImageUrl(file_id)}
                             alt=""
                             width={200}
@@ -118,9 +117,8 @@ export default function Media(props: MediaProps) {
                       href={
                         toDetail
                           ? `/postInfo/${post.id}`
-                          : `/media/${file_type === FileType.Video ? "video" : "image"}/${
-                              file_type === FileType.Video ? showIds : showIds + "_" + i
-                            }`
+                          : `/media/${file_type === FileType.Video ? "video" : "image"}/${file_type === FileType.Video ? showIds : showIds + "_" + i
+                          }`
                       }
                       className={
                         file_type === FileType.Video
@@ -144,16 +142,13 @@ export default function Media(props: MediaProps) {
                             </div>
                           )}
                           <LazyImg
-                            className={`aspect-square  relative z-10 ${
-                              data.length === 1
-                                ? "object-contain max-h-[200px]"
-                                : "object-cover rounded-md"
-                            }`}
+                            className={`aspect-square w-full relative z-10 ${data.length === 1 ? "object-contain " : "object-cover rounded-md"
+                              }`}
                             src={buildImageUrl(file_id)}
                             alt=""
                             width={200}
                             height={200}
-                            layout="responsive"
+                            layout="intrinsic"
                           />
                         </div>
                       )}
