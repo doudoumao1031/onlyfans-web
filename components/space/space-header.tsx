@@ -7,6 +7,9 @@ import { Link } from "@/i18n/routing"
 import { useEffect, useRef, useState } from "react"
 import LazyImg from "../common/lazy-img"
 import { useTranslations } from "next-intl"
+import CommonAvatar from "../common/common-avatar"
+import { getSelfId } from "@/lib/actions/server-actions"
+import { buildMention } from "../post/utils"
 export default function SpaceHeader({ data }: { data: UserProfile | undefined }) {
   if (!data) {
     throw new Error()
@@ -14,8 +17,10 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
   const t = useTranslations("Space")
   const bgRef = useRef<HTMLDivElement>(null)
   const [isTop, setIsTop] = useState<boolean>(false)
+  const [isSelf, setIsSelf] = useState(false)
 
   useEffect(() => {
+    getIsSelf(data.id.toString())
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsTop(!entry.isIntersecting)
@@ -35,6 +40,24 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
       }
     }
   }, [])
+  const getIsSelf = async (userId: string) => {
+    const selfId = await getSelfId()
+    setIsSelf(selfId === userId)
+  }
+  const renderTitle = () => {
+    if (isSelf) return t("mySpace")
+    return <div className="flex-1 flex items-center ">
+      <div className="w-8 h-8">
+        <CommonAvatar photoFileId={data.photo} size={32} />
+      </div>
+      <div className="ml-2">
+        <div className="text-[14px]">
+          {data.first_name} {data.last_name}
+        </div>
+        <div className="text-black/50 text-[12px]">{buildMention(data.username)}</div>
+      </div>
+    </div>
+  }
   return (
     <div className=" relative h-[200px]">
       <div className="absolute w-full h-full z-0" ref={bgRef}>
@@ -51,11 +74,11 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
         <Header
           leftTitle={
             <span
-              className={` pt-[1px] shrink-0 text-[18px] font-semibold ml-8 ${
-                isTop ? "text-[#222]" : "text-[#fff]"
-              }`}
+              className={` pt-[1px] shrink-0 text-[18px] font-semibold ml-8 ${isTop ? "text-[#222]" : "text-[#fff]"
+                }`}
             >
-              {isTop ? t("mySpace") : ""}
+              {isTop ? renderTitle() : ""}
+
             </span>
           }
           right={
@@ -88,7 +111,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           }
           backIconColor={isTop ? "#222" : "#fff"}
         />
-        <div className={`text-xs pl-6 pr-6 pb-2 ${isTop ? "text-theme" : "text-white"}`}>
+        <div className={`text-xs truncate pl-6 pr-6 pb-2 ${isTop ? "text-theme" : "text-white"}`}>
           {data.top_info}
         </div>
       </div>

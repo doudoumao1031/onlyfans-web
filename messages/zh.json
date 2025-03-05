@@ -98,9 +98,12 @@
   },
   "Profile": {
     "mainTitle": "我的",
+    "moreInfo": "更多信息",
+    "foldInfo": "折叠信息",
     "actions": {
       "enter": "进入空间",
       "moreInfo": "更多信息",
+      
       "recharge": "充值"
     },
     "moduleTypes": {

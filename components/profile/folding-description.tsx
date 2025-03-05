@@ -36,15 +36,14 @@ export default function FoldingDescription({
           ) : null}
         </>
       )}
-      {about && hideState && (
+      {about && (
         <button
           className="text-text-theme mt-1"
-          type={"button"}
           onTouchEnd={() => {
-            setHideState(false)
+            setHideState(!hideState)
           }}
         >
-          {t("actions.moreInfo")}
+          {!hideState ? t("foldInfo") : t("moreInfo")}
         </button>
       )}
     </>
