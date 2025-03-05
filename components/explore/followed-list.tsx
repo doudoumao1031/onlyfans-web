@@ -25,7 +25,7 @@ export default function FollowedList({ initialItems, initialHasMore }: FeedListP
 
     window.addEventListener(ActionTypes.Followed.SCROLL_TO_TOP, handleScrollTop)
     window.addEventListener(ActionTypes.Followed.REFRESH, handleRefresh)
-
+    handleRefresh()
     return () => {
       window.removeEventListener(ActionTypes.Followed.SCROLL_TO_TOP, handleScrollTop)
       window.removeEventListener(ActionTypes.Followed.REFRESH, handleRefresh)
