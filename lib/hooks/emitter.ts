@@ -1,7 +1,7 @@
 import { BRIDGE_EVENT_NAME } from "../contexts/emitter-context"
 import Emittery from "emittery"
 import { useEffect } from "react"
-const IOS_FIX_TIMEOUT = 16.6
+const IOS_FIX_TIMEOUT = 200
 export type SystemBars = {
   top: number
 }
