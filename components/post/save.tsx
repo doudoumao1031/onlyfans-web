@@ -26,21 +26,19 @@ export default function Save({
 
   const handleSave = async () => {
     if (isSaved) {
-      setSaves((prevSaves) => prevSaves - 1)
+      setSaves((pre) => pre - 1)
       setIsSaved(false)
       showMessage(t("cancelSaved"))
     } else {
-      // 如果未点赞，增加点赞
-      setSaves((prevSaves) => prevSaves + 1)
+      setSaves((pre) => pre + 1)
       setIsSaved(true)
       showMessage(t("saved"))
     }
     try {
-      await userCollectionPost({ post_id: postId, collection: !isSaved, user_id: 1 })
+      await userCollectionPost({ post_id: postId, collection: !isSaved })
     } catch (error) {
       console.error("Error saved post:", error)
-      // 如果点赞失败，恢复之前的点赞状态
-      setSaves((prevSaves) => (isSaved ? prevSaves + 1 : prevSaves - 1))
+      setSaves((pre) => (isSaved ? pre + 1 : pre - 1))
       setIsSaved(isSaved)
     }
     if (notice) {

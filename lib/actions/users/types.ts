@@ -44,9 +44,8 @@ export type SubscribeSetting = {
  * 收藏文章/帖子请求
  */
 export interface CollectionPostReq {
-  collection: boolean // 0-取消收藏 1-收藏
+  collection: boolean
   post_id: number
-  user_id?: number
 }
 
 export interface User {
@@ -102,7 +101,7 @@ export interface PtWalletInfo extends WalletInfo {
 /**
  * 收支明细请求
  */
-export type StatementReq  = PageInfo &  {
+export type StatementReq = PageInfo & {
   change_type?: number // 1 充值 2购买会员 3 打赏 4 帖子付费 5 提现
   start_time?: number
   end_time?: number
