@@ -14,10 +14,25 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
   if (!data) {
     throw new Error()
   }
+
   const t = useTranslations("Space")
   const bgRef = useRef<HTMLDivElement>(null)
   const [isTop, setIsTop] = useState<boolean>(false)
   const [isSelf, setIsSelf] = useState(false)
+  const divRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (divRef.current) {
+      // 获取 CSS 变量 --top-bar 的值
+      const topBarValue = getComputedStyle(document.documentElement).getPropertyValue("--top-bar").trim()
+
+      // 检查 --top-bar 的值，并根据其值修改样式
+      if (topBarValue) {
+        // 例如，如果 --top-bar 存在且不为 0，则修改 top 样式
+        divRef.current.style.top = topBarValue !== "0vw" ? topBarValue : "0"
+      }
+    }
+  }, [])
 
   useEffect(() => {
     getIsSelf(data.id.toString())
@@ -46,17 +61,19 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
   }
   const renderTitle = () => {
     if (isSelf) return t("mySpace")
-    return <div className="flex-1 flex items-center ">
-      <div className="w-8 h-8">
-        <CommonAvatar photoFileId={data.photo} size={32} />
-      </div>
-      <div className="ml-2">
-        <div className="text-[14px]">
-          {data.first_name} {data.last_name}
+    return (
+      <div className="flex-1 flex items-center ">
+        <div className="w-8 h-8">
+          <CommonAvatar photoFileId={data.photo} size={32} />
         </div>
-        <div className="text-black/50 text-[12px]">{buildMention(data.username)}</div>
+        <div className="ml-2">
+          <div className="text-[14px]">
+            {data.first_name} {data.last_name}
+          </div>
+          <div className="text-black/50 text-[12px]">{buildMention(data.username)}</div>
+        </div>
       </div>
-    </div>
+    )
   }
   return (
     <div className=" relative h-[200px]">
@@ -70,7 +87,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           alt={""}
         />
       </div>
-      <div className={`w-full fixed top-0 left-0 z-40 ${isTop ? "bg-[#fff]" : "auto"}`}>
+      <div ref={divRef} className={`w-full fixed top-0 left-0 z-40 ${isTop ? "bg-[#fff]" : "auto"}`}>
         <Header
           leftTitle={
             <span
