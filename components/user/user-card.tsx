@@ -24,10 +24,10 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
           className="w-full rounded-lg opacity-50"
         />
         <div className="w-full absolute flex-col h-[100px] px-4 text-white">
-          <div className="h-4 text-xs text-nowrap px-1 pb-1 truncate">{user.about}</div>
+          <div className="h-4 text-xs text-nowrap px-1 pb-1 truncate my-1">{user.about}</div>
           <div className="w-full">
             <div className="flex px-3 items-center justify-start">
-              <div className="w-1/4">
+              <div className="mr-4">
                 <AvatarVlog src={user.photo} vlog={user.live_certification} />
               </div>
               <div className="flex-col w-3/4">
