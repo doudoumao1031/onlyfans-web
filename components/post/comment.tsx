@@ -110,7 +110,6 @@ function Comment({
         {!loading ? (
           <div className="flex justify-between">
             <div className="flex gap-2">
-              {/*<Avatar fileId={photo} width={9} />*/}
               <div className={"shrink-0"}>
                 <CommonAvatar photoFileId={photo} size={36} />
               </div>
@@ -133,7 +132,7 @@ function Comment({
             <Thumbup thumbupCount={thumbupCount} isThumbupped={isThumbupped} thumbup={thumbup} />
           </div>
         ) : (
-          <CommentSkeleton></CommentSkeleton>
+          <CommentSkeleton />
         )}
         {showReplyInput && (
           <div className="flex gap-2 p-4">
