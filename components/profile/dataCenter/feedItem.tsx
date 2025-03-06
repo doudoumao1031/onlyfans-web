@@ -28,8 +28,8 @@ export default function Page({ item }: TProps) {
         <div className={"h-28 flex justify-between px-4 pl-0"}>
           <div className="h-28 w-28 bg-cover mr-2 shrink-0 rounded-md bg-slate-200">
             <LazyImg
-              className="aspect-square rounded-md "
-              src={buildImageUrl(post_attachment ? post_attachment[0]?.thumb_id || post_attachment[0]?.file_id : "")}
+              className="aspect-square rounded-md object-cover"
+              src={post_attachment ? buildImageUrl(post_attachment[0]?.thumb_id || post_attachment[0]?.file_id) : "/icons/image_draft.png"}
               alt=""
               width={112}
               height={112}

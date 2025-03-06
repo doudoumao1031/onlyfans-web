@@ -100,6 +100,7 @@
     "mainTitle": "My",
     "moreInfo": "More Info",
     "foldInfo": "Fold Info",
+    "noUserName":"The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey...",
     "actions": {
       "enter": "Enter the Space",
       "moreInfo": "More Info",
@@ -387,7 +388,8 @@
     "fllowSuccess": "Follow Success",
     "cancelled": "Cancelled",
     "day": "Day",
-    "free": "Free"
+    "free": "Free",
+    "noUserName":"The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey..."
   },
   "Search": {
     "inputPlaceholder": "Search",

@@ -52,7 +52,7 @@ export default function UserInfo({
           <div className="text-center text-gray-400 text-xs">
             {data.username
               ? "@" + data.username
-              : "该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧..."}
+              : t("noUserName")}
           </div>
           <div className="flex justify-center mt-1">
             <IconWithImage

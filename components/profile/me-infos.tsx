@@ -36,11 +36,11 @@ export default async function Page() {
     <div>
       <div
         className={"profile-content bg-slate-300 bg-cover"}
-        // style={{
-        //   backgroundImage: data.back_img
-        //     ? `url(${buildImageUrl(data.back_img)})`
-        //     : "url(/icons/base-header.png)"
-        // }}
+      // style={{
+      //   backgroundImage: data.back_img
+      //     ? `url(${buildImageUrl(data.back_img)})`
+      //     : "url(/icons/base-header.png)"
+      // }}
       >
         <LazyImg
           style={{ objectFit: "cover" }}
@@ -83,7 +83,7 @@ export default async function Page() {
           <div className="text-center text-text-desc text-xs">
             {data.username
               ? "@" + data.username
-              : "该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧..."}
+              : t("noUserName")}
           </div>
           <Link href={`/space/${data.id}/feed`}>
             <div className="flex justify-center mt-2">
