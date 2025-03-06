@@ -33,7 +33,7 @@ export default function SearchInput({ placeholder }: { placeholder: string }) {
         height={18}
         className="absolute top-1/3 left-6"
       />
-      <button onClick={() => {back()}}>
+      <button className="shrink-0" onClick={() => { back() }}>
         <span className="text-text-theme text-lg font-normal text-nowrap w-8">{t("cancel")}</span>
       </button>
     </div>
