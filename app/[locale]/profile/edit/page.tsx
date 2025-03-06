@@ -30,7 +30,7 @@ export default function Page() {
     resolver: zodResolver(
       z.object({
         username: z.string({ message: "请输入昵称" }),
-        about: z.string().max(999,"最多999字").optional(),
+        about: z.string().max(999, "最多999字").optional(),
         location: z.string().optional(),
         photo: z.string().optional(),
         top_info: z.string().optional(),
@@ -87,14 +87,14 @@ export default function Page() {
       }
     }
     return {}
-  },[formValues.back_img])
+  }, [formValues.back_img])
 
   return (
     <>
       <form
         className={"relative"}
-        onSubmit={handleSubmit(async(data) => {
-          await withLoading(async() => {
+        onSubmit={handleSubmit(async (data) => {
+          await withLoading(async () => {
             const response = await updateUserBaseInfo({
               ...data,
               flags: 31
@@ -108,7 +108,7 @@ export default function Page() {
         })}
       >
         <div className={"w-full left-0 top-0 absolute z-20 text-white"}>
-          <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"}/>
+          <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"} />
         </div>
         <div className="profile-content bg-[url('/icons/image_fans_normal_05.png')] relative bg-cover" style={backImageStyle}>
           <input
@@ -124,6 +124,7 @@ export default function Page() {
             }}
           />
           <div className={"text-xs text-white absolute right-4 top-24"}>{t("changeBackgroundImage")}</div>
+          <div className="w-full h-full absolute top-0 left-0 bg-black/20"></div>
         </div>
         <section className="mt-[-47px] rounded-t-3xl bg-white relative pt-12 text-black pb-8">
           <section className="pl-4 pr-4 pb-3 ">
@@ -162,7 +163,7 @@ export default function Page() {
               <section>
                 <Controller
                   control={control}
-                  render={({ field,fieldState }) => (
+                  render={({ field, fieldState }) => (
                     <InputWithLabel
                       errorMessage={fieldState.error?.message}
                       onInputChange={field.onChange}
