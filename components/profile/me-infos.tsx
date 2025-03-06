@@ -50,7 +50,7 @@ export default async function Page() {
           src={data.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"}
           alt={""}
         />
-        <div className=" absolute top-0 left-0 w-full">
+        <div className="absolute top-0 left-0 w-full" style={{ paddingTop: "var(--top-bar)" }}>
           <Header
             right={
               <>
