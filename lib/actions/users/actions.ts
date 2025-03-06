@@ -34,6 +34,18 @@ export const searchUser = (params: SearchUserReq) =>
   )
 
 /**
+ * 收藏/取消收藏博主
+ * @param params
+ */
+export const collecTionUser = (params: { collection_id: number; collection: boolean }) =>
+  fetchWithPost<{ collection_id: number; collection: boolean }, unknown>(
+    ENDPOINTS.USERS.COLLECTION_USER,
+    params
+  ).then((res) => {
+    return !!(res && res.code === 0)
+  })
+
+/**
  * 已收藏博主列表
  */
 export const userCollectionUsers = (params: PageInfo) =>
@@ -76,14 +88,12 @@ export const updateSubscribeSettingItem = (params: Partial<DiscountInfo>) =>
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     discount_price: String(params.discount_price)
-  }).then(
-    (response) => {
-      if (response?.code === 0) {
-        return response.data
-      }
-      return null
+  }).then((response) => {
+    if (response?.code === 0) {
+      return response.data
     }
-  )
+    return null
+  })
 
 export const addSubscribeSetting = (params: { price: number | string; id?: number }) =>
   fetchWithPost<{
@@ -197,7 +207,6 @@ export const userStatement = (params: StatementReq) =>
       }
     }
   )
-
 
 //支出记录
 export const getExpenses = (params: PageInfo & { start_time?: number; end_time?: number }) =>

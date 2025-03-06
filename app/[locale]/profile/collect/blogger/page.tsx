@@ -4,6 +4,7 @@ import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import {
   BloggerInfo,
+  collecTionUser,
   PageResponse,
   userCollectionUsers
 } from "@/lib"
@@ -11,7 +12,10 @@ import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { Fragment, useEffect, useState } from "react"
 import { useTranslations } from "next-intl"
 import UserCard from "@/components/user/user-card"
+import DelItem from "@/components/profile/del-item"
+import LoadingMask from "@/components/common/loading-mask"
 export default function Page() {
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [initData, setInitData] = useState<PageResponse<BloggerInfo> | null>()
   useEffect(() => {
     getData()
@@ -33,12 +37,23 @@ export default function Page() {
       from_id: 0
     }
   })
+  const delItem = async (collection_id: number) => {
+    try {
+      setIsLoading(true)
+      await collecTionUser({ collection_id, collection: false })
+      getData()
+      setIsLoading(false)
+    } catch {
+      setIsLoading(false)
+    }
+  }
   const t = useTranslations("Profile")
   return (
-    <div className="mt-4 px-4  h-[calc(100vh-145px)]">
+    <div className="mt-4   h-[calc(100vh-145px)]">
+      <LoadingMask isLoading={isLoading} />
       {initData && (
         <InfiniteScroll<BloggerInfo>
-          className={"h-full w-full mx-auto"}
+          className={"h-full overflow-x-hidden mx-auto"}
           initialItems={initData.list || []}
           initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}
           fetcherFn={infiniteFetchPosts}
@@ -51,9 +66,17 @@ export default function Page() {
                 {initData?.total ?? 0}
               </div>
               {items.map((v, i) => (
-                <div key={i} className={"w-full mb-[10px]"}>
-                  <UserCard user={v} subscribe={true} />
-                </div>
+                <DelItem
+                  onDelete={() => {
+                    delItem(v.id)
+                  }}
+                  key={v.id}
+                >
+
+                  <div className="py-[5px]">
+                    <UserCard user={v} subscribe={true} />
+                  </div>
+                </DelItem>
               ))}
               {isLoading && <ListLoading />}
               {!hasMore && items?.length > 0 && <ListEnd />}
