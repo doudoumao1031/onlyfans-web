@@ -314,6 +314,7 @@ export default function Page() {
 
   const { showMessage, renderNode } = useCommonMessage()
 
+
   return (
     <>
       <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
@@ -327,9 +328,8 @@ export default function Page() {
                 setActiveKey(v.key)
               }}
               key={v.value.start}
-              className={`h-8 px-4 flex justify-center items-center border border-theme rounded-full mr-3 ${
-                active.start === v.value.start ? "bg-theme text-white" : "text-text-theme "
-              }`}
+              className={`h-8 px-4 flex justify-center items-center border border-theme rounded-full mr-3 ${active.start === v.value.start ? "bg-theme text-white" : "text-text-theme "
+                }`}
             >
               {v.label}
             </button>
@@ -339,7 +339,7 @@ export default function Page() {
           <span className="text-[32px] font-medium">{walletInfo?.amount}</span>
           <span className="text-[18px] text-[#777] ml-2 pb-1">USDT</span>
         </div>
-        <div className="pl-4 pr-4 flex justify-between items-center mt-2 mb-12">
+        <div className="pl-4 pr-4 flex justify-between items-center mt-2 mb-5">
           <span className="text-xs">
             <span className="text-[#777] ">{currentLabel}</span>
             <span className="text-text-theme ml-2">+{inCome}</span>
@@ -363,7 +363,20 @@ export default function Page() {
             </Withdrawal>
           )}
         </div>
-        <div className="pl-4 font-bold text-base">{t("incomeTrend")}</div>
+        <div className="px-4 pt-5 border-t border-[#DDDDDD]  text-base flex justify-between items-center">
+          <span className="font-bold">{t("incomeTrend")}</span>
+          <Link href={"/profile/revenue"} className="flex items-center">
+            <span className="ml-2 mr-2 text-theme text-[12px]">
+              收益明细
+            </span>
+            <IconWithImage
+              url="/icons/profile/icon-r.png"
+              width={14}
+              color="#00aef3"
+              height={14}
+            />
+          </Link>
+        </div>
         <div className="p-4 flex">
           <span className="mr-8">{t("incomeTime")}</span>
           {dateTabs.map((v, index) => (
@@ -373,9 +386,8 @@ export default function Page() {
                 setDateActive(v.value)
               }}
               key={index}
-              className={`mr-8 text-[#bbb] ${
-                dateActive.start === v.value.start ? "text-text-theme" : ""
-              }`}
+              className={`mr-8 text-[#bbb] ${dateActive.start === v.value.start ? "text-text-theme" : ""
+                }`}
             >
               {v.label}
             </button>

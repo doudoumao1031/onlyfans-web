@@ -220,6 +220,18 @@ export const getExpenses = (params: PageInfo & { start_time?: number; end_time?:
     }
   )
 
+  //收益明细
+export const getWalletStatement = (params: PageInfo & { start_time?: number; end_time?: number }) =>
+  fetchWithPost<PageInfo, PageResponse<StatementResp>>(ENDPOINTS.USERS.WALLET_STATEMENT, params).then(
+    (res) => {
+      if (res && res.code === 0) {
+        return res.data
+      } else {
+        return null
+      }
+    }
+  )
+
 /**
  * 成为博主
  */
