@@ -3,15 +3,16 @@ import Image from "next/image"
 import IconWithImage from "@/components/profile/icon"
 import { Link } from "@/i18n/routing"
 import { clsx } from "clsx"
-import { FileType, PostData, postPined } from "@/lib"
+import { deletePost, FileType, PostData, postPined } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl, TIME_FORMAT } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 import dayjs from "dayjs"
 import { useLongPress } from "@/components/common/long-press"
-import { useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import SheetSelect from "@/components/common/sheet-select"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
   return (
@@ -25,7 +26,6 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
 const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, postStatus: number, refresh?: () => void ,pinned: boolean}) => {
   const t = useTranslations("Profile.manuscript")
   const { showMessage } = useCommonMessageContext()
-  const isAuditing = postStatus === 2
   const handlePined = () => {
     postPined(id).then((data) => {
       if (data?.code === 0) {
@@ -38,36 +38,31 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, po
       }
     })
   }
-  // 审核中不允许有操作
-  if (isAuditing) {
-    return (
-      <section className="flex opacity-50">
-        <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-          <IconWithImage url={"/theme/icon_fans_share_normal@3x.png"} width={20} height={20} color={"#222"}/>
-          <span>{t("itemActions.share")}</span>
-        </button>
-        <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-          <IconWithImage url={"/theme/icon_fans_stick_dark@3x.png"} width={20} height={20} color={"#222"}/>
-          <span>{pinned ? t("itemActions.pinned") : t("itemActions.unpinned")}</span>
-        </button>
-        <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-          <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
-          <span>{t("itemActions.data")}</span>
-        </button>
-        <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 ">
-          <IconWithImage url={"/theme/icon_fans_edit_red@3x.png"} width={20} height={20} color={"#222"}/>
-          <span>{t("itemActions.edit")}</span>
-        </button>
-      </section>
-    )
-  }
+  // 0草稿状态 1发布 2审核中 3未通过
+  const canEdit = useMemo(() => {
+    return [0,1,3].includes(postStatus)
+  },[postStatus])
+
   return (
-    <section className="flex">
-      <button className="flex-1 flex gap-2 pt-2.5 pb-2.5">
+    <section className="flex text-xs">
+      <button className={clsx(
+        "flex-1 flex gap-2 pt-2.5 pb-2.5 items-center",
+        canEdit ? "" : "opacity-50"
+      )}
+      >
         <IconWithImage url={"/theme/icon_fans_share_normal@3x.png"} width={20} height={20} color={"#222"}/>
         <span>{t("itemActions.share")}</span>
       </button>
-      <button onTouchEnd={handlePined} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
+      <button onTouchEnd={(event) => {
+        if (canEdit) {
+          handlePined()
+        }
+        event.preventDefault()
+      }} className={clsx(
+        "flex-1 flex gap-2 pt-2.5 pb-2.5 items-center",
+        canEdit ? "" : "opacity-50"
+      )}
+      >
         <IconWithImage url={pinned ? "/theme/icon_fans_stick_highlight@3x.png" :"/theme/icon_fans_stick_dark@3x.png"} width={20} height={20} className={clsx(
           pinned ? "bg-background-theme" : "bg-black"
         )}
@@ -77,19 +72,27 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, po
         )}
         >{pinned ? t("itemActions.pinned") : t("itemActions.unpinned")}</span>
       </button>
-      <Link href={`/profile/dataCenter/feeds?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5">
-        <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
-        <span>{t("itemActions.data")}</span>
-      </Link>
-      {[0, 3].includes(postStatus) ? (
+      {canEdit ? (
+        <Link href={`/profile/dataCenter/feeds?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 items-center">
+          <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
+          <span>{t("itemActions.data")}</span>
+        </Link>
+          )
+          :   (
+            <button className="flex-1 flex gap-2 pt-2.5 pb-2.5 opacity-50 items-center">
+              <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
+              <span>{t("itemActions.data")}</span>
+            </button>
+          )}
+      {canEdit ? (
         <Link href={`/profile/manuscript/draft/edit?id=${id}`}
-          className="flex-1 flex gap-2 pt-2.5 pb-2.5 text-text-theme"
+          className="flex-1 flex gap-2 pt-2.5 pb-2.5 items-center"
         >
           <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"}/>
           <span>{t("itemActions.edit")}</span>
         </Link>
       ) : (
-        <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 opacity-50">
+        <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 opacity-50 items-center">
           <IconWithImage url={"/theme/icon_fans_edit_red@3x.png"} width={20} height={20} color={"#222"}/>
           <span>{t("itemActions.edit")}</span>
         </button>
@@ -120,6 +123,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const ref = useRef<HTMLButtonElement>()
+  const commonTrans = useTranslations("Common")
   const [openState, setOpenState] = useState<boolean>(false)
   const firstMedia = data.post_attachment?.[0]
   let imageId = ""
@@ -130,14 +134,31 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
     imageId = firstMedia.thumb_id
   }
 
-  useLongPress(ref,() => {
+  const { isPressing } = useLongPress(ref,() => {
     setOpenState(true)
   }, 500)
 
   const { showMessage } = useCommonMessageContext()
-  const handleSheetChange = (value:unknown) => {
+  const { withLoading } = useLoadingHandler({
+    onError: () => {
+      showMessage(commonTrans("updateFail"))
+    },
+    onSuccess: () => {
+      showMessage(commonTrans("updateSuccess"), "success", {
+        afterDuration: refresh,
+        duration: 500
+      })
+    }
+  })
+  const handleSheetChange = async (value:unknown) => {
     if (value === "DEL") {
-      showMessage("接口待实现")
+      await withLoading(async () => {
+        try {
+          await deletePost(data.post.id)
+        } catch {
+          return new Error()
+        }
+      })
     }
   }
 
@@ -153,7 +174,11 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
         onInputChange={handleSheetChange}
       />
       <section className="border-b border-gray-100 pt-4">
-        <button className={"flex gap-2.5 text-left h-[100px] relative w-full"} ref={ref}>
+        <button className={clsx(
+          "flex gap-2.5 text-left h-[100px] relative w-full transition-all rounded-xl",
+          isPressing ? "bg-gray-200" : ""
+        )} ref={ref}
+        >
           {/*<ManuscriptItemState state={"REJECT"}/>*/}
           <ManuscriptItemState state={data.post.post_status}/>
           <div className={"w-[100px] h-[100px] overflow-hidden rounded flex items-center"}>

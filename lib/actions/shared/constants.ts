@@ -26,6 +26,7 @@ export const ENDPOINTS = {
     ADD: "/post/add",
     DELETE_FILE: "/post/deletePostFile",
     DELETE_VOTE: "/post/deleteVote",
+    DELETE_POST: "/post/delete",
     ME_MEDIAS: "/post/mePostMedias",
     ME_POSTS: "/post/mePosts",
     ME_DRAFT_POST: "/post/meDraftPosts",
