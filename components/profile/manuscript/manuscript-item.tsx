@@ -156,8 +156,8 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
         <button className={"flex gap-2.5 text-left h-[100px] relative w-full"} ref={ref}>
           {/*<ManuscriptItemState state={"REJECT"}/>*/}
           <ManuscriptItemState state={data.post.post_status}/>
-          <div className={"w-[100px] h-[100px] overflow-hidden rounded"}>
-            {imageId ? <LazyImg src={buildImageUrl(imageId)} alt={"post"} width={100} height={100}/>
+          <div className={"w-[100px] h-[100px] overflow-hidden rounded flex items-center"}>
+            {imageId ? <LazyImg containerAuto={true} src={buildImageUrl(imageId)} alt={"post"} width={100} height={100}/>
               : (
                 <Image src={"/icons/image_draft.png"} alt={""} width={100} height={100}
                   className={"shrink-0 w-[100px] h-full rounded"}

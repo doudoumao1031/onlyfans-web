@@ -12,6 +12,10 @@ export default function Header({
 }) {
   const router = useRouter()
   const handleBack = () => {
+    if (!document.referrer) {
+      router.back()
+      return
+    }
     const url = new URL(document.referrer)
     if (url.pathname) {
       router.replace(url.pathname)

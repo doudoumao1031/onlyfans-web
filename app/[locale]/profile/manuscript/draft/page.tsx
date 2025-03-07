@@ -11,14 +11,20 @@ import { LazyImageWithFileId } from "@/components/common/lazy-img"
 import { TIME_FORMAT } from "@/lib/utils"
 import dayjs from "dayjs"
 import { useTranslations } from "next-intl"
+import Image from "next/image"
 
 const DraftItem = ({ data }:{data:PostData}) => {
   const t = useTranslations("Profile.manuscript")
+  const attachmentId = data.post_attachment?.[0]?.file_id
   return (
     <Link href={`./draft/edit?id=${data.post.id}`} className="pt-2.5 pb-2.5 border-b border-gray-100 flex gap-2.5">
       {/*<Image src={""} alt={"img"} width={100} height={100} className="rounded"/>*/}
       <div className={"w-[100px] h-[100px] shrink-0 overflow-hidden"}>
-        <LazyImageWithFileId fileId={data.post_attachment?.[0].file_id} alt={data.post.title} width={100} height={100} className={"rounded"}/>
+        {attachmentId ? <LazyImageWithFileId fileId={attachmentId} alt={data.post.title} width={100} height={100} className={"rounded"}/> :  (
+          <Image src={"/icons/image_draft.png"} alt={""} width={100} height={100}
+            className={"shrink-0 w-full h-full rounded"}
+          />
+        )}
       </div>
       <div className="flex-col justify-between flex flex-1 w-0">
         <div className="text-[#333] line-clamp-[2] ">{data.post.title}</div>

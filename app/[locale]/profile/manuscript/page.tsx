@@ -141,73 +141,75 @@ const ManuscriptMedia = () => {
       </div>
       <section className="">
         {initData && (
-          <InfiniteScroll<PostData> className={"grid grid-cols-2 gap-3 mt-2"} fetcherFn={infiniteFetchMedia} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
+          <InfiniteScroll<PostData> className={"mt-2"} fetcherFn={infiniteFetchMedia} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
             {({ items, isLoading, hasMore, error }) => (
               <Fragment>
                 {Boolean(error) && <ListError />}
-                {items?.map((item, index) => (
-                  <section key={index}>
-                    <section className="rounded-xl relative overflow-hidden text-xs">
-                      <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5 z-10">
-                        <section className="flex items-center gap-0.5">
-                          <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
-                            color={"#fff"}
-                          />
-                          <span>{item.post_metric.play_count}</span>
+                <div className={"grid grid-cols-2 gap-3 "}>
+                  {items?.map((item, index) => (
+                    <section key={index}>
+                      <section className="rounded-xl relative overflow-hidden text-xs bg-black/50">
+                        <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5 z-10">
+                          <section className="flex items-center gap-0.5">
+                            <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
+                              color={"#fff"}
+                            />
+                            <span>{item.post_metric.play_count}</span>
+                          </section>
+                          <section className="flex items-center gap-0.5">
+                            <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
+                              color={"#fff"}
+                            />
+                            <span>{item.post_metric.tip_count}</span>
+                          </section>
                         </section>
-                        <section className="flex items-center gap-0.5">
-                          <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
-                            color={"#fff"}
-                          />
-                          <span>{item.post_metric.tip_count}</span>
+                        <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around z-10">
+                          <section className="flex items-center gap-0.5 flex-1">
+                            <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12}
+                              color={"#fff"}
+                            />
+                            <span>{item.post_metric.thumbs_up_count}</span>
+                          </section>
+                          <section className="flex items-center gap-0.5 flex-1 justify-center">
+                            <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12}
+                              color={"#fff"}
+                            />
+                            <span>{item.post_metric.comment_count}</span>
+                          </section>
+                          <section className="flex items-center gap-0.5 flex-1 justify-end">
+                            <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12}
+                              color={"#fff"}
+                            />
+                            <span>{item.post_metric.share_count}</span>
+                          </section>
                         </section>
-                      </section>
-                      <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around z-10">
-                        <section className="flex items-center gap-0.5 flex-1">
-                          <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12}
-                            color={"#fff"}
-                          />
-                          <span>{item.post_metric.collection_count}</span>
-                        </section>
-                        <section className="flex items-center gap-0.5 flex-1 justify-center">
-                          <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12}
-                            color={"#fff"}
-                          />
-                          <span>{item.post_metric.comment_count}</span>
-                        </section>
-                        <section className="flex items-center gap-0.5 flex-1 justify-end">
-                          <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12}
-                            color={"#fff"}
-                          />
-                          <span>{item.post_metric.share_count}</span>
-                        </section>
-                      </section>
-                      <section
-                        className="w-full h-[220px] rounded flex justify-center items-center overflow-hidden"
-                      >
-                        <LazyImageWithFileId fileId={item.post_attachment?.[0]?.file_id} alt={"post_attachment"} width={200} height={220} className="w-full h-full" />
-                      </section>
-                    </section>
-                    {
-                      [0, 3].includes(item.post.post_status) ? (
-                        <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
-                          className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
+                        <section
+                          className="w-full h-[220px] rounded flex justify-center items-center overflow-hidden"
                         >
-                          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
-                          <span>{t("itemActions.edit")}</span>
-                        </Link>
-                      )
-                        : (
-                          <button type={"button"}
-                            className="rounded-[10px] grayscale gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
+                          <LazyImageWithFileId containerAuto={true} fileId={item.post_attachment?.[0]?.file_id} alt={"post_attachment"} width={200} height={220} className="max-w-full max-h-full object-contain" />
+                        </section>
+                      </section>
+                      {
+                        [0, 3].includes(item.post.post_status) ? (
+                          <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
+                            className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
                           >
                             <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
                             <span>{t("itemActions.edit")}</span>
-                          </button>
+                          </Link>
                         )
-                    }
-                  </section>
-                ))}
+                          : (
+                            <button type={"button"}
+                              className="rounded-[10px] grayscale gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
+                            >
+                              <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
+                              <span>{t("itemActions.edit")}</span>
+                            </button>
+                          )
+                      }
+                    </section>
+                  ))}
+                </div>
                 {isLoading && <ListLoading />}
                 {!hasMore && items?.length > 0 && <ListEnd />}
               </Fragment>

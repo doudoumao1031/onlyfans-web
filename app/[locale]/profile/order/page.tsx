@@ -728,13 +728,26 @@ export default function Page() {
     return realPrice.toFixed(2)
   }, [realPrice, t])
 
+  const handleBack = () => {
+    if (!document.referrer) {
+      router.back()
+      return
+    }
+    const url = new URL(document.referrer)
+    if (url.pathname) {
+      router.replace(url.pathname)
+    } else {
+      router.back()
+    }
+  }
+
   const { withLoading } = useLoadingHandler({
     onError: (message) => {
       showMessage(typeof message === "string" ? message : commonTrans("updateFail"))
     },
     onSuccess: (message) => {
       showMessage(typeof message === "string" ? message : commonTrans("updateSuccess"), "success", {
-        afterDuration: router.back
+        afterDuration: handleBack
       })
     }
   })
