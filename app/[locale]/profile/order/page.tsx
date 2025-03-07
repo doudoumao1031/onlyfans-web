@@ -43,7 +43,7 @@ import { useTranslations } from "next-intl"
 
 const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
 
-const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, openState, setOpenState ,basePrice }: {
+const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, openState, setOpenState, basePrice }: {
   callback: (data: DiscountInfo) => void,
   userId: number,
   currentDiscounts: AddBundleDiscount[],
@@ -76,7 +76,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
   }, [openState, form])
 
   const monthSelections = useMemo(() => {
-    const arr = [2,3,6,9,12]
+    const arr = [2, 3, 6, 9, 12]
     return arr.map(month => {
       return {
         label: `${month}${t("monthUnit")}`,
@@ -112,27 +112,29 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
           >
             <ModalHeader title={t("bundleSub")}
               left={<button type={"button"} onTouchEnd={() => {
-                setOpenState(false)
-              }} className={"text-base"}
-              >{commonTrans("cancel")}</button>}
+                           setOpenState(false)
+                         }} className={"text-base"}
+                    >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-base text-text-theme"}
                 >{commonTrans("save")}</button>
-              )}
+                         )}
             ></ModalHeader>
 
             <div className={"mt-5 block px-4"}>
               <Controller render={({ field, fieldState }) => {
                 return (
                   initData ? (
-                    <InputWithLabel placeholder={t("subTimeLimit")} value={`${field.value} ${t("monthUnit")}${t("month")}`} disabled/>
+                    <InputWithLabel placeholder={t("subTimeLimit")}
+                      value={`${field.value} ${t("monthUnit")}${t("month")}`} disabled
+                    />
                   ) : (
                     <InputWithLabel errorMessage={fieldState.error?.message} placeholder={t("subTimeLimit")}
                       onInputChange={(value) => {
-                        field.onChange(value)
-                        form.setValue("price", Number((Number(value) * basePrice)))
-                      }}
+                                      field.onChange(value)
+                                      form.setValue("price", Number((Number(value) * basePrice)))
+                                    }}
                       options={monthSelections}
                       value={field.value ?? ""}
                     />
@@ -144,9 +146,13 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
                 <Controller render={({ field }) => (
                   <InputWithLabel
                     errorMessage={form.formState.errors?.price?.message} onBlur={event => {
-                      field.onChange(Number(event.target.value).toFixed(2))
-                    }}
-                    value={field.value ||""} onInputChange={field.onChange} placeholder={t("subPrice")}
+                    let numberVal = Number(event.target.value)
+                    if (isNaN(numberVal)) {
+                      numberVal = 2
+                    }
+                    field.onChange(numberVal.toFixed(2))
+                  }}
+                    value={field.value || ""} onInputChange={field.onChange} placeholder={t("subPrice")}
                     description={t("bundleSubPriceDescription")}
                   />
                 )} name={"price"} control={form.control}
@@ -160,7 +166,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
   )
 }
 
-const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState, initData }: {
+const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState, initData }: {
   items: DiscountInfo[],
   updateItems: (items: DiscountInfo[]) => void,
   openState: boolean,
@@ -179,14 +185,14 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
   const priceOptions: ISelectOption[] = useMemo(() => {
     return items.filter(item => item.discount_per === 0).map(item => {
       return {
-        label: <div className={"text-left"}>${item.price} {item.month_count}{t("monthUnit")}{t("month")} <span
-          className={"text-[#bbb]"}
-        >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
+        label: <div className={"text-left"}>
+          ${item.price} {item.month_count}{t("monthUnit")}{t("month")} <span
+            className={"text-[#bbb]"}
+                                                                       >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
         value: item.id
       }
     })
   }, [items, t])
-
 
 
   useEffect(() => {
@@ -203,7 +209,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
       return `${item.discount_price} ${item.month_count}${t("monthUnit")}${t("month")} （${t("avg")}${calcAvg(Number(item.discount_price), item.month_count)}/${t("month")}）`
     }
     return ""
-  },[id, items, t])
+  }, [id, items, t])
 
   return (
     <Drawer open={openState} onOpenChange={setOpenState}>
@@ -244,14 +250,14 @@ const EditPromotionalActivities = ({ items, updateItems, openState,setOpenState,
           >
             <ModalHeader title={t("discountActivities")}
               left={<button onTouchEnd={() => {
-                setOpenState(false)
-              }} className={"text-base text-[#777]"}
-              >{commonTrans("cancel")}</button>}
+                           setOpenState(false)
+                         }} className={"text-base text-[#777]"}
+                    >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-base text-text-theme"}
                 >{commonTrans("save")}</button>
-              )}
+                         )}
             ></ModalHeader>
 
             <div className={"mt-5 block px-4"}>
@@ -373,7 +379,7 @@ function TopLabelWrapper({ label, children, errorMessage }: {
   )
 }
 
-function SubscribeBundle({ items,initSettings, userId, updateItems,basePrice }: {
+function SubscribeBundle({ items, initSettings, userId, updateItems, basePrice }: {
   items: DiscountInfo[],
   initSettings: DiscountInfo[]
   userId: number,
@@ -417,7 +423,7 @@ function SubscribeBundle({ items,initSettings, userId, updateItems,basePrice }: 
       const shouldChangeStatus = defaultItem && Number(defaultItem.price) !== Number(data.price)
       update(updateIndex, {
         ...data,
-        discount_status: shouldChangeStatus? false :data.discount_status
+        discount_status: shouldChangeStatus ? false : data.discount_status
       })
     }
     mockSubmit()
@@ -469,7 +475,7 @@ function SubscribeBundle({ items,initSettings, userId, updateItems,basePrice }: 
                     >
                       ${discount.price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;<span
                         className="text-[#6D7781]"
-                      >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
+                                                                                                                 >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
                     </button>
                     <Switch className={"custom-switch"} checked={!field.value.item_status} onCheckedChange={(value) => {
                       field.onChange({
@@ -492,12 +498,16 @@ function SubscribeBundle({ items,initSettings, userId, updateItems,basePrice }: 
   )
 }
 
-function DiscountPercentLabel ({ index,percent }:{index:number,percent:number}) {
+function DiscountPercentLabel({ index, percent }: { index: number, percent: number }) {
   const t = useTranslations("Profile.order")
   return (
     <div className={"flex gap-1 items-center"}>
       <div>{t("discount")}{index}</div>
-      <div className={"rounded-tl-full rounded-tr-full rounded-br-full bg-[#F7B500] text-white px-1.5 py-0.5 text-xs"}>{percent}% off</div>
+      <div
+        className={"rounded-tl-full rounded-tr-full rounded-br-full bg-[#F7B500] text-white px-1.5 py-0.5 text-xs"}
+      >{percent}%
+        off
+      </div>
     </div>
   )
 }
@@ -510,13 +520,13 @@ function PromotionalActivities({ updateItems, items }: {
   const commonTrans = useTranslations("Common")
   const discountList = useMemo(() => {
     return items.filter(item => item.discount_per > 0)
-  },[items])
+  }, [items])
   const noDiscountList = useMemo(() => {
     return items.filter(item => item.discount_per === 0)
-  },[items])
+  }, [items])
 
-  const [openState,setOpenState] = useState<boolean>(false)
-  const [editData,setEditData] = useState<DiscountInfo>()
+  const [openState, setOpenState] = useState<boolean>(false)
+  const [editData, setEditData] = useState<DiscountInfo>()
   const openEditModal = (data?: DiscountInfo) => {
     setEditData(data)
     setOpenState(true)
@@ -524,7 +534,9 @@ function PromotionalActivities({ updateItems, items }: {
 
   return (
     <section className={"pt-5 pb-5 border-b border-gray-100"}>
-      <EditPromotionalActivities initData={editData} items={items} updateItems={updateItems} openState={openState} setOpenState={setOpenState}/>
+      <EditPromotionalActivities initData={editData} items={items} updateItems={updateItems} openState={openState}
+        setOpenState={setOpenState}
+      />
       <section className="pl-4 pr-4">
         <section className="flex justify-between items-center">
           <h1 className="text-base font-medium">{t("discountActivities")}</h1>
@@ -545,13 +557,16 @@ function PromotionalActivities({ updateItems, items }: {
         )}
         {items.filter(d => d.discount_per > 0).map((discount, index) => {
           return (
-            <TopLabelWrapper key={discount.id} label={<DiscountPercentLabel index={index+1} percent={discount.discount_per}/>}>
+            <TopLabelWrapper key={discount.id}
+              label={<DiscountPercentLabel index={index + 1} percent={discount.discount_per}/>}
+            >
               <div className={"flex-1"} onTouchEnd={() => {
                 openEditModal(discount)
               }}
               >
                 <div>
-                  {discount.discount_price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;<span
+                  {discount.discount_price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;
+                  <span
                     className="text-[#6D7781]"
                   >({t("avg")} ${calcAvg(Number(discount.discount_price), discount.month_count)}/{t("month")})</span>
                 </div>
@@ -561,13 +576,13 @@ function PromotionalActivities({ updateItems, items }: {
               </div>
               <Switch disabled={discount.item_status} className={"custom-switch"}
                 checked={!discount.discount_status} onCheckedChange={(value) => {
-                  const updateIndex = items.findIndex(i => i.id === discount.id)
-                  const arr = [...items]
-                  const item = arr[updateIndex]
-                  item.discount_status = !value
-                  arr.splice(updateIndex,1,item)
-                  updateItems(arr)
-                }}
+                const updateIndex = items.findIndex(i => i.id === discount.id)
+                const arr = [...items]
+                const item = arr[updateIndex]
+                item.discount_status = !value
+                arr.splice(updateIndex, 1, item)
+                updateItems(arr)
+              }}
               ></Switch>
             </TopLabelWrapper>
           )
@@ -780,13 +795,13 @@ export default function Page() {
     <div>
       <Header title={t("title")} titleColor={"#000"}
         right={<button onTouchEnd={() => {
-          baseFeeForm.trigger().then(async(valid) => {
-            if (valid) {
-              await updateSubscribeSettings()
-            }
-          })
-        }} className="text-text-theme text-base"
-        >{t("complete")}</button>}
+                baseFeeForm.trigger().then(async (valid) => {
+                  if (valid) {
+                    await updateSubscribeSettings()
+                  }
+                })
+              }} className="text-text-theme text-base"
+               >{t("complete")}</button>}
       />
       <section className="mt-5 text-black">
         <section className="pl-4 pr-4 pb-5 border-b border-gray-100">
@@ -805,8 +820,8 @@ export default function Page() {
                           transition: "top .1s",
                           top: -7
                         }} className={clsx(
-                          "absolute bg-white left-4 leading-none font-normal z-30 transition text-[#6D7781]",
-                        )}
+                        "absolute bg-white left-4 leading-none font-normal z-30 transition text-[#6D7781]",
+                      )}
                       >
                         {t("monthlyPrice")}
                       </label>
@@ -824,7 +839,9 @@ export default function Page() {
                     </section>
                     <section className="text-[#6D7781] text-xs px-4 mt-1.5">
                       <div>{t("baseSubLimit")}</div>
-                      <div>{t("shouldBe1")} <span className="text-text-theme">{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
+                      <div>{t("shouldBe1")} <span
+                        className="text-text-theme"
+                                            >{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
                       </div>
                     </section>
                   </section>
@@ -835,7 +852,8 @@ export default function Page() {
           </form>
         </section>
         {userInfo && realPrice > 0 && (
-          <SubscribeBundle basePrice={realPrice} updateItems={updateItems} items={baseFormValues.items} initSettings={baseFormValues?.items ?? []}
+          <SubscribeBundle basePrice={realPrice} updateItems={updateItems} items={baseFormValues.items}
+            initSettings={baseFormValues?.items ?? []}
             userId={userInfo?.id}
           />
         )}
