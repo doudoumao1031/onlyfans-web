@@ -107,7 +107,7 @@ export default function Page() {
           })
         })}
       >
-        <div className={"w-full left-0 top-0 absolute z-20 text-white bg-black/50"}>
+        <div className={"w-full left-0 top-0 absolute z-20 text-white bg-black/20"}>
           <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"}/>
         </div>
         <div className="profile-content bg-[url('/icons/image_fans_normal_05.png')] relative bg-cover" style={backImageStyle}>
