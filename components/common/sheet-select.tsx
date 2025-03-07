@@ -16,7 +16,7 @@ export interface ISelectOption {
 
 
 export default function SheetSelect({ children, options, onInputChange, isOpen, setIsOpen, outerControl = true }: {
-    children: React.ReactNode, options: ISelectOption[],
+    children?: React.ReactNode, options: ISelectOption[],
     onInputChange?: (value: string | number | readonly string[] | undefined) => void,
     isOpen?: boolean,
     setIsOpen?: (v: boolean) => void,
@@ -30,12 +30,14 @@ export default function SheetSelect({ children, options, onInputChange, isOpen, 
   return (
     <>
       <Sheet open={openState} onOpenChange={changeState}>
-        <SheetTrigger asChild>
-          <button className={"w-full"} onTouchEnd={() => {
-            changeState?.(true)
-          }}
-          >{children}</button>
-        </SheetTrigger>
+        {children && (
+          <SheetTrigger asChild>
+            <button className={"w-full"} onTouchEnd={() => {
+              changeState?.(true)
+            }}
+            >{children}</button>
+          </SheetTrigger>
+        )}
         <SheetContent side={"bottom"} className={"px-2.5 py-0 pb-2.5 border-none hide-modal-close"}>
           <SheetTitle className={"hidden"}></SheetTitle>
           <SheetDescription className={"hidden"}></SheetDescription>

@@ -617,9 +617,11 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
         setIsOpen={setIsOpen}
         onInputChange={handleChange} options={options}
       >
-        <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
-          height={24} color={"#bbb"}
-        />
+        <div className={"flex justify-end"}>
+          <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={24}
+            height={24} color={"#bbb"}
+          />
+        </div>
       </SheetSelect>
 
       <Dialog open={drawerIsOpen} onOpenChange={setDrawerIsOpen}>
@@ -797,12 +799,12 @@ export default function Page() {
                       </label>
                       <section
                         className={
-                          clsx("h-[46px] flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center justify-between",
+                          clsx("h-[46px] flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center",
                           )
                         }
                       >
                         <div>{showBaseValue}</div>
-                        <div className="shrink-0 flex items-center">
+                        <div className="flex-1 flex items-center justify-end">
                           <BasePriceSettings valueChange={field.onChange} value={field.value}/>
                         </div>
                       </section>

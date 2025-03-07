@@ -9,6 +9,9 @@ import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl, TIME_FORMAT } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 import dayjs from "dayjs"
+import { useLongPress } from "@/components/common/long-press"
+import { useRef, useState } from "react"
+import SheetSelect from "@/components/common/sheet-select"
 
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
   return (
@@ -113,6 +116,11 @@ const ManuscriptItemState = ({ state }: { state: number }) => {
   )
 }
 export default function ManuscriptItem({ data, refresh }: { data: PostData, refresh?: () => void }) {
+  "use client"
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  const ref = useRef<HTMLButtonElement>()
+  const [openState, setOpenState] = useState<boolean>(false)
   const firstMedia = data.post_attachment?.[0]
   let imageId = ""
   if (firstMedia?.file_type === FileType.Image) {
@@ -121,46 +129,69 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
   if (firstMedia?.file_type === FileType.Video) {
     imageId = firstMedia.thumb_id
   }
+
+  useLongPress(ref,() => {
+    setOpenState(true)
+  }, 500)
+
+  const { showMessage } = useCommonMessageContext()
+  const handleSheetChange = (value:unknown) => {
+    if (value === "DEL") {
+      showMessage("接口待实现")
+    }
+  }
+
   return (
-    <section className="border-b border-gray-100 pt-4">
-      <button className={"flex gap-2.5 text-left h-[100px] relative w-full"}>
-        {/*<ManuscriptItemState state={"REJECT"}/>*/}
-        <ManuscriptItemState state={data.post.post_status}/>
-        <div className={"w-[100px] h-[100px] overflow-hidden rounded"}>
-          {imageId ? <LazyImg src={buildImageUrl(imageId)} alt={"post"} width={100} height={100}/>
-            : (
-              <Image src={"/icons/image_draft.png"} alt={""} width={100} height={100}
-                className={"shrink-0 w-[100px] h-full rounded"}
+    <>
+      <SheetSelect
+        options={[
+          { label: <span className={"text-[#FF223B]"}>删除</span>,value:"DEL" }
+        ]}
+        outerControl={true}
+        isOpen={openState}
+        setIsOpen={setOpenState}
+        onInputChange={handleSheetChange}
+      />
+      <section className="border-b border-gray-100 pt-4">
+        <button className={"flex gap-2.5 text-left h-[100px] relative w-full"} ref={ref}>
+          {/*<ManuscriptItemState state={"REJECT"}/>*/}
+          <ManuscriptItemState state={data.post.post_status}/>
+          <div className={"w-[100px] h-[100px] overflow-hidden rounded"}>
+            {imageId ? <LazyImg src={buildImageUrl(imageId)} alt={"post"} width={100} height={100}/>
+              : (
+                <Image src={"/icons/image_draft.png"} alt={""} width={100} height={100}
+                  className={"shrink-0 w-[100px] h-full rounded"}
+                />
+              )
+            }
+          </div>
+          <section className={"flex-1 h-full flex flex-col justify-between "}>
+            <h3 className="line-clamp-[2]">{data.post.title}</h3>
+            <section className={"flex-1 flex items-center text-[#bbb]"}>{data.post.pub_time ? dayjs(data.post.pub_time * 1000).format(TIME_FORMAT) : ""}</section>
+            <section className="flex gap-4 text-xs justify-around">
+              <ShowNumberWithIcon number={data.post_metric?.thumbs_up_count ?? 0}
+                icon={"/icons/profile/icon_fans_like_normal@3x.png"}
               />
-            )
-          }
-        </div>
-        <section className={"flex-1 h-full flex flex-col justify-between "}>
-          <h3 className="line-clamp-[2]">{data.post.title}</h3>
-          <section className={"flex-1 flex items-center text-[#bbb]"}>{data.post.pub_time ? dayjs(data.post.pub_time * 1000).format(TIME_FORMAT) : ""}</section>
-          <section className="flex gap-4 text-xs justify-around">
-            <ShowNumberWithIcon number={data.post_metric?.thumbs_up_count ?? 0}
-              icon={"/icons/profile/icon_fans_like_normal@3x.png"}
-            />
-            <ShowNumberWithIcon number={data.post_metric?.comment_count ?? 0}
-              icon={"/icons/profile/icon_fans_comment_normal@3x.png"}
-            />
-            <ShowNumberWithIcon number={data.post_metric?.play_count ?? 0}
-              icon={"/icons/profile/icon_fans_reward_normal@3x.png"}
-            />
-            <ShowNumberWithIcon number={data.post_metric?.share_count ?? 0}
-              icon={"/icons/profile/icon_fans_share_normal@3x.png"}
-            />
-            <ShowNumberWithIcon number={data.post_metric?.collection_count ?? 0}
-              icon={"/icons/profile/icon_fans_collect_normal@3x.png"}
-            />
-            <ShowNumberWithIcon number={data.post_metric?.tip_count ?? 0}
-              icon={"/icons/profile/icon_fans_money_s_gray@3x.png"}
-            />
+              <ShowNumberWithIcon number={data.post_metric?.comment_count ?? 0}
+                icon={"/icons/profile/icon_fans_comment_normal@3x.png"}
+              />
+              <ShowNumberWithIcon number={data.post_metric?.play_count ?? 0}
+                icon={"/icons/profile/icon_fans_reward_normal@3x.png"}
+              />
+              <ShowNumberWithIcon number={data.post_metric?.share_count ?? 0}
+                icon={"/icons/profile/icon_fans_share_normal@3x.png"}
+              />
+              <ShowNumberWithIcon number={data.post_metric?.collection_count ?? 0}
+                icon={"/icons/profile/icon_fans_collect_normal@3x.png"}
+              />
+              <ShowNumberWithIcon number={data.post_metric?.tip_count ?? 0}
+                icon={"/icons/profile/icon_fans_money_s_gray@3x.png"}
+              />
+            </section>
           </section>
-        </section>
-      </button>
-      <ManuscriptActions id={data.post.id} postStatus={data.post.post_status} refresh={refresh} pinned={data.post.pinned}/>
-    </section>
+        </button>
+        <ManuscriptActions id={data.post.id} postStatus={data.post.post_status} refresh={refresh} pinned={data.post.pinned}/>
+      </section>
+    </>
   )
 }
