@@ -148,7 +148,7 @@ const ManuscriptMedia = () => {
                 <div className={"grid grid-cols-2 gap-3 "}>
                   {items?.map((item, index) => (
                     <section key={index}>
-                      <section className="rounded-xl relative overflow-hidden text-xs bg-black/50">
+                      <section className="rounded-xl relative overflow-hidden text-xs bg-black/20">
                         <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5 z-10">
                           <section className="flex items-center gap-0.5">
                             <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}

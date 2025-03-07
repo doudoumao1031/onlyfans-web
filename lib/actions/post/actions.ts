@@ -170,3 +170,9 @@ export const postPined = (post_id: number) =>
  * @param post_id
  */
 export const addPostLog = (post_id: number) => fetchWithPost(ENDPOINTS.POST.VIEW_LOG, { post_id })
+
+/**
+ * 删除帖子
+ * @param post_id
+ */
+export const deletePost = (post_id: number) => fetchWithPost(`${ENDPOINTS.POST.DELETE_POST}/${post_id}`, undefined)
