@@ -41,6 +41,7 @@ export interface CommentReplyPageReq {
 }
 
 export interface CommentInfo {
+  comment_time: number
   content: string
   id: number
   is_self: boolean
@@ -54,6 +55,7 @@ export interface CommentInfo {
 }
 
 export interface CommentReplyInfo {
+  comment_time: number
   comment_id: number
   content: string
   id: number

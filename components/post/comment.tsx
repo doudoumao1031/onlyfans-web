@@ -17,6 +17,7 @@ import CommentSkeleton from "./comment-skeleton"
 import SheetSelect from "../common/sheet-select"
 import { useTranslations } from "next-intl"
 import { useCommonMessageContext } from "../common/common-message"
+import dayjs from "dayjs"
 
 export default function Comments({
   post_id,
@@ -74,7 +75,17 @@ function Comment({
 }) {
   const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Common.post")
-  const { user, content, thumbs_up_count, thumb_up, id, post_id, is_self, reply_count } = comment
+  const {
+    user,
+    content,
+    thumbs_up_count,
+    thumb_up,
+    id,
+    post_id,
+    is_self,
+    reply_count,
+    comment_time
+  } = comment
   const { photo, username } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
@@ -117,6 +128,7 @@ function Comment({
                 <div className="text-xs text-theme">{username}</div>
                 <div className="text-sm">{content}</div>
                 <div className="flex gap-4 text-xs text-[#6D7781]">
+                  <div>{dayjs.unix(comment_time).format("MM.DD hh:mm")}</div>
                   {reply_count > 0 && (
                     <div onClick={toggleReplies} className="text-theme">
                       {t("replyCount", { count: reply_count })}
@@ -254,7 +266,17 @@ function Reply({
 }) {
   const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Common.post")
-  const { user, content, thumbs_up_count, thumb_up, id, comment_id, is_self, reply_user } = reply
+  const {
+    user,
+    content,
+    thumbs_up_count,
+    thumb_up,
+    id,
+    comment_id,
+    is_self,
+    reply_user,
+    comment_time
+  } = reply
   const { photo, username } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
@@ -294,6 +316,8 @@ function Reply({
                 <div>{content}</div>
               </div>
               <div className="flex gap-4 text-xs text-[#6D7781]">
+                {" "}
+                <div>{dayjs.unix(comment_time).format("MM.DD hh:mm")}</div>
                 <div onClick={() => setShowReplyInput(!showReplyInput)}>{t("reply")}</div>
                 {is_self && (
                   <div onClick={() => setOpenConfirmDeleteReply(true)}>{t("delete")}</div>
