@@ -4,34 +4,29 @@ import { Skeleton } from "@/components/ui/skeleton"
 import Image from "next/image"
 import { ComponentProps } from "react"
 import { buildImageUrl } from "@/lib/utils"
-import clsx from "clsx"
-type MyImageProps = ComponentProps<typeof Image> & {
-  containerAuto?: boolean
-};
+type MyImageProps = ComponentProps<typeof Image> & {}
 export default function LazyImg(props: MyImageProps): React.ReactNode {
   const [isLoading, setIsLoading] = useState(true)
   return (
-    <div className={clsx("relative", !props.containerAuto ? "w-full h-full" :"")}>
-      {
-        (isLoading) && <Skeleton className={`${props.className} w-full h-full absolute `}></Skeleton>
-      }
+    <div className="relative w-full h-full flex justify-center">
+      {isLoading && <Skeleton className={`${props.className} w-full h-full absolute `}></Skeleton>}
       {props.src && <Image {...props} onLoad={() => setIsLoading(false)} />}
     </div>
-
   )
 }
 
-export function LazyImageWithFileId(props:Omit<MyImageProps, "src"> & {fileId: string}) {
+export function LazyImageWithFileId(props: Omit<MyImageProps, "src"> & { fileId: string }) {
   const { fileId } = props
   if (fileId) {
     const src = buildImageUrl(fileId)
     return <LazyImg {...props} src={src} />
   }
   return (
-    <Skeleton style={{
-      width:props.width,
-      height: props.height
-    }}
+    <Skeleton
+      style={{
+        width: props.width,
+        height: props.height
+      }}
     ></Skeleton>
   )
 }

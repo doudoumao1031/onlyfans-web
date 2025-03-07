@@ -574,6 +574,8 @@ const UploadMedia = () => {
         if (ref?.current) {
           ref.current.value = ""
         }
+      } else {
+        showMessage(t("manuscript.uploadFail"), "error")
       }
     }).finally(() => {
       setIsUploading(false)

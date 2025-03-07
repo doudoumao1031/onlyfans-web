@@ -98,9 +98,13 @@
   },
   "Profile": {
     "mainTitle": "我的",
+    "moreInfo": "更多信息",
+    "foldInfo": "折叠信息",
+    "noUserName":"该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧...",
     "actions": {
       "enter": "进入空间",
       "moreInfo": "更多信息",
+      
       "recharge": "充值"
     },
     "moduleTypes": {
@@ -196,6 +200,7 @@
       "deleteImageContent": "请先删除图片内容",
       "deleteVideoContent": "请先删除视频内容",
       "uploading": "上传中...",
+      "uploadFail": "上传失败",
       "videoImage": "视频/图片",
       "priceFree": "金额0时，为免费",
       "payPrice": "付费金额",
@@ -383,7 +388,8 @@
     "fllowSuccess": "关注成功",
     "cancelled": "取消成功",
     "day": "天",
-    "free": "免费"
+    "free": "免费",
+    "noUserName":"该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧..."
   },
   "Search": {
     "inputPlaceholder": "输入博主的昵称或用户名进行搜索",

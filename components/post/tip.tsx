@@ -11,7 +11,7 @@ interface TipProps {
 
 export default function Tip(props: TipProps) {
   const { count, postId, self, tipStar, notice } = props
-  const [amount, setAmount] = useState<number>(count)
+  const [amount, setAmount] = useState<number>(parseFloat(count.toFixed(2)))
   const content = (
     <div>
       <Stats icon="icon_fans_reward" value={amount} disable={self}/>
@@ -19,7 +19,7 @@ export default function Tip(props: TipProps) {
   )
   return self ? content :
     (
-      <TipDrawer postId={postId} refresh={(t) => setAmount(amount + t)} tipStar={tipStar} notice={notice}>
+      <TipDrawer postId={postId} refresh={(t) => setAmount(parseFloat((amount + t).toFixed(2)))} tipStar={tipStar} notice={notice}>
         {content}
       </TipDrawer>
     )

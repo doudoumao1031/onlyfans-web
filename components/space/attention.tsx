@@ -85,9 +85,8 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
         onClick={async () => {
           await handleFollowing()
         }}
-        className={`min-w-20 px-2 h-8 rounded-full border border-theme flex justify-center items-center  ${
-          isFocus ? "" : "bg-theme"
-        }`}
+        className={`min-w-20 px-2 h-8 rounded-full border border-theme flex justify-center items-center  ${isFocus ? "" : "bg-theme"
+          }`}
       >
         <IconWithImage
           url={
@@ -108,7 +107,7 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
             {dayjs((data && data?.sub_end_time * 1000) || 0).diff(dayjs(), "days")}
             {t("day")}
           </span>
-          <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="#00AEF3" />
+          {/* <IconWithImage url="/icons/icon_arrow_right.png" width={16} height={16} color="#00AEF3" /> */}
         </div>
       )}
 

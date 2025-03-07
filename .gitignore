@@ -47,3 +47,5 @@ push-all.sh
 .idea
 
 .vscode
+/.clerk/.tmp/README.md
+/.clerk/.tmp/keyless.json

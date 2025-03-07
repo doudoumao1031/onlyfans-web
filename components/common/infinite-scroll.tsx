@@ -111,7 +111,7 @@ export default function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
   return (
     <div
       ref={containerRef}
-      className={clsx("w-full h-full overflow-y-auto relative list-scroll-box", className)}
+      className={clsx("w-full h-full overflow-y-auto relative list-scroll-box hide-scrollbar", className)}
       style={{ transition: "transform 0.2s ease-out" }}
     >
       {isRefreshing && (

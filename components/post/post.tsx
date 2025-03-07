@@ -9,7 +9,6 @@ import Subscribe from "./subscribe"
 import UserTitle from "./user-title"
 import Description from "./description"
 import Media from "./media"
-import UserHomePageLink from "./user-homepage-link"
 import Like from "./like"
 import CommentStats from "./comment-stats"
 import Tip from "./tip"
@@ -80,7 +79,6 @@ export default function Post({
         )}
 
         <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
-        <UserHomePageLink userId={user.id.toString()} postId={post.id} />
         {post_attachment && post_attachment.length > 0 && (
           <Media
             data={post_attachment}
@@ -97,11 +95,7 @@ export default function Post({
             ))}
           </div>
         )}
-        {hasSubscribe && user && !user?.sub && !mention_user && (
-          <div>
-            <Subscribe user={user} />
-          </div>
-        )}
+        {hasSubscribe && user && !user?.sub && !mention_user && <Subscribe user={user} />}
         {hasVote && post_vote && (
           <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
             <Image src="/theme/icon_fans_vote_red@3x.png" alt="" width={20} height={20} />

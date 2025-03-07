@@ -98,6 +98,9 @@
   },
   "Profile": {
     "mainTitle": "My",
+    "moreInfo": "More Info",
+    "foldInfo": "Fold Info",
+    "noUserName":"The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey...",
     "actions": {
       "enter": "Enter the Space",
       "moreInfo": "More Info",
@@ -198,6 +201,7 @@
       "deleteImageContent": "Please delete the image content first",
       "deleteVideoContent": "Please delete the video content first",
       "uploading": "Uploading...",
+      "uploadFail": "Upload fail",
       "videoImage": "Video/Image",
       "priceFree": "Amount 0 is free",
       "payPrice": "Pay Price",
@@ -384,7 +388,8 @@
     "fllowSuccess": "Follow Success",
     "cancelled": "Cancelled",
     "day": "Day",
-    "free": "Free"
+    "free": "Free",
+    "noUserName":"The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey..."
   },
   "Search": {
     "inputPlaceholder": "Search",

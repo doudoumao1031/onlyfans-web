@@ -15,11 +15,10 @@ export default function FoldingDescription({
   return (
     <>
       <section
-        className={"overflow-hidden whitespace-pre-wrap break-all"}
-        style={{ height: hideState ? "2.5em" : "auto" }}
+        className={hideState && about?.length > 100 ? "line-clamp-3" : "whitespace-pre-wrap"}
         dangerouslySetInnerHTML={{ __html: about }}
       ></section>
-      {!hideState && (
+      {(!hideState || about?.length < 100) && (
         <>
           {location ? (
             <div className={"flex text-xs gap-1 mt-1.5 text-[#6D7781] break-all whitespace-normal"}>
@@ -36,15 +35,14 @@ export default function FoldingDescription({
           ) : null}
         </>
       )}
-      {about && hideState && (
+      {about?.length > 100 && (
         <button
           className="text-text-theme mt-1"
-          type={"button"}
           onTouchEnd={() => {
-            setHideState(false)
+            setHideState(!hideState)
           }}
         >
-          {t("actions.moreInfo")}
+          {!hideState ? t("foldInfo") : t("moreInfo")}
         </button>
       )}
     </>

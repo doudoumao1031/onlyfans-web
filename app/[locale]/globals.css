@@ -4,12 +4,12 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 /*antd mobile override*/
 :root:root {
-  --theme: #00AEF3;
+  --theme: #00aef3;
   --theme-10: rgba(0, 174, 243, 0.1);
   --theme-20: rgba(0, 174, 243, 0.2);
   --theme-30: rgba(0, 174, 243, 0.3);
@@ -20,36 +20,36 @@ body {
   --theme-80: rgba(0, 174, 243, 0.8);
   --theme-90: rgba(0, 174, 243, 0.9);
   --adm-color-primary: #000;
-  --pink: #FF8492;
+  --pink: #ff8492;
   --blue: var(--theme);
-  --orange: #FFA94B;
-  --green: #0DC28A;
+  --orange: #ffa94b;
+  --green: #0dc28a;
   --black: #222222;
   --gray-primary: #444444;
-  --gray-secondary: #6D7781;
+  --gray-secondary: #6d7781;
   --gray-tertiary: #999999;
-  --gray-quaternary: #DDDDDD;
-  --white: #FFFFFF;
-  --white-80: #FFFFFFcc;
-  --white-20: #FFFFFF33;
-  --background-primary: #FFFFFF;
-  --background-secondary: #D3F3FF;
+  --gray-quaternary: #dddddd;
+  --white: #ffffff;
+  --white-80: #ffffffcc;
+  --white-20: #ffffff33;
+  --background-primary: #ffffff;
+  --background-secondary: #d3f3ff;
   --background-pink: var(--pink);
   --background-blue: var(--blue);
   --background-theme: var(--blue);
   /* Text Colors */
   --text-title: #222222;
   --text-subtitle: #444444;
-  --text-desc: #6D7781;
+  --text-desc: #6d7781;
   --text-disabled: #999999;
   --text-link: var(--theme);
-  --text-light: #FFFFFF;
-  --text-light-secondary: #FFFFFFcc;
+  --text-light: #ffffff;
+  --text-light-secondary: #ffffffcc;
   --text-pink: var(--pink);
   --text-blue: var(--blue);
   --text-theme: var(--blue);
 
-  --border: #DDDDDD;
+  --border: #dddddd;
   --border-pink: var(--pink);
   --border-blue: var(--blue);
   --border-theme: var(--blue);
@@ -122,12 +122,13 @@ body {
   }
 }
 
-input,textarea {
+input,
+textarea {
   outline: none;
 }
 
 .hide-modal-close button.absolute {
-  @apply hidden
+  @apply hidden;
 }
 
 .modal-backdrop {
@@ -157,9 +158,30 @@ input,textarea {
 }
 
 @keyframes colorProgress {
-  0% { fill: #FFC0CB; } /* 浅粉色 */
-  25% { fill: #FFFFFF; } /* 白色 */
-  50% { fill: #f29fa7; } /* 调淡的深粉红 */
-  75% { fill: #f0919a; } /* 热粉色 */
-  100% { fill: #FFC0CB; } /* 浅粉色 */
+  0% {
+    fill: #ffc0cb;
+  } /* 浅粉色 */
+  25% {
+    fill: #ffffff;
+  } /* 白色 */
+  50% {
+    fill: #f29fa7;
+  } /* 调淡的深粉红 */
+  75% {
+    fill: #f0919a;
+  } /* 热粉色 */
+  100% {
+    fill: #ffc0cb;
+  } /* 浅粉色 */
+}
+
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+  }
 }

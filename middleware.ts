@@ -49,6 +49,8 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-  matcher: ["/", "/(zh|en)/:path*", "/((?!_next/static|_next/image|.*\\.png$|api).*)"]
+  matcher: [
+    "/",
+    "/(zh|en)/:path*",
+    "/((?!_next|static|.*\\.\\w+$|api).*)"]
 }

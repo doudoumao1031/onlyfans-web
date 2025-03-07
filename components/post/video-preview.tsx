@@ -13,6 +13,7 @@ interface VideoPreviewProps {
 
 export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const backgroundVideoRef = useRef<HTMLVideoElement>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -48,7 +49,18 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
       }
     }
   }, [])
+  // 同步播放状态
+  const handlePlay = () => {
+    if (backgroundVideoRef.current && videoRef.current) {
+      backgroundVideoRef.current.play()
+    }
+  }
 
+  const handlePause = () => {
+    if (backgroundVideoRef.current && videoRef.current) {
+      backgroundVideoRef.current.pause()
+    }
+  }
   return (
     <div className="relative w-full rounded-xl" style={{ aspectRatio: "343/200" }}>
       {isLoading &&
@@ -63,16 +75,27 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
         ) : (
           <Skeleton className="absolute w-full h-full rounded-xl" />
         ))}
-      <video
-        ref={videoRef}
-        className="w-full h-full object-cover rounded-xl"
-        poster={buildImageUrl(thumbId || fileId)}
-        src={buildVideoUrl(fileId, "240p")}
-        playsInline
-        muted
-        loop
-        onCanPlay={() => setIsLoading(false)}
-      />
+      <div className="w-full h-full relative overflow-hidden">
+        <video
+          ref={backgroundVideoRef}
+          src={buildVideoUrl(fileId, "240p")}
+          className="w-full h-full absolute top-0 left-0 z-[-1] object-cover blur-[10px]"
+          muted
+          loop
+        />
+        <video
+          ref={videoRef}
+          className="w-full h-full object-contain rounded-xl"
+          poster={buildImageUrl(thumbId || fileId)}
+          src={buildVideoUrl(fileId, "240p")}
+          playsInline
+          onPlay={handlePlay}
+          onPause={handlePause}
+          muted
+          loop
+          onCanPlay={() => setIsLoading(false)}
+        />
+      </div>
     </div>
   )
 }
