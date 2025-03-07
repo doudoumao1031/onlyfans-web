@@ -51,8 +51,8 @@
       "cancelSaved": "已取消收藏"
     },
     "datePicker": {
-      "Year":"年",
-      "Year1":"年",
+      "Year": "年",
+      "Year1": "年",
       "year": "年",
       "month": "月",
       "january": "一月",
@@ -100,11 +100,10 @@
     "mainTitle": "我的",
     "moreInfo": "更多信息",
     "foldInfo": "折叠信息",
-    "noUserName":"该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧...",
+    "noUserName": "该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧...",
     "actions": {
       "enter": "进入空间",
       "moreInfo": "更多信息",
-      
       "recharge": "充值"
     },
     "moduleTypes": {
@@ -305,7 +304,9 @@
       "recharge": "充值",
       "subscribe": "订阅",
       "tip": "打赏",
-      "postPay": "帖子付费"
+      "postPay": "帖子付费",
+      "sourceBtn": "查看来源",
+      "revenueTitle": "收益明细"
     },
     "collect": {
       "collect": "收藏夹",
@@ -389,7 +390,7 @@
     "cancelled": "取消成功",
     "day": "天",
     "free": "免费",
-    "noUserName":"该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧..."
+    "noUserName": "该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧..."
   },
   "Search": {
     "inputPlaceholder": "搜索",
