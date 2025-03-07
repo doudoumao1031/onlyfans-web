@@ -75,7 +75,7 @@ export default function UserInfo({
           {!isSelf && !data.sub && (
             <SubscribedDrawer
               userId={data.id}
-              name={data.username || data.first_name}
+              name={data.first_name}
               free={data.sub_price === 0}
               setRechargeModel={setVisible}
               flush={() => {

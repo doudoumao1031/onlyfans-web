@@ -392,7 +392,7 @@
     "noUserName":"该博主还未填写任何数据，请填写个人信息开启,你的精彩之旅吧..."
   },
   "Search": {
-    "inputPlaceholder": "输入博主的昵称或用户名进行搜索",
+    "inputPlaceholder": "搜索",
     "description": "输入博主的昵称或用户名进行搜索",
     "noResult": "没有搜到相关博主，请尝试别的搜索词",
     "users": "博主",
