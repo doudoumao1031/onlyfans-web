@@ -1,6 +1,6 @@
 "use client"
 import IconWithImage from "@/components/profile/icon"
-import React from "react"
+import React, { useCallback } from "react"
 import { useRouter } from "next/navigation"
 
 export default function Header({ handleBack, title, right, titleColor, backIconColor, leftTitle }: {
@@ -12,7 +12,20 @@ export default function Header({ handleBack, title, right, titleColor, backIconC
   leftTitle?: React.ReactNode
 }) {
   const router = useRouter()
-  const handleClickBack = handleBack ? handleBack : router.back
+  const myBack = useCallback(() => {
+    if (!document.referrer) {
+      router.back()
+      return
+    }
+    const url = new URL(document.referrer)
+    if (url.pathname) {
+      router.replace(url.pathname)
+    } else {
+      router.back()
+    }
+  }, [router])
+  const handleClickBack = handleBack ? handleBack : myBack
+
   return (
     <section className="flex align-middle justify-between items-center w-screen px-4 text-black max-w-lg" style={{ aspectRatio: "375/44" }}>
       <div className="flex justify-start shrink-0 w-1/5">

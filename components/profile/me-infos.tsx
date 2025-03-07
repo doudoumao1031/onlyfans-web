@@ -1,14 +1,12 @@
-import Header from "@/components/common/header"
 import Avatar from "@/components/profile/avatar"
 import IconWithImage from "@/components/profile/icon"
 import { Link } from "@/i18n/routing"
 import { userProfile } from "@/lib/actions/profile"
 import { userWallet } from "@/lib"
-import { buildImageUrl } from "@/lib/utils"
 import FoldingDescription from "@/components/profile/folding-description"
 import RechargePanel from "@/components/profile/recharge-panel"
-import LazyImg from "../common/lazy-img"
 import { getTranslations } from "next-intl/server"
+import ProfileHeader from "./profile-header"
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
     return data
@@ -34,36 +32,7 @@ export default async function Page() {
 
   return (
     <div>
-      <div
-        className={"profile-content bg-slate-300 bg-cover"}
-      // style={{
-      //   backgroundImage: data.back_img
-      //     ? `url(${buildImageUrl(data.back_img)})`
-      //     : "url(/icons/base-header.png)"
-      // }}
-      >
-        <LazyImg
-          style={{ objectFit: "cover" }}
-          width={200}
-          height={400}
-          className="w-full h-full"
-          src={data.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"}
-          alt={""}
-        />
-        <div className="absolute top-0 left-0 w-full" style={{ paddingTop: "var(--top-bar)" }}>
-          <Header
-            right={
-              <>
-                <IconWithImage url="/theme/icon_nav_code_white@3x.png" width={22} height={22} />
-                <IconWithImage url="/theme/icon_nav_share_white@3x.png" width={22} height={22} />
-              </>
-            }
-            title={t("mainTitle")}
-            backIconColor={"#fff"}
-          />
-          <div className="text-xs pl-6 pr-6 text-white break-all ">{data.top_info}</div>
-        </div>
-      </div>
+      <ProfileHeader data={data} />
       <section className="mt-[-47px] rounded-t-3xl bg-white relative  pt-12 text-black ">
         <section className="pl-4 pr-4 pb-3 border-b border-b-gray-100">
           <Avatar showLive={data.live_certification} fileId={data.photo} />
