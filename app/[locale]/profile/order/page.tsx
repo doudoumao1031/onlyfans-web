@@ -2,7 +2,7 @@
 import InputWithLabel from "@/components/profile/input-with-label"
 import React, { useEffect, useMemo, useState } from "react"
 import Header from "@/components/common/header"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/i18n/routing"
 import {
   Drawer,
   DrawerContent,
@@ -743,26 +743,15 @@ export default function Page() {
     return realPrice.toFixed(2)
   }, [realPrice, t])
 
-  const handleBack = () => {
-    if (!document.referrer) {
-      router.back()
-      return
-    }
-    const url = new URL(document.referrer)
-    if (url.pathname) {
-      router.replace(url.pathname)
-    } else {
-      router.back()
-    }
-  }
-
   const { withLoading } = useLoadingHandler({
     onError: (message) => {
       showMessage(typeof message === "string" ? message : commonTrans("updateFail"))
     },
     onSuccess: (message) => {
       showMessage(typeof message === "string" ? message : commonTrans("updateSuccess"), "success", {
-        afterDuration: handleBack
+        afterDuration: () => {
+          router.push("/profile")
+        }
       })
     }
   })
