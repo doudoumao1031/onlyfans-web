@@ -108,14 +108,14 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
                   color={isTop ? "#222" : "#fff"}
                 />
               </Link>
-              <div>
+              <Link className="flex items-center justify-center" href="/profile/share">
                 <IconWithImage
                   url="/icons/space/icon_nav_code_black@3x.png"
                   width={22}
                   height={22}
                   color={isTop ? "#222" : "#fff"}
                 />
-              </div>
+              </Link>
               <div>
                 <IconWithImage
                   url="/icons/space/icon_fans_share_normal@3x.png"
