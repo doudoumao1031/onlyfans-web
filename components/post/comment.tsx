@@ -18,6 +18,7 @@ import SheetSelect from "../common/sheet-select"
 import { useTranslations } from "next-intl"
 import { useCommonMessageContext } from "../common/common-message"
 import dayjs from "dayjs"
+import TextareaAutosize from "react-textarea-autosize"
 
 export default function Comments({
   post_id,
@@ -39,14 +40,32 @@ export default function Comments({
   return (
     <>
       <div className="flex flex-col gap-6 p-4">
-        <div className="flex gap-2">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="grow"
-            placeholder={t("commentPlaceholder")}
-          />
-          <button onClick={sendComment}>{t("sendComment")}</button>
+        <div className="flex gap-2 items-center">
+          <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
+            <TextareaAutosize
+              minRows={1}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="grow bg-transparent"
+              placeholder={t("commentPlaceholder")}
+            />
+            <Image
+              src="/theme/icon_fans_comment_face@3x.png"
+              width={24}
+              height={24}
+              alt=""
+              className="size-[24px]"
+            />
+          </div>
+          <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
+            <Image
+              src="/theme/icon_fans_comment_send@3x.png"
+              width={24}
+              height={24}
+              alt=""
+              onClick={sendComment}
+            />
+          </div>
         </div>
         {comments.map((comment) => (
           <Comment key={comment.id} comment={comment} removed={removeComment} />
@@ -148,14 +167,32 @@ function Comment({
           <CommentSkeleton />
         )}
         {showReplyInput && (
-          <div className="flex gap-2 p-4">
-            <input
-              value={replyInput}
-              onChange={(e) => setReplyInput(e.target.value)}
-              className="grow"
-              placeholder={t("replyPlaceholder")}
-            />
-            <button onClick={sendReply}>{t("sendReply")}</button>
+          <div className="flex gap-2 items-center">
+            <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
+              <TextareaAutosize
+                minRows={1}
+                value={replyInput}
+                onChange={(e) => setReplyInput(e.target.value)}
+                className="grow bg-transparent"
+                placeholder={t("replyPlaceholder")}
+              />
+              <Image
+                src="/theme/icon_fans_comment_face@3x.png"
+                width={24}
+                height={24}
+                alt=""
+                className="size-[24px]"
+              />
+            </div>
+            <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
+              <Image
+                src="/theme/icon_fans_comment_send@3x.png"
+                width={24}
+                height={24}
+                alt=""
+                onClick={sendReply}
+              />
+            </div>
           </div>
         )}
         {showReplies && !!replies?.length && (
@@ -329,14 +366,32 @@ function Reply({
           <Thumbup thumbupCount={thumbupCount} isThumbupped={isThumbupped} thumbup={thumbup} />
         </div>
         {showReplyInput && (
-          <div className="flex gap-2 p-4">
-            <input
-              value={replyInput}
-              onChange={(e) => setReplyInput(e.target.value)}
-              className="grow"
-              placeholder={t("replyPlaceholder")}
-            />
-            <button onClick={sendReply}>{t("sendReply")}</button>
+          <div className="flex gap-2 items-center">
+            <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
+              <TextareaAutosize
+                minRows={1}
+                value={replyInput}
+                onChange={(e) => setReplyInput(e.target.value)}
+                className="grow bg-transparent"
+                placeholder={t("replyPlaceholder")}
+              />
+              <Image
+                src="/theme/icon_fans_comment_face@3x.png"
+                width={24}
+                height={24}
+                alt=""
+                className="size-[24px]"
+              />
+            </div>
+            <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
+              <Image
+                src="/theme/icon_fans_comment_send@3x.png"
+                width={24}
+                height={24}
+                alt=""
+                onClick={sendReply}
+              />
+            </div>
           </div>
         )}
       </div>
