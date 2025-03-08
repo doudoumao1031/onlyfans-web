@@ -20,6 +20,7 @@ export interface RecomBloggerReq extends PageInfo {
 
 export type FansPageReq = PageInfo & {
   desc?: boolean
+  name?: string
 }
 
 /**
