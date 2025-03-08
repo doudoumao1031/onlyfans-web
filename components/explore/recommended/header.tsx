@@ -22,17 +22,16 @@ export default function Header() {
   }, [pathname])
 
   return (
-    <div className="flex gap-3 w-full mb-4 overflow-x-auto">
+    <div className="flex gap-3 w-full mb-4 overflow-x-auto hide-scrollbar">
       {tabs.map((tab) => (
         <Link
           key={tab.path}
           href={tab.path}
           ref={pathname.endsWith(tab.path) ? activeTabRef : null}
-          className={`flex flex-shrink-0 whitespace-nowrap items-center justify-center ${
-            pathname.endsWith(tab.path)
+          className={`flex flex-shrink-0 whitespace-nowrap items-center justify-center ${pathname.endsWith(tab.path)
               ? "bg-background-theme text-white"
               : "bg-white text-text-theme"
-          } border border-border-theme rounded-full px-5 py-1`}
+            } border border-border-theme rounded-full px-5 py-1`}
         >
           <span className="text-nowrap font-medium text-base">{tab.label}</span>
         </Link>
