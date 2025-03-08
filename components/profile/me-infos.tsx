@@ -45,7 +45,7 @@ export default async function Page() {
                 url={"/theme/icon_edit_gray@3x.png"}
                 width={20}
                 height={20}
-                color={"#bbb"}
+                color={"#6D7781"}
               />
             </Link>
           </h1>
