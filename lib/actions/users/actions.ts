@@ -15,7 +15,9 @@ import {
   WalletInfo,
   PtWalletInfo,
   StatementReq,
-  StatementResp
+  StatementResp,
+  FansFollowItem,
+  FansSubscribeItems
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
 
@@ -145,7 +147,7 @@ export const getSubscribeUsers = (params: PageInfo) =>
  * @param params
  */
 export const getFollowedUsers = (params: FansPageReq) =>
-  fetchWithPost<FansPageReq, PageResponse<SubscribeUserInfo>>(
+  fetchWithPost<FansPageReq, PageResponse<FansFollowItem>>(
     ENDPOINTS.USERS.GET_FOLLOWED_USERS,
     params
   ).then((response) => {
@@ -156,20 +158,12 @@ export const getFollowedUsers = (params: FansPageReq) =>
     }
   })
 
-export const infiniteGetFollowedUsers = async (page: number) => {
-  const data = await getFollowedUsers({ page, pageSize: 10, from_id: 0 })
-  return {
-    items: data?.list || [],
-    hasMore: !data?.list ? false : page < Math.ceil(data.total / page)
-  }
-}
-
 /**
  * 订阅我的用户
  * @param params
  */
 export const getSubscribedUsers = (params: FansPageReq) =>
-  fetchWithPost<FansPageReq, PageResponse<SubscribeUserInfo>>(
+  fetchWithPost<FansPageReq, PageResponse<FansSubscribeItems>>(
     ENDPOINTS.USERS.GET_SUBSCRIBED_USERS,
     params
   ).then((response) => {

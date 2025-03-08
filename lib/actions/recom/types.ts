@@ -1,4 +1,4 @@
-import { PostInfoVo } from "@/lib"
+import { UserProfile } from "@/lib/actions/profile"
 
 /**
  * 分页公共请求
@@ -66,6 +66,17 @@ export interface SubscribeUserInfo {
   end_time: number // 结束时间
 }
 
+export interface FansFollowItem {
+  user: UserProfile
+  following_time: number
+}
+
+export interface FansSubscribeItems {
+  user: UserProfile
+  start_time: number
+  end_time: number
+}
+
 export interface UserInfoVo {
   id: string
   username: string
@@ -77,13 +88,3 @@ export interface UserInfoVo {
   isFollowing: boolean
 }
 
-export interface UserPostVo {
-  user: UserInfoVo
-  posts: PostInfoVo[]
-}
-
-// Response types
-export type FollowUserPostsResp = PostInfoVo[]
-export type FollowUserUpdateResp = UserPostVo[]
-export type RecomBloggerResp = UserInfoVo[]
-export type SystemPostResp = PostInfoVo[]

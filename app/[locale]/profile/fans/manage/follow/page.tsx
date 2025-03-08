@@ -1,22 +1,21 @@
 "use client"
 import React, { Fragment, useCallback, useEffect, useState } from "react"
 import TimeSort from "@/components/profile/time-sort"
-import { getFollowedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
+import { FansFollowItem, getFollowedUsers, PageResponse } from "@/lib"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
-import FansListItem from "@/components/profile/fans/fans-list-item"
 import { useTranslations } from "next-intl"
+import { FollowedListItem } from "@/components/profile/fans/fans-list-item"
 
 interface FollowedUsersProps {
-  initialItems: SubscribeUserInfo[];
+  initialItems: FansFollowItem[];
   initialHasMore: boolean;
-  fetcherFn: (page: number) => Promise<{ items: SubscribeUserInfo[]; hasMore: boolean; }>
+  fetcherFn: (page: number) => Promise<{ items: FansFollowItem[]; hasMore: boolean; }>
 }
 
 function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsersProps) {
-
   return (
-    <InfiniteScroll<SubscribeUserInfo>
+    <InfiniteScroll<FansFollowItem>
       initialItems={initialItems}
       initialHasMore={initialHasMore}
       fetcherFn={fetcherFn}
@@ -24,7 +23,7 @@ function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsers
       {({ items, isLoading, hasMore, error }) => (
         <Fragment>
           {Boolean(error) && <ListError/>}
-          {items?.map(item => <FansListItem data={item} key={item.user.id}/>)}
+          {items?.map(item => <FollowedListItem data={item} key={item.user.id}/>)}
           {isLoading && <ListLoading/>}
           {!hasMore && items.length > 0 && <ListEnd/>}
         </Fragment>
@@ -34,7 +33,7 @@ function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsers
 }
 
 export default function Page() {
-  const [data,setData] = useState<PageResponse<SubscribeUserInfo> | null>(null)
+  const [data,setData] = useState<PageResponse<FansFollowItem> | null>(null)
   const [sortDesc,setSortDesc] = useState<boolean>(true)
   const t = useTranslations("Profile.fans")
   const fetcherFn = useCallback(async(page:number) => {

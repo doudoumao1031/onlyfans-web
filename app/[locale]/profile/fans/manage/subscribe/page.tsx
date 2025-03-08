@@ -1,28 +1,28 @@
 "use client"
 import React, { useCallback, useEffect, useState } from "react"
 import TimeSort from "@/components/profile/time-sort"
-import FansListItem from "@/components/profile/fans/fans-list-item"
-import { getSubscribedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
+import { FansSubscribeItems, getSubscribedUsers, PageResponse  } from "@/lib"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useTranslations } from "next-intl"
+import { FansSubscribe } from "@/components/profile/fans/fans-list-item"
 
 interface SubscribeUsersProps {
   initialHasMore: boolean;
-  initialItems: SubscribeUserInfo[];
-  fetchData: (page: number) => Promise<{ items: SubscribeUserInfo[]; hasMore: boolean; }>;
+  initialItems: FansSubscribeItems[];
+  fetchData: (page: number) => Promise<{ items: FansSubscribeItems[]; hasMore: boolean; }>;
 }
 
 function SubscribeUsers({ initialItems, initialHasMore, fetchData }: SubscribeUsersProps) {
   return (
-    <InfiniteScroll<SubscribeUserInfo> initialItems={initialItems}
+    <InfiniteScroll<FansSubscribeItems> initialItems={initialItems}
       initialHasMore={initialHasMore}
       fetcherFn={fetchData}
     >
       {({ items, isLoading, hasMore, error }) => (
         <div>
           {Boolean(error) && <ListError/>}
-          {items?.map(item => <FansListItem isSubscribe={true} data={item} key={item.user.id}/>)}
+          {items?.map(item => <FansSubscribe data={item} key={item.user.id}/>)}
           {isLoading && <ListLoading/>}
           {!hasMore && items.length > 0 && <ListEnd/>}
         </div>
@@ -32,7 +32,7 @@ function SubscribeUsers({ initialItems, initialHasMore, fetchData }: SubscribeUs
 }
 
 export default function Page() {
-  const [data,setData] = useState<PageResponse<SubscribeUserInfo> | null>(null)
+  const [data,setData] = useState<PageResponse<FansSubscribeItems> | null>(null)
   const [sortDesc,setSortDesc] = useState<boolean>(true)
   const t = useTranslations("Profile.fans")
   const fetchSubscribedUsers = useCallback(async (page:number) => {

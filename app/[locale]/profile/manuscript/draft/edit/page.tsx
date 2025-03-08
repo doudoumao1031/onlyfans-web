@@ -26,7 +26,7 @@ import {
 import { isNumber } from "lodash"
 import { buildImageUrl, getUploadMediaFileType, UPLOAD_MEDIA_TYPE, uploadFile } from "@/lib/utils"
 import DateTimePicker from "@/components/common/date-time-picker"
-import { FileType, getFollowedUsers, SubscribeUserInfo } from "@/lib"
+import { FansFollowItem, FileType, getFollowedUsers, SubscribeUserInfo } from "@/lib"
 import Empty from "@/components/common/empty"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
@@ -709,7 +709,7 @@ function SelectMotionUser({
 }: {
   isOpen: boolean
   setIsOpen: (val: boolean) => void
-  subUsers: SubscribeUserInfo[],
+  subUsers: FansFollowItem[],
   updateMentionUserIds: (id: number) => void
 }) {
   const t = useTranslations("Profile")
@@ -745,7 +745,7 @@ function SelectMotionUser({
                       <div className={"text-base text-[#222] font-medium"}>{item.user.username}</div>
                       <div
                         className={"text-xs text-[#bbb]"}
-                      >{dayjs(item.start_time).format("YYYY-MM-DD HH:mm")}</div>
+                      >{dayjs(item.following_time * 1000).format("YYYY-MM-DD HH:mm")}</div>
                     </section>
                   </button>
                 </div>
@@ -777,7 +777,7 @@ const EditPageContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const postId = Number(searchParams.get("id"))
-  const [subUsers, setSubUsers] = useState<SubscribeUserInfo[]>([])
+  const [subUsers, setSubUsers] = useState<FansFollowItem[]>([])
   const { showMessage } = useCommonMessageContext()
 
   useEffect(() => {
@@ -860,8 +860,6 @@ const EditPageContent = () => {
   })
 
   const { register, watch, formState, setValue, handleSubmit: handleFormSubmit } = postForm
-
-  const noticeRegister = register("post.notice")
 
   const formValues = watch()
   const [atUserModal, setAtUserModal] = useState<boolean>(false)
@@ -1068,13 +1066,18 @@ const EditPageContent = () => {
           <ItemEditTitle showIcon={false} title={t("manuscript.publishNotice")} />
           <section className="border-b border-gray-200 flex justify-between items-center py-3">
             <div>{t("manuscript.subscriber")}</div>
-            <Switch
-              className={"custom-switch"}
-              {...noticeRegister}
-              onCheckedChange={(value) => {
-                setValue("post.notice", value)
-              }}
-            ></Switch>
+            <Controller control={postForm.control} render={({ field }) => {
+              return (
+                <Switch
+                  className={"custom-switch"}
+                  checked={field.value}
+                  onCheckedChange={(value) => {
+                  field.onChange(value)
+                }}
+                />
+)
+            }} name={"post.notice"}
+            />
           </section>
         </section>
         <section className="text-center pb-5">
