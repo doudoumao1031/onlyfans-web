@@ -39,7 +39,7 @@ export default function Page() {
     const res = await getWalletStatement(params)
     setLoading(false)
     setInitData(res)
-    console.log(res, 'dats------');
+    console.log(res, "dats------")
 
   }
 

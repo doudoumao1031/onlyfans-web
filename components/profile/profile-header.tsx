@@ -35,7 +35,7 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
         setIsTop(!entry.isIntersecting)
       },
       {
-        threshold: 0.1
+        threshold: 0.7
       }
     )
     const currentBgRef = bgRef.current

@@ -41,7 +41,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
         setIsTop(!entry.isIntersecting)
       },
       {
-        threshold: 0.1
+        threshold: 0.7
       }
     )
 
