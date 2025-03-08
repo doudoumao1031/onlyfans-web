@@ -32,9 +32,9 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
               </div>
               <div className="flex-col w-3/4">
                 <div>
-                  <div className="font-medium text-sm">{user.first_name}</div>
+                  <div className="font-medium text-sm text-nowrap">{user.first_name}</div>
                   <div className="font-normal text-xs">
-                    {user.username ? `@${user.username}` : `@${user.first_name}`}
+                    {user.username ? `@${user.username}` : "\u00A0"}
                   </div>
                 </div>
                 {subscribe && (

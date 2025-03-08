@@ -132,6 +132,15 @@ export interface StatementResp {
   trade_time: number // 交易时间
   trade_status: number // 0 成功 1 审核中 2 失败
   from_user: string // 交易方
+  post_id?: number //帖子id
+  user_base_vo?: {
+    first_name: string
+    id: number
+    last_name: number
+    photo: number
+    pt_user_id: number
+    username: string
+  }
 }
 
 export interface UserMetricDayReq {
