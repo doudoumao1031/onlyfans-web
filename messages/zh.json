@@ -207,7 +207,9 @@
       "paySetting": "付费设置",
       "invalid": "无效",
       "free": "免费",
-      "motionUser": "关注用户"
+      "motionUser": "关注用户",
+      "viewPic": "请浏览图片",
+      "viewVideo": "请查看视频"
     },
     "recharge": {
       "title": "充值",

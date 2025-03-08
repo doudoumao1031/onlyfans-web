@@ -26,7 +26,7 @@ import {
 import { isNumber } from "lodash"
 import { buildImageUrl, getUploadMediaFileType, UPLOAD_MEDIA_TYPE, uploadFile } from "@/lib/utils"
 import DateTimePicker from "@/components/common/date-time-picker"
-import { getFollowedUsers, SubscribeUserInfo } from "@/lib"
+import { FileType, getFollowedUsers, SubscribeUserInfo } from "@/lib"
 import Empty from "@/components/common/empty"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
@@ -594,12 +594,12 @@ const UploadMedia = () => {
                 <div
                   key={item.file_id}
                   className={
-                    "relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5]  "
+                    "relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "
                   }
                 >
-                  <section className={"h-full w-full overflow-hidden rounded "}>
+                  <section className={"h-full w-full overflow-hidden flex items-center"}>
                     <Image
-                      className={"rounded-xl max-h-full max-w-full object-contain"}
+                      className={"max-h-full max-w-full object-contain"}
                       src={buildImageUrl(field.value)}
                       alt={"attachment"}
                       width={100}
@@ -772,12 +772,14 @@ const Page = () => {
   )
 }
 
+
 const EditPageContent = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const postId = Number(searchParams.get("id"))
   const [subUsers, setSubUsers] = useState<SubscribeUserInfo[]>([])
   const { showMessage } = useCommonMessageContext()
+
   useEffect(() => {
     getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 }).then(response => {
       if (!response) return
@@ -787,6 +789,14 @@ const EditPageContent = () => {
   const selectionStart = useRef<number>(0)
   const t = useTranslations("Profile")
   const commonTrans = useTranslations("Common")
+
+  const DEFAULT_POST_TITLE = useMemo(() => {
+    return {
+      [FileType.Image] : t("manuscript.viewPic"),
+      [FileType.Video] : t("manuscript.viewVideo"),
+      [FileType.Other] : ""
+    }
+  },[t])
   const getSubmitFormData = (formData: iPost) => {
     const { post_mention_user = [], post: { title } } = formData
     const mentionUsers = post_mention_user?.map(item => subUsers.find(sub => sub.user.id === item.user_id))?.filter(item => !!item)
@@ -801,9 +811,7 @@ const EditPageContent = () => {
 
   const { withLoading } = useLoadingHandler({
     onError: (message) => {
-      showMessage(typeof message === "string" ? message : commonTrans("saveFail"), "error", {
-        afterDuration: router.back
-      })
+      showMessage(typeof message === "string" ? message : commonTrans("saveFail"), "error")
     },
     onSuccess: (message) => {
       showMessage(typeof message === "string" ? message : commonTrans("saveSuccess"), "success", {
@@ -885,6 +893,29 @@ const EditPageContent = () => {
     return !!title || !!attachments?.length
   }, [formValues])
 
+  const post_attachment = (watch("post_attachment") ?? []).filter(item => !!item)
+  const post_title = (watch("post.title") ?? "").trim()
+
+  const canPublish = useMemo(() => {
+    if (post_attachment?.length) {
+      return true
+    }
+    return post_title.length > 4
+  },[post_title,post_attachment])
+
+  //请浏览图片/请查看视频
+  useEffect(() => {
+    if (post_attachment.length && post_title === "") {
+      const fileType = post_attachment[0].file_type
+      setValue("post.title",DEFAULT_POST_TITLE[fileType])
+      postForm.trigger()
+    }
+    const defaultTitles = Object.values(DEFAULT_POST_TITLE).filter(item => !!item)
+    if (post_attachment.length === 0 && defaultTitles.includes(post_title)) {
+      setValue("post.title","")
+    }
+  }, [DEFAULT_POST_TITLE, postForm, post_attachment, post_title, setValue])
+
   return (
     <FormProvider {...postForm}>
       <SelectMotionUser isOpen={atUserModal} setIsOpen={setAtUserModal}
@@ -922,7 +953,7 @@ const EditPageContent = () => {
                 </button>
               )
           }
-          <button type="submit" className={clsx(!formState.isValid ? "text-[#bbb]" : "text-text-theme")}>
+          <button type="submit" className={clsx((canPublish) ? "text-text-theme" : "text-[#bbb]")}>
             {t("manuscript.itemActions.publish")}
           </button>
         </section>

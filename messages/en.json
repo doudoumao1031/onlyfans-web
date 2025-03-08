@@ -209,7 +209,9 @@
       "paySetting": "Pay Setting",
       "invalid": "Invalid",
       "free": "Free",
-      "motionUser": "Motion User"
+      "motionUser": "Motion User",
+      "viewPic": "Please browse the picture",
+      "viewVideo": "Please view the video"
     },
     "recharge": {
       "title": "Recharge",
