@@ -51,8 +51,8 @@
       "cancelSaved": "Cancel saved"
     },
     "datePicker": {
-      "Year":"Year",
-      "Year1":"",
+      "Year": "Year",
+      "Year1": "",
       "year": "-",
       "month": "",
       "january": "January",
@@ -100,7 +100,7 @@
     "mainTitle": "My",
     "moreInfo": "More Info",
     "foldInfo": "Fold Info",
-    "noUserName":"The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey...",
+    "noUserName": "The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey...",
     "actions": {
       "enter": "Enter the Space",
       "moreInfo": "More Info",
@@ -209,7 +209,9 @@
       "paySetting": "Pay Setting",
       "invalid": "Invalid",
       "free": "Free",
-      "motionUser": "Motion User"
+      "motionUser": "Motion User",
+      "viewPic": "Please browse the picture",
+      "viewVideo": "Please view the video"
     },
     "recharge": {
       "title": "Recharge",
@@ -306,7 +308,9 @@
       "recharge": "Recharge",
       "subscribe": "Subscribe",
       "tip": "Reward",
-      "postPay": "Post pay"
+      "postPay": "Post pay",
+      "sourceBtn": "Source",
+      "revenueTitle": "Revenue Details"
     },
     "collect": {
       "collect": "Collect",
@@ -389,7 +393,7 @@
     "cancelled": "Cancelled",
     "day": "Day",
     "free": "Free",
-    "noUserName":"The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey..."
+    "noUserName": "The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey..."
   },
   "Search": {
     "inputPlaceholder": "Search",

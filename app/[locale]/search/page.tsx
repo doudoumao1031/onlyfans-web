@@ -48,12 +48,14 @@ export default async function Page(props: {
       {query !== "" && users && users.total > 0 && users.list && (
         <div className="flex flex-col justify-start px-4 pt-[20px]">
           <span className="font-medium text-left text-[#6D7781]">{t("users")}</span>
-          <div className="w-full mt-[10px]">
-            {users.list.map((item, index) => (
-              <div key={index} className="w-full mb-[10px]">
-                <UserCard key={index} user={item} subscribe={true} />
-              </div>
-            ))}
+          <div className="w-full mt-[10px] overflow-x-auto">
+            <div className="flex space-x-4">
+              {users.list.map((item, index) => (
+                <div key={index} className="min-w-[343px]">
+                  <UserCard key={index} user={item} subscribe={true} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}

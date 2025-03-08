@@ -8,7 +8,6 @@ import {
   RecomBloggerReq,
   BloggerType
 } from "@/lib"
-import type { FollowUserUpdateResp } from "@/lib"
 
 /**
  * 推荐博主-热门推荐
@@ -110,11 +109,6 @@ export const getFollowUserPosts = (params: PageInfo) =>
       }
     }
   )
-
-export async function getFollowUserUpdate(): Promise<FollowUserUpdateResp> {
-  // Implementation
-  throw new Error("Not implemented")
-}
 
 /**
  * 推荐博主

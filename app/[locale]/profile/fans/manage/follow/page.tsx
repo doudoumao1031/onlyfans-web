@@ -1,22 +1,22 @@
 "use client"
-import React, { Fragment, useCallback, useEffect, useState } from "react"
+import React, { Fragment, SyntheticEvent, useCallback, useEffect, useState } from "react"
 import TimeSort from "@/components/profile/time-sort"
-import { getFollowedUsers, PageResponse, SubscribeUserInfo } from "@/lib"
+import { FansFollowItem, getFollowedUsers, PageResponse } from "@/lib"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
-import FansListItem from "@/components/profile/fans/fans-list-item"
 import { useTranslations } from "next-intl"
+import { FollowedListItem } from "@/components/profile/fans/fans-list-item"
+import IconWithImage from "@/components/profile/icon"
 
 interface FollowedUsersProps {
-  initialItems: SubscribeUserInfo[];
+  initialItems: FansFollowItem[];
   initialHasMore: boolean;
-  fetcherFn: (page: number) => Promise<{ items: SubscribeUserInfo[]; hasMore: boolean; }>
+  fetcherFn: (page: number) => Promise<{ items: FansFollowItem[]; hasMore: boolean; }>
 }
 
 function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsersProps) {
-
   return (
-    <InfiniteScroll<SubscribeUserInfo>
+    <InfiniteScroll<FansFollowItem>
       initialItems={initialItems}
       initialHasMore={initialHasMore}
       fetcherFn={fetcherFn}
@@ -24,7 +24,7 @@ function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsers
       {({ items, isLoading, hasMore, error }) => (
         <Fragment>
           {Boolean(error) && <ListError/>}
-          {items?.map(item => <FansListItem data={item} key={item.user.id}/>)}
+          {items?.map(item => <FollowedListItem data={item} key={item.user.id}/>)}
           {isLoading && <ListLoading/>}
           {!hasMore && items.length > 0 && <ListEnd/>}
         </Fragment>
@@ -34,8 +34,9 @@ function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsers
 }
 
 export default function Page() {
-  const [data,setData] = useState<PageResponse<SubscribeUserInfo> | null>(null)
+  const [data,setData] = useState<PageResponse<FansFollowItem> | null>(null)
   const [sortDesc,setSortDesc] = useState<boolean>(true)
+  const [name,setName] = useState<string>("")
   const t = useTranslations("Profile.fans")
   const fetcherFn = useCallback(async(page:number) => {
     const data = await getFollowedUsers({ page, pageSize: 10, from_id: 0,desc: sortDesc })
@@ -45,23 +46,41 @@ export default function Page() {
     }
   },[sortDesc])
   const fetchInitData = () => {
-    getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 ,desc: sortDesc }).then(setData)
+    getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 ,desc: sortDesc ,name }).then(setData)
   }
   useEffect(fetchInitData,[])
 
   useEffect(fetchInitData,[sortDesc])
 
+  const handleFormSubmit = (event:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+    event.preventDefault()
+    fetchInitData()
+  }
   if (!data) return null
 
   return (
     <div className={"px-4"}>
-      <div className="flex justify-between py-4 items-center">
-        <span>
-          <span className={"text-[#777]"}>{t("followTotal")}：</span>
-          {data?.total}
-        </span>
-        <TimeSort sortDesc={sortDesc} handleSortChange={setSortDesc}>{t("followedTime")}</TimeSort>
-      </div>
+      <form onSubmit={handleFormSubmit}>
+        <div>
+          <div className={"mt-2 flex-1 pt-2 pb-2 pl-3 pr-3 bg-[#F4F5F5] rounded-full flex items-center"}>
+            <IconWithImage url={"/icons/profile/icon_search_s@3x.png"} width={18} height={18}
+              color={"rgb(221, 221, 221)"}
+            />
+            <input value={name} onChange={(event) => {
+              setName(event.target.value)
+            }} className="w-full bg-transparent flex pl-0.5"
+            />
+          </div>
+        </div>
+        <div className="flex justify-between py-4 items-center text-[14px]">
+          <span>
+            <span className={"text-[#777]"}>{t("followTotal")}：</span>
+            {data?.total}
+          </span>
+          <TimeSort sortDesc={sortDesc} handleSortChange={setSortDesc}>{t("followedTime")}</TimeSort>
+        </div>
+      </form>
+
       {data && <FollowedUsers initialHasMore={Number(data?.total) > Number(data?.list?.length)} initialItems={data?.list ?? []} fetcherFn={fetcherFn}/>}
     </div>
   )
