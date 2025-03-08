@@ -11,6 +11,8 @@
     "cancel": "Cancel",
     "postLoadError": "Failed to load post content",
     "detailLoadError": "Failed to load detail",
+    "delText": "Content has been deleted",
+    "backPre": "Return to previous page",
     "ContentLoadingFailed": "Content loading failed",
     "FreeAndSubscription": "Free/Subscription",
     "createTime": "Create Time",

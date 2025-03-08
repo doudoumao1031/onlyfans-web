@@ -69,7 +69,7 @@ export default function Media(props: MediaProps) {
                         setFollowModal(true)
                       }}
                       className={
-                        file_type === FileType.Video ? "col-span-3" : "block w-full h-full "
+                        file_type === FileType.Video ? "col-span-3 w-full" : "block w-full h-full "
                       }
                     >
                       {file_type === FileType.Video ? (
@@ -89,8 +89,8 @@ export default function Media(props: MediaProps) {
                           )}
                           <LazyImg
                             className={`aspect-square  relative z-10 ${data.length === 1
-                                ? "object-contain max-h-[200px]"
-                                : "object-cover rounded-md"
+                              ? "object-contain max-h-[200px]"
+                              : "object-cover rounded-md"
                               }`}
                             src={buildImageUrl(file_id)}
                             alt=""

@@ -83,7 +83,7 @@ export default function Page() {
                       <div className="flex justify-between text-xs mt-1">
                         <span className="text-[#979799]" >{dayjs(v.trade_time * 1000).format("YYYY-MM-DD HH:mm:ss")}</span>
                         {v.change_type !== 1 && (
-                          <Link href={v.change_type == 2 ? `/space/${v?.user_base_vo?.id}` : `/postInfo/${v.post_id}`}>
+                          <Link href={v.change_type == 2 ? `/space/${v?.user_base_vo?.id}/feed` : `/postInfo/${v.post_id}`}>
                             <span className="text-theme">{t("sourceBtn")}</span>
                           </Link>
                         )}
