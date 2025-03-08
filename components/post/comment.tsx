@@ -107,7 +107,8 @@ function Comment({
           {
             label: "",
             description: `${username}: ${content}`,
-            value: -1
+            value: -1,
+            descriptionClassName: "text-[15px]"
           },
           {
             label: t("delete"),
