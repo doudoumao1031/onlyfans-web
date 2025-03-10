@@ -16,21 +16,24 @@ import Image from "next/image"
 import {
   addPost,
   iPost,
+  iPostAttachment,
   iPostPrice,
   iPostVote,
   postDetail,
   postPriceSchema,
   postSchema,
-  postVoteSchema, pubPost
+  postVoteSchema,
+  pubPost
 } from "@/lib/actions/profile"
 import { isNumber } from "lodash"
-import { buildImageUrl, getUploadMediaFileType, UPLOAD_MEDIA_TYPE, uploadFile } from "@/lib/utils"
+import { buildImageUrl, getUploadMediaFileType, uploadFile } from "@/lib/utils"
 import DateTimePicker from "@/components/common/date-time-picker"
-import { FansFollowItem, FileType, getFollowedUsers, SubscribeUserInfo } from "@/lib"
+import { FansFollowItem, FileType, getFollowedUsers } from "@/lib"
 import Empty from "@/components/common/empty"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { useTranslations } from "next-intl"
+import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
 
 const ItemEditTitle = ({
   title,
@@ -527,11 +530,18 @@ const ReadSettings = ({
   )
 }
 
+
+interface LocalPreviewMediaProps {
+  mediaType: FileType
+  media: File
+  index: number
+}
+
 const UploadMedia = () => {
   const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Profile")
   const [uploading, setIsUploading] = useState<boolean>(false)
-  const [firstMediaType, setFirstMediaType] = useState<UPLOAD_MEDIA_TYPE | undefined>(undefined)
+  const [firstMediaType, setFirstMediaType] = useState<FileType | undefined>(undefined)
   const { control } = useFormContext<iPost>()
   const ref = useRef<HTMLInputElement>(null)
   const {
@@ -543,23 +553,28 @@ const UploadMedia = () => {
     name: "post_attachment"
   })
 
+  // const localPreviews:LocalPreviewMediaProps[] = []
+  const [localPreviews,setLocalPreviews] = useState<LocalPreviewMediaProps[]>([])
+
+  const [tempFile, setTempFile] = useState<File | null>(null)
+
   useEffect(() => {
     if (itemsList.length === 0) {
       setFirstMediaType(undefined)
     }
   }, [itemsList])
 
-  const handleUpload = (file: File) => {
+  const handleUpload = useCallback((file: File) => {
     const fileType = getUploadMediaFileType(file)
     if (!firstMediaType) {
       setFirstMediaType(fileType)
     } else {
       if (fileType !== firstMediaType) {
-        if (fileType === UPLOAD_MEDIA_TYPE.PIC) {
-          showMessage(t("manuscript.deleteVideoContent"), "error")
+        if (fileType === FileType.Image) {
+          showMessage(t("manuscript.deleteVideoContent"))
         }
-        if (fileType === UPLOAD_MEDIA_TYPE.VIDEO) {
-          showMessage(t("manuscript.deleteImageContent"), "error")
+        if (fileType === FileType.Video) {
+          showMessage(t("manuscript.deleteImageContent"))
         }
         return
       }
@@ -574,16 +589,59 @@ const UploadMedia = () => {
         if (ref?.current) {
           ref.current.value = ""
         }
+        setLocalPreviews(prevState => {
+          return [
+            ...prevState,
+            {
+              media: file,
+              mediaType: fileType,
+              index:itemsList.length
+            }
+          ]
+        })
       } else {
-        showMessage(t("manuscript.uploadFail"), "error")
+        showMessage(t("manuscript.uploadFail"))
       }
     }).finally(() => {
       setIsUploading(false)
     })
+  },[append, firstMediaType, showMessage, t, localPreviews])
+
+  // const localPreviewMedia = useState<File | null>(null)
+  const [localPreview,setLocalPreview] = useState<File>()
+  const [openState,setOpenState] = useState<boolean>(false)
+  const [previewType, setPreviewType] = useState<PreviewType>(PreviewType.LOCAL)
+  const [previewMediaType, setPreviewMediaType] = useState<FileType>()
+  const [previewFileId, setPreviewFileId] = useState<string>("")
+
+  const adjustLocalPreviewIndex = (start: number) => {
+    const clone = [...localPreviews]
+    clone.forEach((localPreview, index) => {
+      if (index >= start) {
+        localPreview.index--
+      }
+    })
+    const data = clone.filter(item => item.index > -1)
+    setLocalPreviews(data)
+  }
+
+  const openPreview = (index: number,attachment:iPostAttachment) => {
+    const previewItem = localPreviews.find(item => item.index === index)
+    if (previewItem) {
+      setPreviewType(PreviewType.LOCAL)
+      setLocalPreview(previewItem.media)
+      setPreviewMediaType(previewItem.mediaType)
+    } else {
+      setPreviewType(PreviewType.ONLINE)
+      setPreviewFileId(attachment.file_id)
+      setPreviewMediaType(attachment.file_type)
+    }
+    setOpenState(true)
   }
 
   return (
     <>
+      <MediaPreview fileId={previewFileId} previewType={previewType} mediaType={previewMediaType} openState={openState} setOpenState={setOpenState} media={localPreview} />
       {itemsList?.map((item, index) => {
         return (
           <Controller
@@ -596,21 +654,42 @@ const UploadMedia = () => {
                   className={
                     "relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "
                   }
+                  onTouchEnd={() => {
+                    openPreview(index,field.value)
+                  }}
                 >
                   <section className={"h-full w-full overflow-hidden flex items-center"}>
-                    <Image
-                      className={"max-h-full max-w-full object-contain"}
-                      src={buildImageUrl(field.value)}
-                      alt={"attachment"}
-                      width={100}
-                      height={100}
-                    />
+                    {
+                      field.value.file_type === FileType.Image && (
+                      <Image
+                        className={"max-h-full max-w-full object-contain"}
+                        src={buildImageUrl(field.value.file_id)}
+                        alt={"attachment"}
+                        width={100}
+                        height={100}
+                      />
+)
+                    }
+                    {
+                      field.value.file_type === FileType.Video && (
+                        <Image
+                          className={"max-h-full max-w-full object-contain"}
+                          src={"/icons/image_draft.png"}
+                          alt={"attachment"}
+                          width={100}
+                          height={100}
+                        />
+                      )
+                    }
                   </section>
                   <button
                     type={"button"}
                     className={"absolute right-[-4px] top-[-4px]"}
-                    onTouchEnd={() => {
+                    onTouchEnd={(event) => {
+                      // event.preventDefault()
+                      event.stopPropagation()
                       remove(index)
+                      adjustLocalPreviewIndex(index)
                     }}
                   >
                     <Image
@@ -623,7 +702,7 @@ const UploadMedia = () => {
                 </div>
               )
             }}
-            name={`post_attachment.${index}.file_id`}
+            name={`post_attachment.${index}`}
           />
         )
       })}
