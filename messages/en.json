@@ -50,7 +50,8 @@
       "confirmTip": "Confirm payment",
       "custom": "Custom",
       "saved": "Saved",
-      "cancelSaved": "Cancel saved"
+      "cancelSaved": "Cancel saved",
+      "moreInfo": "Click to view more content"
     },
     "datePicker": {
       "Year": "Year",
