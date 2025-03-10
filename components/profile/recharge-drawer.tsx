@@ -104,7 +104,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         }}
         headerRight={() => {
           return (
-            <Link href={"/profile/revenue"} prefetch={false}>
+            <Link href={"/profile/recharge"} prefetch={false}>
               <button className={"text-base text-text-theme"}>{t("details")}</button>
             </Link>
           )

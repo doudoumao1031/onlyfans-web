@@ -215,7 +215,7 @@
       "viewVideo": "请查看视频"
     },
     "recharge": {
-      "title": "充值",
+      "title": "充值明细",
       "details": "明细",
       "error": "充值失败",
       "success": "充值成功",
@@ -227,7 +227,13 @@
       "all": "全部",
       "rechargeValuePlaceholder": "请输入充值金额",
       "confirm": "确认充值",
-      "amountGreaterThanPtamount": "充值金额不能大于钱包余额"
+      "amountGreaterThanPtamount": "充值金额不能大于钱包余额",
+      "tradeSuccess": "交易成功",
+      "reviewing": "交易进行中",
+      "failed": "交易失败",
+      "tradeNo": "订单号",
+      "digitalWallet": "数字钱包充值",
+      "balance": "余额"
     },
     "order": {
       "title": "订阅管理",

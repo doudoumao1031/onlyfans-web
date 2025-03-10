@@ -217,7 +217,7 @@
       "viewVideo": "Please view the video"
     },
     "recharge": {
-      "title": "Recharge",
+      "title": "Recharge details",
       "error": "Recharge Fail",
       "details": "Details",
       "success": "Recharge Success",
@@ -229,7 +229,13 @@
       "all": "All",
       "rechargeValuePlaceholder": "Please enter the recharge amount",
       "confirm": "Confirm to Recharge",
-      "amountGreaterThanPtamount": "Deposit amount cannot be greater than the wallet balance"
+      "amountGreaterThanPtamount": "Deposit amount cannot be greater than the wallet balance",
+      "tradeSuccess": "Trade success",
+      "reviewing": "Trading",
+      "failed": "Trade failed",
+      "tradeNo": "Trade no",
+      "digitalWallet": "Digital Wallet Recharge",
+      "balance": "Balance"
     },
     "order": {
       "title": "Subscribe Management",

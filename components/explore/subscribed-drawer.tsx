@@ -122,9 +122,8 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
       <FormDrawer
         isAutoHeight
         title={
-          <div>
-            <span className="text-lg font-semibold">{t("Subscribe")}</span>
-            <span className="text-text-theme font-normal text-[15px]">{name}</span>
+          <div className={"w-[150px] ellipsis-custom"}>
+            <span className="text-lg font-semibold">{t("Subscribe")} <span className="text-text-theme font-normal text-[15px]">{name}</span></span>
           </div>
         }
         headerLeft={(close) => {
