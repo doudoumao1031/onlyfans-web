@@ -85,7 +85,7 @@ export default function Post({
 
         <Description mentionUser={mention_user} content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
         {!isSpace() && <Link href={buildUserHomePagePath(user.id.toString())} className="px-3 text-theme">
-          {"点击查看更多内容"}
+          {t("moreInfo")}
         </Link>}
         {post_attachment && post_attachment.length > 0 && (
           <Media
