@@ -43,7 +43,7 @@ export default function MediaItem({ item }: { item: PostData }) {
         >
           <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
             <div className="p-2 truncate overflow-hidden text-ellipsis">
-              {!lock ? post.title : ""}
+              {/* {!lock ? post.title : ""} */}
             </div>
             <div className="flex justify-between p-2">
               <span className="flex items-center">
