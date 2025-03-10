@@ -1,7 +1,7 @@
 import { User } from "@/lib"
 
 export function buildUserHomePagePath(userId: string) {
-  return userId ? `/space/${userId}/feed` : `/explore/feed`
+  return userId ? `/space/${userId}/feed` : "/explore/feed"
 }
 
 export function buildUserHomePagePathForDisplay(userId: string) {

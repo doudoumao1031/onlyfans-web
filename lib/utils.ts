@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { completeFile, uploadMediaFile, uploadPart } from "./actions/media"
-import { ENDPOINTS, uploadFetch } from "@/lib/actions/shared"
+import { ENDPOINTS, FileType, uploadFetch } from "@/lib/actions/shared"
 import { PromiseConcurrency } from "@/lib/promise-curr"
 
 // 文件分片大小2M
@@ -21,21 +21,15 @@ export function convertImageToBase64(file: File) {
   })
 }
 
-export enum UPLOAD_MEDIA_TYPE {
-  PIC = "1", // 图片
-  VIDEO = "2", // 视频
-  OTHER = "3" // 其他附件
-}
-
 export const getUploadMediaFileType = (file: File) => {
   const type = file.type.toLowerCase()
   if (type.includes("video")) {
-    return UPLOAD_MEDIA_TYPE.VIDEO
+    return FileType.Video
   }
   if (type.includes("image")) {
-    return UPLOAD_MEDIA_TYPE.PIC
+    return FileType.Image
   }
-  return UPLOAD_MEDIA_TYPE.OTHER
+  return FileType.Other
 }
 
 export async function commonUploadFile(file: File) {
@@ -43,7 +37,7 @@ export async function commonUploadFile(file: File) {
   const fileType = getUploadMediaFileType(file)
   formData.append("file_count", "1")
   formData.append("file_size", String(file.size))
-  formData.append("file_type", fileType)
+  formData.append("file_type", String(fileType))
   formData.append("file", file)
   const response = await uploadMediaFile(formData)
   if (response?.data) {
@@ -100,7 +94,7 @@ export async function uploadFile(file: File) {
     const chunkResult = await uploadFirstChunk(
       String(file.size),
       firstChunk,
-      getUploadMediaFileType(file),
+      String(getUploadMediaFileType(file)),
       totalChunks.toString()
     )
     console.log("handleUploadFile totalChunks", totalChunks)

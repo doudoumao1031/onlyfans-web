@@ -1,4 +1,4 @@
-import React from "react"
+import React, { ComponentProps } from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,6 +10,7 @@ import {
   Legend
 } from "chart.js"
 import { Line } from "react-chartjs-2"
+import { ChartOptions } from "chart.js"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -20,17 +21,17 @@ ChartJS.register(
   Legend
 )
 
-export const options = {
+export const options: ChartOptions<"line"> & { borderWidth: number } = {
   borderWidth: 2,
   //   responsive: true,
   interaction: {
     mode: "index" as const,
     intersect: false
   },
-  stacked: false,
-  title: {
-    display: false
-  },
+  // stacked: false,
+  // title: {
+  //   display: false
+  // },
   plugins: {
     title: {
       display: false,
@@ -42,25 +43,25 @@ export const options = {
     tooltip: {
       enabled: true, // 启用 tooltip
       displayColors: true, // 是否显示颜色方块
-      backgroundColor: 'rgba(0, 0, 0, 0.8)', // tooltip 背景颜色
-      titleColor: '#fff', // 标题文字颜色
-      bodyColor: '#fff', // 内容文字颜色
-      borderColor: 'rgba(75, 192, 192, 1)', // 边框颜色
+      backgroundColor: "rgba(0, 0, 0, 0.8)", // tooltip 背景颜色
+      titleColor: "#fff", // 标题文字颜色
+      bodyColor: "#fff", // 内容文字颜色
+      borderColor: "rgba(75, 192, 192, 1)", // 边框颜色
       borderWidth: 0, // 边框宽度
       padding: 10, // 内边距
       caretSize: 8, // 提示箭头的尺寸
       callbacks: {
-        labelColor: (context: any) => {
+        labelColor: (context) => {
           return {
-            borderColor: context.dataset.borderColor, // 颜色方块的边框颜色
-            backgroundColor: context.dataset.borderColor, // 颜色方块的背景颜色
+            borderColor: "#00aef3",
+            backgroundColor: "#00aef3", // 颜色方块的背景颜色
             borderWidth: 0, // 颜色方块的边框宽度
             borderRadius: 5, // 颜色方块的圆角半径
             width: 5, // 方块宽度（默认是 10）
-            height: 5, // 方块高度（默认是 10）
-          };
-        },
-      },
+            height: 5 // 方块高度（默认是 10）
+          }
+        }
+      }
     }
   },
   scales: {
@@ -75,7 +76,7 @@ export const options = {
       // max: 100, // 设置 Y 轴的最大值
       ticks: {
         // stepSize: 20, // 设置默认步长为 5
-        precision: 0, // 确保刻度值不显示小数
+        precision: 0 // 确保刻度值不显示小数
         // callback: (value: number) => {
         //   // 前两个刻度（0 和 5）显示
         //   if (value <= 10) {
@@ -88,7 +89,7 @@ export const options = {
         //   // 其他刻度不显示
         //   return null;
         // },
-      },
+      }
     },
     x: {
       grid: {
