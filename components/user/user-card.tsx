@@ -32,7 +32,7 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
               </div>
               <div className="flex-col w-3/4">
                 <div>
-                  <div className="font-medium text-sm text-nowrap">{user.first_name}</div>
+                  <div className="font-medium text-sm text-nowrap w-[85%]  truncate">{user.first_name}</div>
                   <div className="font-normal text-xs w-[75%] truncate">
                     {user.username ? `@${user.username}` : "\u00A0"}
                   </div>
@@ -57,6 +57,14 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
                         <span className="text-xs ml-1">{user.video_count}</span>
                       </div>
                     </div>
+                    {subscribe && (
+                      <div className="">
+                        {/*<SubscribedButton userId={user.id} name={user.first_name} subPrice={user.sub_price} type={"button"}/>*/}
+                        <div className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white">
+                          <span className="text-xs text-nowrap">{user.sub ? t("recommended.subscribed") : user.sub_price > 0 ? t("recommended.freeAndSubscription") : t("recommended.free")}</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -74,16 +82,9 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
 
   return (
     <div className="relative">
-      <Link href={`/space/${user.id}/feed`}>
+      <Link href={`/space/${user.id}/feed`} className="">
         {cardContent}
-        {subscribe && (
-          <div className="absolute right-4 bottom-4 z-10">
-            {/*<SubscribedButton userId={user.id} name={user.first_name} subPrice={user.sub_price} type={"button"}/>*/}
-            <div className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white">
-              <span className="text-xs text-nowrap">{user.sub ? t("recommended.subscribed") : user.sub_price > 0 ? t("recommended.freeAndSubscription") : t("recommended.free")}</span>
-            </div>
-          </div>
-        )}
+
       </Link>
     </div>
   )

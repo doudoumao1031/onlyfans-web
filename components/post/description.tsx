@@ -1,10 +1,13 @@
 import { Link } from "@/i18n/routing"
 import { buildUserHomePagePath, getUserIdFromMention, isMention } from "./utils"
+import { User } from "@/lib"
 
 export default function Description({
+  mentionUser,
   content,
   linkRender
 }: {
+  mentionUser: User[]
   content: string
   linkRender?: (content: string) => React.ReactNode
 }) {
@@ -13,22 +16,24 @@ export default function Description({
   return (
     <div className="whitespace-pre-wrap">
       {segments.map((s, i) => (
-        <DescriptionSegment key={i} content={s} linkRender={linkRender} />
+        <DescriptionSegment mentionUser={mentionUser} key={i} content={s} linkRender={linkRender} />
       ))}
     </div>
   )
 }
 
 function DescriptionSegment({
+  mentionUser,
   content,
   linkRender
 }: {
+  mentionUser: User[]
   content: string
   linkRender?: (content: string) => React.ReactNode
 }) {
   return isMention(content) ? (
-    <Link href={buildUserHomePagePath(getUserIdFromMention(content))} className="text-theme">
-      {content}{" "}
+    <Link href={buildUserHomePagePath(getUserIdFromMention(content, mentionUser))} className="text-theme">
+      {content}
     </Link>
   ) : linkRender ? (
     linkRender(content)

@@ -19,7 +19,8 @@ import CommentSkeleton from "./comment-skeleton"
 import { useGlobal } from "@/lib/contexts/global-context"
 import useCommonMessage, { CommonMessageContext } from "@/components/common/common-message"
 import { useTranslations } from "next-intl"
-
+import { buildUserHomePagePath } from "./utils"
+import { usePathname } from "next/navigation"
 export default function Post({
   data,
   hasVote,
@@ -45,6 +46,10 @@ export default function Post({
   const [showVote, setShowVote] = useState(false)
   const [commentsLoading, setCommentsLoading] = useState<boolean>(false)
   const [tipStar, setTipStar] = useState<boolean>(false)
+  const path = usePathname()
+  const isSpace = () => {
+    return path.indexOf("/space") > -1
+  }
   const linkRender = (content: string) => {
     return <Link href={`/postInfo/${post.id}`}>{content}</Link>
   }
@@ -78,7 +83,10 @@ export default function Post({
           <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} space={space} />
         )}
 
-        <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
+        <Description mentionUser={mention_user} content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
+        {!isSpace() && <Link href={buildUserHomePagePath(user.id.toString())} className="px-3 text-theme">
+          {t("moreInfo")}
+        </Link>}
         {post_attachment && post_attachment.length > 0 && (
           <Media
             data={post_attachment}
