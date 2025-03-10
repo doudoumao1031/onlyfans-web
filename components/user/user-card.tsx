@@ -33,7 +33,7 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
               <div className="flex-col w-3/4">
                 <div>
                   <div className="font-medium text-sm text-nowrap">{user.first_name}</div>
-                  <div className="font-normal text-xs">
+                  <div className="font-normal text-xs w-[75%] truncate">
                     {user.username ? `@${user.username}` : "\u00A0"}
                   </div>
                 </div>

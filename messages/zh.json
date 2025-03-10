@@ -12,6 +12,8 @@
     "cancel": "取消",
     "postLoadError": "帖子内容加载失败",
     "detailLoadError": "详情加载失败",
+    "delText": "内容已删除",
+    "backPre": "返回上一页",
     "ContentLoadingFailed": "内容加载失败",
     "FreeAndSubscription": "免费/订阅",
     "potatoWallet": "Potato 钱包",

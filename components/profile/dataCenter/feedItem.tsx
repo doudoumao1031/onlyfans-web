@@ -47,7 +47,10 @@ export default function Page({ item }: TProps) {
                 />
                 <span className="text-[#BBB] text-xs ml-2">{post_metric.play_count}</span>
               </div>
-              <div className="text-[#BBB] flex items-center" onClick={() => { setIsOpen(!isOpen) }}>
+              <div className="text-[#BBB] flex items-center" onClick={(e) => {
+                e.preventDefault()
+                setIsOpen(!isOpen)
+              }}>
                 <span>{isOpen ? t("dataCenter.fold") : t("dataCenter.detail")}</span>
                 <IconWithImage url="/icons/profile/icon-bt.png" width={14} height={14} color={"#BBB"} />
               </div>

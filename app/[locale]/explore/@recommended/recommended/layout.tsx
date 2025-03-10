@@ -5,7 +5,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <div className="flex max-w-lg mx-auto h-full flex-col w-full justify-start items-center">
         <Header />
-        <div className="grow py-3 w-full h-3/4">{children}</div>
+        <div className="grow py-3 w-full h-3/4 overflow-y-auto hide-scrollbar">{children}</div>
       </div>
     </>
   )

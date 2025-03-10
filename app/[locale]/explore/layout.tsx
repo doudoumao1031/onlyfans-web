@@ -58,9 +58,8 @@ export default function Layout({
           />
         )}
         <div
-          className={`flex flex-col w-full  justify-start items-center ${
-            isFind ? "h-[calc(100vh-94px)]" : "h-[calc(100vh-49px)]"
-          }`}
+          className={`flex flex-col w-full  justify-start items-center ${isFind ? "h-[calc(100vh-94px)]" : "h-[calc(100vh-49px)]"
+            }`}
         >
           <Nav isFind={!!isFind} />
           <div className="grow px-4 py-3 w-full h-[calc(100%-60px)]">
@@ -73,16 +72,14 @@ export default function Layout({
               {followed}
             </div>
             <div
-              className={`w-full h-full ${
-                path.indexOf("/explore/recommended") > -1 ? "" : "hidden"
-              }`}
+              className={`w-full h-full ${path.indexOf("/explore/recommended") > -1 ? "" : "hidden"
+                }`}
             >
               {recommended}
             </div>
             <div
-              className={`w-full h-full ${
-                path.indexOf("/explore/subscribed") > -1 ? "" : "hidden"
-              }`}
+              className={`w-full h-full ${path.indexOf("/explore/subscribed") > -1 ? "" : "hidden"
+                }`}
             >
               {subscribed}
             </div>

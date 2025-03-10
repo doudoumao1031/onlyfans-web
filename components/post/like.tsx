@@ -45,7 +45,12 @@ export default function Like({
     }
     // 静默提交点赞操作
     try {
-      await starPost({ post_id: postId, deleted: isLiked })
+      const success = await starPost({ post_id: postId, deleted: isLiked })
+      if (!success) {
+        // 如果点赞失败，恢复之前的点赞状态
+        setLikes((prevLikes) => (isLiked ? prevLikes + 1 : prevLikes - 1))
+        setIsLiked(isLiked)
+      }
     } catch (error) {
       console.error("Error liking post:", error)
       // 如果点赞失败，恢复之前的点赞状态
