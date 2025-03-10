@@ -143,6 +143,20 @@ export interface StatementResp {
   }
 }
 
+/**
+ * 提现记录
+ */
+export interface WithdrawOrder {
+  trade_type: number
+  trade_no: string
+  amount: number // 金额
+  id: number
+  reason: string // 变动原因
+  audit_time: number  // 审核时间
+  create_time: number // 创建时间
+  trade_status: number // 0 成功 1 审核中 2 失败
+}
+
 export interface UserMetricDayReq {
   start?: string
   end?: string

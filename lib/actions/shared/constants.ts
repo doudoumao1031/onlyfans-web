@@ -93,6 +93,7 @@ export const ENDPOINTS = {
     VIEW_LOGS: "/user/userViewLogs",
     VIEW_ME_LOGS: "/user/userViewMeLogs",
     WALLET_STATEMENT: "/user/userWalletStatement",
+    WALLET_DOWN_ORDER: "/user/userWalletDownOrder", //用户提现记录
     WALLET: "/user/wallet", // 我的钱包（余额信息）
     PT_WALLET: "/user/ptWallet", // pt钱包信息（充值配置）
 

@@ -227,7 +227,8 @@
       "rate": "Rate",
       "all": "All",
       "rechargeValuePlaceholder": "Please enter the recharge amount",
-      "confirm": "Confirm to Recharge"
+      "confirm": "Confirm to Recharge",
+      "amountGreaterThanPtamount": "Deposit amount cannot be greater than the wallet balance"
     },
     "order": {
       "title": "Subscribe Management",
@@ -356,8 +357,8 @@
       "fold": "Fold",
       "detail": "Detail"
     },
-    "withdrawalInfo": {
-      "title": "Detail",
+    "withdrawOrder": {
+      "title": "Withdraw Detail",
       "success": "Success",
       "reviewing": "Reviewing",
       "failed": "Failed",

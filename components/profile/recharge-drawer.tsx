@@ -77,7 +77,6 @@ export default function RechargeDrawer(props: RechargeProps) {
     <>
       <button
         onClick={() => {
-          // getSettingData()
           setIsOpen(true)
         }}
       >
@@ -105,7 +104,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         }}
         headerRight={() => {
           return (
-            <Link href={"/profile/statement?changeType=1"} prefetch={false}>
+            <Link href={"/profile/revenue"} prefetch={false}>
               <button className={"text-base text-text-theme"}>{t("details")}</button>
             </Link>
           )
@@ -163,20 +162,17 @@ export default function RechargeDrawer(props: RechargeProps) {
           <div className="my-[40px] self-center">
             <button
               type="button"
-              /*disabled={amount === 0 || amount > ptBalance}*/
-              disabled={amount === 0}
+              disabled={amount === 0 || amount > ptBalance}
               className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${
-                amount === 0 ? "bg-[#dddddd]" : "bg-background-theme"
+                amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-theme"
               }`}
-              onClick={() => {
-                /*if (!(amount === 0 || amount > ptBalance)) {*/
-                if (amount !== 0) {
-                  handleRecharge(amount)
+              onClick={async () => {
+                if (!(amount === 0 || amount > ptBalance)) {
+                  await handleRecharge(amount)
                 }
               }}
             >
-              {/*{amount > ptBalance ? "充值金额不能大于钱包余额" : "确认充值"}*/}
-              {t("confirm")}
+              {amount > ptBalance ? t("amountGreaterThanPtamount") : t("confirm")}
             </button>
           </div>
         </div>
