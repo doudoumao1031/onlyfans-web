@@ -792,11 +792,11 @@ const EditPageContent = () => {
 
   const DEFAULT_POST_TITLE = useMemo(() => {
     return {
-      [FileType.Image] : t("manuscript.viewPic"),
-      [FileType.Video] : t("manuscript.viewVideo"),
-      [FileType.Other] : ""
+      [FileType.Image]: t("manuscript.viewPic"),
+      [FileType.Video]: t("manuscript.viewVideo"),
+      [FileType.Other]: ""
     }
-  },[t])
+  }, [t])
   const getSubmitFormData = (formData: iPost) => {
     const { post_mention_user = [], post: { title } } = formData
     const mentionUsers = post_mention_user?.map(item => subUsers.find(sub => sub.user.id === item.user_id))?.filter(item => !!item)
@@ -899,18 +899,18 @@ const EditPageContent = () => {
       return true
     }
     return post_title.length > 4
-  },[post_title,post_attachment])
+  }, [post_title, post_attachment])
 
   //请浏览图片/请查看视频
   useEffect(() => {
     if (post_attachment.length && post_title === "") {
       const fileType = post_attachment[0].file_type
-      setValue("post.title",DEFAULT_POST_TITLE[fileType])
+      setValue("post.title", DEFAULT_POST_TITLE[fileType])
       postForm.trigger()
     }
     const defaultTitles = Object.values(DEFAULT_POST_TITLE).filter(item => !!item)
     if (post_attachment.length === 0 && defaultTitles.includes(post_title)) {
-      setValue("post.title","")
+      setValue("post.title", "")
     }
   }, [DEFAULT_POST_TITLE, postForm, post_attachment, post_title, setValue])
 
@@ -1072,10 +1072,10 @@ const EditPageContent = () => {
                   className={"custom-switch"}
                   checked={field.value}
                   onCheckedChange={(value) => {
-                  field.onChange(value)
-                }}
+                    field.onChange(value)
+                  }}
                 />
-)
+              )
             }} name={"post.notice"}
             />
           </section>

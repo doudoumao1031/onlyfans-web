@@ -78,7 +78,7 @@ export default function Post({
           <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} space={space} />
         )}
 
-        <Description content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
+        <Description mentionUser={mention_user} content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
         {post_attachment && post_attachment.length > 0 && (
           <Media
             data={post_attachment}
