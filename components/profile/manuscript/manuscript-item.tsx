@@ -129,9 +129,6 @@ const ManuscriptItemState = ({ state }: { state: number }) => {
 }
 export default function ManuscriptItem({ data, refresh }: { data: PostData, refresh?: () => void }) {
   "use client"
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
-  const ref = useRef<HTMLButtonElement>()
   const commonTrans = useTranslations("Common")
   const [openState, setOpenState] = useState<boolean>(false)
   const firstMedia = data.post_attachment?.[0]
@@ -195,7 +192,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
         >
           {/*<ManuscriptItemState state={"REJECT"}/>*/}
           <ManuscriptItemState state={data.post.post_status}/>
-          <div className={"w-[100px] h-[100px] overflow-hidden rounded flex items-center"}>
+          <div className={"w-[100px] h-[100px] overflow-hidden rounded flex items-center shrink-0"}>
             {imageId ?
               <LazyImg containerAuto={true} src={buildImageUrl(imageId)} alt={"post"} width={100} height={100}/>
               : (
