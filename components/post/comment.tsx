@@ -148,7 +148,7 @@ function Comment({
                 <div className="text-xs text-theme">{`${first_name} ${last_name}`}</div>
                 <div className="text-sm">{content}</div>
                 <div className="flex gap-4 text-xs text-[#6D7781]">
-                  <div>{dayjs.unix(comment_time).format("MM.DD hh:mm")}</div>
+                  <div>{dayjs.unix(comment_time).format(datetimeFormat)}</div>
                   {reply_count > 0 && (
                     <div onClick={toggleReplies} className="text-theme">
                       {t("replyCount", { count: reply_count })}
@@ -357,7 +357,7 @@ function Reply({
               </div>
               <div className="flex gap-4 text-xs text-[#6D7781]">
                 {" "}
-                <div>{dayjs.unix(comment_time).format("MM.DD hh:mm")}</div>
+                <div>{dayjs.unix(comment_time).format(datetimeFormat)}</div>
                 <div onClick={() => setShowReplyInput(!showReplyInput)}>{t("reply")}</div>
                 {is_self && (
                   <div onClick={() => setOpenConfirmDeleteReply(true)}>{t("delete")}</div>
@@ -478,3 +478,5 @@ function Thumbup({
     </div>
   )
 }
+
+const datetimeFormat = "M月D日 H:m"
