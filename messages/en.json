@@ -51,7 +51,7 @@
       "custom": "Custom",
       "saved": "Saved",
       "cancelSaved": "Cancel saved",
-      "moreInfo": "Click to view more content"
+      "moreInfoText": "Click to view more content"
     },
     "datePicker": {
       "Year": "Year",
