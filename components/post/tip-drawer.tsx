@@ -42,6 +42,9 @@ export default function TipDrawer(props: TipDrawerProps) {
           const starRes = await starPost({ post_id: Number(postId), deleted: false })
           if (starRes) {
             tipStar(true)
+            console.log("tip and star success")
+          } else {
+            console.log("tip and star failed")
           }
         }
         setDrawerOpen(false)
@@ -54,6 +57,8 @@ export default function TipDrawer(props: TipDrawerProps) {
       } else if (res?.message == "NOT_ENOUGH_BALANCE") {
         setDrawerOpen(false)
         setVisible(true)
+      } else {
+        throw new Error()
       }
     })
     if (notice) {

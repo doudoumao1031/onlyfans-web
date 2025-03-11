@@ -8,6 +8,7 @@ import { User } from "@/lib"
 import Modal from "@/components/space/modal"
 import { useState } from "react"
 import { useTranslations } from "next-intl"
+import { useGlobal } from "@/lib/contexts/global-context"
 
 interface MediaProps {
   data: Attachment[]
@@ -17,6 +18,7 @@ interface MediaProps {
   followConfirm?: () => void
 }
 export default function Media(props: MediaProps) {
+  const { sid } = useGlobal()
   const t = useTranslations("PostInfo")
   const tSpace = useTranslations("Space")
   const { data, post, user, isInfoPage, followConfirm } = props
@@ -108,8 +110,7 @@ export default function Media(props: MediaProps) {
               <>
                 {data.map(({ file_id, file_type, thumb_id }, i) => {
                   /*订阅需要付费 && 帖子无需付费 => 只需要关注则可查看 */
-                  const toDetail =
-                    !isInfoPage &&
+                  const toDetail = (user.id !== sid) && !isInfoPage &&
                     ((user.sub_price > 0 && !user.following) || (user.sub_price === 0 && !user.sub))
                   return (
                     <Link

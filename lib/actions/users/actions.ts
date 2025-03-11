@@ -17,7 +17,7 @@ import {
   StatementReq,
   StatementResp,
   FansFollowItem,
-  FansSubscribeItems
+  FansSubscribeItems, WithdrawOrder
 } from "@/lib"
 import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/types"
 
@@ -193,6 +193,20 @@ export async function userPtWallet() {
  */
 export const userStatement = (params: StatementReq) =>
   fetchWithPost<StatementReq, PageResponse<StatementResp>>(ENDPOINTS.USERS.STATEMENT, params).then(
+    (res) => {
+      if (res && res.code === 0) {
+        return res.data
+      } else {
+        return null
+      }
+    }
+  )
+
+/**
+ * 提现记录
+ */
+export const userWalletDownOrder = (params: StatementReq) =>
+  fetchWithPost<StatementReq, PageResponse<WithdrawOrder>>(ENDPOINTS.USERS.WALLET_DOWN_ORDER, params).then(
     (res) => {
       if (res && res.code === 0) {
         return res.data

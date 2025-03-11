@@ -50,7 +50,8 @@
       "confirmTip": "确认支付",
       "custom": "自定义",
       "saved": "已收藏",
-      "cancelSaved": "已取消收藏"
+      "cancelSaved": "已取消收藏",
+      "moreInfo": "点击查看更多内容"
     },
     "datePicker": {
       "Year": "年",
@@ -214,7 +215,7 @@
       "viewVideo": "请查看视频"
     },
     "recharge": {
-      "title": "充值",
+      "title": "充值明细",
       "details": "明细",
       "error": "充值失败",
       "success": "充值成功",
@@ -225,7 +226,14 @@
       "rate": "总的比例",
       "all": "全部",
       "rechargeValuePlaceholder": "请输入充值金额",
-      "confirm": "确认充值"
+      "confirm": "确认充值",
+      "amountGreaterThanPtamount": "充值金额不能大于钱包余额",
+      "tradeSuccess": "交易成功",
+      "reviewing": "交易进行中",
+      "failed": "交易失败",
+      "tradeNo": "订单号",
+      "digitalWallet": "数字钱包充值",
+      "balance": "余额"
     },
     "order": {
       "title": "订阅管理",
@@ -354,8 +362,8 @@
       "fold": "收起",
       "detail": "详细"
     },
-    "withdrawalInfo": {
-      "title": "明细",
+    "withdrawOrder": {
+      "title": "提现明细",
       "success": "成功",
       "reviewing": "审核中",
       "failed": "失败",

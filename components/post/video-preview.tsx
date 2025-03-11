@@ -62,7 +62,7 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
     }
   }
   return (
-    <div className="relative w-full rounded-xl" style={{ aspectRatio: "343/200" }}>
+    <div className="relative w-full rounded-xl aspect-square" >
       {isLoading &&
         (thumbId ? (
           <Image
@@ -96,6 +96,6 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
           onCanPlay={() => setIsLoading(false)}
         />
       </div>
-    </div>
+    </div >
   )
 }
