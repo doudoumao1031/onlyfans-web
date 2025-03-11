@@ -105,7 +105,7 @@ function Comment({
     reply_count,
     comment_time
   } = comment
-  const { photo, username } = user
+  const { photo, username, first_name, last_name } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
   const [thumbupCount, setThumbupCount] = useState(thumbs_up_count)
@@ -125,7 +125,7 @@ function Comment({
         options={[
           {
             label: "",
-            description: `${username}: ${content}`,
+            description: `${first_name} ${last_name}: ${content}`,
             value: -1,
             descriptionClassName: "text-[15px]"
           },
@@ -145,7 +145,7 @@ function Comment({
                 <CommonAvatar photoFileId={photo} size={36} />
               </div>
               <div className="flex flex-col gap-2">
-                <div className="text-xs text-theme">{username}</div>
+                <div className="text-xs text-theme">{`${first_name} ${last_name}`}</div>
                 <div className="text-sm">{content}</div>
                 <div className="flex gap-4 text-xs text-[#6D7781]">
                   <div>{dayjs.unix(comment_time).format("MM.DD hh:mm")}</div>
@@ -315,7 +315,7 @@ function Reply({
     reply_user,
     comment_time
   } = reply
-  const { photo, username } = user
+  const { photo, first_name, last_name } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
   const [thumbupCount, setThumbupCount] = useState(thumbs_up_count)
@@ -332,7 +332,7 @@ function Reply({
         options={[
           {
             label: "",
-            description: `${username}: ${content}`,
+            description: `${first_name} ${last_name}: ${content}`,
             value: -1
           },
           {
@@ -348,7 +348,9 @@ function Reply({
           <div className="flex gap-2">
             <Avatar fileId={photo} width={9} height={9} />
             <div className="flex flex-col gap-2">
-              <div className="text-xs text-theme">{username}</div>
+              <div className="text-xs text-theme">
+                {first_name} {last_name}
+              </div>
               <div className="text-sm flex gap-2">
                 {reply_user && <div className="text-[#6D7781]">{reply_user.username}</div>}
                 <div>{content}</div>
