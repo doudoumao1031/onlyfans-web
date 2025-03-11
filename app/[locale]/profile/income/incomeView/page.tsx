@@ -30,12 +30,10 @@ import { useTranslations } from "next-intl"
 
 const Withdrawal = ({
   children,
-  info,
-  refresh
+  info
 }: {
   children: React.ReactNode
   info: WalletInfo
-  refresh: () => void
 }) => {
   const t = useTranslations("Profile.income")
   const schemas = useMemo(() => {
@@ -166,7 +164,7 @@ const Withdrawal = ({
                         }
                       }}
                       placeholder="0.00"
-                      className="border-0 w-16 text-[#BBB] flex-1 text-right"
+                      className="border-0 w-16 flex-1 text-right"
                     />
                   )
                 }}
@@ -358,7 +356,7 @@ export default function Page() {
             <span className="text-text-theme ml-2">+{inCome}</span>
           </span>
           {walletInfo && (
-            <Withdrawal info={walletInfo} refresh={refreshWalletInfo}>
+            <Withdrawal info={walletInfo} >
               <span className="text-xs flex">
                 <span className="text-[#777] ">{t("withdrawalAmountAvailable")}</span>
                 <span className="ml-2 mr-2">
