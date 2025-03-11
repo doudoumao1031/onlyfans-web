@@ -8,7 +8,7 @@ export type SystemBars = {
 export const emitter = new Emittery()
 
 if (typeof window !== "undefined") {
-  window.wallet = {
+  window.fansx = {
     call: (type: string, data: unknown) => {
       switch (type) {
         case BRIDGE_EVENT_NAME.sendSystemtBarsInfo: {

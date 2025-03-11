@@ -9,7 +9,7 @@ interface Window {
     params: string,
     callback?: () => void,
   ) => void
-  wallet: {
+  fansx: {
     call: unknown
   }
   Android: {
