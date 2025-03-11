@@ -36,7 +36,7 @@ export default function Page({ item }: TProps) {
             />
           </div>
           <div className="flex flex-col justify-between flex-1">
-            <div className="fbreak-all text-ellipsis line-clamp-2">{post.title}</div>
+            <div className="break-all text-ellipsis line-clamp-2">{post.title}</div>
             <div className="flex justify-between items-center">
               <div className="flex items-center">
                 <IconWithImage
