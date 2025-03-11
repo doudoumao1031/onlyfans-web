@@ -128,7 +128,7 @@ export default function Page({ postData }: { postData: PostData }) {
               <CommonAvatar photoFileId={photo} size={32} />
             </div>
             <div className="ml-2">
-              <div className="text-[14px]">
+              <div className="text-[14px] truncate max-w-[150px]">
                 {first_name} {last_name}
               </div>
               <div className="text-black/50 text-[12px]">{buildMention(username)}</div>
@@ -141,16 +141,14 @@ export default function Page({ postData }: { postData: PostData }) {
               onClick={async () => {
                 await handleFollowing()
               }}
-              className={`h-[26px] min-w-[80px] px-2 flex justify-center items-center rounded-full ${
-                isFocus
+              className={`h-[26px] min-w-[80px] px-2 flex justify-center items-center rounded-full ${isFocus
                   ? "bg-white border border-border-theme text-text-theme"
                   : " bg-background-theme text-white"
-              }`}
+                }`}
             >
               <IconWithImage
-                url={`/icons/${
-                  isFocus ? "icon_info_followed_white@3x.png" : "icon_info_follow_white@3x.png"
-                }`}
+                url={`/icons/${isFocus ? "icon_info_followed_white@3x.png" : "icon_info_follow_white@3x.png"
+                  }`}
                 width={20}
                 height={20}
                 color={isFocus ? "#00AEF3" : "#fff"}
