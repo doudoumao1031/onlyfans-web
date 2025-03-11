@@ -83,9 +83,13 @@ export default function Post({
           <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} space={space} />
         )}
 
-        <Description mentionUser={mention_user} content={post.title} linkRender={!isInfoPage ? linkRender : undefined} />
+        <Description
+          mentionUser={mention_user}
+          content={post.title}
+          linkRender={!isInfoPage ? linkRender : undefined}
+        />
         {!isSpace() && (
-          <Link href={buildUserHomePagePath(user.id.toString())} className="px-3 text-theme">
+          <Link href={buildUserHomePagePath(user.id)} className="px-3 text-theme">
             {t("moreInfo")}
           </Link>
         )}
