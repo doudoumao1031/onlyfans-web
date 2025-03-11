@@ -19,5 +19,5 @@ export function getUserIdFromMention(mention: string, mentionUser: User[]) {
 }
 
 export function buildMention(userId: string) {
-  return `@${userId}`
+  return userId ? `@${userId}` : ""
 }

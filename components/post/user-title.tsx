@@ -25,7 +25,7 @@ export default function UserTitle({
             <CommonAvatar photoFileId={photo} size={40} />
           </div>
           <div>
-            <div className="text-base truncate max-w-[200px]">
+            <div className="text-base truncate max-w-[160px]">
               {first_name} {last_name}
             </div>
             <div className="text-black/50 text-xs">{buildMention(username)}</div>
@@ -41,7 +41,7 @@ export default function UserTitle({
             color={"#777"}
           />
         ) : (
-          <span>{dayjs(pub_time * 1000).format("MM-DD HH:mm")}</span>
+          <span className="text-nowrap">{dayjs(pub_time * 1000).format("MM-DD HH:mm")}</span>
         )}
       </div>
     </div>
