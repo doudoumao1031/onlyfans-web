@@ -59,8 +59,8 @@ export default function Media(props: MediaProps) {
           }
         >
           {
-            /*详情页面 && 订阅需要付费 && 帖子无需付费 => 打开确认关注modal */
-            isInfoPage && user.sub_price > 0 && !user.following && !user.sub ? (
+            /*非自己 && 详情页面 && 订阅需要付费 && 帖子无需付费 => 打开确认关注modal */
+            user.id != sid && isInfoPage && user.sub_price > 0 && !user.following && !user.sub ? (
               <>
                 {data.map(({ file_id, file_type, thumb_id }, i) => {
                   return (

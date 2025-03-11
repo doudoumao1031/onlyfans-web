@@ -48,6 +48,7 @@
       "tipFailed": "Tip failed",
       "tipConfirm": "Confirm tip {amount} {currency}",
       "confirmTip": "Confirm payment",
+      "minTip": "Min tip 0.1 USDT",
       "custom": "Custom",
       "saved": "Saved",
       "cancelSaved": "Cancel saved",
