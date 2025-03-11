@@ -180,15 +180,19 @@ const Withdrawal = ({
             <button
               disabled={!!errorMessage}
               type={"button"}
-              onTouchEnd={async () => {
-                await withLoading(async () => {
-                  const response = await addWalletDownOrder({
-                    amount: Number(amount)
-                  })
-                  if (response?.code === 0) {
-                    return true
-                  } else {
-                    throw Error
+              onTouchEnd={() => {
+                withdrawalForm.trigger().then(async (valid) => {
+                  if (valid) {
+                    await withLoading(async () => {
+                      const response = await addWalletDownOrder({
+                        amount: Number(amount)
+                      })
+                      if (response?.code === 0) {
+                        return true
+                      } else {
+                        throw Error
+                      }
+                    })
                   }
                 })
               }}

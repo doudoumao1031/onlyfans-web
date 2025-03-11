@@ -6,7 +6,7 @@ import IconWithImage from "@/components/profile/icon"
 import ManuscriptItem from "@/components/profile/manuscript/manuscript-item"
 import Header from "@/components/common/header"
 import { Link } from "@/i18n/routing"
-import { myMediaPosts, myPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
+import { Attachment, FileType, myMediaPosts, myPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
@@ -39,7 +39,7 @@ const ManuscriptPost = () => {
       }
     })
   }
-  useEffect(fetchInitData,[])
+  useEffect(fetchInitData, [])
 
   const infiniteFetchMyPosts = useInfiniteFetch<SearchPostReq, PostData>({
     fetchFn: myPosts,
@@ -50,7 +50,7 @@ const ManuscriptPost = () => {
     }
   })
 
-  const handleFormSubmit = (event:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+  const handleFormSubmit = (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     event.preventDefault()
     fetchInitData()
   }
@@ -89,7 +89,7 @@ const ManuscriptPost = () => {
             {({ items, isLoading, hasMore, error }) => (
               <Fragment>
                 {Boolean(error) && <ListError />}
-                {items?.map((item, index) => <ManuscriptItem data={item} key={index} refresh={fetchInitData}/>)}
+                {items?.map((item, index) => <ManuscriptItem data={item} key={index} refresh={fetchInitData} />)}
                 {isLoading && <ListLoading />}
                 {!hasMore && items?.length > 0 && <ListEnd />}
               </Fragment>
@@ -99,6 +99,15 @@ const ManuscriptPost = () => {
       </section>
     </section>
   )
+}
+
+function MediaImagePreview({ attachment }: { attachment: Attachment[] }) {
+  if (attachment.length === 0) {
+    return null
+  }
+  const [firstMedia] = attachment
+  const fileId = firstMedia?.file_type === FileType.Image ? firstMedia.file_id : firstMedia.thumb_id
+  return <LazyImageWithFileId containerAuto={true} fileId={fileId} alt={"post_attachment"} width={200} height={220} className="max-w-full max-h-full object-contain" />
 }
 
 const ManuscriptMedia = () => {
@@ -186,7 +195,8 @@ const ManuscriptMedia = () => {
                         <section
                           className="w-full h-[220px] rounded flex justify-center items-center overflow-hidden"
                         >
-                          <LazyImageWithFileId containerAuto={true} fileId={item.post_attachment?.[0]?.file_id} alt={"post_attachment"} width={200} height={220} className="max-w-full max-h-full object-contain" />
+                          <MediaImagePreview attachment={item.post_attachment ?? []} />
+                          {/* <LazyImageWithFileId containerAuto={true} fileId={item.post_attachment?.[0]?.file_id} alt={"post_attachment"} width={200} height={220} className="max-w-full max-h-full object-contain" /> */}
                         </section>
                       </section>
                       {
