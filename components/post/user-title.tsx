@@ -20,8 +20,8 @@ export default function UserTitle({
   return (
     <div className={"flex justify-between"}>
       <Link href={`/space/${user.id}/feed`}>
-        <div className="flex gap-4">
-          <div className="flex items-center">
+        <div className="flex gap-2.5">
+          <div className="flex items-center min-w-10">
             <CommonAvatar photoFileId={photo} size={40} />
           </div>
           <div>
@@ -41,7 +41,7 @@ export default function UserTitle({
             color={"#777"}
           />
         ): (
-          <span>{dayjs(pub_time * 1000).format("MM-DD HH:mm")}</span>
+          <span className={"text-nowrap"}>{dayjs(pub_time * 1000).format("MM-DD HH:mm")}</span>
         )}
       </div>
     </div>
