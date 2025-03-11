@@ -19,12 +19,12 @@ export default function Subscribe({ user }: { user: User }) {
         className="w-full rounded-lg object-cover"
       />
       <div className="w-full h-full absolute flex justify-between bg-black/50 p-4 rounded-lg">
-        <div className="flex gap-3 px-0 items-center">
-          <div>
+        <div className="flex gap-3 px-0 items-center w-full">
+          <div className={""}>
             <AvatarVlog src={photo} vlog={user.live_certification} />
           </div>
-          <div className="text-white">
-            <div className="text-sm font-medium">
+          <div className="text-white w-2/3">
+            <div className="text-sm font-medium w-[75%] truncate">
               {first_name} {last_name}
             </div>
             <div className="text-white/75 text-xs">{buildMention(username)}</div>

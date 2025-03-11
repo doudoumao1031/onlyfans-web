@@ -5,6 +5,7 @@ import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
 import { Link } from "@/i18n/routing"
 import { useTranslations } from "next-intl"
 import AvatarVlog from "@/components/user/avatar-vlog"
+import { buildMention } from "@/components/post/utils"
 /**
  * 博主名片
  * @param user 用户信息
@@ -32,15 +33,13 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
               </div>
               <div className="flex-col w-3/4">
                 <div>
-                  <div className="font-medium text-sm text-nowrap w-[85%]  truncate">{user.first_name}</div>
-                  <div className="font-normal text-xs w-[75%] truncate">
-                    {user.username ? `@${user.username}` : "\u00A0"}
-                  </div>
+                  <div className="font-medium text-sm text-nowrap w-[85%] truncate">{user.first_name + user.last_name}</div>
+                  <div className="font-normal text-xs w-[75%] truncate">{buildMention(user.username)}</div>
                 </div>
                 {subscribe && (
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-4">
-                      <div className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-center">
+                      <div className="bg-black bg-opacity-40 px-2.5 py-1 rounded-full flex items-center">
                         <IconWithImage
                           url="/theme/icon_fans_info_photo_white@3x.png"
                           width={14}
@@ -48,7 +47,7 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
                         />
                         <span className=" text-xs ml-1">{user.img_count}</span>
                       </div>
-                      <div className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-start">
+                      <div className="bg-black bg-opacity-40 px-2.5 py-1 rounded-full flex items-start">
                         <IconWithImage
                           url="/theme/icon_fans_info_video_white@3x.png"
                           width={14}
@@ -60,7 +59,7 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
                     {subscribe && (
                       <div className="">
                         {/*<SubscribedButton userId={user.id} name={user.first_name} subPrice={user.sub_price} type={"button"}/>*/}
-                        <div className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white">
+                        <div className="bg-black bg-opacity-40 self-start px-3 py-1 rounded-full text-white">
                           <span className="text-xs text-nowrap">{user.sub ? t("recommended.subscribed") : user.sub_price > 0 ? t("recommended.freeAndSubscription") : t("recommended.free")}</span>
                         </div>
                       </div>
@@ -84,7 +83,6 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
     <div className="relative">
       <Link href={`/space/${user.id}/feed`} className="">
         {cardContent}
-
       </Link>
     </div>
   )
