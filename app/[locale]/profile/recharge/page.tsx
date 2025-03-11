@@ -30,7 +30,6 @@ export default function Page() {
             end_time: Math.floor(dayjs(date).endOf("month").valueOf() / 1000)
           })
           setList(list)
-          console.log("list", list)
         } catch (error) {
           console.error("Error fetching withdraw:", error)
         }
@@ -54,8 +53,14 @@ export default function Page() {
     <div>
       <Header title={t("title")} titleColor="#000" />
       <Suspense fallback={<div className="flex justify-center p-4">Loading...</div>}>
-        <div className="w-full h-[calc(100vh-153px)]">
-          {list && (
+        {list && (
+          <div className="w-full h-[calc(100vh-49px)]">
+            <DatePicker
+              defVal={date}
+              confirm={(e) => {
+                setDate(e)
+              }}
+            />
             <InfiniteScroll<StatementResp>
               className={"h-full w-full mx-auto"}
               initialItems={list.list || []}
@@ -65,54 +70,48 @@ export default function Page() {
               {({ items, isLoading, hasMore, error }) => (
                 <Fragment>
                   {Boolean(error) && <ListError />}
-                  <DatePicker
-                    defVal={date}
-                    confirm={(e) => {
-                      setDate(e)
-                    }}
-                  />
                   <div className="p-4 pt-0">
                     {items.map((v, i) => {
-                      const types = [
-                        { color: "text-[#19B370]", value: t("tradeSuccess") },
-                        { color: "text-[#00AEF3]", value: t("reviewing") },
-                        { color: "text-[#FF3E3E]", value: t("failed") }
-                      ]
-                      return (
-                        <div key={i} className="py-3 border-b border-spacing-0.5 border-[#ddd]">
-                          <div className={"flex justify-between mb-2.5"}>
-                            <span>{t("digitalWallet")}</span>
-                            <span className={`${types[v.trade_status].color}`}>
-                              {types[v.trade_status].value}
-                            </span>
-                          </div>
-                          <div className={"flex justify-start items-center"}>
-                            <div className={"w-10 h-10 mr-2"}>
-                              <LazyImg src={"/theme/icon_wallet_digital@3x.png"} height={40} width={40} alt={""} />
+                        const types = [
+                          { color: "text-[#19B370]", value: t("tradeSuccess") },
+                          { color: "text-[#00AEF3]", value: t("reviewing") },
+                          { color: "text-[#FF3E3E]", value: t("failed") }
+                        ]
+                        return (
+                          <div key={i} className="py-3 border-b border-spacing-0.5 border-[#ddd]">
+                            <div className={"flex justify-between mb-2.5"}>
+                              <span>{t("digitalWallet")}</span>
+                              <span className={`${types[v.trade_status].color}`}>
+                                {types[v.trade_status].value}
+                              </span>
                             </div>
-                            <div className={"flex flex-col w-full"}>
-                              <div className="flex justify-between items-center">
-                                <span className="text-[13px] text-[#777777]">{t("tradeNo")}: {v.trade_no}</span>
-                                <span className="text-[#222222] text-base">{new Intl.NumberFormat().format(v.change_amount)}</span>
+                            <div className={"flex justify-start items-center"}>
+                              <div className={"w-10 h-10 mr-2"}>
+                                <LazyImg src={"/theme/icon_wallet_digital@3x.png"} height={40} width={40} alt={""} />
                               </div>
-                              <div className="flex justify-between text-xs mt-1.5 text-[#979799]">
-                                <span>{dayjs(v.trade_time * 1000).format("YYYY-MM-DD HH:mm:ss")}</span>
-                                <span>{t("balance")}: {new Intl.NumberFormat().format(v.balance_snapshot)}</span>
+                              <div className={"flex flex-col w-full"}>
+                                <div className="flex justify-between items-center">
+                                  <span className="text-[13px] text-[#777777]">{t("tradeNo")}: {v.trade_no}</span>
+                                  <span className="text-[#222222] text-base">{new Intl.NumberFormat().format(v.change_amount)}</span>
+                                </div>
+                                <div className="flex justify-between text-xs mt-1.5 text-[#979799]">
+                                  <span>{dayjs(v.trade_time * 1000).format("YYYY-MM-DD HH:mm:ss")}</span>
+                                  <span>{t("balance")}: {new Intl.NumberFormat().format(v.balance_snapshot)}</span>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                    })}
+                        )
+                      })}
                   </div>
                   {isLoading && <ListLoading />}
                   {!hasMore && items?.length > 0 && <ListEnd />}
                   {(!items || !items?.length) && <Empty top={20} />}
                 </Fragment>
-              )}
+                )}
             </InfiniteScroll>
-          )}
-        </div>
+          </div>
+        )}
       </Suspense>
     </div>
   )

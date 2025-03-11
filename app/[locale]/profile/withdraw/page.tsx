@@ -51,7 +51,13 @@ export default function Page() {
     <div>
       <Header title={t("title")} titleColor="#000" />
       <Suspense fallback={<div className="flex justify-center p-4">Loading...</div>}>
-        <div className="w-full h-[calc(100vh-153px)]">
+        <div className="w-full h-[calc(100vh-49px)]">
+          <DatePicker
+            defVal={date}
+            confirm={(e) => {
+              setDate(e)
+            }}
+          />
           {list && (
             <InfiniteScroll<WithdrawOrder>
               className={"h-full w-full mx-auto"}
@@ -62,12 +68,6 @@ export default function Page() {
               {({ items, isLoading, hasMore, error }) => (
                 <Fragment>
                   {Boolean(error) && <ListError />}
-                  <DatePicker
-                    defVal={date}
-                    confirm={(e) => {
-                      setDate(e)
-                    }}
-                  />
                   <div className="p-4 pt-0">
                     {items.map((v, i) => {
                       const types = [
