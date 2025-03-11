@@ -1,4 +1,4 @@
-import React, { ComponentProps } from "react"
+import React from "react"
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -7,10 +7,10 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  ChartOptions
 } from "chart.js"
 import { Line } from "react-chartjs-2"
-import { ChartOptions } from "chart.js"
 ChartJS.register(
   CategoryScale,
   LinearScale,

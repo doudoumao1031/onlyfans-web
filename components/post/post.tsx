@@ -90,7 +90,7 @@ export default function Post({
         />
         {!isSpace() && (
           <Link href={buildUserHomePagePath(user.id)} className="px-3 text-theme">
-            {t("moreInfo")}
+            {t("moreInfoText")}
           </Link>
         )}
         {post_attachment && post_attachment.length > 0 && (

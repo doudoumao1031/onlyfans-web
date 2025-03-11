@@ -24,7 +24,7 @@ export default function Subscribe({ user }: { user: User }) {
             <AvatarVlog src={photo} vlog={user.live_certification} />
           </div>
           <div className="text-white">
-            <div className="text-sm font-medium">
+            <div className="text-sm truncate max-w-[200px]">
               {first_name} {last_name}
             </div>
             <div className="text-white/75 text-xs">{buildMention(username)}</div>

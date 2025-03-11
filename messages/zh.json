@@ -51,7 +51,7 @@
       "custom": "自定义",
       "saved": "已收藏",
       "cancelSaved": "已取消收藏",
-      "moreInfo": "点击查看更多内容"
+      "moreInfoText": "点击查看更多内容"
     },
     "datePicker": {
       "Year": "年",
