@@ -83,7 +83,7 @@ const ManuscriptPost = () => {
           </button>
         </section>
       </form>
-      <section className={"flex flex-col gap-2.5"}>
+      <section className={"flex flex-col gap-2.5 h-[calc(100vh-145px)]"}>
         {initData && (
           <InfiniteScroll<PostData> fetcherFn={infiniteFetchMyPosts} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
             {({ items, isLoading, hasMore, error }) => (
@@ -139,7 +139,7 @@ const ManuscriptMedia = () => {
           <span className="text-text-theme text-xs">{commonTrans("createTime")}</span>
         </button>
       </div>
-      <section className="">
+      <section className="h-[calc(100vh-145px)]">
         {initData && (
           <InfiniteScroll<PostData> className={"mt-2"} fetcherFn={infiniteFetchMedia} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
             {({ items, isLoading, hasMore, error }) => (

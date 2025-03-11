@@ -9,10 +9,11 @@ import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl, TIME_FORMAT } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 import dayjs from "dayjs"
-import { useLongPress } from "@/components/common/long-press"
 import { useMemo, useRef, useState } from "react"
+import { useLongPress, LongPressEventType } from "use-long-press"
 import SheetSelect from "@/components/common/sheet-select"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+// import { LongPressEventType } from "use-long-press/lib/use-long-press.types"
 
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
   return (
@@ -23,7 +24,12 @@ const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) 
   )
 }
 
-const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, postStatus: number, refresh?: () => void ,pinned: boolean}) => {
+const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
+  id: number,
+  postStatus: number,
+  refresh?: () => void,
+  pinned: boolean
+}) => {
   const t = useTranslations("Profile.manuscript")
   const { showMessage } = useCommonMessageContext()
   const handlePined = () => {
@@ -40,8 +46,8 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, po
   }
   // 0草稿状态 1发布 2审核中 3未通过
   const canEdit = useMemo(() => {
-    return [0,1,3].includes(postStatus)
-  },[postStatus])
+    return [0, 1, 3].includes(postStatus)
+  }, [postStatus])
 
   return (
     <section className="flex text-xs">
@@ -63,12 +69,13 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, po
         canEdit ? "" : "opacity-50"
       )}
       >
-        <IconWithImage url={pinned ? "/theme/icon_fans_stick_highlight@3x.png" :"/theme/icon_fans_stick_dark@3x.png"} width={20} height={20} className={clsx(
+        <IconWithImage url={pinned ? "/theme/icon_fans_stick_highlight@3x.png" : "/theme/icon_fans_stick_dark@3x.png"}
+          width={20} height={20} className={clsx(
           pinned ? "bg-background-theme" : "bg-black"
         )}
         />
         <span className={clsx(
-          pinned ? "text-text-theme":""
+          pinned ? "text-text-theme" : ""
         )}
         >{pinned ? t("itemActions.pinned") : t("itemActions.unpinned")}</span>
       </button>
@@ -77,18 +84,20 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: { id: number, po
           <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
           <span>{t("itemActions.data")}</span>
         </Link>
-          )
-          :   (
-            <button className="flex-1 flex gap-2 pt-2.5 pb-2.5 opacity-50 items-center">
-              <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
-              <span>{t("itemActions.data")}</span>
-            </button>
-          )}
+        )
+        : (
+          <button className="flex-1 flex gap-2 pt-2.5 pb-2.5 opacity-50 items-center">
+            <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
+            <span>{t("itemActions.data")}</span>
+          </button>
+        )}
       {canEdit ? (
         <Link href={`/profile/manuscript/draft/edit?id=${id}`}
           className="flex-1 flex gap-2 pt-2.5 pb-2.5 items-center"
         >
-          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"}/>
+          <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20}
+            className={"bg-background-theme"}
+          />
           <span>{t("itemActions.edit")}</span>
         </Link>
       ) : (
@@ -133,10 +142,10 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
   if (firstMedia?.file_type === FileType.Video) {
     imageId = firstMedia.thumb_id
   }
-
-  const { isPressing } = useLongPress(ref,() => {
-    setOpenState(true)
-  }, 500)
+  //
+  // const { isPressing } = useLongPress(ref,() => {
+  //   setOpenState(true)
+  // })
 
   const { showMessage } = useCommonMessageContext()
   const { withLoading } = useLoadingHandler({
@@ -150,7 +159,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
       })
     }
   })
-  const handleSheetChange = async (value:unknown) => {
+  const handleSheetChange = async (value: unknown) => {
     if (value === "DEL") {
       await withLoading(async () => {
         try {
@@ -162,11 +171,17 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
     }
   }
 
+  const longPressHandler = useLongPress(() => {
+    setOpenState(true)
+  }, {
+    detect: LongPressEventType.Touch
+  })
+
   return (
     <>
       <SheetSelect
         options={[
-          { label: <span className={"text-[#FF223B]"}>删除</span>,value:"DEL" }
+          { label: <span className={"text-[#FF223B]"}>删除</span>, value: "DEL" }
         ]}
         outerControl={true}
         isOpen={openState}
@@ -174,15 +189,15 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
         onInputChange={handleSheetChange}
       />
       <section className="border-b border-gray-100 pt-4">
-        <button className={clsx(
-          "flex gap-2.5 text-left h-[100px] relative w-full transition-all rounded-xl",
-          isPressing ? "bg-gray-200" : ""
-        )} ref={ref}
+        <button {...longPressHandler()} className={clsx(
+          "flex gap-2.5 text-left h-[100px] relative w-full transition-all rounded-xl"
+        )}
         >
           {/*<ManuscriptItemState state={"REJECT"}/>*/}
           <ManuscriptItemState state={data.post.post_status}/>
           <div className={"w-[100px] h-[100px] overflow-hidden rounded flex items-center"}>
-            {imageId ? <LazyImg containerAuto={true} src={buildImageUrl(imageId)} alt={"post"} width={100} height={100}/>
+            {imageId ?
+              <LazyImg containerAuto={true} src={buildImageUrl(imageId)} alt={"post"} width={100} height={100}/>
               : (
                 <Image src={"/icons/image_draft.png"} alt={""} width={100} height={100}
                   className={"shrink-0 w-[100px] h-full rounded"}
@@ -192,7 +207,9 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
           </div>
           <section className={"flex-1 h-full flex flex-col justify-between "}>
             <h3 className="line-clamp-[2]">{data.post.title}</h3>
-            <section className={"flex-1 flex items-center text-[#bbb]"}>{data.post.pub_time ? dayjs(data.post.pub_time * 1000).format(TIME_FORMAT) : ""}</section>
+            <section
+              className={"flex-1 flex items-center text-[#bbb]"}
+            >{data.post.pub_time ? dayjs(data.post.pub_time * 1000).format(TIME_FORMAT) : ""}</section>
             <section className="flex gap-4 text-xs justify-around">
               <ShowNumberWithIcon number={data.post_metric?.thumbs_up_count ?? 0}
                 icon={"/icons/profile/icon_fans_like_normal@3x.png"}
@@ -215,7 +232,9 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
             </section>
           </section>
         </button>
-        <ManuscriptActions id={data.post.id} postStatus={data.post.post_status} refresh={refresh} pinned={data.post.pinned}/>
+        <ManuscriptActions id={data.post.id} postStatus={data.post.post_status} refresh={refresh}
+          pinned={data.post.pinned}
+        />
       </section>
     </>
   )

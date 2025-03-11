@@ -14,7 +14,7 @@ import { useTranslations } from "next-intl"
 
 
 const formValidation = z.object({
-  sub_reply: z.string({ message: "请输入订阅回复" }).min(1, "请输入订阅回复")
+  sub_reply: z.string({ message: "请输入订阅回复" }).trim().min(1, "请输入订阅回复")
 })
 
 
