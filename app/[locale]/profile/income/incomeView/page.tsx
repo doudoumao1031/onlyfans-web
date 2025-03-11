@@ -25,7 +25,7 @@ import { getEvenlySpacedPoints } from "@/lib/utils"
 import { clsx } from "clsx"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import LoadingMask from "@/components/common/loading-mask"
-import { Link } from "@/i18n/routing"
+import { Link, useRouter } from "@/i18n/routing"
 import { useTranslations } from "next-intl"
 
 const Withdrawal = ({
@@ -58,6 +58,7 @@ const Withdrawal = ({
 
   const [openState, setOpenState] = useState<boolean>(false)
   const { showMessage } = useCommonMessageContext()
+  const router = useRouter()
 
   useEffect(() => {
     if (openState) {
@@ -78,11 +79,16 @@ const Withdrawal = ({
       showMessage(t("withdrawalAmountFailed"))
     },
     onSuccess: () => {
-      refresh()
       setOpenState(false)
-      showMessage(t("withdrawalAmountSuccess"), "success")
+      showMessage(t("withdrawalAmountSuccess"), "success",{
+        afterDuration: () => {
+          router.push("/profile/statement?changeType=5")
+        }
+      })
     }
   })
+
+  const amount = withdrawalForm.watch("amount")
 
   return (
     <>
@@ -121,23 +127,14 @@ const Withdrawal = ({
           )
         }}
         className="border-0"
-        handleSubmit={withdrawalForm.handleSubmit(async (data) => {
-          await withLoading(async () => {
-            const response = await addWalletDownOrder({
-              amount: Number(data.amount)
-            })
-            if (response?.code === 0) {
-              return true
-            } else {
-              throw Error
-            }
-          })
-        })}
+        handleSubmit={(event) => {
+          event.preventDefault()
+        }}
       >
         <div className="p-8">
           <div className="flex justify-between mt-4">
             <div className="flex flex-col items-center">
-              <span className="text-xs text-[#777] mb-2">{t("withdrawalAmountAvailable")}</span>
+              <span className="text-xs text-[#222] mb-2">{t("withdrawalAmountAvailable")}</span>
               <span className="text-[20px]">{info.amount - (info?.freeze ?? 0)} USDT</span>
             </div>
             <div className="flex flex-col items-center">
@@ -160,8 +157,12 @@ const Withdrawal = ({
                       onChange={field.onChange}
                       onBlur={(event) => {
                         const value = event.target.value
+                        let numberValue = Number(value)
+                        if (isNaN(numberValue)) {
+                          numberValue = 0
+                        }
                         if (value) {
-                          field.onChange(Number(event.target.value).toFixed(2))
+                          field.onChange((numberValue).toFixed(2))
                         }
                       }}
                       placeholder="0.00"
@@ -180,7 +181,19 @@ const Withdrawal = ({
           <div className="flex justify-center mt-10">
             <button
               disabled={!!errorMessage}
-              type={"submit"}
+              type={"button"}
+              onTouchEnd={async () => {
+                await withLoading(async () => {
+                  const response = await addWalletDownOrder({
+                    amount: Number(amount)
+                  })
+                  if (response?.code === 0) {
+                    return true
+                  } else {
+                    throw Error
+                  }
+                })
+              }}
               className={clsx(
                 "w-full transition-all h-12 rounded-full text-white flex justify-center items-center ",
                 !!errorMessage ? "bg-[#ddd]" : "bg-background-theme "

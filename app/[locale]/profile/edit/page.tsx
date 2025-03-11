@@ -184,6 +184,8 @@ export default function Page() {
                       onInputChange={field.onChange}
                       value={field.value}
                       label={t("form.topInfo")}
+                      type={"textarea"}
+                      rows={5}
                     />
                   )}
                   name={"top_info"}

@@ -36,9 +36,9 @@ import { useTranslations } from "next-intl"
 import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
 
 const ItemEditTitle = ({
-  title,
-  showIcon = true
-}: {
+                         title,
+                         showIcon = true
+                       }: {
   title: React.ReactNode
   showIcon?: boolean
 }) => {
@@ -58,11 +58,11 @@ const ItemEditTitle = ({
 }
 
 const FormItemWithSelect = ({
-  label,
-  value,
-  options,
-  onValueChange
-}: {
+                              label,
+                              value,
+                              options,
+                              onValueChange
+                            }: {
   label: React.ReactNode
   options: ISelectOption[]
   value: unknown
@@ -91,10 +91,10 @@ const FormItemWithSelect = ({
 }
 
 const AddVoteModal = ({
-  children,
-  initFormData,
-  updateVoteData
-}: {
+                        children,
+                        initFormData,
+                        updateVoteData
+                      }: {
   children: React.ReactNode
   initFormData?: iPostVote
   updateVoteData: (data: iPostVote) => void
@@ -106,7 +106,7 @@ const AddVoteModal = ({
     defaultValues: initFormData ?? {
       items: [],
       title: "",
-      stop_time: Date.now(),
+      stop_time: Date.now() / 1000,
       mu_select: false
     }
   })
@@ -282,7 +282,7 @@ const AddVoteModal = ({
                     >
                       <div
                         className={field.value ? "" : "text-gray-500"}
-                      >{field.value ? dayjs(field.value).format("YYYY-MM-DD HH:mm") : "请选择"}</div>
+                      >{field.value ? dayjs(field.value * 1000).format("YYYY-MM-DD HH:mm") : "请选择"}</div>
                     </DateTimePicker>
                   )
                 }}
@@ -327,10 +327,10 @@ const revertPriceSettingOption = (list: iPostPrice[]) => {
 }
 
 const ReadSettings = ({
-  children,
-  initFormData,
-  updatePrice
-}: {
+                        children,
+                        initFormData,
+                        updatePrice
+                      }: {
   children: React.ReactNode
   initFormData?: iPostPrice[]
   updatePrice: (price: iPostPrice[]) => void
@@ -553,10 +553,7 @@ const UploadMedia = () => {
     name: "post_attachment"
   })
 
-  // const localPreviews:LocalPreviewMediaProps[] = []
-  const [localPreviews,setLocalPreviews] = useState<LocalPreviewMediaProps[]>([])
-
-  const [tempFile, setTempFile] = useState<File | null>(null)
+  const [localPreviews, setLocalPreviews] = useState<LocalPreviewMediaProps[]>([])
 
   useEffect(() => {
     if (itemsList.length === 0) {
@@ -595,7 +592,7 @@ const UploadMedia = () => {
             {
               media: file,
               mediaType: fileType,
-              index:itemsList.length
+              index: itemsList.length
             }
           ]
         })
@@ -605,11 +602,11 @@ const UploadMedia = () => {
     }).finally(() => {
       setIsUploading(false)
     })
-  },[append, firstMediaType, showMessage, t, localPreviews])
+  }, [append, firstMediaType, showMessage, t, localPreviews])
 
   // const localPreviewMedia = useState<File | null>(null)
-  const [localPreview,setLocalPreview] = useState<File>()
-  const [openState,setOpenState] = useState<boolean>(false)
+  const [localPreview, setLocalPreview] = useState<File>()
+  const [openState, setOpenState] = useState<boolean>(false)
   const [previewType, setPreviewType] = useState<PreviewType>(PreviewType.LOCAL)
   const [previewMediaType, setPreviewMediaType] = useState<FileType>()
   const [previewFileId, setPreviewFileId] = useState<string>("")
@@ -625,7 +622,7 @@ const UploadMedia = () => {
     setLocalPreviews(data)
   }
 
-  const openPreview = (index: number,attachment:iPostAttachment) => {
+  const openPreview = (index: number, attachment: iPostAttachment) => {
     const previewItem = localPreviews.find(item => item.index === index)
     if (previewItem) {
       setPreviewType(PreviewType.LOCAL)
@@ -641,7 +638,9 @@ const UploadMedia = () => {
 
   return (
     <>
-      <MediaPreview fileId={previewFileId} previewType={previewType} mediaType={previewMediaType} openState={openState} setOpenState={setOpenState} media={localPreview} />
+      <MediaPreview fileId={previewFileId} previewType={previewType} mediaType={previewMediaType} openState={openState}
+        setOpenState={setOpenState} media={localPreview}
+      />
       {itemsList?.map((item, index) => {
         return (
           <Controller
@@ -655,20 +654,20 @@ const UploadMedia = () => {
                     "relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "
                   }
                   onTouchEnd={() => {
-                    openPreview(index,field.value)
+                    openPreview(index, field.value)
                   }}
                 >
                   <section className={"h-full w-full overflow-hidden flex items-center"}>
                     {
                       field.value.file_type === FileType.Image && (
-                      <Image
-                        className={"max-h-full max-w-full object-contain"}
-                        src={buildImageUrl(field.value.file_id)}
-                        alt={"attachment"}
-                        width={100}
-                        height={100}
-                      />
-)
+                        <Image
+                          className={"max-h-full max-w-full object-contain"}
+                          src={buildImageUrl(field.value.file_id)}
+                          alt={"attachment"}
+                          width={100}
+                          height={100}
+                        />
+                      )
                     }
                     {
                       field.value.file_type === FileType.Video && (
@@ -784,8 +783,8 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
 }
 
 function SelectMotionUser({
-  isOpen, setIsOpen, updateMentionUserIds, subUsers
-}: {
+                            isOpen, setIsOpen, updateMentionUserIds, subUsers
+                          }: {
   isOpen: boolean
   setIsOpen: (val: boolean) => void
   subUsers: FansFollowItem[],
@@ -831,7 +830,7 @@ function SelectMotionUser({
               )
             })
             }
-            {filteredData.length === 0 && <Empty text={"暂无数据"} />}
+            {filteredData.length === 0 && <Empty text={"暂无数据"}/>}
           </div>
         </section>
       </section>
@@ -846,7 +845,7 @@ const insertString = (str: string, index: number, char: string) => {
 const Page = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <EditPageContent />
+      <EditPageContent/>
     </Suspense>
   )
 }
@@ -858,6 +857,7 @@ const EditPageContent = () => {
   const postId = Number(searchParams.get("id"))
   const [subUsers, setSubUsers] = useState<FansFollowItem[]>([])
   const { showMessage } = useCommonMessageContext()
+  const titleInFocus = useRef<boolean>(false)
 
   useEffect(() => {
     getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 }).then(response => {
@@ -871,11 +871,11 @@ const EditPageContent = () => {
 
   const DEFAULT_POST_TITLE = useMemo(() => {
     return {
-      [FileType.Image] : t("manuscript.viewPic"),
-      [FileType.Video] : t("manuscript.viewVideo"),
-      [FileType.Other] : ""
+      [FileType.Image]: t("manuscript.viewPic"),
+      [FileType.Video]: t("manuscript.viewVideo"),
+      [FileType.Other]: ""
     }
-  },[t])
+  }, [t])
   const getSubmitFormData = (formData: iPost) => {
     const { post_mention_user = [], post: { title } } = formData
     const mentionUsers = post_mention_user?.map(item => subUsers.find(sub => sub.user.id === item.user_id))?.filter(item => !!item)
@@ -978,20 +978,23 @@ const EditPageContent = () => {
       return true
     }
     return post_title.length > 4
-  },[post_title,post_attachment])
+  }, [post_title, post_attachment])
 
   //请浏览图片/请查看视频
   useEffect(() => {
+    if (titleInFocus.current) {
+      return
+    }
     if (post_attachment.length && post_title === "") {
       const fileType = post_attachment[0].file_type
-      setValue("post.title",DEFAULT_POST_TITLE[fileType])
+      setValue("post.title", DEFAULT_POST_TITLE[fileType])
       postForm.trigger()
     }
     const defaultTitles = Object.values(DEFAULT_POST_TITLE).filter(item => !!item)
     if (post_attachment.length === 0 && defaultTitles.includes(post_title)) {
-      setValue("post.title","")
+      setValue("post.title", "")
     }
-  }, [DEFAULT_POST_TITLE, postForm, post_attachment, post_title, setValue])
+  }, [DEFAULT_POST_TITLE, postForm, post_attachment, post_title, setValue, titleInFocus])
 
   return (
     <FormProvider {...postForm}>
@@ -1016,9 +1019,9 @@ const EditPageContent = () => {
                       color={"#000"}
                     />
                   </button>
-                }
+                  }
               />
-            )
+              )
               : (
                 <button type={"button"} onTouchEnd={router.back}>
                   <IconWithImage
@@ -1037,7 +1040,7 @@ const EditPageContent = () => {
 
 
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">
-          <UploadMedia />
+          <UploadMedia/>
         </section>
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 relative">
           <textarea
@@ -1046,6 +1049,12 @@ const EditPageContent = () => {
             maxLength={999}
             placeholder={t("manuscript.shareMyFeelings")}
             rows={5}
+            onFocus={() => {
+              titleInFocus.current = true
+            }}
+            onBlur={() => {
+              titleInFocus.current = false
+            }}
             onKeyUp={event => {
               if (event.key === "@") {
                 selectionStart.current = (event.target as HTMLTextAreaElement).selectionStart
@@ -1132,7 +1141,7 @@ const EditPageContent = () => {
           </div>
           <section className="mt-2.5">
             {formValues.post_price?.map((price, index) => (
-              <ReadingSettingsDisplay postPrice={price} key={index} />
+              <ReadingSettingsDisplay postPrice={price} key={index}/>
             ))}
             {/*<div className="flex items-center space-x-2">*/}
             {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
@@ -1142,7 +1151,7 @@ const EditPageContent = () => {
           </section>
         </section>
         <section className="pt-5 pb-5 pl-4 pr-4 ">
-          <ItemEditTitle showIcon={false} title={t("manuscript.publishNotice")} />
+          <ItemEditTitle showIcon={false} title={t("manuscript.publishNotice")}/>
           <section className="border-b border-gray-200 flex justify-between items-center py-3">
             <div>{t("manuscript.subscriber")}</div>
             <Controller control={postForm.control} render={({ field }) => {
@@ -1151,10 +1160,10 @@ const EditPageContent = () => {
                   className={"custom-switch"}
                   checked={field.value}
                   onCheckedChange={(value) => {
-                  field.onChange(value)
-                }}
+                    field.onChange(value)
+                  }}
                 />
-)
+              )
             }} name={"post.notice"}
             />
           </section>

@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback, useEffect, RefObject } from "react"
 
-export function useLongPress(ref: RefObject<HTMLButtonElement>, onLongPress: () => void, holdOn = 1000) {
+export function useLongPress(ref: RefObject<HTMLButtonElement>, onLongPress: () => void, holdOn = 2000) {
   const [isPressing, setIsPressing] = useState<boolean>(false)
   const touchStart = useRef<number>(0)
   const timer = useRef<ReturnType<typeof setTimeout>>(null)
@@ -27,7 +27,7 @@ export function useLongPress(ref: RefObject<HTMLButtonElement>, onLongPress: () 
       if (timer.current) {
         clearTimeout(timer.current)
       }
-      if (end - touchStart.current > 1000) {
+      if (end - touchStart.current > holdOn) {
         onLongPress?.()
       }
     },
