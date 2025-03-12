@@ -34,6 +34,7 @@ import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { useTranslations } from "next-intl"
 import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
+import CommonAvatar from "@/components/common/common-avatar"
 
 const ItemEditTitle = ({
   title,
@@ -859,9 +860,7 @@ function SelectMotionUser({
             {filteredData.map(item => {
               return (
                 <div key={item.user.id} className={"flex gap-4 items-center"}>
-                  <Image src={buildImageUrl(item.user.photo)} alt={"avatar"} width={40} height={40}
-                    className={"rounded-full shrink-0"}
-                  />
+                  <CommonAvatar photoFileId={item.user.photo} size={40} />
                   <button onTouchEnd={() => {
                     updateMentionUserIds(item.user.id)
                   }} type={"button"} className={"flex-1 flex justify-between border-b border-[#ddd] py-3 "}
@@ -905,6 +904,7 @@ const EditPageContent = () => {
   const [subUsers, setSubUsers] = useState<FansFollowItem[]>([])
   const { showMessage } = useCommonMessageContext()
   const titleInFocus = useRef<boolean>(false)
+  const [formDefaultData, setFormDefaultData] = useState<iPost>()
 
   useEffect(() => {
     getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 }).then(response => {
@@ -971,24 +971,16 @@ const EditPageContent = () => {
   const postForm = useForm<iPost>({
     mode: "all",
     resolver: zodResolver(postSchema),
-    defaultValues: (isNumber(postId) && postId > 0) ? () => {
-      return postDetail(postId).then(data => {
-        if (data) {
-          return {
-            ...data.data,
-            post_vote: data.data.post_vote ?? undefined,
-            post_attachment: data.data.post_attachment ?? []
-          }
-        }
-        return initPostFormData
-      })
-    } : { ...initPostFormData }
+    defaultValues: { ...initPostFormData }
   })
 
   const { register, watch, formState, setValue, handleSubmit: handleFormSubmit } = postForm
 
   const formValues = watch()
   const [atUserModal, setAtUserModal] = useState<boolean>(false)
+  const isEdit = useMemo(() => {
+    return isNumber(postId) && postId > 0
+  }, [postId])
 
   const updateMentionUserIds = useCallback((id: number) => {
     const value = formValues.post_mention_user ?? []
@@ -1011,11 +1003,32 @@ const EditPageContent = () => {
     })
   }
 
+  useEffect(() => {
+    if (isEdit) {
+      postDetail(postId).then(data => {
+        if (data) {
+          setFormDefaultData(data.data)
+        }
+      })
+    }
+  }, [postId, isEdit])
+
+  useEffect(() => {
+    if (formDefaultData) {
+      postForm.reset(formDefaultData)
+    }
+  }, [formDefaultData, postForm])
+
   const showSaveDraft = useMemo(() => {
-    const title = formValues.post?.title
-    const attachments = formValues.post_attachment
-    return !!title || !!attachments?.length
-  }, [formValues])
+    if (isEdit) {
+      return JSON.stringify(formValues) !== JSON.stringify(formDefaultData)
+    } else {
+      const title = formValues.post?.title
+      const attachments = formValues.post_attachment
+      return !!title || !!attachments?.length
+    }
+
+  }, [formValues, isEdit, formDefaultData])
 
   const post_attachment = (watch("post_attachment") ?? []).filter(item => !!item)
   const post_title = (watch("post.title") ?? "").trim()

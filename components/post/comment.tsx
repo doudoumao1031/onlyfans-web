@@ -19,6 +19,7 @@ import { useTranslations } from "next-intl"
 import { useCommonMessageContext } from "../common/common-message"
 import dayjs from "dayjs"
 import TextareaAutosize from "react-textarea-autosize"
+import EmojiPicker from "./emoji-picker"
 
 export default function Comments({
   post_id,
@@ -36,6 +37,7 @@ export default function Comments({
   const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Common.post")
   const [input, setInput] = useState("")
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   return (
     <>
@@ -55,6 +57,7 @@ export default function Comments({
               height={24}
               alt=""
               className="size-[24px]"
+              onClick={() => setShowEmojiPicker((pre) => !pre)}
             />
           </div>
           <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
@@ -67,6 +70,7 @@ export default function Comments({
             />
           </div>
         </div>
+        {showEmojiPicker && <EmojiPicker onClick={(emoji) => setInput((pre) => pre + emoji)} />}
         {comments.map((comment) => (
           <Comment key={comment.id} comment={comment} removed={removeComment} />
         ))}
@@ -81,6 +85,7 @@ export default function Comments({
       increaseCommentCount(1)
       setInput("")
       showMessage("感谢评论", "love")
+      setShowEmojiPicker(false)
     }
   }
 }
@@ -113,8 +118,8 @@ function Comment({
   const [loading, setLoading] = useState<boolean>(false)
   const [replies, setReplies] = useState<CommentReplyInfo[] | undefined>(undefined)
   const [showReplies, setShowReplies] = useState(false)
-
   const [openCofirmDeleteComment, setOpenConfirmDeleteComment] = useState<boolean>(false)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   return (
     <>
@@ -167,33 +172,39 @@ function Comment({
           <CommentSkeleton />
         )}
         {showReplyInput && (
-          <div className="flex gap-2 items-center">
-            <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
-              <TextareaAutosize
-                minRows={1}
-                value={replyInput}
-                onChange={(e) => setReplyInput(e.target.value)}
-                className="grow bg-transparent"
-                placeholder={t("replyPlaceholder")}
-              />
-              <Image
-                src="/theme/icon_fans_comment_face@3x.png"
-                width={24}
-                height={24}
-                alt=""
-                className="size-[24px]"
-              />
+          <>
+            <div className="flex gap-2 items-center">
+              <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
+                <TextareaAutosize
+                  minRows={1}
+                  value={replyInput}
+                  onChange={(e) => setReplyInput(e.target.value)}
+                  className="grow bg-transparent"
+                  placeholder={t("replyPlaceholder")}
+                />
+                <Image
+                  src="/theme/icon_fans_comment_face@3x.png"
+                  width={24}
+                  height={24}
+                  alt=""
+                  className="size-[24px]"
+                  onClick={() => setShowEmojiPicker((pre) => !pre)}
+                />
+              </div>
+              <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
+                <Image
+                  src="/theme/icon_fans_comment_send@3x.png"
+                  width={24}
+                  height={24}
+                  alt=""
+                  onClick={sendReply}
+                />
+              </div>
             </div>
-            <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
-              <Image
-                src="/theme/icon_fans_comment_send@3x.png"
-                width={24}
-                height={24}
-                alt=""
-                onClick={sendReply}
-              />
-            </div>
-          </div>
+            {showEmojiPicker && (
+              <EmojiPicker onClick={(emoji) => setReplyInput((pre) => pre + emoji)} />
+            )}
+          </>
         )}
         {showReplies && !!replies?.length && (
           <div className="pl-10 flex flex-col gap-2.5">
@@ -320,8 +331,8 @@ function Reply({
   const [replyInput, setReplyInput] = useState("")
   const [thumbupCount, setThumbupCount] = useState(thumbs_up_count)
   const [isThumbupped, setIsThumbupped] = useState(thumb_up)
-
   const [openCofirmDeleteReply, setOpenConfirmDeleteReply] = useState<boolean>(false)
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false)
 
   return (
     <>
@@ -368,33 +379,39 @@ function Reply({
           <Thumbup thumbupCount={thumbupCount} isThumbupped={isThumbupped} thumbup={thumbup} />
         </div>
         {showReplyInput && (
-          <div className="flex gap-2 items-center">
-            <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
-              <TextareaAutosize
-                minRows={1}
-                value={replyInput}
-                onChange={(e) => setReplyInput(e.target.value)}
-                className="grow bg-transparent"
-                placeholder={t("replyPlaceholder")}
-              />
-              <Image
-                src="/theme/icon_fans_comment_face@3x.png"
-                width={24}
-                height={24}
-                alt=""
-                className="size-[24px]"
-              />
+          <>
+            <div className="flex gap-2 items-center">
+              <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
+                <TextareaAutosize
+                  minRows={1}
+                  value={replyInput}
+                  onChange={(e) => setReplyInput(e.target.value)}
+                  className="grow bg-transparent"
+                  placeholder={t("replyPlaceholder")}
+                />
+                <Image
+                  src="/theme/icon_fans_comment_face@3x.png"
+                  width={24}
+                  height={24}
+                  alt=""
+                  className="size-[24px]"
+                  onClick={() => setShowEmojiPicker((pre) => !pre)}
+                />
+              </div>
+              <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
+                <Image
+                  src="/theme/icon_fans_comment_send@3x.png"
+                  width={24}
+                  height={24}
+                  alt=""
+                  onClick={sendReply}
+                />
+              </div>
             </div>
-            <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
-              <Image
-                src="/theme/icon_fans_comment_send@3x.png"
-                width={24}
-                height={24}
-                alt=""
-                onClick={sendReply}
-              />
-            </div>
-          </div>
+            {showEmojiPicker && (
+              <EmojiPicker onClick={(emoji) => setReplyInput((pre) => pre + emoji)} />
+            )}
+          </>
         )}
       </div>
     </>
