@@ -3,7 +3,7 @@
 import { useRouter } from "@/i18n/routing"
 import { useEffect } from "react"
 const { log } = console
-const checkPlatform = () => {
+export const checkPlatform = () => {
   const isAndroid = !!window.Android
   const isIOS = !!window.webkit
   return { isAndroid, isIOS }

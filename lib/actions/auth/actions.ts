@@ -25,3 +25,11 @@ export const users = async (params: PageInfo) => {
   }
   return null
 }
+
+export const loginToken = async () => {
+  const res = await fetchWithPost<undefined, undefined>(ENDPOINTS.AUTH.LOGIN_TOKEN, undefined)
+  if (res && res.code === 0) {
+    return res.data
+  }
+  return null
+}

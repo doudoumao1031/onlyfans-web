@@ -4,7 +4,8 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost
 export const ENDPOINTS = {
   AUTH: {
     LOGIN: "/auth/login",
-    USERS: "/auth/users"
+    USERS: "/auth/users",
+    LOGIN_TOKEN: "/auth/loginToken"
   },
   RECOM: {
     FOLLOW_USER_POSTS: "/index/followUserPosts",
