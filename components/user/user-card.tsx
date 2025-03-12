@@ -33,7 +33,7 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo; subsc
               </div>
               <div className="flex-col w-3/4">
                 <div>
-                  <div className="font-medium text-sm text-nowrap w-[85%] truncate">{user.first_name + user.last_name}</div>
+                  <div className="font-medium text-sm text-nowrap w-[85%] truncate">{`${user.first_name} ${user.last_name}`}</div>
                   <div className="font-normal text-xs w-[75%] truncate">{buildMention(user.username)}</div>
                 </div>
                 {subscribe && (
