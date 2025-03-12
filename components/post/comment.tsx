@@ -39,7 +39,7 @@ export default function Comments({
 
   return (
     <>
-      <div className="flex flex-col gap-6 p-4">
+      <div className="flex flex-col gap-2.5 p-4">
         <div className="flex gap-2 items-center">
           <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
             <TextareaAutosize
@@ -196,7 +196,7 @@ function Comment({
           </div>
         )}
         {showReplies && !!replies?.length && (
-          <div className="pl-10 py-4 flex flex-col gap-3">
+          <div className="pl-10 flex flex-col gap-2.5">
             {replies.map((reply) => (
               <Reply
                 key={reply.id}
@@ -479,4 +479,4 @@ function Thumbup({
   )
 }
 
-const datetimeFormat = "M月D日 H:m"
+const datetimeFormat = "M月D日 HH:mm"

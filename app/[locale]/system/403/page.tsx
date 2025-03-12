@@ -103,7 +103,7 @@ function ErrorContent() {
               <option value="">Select Token / 选择令牌</option>
               {useList.map((user) => (
                 <option key={user.id} value={user.id}>
-                  User:{user.id},ptID:{user.pt_user_id},ln:{user.last_name}
+                  User:{user.id},ptId:{user.pt_user_id},Fn:{user.first_name}
                 </option>
               ))}
             </select>
