@@ -80,7 +80,7 @@ export default function Page() {
                         {t("balance")}:{v.balance_snapshot}
                       </span>
                       {v.from_user && (
-                        <span className="text-orange">{StatementTypeList[v.change_type - 1].desc} {v.from_user}</span>
+                        <span className="text-orange truncate max-w-[160px]">{StatementTypeList[v.change_type - 1].desc} {v.from_user}</span>
                       )}
                     </div>
                   </div>

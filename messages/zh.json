@@ -48,6 +48,7 @@
       "tipFailed": "打赏失败",
       "tipConfirm": "确认支付{amount} {currency}",
       "confirmTip": "确认支付",
+      "minTip": "最低打赏金额为0.1USDT",
       "custom": "自定义",
       "saved": "已收藏",
       "cancelSaved": "已取消收藏",

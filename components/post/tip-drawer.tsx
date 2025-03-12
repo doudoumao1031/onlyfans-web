@@ -150,14 +150,23 @@ export default function TipDrawer(props: TipDrawerProps) {
               type="number"
               className="w-full py-2 px-16 border-0 bg-white rounded-lg text-right h-[49px] placeholder:text-gray-400"
               placeholder="0.00"
-              max={999}
-              value={amount == 0 ? "" : amount.toString()}
+              // max={999}
+              // min={0.01}
+              value={amount.toString()}
               onChange={(event) => {
-                const money = event.target.value.replace(/[^0-9.]/g, "")
-                setAmount(parseFloat(money) || 0)
+                const value = event.target.value
+                // 允许输入数字和小数点，但小数点后最多两位
+                const regex = /^\d*\.?\d{0,2}$/
+                if (regex.test(value) || value === "") {
+                  setAmount(parseFloat(value) || 0)
+                }
               }}
               onBlur={(event) => {
-                Number(event.target.value).toFixed(2)
+                const value = event.target.value
+                if (value) {
+                  const formattedValue = parseFloat(value).toFixed(2)
+                  setAmount(parseFloat(formattedValue))
+                }
               }}
             />
             <Label
@@ -174,17 +183,17 @@ export default function TipDrawer(props: TipDrawerProps) {
           <div className="my-[40px]  self-center">
             <button
               type={"button"}
-              disabled={amount === 0 || !amount}
+              disabled={!amount || amount < 0.1}
               className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${
-                amount === 0 || !amount ? "bg-gray-quaternary" : "bg-theme"
+                !amount || amount < 0.1 ? "bg-gray-quaternary" : "bg-theme"
               }`}
               onTouchEnd={async () => {
-                if (amount > 0) {
+                if (amount >= 0.1) {
                   await handTip()
                 }
               }}
             >
-              {amount > 0 ? t("tipConfirm", { amount, currency: "USDT" }) : t("confirmTip")}
+              {amount >= 0.1 ? t("tipConfirm", { amount, currency: "USDT" }) : amount > 0 && amount < 0.1 ? t("minTip") : t("confirmTip")}
             </button>
           </div>
         </div>

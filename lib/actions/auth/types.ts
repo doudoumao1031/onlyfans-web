@@ -22,3 +22,12 @@ export interface UserVo {
   name: string
   // Add other users fields based on API response
 }
+
+export interface UserListResp {
+  id: number
+  first_name: string
+  last_name: string
+  username: string
+  pt_user_id: number
+  blogger: boolean
+}

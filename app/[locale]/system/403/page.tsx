@@ -1,100 +1,32 @@
 "use client"
 
 import { useSearchParams, useRouter } from "next/navigation"
-import { Suspense, useState } from "react"
-import { login } from "@/lib/actions/auth/actions"
+import { Suspense, useState, useEffect } from "react"
+import { login, users } from "@/lib/actions/auth/actions"
 import { TOKEN_KEY, USER_KEY } from "@/lib/utils"
 import LoadingMask from "@/components/common/loading-mask"
 import { useGlobal } from "@/lib/contexts/global-context"
-
-const testUsersList = [
-  {
-    id: 1,
-    token: "1"
-  },
-  {
-    id: 2,
-    token: "2"
-  },
-  {
-    id: 3,
-    token: "3"
-  },
-  {
-    id: 6,
-    token: "6"
-  },
-  {
-    id: 15,
-    token: "15"
-  },
-  {
-    id: 16,
-    token: "16"
-  },
-  {
-    id: 17,
-    token: "17"
-  },
-  {
-    id: 18,
-    token: "18"
-  },
-  {
-    id: 19,
-    token: "19"
-  },
-  {
-    id: 20,
-    token: "20"
-  },
-  {
-    id: 21,
-    token: "21"
-  },
-  {
-    id: 22,
-    token: "22"
-  },
-  {
-    id: 23,
-    token: "23"
-  },
-  {
-    id: 24,
-    token: "24"
-  },
-  {
-    id: 25,
-    token: "25"
-  },
-  {
-    id: 26,
-    token: "26"
-  }
-  // {
-  //   id: 27,
-  //   token: "27"
-  // },
-  // {
-  //   id: 28,
-  //   token: "28"
-  // },
-  // {
-  //   id: 29,
-  //   token: "29"
-  // }
-]
+import { UserListResp } from "@/lib"
 
 function ErrorContent() {
   const search = useSearchParams()
   const router = useRouter()
   const redirectPath = search.get("redirect")
   const [userId, setUserId] = useState("20240990")
+  const [useList, setUserList] = useState<UserListResp[]>([])
   const [token, setToken] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const { setSid } = useGlobal()
+  useEffect(() => {
+    const userList = async () => {
+      const result = await users({ page: 1, pageSize: 100, from_id: 0 })
+      if (result) {
+        setUserList(result.list)
+      }
+    }
+    userList()
+  }, [])
 
   const handleClick = async () => {
     if (!userId && !token) {
@@ -169,9 +101,9 @@ function ErrorContent() {
               className="border rounded px-4 py-2 w-64"
             >
               <option value="">Select Token / 选择令牌</option>
-              {testUsersList.map((user) => (
-                <option key={user.id} value={user.token}>
-                  User {user.id} (Token: {user.token})
+              {useList.map((user) => (
+                <option key={user.id} value={user.id}>
+                  User:{user.id},ptId:{user.pt_user_id},Fn:{user.first_name}
                 </option>
               ))}
             </select>

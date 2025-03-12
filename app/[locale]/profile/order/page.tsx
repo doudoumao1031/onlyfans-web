@@ -130,11 +130,16 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
                       value={`${field.value} ${t("monthUnit")}${t("month")}`} disabled
                     />
                   ) : (
-                    <InputWithLabel errorMessage={fieldState.error?.message} placeholder={t("subTimeLimit")}
+                    <InputWithLabel
+                      errorMessage={fieldState.error?.message}
+                      placeholder={t("subTimeLimit")}
                       onInputChange={(value) => {
-                                      field.onChange(value)
-                                      form.setValue("price", Number((Number(value) * basePrice)))
-                                    }}
+                        field.onChange(value)
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-expect-error
+                        form.setValue("price", Number((Number(value) * basePrice)).toFixed(2))
+                        form.trigger()
+                      }}
                       options={monthSelections}
                       value={field.value ?? ""}
                     />
