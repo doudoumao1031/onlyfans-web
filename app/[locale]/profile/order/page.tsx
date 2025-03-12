@@ -73,7 +73,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
     if (openState) {
       form.reset(initData)
     }
-  }, [openState, form])
+  }, [openState, form, initData])
 
   const monthSelections = useMemo(() => {
     const arr = [2, 3, 6, 9, 12]
@@ -84,7 +84,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
       }
     })
       .filter(item => !hasSub.includes(Number(item.value)))
-  }, [hasSub])
+  }, [hasSub, t])
 
   return (
     <Drawer open={openState} onOpenChange={setOpenState}>
@@ -112,14 +112,14 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
           >
             <ModalHeader title={t("bundleSub")}
               left={<button type={"button"} onTouchEnd={() => {
-                           setOpenState(false)
-                         }} className={"text-base"}
-                    >{commonTrans("cancel")}</button>}
+                setOpenState(false)
+              }} className={"text-base"}
+              >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-base text-text-theme"}
                 >{commonTrans("save")}</button>
-                         )}
+              )}
             ></ModalHeader>
 
             <div className={"mt-5 block px-4"}>
@@ -151,12 +151,12 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
                 <Controller render={({ field }) => (
                   <InputWithLabel
                     errorMessage={form.formState.errors?.price?.message} onBlur={event => {
-                    let numberVal = Number(event.target.value)
-                    if (isNaN(numberVal)) {
-                      numberVal = 2
-                    }
-                    field.onChange(numberVal.toFixed(2))
-                  }}
+                      let numberVal = Number(event.target.value)
+                      if (isNaN(numberVal)) {
+                        numberVal = 2
+                      }
+                      field.onChange(numberVal.toFixed(2))
+                    }}
                     value={field.value || ""} onInputChange={field.onChange} placeholder={t("subPrice")}
                     description={t("bundleSubPriceDescription")}
                   />
@@ -193,7 +193,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
         label: <div className={"text-left"}>
           ${item.price} {item.month_count}{t("monthUnit")}{t("month")} <span
             className={"text-[#bbb]"}
-                                                                       >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
+          >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
         value: item.id
       }
     })
@@ -255,14 +255,14 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
           >
             <ModalHeader title={t("discountActivities")}
               left={<button onTouchEnd={() => {
-                           setOpenState(false)
-                         }} className={"text-base text-[#777]"}
-                    >{commonTrans("cancel")}</button>}
+                setOpenState(false)
+              }} className={"text-base text-[#777]"}
+              >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-base text-text-theme"}
                 >{commonTrans("save")}</button>
-                         )}
+              )}
             ></ModalHeader>
 
             <div className={"mt-5 block px-4"}>
@@ -480,7 +480,7 @@ function SubscribeBundle({ items, initSettings, userId, updateItems, basePrice }
                     >
                       ${discount.price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;<span
                         className="text-[#6D7781]"
-                                                                                                                 >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
+                      >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
                     </button>
                     <Switch className={"custom-switch"} checked={!field.value.item_status} onCheckedChange={(value) => {
                       field.onChange({
@@ -563,7 +563,7 @@ function PromotionalActivities({ updateItems, items }: {
         {items.filter(d => d.discount_per > 0).map((discount, index) => {
           return (
             <TopLabelWrapper key={discount.id}
-              label={<DiscountPercentLabel index={index + 1} percent={discount.discount_per}/>}
+              label={<DiscountPercentLabel index={index + 1} percent={discount.discount_per} />}
             >
               <div className={"flex-1"} onTouchEnd={() => {
                 openEditModal(discount)
@@ -581,13 +581,13 @@ function PromotionalActivities({ updateItems, items }: {
               </div>
               <Switch disabled={discount.item_status} className={"custom-switch"}
                 checked={!discount.discount_status} onCheckedChange={(value) => {
-                const updateIndex = items.findIndex(i => i.id === discount.id)
-                const arr = [...items]
-                const item = arr[updateIndex]
-                item.discount_status = !value
-                arr.splice(updateIndex, 1, item)
-                updateItems(arr)
-              }}
+                  const updateIndex = items.findIndex(i => i.id === discount.id)
+                  const arr = [...items]
+                  const item = arr[updateIndex]
+                  item.discount_status = !value
+                  arr.splice(updateIndex, 1, item)
+                  updateItems(arr)
+                }}
               ></Switch>
             </TopLabelWrapper>
           )
@@ -685,8 +685,8 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
             </div>
           </form>
           <DialogHeader className={"hidden"}>
-            <DialogTitle/>
-            <DialogDescription/>
+            <DialogTitle />
+            <DialogDescription />
           </DialogHeader>
         </DialogContent>
       </Dialog>
@@ -789,13 +789,13 @@ export default function Page() {
     <div>
       <Header title={t("title")} titleColor={"#000"}
         right={<button onTouchEnd={() => {
-                baseFeeForm.trigger().then(async (valid) => {
-                  if (valid) {
-                    await updateSubscribeSettings()
-                  }
-                })
-              }} className="text-text-theme text-base"
-               >{t("complete")}</button>}
+          baseFeeForm.trigger().then(async (valid) => {
+            if (valid) {
+              await updateSubscribeSettings()
+            }
+          })
+        }} className="text-text-theme text-base"
+        >{t("complete")}</button>}
       />
       <section className="mt-5 text-black">
         <section className="pl-4 pr-4 pb-5 border-b border-gray-100">
@@ -814,8 +814,8 @@ export default function Page() {
                           transition: "top .1s",
                           top: -7
                         }} className={clsx(
-                        "absolute bg-white left-4 leading-none font-normal z-30 transition text-[#6D7781]",
-                      )}
+                          "absolute bg-white left-4 leading-none font-normal z-30 transition text-[#6D7781]",
+                        )}
                       >
                         {t("monthlyPrice")}
                       </label>
@@ -827,7 +827,7 @@ export default function Page() {
                       >
                         <div>{showBaseValue}</div>
                         <div className="flex-1 flex items-center justify-end">
-                          <BasePriceSettings valueChange={field.onChange} value={field.value}/>
+                          <BasePriceSettings valueChange={field.onChange} value={field.value} />
                         </div>
                       </section>
                     </section>
@@ -835,7 +835,7 @@ export default function Page() {
                       <div>{t("baseSubLimit")}</div>
                       <div>{t("shouldBe1")} <span
                         className="text-text-theme"
-                                            >{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
+                      >{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
                       </div>
                     </section>
                   </section>
@@ -851,7 +851,7 @@ export default function Page() {
             userId={userInfo?.id}
           />
         )}
-        {realPrice > 0 && <PromotionalActivities items={baseFormValues.items} updateItems={updateItems}/>}
+        {realPrice > 0 && <PromotionalActivities items={baseFormValues.items} updateItems={updateItems} />}
       </section>
     </div>
   )
