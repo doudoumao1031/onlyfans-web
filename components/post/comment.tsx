@@ -152,7 +152,7 @@ function Comment({
           <div className="flex justify-between">
             <div className="flex gap-2">
               <div className={"shrink-0"}>
-                <CommonAvatar photoFileId={photo} size={36} />
+                <CommonAvatar photoFileId={photo} size={32} />
               </div>
               <div className="flex flex-col gap-2">
                 <div className="text-xs text-theme">{`${first_name} ${last_name}`}</div>
@@ -366,7 +366,9 @@ function Reply({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between">
           <div className="flex gap-2">
-            <Avatar fileId={photo} width={9} height={9} />
+            <div className={"shrink-0"}>
+              <CommonAvatar photoFileId={photo} size={32} />
+            </div>
             <div className="flex flex-col gap-2">
               <div className="text-xs text-theme">
                 {first_name} {last_name}
