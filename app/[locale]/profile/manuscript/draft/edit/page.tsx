@@ -36,9 +36,9 @@ import { useTranslations } from "next-intl"
 import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
 
 const ItemEditTitle = ({
-                         title,
-                         showIcon = true
-                       }: {
+  title,
+  showIcon = true
+}: {
   title: React.ReactNode
   showIcon?: boolean
 }) => {
@@ -58,11 +58,11 @@ const ItemEditTitle = ({
 }
 
 const FormItemWithSelect = ({
-                              label,
-                              value,
-                              options,
-                              onValueChange
-                            }: {
+  label,
+  value,
+  options,
+  onValueChange
+}: {
   label: React.ReactNode
   options: ISelectOption[]
   value: unknown
@@ -91,10 +91,10 @@ const FormItemWithSelect = ({
 }
 
 const AddVoteModal = ({
-                        children,
-                        initFormData,
-                        updateVoteData
-                      }: {
+  children,
+  initFormData,
+  updateVoteData
+}: {
   children: React.ReactNode
   initFormData?: iPostVote
   updateVoteData: (data: iPostVote) => void
@@ -327,10 +327,10 @@ const revertPriceSettingOption = (list: iPostPrice[]) => {
 }
 
 const ReadSettings = ({
-                        children,
-                        initFormData,
-                        updatePrice
-                      }: {
+  children,
+  initFormData,
+  updatePrice
+}: {
   children: React.ReactNode
   initFormData?: iPostPrice[]
   updatePrice: (price: iPostPrice[]) => void
@@ -537,6 +537,59 @@ interface LocalPreviewMediaProps {
   index: number
 }
 
+const FirstFrameImage = ({ file }: { file: File | undefined }) => {
+  const [imageSrc, setImageSrc] = useState<string | null>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    if (canvasRef.current && file) {
+      const videoElement = document.createElement("video")
+      videoElement.preload = "metadata"
+      const canvas = canvasRef.current
+      videoElement.onloadeddata = () => {
+        videoElement.currentTime = 0.1
+      }
+
+      videoElement.onseeked = () => {
+        canvas.width = videoElement.videoWidth
+        canvas.height = videoElement.videoHeight
+        const ctx = canvas.getContext("2d")
+        if (ctx) {
+          ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height)
+          setImageSrc(canvas.toDataURL("image/png"))
+        }
+      }
+      videoElement.src = URL.createObjectURL(file)
+    }
+  }, [file])
+
+  if (!file) {
+    return (
+      <Image
+        className={"max-h-full max-w-full object-contain"}
+        src={"/icons/image_draft.png"}
+        alt={"attachment"}
+        width={100}
+        height={100}
+      />
+    )
+  }
+  return (
+    <div>
+      <canvas ref={canvasRef} style={{ display: "none" }} />
+      {imageSrc && (
+        <Image
+          className={"max-h-full max-w-full object-contain"}
+          src={imageSrc}
+          alt={"attachment"}
+          width={100}
+          height={100}
+        />
+      )
+      }
+    </div>
+  )
+}
+
 const UploadMedia = () => {
   const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Profile")
@@ -671,13 +724,7 @@ const UploadMedia = () => {
                     }
                     {
                       field.value.file_type === FileType.Video && (
-                        <Image
-                          className={"max-h-full max-w-full object-contain"}
-                          src={"/icons/image_draft.png"}
-                          alt={"attachment"}
-                          width={100}
-                          height={100}
-                        />
+                        <FirstFrameImage file={localPreviews.find(item => item.index === index)?.media} />
                       )
                     }
                   </section>
@@ -783,8 +830,8 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
 }
 
 function SelectMotionUser({
-                            isOpen, setIsOpen, updateMentionUserIds, subUsers
-                          }: {
+  isOpen, setIsOpen, updateMentionUserIds, subUsers
+}: {
   isOpen: boolean
   setIsOpen: (val: boolean) => void
   subUsers: FansFollowItem[],
@@ -830,7 +877,7 @@ function SelectMotionUser({
               )
             })
             }
-            {filteredData.length === 0 && <Empty text={"暂无数据"}/>}
+            {filteredData.length === 0 && <Empty text={"暂无数据"} />}
           </div>
         </section>
       </section>
@@ -845,7 +892,7 @@ const insertString = (str: string, index: number, char: string) => {
 const Page = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <EditPageContent/>
+      <EditPageContent />
     </Suspense>
   )
 }
@@ -1019,9 +1066,9 @@ const EditPageContent = () => {
                       color={"#000"}
                     />
                   </button>
-                  }
+                }
               />
-              )
+            )
               : (
                 <button type={"button"} onTouchEnd={router.back}>
                   <IconWithImage
@@ -1040,7 +1087,7 @@ const EditPageContent = () => {
 
 
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">
-          <UploadMedia/>
+          <UploadMedia />
         </section>
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 relative">
           <textarea
@@ -1141,7 +1188,7 @@ const EditPageContent = () => {
           </div>
           <section className="mt-2.5">
             {formValues.post_price?.map((price, index) => (
-              <ReadingSettingsDisplay postPrice={price} key={index}/>
+              <ReadingSettingsDisplay postPrice={price} key={index} />
             ))}
             {/*<div className="flex items-center space-x-2">*/}
             {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
@@ -1151,7 +1198,7 @@ const EditPageContent = () => {
           </section>
         </section>
         <section className="pt-5 pb-5 pl-4 pr-4 ">
-          <ItemEditTitle showIcon={false} title={t("manuscript.publishNotice")}/>
+          <ItemEditTitle showIcon={false} title={t("manuscript.publishNotice")} />
           <section className="border-b border-gray-200 flex justify-between items-center py-3">
             <div>{t("manuscript.subscriber")}</div>
             <Controller control={postForm.control} render={({ field }) => {
