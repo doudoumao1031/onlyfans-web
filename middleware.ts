@@ -14,7 +14,7 @@ const checkPathIsInLocale = (path: string) => {
 }
 
 const isUnauthorizedPath = (locale: string, path: string) => {
-  return `/${locale}/auth` === path
+  return `/${locale}/system/403` === path
 }
 
 export async function middleware(request: NextRequest) {
@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
     // return NextResponse.next()
   } else {
     if (!pathValidation) {
-      const redirectUrl = new URL(`/${locale}/auth`, request.url)
+      const redirectUrl = new URL(`/${locale}/system/403`, request.url)
       redirectUrl.searchParams.set("redirect", url.pathname)
       return NextResponse.redirect(redirectUrl)
     }

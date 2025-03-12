@@ -55,6 +55,10 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
   }, [router])
 
   useEffect(() => {
+    // 测试
+    setTimeout(() => {
+      window?.callAppApi("requestOAuth", "")
+    }, 2000)
     emitter.on(
       BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
       handleGetSystemBarsInfo,
