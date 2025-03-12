@@ -14,8 +14,13 @@ const checkPathIsInLocale = (path: string) => {
 }
 
 const isUnauthorizedPath = (locale: string, path: string) => {
+  return `/${locale}/auth` === path
+}
+
+const is403Path = (locale: string, path: string) => {
   return `/${locale}/system/403` === path
 }
+
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
@@ -39,8 +44,11 @@ export async function middleware(request: NextRequest) {
     return handleI18nRouting(request)
     // return NextResponse.next()
   } else {
+    if (is403Path(locale, pathname)) {
+      return handleI18nRouting(request)
+    }
     if (!pathValidation) {
-      const redirectUrl = new URL(`/${locale}/system/403`, request.url)
+      const redirectUrl = new URL(`/${locale}/auth`, request.url)
       redirectUrl.searchParams.set("redirect", url.pathname)
       return NextResponse.redirect(redirectUrl)
     }

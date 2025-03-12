@@ -8,10 +8,12 @@ export default function Page() {
   useEffect(() => {
     const { isIOS, isAndroid } = checkPlatform()
     if (!isIOS && !isAndroid) {
+
       router.push("/system/403")
+    } else {
+      window?.callAppApi("requestOAuth", "")
     }
-    window?.callAppApi("requestOAuth", "")
-  }, [router])
+  }, [])
   return (
     <LoadingMask isLoading={true} />
   )

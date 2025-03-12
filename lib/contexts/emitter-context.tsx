@@ -9,6 +9,8 @@ import React, {
 } from "react"
 import { emitter, useAppLoaded } from "@/lib/hooks/emitter"
 import { useRouter } from "@/i18n/routing"
+import { loginToken, LoginTokenResp } from "../actions/auth"
+import { TOKEN_KEY, USER_KEY } from "../utils"
 
 const emitterContext = createContext(undefined)
 
@@ -47,11 +49,19 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
   }, [])
   const handleResponseOAuth = useCallback((data: unknown) => {
     console.log(data, "data--handleResponseOAuth")
+    loginToken(data as string).then((res: LoginTokenResp | null) => {
+      if (res?.token && res?.user_id) {
+        document.cookie = `${TOKEN_KEY}=${res.token}; path=/; secure; samesite=lax`
+        document.cookie = `${USER_KEY}=${res.user_id}; path=/; secure; samesite=lax`
+      }
+      router.push("/explore/feed")
+      console.log(res, "res--handleResponseOAuth")
+    })
     // const { isIOS, isAndroid } = checkPlatform()
     // if (!isIOS && !isAndroid) {
     //   router.push("/system/403")
     // }
-  }, [router])
+  }, [])
 
   useEffect(() => {
     // 测试
