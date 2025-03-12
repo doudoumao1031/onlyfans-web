@@ -36,9 +36,9 @@ import { useTranslations } from "next-intl"
 import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
 
 const ItemEditTitle = ({
-                         title,
-                         showIcon = true
-                       }: {
+  title,
+  showIcon = true
+}: {
   title: React.ReactNode
   showIcon?: boolean
 }) => {
@@ -58,11 +58,11 @@ const ItemEditTitle = ({
 }
 
 const FormItemWithSelect = ({
-                              label,
-                              value,
-                              options,
-                              onValueChange
-                            }: {
+  label,
+  value,
+  options,
+  onValueChange
+}: {
   label: React.ReactNode
   options: ISelectOption[]
   value: unknown
@@ -91,10 +91,10 @@ const FormItemWithSelect = ({
 }
 
 const AddVoteModal = ({
-                        children,
-                        initFormData,
-                        updateVoteData
-                      }: {
+  children,
+  initFormData,
+  updateVoteData
+}: {
   children: React.ReactNode
   initFormData?: iPostVote
   updateVoteData: (data: iPostVote) => void
@@ -327,10 +327,10 @@ const revertPriceSettingOption = (list: iPostPrice[]) => {
 }
 
 const ReadSettings = ({
-                        children,
-                        initFormData,
-                        updatePrice
-                      }: {
+  children,
+  initFormData,
+  updatePrice
+}: {
   children: React.ReactNode
   initFormData?: iPostPrice[]
   updatePrice: (price: iPostPrice[]) => void
@@ -783,8 +783,8 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
 }
 
 function SelectMotionUser({
-                            isOpen, setIsOpen, updateMentionUserIds, subUsers
-                          }: {
+  isOpen, setIsOpen, updateMentionUserIds, subUsers
+}: {
   isOpen: boolean
   setIsOpen: (val: boolean) => void
   subUsers: FansFollowItem[],
@@ -830,7 +830,7 @@ function SelectMotionUser({
               )
             })
             }
-            {filteredData.length === 0 && <Empty text={"暂无数据"}/>}
+            {filteredData.length === 0 && <Empty text={"暂无数据"} />}
           </div>
         </section>
       </section>
@@ -845,7 +845,7 @@ const insertString = (str: string, index: number, char: string) => {
 const Page = () => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <EditPageContent/>
+      <EditPageContent />
     </Suspense>
   )
 }
@@ -858,6 +858,7 @@ const EditPageContent = () => {
   const [subUsers, setSubUsers] = useState<FansFollowItem[]>([])
   const { showMessage } = useCommonMessageContext()
   const titleInFocus = useRef<boolean>(false)
+  const [formDefaultData, setFormDefaultData] = useState<iPost>()
 
   useEffect(() => {
     getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 }).then(response => {
@@ -924,24 +925,16 @@ const EditPageContent = () => {
   const postForm = useForm<iPost>({
     mode: "all",
     resolver: zodResolver(postSchema),
-    defaultValues: (isNumber(postId) && postId > 0) ? () => {
-      return postDetail(postId).then(data => {
-        if (data) {
-          return {
-            ...data.data,
-            post_vote: data.data.post_vote ?? undefined,
-            post_attachment: data.data.post_attachment ?? []
-          }
-        }
-        return initPostFormData
-      })
-    } : { ...initPostFormData }
+    defaultValues: { ...initPostFormData }
   })
 
   const { register, watch, formState, setValue, handleSubmit: handleFormSubmit } = postForm
 
   const formValues = watch()
   const [atUserModal, setAtUserModal] = useState<boolean>(false)
+  const isEdit = useMemo(() => {
+    return isNumber(postId) && postId > 0
+  }, [postId])
 
   const updateMentionUserIds = useCallback((id: number) => {
     const value = formValues.post_mention_user ?? []
@@ -964,11 +957,32 @@ const EditPageContent = () => {
     })
   }
 
+  useEffect(() => {
+    if (isEdit) {
+      postDetail(postId).then(data => {
+        if (data) {
+          setFormDefaultData(data.data)
+        }
+      })
+    }
+  }, [postId, isEdit])
+
+  useEffect(() => {
+    if (formDefaultData) {
+      postForm.reset(formDefaultData)
+    }
+  }, [formDefaultData, postForm])
+
   const showSaveDraft = useMemo(() => {
-    const title = formValues.post?.title
-    const attachments = formValues.post_attachment
-    return !!title || !!attachments?.length
-  }, [formValues])
+    if (isEdit) {
+      return JSON.stringify(formValues) !== JSON.stringify(formDefaultData)
+    } else {
+      const title = formValues.post?.title
+      const attachments = formValues.post_attachment
+      return !!title || !!attachments?.length
+    }
+
+  }, [formValues, isEdit, formDefaultData])
 
   const post_attachment = (watch("post_attachment") ?? []).filter(item => !!item)
   const post_title = (watch("post.title") ?? "").trim()
@@ -1019,9 +1033,9 @@ const EditPageContent = () => {
                       color={"#000"}
                     />
                   </button>
-                  }
+                }
               />
-              )
+            )
               : (
                 <button type={"button"} onTouchEnd={router.back}>
                   <IconWithImage
@@ -1040,7 +1054,7 @@ const EditPageContent = () => {
 
 
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">
-          <UploadMedia/>
+          <UploadMedia />
         </section>
         <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 relative">
           <textarea
@@ -1141,7 +1155,7 @@ const EditPageContent = () => {
           </div>
           <section className="mt-2.5">
             {formValues.post_price?.map((price, index) => (
-              <ReadingSettingsDisplay postPrice={price} key={index}/>
+              <ReadingSettingsDisplay postPrice={price} key={index} />
             ))}
             {/*<div className="flex items-center space-x-2">*/}
             {/*    <IconWithImage url={"/icons/profile/icon-reading.png"} width={20} height={20}*/}
@@ -1151,7 +1165,7 @@ const EditPageContent = () => {
           </section>
         </section>
         <section className="pt-5 pb-5 pl-4 pr-4 ">
-          <ItemEditTitle showIcon={false} title={t("manuscript.publishNotice")}/>
+          <ItemEditTitle showIcon={false} title={t("manuscript.publishNotice")} />
           <section className="border-b border-gray-200 flex justify-between items-center py-3">
             <div>{t("manuscript.subscriber")}</div>
             <Controller control={postForm.control} render={({ field }) => {

@@ -253,7 +253,7 @@
       "monthUnit": "个",
       "subTimeLimit": "订阅时限",
       "subPrice": "订阅价格",
-      "bundleSubPriceDescription": "最小价格$1.99 USDT，最高价格不超过999.99 价格保留小数点2位数",
+      "bundleSubPriceDescription": "最小价格$1.99 USDT，最高价格不超过9999.99 价格保留小数点2位数",
       "discount": "促销",
       "discountActivities": "促销活动",
       "emptyDiscount": "为用户提供订阅的促销活动，可以为您吸引更多的订阅用户",
