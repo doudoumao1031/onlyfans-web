@@ -34,6 +34,7 @@ import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { useTranslations } from "next-intl"
 import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
+import CommonAvatar from "@/components/common/common-avatar"
 
 const ItemEditTitle = ({
   title,
@@ -812,9 +813,7 @@ function SelectMotionUser({
             {filteredData.map(item => {
               return (
                 <div key={item.user.id} className={"flex gap-4 items-center"}>
-                  <Image src={buildImageUrl(item.user.photo)} alt={"avatar"} width={40} height={40}
-                    className={"rounded-full shrink-0"}
-                  />
+                  <CommonAvatar photoFileId={item.user.photo} size={40} />
                   <button onTouchEnd={() => {
                     updateMentionUserIds(item.user.id)
                   }} type={"button"} className={"flex-1 flex justify-between border-b border-[#ddd] py-3 "}
