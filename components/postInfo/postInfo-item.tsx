@@ -201,7 +201,7 @@ export default function Page({ postData }: { postData: PostData }) {
       {drawer && (
         <SubscribedDrawer
           userId={postInfo.user.id}
-          name={postInfo.user.first_name}
+          name={`${postInfo.user.first_name} ${postInfo.user.last_name}`}
           free={postInfo.user.sub_price === 0}
           flush={refresh}
           isOpen={drawer}

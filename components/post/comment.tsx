@@ -42,6 +42,7 @@ export default function Comments({
   return (
     <>
       <div className="flex flex-col gap-2.5 p-4">
+        {/*todo： 可查看媒体一样的权限*/}
         <div className="flex gap-2 items-center">
           <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
             <TextareaAutosize
@@ -60,13 +61,17 @@ export default function Comments({
               onClick={() => setShowEmojiPicker((pre) => !pre)}
             />
           </div>
-          <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
+          <div className={`p-1 ${!input || input === "" ? "bg-sky-500/50" : "bg-theme" } rounded-[50%] size-[30px] bg-sky`}>
             <Image
               src="/theme/icon_fans_comment_send@3x.png"
               width={24}
               height={24}
               alt=""
-              onClick={sendComment}
+              onClick={async () => {
+                if (input) {
+                  await sendComment()
+                }
+              }}
             />
           </div>
         </div>
@@ -110,7 +115,7 @@ function Comment({
     reply_count,
     comment_time
   } = comment
-  const { photo, username, first_name, last_name } = user
+  const { photo, first_name, last_name } = user
   const [showReplyInput, setShowReplyInput] = useState(false)
   const [replyInput, setReplyInput] = useState("")
   const [thumbupCount, setThumbupCount] = useState(thumbs_up_count)
@@ -147,7 +152,7 @@ function Comment({
           <div className="flex justify-between">
             <div className="flex gap-2">
               <div className={"shrink-0"}>
-                <CommonAvatar photoFileId={photo} size={36} />
+                <CommonAvatar photoFileId={photo} size={32} />
               </div>
               <div className="flex flex-col gap-2">
                 <div className="text-xs text-theme">{`${first_name} ${last_name}`}</div>
@@ -191,13 +196,17 @@ function Comment({
                   onClick={() => setShowEmojiPicker((pre) => !pre)}
                 />
               </div>
-              <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
+              <div className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme" } rounded-[50%] size-[30px]`}>
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
                   width={24}
                   height={24}
                   alt=""
-                  onClick={sendReply}
+                  onClick={async () => {
+                    if (replyInput) {
+                      await sendReply()
+                    }
+                  }}
                 />
               </div>
             </div>
@@ -357,14 +366,16 @@ function Reply({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between">
           <div className="flex gap-2">
-            <Avatar fileId={photo} width={9} height={9} />
+            <div className={"shrink-0"}>
+              <CommonAvatar photoFileId={photo} size={32} />
+            </div>
             <div className="flex flex-col gap-2">
               <div className="text-xs text-theme">
                 {first_name} {last_name}
               </div>
-              <div className="text-sm flex gap-2">
-                {reply_user && <div className="text-[#6D7781]">{reply_user.first_name} {reply_user.last_name}</div>}
-                <div>{content}</div>
+              <div className="text-sm">
+                {reply_user && <span className="text-[#6D7781]">{t("reply")} {`${reply_user.first_name} ${reply_user.last_name}`} : </span>}
+                <span>{content}</span>
               </div>
               <div className="flex gap-4 text-xs text-[#6D7781]">
                 {" "}
@@ -398,13 +409,17 @@ function Reply({
                   onClick={() => setShowEmojiPicker((pre) => !pre)}
                 />
               </div>
-              <div className="p-1 bg-sky-500/50 rounded-[50%] size-[30px]">
+              <div className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme" } rounded-[50%] size-[30px]`}>
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
                   width={24}
                   height={24}
                   alt=""
-                  onClick={sendReply}
+                  onClick={async () => {
+                    if (replyInput) {
+                      await sendReply()
+                    }
+                  }}
                 />
               </div>
             </div>
