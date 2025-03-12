@@ -363,7 +363,7 @@ function Reply({
                 {first_name} {last_name}
               </div>
               <div className="text-sm flex gap-2">
-                {reply_user && <div className="text-[#6D7781]">{reply_user.username}</div>}
+                {reply_user && <div className="text-[#6D7781]">{reply_user.first_name} {reply_user.last_name}</div>}
                 <div>{content}</div>
               </div>
               <div className="flex gap-4 text-xs text-[#6D7781]">
