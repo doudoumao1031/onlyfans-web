@@ -15,8 +15,8 @@ if (typeof window !== "undefined") {
           emitter.emit(BRIDGE_EVENT_NAME.sendSystemtBarsInfo, data)
           return true
         }
-        case BRIDGE_EVENT_NAME.requsetOAuth: {
-          emitter.emit(BRIDGE_EVENT_NAME.requsetOAuth, data)
+        case BRIDGE_EVENT_NAME.responseOAuth: {
+          emitter.emit(BRIDGE_EVENT_NAME.responseOAuth, data)
           return true
         }
         default:

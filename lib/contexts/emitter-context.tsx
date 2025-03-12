@@ -8,14 +8,13 @@ import React, {
   useCallback
 } from "react"
 import { emitter, useAppLoaded } from "@/lib/hooks/emitter"
-import { checkPlatform } from "@/components/common/init"
 import { useRouter } from "@/i18n/routing"
 
 const emitterContext = createContext(undefined)
 
 export enum BRIDGE_EVENT_NAME {
   sendSystemtBarsInfo = "sendSystemtBarsInfo",
-  requsetOAuth = "requsetOAuth"
+  responseOAuth = "responseOAuth"
 }
 
 export function EmitterProvider({ children }: { children: ReactNode }) {
@@ -46,8 +45,8 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
       htmlElement.style.setProperty("--top-bar", newValue)
     }
   }, [])
-  const handleRequestOAuth = useCallback((data: unknown) => {
-    console.log(data, "data--handleRequestOAuth")
+  const handleResponseOAuth = useCallback((data: unknown) => {
+    console.log(data, "data--handleResponseOAuth")
     // const { isIOS, isAndroid } = checkPlatform()
     // if (!isIOS && !isAndroid) {
     //   router.push("/system/403")
@@ -64,8 +63,8 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
       handleGetSystemBarsInfo,
     )
     emitter.on(
-      BRIDGE_EVENT_NAME.requsetOAuth,
-      handleRequestOAuth,
+      BRIDGE_EVENT_NAME.responseOAuth,
+      handleResponseOAuth,
     )
     return () => {
       emitter.off(
@@ -73,13 +72,13 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
         handleGetSystemBarsInfo,
       )
       emitter.off(
-        BRIDGE_EVENT_NAME.requsetOAuth,
-        handleRequestOAuth,
+        BRIDGE_EVENT_NAME.responseOAuth,
+        handleResponseOAuth,
       )
     }
   }, [
     handleGetSystemBarsInfo,
-    handleRequestOAuth
+    handleResponseOAuth
   ])
   return (
     <emitterContext.Provider value={undefined}>
