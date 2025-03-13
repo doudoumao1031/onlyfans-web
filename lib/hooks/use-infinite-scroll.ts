@@ -46,7 +46,7 @@ export function useInfiniteScroll<T>({
   useEffect(() => {
     if (data && page > 1 && !isFetchingRef.current) {
       isFetchingRef.current = true
-      console.log(items, data.items, 'featch========');
+      console.log(items, data.items, "fetch========")
 
       setItems((prev) => [...prev, ...data.items])
       setHasMore(data.hasMore)

@@ -24,9 +24,10 @@ export default function Media(props: MediaProps) {
   const { data, post, user, isInfoPage, followConfirm } = props
   const showIds = data.map((v) => v.file_id).join("_")
   const [followModal, setFollowModal] = useState<boolean>(false)
+  const hasThumbId = !!data[0].thumb_id
   const content = (
     <div>
-      <div className="w-full h-full rounded-lg absolute top-0 left-0 z-20 flex flex-col items-center justify-center">
+      <div className={`w-full h-full rounded-lg absolute top-0 left-0 z-20 flex flex-col items-center justify-center ${hasThumbId && "bg-black bg-opacity-[30%] backdrop-blur"}`}>
         <IconWithImage url="/icons/icon_info_lock_white.png" width={32} color="#fff" height={32} />
         <span className="mt-2 text-white">
           {post.visibility === 2 ? tSpace("tip1") : tSpace("tip2")}
@@ -34,7 +35,7 @@ export default function Media(props: MediaProps) {
       </div>
       <LazyImg
         className={"aspect-square rounded-md block"}
-        src={"/icons/default/img_media_default_lj.png"}
+        src={hasThumbId ? buildImageUrl(data[0]?.thumb_id) : "/icons/default/img_media_default_lj.png"}
         alt=""
         style={{
           width: "100%",
