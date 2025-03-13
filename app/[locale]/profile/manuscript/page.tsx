@@ -12,6 +12,7 @@ import { ListEnd, ListError, ListLoading } from "@/components/explore/list-state
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { LazyImageWithFileId } from "@/components/common/lazy-img"
 import { useTranslations } from "next-intl"
+import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
 
 enum ACTIVE_TYPE {
   POST = "POST",
@@ -113,6 +114,8 @@ function MediaImagePreview({ attachment }: { attachment: Attachment[] }) {
 const ManuscriptMedia = () => {
   const [timeSort, setTimeSort] = useState<boolean>(false)
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
+  const [openState, setOpenState] = useState<boolean>(false)
+  const [previewFileId, setPreviewFileId] = useState<string>("")
   const commonTrans = useTranslations("Common")
   const t = useTranslations("Profile.manuscript")
   useEffect(() => {
@@ -132,102 +135,134 @@ const ManuscriptMedia = () => {
       from_id: 0
     }
   })
+
+  const openMediaPreview = (data:PostData) => {
+    const { post_attachment,post } = data
+    if (post_attachment.length === 0) {
+      return
+    }
+    const [media] = post_attachment
+    if (media.file_type === FileType.Image) {
+      return
+    }
+    // 2审核中
+    if (post.post_status === 2) {
+      return
+    }
+    setPreviewFileId(media.file_id)
+    setOpenState(true)
+  }
   return (
-    <section className="pl-4 pr-4 text-black">
-      <div className={"flex-1 flex justify-end mt-5"}>
-        <button className="shrink-0" onTouchEnd={() => {
-          setTimeSort(prevState => !prevState)
-        }}
-        >
-          <div className="flex items-center justify-center">
-            <IconWithImage
-              url={`/icons/profile/${timeSort ? "icon_gradedown" : "icon_gradeup"}@3x.png`} color={"#000"}
-              width={20} height={20}
-            />
-          </div>
-          <span className="text-text-theme text-xs">{commonTrans("createTime")}</span>
-        </button>
-      </div>
-      <section className="h-[calc(100vh-195px)]">
-        {initData && (
-          <InfiniteScroll<PostData> className={"mt-2"} fetcherFn={infiniteFetchMedia} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
-            {({ items, isLoading, hasMore, error }) => (
-              <Fragment>
-                {Boolean(error) && <ListError />}
-                <div className={"grid grid-cols-2 gap-3 "}>
-                  {items?.map((item, index) => (
-                    <section key={index}>
-                      <section className="rounded-xl relative overflow-hidden text-xs bg-black/20">
-                        <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5 z-10">
-                          <section className="flex items-center gap-0.5">
-                            <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
-                              color={"#fff"}
-                            />
-                            <span>{item.post_metric.play_count}</span>
+    <>
+      <MediaPreview
+        fileId={previewFileId}
+        previewType={PreviewType.ONLINE}
+        mediaType={FileType.Video}
+        openState={openState}
+        setOpenState={setOpenState}
+      />
+      <section className="pl-4 pr-4 text-black">
+        <div className={"flex-1 flex justify-end mt-5"}>
+          <button className="shrink-0" onTouchEnd={() => {
+            setTimeSort(prevState => !prevState)
+          }}
+          >
+            <div className="flex items-center justify-center">
+              <IconWithImage
+                url={`/icons/profile/${timeSort ? "icon_gradedown" : "icon_gradeup"}@3x.png`} color={"#000"}
+                width={20} height={20}
+              />
+            </div>
+            <span className="text-text-theme text-xs">{commonTrans("createTime")}</span>
+          </button>
+        </div>
+        <section className="h-[calc(100vh-195px)]">
+          {initData && (
+            <InfiniteScroll<PostData> className={"mt-2"} fetcherFn={infiniteFetchMedia} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
+              {({ items, isLoading, hasMore, error }) => (
+                <Fragment>
+                  {Boolean(error) && <ListError />}
+                  <div className={"grid grid-cols-2 gap-3 "}>
+                    {items?.map((item, index) => (
+                      <section key={index}>
+                        <section className="rounded-xl relative overflow-hidden text-xs bg-black/20">
+                          <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5 z-10">
+                            <section className="flex items-center gap-0.5">
+                              <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
+                                color={"#fff"}
+                              />
+                              <span>{item.post_metric.play_count}</span>
+                            </section>
+                            <section className="flex items-center gap-0.5">
+                              <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
+                                color={"#fff"}
+                              />
+                              <span>{item.post_metric.tip_count}</span>
+                            </section>
                           </section>
-                          <section className="flex items-center gap-0.5">
-                            <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
-                              color={"#fff"}
-                            />
-                            <span>{item.post_metric.tip_count}</span>
+                          <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around z-10">
+                            <section className="flex items-center gap-0.5 flex-1">
+                              <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12}
+                                color={"#fff"}
+                              />
+                              <span>{item.post_metric.thumbs_up_count}</span>
+                            </section>
+                            <section className="flex items-center gap-0.5 flex-1 justify-center">
+                              <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12}
+                                color={"#fff"}
+                              />
+                              <span>{item.post_metric.comment_count}</span>
+                            </section>
+                            <section className="flex items-center gap-0.5 flex-1 justify-end">
+                              <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12}
+                                color={"#fff"}
+                              />
+                              <span>{item.post_metric.share_count}</span>
+                            </section>
                           </section>
-                        </section>
-                        <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around z-10">
-                          <section className="flex items-center gap-0.5 flex-1">
-                            <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12}
-                              color={"#fff"}
-                            />
-                            <span>{item.post_metric.thumbs_up_count}</span>
-                          </section>
-                          <section className="flex items-center gap-0.5 flex-1 justify-center">
-                            <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12}
-                              color={"#fff"}
-                            />
-                            <span>{item.post_metric.comment_count}</span>
-                          </section>
-                          <section className="flex items-center gap-0.5 flex-1 justify-end">
-                            <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12}
-                              color={"#fff"}
-                            />
-                            <span>{item.post_metric.share_count}</span>
-                          </section>
-                        </section>
-                        <section
-                          className="w-full h-[220px] rounded flex justify-center items-center overflow-hidden"
-                        >
-                          <MediaImagePreview attachment={item.post_attachment ?? []} />
-                          {/* <LazyImageWithFileId containerAuto={true} fileId={item.post_attachment?.[0]?.file_id} alt={"post_attachment"} width={200} height={220} className="max-w-full max-h-full object-contain" /> */}
-                        </section>
-                      </section>
-                      {
-                        [0, 3].includes(item.post.post_status) ? (
-                          <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
-                            className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
+                          <section
+                            onTouchEnd={() => {
+                              openMediaPreview(item)
+                            }}
+                            className="w-full h-[220px] rounded flex justify-center items-center overflow-hidden"
                           >
-                            <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
-                            <span>{t("itemActions.edit")}</span>
-                          </Link>
-                        )
-                          : (
-                            <button type={"button"}
-                              className="rounded-[10px] grayscale gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
+                            <MediaImagePreview attachment={item.post_attachment ?? []} />
+                            {/* <LazyImageWithFileId containerAuto={true} fileId={item.post_attachment?.[0]?.file_id} alt={"post_attachment"} width={200} height={220} className="max-w-full max-h-full object-contain" /> */}
+                          </section>
+                        </section>
+                        {/*// 0草稿状态 1发布 2审核中 3未通过*/}
+                        {
+                          [0, 1, 3].includes(item.post.post_status) ? (
+                            <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
+                              className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
                             >
-                              <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
+                              <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20}
+                                className={"bg-background-theme"}
+                              />
                               <span>{t("itemActions.edit")}</span>
-                            </button>
-                          )
-                      }
-                    </section>
-                  ))}
-                </div>
-                {isLoading && <ListLoading />}
-                {!hasMore && items?.length > 0 && <ListEnd />}
-              </Fragment>
-            )}
-          </InfiniteScroll>
-        )}
+                            </Link>
+                            )
+                            : (
+                              <button type={"button"}
+                                className="rounded-[10px] grayscale gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
+                              >
+                                <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
+                                <span>{t("itemActions.edit")}</span>
+                              </button>
+                            )
+                        }
+                      </section>
+                    ))}
+                  </div>
+                  {isLoading && <ListLoading />}
+                  {!hasMore && items?.length > 0 && <ListEnd />}
+                </Fragment>
+              )}
+            </InfiniteScroll>
+          )}
+        </section>
       </section>
-    </section>
+    </>
   )
 }
 

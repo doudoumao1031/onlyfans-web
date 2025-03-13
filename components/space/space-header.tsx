@@ -68,7 +68,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
         </div>
         <div className="ml-2">
           <div className="text-[14px] truncate max-w-[150px]">
-            {data.first_name} {data.last_name}
+            {data.first_name}
           </div>
           <div className="text-black/50 text-[12px]">{buildMention(data.username)}</div>
         </div>

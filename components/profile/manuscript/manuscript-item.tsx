@@ -18,7 +18,7 @@ import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
   return (
     <section className="flex justify-center flex-col items-center flex-1">
-      <IconWithImage url={icon} height={12} width={12} color={"#222"}/>
+      <IconWithImage url={icon} height={12} width={12} color={"#222"} />
       <div className="text-[#222]">{number}</div>
     </section>
   )
@@ -56,7 +56,7 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
         canEdit ? "" : "opacity-50"
       )}
       >
-        <IconWithImage url={"/theme/icon_fans_share_normal@3x.png"} width={20} height={20} color={"#222"}/>
+        <IconWithImage url={"/theme/icon_fans_share_normal@3x.png"} width={20} height={20} color={"#222"} />
         <span>{t("itemActions.share")}</span>
       </button>
       <button onTouchEnd={(event) => {
@@ -71,8 +71,8 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
       >
         <IconWithImage url={pinned ? "/theme/icon_fans_stick_highlight@3x.png" : "/theme/icon_fans_stick_dark@3x.png"}
           width={20} height={20} className={clsx(
-          pinned ? "bg-background-theme" : "bg-black"
-        )}
+            pinned ? "bg-background-theme" : "bg-black"
+          )}
         />
         <span className={clsx(
           pinned ? "text-text-theme" : ""
@@ -81,13 +81,13 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
       </button>
       {canEdit ? (
         <Link href={`/profile/dataCenter/feeds?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 items-center">
-          <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
+          <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"} />
           <span>{t("itemActions.data")}</span>
         </Link>
-        )
+      )
         : (
           <button className="flex-1 flex gap-2 pt-2.5 pb-2.5 opacity-50 items-center">
-            <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"}/>
+            <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"} />
             <span>{t("itemActions.data")}</span>
           </button>
         )}
@@ -102,7 +102,7 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
         </Link>
       ) : (
         <button type={"button"} className="flex-1 flex gap-2 pt-2.5 pb-2.5 opacity-50 items-center">
-          <IconWithImage url={"/theme/icon_fans_edit_red@3x.png"} width={20} height={20} color={"#222"}/>
+          <IconWithImage url={"/theme/icon_fans_edit_red@3x.png"} width={20} height={20} color={"#222"} />
           <span>{t("itemActions.edit")}</span>
         </button>
       )}
@@ -122,8 +122,8 @@ const ManuscriptItemState = ({ state }: { state: number }) => {
       "leading-[15px] text-xs rounded-br rounded-tl px-1.5 text-white absolute left-0 top-0 z-10",
       state === 2 ? "bg-[#58bf8e]" : "bg-background-theme",
     )}
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     >{textMap[state]}</span>
   )
 }
@@ -171,7 +171,10 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
   const longPressHandler = useLongPress(() => {
     setOpenState(true)
   }, {
-    detect: LongPressEventType.Touch
+    threshold: 1000,
+    detect: LongPressEventType.Touch,
+    cancelOnMovement: true,
+    cancelOutsideElement: true
   })
 
   return (
@@ -191,10 +194,10 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
         )}
         >
           {/*<ManuscriptItemState state={"REJECT"}/>*/}
-          <ManuscriptItemState state={data.post.post_status}/>
+          <ManuscriptItemState state={data.post.post_status} />
           <div className={"w-[100px] h-[100px] overflow-hidden rounded flex items-center shrink-0"}>
             {imageId ?
-              <LazyImg containerAuto={true} src={buildImageUrl(imageId)} alt={"post"} width={100} height={100}/>
+              <LazyImg containerAuto={true} src={buildImageUrl(imageId)} alt={"post"} width={100} height={100} />
               : (
                 <Image src={"/icons/image_draft.png"} alt={""} width={100} height={100}
                   className={"shrink-0 w-[100px] h-full rounded"}
@@ -202,7 +205,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
               )
             }
           </div>
-          <section className={"flex-1 h-full flex flex-col justify-between "}>
+          <Link href={`/profile/manuscript/draft/edit?id=${data.post.id}`} className={"flex-1 h-full flex flex-col justify-between "}>
             <h3 className="line-clamp-[2]">{data.post.title}</h3>
             <section
               className={"flex-1 flex items-center text-[#bbb]"}
@@ -227,7 +230,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
                 icon={"/icons/profile/icon_fans_money_s_gray@3x.png"}
               />
             </section>
-          </section>
+          </Link>
         </button>
         <ManuscriptActions id={data.post.id} postStatus={data.post.post_status} refresh={refresh}
           pinned={data.post.pinned}

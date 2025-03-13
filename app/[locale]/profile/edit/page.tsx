@@ -141,7 +141,7 @@ export default function Page() {
               <section>
                 <InputWithLabel
                   label={t("form.nickname")}
-                  value={`${userOrigin?.first_name ?? ""} ${userOrigin?.last_name ?? ""}`}
+                  value={userOrigin?.first_name ?? ""}
                   disabled
                 />
               </section>

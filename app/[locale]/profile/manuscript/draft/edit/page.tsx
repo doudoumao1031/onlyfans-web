@@ -107,7 +107,7 @@ const AddVoteModal = ({
     defaultValues: initFormData ?? {
       items: [],
       title: "",
-      stop_time: Date.now() / 1000,
+      stop_time: Math.floor(Date.now() / 1000),
       mu_select: false
     }
   })
@@ -278,7 +278,7 @@ const AddVoteModal = ({
                 render={({ field }) => {
                   return (
                     <DateTimePicker min={minTime} value={field.value * 1000} dateChange={value => {
-                      field.onChange(value / 1000)
+                      field.onChange(Math.floor(value / 1000))
                     }}
                     >
                       <div
