@@ -420,7 +420,7 @@
     "btnText5": "订阅后解锁更多内容",
     "operationFailed": "操作失败",
     "followSuccess": "关注成功",
-    "followFailed": "关注失败",
+    "unfollowed": "已取消关注",
     "subscribeSuccess": "订阅成功",
     "subscribeFailed": "订阅失败",
     "subscribeRemaining": "订阅剩余：{x}天",

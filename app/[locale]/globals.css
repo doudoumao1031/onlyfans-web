@@ -167,8 +167,8 @@ textarea {
 .ellipsis-custom::after {
   content: '...';
   position: absolute;
-  right: 2px;
-  bottom: 0;
+  right: 5px;
+  bottom: 1px;
   background: white; /* 背景颜色应与容器背景颜色一致 */
   color: #00aef3; /* 修改为你想要的省略号颜色 */
 }

@@ -421,7 +421,7 @@
     "btnText5": "Subscribe to unlock more content",
     "operationFailed": "Operation Failed",
     "followSuccess": "Follow Success",
-    "followFailed": "Follow Failed",
+    "unfollowed": "Unfollowed",
     "subscribeSuccess": "Subscribe Success",
     "subscribeFailed": "Subscribe Failed",
     "subscribeRemaining": "Subscribe Remaining: {x} days",
