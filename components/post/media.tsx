@@ -27,7 +27,7 @@ export default function Media(props: MediaProps) {
   const hasThumbId = !!data[0].thumb_id
   const content = (
     <div>
-      <div className={`w-full h-full rounded-lg absolute top-0 left-0 z-20 flex flex-col items-center justify-center ${hasThumbId && "bg-black bg-opacity-[30%] backdrop-blur"}`}>
+      <div className={`w-full h-full rounded-lg absolute top-0 left-0 z-20 flex flex-col items-center justify-center ${hasThumbId && "bg-black bg-opacity-[30%] backdrop-blur-md"}`}>
         <IconWithImage url="/icons/icon_info_lock_white.png" width={32} color="#fff" height={32} />
         <span className="mt-2 text-white">
           {post.visibility === 2 ? tSpace("tip1") : tSpace("tip2")}
@@ -39,7 +39,8 @@ export default function Media(props: MediaProps) {
         alt=""
         style={{
           width: "100%",
-          height: "200px"
+          height: "200px",
+          objectFit: "cover"
         }}
         width={343}
         height={200}
