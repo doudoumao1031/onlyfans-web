@@ -61,9 +61,10 @@ export default function Comments({
               onClick={() => setShowEmojiPicker((pre) => !pre)}
             />
           </div>
-          <div className={`p-1 ${!input || input === "" ? "bg-sky-500/50" : "bg-theme" } rounded-[50%] size-[30px] bg-sky`}>
+          <div className={`p-1 ${!input || input === "" ? "bg-sky-500/50" : "bg-theme"} rounded-[50%] size-[30px] bg-sky`}>
             <Image
-              src="/theme/icon_fans_comment_send@3x.png"
+              // src="/theme/icon_fans_comment_send@3x.png"
+              src="/svgIcons/icon_fans_comment_send@3x.svg"
               width={24}
               height={24}
               alt=""
@@ -196,7 +197,7 @@ function Comment({
                   onClick={() => setShowEmojiPicker((pre) => !pre)}
                 />
               </div>
-              <div className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme" } rounded-[50%] size-[30px]`}>
+              <div className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"} rounded-[50%] size-[30px]`}>
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
                   width={24}
@@ -407,7 +408,7 @@ function Reply({
                   onClick={() => setShowEmojiPicker((pre) => !pre)}
                 />
               </div>
-              <div className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme" } rounded-[50%] size-[30px]`}>
+              <div className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"} rounded-[50%] size-[30px]`}>
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
                   width={24}
