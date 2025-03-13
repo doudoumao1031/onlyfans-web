@@ -52,7 +52,7 @@ export default function UserInfo({
           <div className="text-center text-gray-400 text-xs">
             {data.username
               ? "@" + data.username
-              : t("noUserName")}
+              : !data.first_name && !data.about ? t("noUserName") : ""}
           </div>
           <div className="flex justify-center mt-1">
             <IconWithImage
@@ -61,7 +61,7 @@ export default function UserInfo({
               height={18}
               color="#222"
             />
-            <span className="text-xs ml-1 text-gray-400">{data.location || "北京"}</span>
+            <span className="text-xs ml-1 text-gray-400 max-w-[130px] truncate">{data.location || "北京"}</span>
           </div>
           <div className="flex justify-between mt-6 mb-6 px-1">
             {tabs.map((v) => (

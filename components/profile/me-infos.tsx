@@ -52,7 +52,7 @@ export default async function Page() {
           <div className="text-center text-text-desc text-xs">
             {data.username
               ? "@" + data.username
-              : t("noUserName")}
+              : !data.first_name && !data.about ? t("noUserName") : ""}
           </div>
           <Link href={`/space/${data.id}/feed`}>
             <div className="flex justify-center mt-2">
