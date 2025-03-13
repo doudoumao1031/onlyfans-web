@@ -14,33 +14,40 @@ const checkPathIsInLocale = (path: string) => {
 }
 
 const isUnauthorizedPath = (locale: string, path: string) => {
+  return `/${locale}/auth` === path || `/${locale}/system/403` === path
+}
+
+const is403Path = (locale: string, path: string) => {
   return `/${locale}/system/403` === path
 }
+
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const [, locale] = pathname.split("/")
   const cookieStore = await cookies()
   const xToken = cookieStore.get(TOKEN_KEY)?.value
+
   const hasLocale = checkPathIsInLocale(pathname)
   if (!hasLocale) {
     const redirectUrl = request.nextUrl.clone()
     redirectUrl.pathname = `/${defaultLocale}/${pathname}`
     return NextResponse.redirect(redirectUrl)
   }
+
   const pathValidation = isUnauthorizedPath(locale, pathname)
+  const is403 = is403Path(locale, pathname)
   const url = new URL(request.url)
 
-  if (pathValidation || url.pathname.startsWith("/api")) {
+  if (pathValidation || is403 || url.pathname.startsWith("/api")) {
     return handleI18nRouting(request)
   }
-
   if (xToken) {
     return handleI18nRouting(request)
     // return NextResponse.next()
   } else {
     if (!pathValidation) {
-      const redirectUrl = new URL(`/${locale}/system/403`, request.url)
+      const redirectUrl = new URL(`/${locale}/auth`, request.url)
       redirectUrl.searchParams.set("redirect", url.pathname)
       return NextResponse.redirect(redirectUrl)
     }

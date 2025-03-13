@@ -48,8 +48,10 @@ export default function Vote({ postId }: { postId: number }) {
               onClick={() => handleClickOption(id)}
             >
               <div className="flex gap-1 h-full items-center">
-                {select && <Image src="/theme/checkbox_select@3x.png" alt="" width={20} height={20} />}
-                <div>{content}</div>
+                {select && (
+                  <Image src="/theme/checkbox_select@3x.png" alt="" width={20} height={20} />
+                )}
+                <div className="truncate">{content}</div>
               </div>
               <div className={`pr-3 ${select ? "text-theme" : ""}`}>
                 {vote_count} {t("votes")}
@@ -61,7 +63,7 @@ export default function Vote({ postId }: { postId: number }) {
               className="w-full h-11 border rounded-md px-2 flex justify-center items-center"
               onClick={() => handleClickOption(id)}
             >
-              <div>{content}</div>
+              <div className="truncate">{content}</div>
             </div>
           )
         )}
