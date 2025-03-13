@@ -67,7 +67,7 @@ export default async function Page() {
           >
             <div>
               <Image
-                src="/theme/icon_fans_mine_record@3x.png"
+                src="/theme/icon_fans_mine_data@3x.png"
                 alt="icon-data-analysis"
                 width={50}
                 height={50}
