@@ -11,7 +11,8 @@ import { emitter, useAppLoaded } from "@/lib/hooks/emitter"
 import { useRouter } from "@/i18n/routing"
 import { loginToken, LoginTokenResp } from "../actions/auth"
 import { TOKEN_KEY, USER_KEY } from "../utils"
-
+import { useSearchParams } from "next/navigation"
+import { locales } from "@/i18n/routing"
 const emitterContext = createContext(undefined)
 
 export enum BRIDGE_EVENT_NAME {
@@ -21,7 +22,10 @@ export enum BRIDGE_EVENT_NAME {
 
 export function EmitterProvider({ children }: { children: ReactNode }) {
   useAppLoaded()
+  const search = useSearchParams()
   const router = useRouter()
+  const redirectPath = search.get("redirect")
+
   const handleGetSystemBarsInfo = useCallback((data: unknown) => {
     const htmlElement = document.documentElement
     if (typeof data === "string") {
@@ -49,18 +53,21 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
   }, [])
   const handleResponseOAuth = useCallback((data: unknown) => {
     console.log(data, "data--handleResponseOAuth")
+    if (!data) return
     loginToken(data as string).then((res: LoginTokenResp | null) => {
       if (res?.token && res?.user_id) {
         document.cookie = `${TOKEN_KEY}=${res.token}; path=/; secure; samesite=lax`
         document.cookie = `${USER_KEY}=${res.user_id}; path=/; secure; samesite=lax`
+        let link = "/explore/feed"
+        if (redirectPath) {
+          const localePattern = locales.join("|")
+          const regex = new RegExp(`(\/(${localePattern})\/)+`, "g")
+          link = redirectPath.replace(regex, "/")
+        }
+        router.push(link)
+        console.log(res.token, res.user_id, "res--handleResponseOAuth")
       }
-      router.push("/explore/feed")
-      console.log(res, "res--handleResponseOAuth")
     })
-    // const { isIOS, isAndroid } = checkPlatform()
-    // if (!isIOS && !isAndroid) {
-    //   router.push("/system/403")
-    // }
   }, [])
 
   useEffect(() => {
