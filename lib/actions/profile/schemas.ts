@@ -15,7 +15,10 @@ export const postPriceSchema = z.array(z.object({
   price: z.union([z.string().refine(data => Number(data) < 999,"不能大于999").refine(data => Number(data) > -1, "不能小于0").optional(),z.number()]),
   user_type: z.number(),
   visibility: z.boolean()
-}))
+})).nonempty("请设置订阅价格").refine(data => {
+  const [first,second] = data
+  return !(Number(first?.price) > 0 && Number(second?.price) === 0)
+},{ message:"订阅价格大于0时，非订阅用户不能免费" ,path:[1,"price"] })
 
 export const postSchema = z.object({
   post: z.object({
@@ -27,7 +30,7 @@ export const postSchema = z.object({
     file_id: z.union([z.string(),z.number()]),
     id: z.union([z.string(),z.number()]).optional()
   })).optional(),
-  post_price: postPriceSchema.min(1),
+  post_price: postPriceSchema,
   post_vote: postVoteSchema.optional(),
   post_mention_user: z.array(z.object({ user_id: z.number() })).optional()
 })
