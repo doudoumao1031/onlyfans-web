@@ -25,7 +25,7 @@ export default function UserTitle({
             <CommonAvatar photoFileId={photo} size={40} />
           </div>
           <div>
-            <div className="text-base truncate max-w-[160px]">
+            <div className="text-base truncate max-w-[150px]">
               {first_name} {last_name}
             </div>
             <div className="text-black/50 text-xs">{buildMention(username)}</div>
