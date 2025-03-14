@@ -147,6 +147,7 @@ export const myMediaPosts = (
   params: PageInfo & {
     user_id?: number
     post_status?: number
+    sort_asc?: boolean
   }
 ) =>
   fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.POST.ME_MEDIAS, params).then(

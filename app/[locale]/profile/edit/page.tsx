@@ -31,7 +31,7 @@ export default function Page() {
       z.object({
         username: z.string({ message: "请输入昵称" }),
         about: z.string().max(999, "最多999字").optional(),
-        location: z.string().optional(),
+        location: z.string().max(30,"最多30个字").optional(),
         photo: z.string().optional(),
         top_info: z.string().optional(),
         back_img: z.string().optional()
@@ -189,11 +189,14 @@ export default function Page() {
               <section>
                 <Controller
                   control={control}
-                  render={({ field }) => (
+                  render={({ field ,fieldState }) => (
                     <InputWithLabel
                       onInputChange={field.onChange}
                       value={field.value}
+                      type={"textarea"}
+                      rows={5}
                       label={t("form.location")}
+                      errorMessage={fieldState.error?.message}
                     />
                   )}
                   name={"location"}
