@@ -91,7 +91,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
         <Header
           leftTitle={
             <span
-              className={` pt-[1px] shrink-0 text-[18px] font-semibold ml-8 ${isTop ? "text-[#222]" : "text-[#fff]"
+              className={` pt-[1px] shrink-0 text-[18px] font-semibold ml-4 ${isTop ? "text-[#222]" : "text-[#fff]"
                 }`}
             >
               {isTop ? renderTitle() : ""}
