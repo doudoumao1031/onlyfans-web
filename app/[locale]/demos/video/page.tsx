@@ -8,6 +8,8 @@ export default function VideoPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [autoplayBlocked, setAutoplayBlocked] = useState(false)
+  const [hlsUrl, setHlsUrl] = useState("https://onlyfansstaticdata-test.potato.im/output/original.m3u8")
+  const [inputUrl, setInputUrl] = useState("https://onlyfansstaticdata-test.potato.im/output/original.m3u8")
 
   useEffect(() => {
     const loadVideo = async () => {
@@ -17,9 +19,6 @@ export default function VideoPage() {
 
         const video = videoRef.current
         if (!video) return
-
-        // The CDN URL for the HLS playlist
-        const hlsUrl = "https://onlyfansstaticdata-test.potato.im/output/original.m3u8"
 
         // Check if HLS is supported
         if (Hls.isSupported()) {
@@ -102,7 +101,7 @@ export default function VideoPage() {
     }
 
     loadVideo()
-  }, [])
+  }, [hlsUrl])
 
   const handlePlayClick = () => {
     if (videoRef.current) {
@@ -112,6 +111,11 @@ export default function VideoPage() {
       })
       setAutoplayBlocked(false)
     }
+  }
+
+  const handleUrlSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setHlsUrl(inputUrl)
   }
 
   return (
@@ -141,20 +145,8 @@ export default function VideoPage() {
           )}
 
           {autoplayBlocked && !error && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-              <div className="text-white text-center p-4">
-                <p className="font-semibold">Click to play the video</p>
-                <button
-                  className="mt-4 px-6 py-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 flex items-center justify-center"
-                  onClick={handlePlayClick}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  <span className="ml-2">Play Video</span>
-                </button>
-              </div>
+            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30" onClick={handlePlayClick}>
+              {/* Removed the title and button, clicking anywhere on the overlay will play the video */}
             </div>
           )}
 
@@ -167,6 +159,32 @@ export default function VideoPage() {
         </div>
 
         <div className="p-4">
+          <form onSubmit={handleUrlSubmit} className="mb-4">
+            <div className="flex flex-col md:flex-row gap-2">
+              <div className="flex-grow">
+                <label htmlFor="hlsUrlInput" className="block text-sm font-medium text-gray-700 mb-1">
+                  HLS Stream URL
+                </label>
+                <input
+                  id="hlsUrlInput"
+                  type="text"
+                  value={inputUrl}
+                  onChange={(e) => setInputUrl(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Enter HLS stream URL"
+                />
+              </div>
+              <div className="self-end">
+                <button
+                  type="submit"
+                  className="w-full md:w-auto px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  Load Stream
+                </button>
+              </div>
+            </div>
+          </form>
+
           <p className="text-gray-700">
             This demo shows an HLS video stream with AES-128 encryption. The encryption key is served
             through a secure API route that reads the key from the public directory.
@@ -175,7 +193,7 @@ export default function VideoPage() {
             Key location: <code>/public/keys/encrypt.key</code>
           </p>
           <p className="text-gray-700 mt-2">
-            HLS Source: <code>https://onlyfansstaticdata-test.potato.im/output/original.m3u8</code>
+            Current HLS Source: <code>{hlsUrl}</code>
           </p>
         </div>
       </div>
