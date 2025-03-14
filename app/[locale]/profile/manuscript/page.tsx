@@ -13,6 +13,7 @@ import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { LazyImageWithFileId } from "@/components/common/lazy-img"
 import { useTranslations } from "next-intl"
 import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
+import { ImageCarouselPreview } from "@/components/profile/manuscript/image-carousel-preview"
 
 enum ACTIVE_TYPE {
   POST = "POST",
@@ -115,6 +116,8 @@ const ManuscriptMedia = () => {
   const [timeSort, setTimeSort] = useState<boolean>(false)
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const [openState, setOpenState] = useState<boolean>(false)
+  const [imagesPreviewOpenState, setImagePreviewOpenState] = useState<boolean>(false)
+  const [imageList, setImageList] = useState<string[]>([])
   const [previewFileId, setPreviewFileId] = useState<string>("")
   const commonTrans = useTranslations("Common")
   const t = useTranslations("Profile.manuscript")
@@ -143,6 +146,8 @@ const ManuscriptMedia = () => {
     }
     const [media] = post_attachment
     if (media.file_type === FileType.Image) {
+      setImageList(post_attachment.map(item => item.file_id))
+      setImagePreviewOpenState(true)
       return
     }
     // 2审核中
@@ -154,6 +159,11 @@ const ManuscriptMedia = () => {
   }
   return (
     <>
+      <ImageCarouselPreview
+        openState={imagesPreviewOpenState}
+        setOpenState={setImagePreviewOpenState}
+        imagesList={imageList}
+      />
       <MediaPreview
         fileId={previewFileId}
         previewType={PreviewType.ONLINE}

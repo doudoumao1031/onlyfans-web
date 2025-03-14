@@ -24,12 +24,27 @@ export default function Media(props: MediaProps) {
   const { data, post, user, isInfoPage, followConfirm } = props
   const showIds = data.map((v) => v.file_id).join("_")
   const [followModal, setFollowModal] = useState<boolean>(false)
+  const hasThumbId = !!data[0].thumb_id
   const content = (
-    <div className="w-full h-full bg-black bg-opacity-[30%] rounded-lg backdrop-blur absolute top-0 left-0 z-20 flex flex-col items-center justify-center">
-      <IconWithImage url="/icons/icon_info_lock_white.png" width={32} color="#fff" height={32} />
-      <span className="mt-2 text-white">
-        {post.visibility === 2 ? tSpace("tip1") : tSpace("tip2")}
-      </span>
+    <div>
+      <div className={`w-full h-full rounded-lg absolute top-0 left-0 z-20 flex flex-col items-center justify-center ${hasThumbId && "bg-black bg-opacity-[30%] backdrop-blur-md"}`}>
+        <IconWithImage url="/icons/icon_info_lock_white.png" width={32} color="#fff" height={32} />
+        <span className="mt-2 text-white">
+          {post.visibility === 2 ? tSpace("tip1") : tSpace("tip2")}
+        </span>
+      </div>
+      <LazyImg
+        className={"aspect-square rounded-md block"}
+        src={hasThumbId ? buildImageUrl(data[0]?.thumb_id) : "/icons/default/img_media_default_lj.png"}
+        alt=""
+        style={{
+          width: "100%",
+          height: "200px",
+          objectFit: "cover"
+        }}
+        width={343}
+        height={200}
+      />
     </div>
   )
   return (
@@ -39,17 +54,6 @@ export default function Media(props: MediaProps) {
         <div className="w-full h-[200px] relative">
           {/*帖子详情正常查看 ｜ 推荐/空间点击媒体到帖子详情*/}
           {isInfoPage ? content : <Link href={`/postInfo/${post.id}`}>{content}</Link>}
-          <LazyImg
-            className={"aspect-square rounded-md block"}
-            src={"/icons/default/img_media_default.png"}
-            alt=""
-            style={{
-              width: "100%",
-              height: "200px"
-            }}
-            width={343}
-            height={200}
-          />
         </div>
       )}
       {(post.visibility === 0 || (post.visibility === 1 && user.sub)) && (

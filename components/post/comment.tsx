@@ -1,6 +1,5 @@
 "use client"
 import Image from "next/image"
-import Avatar from "./avatar"
 import {
   addComment,
   CommentInfo,
@@ -20,29 +19,30 @@ import { useCommonMessageContext } from "../common/common-message"
 import dayjs from "dayjs"
 import TextareaAutosize from "react-textarea-autosize"
 import EmojiPicker from "./emoji-picker"
+import { TPost } from "@/components/post/types"
+import { useGlobal } from "@/lib/contexts/global-context"
 
-export default function Comments({
-  post_id,
-  comments,
-  removeComment,
-  fetchComments,
-  increaseCommentCount
-}: {
+interface CommentsProps {
   post_id: number
+  post: TPost
   comments: CommentInfo[]
   removeComment: (id: number) => void
   fetchComments: () => void
   increaseCommentCount: (n: number) => void
-}) {
+}
+
+export default function Comments(props: CommentsProps) {
+  const { post_id, post, comments, removeComment, fetchComments, increaseCommentCount } = props
+  const { sid } = useGlobal()
   const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Common.post")
   const [input, setInput] = useState("")
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-
+  {/* 帖子不可见且非自己不可评论 */}
+  if (post.visibility !== 0 && sid != post.id) return null
   return (
     <>
       <div className="flex flex-col gap-2.5 p-4">
-        {/*todo： 可查看媒体一样的权限*/}
         <div className="flex gap-2 items-center">
           <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
             <TextareaAutosize
@@ -252,7 +252,7 @@ function Comment({
       setShowReplies(false)
     } else {
       if (replies === undefined) {
-        fetchReplies()
+        await fetchReplies()
       } else {
         setShowReplies(true)
       }

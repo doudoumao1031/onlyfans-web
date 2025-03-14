@@ -1,6 +1,6 @@
 "use client"
 import InputWithLabel from "@/components/profile/input-with-label"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState } from "react"
 import Header from "@/components/common/header"
 import { useRouter } from "@/i18n/routing"
 import {
@@ -69,12 +69,6 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
     }
   })
 
-  useEffect(() => {
-    if (openState) {
-      form.reset(initData)
-    }
-  }, [openState, form, initData])
-
   const monthSelections = useMemo(() => {
     const arr = [2, 3, 6, 9, 12]
     return arr.map(month => {
@@ -85,6 +79,23 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
     })
       .filter(item => !hasSub.includes(Number(item.value)))
   }, [hasSub, t])
+
+  const currentMonthCount = form.watch("month_count")
+
+  useEffect(() => {
+    if (openState) {
+      if (initData) {
+        form.reset(initData)
+      } else {
+        if (!currentMonthCount) {
+          const value = monthSelections.at(0)?.value
+          if (value !== undefined) {
+            form.setValue("month_count", value)
+          }
+        }
+      }
+    }
+  }, [openState, form, initData, currentMonthCount, monthSelections])
 
   return (
     <Drawer open={openState} onOpenChange={setOpenState}>
@@ -114,7 +125,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
               left={<button type={"button"} onTouchEnd={() => {
                 setOpenState(false)
               }} className={"text-base"}
-              >{commonTrans("cancel")}</button>}
+                    >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-base text-text-theme"}
@@ -193,16 +204,25 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
         label: <div className={"text-left"}>
           ${item.price} {item.month_count}{t("monthUnit")}{t("month")} <span
             className={"text-[#bbb]"}
-          >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
+                                                                       >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
         value: item.id
       }
     })
   }, [items, t])
 
-
+  const currentSelectOption = addForm.watch("id")
   useEffect(() => {
     if (openState) {
-      addForm.reset(initData)
+      if (initData) {
+        addForm.reset(initData)
+      } else {
+        if (priceOptions.length && !currentSelectOption) {
+          const first = priceOptions.at(0)
+          if (first) {
+            addForm.setValue("id", first.value as number)
+          }
+        }
+      }
     }
   }, [openState, addForm, initData])
   const id = addForm.watch("id")
@@ -257,7 +277,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
               left={<button onTouchEnd={() => {
                 setOpenState(false)
               }} className={"text-base text-[#777]"}
-              >{commonTrans("cancel")}</button>}
+                    >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-base text-text-theme"}
@@ -384,9 +404,8 @@ function TopLabelWrapper({ label, children, errorMessage }: {
   )
 }
 
-function SubscribeBundle({ items, initSettings, userId, updateItems, basePrice }: {
+function SubscribeBundle({ items, userId, updateItems, basePrice }: {
   items: DiscountInfo[],
-  initSettings: DiscountInfo[]
   userId: number,
   updateItems: (items: DiscountInfo[]) => void,
   basePrice: number
@@ -424,7 +443,7 @@ function SubscribeBundle({ items, initSettings, userId, updateItems, basePrice }
       append(data)
     } else {
       const updateIndex = fields.findIndex(item => item.id === data.id)
-      const defaultItem = initSettings.find(i => i.id === data.id)
+      const defaultItem = items.find(i => i.id === data.id)
       const shouldChangeStatus = defaultItem && Number(defaultItem.price) !== Number(data.price)
       update(updateIndex, {
         ...data,
@@ -435,8 +454,9 @@ function SubscribeBundle({ items, initSettings, userId, updateItems, basePrice }
   }
 
   useEffect(() => {
-    bundleForm.setValue("list", initSettings)
-  }, [bundleForm, initSettings])
+    bundleForm.setValue("list", items)
+    console.log("bundleForm setValue", items)
+  }, [items])
 
   return (
     <section className={"pt-5 pb-5 border-b border-gray-100"}>
@@ -480,13 +500,13 @@ function SubscribeBundle({ items, initSettings, userId, updateItems, basePrice }
                     >
                       ${discount.price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;<span
                         className="text-[#6D7781]"
-                      >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
+                                                                                                                 >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
                     </button>
                     <Switch className={"custom-switch"} checked={!field.value.item_status} onCheckedChange={(value) => {
                       field.onChange({
-                        ...field.value,
+                        ...discount,
                         item_status: !value,
-                        discount_status: !value ? true : field.value.discount_status
+                        discount_status: !value ? true : discount.discount_status
                       })
                       mockSubmit()
                     }}
@@ -523,6 +543,7 @@ function PromotionalActivities({ updateItems, items }: {
 }) {
   const t = useTranslations("Profile.order")
   const commonTrans = useTranslations("Common")
+  const contentRef = useRef<HTMLElement>(null)
   const discountList = useMemo(() => {
     return items.filter(item => item.discount_per > 0)
   }, [items])
@@ -538,8 +559,17 @@ function PromotionalActivities({ updateItems, items }: {
   }
 
   return (
-    <section className={"pt-5 pb-5 border-b border-gray-100"}>
-      <EditPromotionalActivities initData={editData} items={items} updateItems={updateItems} openState={openState}
+    <section ref={contentRef} className={"pt-5 pb-5 border-b border-gray-100"}>
+      <EditPromotionalActivities
+        initData={editData}
+        items={items}
+        updateItems={data => {
+          updateItems(data)
+          setTimeout(() => {
+            contentRef?.current?.scrollIntoView({ behavior: "smooth" })
+          },100)
+        }}
+        openState={openState}
         setOpenState={setOpenState}
       />
       <section className="pl-4 pr-4">
@@ -730,6 +760,10 @@ export default function Page() {
   const baseFormValues = baseFeeForm.watch()
 
   useEffect(() => {
+    console.log(baseFormValues.items)
+  }, [baseFormValues.items])
+
+  useEffect(() => {
     if (defaultSettings) {
       baseFeeForm.reset(defaultSettings)
     }
@@ -795,7 +829,7 @@ export default function Page() {
             }
           })
         }} className="text-text-theme text-base"
-        >{t("complete")}</button>}
+               >{t("complete")}</button>}
       />
       <section className="mt-5 text-black">
         <section className="pl-4 pr-4 pb-5 border-b border-gray-100">
@@ -835,7 +869,7 @@ export default function Page() {
                       <div>{t("baseSubLimit")}</div>
                       <div>{t("shouldBe1")} <span
                         className="text-text-theme"
-                      >{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
+                                            >{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
                       </div>
                     </section>
                   </section>
@@ -846,10 +880,7 @@ export default function Page() {
           </form>
         </section>
         {userInfo && realPrice > 0 && (
-          <SubscribeBundle basePrice={realPrice} updateItems={updateItems} items={baseFormValues.items}
-            initSettings={baseFormValues?.items ?? []}
-            userId={userInfo?.id}
-          />
+          <SubscribeBundle basePrice={realPrice} updateItems={updateItems} items={baseFormValues.items} userId={userInfo?.id}/>
         )}
         {realPrice > 0 && <PromotionalActivities items={baseFormValues.items} updateItems={updateItems} />}
       </section>

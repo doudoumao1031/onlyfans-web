@@ -33,7 +33,7 @@ export function useInfiniteScroll<T>({
     items: T[]
     hasMore: boolean
   }>(hasMore ? page.toString() : null, async (pageStr) => fetcherFn(parseInt(pageStr)), {
-    keepPreviousData: true
+    keepPreviousData: false
   })
 
   useEffect(() => {
@@ -46,6 +46,8 @@ export function useInfiniteScroll<T>({
   useEffect(() => {
     if (data && page > 1 && !isFetchingRef.current) {
       isFetchingRef.current = true
+      console.log(items, data.items, "fetch========")
+
       setItems((prev) => [...prev, ...data.items])
       setHasMore(data.hasMore)
       isFetchingRef.current = false
