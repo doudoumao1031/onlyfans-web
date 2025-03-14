@@ -181,21 +181,21 @@ export function getEvenlySpacedPoints<T>(arr: T[], count = 12) {
   return Array.from({ length: count }, (_, i) => arr[Math.round(i * step)])
 }
 export function getDateRange({ start, end }: { start: string, end: string }) {
-  const dateArray = []; // 用于存储日期的数组
-  let currentDate = new Date(start); // 将开始日期转换为 Date 对象
+  const dateArray = [] // 用于存储日期的数组
+  const currentDate = new Date(start) // 将开始日期转换为 Date 对象
 
   // 将结束日期转换为 Date 对象
-  const endDateObj = new Date(end);
+  const endDateObj = new Date(end)
 
   // 循环生成日期范围内的每一天
   while (currentDate <= endDateObj) {
     // 格式化日期为 yyyy-mm-dd
-    const formattedDate = currentDate.toISOString().split('T')[0];
-    dateArray.push(formattedDate); // 将格式化后的日期添加到数组
-    currentDate.setDate(currentDate.getDate() + 1); // 增加一天
+    const formattedDate = currentDate.toISOString().split("T")[0]
+    dateArray.push(formattedDate) // 将格式化后的日期添加到数组
+    currentDate.setDate(currentDate.getDate() + 1) // 增加一天
   }
 
-  return getEvenlySpacedPoints(dateArray);
+  return getEvenlySpacedPoints(dateArray)
 }
 
 
