@@ -62,7 +62,7 @@ export default function SheetSelect({
               return (
                 <button
                   className={clsx(
-                    "pl-8 pr-8 pt-4 pb-4 text-[20px] text-gray-400 block w-full truncate",
+                    "pl-8 pr-8 pt-4 pb-4 text-[20px] block w-full",
                     index !== arr.length - 1 ? "border-b border-b-gray-100" : ""
                   )}
                   key={index}
@@ -71,11 +71,13 @@ export default function SheetSelect({
                     changeState?.(false)
                   }}
                 >
-                  {item.label}
+                  <span className={"text-neutral-800"}>
+                    {item.label}
+                  </span>
                   {item?.description && (
-                    <span className={`text-gray-400 ${item?.descriptionClassName}`}>
-                      {item?.description}
-                    </span>
+                    <div className={`truncate text-gray-400 ${item?.descriptionClassName}`}>
+                      <span>{item?.description}</span>
+                    </div>
                   )}
                 </button>
               )

@@ -157,22 +157,6 @@ textarea {
   animation: colorProgress 3s linear infinite;
 }
 
-.ellipsis-custom {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  position: relative;
-}
-
-.ellipsis-custom::after {
-  content: '...';
-  position: absolute;
-  right: 5px;
-  bottom: 1px;
-  background: white; /* 背景颜色应与容器背景颜色一致 */
-  color: var(--theme); /* 修改为你想要的省略号颜色 */
-}
-
 @keyframes colorProgress {
   0% {
     fill: #ffc0cb;

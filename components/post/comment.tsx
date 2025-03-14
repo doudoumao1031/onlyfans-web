@@ -367,6 +367,7 @@ function Reply({
           {
             label: "",
             description: `${first_name} ${last_name}: ${content}`,
+            descriptionClassName: "text-[15px]",
             value: -1
           },
           {
