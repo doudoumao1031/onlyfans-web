@@ -133,7 +133,7 @@ function Comment({
   const [openCofirmDeleteComment, setOpenConfirmDeleteComment] = useState<boolean>(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   dayjs.extend(localizedFormat)
-  const datetimeFormat = useLocale() === "zh" ? "M月D日 HH:mm" : "ll LT"
+  const datetimeFormat = useLocale() === "zh" ? "M月D日 HH:mm" : "MMM D, h:mm A"
   return (
     <>
       <SheetSelect
@@ -355,7 +355,7 @@ function Reply({
   const [openCofirmDeleteReply, setOpenConfirmDeleteReply] = useState<boolean>(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   dayjs.extend(localizedFormat)
-  const datetimeFormat = useLocale() === "zh" ? "M月D日 HH:mm" : "ll LT"
+  const datetimeFormat = useLocale() === "zh" ? "M月D日 HH:mm" : "MMM D, h:mm A"
   return (
     <>
       <SheetSelect
