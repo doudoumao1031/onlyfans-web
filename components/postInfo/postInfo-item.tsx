@@ -8,7 +8,7 @@ import { PostData } from "@/lib"
 import { userDelFollowing, userFollowing } from "@/lib/actions/space"
 import dayjs from "dayjs"
 import { useRouter } from "next/navigation"
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import CommonAvatar from "@/components/common/common-avatar"
 import { postDetail } from "@/lib/actions/profile"
 import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
@@ -83,6 +83,9 @@ export default function Page({ postData }: { postData: PostData }) {
       type: ActionTypes.EXPLORE.REFRESH
     })
   }
+  useEffect(() => {
+    refresh()
+  }, [])
 
   const { withLoading } = useLoadingHandler({
     onError: (error) => {
@@ -102,7 +105,7 @@ export default function Page({ postData }: { postData: PostData }) {
         setFollow(false)
       }
       await refresh()
-      showMessage(!isFocus ? t("followSuccess") : t("followFailed"))
+      showMessage(!isFocus ? t("followSuccess") : t("unfollowed"))
     })
   }
 
@@ -142,8 +145,8 @@ export default function Page({ postData }: { postData: PostData }) {
                 await handleFollowing()
               }}
               className={`h-[26px] min-w-[80px] px-2 flex justify-center items-center rounded-full ${isFocus
-                  ? "bg-white border border-border-theme text-text-theme"
-                  : " bg-background-theme text-white"
+                ? "bg-white border border-border-theme text-text-theme"
+                : " bg-background-theme text-white"
                 }`}
             >
               <IconWithImage

@@ -131,10 +131,13 @@ export default function Post({
             outLike={!star && tipStar}
           />
           {isInfoPage ? (
-            <CommentStats count={comment_count + adjustCommentCount} onClick={toggleComments} />
+            <CommentStats count={comment_count + adjustCommentCount} disable={post.visibility !== 0 && user.id !== sid} onClick={async () => {
+              if (post.visibility === 0) await toggleComments()
+            }}
+            />
           ) : (
             <Link href={`/postInfo/${post.id}`} className="flex items-end">
-              <CommentStats count={comment_count + adjustCommentCount} />
+              <CommentStats count={comment_count + adjustCommentCount} disable={post.visibility !== 0 && user.id !== sid} />
             </Link>
           )}
           <Tip
@@ -153,6 +156,7 @@ export default function Post({
           ) : (
             <Comments
               post_id={post.id}
+              post={post}
               comments={comments || []}
               removeComment={removeComment}
               fetchComments={async () => setComments(await fetchPostComments(post.id))}

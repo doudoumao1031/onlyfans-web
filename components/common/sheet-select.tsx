@@ -62,7 +62,7 @@ export default function SheetSelect({
               return (
                 <button
                   className={clsx(
-                    "pl-8 pr-8 pt-4 pb-4 text-[20px] text-neutral-800 block w-full truncate",
+                    "pl-8 pr-8 pt-4 pb-4 text-[20px] text-gray-400 block w-full truncate",
                     index !== arr.length - 1 ? "border-b border-b-gray-100" : ""
                   )}
                   key={index}

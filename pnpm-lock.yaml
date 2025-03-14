@@ -59,6 +59,9 @@ importers:
       force:
         specifier: ^0.0.3
         version: 0.0.3
+      hls.js:
+        specifier: ^1.5.20
+        version: 1.5.20
       html2canvas:
         specifier: ^1.4.1
         version: 1.4.1
@@ -1661,6 +1664,9 @@ packages:
   hasown@2.0.2:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
+
+  hls.js@1.5.20:
+    resolution: {integrity: sha512-uu0VXUK52JhihhnN/MVVo1lvqNNuhoxkonqgO3IpjvQiGpJBdIXMGkofjQb/j9zvV7a1SW8U9g1FslWx/1HOiQ==}
 
   html2canvas@1.4.1:
     resolution: {integrity: sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==}
@@ -4405,6 +4411,8 @@ snapshots:
   hasown@2.0.2:
     dependencies:
       function-bind: 1.1.2
+
+  hls.js@1.5.20: {}
 
   html2canvas@1.4.1:
     dependencies:
