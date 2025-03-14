@@ -52,7 +52,10 @@
       "custom": "Custom",
       "saved": "Saved",
       "cancelSaved": "Cancel saved",
-      "moreInfoText": "Click to view more content"
+      "moreInfoText": "Click to view more content",
+      "commentDeleted": "Comment deleted",
+      "commentsDeleted": "Comments have been deleted",
+      "thanksComment": "Thanks for comments"
     },
     "datePicker": {
       "Year": "Year",

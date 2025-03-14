@@ -21,6 +21,8 @@ import TextareaAutosize from "react-textarea-autosize"
 import EmojiPicker from "./emoji-picker"
 import { TPost } from "@/components/post/types"
 import { useGlobal } from "@/lib/contexts/global-context"
+import localizedFormat from "dayjs/plugin/localizedFormat"
+import { useLocale } from "next-intl"
 
 interface CommentsProps {
   post_id: number
@@ -38,9 +40,7 @@ export default function Comments(props: CommentsProps) {
   const t = useTranslations("Common.post")
   const [input, setInput] = useState("")
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-  {
-    /* 帖子不可见且非自己不可评论 */
-  }
+  {/* 帖子不可见且非自己不可评论 */}
   if (post.visibility !== 0 && sid != post.id) return null
   return (
     <>
@@ -96,7 +96,7 @@ export default function Comments(props: CommentsProps) {
       fetchComments()
       increaseCommentCount(1)
       setInput("")
-      showMessage("感谢评论", "love")
+      showMessage(t("thanksComment"), "love")
       setShowEmojiPicker(false)
     }
   }
@@ -132,7 +132,8 @@ function Comment({
   const [showReplies, setShowReplies] = useState(false)
   const [openCofirmDeleteComment, setOpenConfirmDeleteComment] = useState<boolean>(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-
+  dayjs.extend(localizedFormat)
+  const datetimeFormat = useLocale() === "zh" ? "M月D日 HH:mm" : "ll LT"
   return (
     <>
       <SheetSelect
@@ -277,7 +278,7 @@ function Comment({
     })
     if (success) {
       removed(id)
-      showMessage("已删除评论")
+      showMessage(t("commentDeleted"))
     }
   }
 
@@ -299,11 +300,11 @@ function Comment({
     if (isThumbupped) {
       setIsThumbupped((pre) => !pre)
       setThumbupCount((pre) => pre - 1)
-      showMessage("已取消点赞")
+      showMessage(t("unliked"))
     } else {
       setIsThumbupped((pre) => !pre)
       setThumbupCount((pre) => pre + 1)
-      showMessage("感谢支持", "love")
+      showMessage(t("liked"), "love")
     }
   }
 
@@ -317,7 +318,7 @@ function Comment({
       setShowReplyInput(false)
       setReplyInput("")
       fetchReplies()
-      showMessage("感谢评论", "love")
+      showMessage(t("thanksComment"), "love")
     }
   }
 }
@@ -353,7 +354,8 @@ function Reply({
   const [isThumbupped, setIsThumbupped] = useState(thumb_up)
   const [openCofirmDeleteReply, setOpenConfirmDeleteReply] = useState<boolean>(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-
+  dayjs.extend(localizedFormat)
+  const datetimeFormat = useLocale() === "zh" ? "M月D日 HH:mm" : "ll LT"
   return (
     <>
       <SheetSelect
@@ -462,7 +464,7 @@ function Reply({
       setShowReplyInput(false)
       setReplyInput("")
       fetchReplies()
-      showMessage("感谢评论", "love")
+      showMessage(t("thanksComment"), "love")
     }
   }
 
@@ -474,7 +476,7 @@ function Reply({
     })
     if (success) {
       removed(id)
-      showMessage("已取删除评论回复")
+      showMessage(t("commentsDeleted"))
     }
   }
 
@@ -496,11 +498,11 @@ function Reply({
     if (isThumbupped) {
       setIsThumbupped((pre) => !pre)
       setThumbupCount((pre) => pre - 1)
-      showMessage("已取消点赞")
+      showMessage(t("unliked"))
     } else {
       setIsThumbupped((pre) => !pre)
       setThumbupCount((pre) => pre + 1)
-      showMessage("感谢支持", "love")
+      showMessage(t("liked"), "love")
     }
   }
 }
@@ -529,5 +531,3 @@ function Thumbup({
     </div>
   )
 }
-
-const datetimeFormat = "M月D日 HH:mm"

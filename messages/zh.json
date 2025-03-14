@@ -52,7 +52,10 @@
       "custom": "自定义",
       "saved": "已收藏",
       "cancelSaved": "已取消收藏",
-      "moreInfoText": "点击查看更多内容"
+      "moreInfoText": "点击查看更多内容",
+      "commentDeleted": "已删除评论",
+      "commentsDeleted": "已删除评论回复",
+      "thanksComment": "感谢评论"
     },
     "datePicker": {
       "Year": "年",
