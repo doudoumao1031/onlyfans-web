@@ -47,6 +47,7 @@ export default function Post({
   const [commentsLoading, setCommentsLoading] = useState<boolean>(false)
   const [tipStar, setTipStar] = useState<boolean>(false)
   const path = usePathname()
+
   const isSpace = () => {
     return path.indexOf("/space") > -1
   }
@@ -147,7 +148,18 @@ export default function Post({
             tipStar={setTipStar}
             notice={isInfoPage}
           />
-          <Share count={share_count} postId={post.id} />
+          <Share count={share_count} postId={post.id} shareParams={
+            {
+              postId: post.id.toString(),
+              title: post.title,
+              firstName: user.first_name,
+              lastName: user.last_name,
+              username: user.username,
+              fansId: user.id.toString(),
+              data: post_attachment
+            }
+          }
+          />
           <Save count={collection_count} saved={collection} postId={post.id} notice={isInfoPage} />
         </div>
         {showComments &&

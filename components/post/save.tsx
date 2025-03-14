@@ -49,7 +49,7 @@ export default function Save({
   }
   return (
     <button
-      onClick={() => {
+      onTouchEnd={() => {
         handleSave()
       }}
     >
