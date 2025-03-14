@@ -1,6 +1,5 @@
 "use client"
 import Image from "next/image"
-import Avatar from "./avatar"
 import {
   addComment,
   CommentInfo,
@@ -20,29 +19,32 @@ import { useCommonMessageContext } from "../common/common-message"
 import dayjs from "dayjs"
 import TextareaAutosize from "react-textarea-autosize"
 import EmojiPicker from "./emoji-picker"
+import { TPost } from "@/components/post/types"
+import { useGlobal } from "@/lib/contexts/global-context"
 
-export default function Comments({
-  post_id,
-  comments,
-  removeComment,
-  fetchComments,
-  increaseCommentCount
-}: {
+interface CommentsProps {
   post_id: number
+  post: TPost
   comments: CommentInfo[]
   removeComment: (id: number) => void
   fetchComments: () => void
   increaseCommentCount: (n: number) => void
-}) {
+}
+
+export default function Comments(props: CommentsProps) {
+  const { post_id, post, comments, removeComment, fetchComments, increaseCommentCount } = props
+  const { sid } = useGlobal()
   const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Common.post")
   const [input, setInput] = useState("")
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-
+  {
+    /* 帖子不可见且非自己不可评论 */
+  }
+  if (post.visibility !== 0 && sid != post.id) return null
   return (
     <>
       <div className="flex flex-col gap-2.5 p-4">
-        {/*todo： 可查看媒体一样的权限*/}
         <div className="flex gap-2 items-center">
           <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
             <TextareaAutosize
@@ -61,7 +63,11 @@ export default function Comments({
               onClick={() => setShowEmojiPicker((pre) => !pre)}
             />
           </div>
-          <div className={`p-1 ${!input || input === "" ? "bg-sky-500/50" : "bg-theme"} rounded-[50%] size-[30px] bg-sky`}>
+          <div
+            className={`p-1 ${
+              !input || input === "" ? "bg-sky-500/50" : "bg-theme"
+            } rounded-[50%] size-[30px] bg-sky`}
+          >
             <Image
               // src="/theme/icon_fans_comment_send@3x.png"
               src="/svgIcons/icon_fans_comment_send@3x.svg"
@@ -153,11 +159,11 @@ function Comment({
           <div className="flex justify-between">
             <div className="flex gap-2">
               <div className={"shrink-0"}>
-                <CommonAvatar photoFileId={photo} size={36} />
+                <CommonAvatar photoFileId={photo} size={32} />
               </div>
               <div className="flex flex-col gap-2">
                 <div className="text-xs text-theme">{`${first_name} ${last_name}`}</div>
-                <div className="text-sm">{content}</div>
+                <div className="text-sm break-all">{content}</div>
                 <div className="flex gap-4 text-xs text-[#6D7781]">
                   <div>{dayjs.unix(comment_time).format(datetimeFormat)}</div>
                   {reply_count > 0 && (
@@ -197,7 +203,11 @@ function Comment({
                   onClick={() => setShowEmojiPicker((pre) => !pre)}
                 />
               </div>
-              <div className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"} rounded-[50%] size-[30px]`}>
+              <div
+                className={`p-1 ${
+                  !replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"
+                } rounded-[50%] size-[30px]`}
+              >
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
                   width={24}
@@ -252,7 +262,7 @@ function Comment({
       setShowReplies(false)
     } else {
       if (replies === undefined) {
-        fetchReplies()
+        await fetchReplies()
       } else {
         setShowReplies(true)
       }
@@ -267,7 +277,7 @@ function Comment({
     })
     if (success) {
       removed(id)
-      showMessage("已取删除评论")
+      showMessage("已删除评论")
     }
   }
 
@@ -367,13 +377,19 @@ function Reply({
       <div className="flex flex-col gap-2">
         <div className="flex justify-between">
           <div className="flex gap-2">
-            <Avatar fileId={photo} width={9} height={9} />
+            <div className={"shrink-0"}>
+              <CommonAvatar photoFileId={photo} size={32} />
+            </div>
             <div className="flex flex-col gap-2">
               <div className="text-xs text-theme">
                 {first_name} {last_name}
               </div>
               <div className="text-sm">
-                {reply_user && <span className="text-[#6D7781]">{t("reply")} {`${reply_user.first_name} ${reply_user.last_name}`} : </span>}
+                {reply_user && (
+                  <span className="text-[#6D7781]">
+                    {t("reply")} {`${reply_user.first_name} ${reply_user.last_name}`} :{" "}
+                  </span>
+                )}
                 <span>{content}</span>
               </div>
               <div className="flex gap-4 text-xs text-[#6D7781]">
@@ -408,7 +424,11 @@ function Reply({
                   onClick={() => setShowEmojiPicker((pre) => !pre)}
                 />
               </div>
-              <div className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"} rounded-[50%] size-[30px]`}>
+              <div
+                className={`p-1 ${
+                  !replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"
+                } rounded-[50%] size-[30px]`}
+              >
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
                   width={24}

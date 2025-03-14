@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import React, { useMemo } from "react"
 import { FileType } from "@/lib"
 import { buildImageUrl, buildVideoUrl } from "@/lib/utils"
+import { VideoPlayer } from "@/components/video/video-player"
 
 export enum PreviewType {
   LOCAL = 0,
@@ -37,13 +38,36 @@ export function MediaPreview (props:MediaPreviewProps) {
     }
     return null
   },[fileId, media, mediaType, previewType])
-
+  const videoSources = useMemo(() => {
+    if (fileId) {
+      return [
+        { quality: "1080p", url: buildVideoUrl(fileId, "1080p") },
+        { quality: "720p", url: buildVideoUrl(fileId, "720p") },
+        { quality: "480p", url: buildVideoUrl(fileId, "480p") },
+        { quality: "240p", url: buildVideoUrl(fileId, "240p") }
+      ]
+    }
+    return []
+  },[fileId])
   return (
     <Dialog open={openState} onOpenChange={setOpenState}>
       <DialogContent className={"hide-modal-close border-none bg-transparent"}>
-        <div className={"w-[270px] ml-auto mr-auto"}>
+        <div className={"w-10/12 ml-auto mr-auto"}>
           {mediaUrl && mediaType === FileType.Image && (<img className={"w-full"} src={mediaUrl} alt="" width={100} height={100}/>)}
-          {mediaUrl && mediaType === FileType.Video && (<video className={"w-full"} src={mediaUrl} autoPlay width={100} height={100}></video>)}
+          {
+            previewType === PreviewType.ONLINE && mediaUrl && mediaType === FileType.Video && (
+              <VideoPlayer
+                sources={videoSources}
+                className="max-h-[100vh]"
+              />
+            )
+          }
+          {/*本地*/}
+          {
+            previewType === PreviewType.LOCAL && mediaUrl && mediaType === FileType.Video && (
+              <video className={"w-full"} src={mediaUrl} autoPlay width={100} height={100}></video>
+            )
+          }
         </div>
         <DialogHeader className={"hidden"}>
           <DialogTitle />

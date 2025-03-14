@@ -105,7 +105,7 @@ export default function Page({ postData }: { postData: PostData }) {
         setFollow(false)
       }
       await refresh()
-      showMessage(!isFocus ? t("followSuccess") : t("followFailed"))
+      showMessage(!isFocus ? t("followSuccess") : t("unfollowed"))
     })
   }
 

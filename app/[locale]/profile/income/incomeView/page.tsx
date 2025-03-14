@@ -80,7 +80,7 @@ const Withdrawal = ({
       setOpenState(false)
       showMessage(t("withdrawalAmountSuccess"), "success",{
         afterDuration: () => {
-          router.push("/profile/statement?changeType=5")
+          router.push("/profile/withdraw")
         }
       })
     }
@@ -132,11 +132,11 @@ const Withdrawal = ({
         <div className="p-8">
           <div className="flex justify-between mt-4">
             <div className="flex flex-col items-center">
-              <span className="text-xs text-[#222] mb-2">{t("withdrawalAmountAvailable")}</span>
+              <span className="text-xs mb-2">{t("withdrawalAmountAvailable")}</span>
               <span className="text-[20px]">{info.amount - (info?.freeze ?? 0)} USDT</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-xs text-[#777] mb-2">{t("withdrawalAmountFreeze")}</span>
+              <span className="text-xs mb-2">{t("withdrawalAmountFreeze")}</span>
               <span className="text-[20px]">{info.freeze} USDT</span>
             </div>
           </div>

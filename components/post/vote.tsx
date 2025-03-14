@@ -39,7 +39,7 @@ export default function Vote({ postId }: { postId: number }) {
           votedByMe ? (
             <div
               key={id}
-              className="w-full h-11 border rounded-md px-2 flex justify-between items-center bg-no-repeat"
+              className="w-full h-11 border rounded-md px-2 flex justify-between items-center bg-no-repeat gap-2"
               style={{
                 backgroundImage: `${select ? "url(/theme/blue.png)" : "url(/theme/silver.png)"}`,
                 backgroundSize: `${(totalVotes ? vote_count / totalVotes : 0) * 100}% 100%`,
@@ -47,11 +47,13 @@ export default function Vote({ postId }: { postId: number }) {
               }}
               onClick={() => handleClickOption(id)}
             >
-              <div className="flex gap-1 h-full items-center">
-                {select && <Image src="/theme/checkbox_select@3x.png" alt="" width={20} height={20} />}
-                <div>{content}</div>
+              <div className="flex gap-1 h-full items-center truncate">
+                {select && (
+                  <Image src="/theme/checkbox_select@3x.png" alt="" width={20} height={20} />
+                )}
+                <div className="truncate">{content}</div>
               </div>
-              <div className={`pr-3 ${select ? "text-theme" : ""}`}>
+              <div className={`pr-3 ${select ? "text-theme" : ""} whitespace-nowrap`}>
                 {vote_count} {t("votes")}
               </div>
             </div>
@@ -61,7 +63,7 @@ export default function Vote({ postId }: { postId: number }) {
               className="w-full h-11 border rounded-md px-2 flex justify-center items-center"
               onClick={() => handleClickOption(id)}
             >
-              <div>{content}</div>
+              <div className="truncate">{content}</div>
             </div>
           )
         )}

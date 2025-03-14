@@ -9,6 +9,11 @@ export interface LoginResp {
   user: UserVo
 }
 
+export interface LoginTokenResp {
+  token: string
+  user_id: number
+}
+
 export interface UsersReq {
   // Based on vo.UsersReq
   userId: string

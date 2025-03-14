@@ -67,8 +67,8 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           <CommonAvatar photoFileId={data.photo} size={32} />
         </div>
         <div className="ml-2">
-          <div className="text-[14px] truncate max-w-[130px]">
-            {data.first_name} {data.last_name}
+          <div className="text-[14px] truncate max-w-[150px]">
+            {data.first_name}
           </div>
           <div className="text-black/50 text-[12px]">{buildMention(data.username)}</div>
         </div>

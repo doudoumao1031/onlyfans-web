@@ -15,7 +15,7 @@ import { useTranslations } from "next-intl"
 
 type EditUserProfile = Pick<
   UserProfile,
-  "about" | "username" | "location" | "back_img" | "top_info" | "photo"
+  "about" | "username" | "location" | "back_img" | "top_info" | "photo" | "first_name"
 >
 
 const IMAGE_PREFIX = `${process.env.NEXT_PUBLIC_API_URL}/media/img/`
@@ -25,7 +25,7 @@ export default function Page() {
   const { showMessage } = useCommonMessageContext()
   const t = useTranslations("Profile.edit")
   const commonTrans = useTranslations("Common")
-  const { handleSubmit, control, setValue, watch } = useForm<EditUserProfile>({
+  const { handleSubmit, control, setValue, watch, reset } = useForm<EditUserProfile>({
     mode: "all",
     resolver: zodResolver(
       z.object({
@@ -39,26 +39,14 @@ export default function Page() {
     ),
     defaultValues: {}
   })
-  const [userOrigin, setUserOrigin] = useState<UserProfile | undefined>(undefined)
   useEffect(() => {
     userProfile().then((response) => {
       const data = response?.data
       if (data) {
-        setUserOrigin(data)
-        const arr: Array<keyof EditUserProfile> = [
-          "username",
-          "about",
-          "photo",
-          "location",
-          "back_img",
-          "top_info"
-        ]
-        arr.forEach((item) => {
-          setValue(item, data[item])
-        })
+        reset(data)
       }
     })
-  }, [setValue])
+  }, [reset])
 
   const formValues = watch()
   const handleUploadFile = (file: File) => {
@@ -110,7 +98,9 @@ export default function Page() {
         <div className={"w-full left-0 top-0 absolute z-20 text-white bg-black/20"}>
           <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"}/>
         </div>
-        <div className="profile-content bg-[url('/icons/image_fans_normal_05.png')] relative bg-cover" style={backImageStyle}>
+        <div className="profile-content bg-[url('/icons/image_fans_normal_05.png')] relative bg-cover"
+          style={backImageStyle}
+        >
           <input
             type="file"
             accept="image/*"
@@ -139,10 +129,15 @@ export default function Page() {
           <section className="mt-5">
             <section className="pl-4 pr-4 flex flex-col gap-5 ">
               <section>
-                <InputWithLabel
-                  label={t("form.nickname")}
-                  value={`${userOrigin?.first_name ?? ""} ${userOrigin?.last_name ?? ""}`}
-                  disabled
+                <Controller control={control} render={({ field }) => {
+                  return (
+                    <InputWithLabel
+                      label={t("form.nickname")}
+                      value={field.value}
+                      disabled
+                    />
+                  )
+                }} name={"first_name"}
                 />
               </section>
               <section>

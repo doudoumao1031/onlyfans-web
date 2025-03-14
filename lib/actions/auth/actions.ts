@@ -1,5 +1,5 @@
 import { cookies } from "next/headers"
-import { LoginReq, LoginResp, PageInfo, PageResponse, UserListResp } from "@/lib"
+import { LoginReq, LoginResp, LoginTokenResp, PageInfo, PageResponse, UserListResp } from "@/lib"
 import { ENDPOINTS, fetchWithPost } from "@/lib"
 
 /**
@@ -26,8 +26,18 @@ export const users = async (params: PageInfo) => {
   return null
 }
 
-export const loginToken = async () => {
-  const res = await fetchWithPost<undefined, undefined>(ENDPOINTS.AUTH.LOGIN_TOKEN, undefined)
+/**
+ * 登录token
+ * @param params
+ */
+export const loginToken = async (params: string) => {
+  const res = await fetchWithPost<{
+    token: string
+  }, LoginTokenResp | null>(ENDPOINTS.AUTH.LOGIN_TOKEN, {
+    token: params
+  })
+  console.log(res, "res--loginToken")
+
   if (res && res.code === 0) {
     return res.data
   }

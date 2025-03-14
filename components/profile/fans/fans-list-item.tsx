@@ -22,7 +22,7 @@ export function FansSubscribe({ data }: {
       </div>
       <div className={"flex-1 flex justify-between border-b border-[#ddd] py-3 "}>
         <button className={"text-left"}>
-          <div className={"text-base text-[#222] font-medium"}>{data.user.first_name} {data.user.last_name}</div>
+          <div className={"text-base text-[#222] font-medium"}>{data.user.first_name}</div>
           <div
             className={"text-xs text-[#bbb]"}
           >{showTime(data.end_time)}</div>
@@ -38,12 +38,12 @@ export function FansSubscribe({ data }: {
 export function FollowedListItem({ data }:{data:FansFollowItem}) {
   return (
     <div className={"flex gap-4 items-center"}>
-      <div className={" shrink-0"}>
+      <div className={"shrink-0"}>
         <CommonAvatar photoFileId={data.user.photo} size={40}/>
       </div>
       <div className={"flex-1 flex justify-between border-b border-[#ddd] py-3 "}>
         <button className={"text-left"}>
-          <div className={"text-base text-[#222] font-medium"}>{data.user.username}</div>
+          <div className={"text-base text-[#222] font-medium"}>{`${data.user.first_name} ${data.user.last_name}`}</div>
           <div
             className={"text-xs text-[#bbb]"}
           >{dayjs(data.following_time * 1000).format("YYYY-MM-DD HH:mm")}</div>

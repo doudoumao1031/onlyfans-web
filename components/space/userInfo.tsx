@@ -45,7 +45,7 @@ export default function UserInfo({
 
           <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
             <span>
-              {data.first_name} {data.last_name}
+              {data.first_name}
             </span>
           </h1>
           {!isSelf && <Attention data={data} />}

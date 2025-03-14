@@ -38,7 +38,7 @@ export default async function Page() {
           <Avatar showLive={data.live_certification} fileId={data.photo} />
           <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
             <span>
-              {data.first_name} {data.last_name}
+              {data.first_name}
             </span>
             <Link href={"/profile/edit"}>
               <IconWithImage

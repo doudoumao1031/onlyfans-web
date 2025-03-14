@@ -91,15 +91,8 @@ export default function Page() {
                       <div className="flex flex-col justify-between flex-1">
                         <div className="line-clamp-2">{v.post.title}</div>
                         <div className="flex items-center gap-2">
-                          {/* <Image
-                          src={v.user.photo?buildImageUrl(v.user.photo)}
-                          className={"w-6 h-6 rounded-full mr-2 bg-cover "}
-                          width={24}
-                          height={24}
-                          alt={"user avatar"}
-                        /> */}
                           <CommonAvatar photoFileId={v.user.photo} size={24} />
-                          <span className="text-text-theme text-xs">{v.user.username}</span>
+                          <span className="text-text-theme text-xs">{`${v.user.first_name} ${v.user.last_name}`}</span>
                         </div>
                       </div>
                     </div>

@@ -5,12 +5,14 @@ import Image from "next/image"
 import { ComponentProps } from "react"
 import { buildImageUrl } from "@/lib/utils"
 import clsx from "clsx"
+import { omit } from "lodash"
 
 type MyImageProps = ComponentProps<typeof Image> & {
   containerAuto?: boolean
 }
 export default function LazyImg(props: MyImageProps): React.ReactNode {
   const [isLoading, setIsLoading] = useState(true)
+  const restProps = omit(props,"containerAuto")
   return (
     <div className={clsx(
       "relative flex justify-center",
@@ -18,7 +20,7 @@ export default function LazyImg(props: MyImageProps): React.ReactNode {
     )}
     >
       {isLoading && <Skeleton className={`${props.className} w-full h-full absolute `}></Skeleton>}
-      {props.src && <Image {...props} onLoad={() => setIsLoading(false)}/>}
+      {props.src && <Image {...restProps} onLoad={() => setIsLoading(false)}/>}
     </div>
   )
 }
