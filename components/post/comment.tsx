@@ -163,7 +163,7 @@ function Comment({
               </div>
               <div className="flex flex-col gap-2">
                 <div className="text-xs text-theme">{`${first_name} ${last_name}`}</div>
-                <div className="text-sm">{content}</div>
+                <div className="text-sm break-all">{content}</div>
                 <div className="flex gap-4 text-xs text-[#6D7781]">
                   <div>{dayjs.unix(comment_time).format(datetimeFormat)}</div>
                   {reply_count > 0 && (
