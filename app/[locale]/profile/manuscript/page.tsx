@@ -48,7 +48,9 @@ const ManuscriptPost = () => {
     params: {
       title,
       pageSize: 10,
-      from_id: 0
+      from_id: 0,
+      sort_asc: timeSort,
+      post_status: 1
     }
   })
 
@@ -71,13 +73,14 @@ const ManuscriptPost = () => {
             />
           </div>
 
-          <button className="shrink-0" onTouchEnd={() => {
+          <button type={"button"} className="shrink-0" onTouchEnd={() => {
             setTimeSort(prevState => !prevState)
+            fetchInitData()
           }}
           >
             <div className="flex items-center justify-center">
               <IconWithImage
-                url={`/icons/profile/${timeSort ? "icon_gradedown" : "icon_gradeup"}@3x.png`} color={"#000"}
+                url={`/icons/profile/${!timeSort ? "icon_gradedown" : "icon_gradeup"}@3x.png`} color={"#000"}
                 width={20} height={20}
               />
             </div>
@@ -121,21 +124,26 @@ const ManuscriptMedia = () => {
   const [previewFileId, setPreviewFileId] = useState<string>("")
   const commonTrans = useTranslations("Common")
   const t = useTranslations("Profile.manuscript")
-  useEffect(() => {
+
+  const initFetchData = () => {
     myMediaPosts({
       page: 1,
       pageSize: 10,
-      from_id: 0
+      from_id: 0,
+      sort_asc: timeSort
     }).then(response => {
       setInitData(response)
     })
-  }, [])
+  }
+
+  useEffect(initFetchData, [])
 
   const infiniteFetchMedia = useInfiniteFetch({
     fetchFn: myMediaPosts,
     params: {
       pageSize: 10,
-      from_id: 0
+      from_id: 0,
+      sort_asc: timeSort
     }
   })
 
@@ -173,8 +181,9 @@ const ManuscriptMedia = () => {
       />
       <section className="pl-4 pr-4 text-black">
         <div className={"flex-1 flex justify-end mt-5"}>
-          <button className="shrink-0" onTouchEnd={() => {
+          <button type={"button"} className="shrink-0" onTouchEnd={() => {
             setTimeSort(prevState => !prevState)
+            initFetchData()
           }}
           >
             <div className="flex items-center justify-center">

@@ -455,7 +455,6 @@ function SubscribeBundle({ items, userId, updateItems, basePrice }: {
 
   useEffect(() => {
     bundleForm.setValue("list", items)
-    console.log("bundleForm setValue", items)
   }, [items])
 
   return (
@@ -758,10 +757,6 @@ export default function Page() {
     defaultValues: { price: (defaultSettings?.price || 0) as number, items: [] }
   })
   const baseFormValues = baseFeeForm.watch()
-
-  useEffect(() => {
-    console.log(baseFormValues.items)
-  }, [baseFormValues.items])
 
   useEffect(() => {
     if (defaultSettings) {
