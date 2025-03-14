@@ -35,6 +35,7 @@ import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { useTranslations } from "next-intl"
 import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
 import CommonAvatar from "@/components/common/common-avatar"
+import { ZH_YYYY_MM_DD_HH_mm } from "@/lib/constant"
 
 const ItemEditTitle = ({
   title,
@@ -283,7 +284,7 @@ const AddVoteModal = ({
                     >
                       <div
                         className={field.value ? "" : "text-gray-500"}
-                      >{field.value ? dayjs(field.value * 1000).format("YYYY-MM-DD HH:mm") : "请选择"}</div>
+                      >{field.value ? dayjs(field.value * 1000).format(ZH_YYYY_MM_DD_HH_mm) : "请选择"}</div>
                     </DateTimePicker>
                   )
                 }}
@@ -869,7 +870,7 @@ function SelectMotionUser({
                       <div className={"text-base text-[#222] font-medium"}>{item.user.username}</div>
                       <div
                         className={"text-xs text-[#bbb]"}
-                      >{dayjs(item.following_time * 1000).format("YYYY-MM-DD HH:mm")}</div>
+                      >{dayjs(item.following_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)}</div>
                     </section>
                   </button>
                 </div>
@@ -1174,7 +1175,7 @@ const EditPageContent = () => {
               <div className="text-xs mt-1.5">
                 截止：
                 {formValues.post_vote?.stop_time
-                  ? dayjs(formValues.post_vote?.stop_time * 1000).format("YYYY-MM-DD HH:mm")
+                  ? dayjs(formValues.post_vote?.stop_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)
                   : ""}{" "}
                 {t("manuscript.voteEndTime")}
               </div>

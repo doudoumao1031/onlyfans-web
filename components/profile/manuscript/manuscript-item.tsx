@@ -6,13 +6,14 @@ import { clsx } from "clsx"
 import { deletePost, FileType, PostData, postPined } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import LazyImg from "@/components/common/lazy-img"
-import { buildImageUrl, TIME_FORMAT } from "@/lib/utils"
+import { buildImageUrl } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 import dayjs from "dayjs"
 import { useMemo, useRef, useState } from "react"
 import { useLongPress, LongPressEventType } from "use-long-press"
 import SheetSelect from "@/components/common/sheet-select"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { ZH_YYYY_MM_DD_HH_mm_ss } from "@/lib/constant"
 // import { LongPressEventType } from "use-long-press/lib/use-long-press.types"
 
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
@@ -209,7 +210,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
             <h3 className="line-clamp-[2]">{data.post.title}</h3>
             <section
               className={"flex-1 flex items-center text-[#bbb]"}
-            >{data.post.pub_time ? dayjs(data.post.pub_time * 1000).format(TIME_FORMAT) : ""}</section>
+            >{data.post.pub_time ? dayjs(data.post.pub_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss) : ""}</section>
             <section className="flex gap-4 text-xs justify-around">
               <ShowNumberWithIcon number={data.post_metric?.thumbs_up_count ?? 0}
                 icon={"/icons/profile/icon_fans_like_normal@3x.png"}

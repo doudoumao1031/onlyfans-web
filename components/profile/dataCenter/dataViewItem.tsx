@@ -8,11 +8,11 @@ import dayjs from "dayjs"
 import { Line } from "react-chartjs-2"
 import { getEvenlySpacedPoints, getDateRange } from "@/lib/utils"
 import { useTranslations } from "next-intl"
+import { ZH_YYYY_MM_DD } from "@/lib/constant"
 export type TProos = {
   tabs: Record<string, string>,
   title: string
 }
-const DATE_FORMAT = "YYYY-MM-DD"
 
 export default function Page({ tabs, title }: TProos) {
   const t = useTranslations("Profile")
@@ -20,32 +20,32 @@ export default function Page({ tabs, title }: TProos) {
   const dateTabs: Array<{ label: string, key: number, value: UserMetricDayReq | null }> = [
     {
       label: t("dataCenter.yesterday"), key: 0, value: {
-        start: now.add(-1, "day").format(DATE_FORMAT),
-        end: now.add(-1, "day").format(DATE_FORMAT)
+        start: now.add(-1, "day").format(ZH_YYYY_MM_DD),
+        end: now.add(-1, "day").format(ZH_YYYY_MM_DD)
       }
     },
     {
       label: t("dataCenter.last7Days"), key: 1, value: {
-        start: now.add(-7, "day").format(DATE_FORMAT),
-        end: now.format(DATE_FORMAT)
+        start: now.add(-7, "day").format(ZH_YYYY_MM_DD),
+        end: now.format(ZH_YYYY_MM_DD)
       }
     },
     {
       label: t("dataCenter.last15Days"), key: 2, value: {
-        start: now.add(-15, "day").format(DATE_FORMAT),
-        end: now.format(DATE_FORMAT)
+        start: now.add(-15, "day").format(ZH_YYYY_MM_DD),
+        end: now.format(ZH_YYYY_MM_DD)
       }
     },
     {
       label: t("dataCenter.last30Days"), key: 3, value: {
-        start: now.add(-30, "day").format(DATE_FORMAT),
-        end: now.format(DATE_FORMAT)
+        start: now.add(-30, "day").format(ZH_YYYY_MM_DD),
+        end: now.format(ZH_YYYY_MM_DD)
       }
     },
     {
       label: t("dataCenter.last90Days"), key: 4, value: {
-        start: now.add(-90, "day").format(DATE_FORMAT),
-        end: now.format(DATE_FORMAT)
+        start: now.add(-90, "day").format(ZH_YYYY_MM_DD),
+        end: now.format(ZH_YYYY_MM_DD)
       }
     }
     // {

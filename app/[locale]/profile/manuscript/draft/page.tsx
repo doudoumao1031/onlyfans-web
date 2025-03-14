@@ -8,10 +8,10 @@ import { myDraftPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { LazyImageWithFileId } from "@/components/common/lazy-img"
-import { TIME_FORMAT } from "@/lib/utils"
 import dayjs from "dayjs"
 import { useTranslations } from "next-intl"
 import Image from "next/image"
+import { ZH_YYYY_MM_DD_HH_mm_ss } from "@/lib/constant"
 
 const DraftItem = ({ data }:{data:PostData}) => {
   const t = useTranslations("Profile.manuscript")
@@ -28,7 +28,7 @@ const DraftItem = ({ data }:{data:PostData}) => {
       </div>
       <div className="flex-col justify-between flex flex-1 w-0">
         <div className="text-[#333] line-clamp-[2] ">{data.post.title}</div>
-        <div className="pb-2.5 text-xs text-[#bbb]">{t("saveAt")}：{dayjs(data.post.last_update_time * 1000).format(TIME_FORMAT)}</div>
+        <div className="pb-2.5 text-xs text-[#bbb]">{t("saveAt")}：{dayjs(data.post.last_update_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</div>
       </div>
     </Link>
   )

@@ -23,6 +23,7 @@ import { TPost } from "@/components/post/types"
 import { useGlobal } from "@/lib/contexts/global-context"
 import localizedFormat from "dayjs/plugin/localizedFormat"
 import { useLocale } from "next-intl"
+import { EN_MMM_D_h_mm_A, LOCAL_ZH, ZH_M_D_HH_mm } from "@/lib/constant"
 
 interface CommentsProps {
   post_id: number
@@ -133,7 +134,7 @@ function Comment({
   const [openCofirmDeleteComment, setOpenConfirmDeleteComment] = useState<boolean>(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   dayjs.extend(localizedFormat)
-  const datetimeFormat = useLocale() === "zh" ? "M月D日 HH:mm" : "MMM D, h:mm A"
+  const datetimeFormat = useLocale() === LOCAL_ZH ? ZH_M_D_HH_mm : EN_MMM_D_h_mm_A
   return (
     <>
       <SheetSelect
@@ -355,7 +356,7 @@ function Reply({
   const [openCofirmDeleteReply, setOpenConfirmDeleteReply] = useState<boolean>(false)
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
   dayjs.extend(localizedFormat)
-  const datetimeFormat = useLocale() === "zh" ? "M月D日 HH:mm" : "MMM D, h:mm A"
+  const datetimeFormat = useLocale() === LOCAL_ZH ? ZH_M_D_HH_mm : EN_MMM_D_h_mm_A
   return (
     <>
       <SheetSelect

@@ -4,6 +4,7 @@ import dayjs from "dayjs"
 import CommonAvatar from "@/components/common/common-avatar"
 import IconWithImage from "../profile/icon"
 import { Link } from "@/i18n/routing"
+import { ZH_MM_DD_HH_mm } from "@/lib/constant"
 
 export default function UserTitle({
   user,
@@ -41,7 +42,7 @@ export default function UserTitle({
             color={"#777"}
           />
         ) : (
-          <span className="text-nowrap">{dayjs(pub_time * 1000).format("MM-DD HH:mm")}</span>
+          <span className="text-nowrap">{dayjs(pub_time * 1000).format(ZH_MM_DD_HH_mm)}</span>
         )}
       </div>
     </div>

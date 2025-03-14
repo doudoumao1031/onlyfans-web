@@ -3,6 +3,7 @@ import { FansFollowItem, FansSubscribeItems } from "@/lib"
 import dayjs from "dayjs"
 import CommonAvatar from "@/components/common/common-avatar"
 import { useTranslations } from "next-intl"
+import { ZH_YYYY_MM_DD_HH_mm } from "@/lib/constant"
 
 export function FansSubscribe({ data }: {
   data: FansSubscribeItems
@@ -46,7 +47,7 @@ export function FollowedListItem({ data }:{data:FansFollowItem}) {
           <div className={"text-base text-[#222] font-medium"}>{`${data.user.first_name} ${data.user.last_name}`}</div>
           <div
             className={"text-xs text-[#bbb]"}
-          >{dayjs(data.following_time * 1000).format("YYYY-MM-DD HH:mm")}</div>
+          >{dayjs(data.following_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)}</div>
         </button>
       </div>
     </div>

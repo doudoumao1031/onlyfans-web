@@ -11,10 +11,11 @@ import dayjs from "dayjs"
 import { useTranslations } from "next-intl"
 import Link from "next/link"
 import { Fragment, useEffect, useState } from "react"
+import { ZH_YYYY_MM, ZH_YYYY_MM_DD_HH_mm_ss } from "@/lib/constant"
 
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<StatementResp> | null>()
-  const [date, setDate] = useState<string>(dayjs().format("YYYY-MM"))
+  const [date, setDate] = useState<string>(dayjs().format(ZH_YYYY_MM))
   const t = useTranslations("Profile.income")
   const [loading, setLoading] = useState(false)
   const StatementTypeList: ChangeTypeDesc[] = [
@@ -81,7 +82,7 @@ export default function Page() {
                         <span className="text-xs text-orange">+{v.change_amount} USDT</span>
                       </div>
                       <div className="flex justify-between text-xs mt-1">
-                        <span className="text-[#979799]" >{dayjs(v.trade_time * 1000).format("YYYY-MM-DD HH:mm:ss")}</span>
+                        <span className="text-[#979799]" >{dayjs(v.trade_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</span>
                         {v.change_type !== 1 && (
                           <Link href={v.change_type == 2 ? `/space/${v?.user_base_vo?.id}/feed` : `/postInfo/${v.post_id}`}>
                             <span className="text-theme">{t("sourceBtn")}</span>
