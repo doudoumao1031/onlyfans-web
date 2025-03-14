@@ -38,7 +38,9 @@ export default function Comments(props: CommentsProps) {
   const t = useTranslations("Common.post")
   const [input, setInput] = useState("")
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-  {/* 帖子不可见且非自己不可评论 */}
+  {
+    /* 帖子不可见且非自己不可评论 */
+  }
   if (post.visibility !== 0 && sid != post.id) return null
   return (
     <>
@@ -61,7 +63,11 @@ export default function Comments(props: CommentsProps) {
               onClick={() => setShowEmojiPicker((pre) => !pre)}
             />
           </div>
-          <div className={`p-1 ${!input || input === "" ? "bg-sky-500/50" : "bg-theme"} rounded-[50%] size-[30px] bg-sky`}>
+          <div
+            className={`p-1 ${
+              !input || input === "" ? "bg-sky-500/50" : "bg-theme"
+            } rounded-[50%] size-[30px] bg-sky`}
+          >
             <Image
               // src="/theme/icon_fans_comment_send@3x.png"
               src="/svgIcons/icon_fans_comment_send@3x.svg"
@@ -197,7 +203,11 @@ function Comment({
                   onClick={() => setShowEmojiPicker((pre) => !pre)}
                 />
               </div>
-              <div className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"} rounded-[50%] size-[30px]`}>
+              <div
+                className={`p-1 ${
+                  !replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"
+                } rounded-[50%] size-[30px]`}
+              >
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
                   width={24}
@@ -267,7 +277,7 @@ function Comment({
     })
     if (success) {
       removed(id)
-      showMessage("已取删除评论")
+      showMessage("已删除评论")
     }
   }
 
@@ -375,7 +385,11 @@ function Reply({
                 {first_name} {last_name}
               </div>
               <div className="text-sm">
-                {reply_user && <span className="text-[#6D7781]">{t("reply")} {`${reply_user.first_name} ${reply_user.last_name}`} : </span>}
+                {reply_user && (
+                  <span className="text-[#6D7781]">
+                    {t("reply")} {`${reply_user.first_name} ${reply_user.last_name}`} :{" "}
+                  </span>
+                )}
                 <span>{content}</span>
               </div>
               <div className="flex gap-4 text-xs text-[#6D7781]">
@@ -410,7 +424,11 @@ function Reply({
                   onClick={() => setShowEmojiPicker((pre) => !pre)}
                 />
               </div>
-              <div className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"} rounded-[50%] size-[30px]`}>
+              <div
+                className={`p-1 ${
+                  !replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"
+                } rounded-[50%] size-[30px]`}
+              >
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
                   width={24}
