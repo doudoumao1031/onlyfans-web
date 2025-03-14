@@ -17,14 +17,13 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
   const [isTop, setIsTop] = useState<boolean>(false)
   const divRef = useRef<HTMLDivElement>(null)
   const handleShare = useCallback(() => {
-
     try {
       const broadcasterData = {
         type: "broadcaster",
         firstName: data?.first_name,
         lastName: data?.last_name,
         username: data?.username,
-        fansId: data?.id,
+        fansId: data?.id.toString(),
         photoId: data?.photo
       }
       console.log(broadcasterData, "broadcasterData")
