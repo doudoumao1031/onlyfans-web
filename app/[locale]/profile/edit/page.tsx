@@ -61,7 +61,8 @@ export default function Page() {
     },
     onSuccess: () => {
       showMessage(commonTrans("updateSuccess"), "success", {
-        afterDuration: router.back
+        // 跳转到个人主页(需要刷新页面)
+        afterDuration: () => router.push("/profile")
       })
     }
   })
@@ -172,13 +173,14 @@ export default function Page() {
               <section>
                 <Controller
                   control={control}
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <InputWithLabel
                       onInputChange={field.onChange}
                       value={field.value}
                       label={t("form.topInfo")}
                       type={"textarea"}
                       rows={5}
+                      errorMessage={fieldState.error?.message}
                     />
                   )}
                   name={"top_info"}

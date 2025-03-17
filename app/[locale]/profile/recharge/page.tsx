@@ -11,11 +11,12 @@ import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { useTranslations } from "next-intl"
 import LazyImg from "@/components/common/lazy-img"
+import { ZH_YYYY_MM, ZH_YYYY_MM_DD_HH_mm_ss } from "@/lib/constant"
 
 export default function Page() {
   const t = useTranslations("Profile.recharge")
   const [list, setList] = useState<PageResponse<StatementResp> | null>()
-  const [date, setDate] = useState<string>(dayjs().format("YYYY-MM"))
+  const [date, setDate] = useState<string>(dayjs().format(ZH_YYYY_MM))
   const { withLoading } = useLoadingHandler({})
   useEffect(() => {
     const statementList = async () => {
@@ -95,7 +96,7 @@ export default function Page() {
                                   <span className="text-[#222222] text-base">{new Intl.NumberFormat().format(v.change_amount)}</span>
                                 </div>
                                 <div className="flex justify-between text-xs mt-1.5 text-[#979799]">
-                                  <span>{dayjs(v.trade_time * 1000).format("YYYY-MM-DD HH:mm:ss")}</span>
+                                  <span>{dayjs(v.trade_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</span>
                                   <span>{t("balance")}: {new Intl.NumberFormat().format(v.balance_snapshot)}</span>
                                 </div>
                               </div>

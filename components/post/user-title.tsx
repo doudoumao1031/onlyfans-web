@@ -4,6 +4,7 @@ import dayjs from "dayjs"
 import CommonAvatar from "@/components/common/common-avatar"
 import IconWithImage from "../profile/icon"
 import { Link } from "@/i18n/routing"
+import { ZH_MM_DD_HH_mm } from "@/lib/constant"
 
 export default function UserTitle({
   user,
@@ -25,7 +26,7 @@ export default function UserTitle({
             <CommonAvatar photoFileId={photo} size={40} />
           </div>
           <div>
-            <div className="text-base truncate max-w-[160px]">
+            <div className="text-base truncate max-w-[150px]">
               {first_name} {last_name}
             </div>
             <div className="text-black/50 text-xs">{buildMention(username)}</div>
@@ -41,7 +42,7 @@ export default function UserTitle({
             color={"#777"}
           />
         ) : (
-          <span className="text-nowrap">{dayjs(pub_time * 1000).format("MM-DD HH:mm")}</span>
+          <span className="text-nowrap">{dayjs(pub_time * 1000).format(ZH_MM_DD_HH_mm)}</span>
         )}
       </div>
     </div>

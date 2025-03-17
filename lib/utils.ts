@@ -3,10 +3,8 @@ import { twMerge } from "tailwind-merge"
 import { completeFile, uploadMediaFile, uploadPart } from "./actions/media"
 import { ENDPOINTS, FileType, uploadFetch } from "@/lib/actions/shared"
 import { PromiseConcurrency } from "@/lib/promise-curr"
+import { BATCH_SIZE, CHUNK_SIZE } from "@/lib/constant"
 
-// 文件分片大小2M
-const CHUNK_SIZE = 1024 * 1024 * 2
-const BATCH_SIZE = 10
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -180,6 +178,20 @@ export function getEvenlySpacedPoints<T>(arr: T[], count = 12) {
   const step = (arr.length - 1) / (count - 1)
   return Array.from({ length: count }, (_, i) => arr[Math.round(i * step)])
 }
+export function getDateRange({ start, end }: { start: string, end: string }) {
+  const dateArray = [] // 用于存储日期的数组
+  const currentDate = new Date(start) // 将开始日期转换为 Date 对象
 
+  // 将结束日期转换为 Date 对象
+  const endDateObj = new Date(end)
 
-export const TIME_FORMAT = "YYYY-MM-DD HH:mm:ss"
+  // 循环生成日期范围内的每一天
+  while (currentDate <= endDateObj) {
+    // 格式化日期为 yyyy-mm-dd
+    const formattedDate = currentDate.toISOString().split("T")[0]
+    dateArray.push(formattedDate) // 将格式化后的日期添加到数组
+    currentDate.setDate(currentDate.getDate() + 1) // 增加一天
+  }
+
+  return getEvenlySpacedPoints(dateArray)
+}

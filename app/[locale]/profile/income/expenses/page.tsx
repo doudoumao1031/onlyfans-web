@@ -9,10 +9,11 @@ import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import dayjs from "dayjs"
 import { useTranslations } from "next-intl"
 import { Fragment, useEffect, useState } from "react"
+import { ZH_YYYY_MM, ZH_YYYY_MM_DD_HH_mm_ss } from "@/lib/constant"
 
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<StatementResp> | null>()
-  const [date, setDate] = useState<string>(dayjs().format("YYYY-MM"))
+  const [date, setDate] = useState<string>(dayjs().format(ZH_YYYY_MM))
   const t = useTranslations("Profile.income")
   const [loading, setLoading] = useState(false)
   useEffect(() => {
@@ -71,7 +72,7 @@ export default function Page() {
                 {items.map((v, i) => (
                   <div key={i} className="py-3 border-b border-spacing-0.5 border-[#ddd]">
                     <div className="flex justify-between">
-                      <span>{dayjs(v.trade_time * 1000).format("YYYY-MM-DD HH:mm:ss")}</span>
+                      <span>{dayjs(v.trade_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</span>
                       <span className="text-xs text-[#323232]">{v.change_amount} USDT</span>
                     </div>
                     <div className="flex justify-between text-xs mt-1">

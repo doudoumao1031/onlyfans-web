@@ -3,7 +3,7 @@ import Header from "@/components/common/header"
 import IconWithImage from "@/components/profile/icon"
 import { UserProfile } from "@/lib/actions/profile"
 import { buildImageUrl } from "@/lib/utils"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import LazyImg from "../common/lazy-img"
 import { useTranslations } from "next-intl"
 import { Link } from "@/i18n/routing"
@@ -16,7 +16,23 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
   const bgRef = useRef<HTMLDivElement>(null)
   const [isTop, setIsTop] = useState<boolean>(false)
   const divRef = useRef<HTMLDivElement>(null)
+  const handleShare = useCallback(() => {
+    try {
+      const broadcasterData = {
+        type: "broadcaster",
+        firstName: data?.first_name,
+        lastName: data?.last_name,
+        username: data?.username,
+        fansId: data?.id.toString(),
+        photoId: data?.photo
+      }
+      console.log(broadcasterData, "broadcasterData")
 
+      window.callAppApi("ShareText", JSON.stringify(broadcasterData))
+    } catch (error) {
+      console.log("分享失败", error)
+    }
+  }, [data])
   useEffect(() => {
     if (divRef.current) {
       // 获取 CSS 变量 --top-bar 的值
@@ -80,14 +96,14 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
                   color={isTop ? "#222" : "#fff"}
                 />
               </Link>
-              <div>
+              <button type="button" onTouchEnd={handleShare}>
                 <IconWithImage
                   url="/icons/space/icon_fans_share_normal@3x.png"
                   width={22}
                   height={22}
                   color={isTop ? "#222" : "#fff"}
                 />
-              </div>
+              </button>
             </>
           }
           backIconColor={isTop ? "#222" : "#fff"}

@@ -40,8 +40,7 @@ import { z } from "zod"
 import { omit } from "lodash"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { useTranslations } from "next-intl"
-
-const DATE_TIME_FORMAT = "YYYY-MM-DD HH:mm"
+import { ZH_YYYY_MM_DD_HH_mm } from "@/lib/constant"
 
 const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, openState, setOpenState, basePrice }: {
   callback: (data: DiscountInfo) => void,
@@ -346,7 +345,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
                       >
                         <div
                           className={field.value ? "" : "text-gray-500"}
-                        >{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
+                        >{field.value ? dayjs(field.value * 1000).format(ZH_YYYY_MM_DD_HH_mm) : "请选择"}</div>
                       </DateTimePicker>
                     </TopLabelWrapper>
                   )
@@ -363,7 +362,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
                       >
                         <div
                           className={field.value ? "" : "text-gray-500"}
-                        >{field.value ? dayjs(field.value * 1000).format(DATE_TIME_FORMAT) : "请选择"}</div>
+                        >{field.value ? dayjs(field.value * 1000).format(ZH_YYYY_MM_DD_HH_mm) : "请选择"}</div>
                       </DateTimePicker>
                     </TopLabelWrapper>
                   )
@@ -605,7 +604,7 @@ function PromotionalActivities({ updateItems, items }: {
                   >({t("avg")} ${calcAvg(Number(discount.discount_price), discount.month_count)}/{t("month")})</span>
                 </div>
                 <div className="text-[#6D7781]">
-                  {dayjs(discount.discount_start_time * 1000).format(DATE_TIME_FORMAT)} {dayjs(discount.discount_end_time * 1000).format(DATE_TIME_FORMAT)}
+                  {dayjs(discount.discount_start_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)} {dayjs(discount.discount_end_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)}
                 </div>
               </div>
               <Switch disabled={discount.item_status} className={"custom-switch"}

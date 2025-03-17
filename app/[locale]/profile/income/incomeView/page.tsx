@@ -27,6 +27,7 @@ import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import LoadingMask from "@/components/common/loading-mask"
 import { Link, useRouter } from "@/i18n/routing"
 import { useTranslations } from "next-intl"
+import { ZH_YYYY_MM_DD } from "@/lib/constant"
 
 const Withdrawal = ({
   children,
@@ -210,8 +211,6 @@ const Withdrawal = ({
   )
 }
 
-const DATE_FORMAT = "YYYY-MM-DD"
-
 type UserMetricDayReq = {
   start: string
   end: string
@@ -252,22 +251,22 @@ export default function Page() {
     {
       label: t("recent7Days"),
       value: {
-        start: now.add(-7, "day").format(DATE_FORMAT),
-        end: now.format(DATE_FORMAT)
+        start: now.add(-7, "day").format(ZH_YYYY_MM_DD),
+        end: now.format(ZH_YYYY_MM_DD)
       }
     },
     {
       label: t("recent15Days"),
       value: {
-        start: now.add(-15, "day").format(DATE_FORMAT),
-        end: now.format(DATE_FORMAT)
+        start: now.add(-15, "day").format(ZH_YYYY_MM_DD),
+        end: now.format(ZH_YYYY_MM_DD)
       }
     },
     {
       label: t("recent30Days"),
       value: {
-        start: now.add(-30, "day").format(DATE_FORMAT),
-        end: now.format(DATE_FORMAT)
+        start: now.add(-30, "day").format(ZH_YYYY_MM_DD),
+        end: now.format(ZH_YYYY_MM_DD)
       }
     }
   ]
@@ -281,24 +280,24 @@ export default function Page() {
       label: t("today"),
       key: 0,
       value: {
-        start: now.format(DATE_FORMAT),
-        end: now.format(DATE_FORMAT)
+        start: now.format(ZH_YYYY_MM_DD),
+        end: now.format(ZH_YYYY_MM_DD)
       }
     },
     {
       label: t("recent30Days"),
       key: 1,
       value: {
-        start: now.add(-30, "day").format(DATE_FORMAT),
-        end: now.format(DATE_FORMAT)
+        start: now.add(-30, "day").format(ZH_YYYY_MM_DD),
+        end: now.format(ZH_YYYY_MM_DD)
       }
     },
     {
       label: t("recent1Year"),
       key: 2,
       value: {
-        start: now.add(-1, "year").format(DATE_FORMAT),
-        end: now.format(DATE_FORMAT)
+        start: now.add(-1, "year").format(ZH_YYYY_MM_DD),
+        end: now.format(ZH_YYYY_MM_DD)
       }
     }
   ]

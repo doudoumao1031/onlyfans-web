@@ -10,11 +10,12 @@ import { ListEnd, ListError, ListLoading } from "@/components/explore/list-state
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { useTranslations } from "next-intl"
+import { ZH_YYYY_MM, ZH_YYYY_MM_DD_HH_mm_ss } from "@/lib/constant"
 
 export default function Page() {
   const t = useTranslations("Profile.withdrawOrder")
   const [list, setList] = useState<PageResponse<WithdrawOrder> | null>()
-  const [date, setDate] = useState<string>(dayjs().format("YYYY-MM"))
+  const [date, setDate] = useState<string>(dayjs().format(ZH_YYYY_MM))
   const { withLoading } = useLoadingHandler({})
   useEffect(() => {
     const statementList = async () => {
@@ -78,7 +79,7 @@ export default function Page() {
                       return (
                         <div key={i} className="py-3 border-b border-spacing-0.5 border-[#ddd]">
                           <div className="flex justify-between">
-                            <span>{dayjs(v.create_time * 1000).format("YYYY-MM-DD HH:mm:ss")}</span>
+                            <span>{dayjs(v.create_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</span>
                             <span className="text-xs text-[#323232]">{v.amount} USDT</span>
                           </div>
                           <div className="flex justify-end text-xs mt-1">

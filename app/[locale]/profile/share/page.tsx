@@ -5,7 +5,7 @@ import html2canvas from "html2canvas"
 import Header from "@/components/common/header"
 import IconWithImage from "@/components/profile/icon"
 import { UserProfile } from "@/lib/actions/profile"
-import { useEffect, useRef, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { useTranslations } from "next-intl"
 import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl } from "@/lib/utils"
@@ -43,6 +43,21 @@ export default function Page() {
       link.click()
     }
   }
+  const handleShare = useCallback(() => {
+    try {
+      const broadcasterData = {
+        type: "broadcaster",
+        firstName: userInfo?.first_name,
+        lastName: userInfo?.last_name,
+        username: userInfo?.username,
+        fansId: userInfo?.id,
+        photoId: userInfo?.photo
+      }
+      window.callAppApi("ShareText", JSON.stringify(broadcasterData))
+    } catch (error) {
+      console.log("分享失败", error)
+    }
+  }, [userInfo])
   useEffect(() => {
     if (divRef.current) {
       // 获取 CSS 变量 --top-bar 的值
@@ -77,14 +92,14 @@ export default function Page() {
                     color="#222"
                   />
                 </button>
-                <div>
+                <button type="button" onTouchEnd={handleShare}>
                   <IconWithImage
                     url="/icons/space/icon_fans_share_normal@3x.png"
                     width={22}
                     height={22}
                     color="#222"
                   />
-                </div>
+                </button>
               </>
             }
             backIconColor="#222"
