@@ -11,6 +11,8 @@ export default function MediaItem({ item }: { item: PostData }) {
   const t = useTranslations("Space")
   if (!item) return null
   const { post_attachment, post_price, user, post, post_metric } = item
+  console.log(post_attachment, 'post_attachment------------');
+
   const showIds = post_attachment.map((v) => v.file_id).join("_")
   // 是否不可查看
   const lock = user.id !== sid && (post.visibility === 1 && !user.sub) || post.visibility === 2
@@ -26,8 +28,8 @@ export default function MediaItem({ item }: { item: PostData }) {
             height={400}
             className="w-full h-full"
             src={
-              post_attachment[0]?.file_id || post_attachment[0]?.thumb_id
-                ? buildImageUrl(post_attachment[0]?.file_id || post_attachment[0]?.thumb_id)
+              post_attachment[0]?.thumb_id || post_attachment[0]?.file_id
+                ? buildImageUrl(post_attachment[0]?.thumb_id || post_attachment[0]?.file_id)
                 : "/icons/default/img_media_default.png"
             }
             alt={""}

@@ -86,6 +86,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           src={data.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"}
           alt={""}
         />
+        <div className="w-full h-full absolute top-0 left-0 bg-black/20"></div>
       </div>
       <div ref={divRef} className={`w-full fixed top-0 left-0 z-40 ${isTop ? "bg-[#fff]" : "auto"}`}>
         <Header
