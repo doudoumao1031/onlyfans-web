@@ -49,24 +49,28 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
     return [0, 1, 3].includes(postStatus)
   }, [postStatus])
 
+  const canShareAndPin = useMemo(() => {
+    return [1].includes(postStatus)
+  },[postStatus])
+
   return (
     <section className="flex text-xs">
       <button className={clsx(
         "flex-1 flex gap-2 pt-2.5 pb-2.5 items-center",
-        canEdit ? "" : "opacity-50"
+        canShareAndPin ? "" : "opacity-50"
       )}
       >
         <IconWithImage url={"/theme/icon_fans_share_normal@3x.png"} width={20} height={20} color={"#222"} />
         <span>{t("itemActions.share")}</span>
       </button>
       <button onTouchEnd={(event) => {
-        if (canEdit) {
+        if (canShareAndPin) {
           handlePined()
         }
         event.preventDefault()
       }} className={clsx(
         "flex-1 flex gap-2 pt-2.5 pb-2.5 items-center",
-        canEdit ? "" : "opacity-50"
+        canShareAndPin ? "" : "opacity-50"
       )}
       >
         <IconWithImage url={pinned ? "/theme/icon_fans_stick_highlight@3x.png" : "/theme/icon_fans_stick_dark@3x.png"}
@@ -79,7 +83,7 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
         )}
         >{pinned ? t("itemActions.pinned") : t("itemActions.unpinned")}</span>
       </button>
-      {canEdit ? (
+      {canShareAndPin ? (
         <Link href={`/profile/dataCenter/feeds?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 items-center">
           <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"} />
           <span>{t("itemActions.data")}</span>
