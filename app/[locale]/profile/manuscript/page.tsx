@@ -207,13 +207,13 @@ const ManuscriptMedia = () => {
                         <section className="rounded-xl relative overflow-hidden text-xs bg-black/20">
                           <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5 z-10">
                             <section className="flex items-center gap-0.5">
-                              <IconWithImage url={"/icons/profile/icon_fans_view_s@3x.png"} width={12} height={12}
+                              <IconWithImage url={"/theme/icon_fans_view_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
                               <span>{item.post_metric.play_count}</span>
                             </section>
                             <section className="flex items-center gap-0.5">
-                              <IconWithImage url={"/icons/profile/icon_fans_money_s@3x.png"} width={12} height={12}
+                              <IconWithImage url={"/theme/icon_fans_money_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
                               <span>{item.post_metric.tip_count}</span>
@@ -221,19 +221,19 @@ const ManuscriptMedia = () => {
                           </section>
                           <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around z-10">
                             <section className="flex items-center gap-0.5 flex-1">
-                              <IconWithImage url={"/icons/profile/icon_fans_like@3x.png"} width={12} height={12}
+                              <IconWithImage url={"/theme/icon_fans_like_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
                               <span>{item.post_metric.thumbs_up_count}</span>
                             </section>
                             <section className="flex items-center gap-0.5 flex-1 justify-center">
-                              <IconWithImage url={"/icons/profile/icon_fans_comment@3x.png"} width={12} height={12}
+                              <IconWithImage url={"/theme/icon_fans_comment_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
                               <span>{item.post_metric.comment_count}</span>
                             </section>
                             <section className="flex items-center gap-0.5 flex-1 justify-end">
-                              <IconWithImage url={"/icons/profile/icon_fans_reward@3x.png"} width={12} height={12}
+                              <IconWithImage url={"/theme/icon_fans_reward_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
                               <span>{item.post_metric.share_count}</span>
