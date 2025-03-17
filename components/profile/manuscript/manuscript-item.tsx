@@ -131,6 +131,18 @@ const ManuscriptItemState = ({ state }: { state: number }) => {
     >{textMap[state]}</span>
   )
 }
+
+
+function LinkButton({ status,id,children }: { status: number,children: React.ReactNode,id: string | number }) {
+  const canEdit = useMemo(() => {
+    return [0, 1, 3].includes(status)
+  }, [status])
+  if (canEdit) {
+    return <Link href={`/profile/manuscript/draft/edit?id=${id}`} className={"flex-1 h-full flex flex-col justify-between "}>{children}</Link>
+  }
+  return  <div className={"flex-1 h-full flex flex-col justify-between "}>{children}</div>
+}
+
 export default function ManuscriptItem({ data, refresh }: { data: PostData, refresh?: () => void }) {
   "use client"
   const commonTrans = useTranslations("Common")
@@ -209,7 +221,8 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
               )
             }
           </div>
-          <Link href={`/profile/manuscript/draft/edit?id=${data.post.id}`} className={"flex-1 h-full flex flex-col justify-between "}>
+          {/*href={`/profile/manuscript/draft/edit?id=${data.post.id}`} className={"flex-1 h-full flex flex-col justify-between "}*/}
+          <LinkButton id={data.post.id} status={data.post.post_status}>
             <h3 className="line-clamp-[2]">{data.post.title}</h3>
             <section
               className={"flex-1 flex items-center text-[#bbb]"}
@@ -234,7 +247,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
                 icon={"/icons/profile/icon_fans_money_s_gray@3x.png"}
               />
             </section>
-          </Link>
+          </LinkButton>
         </button>
         <ManuscriptActions id={data.post.id} postStatus={data.post.post_status} refresh={refresh}
           pinned={data.post.pinned}

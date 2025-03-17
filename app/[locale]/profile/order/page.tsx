@@ -566,7 +566,7 @@ function PromotionalActivities({ updateItems, items }: {
           updateItems(data)
           setTimeout(() => {
             contentRef?.current?.scrollIntoView({ behavior: "smooth" })
-          },100)
+          }, 100)
         }}
         openState={openState}
         setOpenState={setOpenState}
@@ -690,6 +690,8 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
                     return (
                       <input value={field.value} onChange={field.onChange} onBlur={(event) => {
                         const targetValue = event.target.value
+                        const regex = /^\d+(\.\d{0,2})?$/ // 正则表达式限制最多2位小数
+                        targetValue.replace(regex,"")
                         if (value) {
                           field.onChange(Number(targetValue).toFixed(2).toString())
                         }
@@ -875,7 +877,7 @@ export default function Page() {
           </form>
         </section>
         {userInfo && realPrice > 0 && (
-          <SubscribeBundle basePrice={realPrice} updateItems={updateItems} items={baseFormValues.items} userId={userInfo?.id}/>
+          <SubscribeBundle basePrice={realPrice} updateItems={updateItems} items={baseFormValues.items} userId={userInfo?.id} />
         )}
         {realPrice > 0 && <PromotionalActivities items={baseFormValues.items} updateItems={updateItems} />}
       </section>
