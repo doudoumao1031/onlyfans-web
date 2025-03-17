@@ -172,13 +172,14 @@ export default function Page() {
               <section>
                 <Controller
                   control={control}
-                  render={({ field }) => (
+                  render={({ field, fieldState }) => (
                     <InputWithLabel
                       onInputChange={field.onChange}
                       value={field.value}
                       label={t("form.topInfo")}
                       type={"textarea"}
                       rows={5}
+                      errorMessage={fieldState.error?.message}
                     />
                   )}
                   name={"top_info"}
