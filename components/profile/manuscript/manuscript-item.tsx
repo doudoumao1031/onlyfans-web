@@ -50,24 +50,28 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
     return [0, 1, 3].includes(postStatus)
   }, [postStatus])
 
+  const canShareAndPin = useMemo(() => {
+    return [1].includes(postStatus)
+  },[postStatus])
+
   return (
     <section className="flex text-xs">
       <button className={clsx(
         "flex-1 flex gap-2 pt-2.5 pb-2.5 items-center",
-        canEdit ? "" : "opacity-50"
+        canShareAndPin ? "" : "opacity-50"
       )}
       >
         <IconWithImage url={"/theme/icon_fans_share_normal@3x.png"} width={20} height={20} color={"#222"} />
         <span>{t("itemActions.share")}</span>
       </button>
       <button onTouchEnd={(event) => {
-        if (canEdit) {
+        if (canShareAndPin) {
           handlePined()
         }
         event.preventDefault()
       }} className={clsx(
         "flex-1 flex gap-2 pt-2.5 pb-2.5 items-center",
-        canEdit ? "" : "opacity-50"
+        canShareAndPin ? "" : "opacity-50"
       )}
       >
         <IconWithImage url={pinned ? "/theme/icon_fans_stick_highlight@3x.png" : "/theme/icon_fans_stick_dark@3x.png"}
@@ -80,7 +84,7 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
         )}
         >{pinned ? t("itemActions.pinned") : t("itemActions.unpinned")}</span>
       </button>
-      {canEdit ? (
+      {canShareAndPin ? (
         <Link href={`/profile/dataCenter/feeds?id=${id}`} className="flex-1 flex gap-2 pt-2.5 pb-2.5 items-center">
           <IconWithImage url={"/icons/profile/icon_fans_data_gray@3x.png"} width={20} height={20} color={"#222"} />
           <span>{t("itemActions.data")}</span>
@@ -128,6 +132,18 @@ const ManuscriptItemState = ({ state }: { state: number }) => {
     >{textMap[state]}</span>
   )
 }
+
+
+function LinkButton({ status,id,children }: { status: number,children: React.ReactNode,id: string | number }) {
+  const canEdit = useMemo(() => {
+    return [0, 1, 3].includes(status)
+  }, [status])
+  if (canEdit) {
+    return <Link href={`/profile/manuscript/draft/edit?id=${id}`} className={"flex-1 h-full flex flex-col justify-between "}>{children}</Link>
+  }
+  return  <div className={"flex-1 h-full flex flex-col justify-between "}>{children}</div>
+}
+
 export default function ManuscriptItem({ data, refresh }: { data: PostData, refresh?: () => void }) {
   "use client"
   const commonTrans = useTranslations("Common")
@@ -206,7 +222,8 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
               )
             }
           </div>
-          <Link href={`/profile/manuscript/draft/edit?id=${data.post.id}`} className={"flex-1 h-full flex flex-col justify-between "}>
+          {/*href={`/profile/manuscript/draft/edit?id=${data.post.id}`} className={"flex-1 h-full flex flex-col justify-between "}*/}
+          <LinkButton id={data.post.id} status={data.post.post_status}>
             <h3 className="line-clamp-[2]">{data.post.title}</h3>
             <section
               className={"flex-1 flex items-center text-[#bbb]"}
@@ -231,7 +248,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
                 icon={"/icons/profile/icon_fans_money_s_gray@3x.png"}
               />
             </section>
-          </Link>
+          </LinkButton>
         </button>
         <ManuscriptActions id={data.post.id} postStatus={data.post.post_status} refresh={refresh}
           pinned={data.post.pinned}

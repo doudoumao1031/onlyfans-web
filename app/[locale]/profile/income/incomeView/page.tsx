@@ -131,7 +131,7 @@ const Withdrawal = ({
         }}
       >
         <div className="p-8">
-          <div className="flex justify-between mt-4">
+          <div className="grid grid-cols-2 mt-4">
             <div className="flex flex-col items-center">
               <span className="text-xs mb-2">{t("withdrawalAmountAvailable")}</span>
               <span className="text-[20px]">{info.amount - (info?.freeze ?? 0)} USDT</span>

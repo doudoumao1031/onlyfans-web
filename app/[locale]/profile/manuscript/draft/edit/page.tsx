@@ -102,13 +102,14 @@ const AddVoteModal = ({
   updateVoteData: (data: iPostVote) => void
 }) => {
   const [open, setIsOpen] = useState<boolean>(false)
+  const defaultStopTime = Math.floor(dayjs().add(1,"day").endOf("day").valueOf() / 1000)
   const voteForm = useForm<iPostVote>({
     mode: "all",
     resolver: zodResolver(postVoteSchema),
     defaultValues: initFormData ?? {
       items: [],
       title: "",
-      stop_time: Math.floor(Date.now() / 1000),
+      stop_time: defaultStopTime,
       mu_select: false
     }
   })
