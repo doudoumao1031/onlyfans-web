@@ -5,6 +5,7 @@ export interface iPostAttachment {
   file_id: string
   id?: string
   file_type: FileType
+  thumb_id?: string
 }
 
 //     ALL = "0", // 所有

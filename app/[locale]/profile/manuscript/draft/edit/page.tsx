@@ -540,7 +540,7 @@ interface LocalPreviewMediaProps {
   index: number
 }
 
-const FirstFrameImage = ({ file }: { file: File | undefined }) => {
+const FirstFrameImage = ({ file, fileId }: { file: File | undefined, fileId?: string }) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
@@ -565,6 +565,17 @@ const FirstFrameImage = ({ file }: { file: File | undefined }) => {
     }
   }, [file])
 
+  if ( fileId) {
+    return   (
+      <Image
+        className={"max-h-full max-w-full object-contain"}
+        src={buildImageUrl(fileId)}
+        alt={"attachment"}
+        width={100}
+        height={100}
+      />
+)
+  }
   if (!file) {
     return (
       <Image
@@ -727,7 +738,7 @@ const UploadMedia = () => {
                     }
                     {
                       field.value.file_type === FileType.Video && (
-                        <FirstFrameImage file={localPreviews.find(item => item.index === index)?.media} />
+                        <FirstFrameImage file={localPreviews.find(item => item.index === index)?.media} fileId={field.value.thumb_id} />
                       )
                     }
                   </section>
