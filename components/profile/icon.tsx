@@ -22,7 +22,7 @@ export default function IconWithImage({
     return {
       backgroundColor: color ?? "#fff"
     }
-  },[className,color])
+  }, [className, color])
   return (
     <div
       className={className}
@@ -31,6 +31,8 @@ export default function IconWithImage({
         width,
         maskImage: `url(${url})`,
         maskSize: `${width}px ${height}px`,
+        WebkitMaskImage: `url(${url})`,
+        WebkitMaskSize: `${width}px ${height}px`,
         ...backgroundColor
       }}
     ></div>
