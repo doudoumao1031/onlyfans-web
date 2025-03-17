@@ -5,11 +5,11 @@ import InputWithLabel from "@/components/profile/input-with-label"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo } from "react"
 import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/profile"
 import { useRouter } from "next/navigation"
 import { useCommonMessageContext } from "@/components/common/common-message"
-import { commonUploadFile } from "@/lib/utils"
+import { buildImageUrl, commonUploadFile } from "@/lib/utils"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { useTranslations } from "next-intl"
 
@@ -17,8 +17,6 @@ type EditUserProfile = Pick<
   UserProfile,
   "about" | "username" | "location" | "back_img" | "top_info" | "photo" | "first_name"
 >
-
-const IMAGE_PREFIX = `${process.env.NEXT_PUBLIC_API_URL}/media/img/`
 
 export default function Page() {
   const router = useRouter()
@@ -71,7 +69,7 @@ export default function Page() {
   const backImageStyle = useMemo(() => {
     if (formValues.back_img) {
       return {
-        backgroundImage: `url(${IMAGE_PREFIX}${formValues.back_img})`
+        backgroundImage: `url(${buildImageUrl(formValues.back_img)})`
       }
     }
     return {}
