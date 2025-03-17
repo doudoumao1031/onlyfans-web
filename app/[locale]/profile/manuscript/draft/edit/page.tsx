@@ -1249,13 +1249,13 @@ const EditPageContent = () => {
           >
             {!watch("post_vote") && (
               <span
-                className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-[#999] py-2 text-[#999] text-base"
+                className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-theme py-2 text-theme text-base"
               >
                 <IconWithImage
                   url={"/icons/profile/icon_fans_vote@3x.png"}
                   width={20}
                   height={20}
-                  color={"#999"}
+                  color={"var(--theme)"}
                 />
                 {t("manuscript.vote")}
               </span>

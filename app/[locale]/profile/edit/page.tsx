@@ -62,7 +62,7 @@ export default function Page() {
     onSuccess: () => {
       showMessage(commonTrans("updateSuccess"), "success", {
         // 跳转到个人主页(需要刷新页面)
-        afterDuration: () => router.push("/profile")
+        afterDuration: () => router.replace("/profile")
       })
     }
   })
