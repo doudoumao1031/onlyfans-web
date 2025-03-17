@@ -31,7 +31,7 @@ export default function Page() {
         about: z.string().max(999, "最多999字").optional(),
         location: z.string().max(30,"最多30个字").optional(),
         photo: z.string().optional(),
-        top_info: z.string().optional(),
+        top_info: z.string().max(30,"最多30个字").optional(),
         back_img: z.string().optional()
       })
     ),

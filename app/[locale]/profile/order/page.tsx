@@ -689,12 +689,14 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
                   <Controller control={customPriceForm.control} render={({ field }) => {
                     return (
                       <input value={field.value} onChange={field.onChange} onBlur={(event) => {
-                        const targetValue = event.target.value
-                        const regex = /^\d+(\.\d{0,2})?$/ // 正则表达式限制最多2位小数
-                        targetValue.replace(regex,"")
-                        if (value) {
-                          field.onChange(Number(targetValue).toFixed(2).toString())
+                        let targetValue = event.target.value
+                        const dotIndex = targetValue.indexOf(".")
+                        targetValue = targetValue.substring(0, dotIndex + 3)
+                        let targetValueNumber = Number(targetValue)
+                        if (isNaN(targetValueNumber)) {
+                          targetValueNumber = 1.99
                         }
+                        field.onChange(`${targetValueNumber}`)
                       }} className="w-full block bg-[#F8F8F8] rounded-full px-5 py-2"
                       />
                     )
