@@ -47,17 +47,21 @@ export default function FormDrawer({
       <DrawerContent
         className={clsx("bg-white", isAutoHeight ? "h-auto" : "h-[95vh]", className ?? "")}
       >
-        <form className={"flex-1 max-h-full"} onSubmit={handleSubmit}>
+        <form className={"flex-1 h-full flex flex-col"} onSubmit={handleSubmit}>
           <DrawerHeader className={"hidden"}>
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>
           </DrawerHeader>
-          <ModalHeader
-            title={title}
-            left={headerLeft?.(handleClose)}
-            right={headerRight?.(handleClose)}
-          ></ModalHeader>
-          {children}
+          <div className={"shrink-0"}>
+            <ModalHeader
+              title={title}
+              left={headerLeft?.(handleClose)}
+              right={headerRight?.(handleClose)}
+            ></ModalHeader>
+          </div>
+          <div className={"flex-1 overflow-auto pb-6"}>
+            {children}
+          </div>
         </form>
       </DrawerContent>
       <DrawerFooter className={"hidden"}></DrawerFooter>

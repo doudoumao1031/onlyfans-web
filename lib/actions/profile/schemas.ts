@@ -3,7 +3,7 @@ import { z } from "zod"
 export const postVoteSchema = z.object({
   id: z.union([z.string(),z.number()]).optional(),
   items: z.array(z.object({
-    content: z.string().optional()
+    content: z.string().max(20,"最多20个字").optional()
   }).required()).min(2, "最少两个选项"),
   mu_select: z.boolean(),
   stop_time: z.union([z.number().min(0, "请选择结束时间"), z.string().min(1, "请选择结束时间")]),
