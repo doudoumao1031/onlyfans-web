@@ -3,6 +3,7 @@ export interface Vote {
   title: string
   stop_time: number
   mu_select: boolean
+  vote_user_count: number // 参与投票人数
 }
 export interface VoteItem {
   content: string
