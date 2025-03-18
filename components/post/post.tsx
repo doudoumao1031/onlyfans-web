@@ -123,7 +123,7 @@ export default function Post({
           </div>
         )}
         {hasVote && showVote && <Vote postId={post.id} />}
-        <div className="flex gap-4 justify-between pt-2 pb-4 border-b border-black/5">
+        <div className="flex items-center gap-4 justify-between border-b border-black/5">
           <Like
             count={thumbs_up_count}
             liked={star}

@@ -54,13 +54,13 @@ export const options: ChartOptions<"line"> & { borderWidth: number } = {
       boxWidth: 4, // 提示框内指示点的宽度
       boxHeight: 4, // 提示框内指示点的高度
       bodyFont: {
-        size: 12, // 提示框字体大小
+        size: 12// 提示框字体大小
       },
       callbacks: {
-        labelColor: (context) => {
+        labelColor: () => {
           return {
             borderColor: "#00aef3",
-            backgroundColor: "#00aef3", // 颜色方块的背景颜色
+            backgroundColor: "#00aef3" // 颜色方块的背景颜色
             // borderWidth: 0, // 颜色方块的边框宽度
             // borderRadius: 1, // 颜色方块的圆角半径
             // width: 1, // 方块宽度（默认是 10）
@@ -115,11 +115,11 @@ export const options: ChartOptions<"line"> & { borderWidth: number } = {
   // 统一配置指示点样式
   elements: {
     point: {
-      pointStyle: 'circle', // 数据点形状
+      pointStyle: "circle", // 数据点形状
       radius: 0, // 数据点大小
-      hoverRadius: 4, // 鼠标悬停时数据点大小
-    },
-  },
+      hoverRadius: 4 // 鼠标悬停时数据点大小
+    }
+  }
 }
 
 const labels = ["01-01", "01-02", "01-03", "01-04", "01-05", "01-06", "01-07"]

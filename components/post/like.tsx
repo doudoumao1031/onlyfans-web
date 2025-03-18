@@ -4,6 +4,7 @@ import Stats from "./stats"
 import { useMemo } from "react"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
+import LikeBtn from "./like-btn"
 
 export default function Like({
   count,
@@ -64,8 +65,9 @@ export default function Like({
     }
   }
   return (
-    <button onClick={handleLike}>
-      <Stats icon="icon_fans_like" value={likes} highlight={isLiked} />
-    </button>
+    <div className=" relative" onClick={handleLike}>
+      {/* <Stats icon="icon_fans_like" value={likes} highlight={isLiked} /> */}
+      <LikeBtn value={likes} highlight={isLiked} />
+    </div>
   )
 }
