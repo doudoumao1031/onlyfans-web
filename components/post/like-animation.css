@@ -1,0 +1,37 @@
+.like-container {
+  position: relative;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+}
+
+.heart {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-top: -7px;
+  width: 60px;
+  height: 60px;
+  background: url("/icons/web_heart_animation.png") no-repeat;
+  background-position: left;
+  background-size: 2900%;
+  transition: background 0.3s;
+}
+
+.heart-hight {
+  background-position: right;
+}
+
+.handle-animation {
+  animation: likeAnimation 0.8s steps(28) forwards;
+}
+
+@keyframes likeAnimation {
+  0% {
+    background-position: left;
+  }
+
+  100% {
+    background-position: right;
+  }
+}
