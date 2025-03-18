@@ -83,7 +83,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           <CommonAvatar photoFileId={data.photo} size={32} />
         </div>
         <div className="ml-2">
-          <div className="text-[14px] truncate max-w-[150px]">
+          <div className="text-[14px] truncate max-w-[130px]">
             {data.first_name}
           </div>
           <div className="text-black/50 text-[12px]">{buildMention(data.username)}</div>
@@ -102,12 +102,13 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           src={data.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"}
           alt={""}
         />
+        <div className="w-full h-full absolute top-0 left-0 bg-black/20"></div>
       </div>
       <div ref={divRef} className={`w-full fixed top-0 left-0 z-40 ${isTop ? "bg-[#fff]" : "auto"}`}>
         <Header
           leftTitle={
             <span
-              className={` pt-[1px] shrink-0 text-[18px] font-semibold ml-8 ${isTop ? "text-[#222]" : "text-[#fff]"
+              className={` pt-[1px] shrink-0 text-[18px] font-semibold ml-4 ${isTop ? "text-[#222]" : "text-[#fff]"
                 }`}
             >
               {isTop ? renderTitle() : ""}

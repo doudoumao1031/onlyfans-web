@@ -11,6 +11,7 @@ export default function MediaItem({ item }: { item: PostData }) {
   const t = useTranslations("Space")
   if (!item) return null
   const { post_attachment, post_price, user, post, post_metric } = item
+
   const showIds = post_attachment.map((v) => v.file_id).join("_")
   // 是否不可查看
   const lock = user.id !== sid && (post.visibility === 1 && !user.sub) || post.visibility === 2
@@ -26,8 +27,8 @@ export default function MediaItem({ item }: { item: PostData }) {
             height={400}
             className="w-full h-full"
             src={
-              post_attachment[0]?.file_id || post_attachment[0]?.thumb_id
-                ? buildImageUrl(post_attachment[0]?.file_id || post_attachment[0]?.thumb_id)
+              post_attachment[0]?.thumb_id || post_attachment[0]?.file_id
+                ? buildImageUrl(post_attachment[0]?.thumb_id || post_attachment[0]?.file_id)
                 : "/icons/default/img_media_default.png"
             }
             alt={""}
@@ -39,24 +40,24 @@ export default function MediaItem({ item }: { item: PostData }) {
           <div className="w-full h-full bg-black bg-opacity-5 rounded-lg backdrop-blur absolute top-0 left-0 z-0"></div>
         )}
 
-        <Link href={ toDetail ?
+        <Link href={toDetail ?
           `/postInfo/${post.id}` : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${post_attachment[0]?.file_type === FileType.Video ?
-            showIds : showIds + "_" + 0}}` }
+            showIds : showIds + "_" + 0}`}
         >
           <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
             <div className="p-2 truncate overflow-hidden text-ellipsis">
               {/* {!lock ? post.title : ""} */}
             </div>
             {lock && (
-            <div className="flex flex-col items-center justify-center">
-              <IconWithImage
-                url="/icons/icon_info_lock_white.png"
-                width={32}
-                color="#fff"
-                height={32}
-              />
-              <span className="mt-2">{post.visibility === 2 ? t("tip1") : t("tip2")}</span>
-            </div>
+              <div className="flex flex-col items-center justify-center">
+                <IconWithImage
+                  url="/icons/icon_info_lock_white.png"
+                  width={32}
+                  color="#fff"
+                  height={32}
+                />
+                <span className="mt-2">{post.visibility === 2 ? t("tip1") : t("tip2")}</span>
+              </div>
             )}
             <div className="flex justify-between p-2">
               <span className="flex items-center">
@@ -66,7 +67,7 @@ export default function MediaItem({ item }: { item: PostData }) {
                   color="#fff"
                   height={12}
                 />
-                <span className="ml-1">{post_metric.play_count}</span>
+                <span className="ml-1 text-white">{post_metric.play_count}</span>
               </span>
               {!lock ? (
                 <span className="flex items-center ">
@@ -77,7 +78,7 @@ export default function MediaItem({ item }: { item: PostData }) {
                     height={12}
                   />
                   {post_price ? (
-                    <span className="ml-1">${post_price[0].price}</span>
+                    <span className="ml-1 text-white">${post_price[0].price}</span>
                   ) : (
                     <span></span>
                   )}

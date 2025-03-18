@@ -24,7 +24,7 @@ export default function Layout({
   const searchParams = useSearchParams()
   const isFind = searchParams.get("isFind")
   const path = usePathname()
-  const [isBlogger, setIsBlogger] = useState<boolean>(false)
+  const [isBlogger, setIsBlogger] = useState<boolean>(true)
   useEffect(() => {
     const initData = async () => {
       await userProfile().then((res) => {

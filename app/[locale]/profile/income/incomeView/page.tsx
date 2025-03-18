@@ -21,7 +21,7 @@ import useCommonMessage, {
   CommonMessageContext,
   useCommonMessageContext
 } from "@/components/common/common-message"
-import { getEvenlySpacedPoints } from "@/lib/utils"
+import { getDateRange, getEvenlySpacedPoints } from "@/lib/utils"
 import { clsx } from "clsx"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import LoadingMask from "@/components/common/loading-mask"
@@ -79,7 +79,7 @@ const Withdrawal = ({
     },
     onSuccess: () => {
       setOpenState(false)
-      showMessage(t("withdrawalAmountSuccess"), "success",{
+      showMessage(t("withdrawalAmountSuccess"), "success", {
         afterDuration: () => {
           router.push("/profile/withdraw")
         }
@@ -221,7 +221,7 @@ function ChartData({ params }: { params: UserMetricDayReq }) {
   useEffect(() => {
     getUserMetricDay(params).then((response) => {
       if (response) {
-        const result = getEvenlySpacedPoints<UserMetricDay>(response.list.reverse())
+        const result = getEvenlySpacedPoints<UserMetricDay>((response.list || []).reverse())
         setData(result)
       }
     })
@@ -229,7 +229,7 @@ function ChartData({ params }: { params: UserMetricDayReq }) {
 
   const lineData = useMemo(() => {
     return {
-      labels: data?.map((item) => item.day),
+      labels: !data?.length ? getDateRange(params as { start: string, end: string }) : data?.map((item) => item.day),
       datasets: [
         {
           label: "播放量",

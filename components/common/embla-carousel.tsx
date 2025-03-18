@@ -1,3 +1,4 @@
+"use client"
 import useEmblaCarousel from "embla-carousel-react"
 import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl } from "@/lib/utils"
