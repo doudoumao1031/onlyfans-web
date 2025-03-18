@@ -601,7 +601,7 @@ function PromotionalActivities({ updateItems, items }: {
                   {discount.discount_price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;
                   <span
                     className="text-[#6D7781]"
-                  >({t("avg")} ${calcAvg(Number(discount.discount_price), discount.month_count)}/{t("month")})</span>
+                  >({t("avg")} ${calcAvg(Number(discount.discount_price) * discount.discount_per / 100, discount.month_count)}/{t("month")})</span>
                 </div>
                 <div className="text-[#6D7781]">
                   {dayjs(discount.discount_start_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)} {dayjs(discount.discount_end_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)}
@@ -771,6 +771,17 @@ export default function Page() {
     baseFeeForm.setValue("items", items)
   }
 
+  const closeAllItemsState = () => {
+    const items = baseFeeForm.getValues().items
+    updateItems(items.map(item => {
+      return {
+        ...item,
+        item_status: true,
+        discount_status: true
+      }
+    }))
+  }
+
   const realPrice = baseFeeForm.watch("price")
 
   const showBaseValue = useMemo(() => {
@@ -859,7 +870,13 @@ export default function Page() {
                       >
                         <div>{showBaseValue}</div>
                         <div className="flex-1 flex items-center justify-end">
-                          <BasePriceSettings valueChange={field.onChange} value={field.value} />
+                          <BasePriceSettings valueChange={value => {
+                            field.onChange(value)
+                            if (Number(value) ===0 ) {
+                              closeAllItemsState()
+                            }
+                          }} value={field.value}
+                          />
                         </div>
                       </section>
                     </section>
