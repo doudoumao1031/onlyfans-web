@@ -11,7 +11,6 @@ export default function MediaItem({ item }: { item: PostData }) {
   const t = useTranslations("Space")
   if (!item) return null
   const { post_attachment, post_price, user, post, post_metric } = item
-  console.log(post_attachment, 'post_attachment------------');
 
   const showIds = post_attachment.map((v) => v.file_id).join("_")
   // 是否不可查看
@@ -43,7 +42,7 @@ export default function MediaItem({ item }: { item: PostData }) {
 
         <Link href={toDetail ?
           `/postInfo/${post.id}` : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${post_attachment[0]?.file_type === FileType.Video ?
-            showIds : showIds + "_" + 0}}`}
+            showIds : showIds + "_" + 0}`}
         >
           <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
             <div className="p-2 truncate overflow-hidden text-ellipsis">

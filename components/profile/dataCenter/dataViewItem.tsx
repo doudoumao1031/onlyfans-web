@@ -64,6 +64,7 @@ export default function Page({ tabs, title }: TProos) {
     const res = await getUserMetricDay(dateTabs[dateType]?.value || {})
     if (!res) return
     const result = getEvenlySpacedPoints<UserMetricDay>((res.list || []).reverse())
+
     setDataInfo(result)
   }
   const lineData = useMemo(() => {
