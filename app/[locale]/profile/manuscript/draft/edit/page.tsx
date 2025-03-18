@@ -77,7 +77,7 @@ const FormItemWithSelect = ({
       <div>{label}</div>
       <div className="flex-1">
         <SheetSelect outerControl={false} options={options} onInputChange={onValueChange}>
-          <div className={"flex items-center justify-end gap-1.5 text-[#777]"}>
+          <div className={"flex items-center justify-end gap-1.5 text-[#bbb]"}>
             <span>{showLabel}</span>
             <IconWithImage
               url={"/icons/profile/icon_arrow_right@3x.png"}
@@ -225,12 +225,13 @@ const AddVoteModal = ({
                   key={field.id}
                   name={`items.${index}.content`}
                   control={control}
-                  render={({ field }) => {
+                  render={({ field ,fieldState }) => {
                     return (
                       <InputWithLabel
+                        errorMessage={fieldState.error?.message}
                         value={field.value}
                         onInputChange={field.onChange}
-                        label={t("manuscript.itemActions.voteContentInput")}
+                        label={`${t("manuscript.itemActions.voteOption")}${index+1}`}
                       />
                     )
                   }}
@@ -283,9 +284,15 @@ const AddVoteModal = ({
                       field.onChange(Math.floor(value / 1000))
                     }}
                     >
-                      <div
-                        className={field.value ? "" : "text-gray-500"}
-                      >{field.value ? dayjs(field.value * 1000).format(ZH_YYYY_MM_DD_HH_mm) : "请选择"}</div>
+                      <div className={"flex items-center gap-1.5 text-[#bbb]"}>
+                        <div>{field.value ? dayjs(field.value * 1000).format(ZH_YYYY_MM_DD_HH_mm) : "请选择"}</div>
+                        <IconWithImage
+                          url={"/icons/profile/icon_arrow_right@3x.png"}
+                          width={16}
+                          height={16}
+                          color={"#ddd"}
+                        />
+                      </div>
                     </DateTimePicker>
                   )
                 }}
@@ -630,6 +637,10 @@ const UploadMedia = () => {
 
   const handleUpload = useCallback((file: File) => {
     const fileType = getUploadMediaFileType(file)
+    if (fileType === FileType.Other) {
+      showMessage(t("manuscript.itemActions.notSupport"))
+      return
+    }
     if (!firstMediaType) {
       setFirstMediaType(fileType)
     } else {

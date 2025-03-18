@@ -63,7 +63,7 @@ const ManuscriptPost = () => {
     <section className="pl-4 pr-4 text-black">
       <form onSubmit={handleFormSubmit}>
         <section className="mt-5 flex gap-4 items-center">
-          <div className={"flex-1 pt-2 pb-2 pl-3 pr-3 bg-[#F4F5F5] rounded-full flex items-center"}>
+          <div className={"flex-1 pt-1.5 pb-1.5 pl-3 pr-3 bg-[#F4F5F5] rounded-full flex items-center"}>
             <IconWithImage url={"/icons/profile/icon_search_s@3x.png"} width={18} height={18}
               color={"rgb(221, 221, 221)"}
             />
@@ -73,7 +73,7 @@ const ManuscriptPost = () => {
             />
           </div>
 
-          <button type={"button"} className="shrink-0" onTouchEnd={() => {
+          <button type={"button"} className="shrink-0 leading-none" onTouchEnd={() => {
             setTimeSort(prevState => !prevState)
             fetchInitData()
           }}
