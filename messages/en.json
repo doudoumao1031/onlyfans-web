@@ -23,6 +23,7 @@
     "listEnd": "You have reached the end",
     "saveSuccess": "Save Success",
     "saveFail": "Save Fail",
+    "loginFailed": "Login Failed",
     "post": {
       "recharge": "Recharge",
       "insufficientBalance": "Insufficient Balance",
@@ -438,5 +439,14 @@
     "confirmPay": "Confirm Pay {amount} {currency}",
     "freeFollow": "Free follow",
     "followedView": "Follow us to watch this content"
+  },
+  "ShortLink": {
+    "downloadApp": "Download App",
+    "description": "Description",
+    "openApp": "Open App, dive into their space",
+    "joinPotato": "Join Potato to unlock exclusive contact",
+    "deepInPotato": "——Deep in the exclusive fan community, let intimacy meet innovation",
+    "joinPotatoChat": "Join Potato chat",
+    "joinPotatoDescription": "Build connections with your favorite creators, interact, and immerse yourself in content tailored just for you"
   }
 }
