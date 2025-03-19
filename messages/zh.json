@@ -280,7 +280,8 @@
       "Recent": "最近",
       "followedTime": "关注时间",
       "replyDescription": "用户成功订阅后，将会对用户发起一条问候信息",
-      "replyExample": "Hi，我是用户的昵称，感谢您的订阅"
+      "replyExample": "Hi，我是用户的昵称，感谢您的订阅",
+      "searchPlaceHolder": "请输入搜索关键词"
     },
     "income": {
       "withdrawal": "提现",

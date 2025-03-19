@@ -63,10 +63,10 @@ export default function Page() {
       <form onSubmit={handleFormSubmit}>
         <div>
           <div className={"mt-2 flex-1 pt-2 pb-2 pl-3 pr-3 bg-[#F4F5F5] rounded-full flex items-center"}>
-            <IconWithImage url={"/icons/profile/icon_search_s@3x.png"} width={18} height={18}
+            <IconWithImage url={"/theme/icon_search_s@3x.png"} width={18} height={18}
               color={"rgb(221, 221, 221)"}
             />
-            <input value={name} onChange={(event) => {
+            <input value={name} placeholder={t("searchPlaceHolder")} onChange={(event) => {
               setName(event.target.value)
             }} className="w-full bg-transparent flex pl-0.5"
             />
