@@ -1,6 +1,6 @@
 {
   "Common": {
-    "appName": "唯粉",
+    "appName": "FansX",
     "updateSuccess": "更新成功",
     "updateFail": "更新失败",
     "save": "保存",
@@ -112,7 +112,7 @@
     "actions": {
       "enter": "进入空间",
       "moreInfo": "更多信息",
-      "recharge": "充值"
+      "recharge": "钱包"
     },
     "moduleTypes": {
       "post": "帖子",
