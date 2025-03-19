@@ -79,6 +79,7 @@ export interface PostData {
     thumbs_up_count: number
     tip_count: number
     play_count: number
+    pay_count: number
   }
   user: User
   post_vote: Vote

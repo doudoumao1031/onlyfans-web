@@ -9,7 +9,7 @@ import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 import dayjs from "dayjs"
-import { useMemo, useRef, useState } from "react"
+import { useMemo, useState } from "react"
 import { useLongPress, LongPressEventType } from "use-long-press"
 import SheetSelect from "@/components/common/sheet-select"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
@@ -245,7 +245,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
                 icon={"/icons/profile/icon_fans_collect_normal@3x.png"}
               />
               {/*TODO 缺付费字段*/}
-              <ShowNumberWithIcon number={data.post_metric?.tip_count ?? 0}
+              <ShowNumberWithIcon number={data.post_metric?.pay_count ?? 0}
                 icon={"/icons/profile/icon_fans_money_s_gray@3x.png"}
               />
             </section>
