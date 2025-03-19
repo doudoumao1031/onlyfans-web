@@ -112,20 +112,22 @@ export default function Page() {
               }
             }}
           />
-          <div className={"text-xs text-white absolute right-4 top-24"}>{t("changeBackgroundImage")}</div>
+          <div className={"text-xs text-white absolute right-4 bottom-0"}>{t("changeBackgroundImage")}</div>
           <div className="w-full h-full absolute top-0 left-0 bg-black/20"></div>
         </div>
-        <section className="mt-[-47px] rounded-t-3xl bg-white relative pt-12 text-black pb-8">
+        <section className="bg-white relative pb-8">
           <section className="pl-4 pr-4 pb-3 ">
-            <Avatar
-              showEdit
-              fileId={formValues.photo}
-              onAvatarChange={(fileId) => {
-                setValue("photo", fileId)
-              }}
-            />
+            <div className={"relative top-[-24px] inline-block"}>
+              <Avatar
+                showEdit
+                fileId={formValues.photo}
+                onAvatarChange={(fileId) => {
+                  setValue("photo", fileId)
+                }}
+              />
+            </div>
           </section>
-          <section className="mt-5">
+          <section className="mt-[-12px]">
             <section className="pl-4 pr-4 flex flex-col gap-5 ">
               <section>
                 <Controller control={control} render={({ field }) => {

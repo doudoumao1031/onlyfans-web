@@ -17,7 +17,7 @@ const DraftItem = ({ data }:{data:PostData}) => {
   const t = useTranslations("Profile.manuscript")
   const attachmentId = data.post_attachment?.[0]?.file_id
   return (
-    <Link href={`./draft/edit?id=${data.post.id}`} className="pt-2.5 pb-2.5 border-b border-gray-100 flex gap-2.5">
+    <Link href={`./draft/edit?id=${data.post.id}`} className="pt-2.5 pb-2.5 border-b border-[#ddd] flex gap-2.5">
       {/*<Image src={""} alt={"img"} width={100} height={100} className="rounded"/>*/}
       <div className={"w-[100px] h-[100px] shrink-0 overflow-hidden"}>
         {attachmentId ? <LazyImageWithFileId fileId={attachmentId} alt={data.post.title} width={100} height={100} className={"rounded"}/> :  (
@@ -27,8 +27,8 @@ const DraftItem = ({ data }:{data:PostData}) => {
         )}
       </div>
       <div className="flex-col justify-between flex flex-1 w-0">
-        <div className="text-[#333] line-clamp-[2] ">{data.post.title}</div>
-        <div className="pb-2.5 text-xs text-[#bbb]">{t("saveAt")}：{dayjs(data.post.last_update_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</div>
+        <div className="line-clamp-[2] text-[14px] font-medium">{data.post.title}</div>
+        <div className="pb-2.5 text-xs text-text-desc">{t("saveAt")}：{dayjs(data.post.last_update_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</div>
       </div>
     </Link>
   )

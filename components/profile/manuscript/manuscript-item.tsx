@@ -124,7 +124,7 @@ const ManuscriptItemState = ({ state }: { state: number }) => {
   }
   return (
     <span className={clsx(
-      "leading-[15px] text-xs rounded-br rounded-tl px-1.5 text-white absolute left-0 top-0 z-10",
+      "leading-[15px] text-xs rounded-br rounded-tl py-0.5 px-1.5 text-white absolute left-0 top-0 z-10",
       state === 2 ? "bg-[#58bf8e]" : "bg-background-theme",
     )}
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment

@@ -111,7 +111,7 @@
     "actions": {
       "enter": "Enter the Space",
       "moreInfo": "More Info",
-      "recharge": "Recharge"
+      "recharge": "Wallet"
     },
     "moduleTypes": {
       "post": "Post",
