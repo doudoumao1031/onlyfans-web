@@ -2,6 +2,8 @@ import Header from "@/components/common/header"
 import React from "react"
 import TopTab from "@/components/profile/fans/top-tab"
 import { useTranslations } from "next-intl"
+import { Tab } from "antd-mobile/es/components/tabs/tabs"
+import TabLinks from "@/components/common/tab-link"
 
 enum COLLECT_TYPE {
   BLOGGER = "BLOGGER",
@@ -12,13 +14,13 @@ export default function Layout({ children }: {
 }) {
   const t = useTranslations("Profile")
   const tabOptions = [
-    { label: t("collect.blogger"), name: COLLECT_TYPE.BLOGGER, link: "/profile/collect/blogger" },
-    { label: t("collect.posts"), name: COLLECT_TYPE.POSTS, link: "/profile/collect/posts" }
+    { name: t("collect.blogger"), href: "/profile/collect/blogger" },
+    { name: t("collect.posts"), href: "/profile/collect/posts" }
   ]
   return (
     <>
       <Header title={t("collect.collect")} titleColor={"#000"} />
-      <TopTab tabOptions={tabOptions} />
+      <TabLinks links={tabOptions} />
       {children}
     </>
   )

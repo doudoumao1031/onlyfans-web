@@ -38,7 +38,7 @@ export default function TabLinks({ id, data }: { id: string; data: UserProfile |
           {`${link.name}(${link.num})`}
           <span
             className={clsx(
-              "absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-black w-[40px] ml-[-20px]",
+              "absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-theme w-[40px] ml-[-20px]",
               pathName.endsWith(link.href) ? "block" : "hidden"
             )}
           ></span>

@@ -24,7 +24,7 @@ export default function TabTitle({ tabOptions, active, activeChange }: {
         <button className={clsx("pt-3.5 pb-3.5 text-[20px] relative", activeClass(item.name))} onTouchEnd={() => {
           activeChange(item.name)
         }} key={index}
-        >{item.label} <span className={clsx("absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-black w-[40px] ml-[-20px]", active === item.name ? "block" :"hidden")}></span></button>
+        >{item.label} <span className={clsx("absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-theme w-[40px] ml-[-20px]", active === item.name ? "block" :"hidden")}></span></button>
       ))}
     </div>
   )

@@ -17,7 +17,7 @@ export default function TopTab({ tabOptions }: { tabOptions: Array<iTabTitleOpti
         >
           {item.label}
           <span
-            className={clsx("absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-black w-[40px] ml-[-20px]", pathname.endsWith(item.link) ? "block" : "hidden")}
+            className={clsx("absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-theme w-[40px] ml-[-20px]", pathname.endsWith(item.link) ? "block" : "hidden")}
           ></span>
         </Link>
       ))}
