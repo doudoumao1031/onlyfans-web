@@ -10,6 +10,7 @@ import {
 import clsx from "clsx"
 import IconWithImage from "@/components/profile/icon"
 import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
+import CopyText from "../common/copy-text"
 
 type InputValueType = string | number | readonly string[] | undefined
 
@@ -27,11 +28,12 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   onInputChange?: (value: InputValueType) => void,
   type?: "text" | "textarea",
   rows?: number
+  copy?: boolean
 }
 
 
 export default function InputWithLabel(props: InputProps) {
-  const { label,type= "text", rows = 3, name, disabled, onInputChange, description, value, options, errorMessage, iconSize } = props
+  const { label, type = "text", rows = 3, name, disabled, onInputChange, description, value, options, errorMessage, iconSize, copy } = props
   // const [val, setVal] = useState<InputValueType>(value ?? "")
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const inputRef = useRef(null)
@@ -155,7 +157,11 @@ export default function InputWithLabel(props: InputProps) {
         )}
       </section>
       {errorMessage && <div className="text-theme text-xs px-4 mt-1.5">{errorMessage}</div>}
-      {description && !errorMessage && <section className="text-[#6D7781] text-xs px-4 mt-1.5">{description}</section>}
+      {description && !errorMessage && <section className="text-[#6D7781] text-xs px-4 mt-1.5 flex items-center">{description}
+        {
+          copy && <CopyText text={description.toString()} />
+        }
+      </section>}
     </section>
   )
 }

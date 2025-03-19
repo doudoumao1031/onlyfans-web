@@ -73,11 +73,11 @@ export default function Page() {
                 >
                   <Link href={`/postInfo/${v.post.id}`}>
                     <div className={"  pt-3 pb-3 border-b border-[#e5e5e5] flex"}>
-                      <div className="w-[112px] h-[112px] mr-2">
+                      <div className="w-[112px] h-[112px] mr-2 shrink-0">
                         <LazyImg
                           src={
                             v.post_attachment?.[0]?.file_id
-                              ? buildImageUrl(v.post_attachment?.[0]?.file_id)
+                              ? buildImageUrl(v.post_attachment?.[0]?.thumb_id || v.post_attachment?.[0]?.file_id)
                               : "/icons/image_draft.png"
                           }
                           width={112}
@@ -92,7 +92,7 @@ export default function Page() {
                         <div className="line-clamp-2">{v.post.title}</div>
                         <div className="flex items-center gap-2">
                           <CommonAvatar photoFileId={v.user.photo} size={24} />
-                          <span className="text-text-theme text-xs">{`${v.user.first_name} ${v.user.last_name}`}</span>
+                          <span className="text-text-theme text-xs w-5/12 truncate ">{`${v.user.first_name} ${v.user.last_name}`}</span>
                         </div>
                       </div>
                     </div>
