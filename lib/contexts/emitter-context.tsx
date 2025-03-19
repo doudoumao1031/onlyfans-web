@@ -13,6 +13,8 @@ import { loginToken, LoginTokenResp } from "../actions/auth"
 import { TOKEN_KEY, USER_KEY } from "../utils"
 import { useSearchParams } from "next/navigation"
 import { locales } from "@/i18n/routing"
+import { useCommonMessageContext } from "@/components/common/common-message"
+import { useTranslations } from "next-intl"
 const emitterContext = createContext(undefined)
 
 export enum BRIDGE_EVENT_NAME {
@@ -21,11 +23,12 @@ export enum BRIDGE_EVENT_NAME {
 }
 
 export function EmitterProvider({ children }: { children: ReactNode }) {
+  const { showMessage } = useCommonMessageContext()
   useAppLoaded()
   const search = useSearchParams()
   const router = useRouter()
   const redirectPath = search.get("redirect")
-
+  const t = useTranslations("Common")
   const handleGetSystemBarsInfo = useCallback((data: unknown) => {
     const htmlElement = document.documentElement
     if (typeof data === "string") {
@@ -66,9 +69,14 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
         }
         router.push(link)
         console.log(res.token, res.user_id, "res--handleResponseOAuth")
+      } else {
+        showMessage(t("loginFailed"))
       }
     })
-  }, [])
+      .catch(() => {
+        showMessage(t("loginFailed"))
+      })
+  }, [showMessage, t, router, redirectPath])
 
   useEffect(() => {
     // 测试
