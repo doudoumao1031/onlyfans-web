@@ -6,8 +6,7 @@ import { buildMention } from "@/components/post/utils"
 import LazyImg from "../common/lazy-img"
 /**
  * 博主名片
- * @param user 用户信息
- * @param subscribe 是否订阅
+ * @param user: User 用户信息
  * @constructor
  */
 export default function UserCard({ user }: { user: User }) {
