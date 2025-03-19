@@ -1,8 +1,9 @@
 .like-container {
   position: relative;
+  cursor: pointer;
   width: 45px;
   height: 45px;
-  cursor: pointer;
+  margin-left: -10px;
 }
 
 .heart {
@@ -18,8 +19,19 @@
   transition: background 0.3s;
 }
 
+.heart-default-bg {
+  width: 20px;
+  height: 20px;
+  background-position: left;
+  background-size: cover;
+  transition: background 0.3s;
+  background-size: 2900%;
+  margin: 12px 0 0 20px;
+}
+
 .heart-hight {
   background-position: right;
+
 }
 
 .handle-animation {

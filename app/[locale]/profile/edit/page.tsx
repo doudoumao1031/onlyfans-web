@@ -29,9 +29,9 @@ export default function Page() {
       z.object({
         username: z.string({ message: "请输入昵称" }),
         about: z.string().max(999, "最多999字").optional(),
-        location: z.string().max(30,"最多30个字").optional(),
+        location: z.string().max(30, "最多30个字").optional(),
         photo: z.string().optional(),
-        top_info: z.string().max(30,"最多30个字").optional(),
+        top_info: z.string().max(30, "最多30个字").optional(),
         back_img: z.string().optional()
       })
     ),
@@ -95,7 +95,7 @@ export default function Page() {
         })}
       >
         <div className={"w-full left-0 top-0 absolute z-20 text-white bg-black/20"}>
-          <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"}/>
+          <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"} />
         </div>
         <div className="profile-content bg-[url('/icons/image_fans_normal_05.png')] relative bg-cover"
           style={backImageStyle}
@@ -148,11 +148,13 @@ export default function Page() {
                       label={t("form.username")}
                       value={field.value}
                       disabled
+                      copy={true}
                       description={`https://secretfans.com/${field.value ?? ""}`}
                     />
                   )}
                   name={"username"}
                 />
+
               </section>
               <section>
                 <Controller
@@ -189,7 +191,7 @@ export default function Page() {
               <section>
                 <Controller
                   control={control}
-                  render={({ field ,fieldState }) => (
+                  render={({ field, fieldState }) => (
                     <InputWithLabel
                       onInputChange={field.onChange}
                       value={field.value}
