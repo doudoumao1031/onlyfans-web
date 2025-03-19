@@ -1,5 +1,5 @@
 import {
-  BloggerInfo,
+  User,
   PageInfo,
   ENDPOINTS,
   fetchWithPost,
@@ -114,7 +114,7 @@ export const getFollowUserPosts = (params: PageInfo) =>
  * 推荐博主
  */
 export const getRecomBlogger = (params: RecomBloggerReq) =>
-  fetchWithPost<RecomBloggerReq, PageResponse<BloggerInfo>>(
+  fetchWithPost<RecomBloggerReq, PageResponse<User>>(
     ENDPOINTS.RECOM.RECOM_BLOGGER,
     params
   ).then((res) => {

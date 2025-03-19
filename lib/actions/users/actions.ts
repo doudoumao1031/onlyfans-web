@@ -1,5 +1,5 @@
 import {
-  BloggerInfo,
+  User,
   CollectionPostReq,
   PageInfo,
   DiscountInfo,
@@ -25,7 +25,7 @@ import { SearchUserReq, SubscribeSetting, UserReq } from "@/lib/actions/users/ty
  * 搜索用户
  */
 export const searchUser = (params: SearchUserReq) =>
-  fetchWithPost<SearchUserReq, PageResponse<BloggerInfo>>(ENDPOINTS.USERS.SEARCH, params).then(
+  fetchWithPost<SearchUserReq, PageResponse<User>>(ENDPOINTS.USERS.SEARCH, params).then(
     (res) => {
       if (res && res.code === 0) {
         return res.data
@@ -51,7 +51,7 @@ export const collecTionUser = (params: { collection_id: number; collection: bool
  * 已收藏博主列表
  */
 export const userCollectionUsers = (params: PageInfo) =>
-  fetchWithPost<PageInfo, PageResponse<BloggerInfo>>(ENDPOINTS.USERS.COLLECTION_USERS, params).then(
+  fetchWithPost<PageInfo, PageResponse<User>>(ENDPOINTS.USERS.COLLECTION_USERS, params).then(
     (res) => {
       if (res && res.code === 0) {
         return res.data

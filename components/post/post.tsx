@@ -21,6 +21,7 @@ import useCommonMessage, { CommonMessageContext } from "@/components/common/comm
 import { useTranslations } from "next-intl"
 import { buildUserHomePagePath } from "./utils"
 import { usePathname } from "next/navigation"
+import UserCard from "@/components/user/user-card"
 export default function Post({
   data,
   hasVote,
@@ -106,11 +107,11 @@ export default function Post({
         {hasSubscribe && mention_user && mention_user.length > 0 && (
           <div className={"grid gap-2"}>
             {mention_user.map((user) => (
-              <Subscribe key={user.id} user={user} />
+              <UserCard key={user.id} user={user} />
             ))}
           </div>
         )}
-        {hasSubscribe && user && !user?.sub && !mention_user && <Subscribe user={user} />}
+        {hasSubscribe && user && !user?.sub && !mention_user && <UserCard user={user} />}
         {hasVote && post_vote && (
           <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
             <Image src="/theme/icon_fans_vote_red@3x.png" alt="" width={20} height={20} />

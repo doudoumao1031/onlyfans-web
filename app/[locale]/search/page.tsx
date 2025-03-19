@@ -52,7 +52,7 @@ export default async function Page(props: {
             <div className="flex space-x-4">
               {users.list.map((item, index) => (
                 <div key={index} className="min-w-[343px]">
-                  <UserCard key={index} user={item} subscribe={true} />
+                  <UserCard key={index} user={item}  />
                 </div>
               ))}
             </div>

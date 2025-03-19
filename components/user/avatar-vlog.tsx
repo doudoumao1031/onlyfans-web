@@ -1,16 +1,22 @@
 import Image from "next/image"
 import CommonAvatar from "@/components/common/common-avatar"
+import { useTranslations } from "next-intl"
+import { User } from "@/lib"
 
-export default function AvatarVlog({ src, vlog = false }: {
-  src?: string,
-  vlog?: boolean
+export default function AvatarVlog({ user }: {
+  user: User
 }) {
+  const t = useTranslations("Explore")
   return (
     <div className={"relative"}>
-      <div className={"w-[66px] h-[66px] rounded-full border-2 border-white"}>
-        <CommonAvatar photoFileId={src} size={62} />
+      <div className={"w-[88px] h-[88px] rounded-full border-2 border-white"}>
+        <CommonAvatar photoFileId={user.photo} size={84} />
       </div>
-      {vlog && (
+
+      <div className="absolute bg-black bg-opacity-40 px-2.5 pb-[3px] rounded-full text-white top-0 left-0">
+        <span className="text-[10px] text-nowrap font-medium">{user.sub ? "" : user.sub_price > 0 ? t("recommended.subscription") : t("recommended.free")}</span>
+      </div>
+      {user.live_certification && (
         <div
           className="absolute rounded-full bottom-0 right-0 w-[24px] h-[24px] bg-white flex justify-center items-center"
         >
