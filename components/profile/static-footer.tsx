@@ -13,6 +13,7 @@ export default async function Page() {
               <Image
                 src="/theme/icon_fans_mine_subscription@3x.png"
                 alt="subscription-management"
+                priority
                 width={50}
                 height={50}
               />
@@ -27,6 +28,7 @@ export default async function Page() {
               <Image
                 src="/theme/icon_fans_mine_manuscript@3x.png"
                 alt="icon-manuscript-management"
+                priority
                 width={50}
                 height={50}
               />
@@ -41,6 +43,7 @@ export default async function Page() {
               <Image
                 src="/theme/icon_fans_mine_fans@3x.png"
                 alt="icon-fan-management"
+                priority
                 width={50}
                 height={50}
               />
