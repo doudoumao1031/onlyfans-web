@@ -11,7 +11,6 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
   if (!data) {
     throw new Error()
   }
-
   const t = useTranslations("Profile")
   const bgRef = useRef<HTMLDivElement>(null)
   const [isTop, setIsTop] = useState<boolean>(false)
@@ -89,7 +88,7 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
           }
           right={
             <>
-              <Link className="flex items-center justify-center" href="/profile/share">
+              <Link className="flex items-center justify-center" href={`/profile/share/${data.id}`}>
                 <IconWithImage
                   url="/icons/space/icon_nav_code_black@3x.png"
                   width={22}

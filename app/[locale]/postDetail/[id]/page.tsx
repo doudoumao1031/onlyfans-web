@@ -15,7 +15,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     throw new Error("POST_NOT_FOUND")
   }
   return (
-    <div className=" fixed top-0 left-0 w-full h-screen bg-white z-[45] overflow-auto">
+    <div className="fixed top-0 left-0 w-full h-screen bg-white z-[45] overflow-auto">
       <Suspense fallback={<PostInfoSkeleton />}>
         <PostInfoItem postData={result}></PostInfoItem>
       </Suspense>
