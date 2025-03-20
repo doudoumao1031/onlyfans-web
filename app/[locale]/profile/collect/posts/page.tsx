@@ -12,10 +12,12 @@ import LazyImg from "@/components/common/lazy-img"
 import DelItem from "@/components/profile/del-item"
 import LoadingMask from "@/components/common/loading-mask"
 import { useTranslations } from "next-intl"
+import { useGlobal } from "@/lib/contexts/global-context"
 
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { sid } = useGlobal()
   const t = useTranslations("Profile")
   useEffect(() => {
     getData()
@@ -72,11 +74,11 @@ export default function Page() {
                   key={v.post.id}
                 >
                   <Link href={`/postInfo/${v.post.id}`}>
-                    <div className={"  pt-3 pb-3 border-b border-[#e5e5e5] flex"}>
-                      <div className="w-[112px] h-[112px] mr-2 shrink-0">
+                    <div className={"  pt-3 pb-3 border-b border-[#e5e5e5] flex gap-2"}>
+                      <div className="w-[112px] h-[112px] shrink-0 relative">
                         <LazyImg
                           src={
-                            v.post_attachment?.[0]?.file_id
+                            v.post_attachment?.[0]?.thumb_id || v.post_attachment?.[0]?.file_id
                               ? buildImageUrl(v.post_attachment?.[0]?.thumb_id || v.post_attachment?.[0]?.file_id)
                               : "/icons/image_draft.png"
                           }
@@ -87,6 +89,9 @@ export default function Page() {
                             "h-28 w-28 bg-cover  shrink-0 rounded-md border border-slate-300"
                           }
                         />
+                        {(v.post.visibility !== 0 && v.user.id !== sid) && (
+                          <div className="w-full h-full bg-black bg-opacity-5 rounded-lg backdrop-blur absolute top-0 left-0 z-0"></div>
+                        )}
                       </div>
                       <div className="flex flex-col justify-between flex-1">
                         <div className="line-clamp-2">{v.post.title}</div>
