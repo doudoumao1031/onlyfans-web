@@ -10,9 +10,10 @@
   position: absolute;
   top: 0;
   left: 0;
-  margin-top: -7px;
-  width: 60px;
-  height: 60px;
+  margin-top: -2px;
+  width: 50px;
+  height: 50px;
+  margin-left: 10px;
   background: url("/icons/web_heart_animation.png") no-repeat;
   background-position: left;
   background-size: 2900%;
@@ -20,13 +21,13 @@
 }
 
 .heart-default-bg {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   background-position: left;
   background-size: cover;
   transition: background 0.3s;
   background-size: 2900%;
-  margin: 12px 0 0 20px;
+  margin: 15px 0 0 27px;
 }
 
 .heart-hight {

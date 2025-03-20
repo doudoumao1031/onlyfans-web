@@ -16,14 +16,14 @@ export default function Stats({
   const normalUrl = "/theme/" + icon + "_normal@3x.png"
   const url = disable ? disAbledUrl : highlight ? hightUrl : normalUrl
   return (
-    <div className={`flex gap-1 items-center ${highlight && "text-[--theme]"} ${disable && "text-gray-400"}`}>
+    <div className={`flex gap-1 items-center  ${disable && "text-gray-400"}`}>
       <Image
         src={url}
-        width={20}
-        height={20}
+        width={15}
+        height={15}
         alt=""
       />
-      <span className="text-xs">{value}</span>
+      <span className="text-[14px]">{value}</span>
     </div>
   )
 }
