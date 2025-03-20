@@ -122,7 +122,7 @@ export default function Media(props: MediaProps) {
                       href={
                         toDetail
                           ? `/postInfo/${post.id}`
-                          : `/media/${file_type === FileType.Video ? "video" : "image"}/${file_type === FileType.Video ? showIds : showIds + "_" + i
+                          : `/media/${file_type === FileType.Video ? "video" : "image"}/${file_type === FileType.Video ? showIds + "_" + post.id : showIds + "_" + i
                           }`
                       }
                       className={

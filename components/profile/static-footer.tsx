@@ -6,28 +6,28 @@ import IconWithImage from "@/components/profile/icon"
 const LINKS_CONFIG = [
   {
     labelKey: "subscribe",
-    iconURL:"/theme/icon_fans_mine_subscription@3x.png",
-    href:"/profile/order"
+    iconURL: "/theme/icon_fans_mine_subscription@3x.png",
+    href: "/profile/order"
   },
   {
     labelKey: "draft",
-    iconURL:"/theme/icon_fans_mine_manuscript@3x.png",
-    href:"/profile/manuscript"
+    iconURL: "/theme/icon_fans_mine_manuscript@3x.png",
+    href: "/profile/manuscript"
   },
   {
     labelKey: "fans",
-    iconURL:"/theme/icon_fans_mine_fans@3x.png",
-    href:"/profile/fans/manage/subscribe"
+    iconURL: "/theme/icon_fans_mine_fans@3x.png",
+    href: "/profile/fans/manage/subscribe"
   },
   {
     labelKey: "income",
-    iconURL:"/theme/icon_fans_mine_income@3x.png",
-    href:"/profile/income/incomeView"
+    iconURL: "/theme/icon_fans_mine_income@3x.png",
+    href: "/profile/income/incomeView"
   },
   {
     labelKey: "data",
-    iconURL:"/theme/icon_fans_mine_record@3x.png",
-    href:"/profile/dataCenter/dataView"
+    iconURL: "/theme/icon_fans_mine_record@3x.png",
+    href: "/profile/dataCenter/dataView"
   }
 ]
 

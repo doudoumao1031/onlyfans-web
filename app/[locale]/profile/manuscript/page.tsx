@@ -38,6 +38,7 @@ const ManuscriptPost = () => {
     }).then(response => {
       if (response) {
         setInitData(response)
+
       }
     })
   }
@@ -147,8 +148,8 @@ const ManuscriptMedia = () => {
     }
   })
 
-  const openMediaPreview = (data:PostData) => {
-    const { post_attachment,post } = data
+  const openMediaPreview = (data: PostData) => {
+    const { post_attachment, post } = data
     if (post_attachment.length === 0) {
       return
     }
@@ -260,7 +261,7 @@ const ManuscriptMedia = () => {
                               />
                               <span className={"text-[15px]"}>{t("itemActions.edit")}</span>
                             </Link>
-                            )
+                          )
                             : (
                               <button type={"button"}
                                 className="rounded-[10px] grayscale gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
