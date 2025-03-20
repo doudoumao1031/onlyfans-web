@@ -5,7 +5,6 @@ import Image from "next/image"
 import { CommentInfo, fetchPostComments, PostData } from "@/lib"
 import Comments from "./comment"
 import Vote from "./vote"
-import Subscribe from "./subscribe"
 import UserTitle from "./user-title"
 import Description from "./description"
 import Media from "./media"
@@ -133,13 +132,19 @@ export default function Post({
             outLike={!star && tipStar}
           />
           {isInfoPage ? (
-            <CommentStats count={comment_count + adjustCommentCount} disable={post.visibility !== 0 && user.id !== sid} onClick={async () => {
-              if (post.visibility === 0) await toggleComments()
-            }}
+            <CommentStats
+              count={comment_count + adjustCommentCount}
+              disable={post.visibility !== 0 && user.id !== sid}
+              onClick={async () => {
+                if (post.visibility === 0) await toggleComments()
+              }}
             />
           ) : (
             <Link href={`/postInfo/${post.id}`} className="flex items-end">
-              <CommentStats count={comment_count + adjustCommentCount} disable={post.visibility !== 0 && user.id !== sid} />
+              <CommentStats
+                count={comment_count + adjustCommentCount}
+                disable={post.visibility !== 0 && user.id !== sid}
+              />
             </Link>
           )}
           <Tip
@@ -149,8 +154,10 @@ export default function Post({
             tipStar={setTipStar}
             notice={isInfoPage}
           />
-          <Share count={share_count} postId={post.id} shareParams={
-            {
+          <Share
+            count={share_count}
+            postId={post.id}
+            shareParams={{
               postId: post.id.toString(),
               title: post.title,
               firstName: user.first_name,
@@ -158,8 +165,7 @@ export default function Post({
               username: user.username,
               fansId: user.id.toString(),
               data: post_attachment
-            }
-          }
+            }}
           />
           <Save count={collection_count} saved={collection} postId={post.id} notice={isInfoPage} />
         </div>
