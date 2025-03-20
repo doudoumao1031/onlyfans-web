@@ -83,7 +83,7 @@ export default function Vote({ postId }: { postId: number }) {
           {canVote
             ? secondsToExpire > 3600
               ? t("voteEndTimeHours", { count: Math.floor(secondsToExpire / 3600) })
-              : t("voteEndTimeMunites", { count: Math.floor(secondsToExpire / 60) })
+              : t("voteEndTimeMinutes", { count: Math.floor(secondsToExpire / 60) })
             : t("voteEnded")}
         </div>
       </div>
