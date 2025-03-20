@@ -114,7 +114,7 @@ const AddVoteModal = ({
     }
   })
   const { formState, watch, reset, trigger, getValues, control } = voteForm
-  const { fields: itemsList, append } = useFieldArray({
+  const { fields: itemsList, append, remove } = useFieldArray({
     control,
     name: "items"
   })
@@ -221,38 +221,51 @@ const AddVoteModal = ({
           <section className="flex flex-col gap-5 mt-2">
             {itemsList.map((field, index) => {
               return (
-                <Controller
-                  key={field.id}
-                  name={`items.${index}.content`}
-                  control={control}
-                  render={({ field ,fieldState }) => {
-                    return (
-                      <InputWithLabel
-                        errorMessage={fieldState.error?.message}
-                        value={field.value}
-                        onInputChange={field.onChange}
-                        label={`${t("manuscript.itemActions.voteOption")}${index+1}`}
-                      />
-                    )
-                  }}
-                />
+                <div className={"relative"} key={field.id}>
+                  <Controller
+                    name={`items.${index}.content`}
+                    control={control}
+                    render={({ field ,fieldState }) => {
+                      return (
+                        <InputWithLabel
+                          errorMessage={fieldState.error?.message}
+                          value={field.value}
+                          onInputChange={field.onChange}
+                          label={`${t("manuscript.itemActions.voteOption")}${index+1}`}
+                        />
+                      )
+                    }}
+                  />
+                  {itemsList.length > 2 && (
+                    <button type={"button"} className={"p-1 absolute top-[-8px] right-[-8px] z-20"} onTouchEnd={() => {
+                      remove(index)
+                    }}
+                    >
+                      <img alt={"delete"} src={"/theme/icon_fans_delete@3x.png"} width={16} height={16}/>
+                    </button>
+                  )}
+                </div>
               )
             })}
-            <button
-              type={"button"}
-              onTouchEnd={() => {
-                append({ content: "" })
-              }}
-              className="flex gap-1.5 w-full rounded-xl border border-border-theme justify-center items-center py-2.5 text-text-theme"
-            >
-              <IconWithImage
-                url={"/icons/profile/icon_add@3x.png"}
-                className={"bg-theme"}
-                width={20}
-                height={20}
-              />
-              {t("manuscript.itemActions.addVoteOption")}
-            </button>
+            {
+              itemsList.length < 9 && (
+              <button
+                type={"button"}
+                onTouchEnd={() => {
+                  append({ content: "" })
+                }}
+                className="flex gap-1.5 w-full rounded-xl border border-border-theme justify-center items-center py-2.5 text-text-theme"
+              >
+                <IconWithImage
+                  url={"/icons/profile/icon_add@3x.png"}
+                  className={"bg-theme"}
+                  width={20}
+                  height={20}
+                />
+                {t("manuscript.itemActions.addVoteOption")}
+              </button>
+)
+            }
           </section>
         </section>
         <section className="px-4">
@@ -535,6 +548,10 @@ const ReadSettings = ({
             </section>
           )
         })}
+
+        <div className={"mt-10 text-center text-text-desc"}>
+          {t("manuscript.settingsEffective")}
+        </div>
       </FormDrawer>
     </>
   )

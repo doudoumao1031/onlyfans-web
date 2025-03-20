@@ -40,7 +40,8 @@
       "vote": "投票",
       "viewAllOptions": "查看全部选项",
       "voteCount": "{count}人参与",
-      "voteEndTime": "还有{count}小时结束",
+      "voteEndTimeHours": "还有{count}小时结束",
+      "voteEndTimeMinutes": "还有{count}分钟结束",
       "voteEnded": "投票已结束",
       "votes": "票",
       "tipAmount": "打赏金额",
@@ -165,6 +166,7 @@
       "searchPlaceHolder": "输入博文内容",
       "pinned": "置顶成功",
       "unpinned": "已取消置顶",
+      "settingsEffective": "媒体付费有效",
       "itemActions": {
         "share": "分享",
         "pinned": "已置顶",

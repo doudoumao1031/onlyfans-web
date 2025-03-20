@@ -236,7 +236,7 @@ const ManuscriptMedia = () => {
                               <IconWithImage url={"/theme/icon_fans_reward_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
-                              <span>{item.post_metric.share_count}</span>
+                              <span>{item.post_metric.pay_count}</span>
                             </section>
                           </section>
                           <section
