@@ -73,7 +73,7 @@ export default function Page() {
         </section>
         <section className={"min-h-[120px] bg-[#90bb89] relative py-2 px-4 flex flex-col justify-end"}>
           <div className={"bg-white relative min-h-5 px-4 py-2 rounded-2xl"}>
-            <div>{originData}</div>
+            <div>{originData || t("replyExample")}</div>
             <div className={"text-right text-[#b2b2b2]"}>9:00</div>
             <span className={"message-box-tail"}></span>
           </div>

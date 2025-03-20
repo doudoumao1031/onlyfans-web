@@ -33,49 +33,53 @@ export default async function Page() {
   return (
     <div>
       <ProfileHeader data={data} />
-      <section className="mt-[-47px] rounded-t-3xl bg-white relative  pt-12 text-black ">
-        <section className="pl-4 pr-4 pb-3 border-b border-b-gray-100">
-          <Avatar showLive={data.live_certification} fileId={data.photo} />
-          <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
-            <span>
-              {data.first_name}
-            </span>
-            <Link href={"/profile/edit"}>
-              <IconWithImage
-                url={"/theme/icon_edit_gray@3x.png"}
-                width={20}
-                height={20}
-                color={"#6D7781"}
-              />
-            </Link>
-          </h1>
-          <div className="text-center text-text-desc text-xs">
-            {data.username
-              ? "@" + data.username
-              : !data.first_name && !data.about ? t("noUserName") : ""}
-          </div>
-          <Link href={`/space/${data.id}/feed`}>
-            <div className="flex justify-center mt-2">
-              <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-theme text-text-theme">
-                {t("actions.enter")}
-              </button>
+      <section className="bg-white relative  text-black ">
+        <section className="pl-4 pr-4 pb-3">
+          <div className={"flex justify-between"}>
+            <div className={"relative top-[-24px]"}>
+              <Avatar showLive={data.live_certification} fileId={data.photo} />
+              <h1 className="text-[18px] font-bold items-center flex gap-2">
+                <span>
+                  {data.first_name}
+                </span>
+                <Link href={"/profile/edit"}>
+                  <IconWithImage
+                    url={"/theme/icon_edit_gray@3x.png"}
+                    width={20}
+                    height={20}
+                    color={"#6D7781"}
+                  />
+                </Link>
+              </h1>
+              <div className="text-center text-text-desc text-xs">
+                {data.username
+                  ? "@" + data.username
+                  : !data.first_name && !data.about ? t("noUserName") : ""}
+              </div>
             </div>
-          </Link>
-          <div className="text-xs mt-2.5">
+            <Link href={`/space/${data.id}/feed`}>
+              <div className="flex justify-center mt-2.5">
+                <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-theme text-text-theme">
+                  {t("actions.enter")}
+                </button>
+              </div>
+            </Link>
+          </div>
+          <div className="text-[14px] mt-[-14px]">
             <FoldingDescription about={data.about} location={data.location} />
           </div>
         </section>
-        <div className="p-5 border-b border-b-gray-100">
+        <div className="p-5 border-y border-[#ddd]">
           <div className="grid-cols-4 grid text-center">
-            <div className="border-r border-gray-100">
+            <div className="border-r border-b-[#ddd]">
               <div className="text-2xl">{displayNumber(data.post_count)}</div>
               <div className="text-xs text-[#333]">{t("moduleTypes.post")}</div>
             </div>
-            <div className="border-r border-gray-100">
+            <div className="border-r border-b-[#ddd]">
               <div className="text-2xl">{displayNumber(data.media_count)}</div>
               <div className="text-xs text-[#333]">{t("moduleTypes.media")}</div>
             </div>
-            <div className="border-r border-gray-100">
+            <div className="border-r border-b-[#ddd]">
               <div className="text-2xl">{displayNumber(data.fans_count)}</div>
               <div className="text-xs text-[#333]">{t("moduleTypes.fans")}</div>
             </div>

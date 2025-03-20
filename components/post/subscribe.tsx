@@ -21,7 +21,7 @@ export default function Subscribe({ user }: { user: User }) {
       <div className="w-full h-full absolute flex justify-between bg-black/50 p-4 rounded-lg">
         <div className="flex gap-3 px-0 items-center">
           <div>
-            <AvatarVlog src={photo} vlog={user.live_certification} />
+            <AvatarVlog user={user} />
           </div>
           <div className="text-white">
             <div className="text-sm truncate max-w-[160px]">

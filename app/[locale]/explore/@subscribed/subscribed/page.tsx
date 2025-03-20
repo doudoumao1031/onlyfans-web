@@ -15,7 +15,7 @@ export default async function Page() {
         bloggers?.total > 0 &&
         bloggers?.list.map((info) => (
           <div key={info.user.id} className="w-full mb-[10px] max-w-lg mx-auto">
-            <UserCard user={info.user} subscribe={false} />
+            <UserCard user={info.user} />
           </div>
         ))}
       {!bloggers || (bloggers?.total === 0 && <Empty text={t("SubscribeEmpty")} />)}

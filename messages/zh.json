@@ -1,6 +1,6 @@
 {
   "Common": {
-    "appName": "唯粉",
+    "appName": "FansX",
     "updateSuccess": "更新成功",
     "updateFail": "更新失败",
     "save": "保存",
@@ -23,6 +23,7 @@
     "listEnd": "你已经到达底部",
     "saveSuccess": "保存成功",
     "saveFail": "保存失败",
+    "loginFailed": "登录失败",
     "post": {
       "recharge": "充值",
       "insufficientBalance": "余额不足",
@@ -39,7 +40,8 @@
       "vote": "投票",
       "viewAllOptions": "查看全部选项",
       "voteCount": "{count}人参与",
-      "voteEndTime": "还有{count}小时结束",
+      "voteEndTimeHours": "还有{count}小时结束",
+      "voteEndTimeMinutes": "还有{count}分钟结束",
       "voteEnded": "投票已结束",
       "votes": "票",
       "tipAmount": "打赏金额",
@@ -111,7 +113,7 @@
     "actions": {
       "enter": "进入空间",
       "moreInfo": "更多信息",
-      "recharge": "充值"
+      "recharge": "钱包"
     },
     "moduleTypes": {
       "post": "帖子",
@@ -164,6 +166,7 @@
       "searchPlaceHolder": "输入博文内容",
       "pinned": "置顶成功",
       "unpinned": "已取消置顶",
+      "settingsEffective": "媒体付费有效",
       "itemActions": {
         "share": "分享",
         "pinned": "已置顶",
@@ -175,9 +178,11 @@
         "voteContent": "投票内容",
         "voteContentMin": "最少2个选项",
         "voteContentInput": "请输入投票内容",
-        "addVoteOption": "添加投票选项",
+        "voteOption": "选项",
+        "addVoteOption": "添加选项",
+        "notSupport": "暂不支持该文件格式",
         "voteSelect": "单选/多选",
-        "voteEndTime": "投票结束时间",
+        "voteEndTime": "截止时间",
         "voteSelectSingle": "单选",
         "voteSelectMultiple": "多选",
         "priceSelectAll": "全部",
@@ -278,7 +283,8 @@
       "Recent": "最近",
       "followedTime": "关注时间",
       "replyDescription": "用户成功订阅后，将会对用户发起一条问候信息",
-      "replyExample": "Hi，我是用户的昵称，感谢您的订阅"
+      "replyExample": "Hi，我是用户的昵称，感谢您的订阅",
+      "searchPlaceHolder": "请输入搜索关键词"
     },
     "income": {
       "withdrawal": "提现",
@@ -435,5 +441,14 @@
     "confirmPay": "确认支付 {amount} {currency}",
     "freeFollow": "免费关注",
     "followedView": "关注后可观看此内容"
+  },
+  "ShortLink": {
+    "downloadApp": "下载App",
+    "description": "简介",
+    "openApp": "打开App, 深入Ta的空间",
+    "joinPotato": "加入Potato 解锁专属联系",
+    "deepInPotato": "深入唯粉，让亲密遇见创新",
+    "joinPotatoChat": "加入Potato chat",
+    "joinPotatoDescription": "与您最喜爱的创作者建立联系，进行互动，并沉浸在专为您打造的内容中"
   }
 }

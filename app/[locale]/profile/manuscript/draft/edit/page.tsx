@@ -77,7 +77,7 @@ const FormItemWithSelect = ({
       <div>{label}</div>
       <div className="flex-1">
         <SheetSelect outerControl={false} options={options} onInputChange={onValueChange}>
-          <div className={"flex items-center justify-end gap-1.5 text-[#777]"}>
+          <div className={"flex items-center justify-end gap-1.5 text-[#bbb]"}>
             <span>{showLabel}</span>
             <IconWithImage
               url={"/icons/profile/icon_arrow_right@3x.png"}
@@ -114,7 +114,7 @@ const AddVoteModal = ({
     }
   })
   const { formState, watch, reset, trigger, getValues, control } = voteForm
-  const { fields: itemsList, append } = useFieldArray({
+  const { fields: itemsList, append, remove } = useFieldArray({
     control,
     name: "items"
   })
@@ -221,37 +221,51 @@ const AddVoteModal = ({
           <section className="flex flex-col gap-5 mt-2">
             {itemsList.map((field, index) => {
               return (
-                <Controller
-                  key={field.id}
-                  name={`items.${index}.content`}
-                  control={control}
-                  render={({ field }) => {
-                    return (
-                      <InputWithLabel
-                        value={field.value}
-                        onInputChange={field.onChange}
-                        label={t("manuscript.itemActions.voteContentInput")}
-                      />
-                    )
-                  }}
-                />
+                <div className={"relative"} key={field.id}>
+                  <Controller
+                    name={`items.${index}.content`}
+                    control={control}
+                    render={({ field ,fieldState }) => {
+                      return (
+                        <InputWithLabel
+                          errorMessage={fieldState.error?.message}
+                          value={field.value}
+                          onInputChange={field.onChange}
+                          label={`${t("manuscript.itemActions.voteOption")}${index+1}`}
+                        />
+                      )
+                    }}
+                  />
+                  {itemsList.length > 2 && (
+                    <button type={"button"} className={"p-1 absolute top-[-8px] right-[-8px] z-20"} onTouchEnd={() => {
+                      remove(index)
+                    }}
+                    >
+                      <img alt={"delete"} src={"/theme/icon_fans_delete@3x.png"} width={16} height={16}/>
+                    </button>
+                  )}
+                </div>
               )
             })}
-            <button
-              type={"button"}
-              onTouchEnd={() => {
-                append({ content: "" })
-              }}
-              className="flex gap-1.5 w-full rounded-xl border border-border-theme justify-center items-center py-2.5 text-text-theme"
-            >
-              <IconWithImage
-                url={"/icons/profile/icon_add@3x.png"}
-                className={"bg-theme"}
-                width={20}
-                height={20}
-              />
-              {t("manuscript.itemActions.addVoteOption")}
-            </button>
+            {
+              itemsList.length < 9 && (
+              <button
+                type={"button"}
+                onTouchEnd={() => {
+                  append({ content: "" })
+                }}
+                className="flex gap-1.5 w-full rounded-xl border border-border-theme justify-center items-center py-2.5 text-text-theme"
+              >
+                <IconWithImage
+                  url={"/icons/profile/icon_add@3x.png"}
+                  className={"bg-theme"}
+                  width={20}
+                  height={20}
+                />
+                {t("manuscript.itemActions.addVoteOption")}
+              </button>
+)
+            }
           </section>
         </section>
         <section className="px-4">
@@ -283,9 +297,15 @@ const AddVoteModal = ({
                       field.onChange(Math.floor(value / 1000))
                     }}
                     >
-                      <div
-                        className={field.value ? "" : "text-gray-500"}
-                      >{field.value ? dayjs(field.value * 1000).format(ZH_YYYY_MM_DD_HH_mm) : "请选择"}</div>
+                      <div className={"flex items-center gap-1.5 text-[#bbb]"}>
+                        <div>{field.value ? dayjs(field.value * 1000).format(ZH_YYYY_MM_DD_HH_mm) : "请选择"}</div>
+                        <IconWithImage
+                          url={"/icons/profile/icon_arrow_right@3x.png"}
+                          width={16}
+                          height={16}
+                          color={"#ddd"}
+                        />
+                      </div>
                     </DateTimePicker>
                   )
                 }}
@@ -528,6 +548,10 @@ const ReadSettings = ({
             </section>
           )
         })}
+
+        <div className={"mt-10 text-center text-text-desc"}>
+          {t("manuscript.settingsEffective")}
+        </div>
       </FormDrawer>
     </>
   )
@@ -630,6 +654,10 @@ const UploadMedia = () => {
 
   const handleUpload = useCallback((file: File) => {
     const fileType = getUploadMediaFileType(file)
+    if (fileType === FileType.Other) {
+      showMessage(t("manuscript.itemActions.notSupport"))
+      return
+    }
     if (!firstMediaType) {
       setFirstMediaType(fileType)
     } else {

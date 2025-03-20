@@ -9,7 +9,7 @@ import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl } from "@/lib/utils"
 import { useTranslations } from "next-intl"
 import dayjs from "dayjs"
-import { useMemo, useRef, useState } from "react"
+import { useMemo, useState } from "react"
 import { useLongPress, LongPressEventType } from "use-long-press"
 import SheetSelect from "@/components/common/sheet-select"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
@@ -124,7 +124,7 @@ const ManuscriptItemState = ({ state }: { state: number }) => {
   }
   return (
     <span className={clsx(
-      "leading-[15px] text-xs rounded-br rounded-tl px-1.5 text-white absolute left-0 top-0 z-10",
+      "leading-[15px] text-xs rounded-br rounded-tl py-0.5 px-1.5 text-white absolute left-0 top-0 z-10",
       state === 2 ? "bg-[#58bf8e]" : "bg-background-theme",
     )}
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -224,9 +224,9 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
           </div>
           {/*href={`/profile/manuscript/draft/edit?id=${data.post.id}`} className={"flex-1 h-full flex flex-col justify-between "}*/}
           <LinkButton id={data.post.id} status={data.post.post_status}>
-            <h3 className="line-clamp-[2]">{data.post.title}</h3>
+            <h3 className="line-clamp-[2] text-[14px] font-medium">{data.post.title}</h3>
             <section
-              className={"flex-1 flex items-center text-[#bbb]"}
+              className={"flex-1 flex text-text-desc text-[12px]"}
             >{data.post.pub_time ? dayjs(data.post.pub_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss) : ""}</section>
             <section className="flex gap-4 text-xs justify-around">
               <ShowNumberWithIcon number={data.post_metric?.thumbs_up_count ?? 0}
@@ -235,7 +235,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
               <ShowNumberWithIcon number={data.post_metric?.comment_count ?? 0}
                 icon={"/icons/profile/icon_fans_comment_normal@3x.png"}
               />
-              <ShowNumberWithIcon number={data.post_metric?.play_count ?? 0}
+              <ShowNumberWithIcon number={data.post_metric?.tip_count ?? 0}
                 icon={"/icons/profile/icon_fans_reward_normal@3x.png"}
               />
               <ShowNumberWithIcon number={data.post_metric?.share_count ?? 0}
@@ -244,7 +244,8 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
               <ShowNumberWithIcon number={data.post_metric?.collection_count ?? 0}
                 icon={"/icons/profile/icon_fans_collect_normal@3x.png"}
               />
-              <ShowNumberWithIcon number={data.post_metric?.tip_count ?? 0}
+              {/*TODO 缺付费字段*/}
+              <ShowNumberWithIcon number={data.post_metric?.pay_count ?? 0}
                 icon={"/icons/profile/icon_fans_money_s_gray@3x.png"}
               />
             </section>

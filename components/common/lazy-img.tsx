@@ -29,7 +29,8 @@ export function LazyImageWithFileId(props: Omit<MyImageProps, "src"> & { fileId:
   const { fileId } = props
   if (fileId) {
     const src = buildImageUrl(fileId)
-    return <LazyImg {...props} src={src}/>
+    const restProps = omit(props,"fileId")
+    return <LazyImg {...restProps} src={src}/>
   }
   return (
     <Skeleton

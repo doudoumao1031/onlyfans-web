@@ -3,9 +3,9 @@ import Empty from "@/components/common/empty"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import {
-  BloggerInfo,
   collecTionUser,
   PageResponse,
+  User,
   userCollectionUsers
 } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
@@ -16,7 +16,7 @@ import DelItem from "@/components/profile/del-item"
 import LoadingMask from "@/components/common/loading-mask"
 export default function Page() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [initData, setInitData] = useState<PageResponse<BloggerInfo> | null>()
+  const [initData, setInitData] = useState<PageResponse<User> | null>()
   useEffect(() => {
     getData()
   }, [])
@@ -52,7 +52,7 @@ export default function Page() {
     <div className="mt-4   h-[calc(100vh-145px)]">
       <LoadingMask isLoading={isLoading} />
       {initData && (
-        <InfiniteScroll<BloggerInfo>
+        <InfiniteScroll<User>
           className={"h-full overflow-x-hidden mx-auto"}
           initialItems={initData.list || []}
           initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}
@@ -72,9 +72,8 @@ export default function Page() {
                   }}
                   key={v.id}
                 >
-
                   <div className="py-[5px]">
-                    <UserCard user={v} subscribe={true} />
+                    <UserCard user={v} />
                   </div>
                 </DelItem>
               ))}

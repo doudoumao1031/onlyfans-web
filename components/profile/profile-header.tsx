@@ -65,7 +65,7 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
     }
   }, [])
   return (
-    <div className="relative h-[200px]">
+    <div className="relative h-[158px]">
       <div className="absolute w-full h-full z-0" ref={bgRef}>
         <LazyImg
           style={{ objectFit: "cover" }}

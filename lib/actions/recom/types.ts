@@ -1,4 +1,5 @@
 import { UserProfile } from "@/lib/actions/profile"
+import { User } from "../users"
 
 /**
  * 分页公共请求
@@ -24,45 +25,10 @@ export type FansPageReq = PageInfo & {
 }
 
 /**
- * 博主信息
- */
-export type BloggerInfo = {
-  id: number
-  pt_user_id: number
-  first_name: string
-  last_name: string
-  username: string
-  status: number
-  photo: string
-  back_img: string
-  about: string
-  location: string
-  live_certification: boolean
-  blogger: boolean
-  post_count: number
-  media_count: number
-  video_count: number
-  img_count: number
-  fans_count: number
-  subscribe_count: number
-  following_count: number
-  collection_post_count: number
-  today_add_count: number
-  access_count: number
-  play_count: number
-  sub: boolean // 是否已经订阅
-  sub_price: number // 订阅基础价格
-  sub_end_time: number
-  collection: boolean
-  following: boolean
-  top_info: string
-}
-
-/**
  * 已订阅博主列表返回结果
  */
 export interface SubscribeUserInfo {
-  user: BloggerInfo //博主信息
+  user: User //博主信息
   start_time: number //开始时间
   end_time: number // 结束时间
 }

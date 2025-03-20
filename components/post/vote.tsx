@@ -10,7 +10,10 @@ export default function Vote({ postId }: { postId: number }) {
   const t = useTranslations("Common.post")
   const [vote, setVote] = useState<VoteData>()
   const [loading, setLoading] = useState<boolean>(false)
-  const { title, items, stop_time, mu_select, vote_user_count } = vote || { items: [], stop_time: 0 }
+  const { title, items, stop_time, mu_select, vote_user_count } = vote || {
+    items: [],
+    stop_time: 0
+  }
   const [showOptionAmount, setShowOptionAmount] = useState(3)
   const selectedIds = items.filter((i) => i.select).map((i) => i.id)
   const votedByMe = items.reduce((voted, item) => item.select || voted, false)
@@ -78,7 +81,9 @@ export default function Vote({ postId }: { postId: number }) {
         <div className="mt-2 text-[#999999]">
           {t("voteCount", { count: vote_user_count })}{" "}
           {canVote
-            ? t("voteEndTime", { count: Math.floor(secondsToExpire / 3600) })
+            ? secondsToExpire > 3600
+              ? t("voteEndTimeHours", { count: Math.floor(secondsToExpire / 3600) })
+              : t("voteEndTimeMunites", { count: Math.floor(secondsToExpire / 60) })
             : t("voteEnded")}
         </div>
       </div>
