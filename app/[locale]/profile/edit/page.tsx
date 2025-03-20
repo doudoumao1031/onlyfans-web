@@ -169,6 +169,7 @@ export default function Page() {
                       label={t("form.introduction")}
                       type={"textarea"}
                       rows={5}
+                      maxLength={999}
                     />
                   )}
                   name={"about"}
@@ -180,6 +181,7 @@ export default function Page() {
                   render={({ field, fieldState }) => (
                     <InputWithLabel
                       onInputChange={field.onChange}
+                      maxLength={30}
                       value={field.value}
                       label={t("form.topInfo")}
                       type={"textarea"}
@@ -199,6 +201,7 @@ export default function Page() {
                       value={field.value}
                       type={"textarea"}
                       rows={5}
+                      maxLength={30}
                       label={t("form.location")}
                       errorMessage={fieldState.error?.message}
                     />
