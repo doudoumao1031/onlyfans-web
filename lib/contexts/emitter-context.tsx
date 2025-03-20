@@ -76,7 +76,7 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
       .catch(() => {
         showMessage(t("loginFailed"))
       })
-  }, [showMessage, t, router, redirectPath])
+  }, [])
 
   useEffect(() => {
     // 测试
