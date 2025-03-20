@@ -94,7 +94,7 @@ export default function Page() {
                         )}
                       </div>
                       <div className="flex flex-col justify-between flex-1">
-                        <div className="line-clamp-2">{v.post.title}</div>
+                        <div className="line-clamp-3">{v.post.title}</div>
                         <div className="flex items-center gap-2">
                           <CommonAvatar photoFileId={v.user.photo} size={24} />
                           <span className="text-text-theme text-xs w-5/12 truncate ">{`${v.user.first_name} ${v.user.last_name}`}</span>
