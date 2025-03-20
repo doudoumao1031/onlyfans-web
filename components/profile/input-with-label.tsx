@@ -160,12 +160,12 @@ export default function InputWithLabel(props: InputProps) {
       </section>
       {errorMessage && <div className="text-theme text-xs px-4 mt-1.5">{errorMessage}</div>}
       {description && !errorMessage && (
-      <section className="text-[#6D7781] text-xs px-4 mt-1.5 flex items-center">{description}
-        {
-          copy && <CopyText text={description.toString()} />
-        }
-      </section>
-)}
+        <section className="text-[#6D7781] text-xs px-4 mt-1.5 flex items-center">{description}
+          {
+            copy && <CopyText text={description.toString()} />
+          }
+        </section>
+      )}
     </section>
   )
 }

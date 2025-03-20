@@ -113,7 +113,9 @@
     "actions": {
       "enter": "Enter the Space",
       "moreInfo": "More Info",
-      "recharge": "Wallet"
+      "wallet": "Wallet",
+      "recharge": "Recharge",
+      "withdraw": "Withdrawal"
     },
     "moduleTypes": {
       "post": "Post",
@@ -285,7 +287,7 @@
       "Recent": "Recent",
       "followedTime": "Followed Time",
       "replyDescription": "After the user successfully subscribes, a greeting message will be sent to the user",
-      "replyExample": "Hi, I am the nickname of the user, thank you for your subscription",
+      "replyExample": "Hi, I am {nickname}, thank you for your subscription",
       "searchPlaceHolder": "Please enter search keywords"
     },
     "income": {

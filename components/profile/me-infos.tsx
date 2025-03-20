@@ -89,7 +89,7 @@ export default async function Page() {
             </div>
           </div>
         </div>
-        <RechargePanel amount={walletInfo.amount} />
+        <RechargePanel walletInfo={walletInfo} />
 
         <div className="pl-4 pr-4">
           <div className="flex justify-between items-center pt-2.5 pb-2.5">
