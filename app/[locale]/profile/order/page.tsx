@@ -79,22 +79,18 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
       .filter(item => !hasSub.includes(Number(item.value)))
   }, [hasSub, t])
 
-  const currentMonthCount = form.watch("month_count")
-
   useEffect(() => {
     if (openState) {
       if (initData) {
         form.reset(initData)
       } else {
-        if (!currentMonthCount) {
-          const value = monthSelections.at(0)?.value
-          if (value !== undefined) {
-            form.setValue("month_count", value)
-          }
+        const value = monthSelections.at(0)?.value
+        if (value !== undefined) {
+          form.setValue("month_count", value)
         }
       }
     }
-  }, [openState, form, initData, currentMonthCount, monthSelections])
+  }, [openState, form, initData])
 
   return (
     <Drawer open={openState} onOpenChange={setOpenState}>
@@ -209,17 +205,13 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
     })
   }, [items, t])
 
-  const currentSelectOption = addForm.watch("id")
   useEffect(() => {
     if (openState) {
       if (initData) {
         addForm.reset(initData)
       } else {
-        if (priceOptions.length && !currentSelectOption) {
-          const first = priceOptions.at(0)
-          if (first) {
-            addForm.setValue("id", first.value as number)
-          }
+        if (priceOptions.length) {
+          addForm.setValue("id", priceOptions[0].value as number)
         }
       }
     }
@@ -251,7 +243,8 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
                 return {
                   ...item,
                   ...data,
-                  discount_per: Number(data.discount_per)
+                  discount_per: Number(data.discount_per),
+                  discount_price: Number((Number(item.price) * Number(data.discount_per) / 100).toFixed(2))
                 }
               }
               return item
@@ -556,6 +549,10 @@ function PromotionalActivities({ updateItems, items }: {
     setOpenState(true)
   }
 
+  useEffect(() => {
+    console.log(items)
+  },[items])
+
   return (
     <section ref={contentRef} className={"pt-5 pb-5 border-b border-gray-100"}>
       <EditPromotionalActivities
@@ -687,7 +684,13 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
                 <div className="mt-2.5">
                   <Controller control={customPriceForm.control} render={({ field }) => {
                     return (
-                      <input value={field.value} onChange={field.onChange} onBlur={(event) => {
+                      <input type={"number"} onKeyUp={event => {
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        //@ts-expect-error
+                        const targetValue = event.target.value.replace(/^(-)*(\d+)\.(\d\d).*$/, "$1$2.$3")
+                        field.onChange(targetValue)
+                      }} value={field.value} onChange={field.onChange} onBlur={(event) => {
+                        // 两位小数
                         let targetValue = event.target.value
                         const dotIndex = targetValue.indexOf(".")
                         targetValue = targetValue.substring(0, dotIndex + 3)

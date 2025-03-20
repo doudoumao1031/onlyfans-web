@@ -89,6 +89,8 @@ export default function InputWithLabel(props: InputProps) {
     return option?.label ?? ""
   }, [isSelectInput, value, options])
 
+  const isTextArea = type === "textarea"
+
   return (
     <section className={clsx(
       "relative rounded-xl",
@@ -113,19 +115,19 @@ export default function InputWithLabel(props: InputProps) {
             disabled ? "bg-[#F7F7F7]" : "",)
         }
       >
-        {!isSelectInput && type === "text" && (
+        {!isSelectInput && !isTextArea && (
           <input  maxLength={maxLength} ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
             onChange={event => {
               const eventValue = (event.target as HTMLInputElement).value
               // setVal(eventValue)
               onInputChange?.(eventValue)
-            }} type="text" disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
+            }} type={type ?? "text"} disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
               "flex-1 w-full font-medium",
 
             )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
           />
         )}
-        {!isSelectInput && type === "textarea" && (
+        {!isSelectInput && isTextArea && (
           <textarea maxLength={maxLength} ref={inputRef} onBlur={inputBlur} rows={rows} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
             onChange={event => {
               const eventValue = (event.target as HTMLTextAreaElement).value

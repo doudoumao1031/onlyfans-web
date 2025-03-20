@@ -202,6 +202,7 @@ const AddVoteModal = ({
                   value={field.value}
                   onInputChange={field.onChange}
                   label={t("manuscript.itemActions.voteTitle")}
+                  maxLength={15}
                 />
               )
             }}
@@ -231,6 +232,7 @@ const AddVoteModal = ({
                           errorMessage={fieldState.error?.message}
                           value={field.value}
                           onInputChange={field.onChange}
+                          maxLength={20}
                           label={`${t("manuscript.itemActions.voteOption")}${index+1}`}
                         />
                       )
@@ -1014,6 +1016,9 @@ const EditPageContent = () => {
     resolver: zodResolver(postSchema),
     defaultValues: { ...initPostFormData }
   })
+  useEffect(() => {
+    console.log(postForm.formState.errors)
+  },[postForm.formState])
 
   const { register, watch, formState, setValue, handleSubmit: handleFormSubmit } = postForm
 
@@ -1048,10 +1053,13 @@ const EditPageContent = () => {
     if (isEdit) {
       postDetail(postId).then(data => {
         if (data) {
-          const voteData = data.data?.post_vote ?? undefined
+          const formData = data.data
           setFormDefaultData({
             ...data.data,
-            post_vote: voteData
+            post_vote: formData?.post_vote ?? undefined,
+            post_attachment: formData?.post_attachment ?? undefined,
+            post_mention_user: formData?.post_mention_user ?? undefined,
+            post_price: formData?.post_price ?? undefined
           })
         }
       })

@@ -29,8 +29,8 @@ export const postSchema = z.object({
   post_attachment: z.array(z.object({
     file_id: z.union([z.string(),z.number()]),
     id: z.union([z.string(),z.number()]).optional()
-  })).optional(),
-  post_price: postPriceSchema,
-  post_vote: postVoteSchema.optional(),
-  post_mention_user: z.array(z.object({ user_id: z.number() })).optional()
+  })).nullable().optional(),
+  post_price: postPriceSchema.nullable(),
+  post_vote: postVoteSchema.nullable().optional(),
+  post_mention_user: z.array(z.object({ user_id: z.number() })).nullable().optional()
 })
