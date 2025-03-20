@@ -113,7 +113,9 @@
     "actions": {
       "enter": "进入空间",
       "moreInfo": "更多信息",
-      "recharge": "钱包"
+      "wallet": "钱包",
+      "recharge": "充值",
+      "withdraw": "提现"
     },
     "moduleTypes": {
       "post": "帖子",

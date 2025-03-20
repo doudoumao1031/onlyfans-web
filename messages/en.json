@@ -113,7 +113,9 @@
     "actions": {
       "enter": "Enter the Space",
       "moreInfo": "More Info",
-      "recharge": "Wallet"
+      "wallet": "Wallet",
+      "recharge": "Recharge",
+      "withdraw": "Withdrawal"
     },
     "moduleTypes": {
       "post": "Post",
