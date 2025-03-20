@@ -238,21 +238,25 @@ const AddVoteModal = ({
                 />
               )
             })}
-            <button
-              type={"button"}
-              onTouchEnd={() => {
-                append({ content: "" })
-              }}
-              className="flex gap-1.5 w-full rounded-xl border border-border-theme justify-center items-center py-2.5 text-text-theme"
-            >
-              <IconWithImage
-                url={"/icons/profile/icon_add@3x.png"}
-                className={"bg-theme"}
-                width={20}
-                height={20}
-              />
-              {t("manuscript.itemActions.addVoteOption")}
-            </button>
+            {
+              itemsList.length < 9 && (
+              <button
+                type={"button"}
+                onTouchEnd={() => {
+                  append({ content: "" })
+                }}
+                className="flex gap-1.5 w-full rounded-xl border border-border-theme justify-center items-center py-2.5 text-text-theme"
+              >
+                <IconWithImage
+                  url={"/icons/profile/icon_add@3x.png"}
+                  className={"bg-theme"}
+                  width={20}
+                  height={20}
+                />
+                {t("manuscript.itemActions.addVoteOption")}
+              </button>
+)
+            }
           </section>
         </section>
         <section className="px-4">
@@ -535,6 +539,10 @@ const ReadSettings = ({
             </section>
           )
         })}
+
+        <div className={"mt-10 text-center text-text-desc"}>
+          {t("manuscript.settingsEffective")}
+        </div>
       </FormDrawer>
     </>
   )
