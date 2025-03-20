@@ -25,7 +25,7 @@ import {
   postVoteSchema,
   pubPost
 } from "@/lib/actions/profile"
-import { isNumber } from "lodash"
+import { isEmpty, isNumber } from "lodash"
 import { buildImageUrl, getUploadMediaFileType, uploadFile } from "@/lib/utils"
 import DateTimePicker from "@/components/common/date-time-picker"
 import { FansFollowItem, FileType, getFollowedUsers } from "@/lib"
@@ -1048,7 +1048,11 @@ const EditPageContent = () => {
     if (isEdit) {
       postDetail(postId).then(data => {
         if (data) {
-          setFormDefaultData(data.data)
+          const voteData = data.data?.post_vote ?? undefined
+          setFormDefaultData({
+            ...data.data,
+            post_vote: voteData
+          })
         }
       })
     }
@@ -1167,7 +1171,7 @@ const EditPageContent = () => {
             {formState?.errors?.post?.title?.message}
           </div>
         </section>
-        {watch("post_vote") !== undefined && (
+        {!isEmpty(watch("post_vote")) && (
           <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
             <section className="flex justify-between">
               <div className="flex gap-2.5 items-center">
