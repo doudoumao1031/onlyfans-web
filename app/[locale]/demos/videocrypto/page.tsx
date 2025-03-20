@@ -6,9 +6,16 @@ import * as cryptoModule from "@/lib/crypto"
 export default function VideoCryptoPage() {
   const ENCRYPTION_KEY = "s!*K@wl.zeo&{"
   const videoRef = useRef<HTMLVideoElement>(null)
+  const mediaSourceRef = useRef<MediaSource | null>(null)
+  const sourceBufferRef = useRef<SourceBuffer | null>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [customUrl, setCustomUrl] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [progressStats, setProgressStats] = useState<{
+    bytesLoaded: number;
+    totalBytes: number;
+    percentComplete: number;
+  }>({ bytesLoaded: 0, totalBytes: 0, percentComplete: 0 })
 
   // Initialize crypto module with the key
   useEffect(() => {
@@ -19,67 +26,138 @@ export default function VideoCryptoPage() {
     }
   }, [])
 
-  const fetchDecryptedVideo = useCallback(async (url: string): Promise<Blob> => {
+  const setupMediaSource = useCallback((): string => {
+    // Create a new MediaSource instance
+    const mediaSource = new MediaSource()
+    mediaSourceRef.current = mediaSource
+
+    // Create a URL for the video element
+    const url = URL.createObjectURL(mediaSource)
+
+    // Set up the source buffer when the MediaSource is opened
+    mediaSource.addEventListener("sourceopen", () => {
+      try {
+        // Create a source buffer for MP4 content
+        const sourceBuffer = mediaSource.addSourceBuffer("video/mp4; codecs=\"avc1.42E01E, mp4a.40.2\"")
+        sourceBufferRef.current = sourceBuffer
+
+        // Handle source buffer updates
+        sourceBuffer.addEventListener("updateend", () => {
+          // If we have more data queued and the source buffer is not updating, append it
+          if (mediaSource.readyState === "open" && !sourceBuffer.updating) {
+            // This is where we would append more data if needed
+          }
+        })
+      } catch (error) {
+        console.error("Error setting up source buffer:", error)
+      }
+    })
+
+    return url
+  }, [])
+
+  const fetchAndPlayProgressively = useCallback(async (url: string) => {
     setIsLoading(true)
+    setProgressStats({ bytesLoaded: 0, totalBytes: 0, percentComplete: 0 })
+
     try {
+      // Set up the MediaSource and get the URL
+      const videoUrl = setupMediaSource()
+
+      // Set the video source to the MediaSource URL
+      if (videoRef.current) {
+        videoRef.current.src = videoUrl
+      }
+
+      // Fetch the video
       const response = await fetch(url)
+
+      // Get the total size if available
+      const totalBytes = Number(response.headers.get("content-length")) || 0
 
       if (!response.body) {
         throw new Error("Response body is null")
       }
 
       const reader = response.body.getReader()
+      let bytesLoaded = 0
+      let chunks: Uint8Array[] = []
+      let chunkSize = 0
 
-      const stream = new ReadableStream({
-        start(controller) {
-          function read() {
-            reader.read().then(({ done, value }) => {
-              if (done) {
-                controller.close()
-                return
-              }
-              // Use the cryptoModule.simpleDecrypt function instead of custom implementation
-              const decryptedChunk = cryptoModule.simpleDecrypt(value)
-              controller.enqueue(decryptedChunk)
-              read()
-            })
+      // Read the stream
+      const processStream = async () => {
+        while (true) {
+          const { done, value } = await reader.read()
+
+          if (done) {
+            // End of stream, close the MediaSource if it's still open
+            if (mediaSourceRef.current && mediaSourceRef.current.readyState === "open") {
+              mediaSourceRef.current.endOfStream()
+            }
+            break
           }
-          read()
-        }
-      })
 
-      const response2 = new Response(stream, { headers: { "Content-Type": "video/mp4" } })
-      return response2.blob()
-    } finally {
+          // Decrypt the chunk
+          const decryptedChunk = cryptoModule.simpleDecrypt(value)
+          bytesLoaded += value.length
+
+          // Update progress stats
+          setProgressStats({
+            bytesLoaded,
+            totalBytes,
+            percentComplete: totalBytes ? Math.round((bytesLoaded / totalBytes) * 100) : 0
+          })
+
+          // Add the chunk to our buffer
+          chunks.push(decryptedChunk)
+          chunkSize += decryptedChunk.length
+
+          // If we have enough data or the source buffer is ready, append it
+          if (sourceBufferRef.current && !sourceBufferRef.current.updating &&
+              mediaSourceRef.current && mediaSourceRef.current.readyState === "open" &&
+              (chunkSize > 1024 * 1024 || chunks.length > 10)) {
+
+            // Combine all chunks into one buffer
+            const combinedChunk = new Uint8Array(chunkSize)
+            let offset = 0
+            for (const chunk of chunks) {
+              combinedChunk.set(chunk, offset)
+              offset += chunk.length
+            }
+
+            // Append the combined chunk to the source buffer
+            try {
+              sourceBufferRef.current.appendBuffer(combinedChunk)
+              // Clear the chunks array and reset chunk size
+              chunks = []
+              chunkSize = 0
+            } catch (error) {
+              console.error("Error appending buffer:", error)
+            }
+          }
+        }
+      }
+
+      // Start processing the stream
+      await processStream()
+      setIsLoading(false)
+    } catch (error) {
+      console.error("Error loading video:", error)
       setIsLoading(false)
     }
-  }, [])
+  }, [setupMediaSource])
 
   const handleFileUpload = async (file: File) => {
     try {
       setIsLoading(true)
-      // Read the file as an ArrayBuffer
-      const arrayBuffer = await file.arrayBuffer()
 
-      // Convert to Uint8Array for decryption
-      const encryptedData = new Uint8Array(arrayBuffer)
+      // Create a URL for the file
+      const fileUrl = URL.createObjectURL(file)
 
-      // Use the cryptoModule.simpleDecrypt function instead of custom implementation
-      const decryptedData = cryptoModule.simpleDecrypt(encryptedData)
-
-      // Create a blob from the decrypted data
-      const blob = new Blob([decryptedData], { type: "video/mp4" })
-
-      // Create a URL for the blob
-      const videoUrl = URL.createObjectURL(blob)
-
-      // Set the video source
-      if (videoRef.current) {
-        videoRef.current.src = videoUrl
-      }
+      // Use the progressive playback method for the file
+      await fetchAndPlayProgressively(fileUrl)
     } catch (error) {
       console.error("Error processing file:", error)
-    } finally {
       setIsLoading(false)
     }
   }
@@ -103,35 +181,22 @@ export default function VideoCryptoPage() {
       // Clear any selected file
       setSelectedFile(null)
 
-      // Load the video from the URL
-      fetchDecryptedVideo(customUrl)
-        .then(blob => {
-          const decryptedUrl = URL.createObjectURL(blob)
-          if (videoRef.current) {
-            videoRef.current.src = decryptedUrl
-          }
-        })
-        .catch(error => {
-          console.error("Error loading encrypted video:", error)
-        })
+      // Load the video from the URL with progressive playback
+      fetchAndPlayProgressively(customUrl)
     }
   }
 
   useEffect(() => {
-    // Only fetch from URL if no file is selected
-    if (!selectedFile && customUrl) {
-      fetchDecryptedVideo(customUrl)
-        .then(blob => {
-          const decryptedUrl = URL.createObjectURL(blob)
-          if (videoRef.current) {
-            videoRef.current.src = decryptedUrl
-          }
-        })
-        .catch(error => {
-          console.error("Error loading encrypted video:", error)
-        })
+    // Cleanup function to release resources
+    return () => {
+      if (videoRef.current) {
+        videoRef.current.src = ""
+      }
+      if (mediaSourceRef.current && mediaSourceRef.current.readyState === "open") {
+        mediaSourceRef.current.endOfStream()
+      }
     }
-  }, [fetchDecryptedVideo, selectedFile, customUrl])
+  }, [])
 
   return (
     <div className="container mx-auto p-4">
@@ -180,6 +245,21 @@ export default function VideoCryptoPage() {
           </p>
         )}
       </div>
+
+      {isLoading && (
+        <div className="mb-4">
+          <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div
+              className="bg-blue-600 h-2.5 rounded-full"
+              style={{ width: `${progressStats.percentComplete}%` }}
+            ></div>
+          </div>
+          <p className="text-sm text-gray-600 mt-1">
+            {progressStats.bytesLoaded.toLocaleString()} / {progressStats.totalBytes.toLocaleString()} bytes
+            ({progressStats.percentComplete}%)
+          </p>
+        </div>
+      )}
 
       <div className="video-container">
         <video
