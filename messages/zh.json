@@ -165,6 +165,7 @@
       "searchPlaceHolder": "输入博文内容",
       "pinned": "置顶成功",
       "unpinned": "已取消置顶",
+      "settingsEffective": "媒体付费有效",
       "itemActions": {
         "share": "分享",
         "pinned": "已置顶",
