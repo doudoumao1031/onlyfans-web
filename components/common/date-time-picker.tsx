@@ -40,7 +40,7 @@ export default function DateTimePicker(props: {
       >
         {children}
       </button>
-      <Drawer open={visible} onOpenChange={setVisible}>
+      <Drawer open={visible} onOpenChange={setVisible} dismissible={false}>
         <DrawerContent className={"bg-white"}>
           <section className={"flex-1"}>
             <DrawerHeader className={"hidden"}>
