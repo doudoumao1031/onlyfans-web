@@ -22,7 +22,7 @@ const LINKS_CONFIG = [
   {
     labelKey: "income",
     iconURL: "/theme/icon_fans_mine_income@3x.png",
-    href: "/profile/income/incomeView"
+    href: "/profile/incomeView"
   },
   {
     labelKey: "data",

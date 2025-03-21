@@ -115,7 +115,8 @@
       "moreInfo": "More Info",
       "wallet": "Wallet",
       "recharge": "Recharge",
-      "withdraw": "Withdrawal"
+      "withdraw": "Withdrawal",
+      "expenseRecord": "Expense Record"
     },
     "moduleTypes": {
       "post": "Post",

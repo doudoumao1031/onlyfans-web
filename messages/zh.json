@@ -115,7 +115,8 @@
       "moreInfo": "更多信息",
       "wallet": "钱包",
       "recharge": "充值",
-      "withdraw": "提现"
+      "withdraw": "提现",
+      "expenseRecord": "消费记录"
     },
     "moduleTypes": {
       "post": "帖子",
@@ -307,7 +308,7 @@
       "recent15Days": "近15天",
       "transactionRecord": "交易记录",
       "incomeCenter": "收益中心",
-      "expensesRecord": "支出记录",
+      "expensesRecord": "消费记录",
       "diff30Days": "较前30日",
       "diff1Year": "较前一年",
       "january": "一月",

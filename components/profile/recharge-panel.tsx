@@ -3,12 +3,14 @@ import RechargeDrawer from "@/components/profile/recharge-drawer"
 import { useMemo, useState } from "react"
 import { useTranslations } from "next-intl"
 import SheetSelect from "../common/sheet-select"
-import WithdrawDrawer from "./withdraw-drawer"
+// import WithdrawDrawer from "./withdraw-drawer"
 import { WalletInfo } from "@/lib"
+import { useRouter } from "@/i18n/routing"
 
 export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [withdrawOpen, setWithdrawOpen] = useState<boolean>(false)
+  // const [withdrawOpen, setWithdrawOpen] = useState<boolean>(false)
   const [openSheet, setOpenSheet] = useState<boolean>(false)
   const [initAmount, setInitAmount] = useState<number>(walletInfo.amount)
   const t = useTranslations("Profile")
@@ -20,8 +22,6 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
 
   return (
     <>
-
-
       <div className={"p-4"}>
         <div
           className={"bg-[url('/theme/bg_wallet@3x.png')] gap-1.5 bg-cover rounded-xl text-white flex justify-between items-center px-[20px] pt-[10px] pb-[20px]"}
@@ -41,7 +41,8 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
                 if (v === 1) {
                   setIsOpen(true)
                 } else if (v === 2) {
-                  setWithdrawOpen(true)
+                  setOpenSheet(false)
+                  router.push("/profile/expenses")
                 }
               }}
               options={[
@@ -50,7 +51,7 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
                   value: 1
                 },
                 {
-                  label: t("actions.withdraw"),
+                  label: t("actions.expenseRecord"),
                   value: 2
                 }
               ]}
@@ -62,7 +63,7 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
         </div>
       </div>
       <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen} setWfAmount={setInitAmount}><></></RechargeDrawer>
-      <WithdrawDrawer isOpen={withdrawOpen} setIsOpen={setWithdrawOpen} info={walletInfo}><></></WithdrawDrawer>
+      {/* <WithdrawDrawer isOpen={withdrawOpen} setIsOpen={setWithdrawOpen} info={walletInfo}><></></WithdrawDrawer> */}
     </>
   )
 }
