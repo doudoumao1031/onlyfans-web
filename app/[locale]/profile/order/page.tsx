@@ -86,7 +86,10 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
       } else {
         const value = monthSelections.at(0)?.value
         if (value !== undefined) {
-          form.setValue("month_count", value)
+          form.reset({
+            month_count: value,
+            price: undefined
+          })
         }
       }
     }
@@ -549,9 +552,7 @@ function PromotionalActivities({ updateItems, items }: {
     setOpenState(true)
   }
 
-  useEffect(() => {
-    console.log(items)
-  },[items])
+  const { showMessage } = useCommonMessageContext()
 
   return (
     <section ref={contentRef} className={"pt-5 pb-5 border-b border-gray-100"}>
@@ -612,6 +613,9 @@ function PromotionalActivities({ updateItems, items }: {
                   item.discount_status = !value
                   arr.splice(updateIndex, 1, item)
                   updateItems(arr)
+                  if (value) {
+                    showMessage(t("attentionSettings"))
+                  }
                 }}
               ></Switch>
             </TopLabelWrapper>

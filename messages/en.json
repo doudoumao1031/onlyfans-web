@@ -274,7 +274,8 @@
       "discountPromotional": "promotional discount",
       "discountPromotionalDescription": "Percentage, up to 90%",
       "discountStartTime": "Promotion start time",
-      "discountEndTime": "Promotion end time"
+      "discountEndTime": "Promotion end time",
+      "attentionSettings": "Note to reset the promotion time"
     },
     "fans": {
       "title": "Fans Mgt",
