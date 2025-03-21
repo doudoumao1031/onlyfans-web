@@ -76,6 +76,18 @@
       "october": "十月",
       "november": "十一月",
       "december": "十二月"
+    },
+    "emoji": {
+      "SUGGESTED": "最近使用",
+      "CUSTOM": "自定义",
+      "SMILEYS_PEOPLE": "表情符号",
+      "ANIMALS_NATURE": "动物和自然",
+      "FOOD_DRINK": "食物和饮料",
+      "TRAVEL_PLACES": "旅行地点",
+      "ACTIVITIES": "活动",
+      "OBJECTS": "物体",
+      "SYMBOLS": "符号",
+      "FLAGS": "旗帜"
     }
   },
   "Explore": {
