@@ -36,7 +36,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 
 export default function InputWithLabel(props: InputProps) {
-  const { label, type = "text", rows = 3, name, disabled, onInputChange, description, value, options, errorMessage, iconSize, copy,maxLength } = props
+  const { label, type = "text", rows = 3, name, disabled, onInputChange, description, value, options, errorMessage, iconSize, copy, maxLength } = props
   // const [val, setVal] = useState<InputValueType>(value ?? "")
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const inputRef = useRef(null)
@@ -119,7 +119,7 @@ export default function InputWithLabel(props: InputProps) {
         }
       >
         {!isSelectInput && !isTextArea && (
-          <input  maxLength={maxLength} ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
+          <input maxLength={maxLength} ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
             onChange={event => {
               const eventValue = (event.target as HTMLInputElement).value
               // setVal(eventValue)
@@ -161,9 +161,9 @@ export default function InputWithLabel(props: InputProps) {
           </>
         )}
       </section>
-      {errorMessage && <div className="text-theme mt-1.5 px-4 text-xs">{errorMessage}</div>}
+      {errorMessage && <div className="text-theme text-xs px-4 mt-1.5">{errorMessage}</div>}
       {description && !errorMessage && (
-        <section className="mt-1.5 flex items-center px-4 text-xs text-[#6D7781]">{description}
+        <section className="text-[#6D7781] text-xs px-4 mt-1.5 flex items-center">{description}
           {
             copy && <CopyText text={description.toString()} />
           }
