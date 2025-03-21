@@ -59,7 +59,7 @@ export default async function Page() {
             </div>
             <Link href={`/space/${data.id}/feed`}>
               <div className="flex justify-center mt-2.5">
-                <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-theme text-text-theme">
+                <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-theme text-text-theme shrink-0">
                   {t("actions.enter")}
                 </button>
               </div>

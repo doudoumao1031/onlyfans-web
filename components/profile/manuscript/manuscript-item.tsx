@@ -1,7 +1,7 @@
 // 稿件
 import Image from "next/image"
 import IconWithImage from "@/components/profile/icon"
-import { Link } from "@/i18n/routing"
+import { Link, useRouter } from "@/i18n/routing"
 import { clsx } from "clsx"
 import { deletePost, FileType, PostData, postPined } from "@/lib"
 import { useCommonMessageContext } from "@/components/common/common-message"
@@ -14,7 +14,6 @@ import { useLongPress, LongPressEventType } from "use-long-press"
 import SheetSelect from "@/components/common/sheet-select"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { ZH_YYYY_MM_DD_HH_mm_ss } from "@/lib/constant"
-// import { LongPressEventType } from "use-long-press/lib/use-long-press.types"
 
 const ShowNumberWithIcon = ({ icon, number }: { icon: string, number: number }) => {
   return (
@@ -146,6 +145,7 @@ function LinkButton({ status,id,children }: { status: number,children: React.Rea
 
 export default function ManuscriptItem({ data, refresh }: { data: PostData, refresh?: () => void }) {
   "use client"
+  const router = useRouter()
   const commonTrans = useTranslations("Common")
   const [openState, setOpenState] = useState<boolean>(false)
   const firstMedia = data.post_attachment?.[0]
@@ -188,7 +188,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
   const longPressHandler = useLongPress(() => {
     setOpenState(true)
   }, {
-    threshold: 1000,
+    threshold: 1500,
     detect: LongPressEventType.Touch,
     cancelOnMovement: true,
     cancelOutsideElement: true
@@ -212,7 +212,12 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
         >
           {/*<ManuscriptItemState state={"REJECT"}/>*/}
           <ManuscriptItemState state={data.post.post_status} />
-          <div className={"w-[100px] h-[100px] overflow-hidden rounded flex items-center shrink-0"}>
+          <div onClick={() => {
+            if ( [0, 1, 3].includes(data.post.post_status)) {
+              router.push(`/profile/manuscript/draft/edit?id=${data.post.id}`)
+            }
+          }} className={"w-[100px] h-[100px] overflow-hidden rounded flex items-center shrink-0"}
+          >
             {imageId ?
               <LazyImg containerAuto={true} src={buildImageUrl(imageId)} alt={"post"} width={100} height={100} />
               : (
@@ -244,7 +249,6 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
               <ShowNumberWithIcon number={data.post_metric?.collection_count ?? 0}
                 icon={"/icons/profile/icon_fans_collect_normal@3x.png"}
               />
-              {/*TODO 缺付费字段*/}
               <ShowNumberWithIcon number={data.post_metric?.pay_count ?? 0}
                 icon={"/icons/profile/icon_fans_money_s_gray@3x.png"}
               />
