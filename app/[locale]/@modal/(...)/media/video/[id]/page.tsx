@@ -1,5 +1,6 @@
 import { Modal } from "@/components/common/modal"
-import { VideoPlayer } from "@/components/video/video-player"
+import VideoPlay from "@/components/common/video-play"
+// import { VideoPlayer } from "@/components/video/video-player"
 import { addFilePlayLog } from "@/lib"
 import { buildVideoUrl } from "@/lib/utils"
 
@@ -23,11 +24,12 @@ export default async function VideoBrowseModal({
 
   return (
     <Modal>
-      <div className="relative max-h-screen max-w-[100vw]">
-        <VideoPlayer
+      <div className="max-w-screen relative max-h-screen">
+        <VideoPlay src={buildVideoUrl(fileId, "1080p")} />
+        {/* <VideoPlayer
           sources={videoSources}
-          className="max-h-screen"
-        />
+          className="max-h-[100vh]"
+        /> */}
       </div>
     </Modal>
   )

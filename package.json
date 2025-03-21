@@ -57,6 +57,7 @@
     "use-debounce": "^10.0.4",
     "use-long-press": "^3.2.0",
     "vaul": "^1.1.2",
+    "video.js": "^8.22.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -64,6 +65,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/video.js": "^7.3.58",
     "eslint": "^8",
     "eslint-config-next": "15.0.4",
     "eslint-import-resolver-typescript": "^4.2.2",
