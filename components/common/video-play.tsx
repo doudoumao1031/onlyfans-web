@@ -1,6 +1,8 @@
 "use client"
 import React, { useEffect, useRef } from "react"
+
 import videojs from "video.js"
+
 import "video.js/dist/video-js.css"
 
 export default function VideoPlayer({ src }: { src: string }) {
@@ -30,7 +32,7 @@ export default function VideoPlayer({ src }: { src: string }) {
 
   return (
     <div data-vjs-player>
-      <video ref={videoRef} className="w-full max-h-[100vh] object-contain video-js vjs-big-play-centered" />
+      <video ref={videoRef} className="w-full max-h-screen  object-contain video-js vjs-big-play-centered" />
     </div>
   )
 }
