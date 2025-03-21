@@ -1,8 +1,7 @@
 "use server"
 
-import { ENDPOINTS, fetchWithGet } from "@/lib"
-import { fetchWithPost } from "@/lib"
-import { ApiResponse } from "@/lib"
+import { ENDPOINTS, fetchWithGet , fetchWithPost , ApiResponse } from "@/lib"
+
 import { iPost, ReplyForm, UpdateUserBaseReq, UserProfile } from "./types"
 
 export async function addPost(params: iPost) {

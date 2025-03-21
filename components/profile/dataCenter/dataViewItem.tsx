@@ -1,14 +1,17 @@
 "use client"
-import InputWithLabel from "@/components/profile/input-with-label"
 import { useEffect, useMemo, useState } from "react"
-import { options } from "@/components/profile/chart-line"
 
-import { getUserMetricDay, UserMetricDay, UserMetricDayReq } from "@/lib"
+
 import dayjs from "dayjs"
-import { Line } from "react-chartjs-2"
-import { getEvenlySpacedPoints, getDateRange } from "@/lib/utils"
 import { useTranslations } from "next-intl"
+import { Line } from "react-chartjs-2"
+
+import { options } from "@/components/profile/chart-line"
+import InputWithLabel from "@/components/profile/input-with-label"
+import { getUserMetricDay, UserMetricDay, UserMetricDayReq } from "@/lib"
 import { ZH_YYYY_MM_DD } from "@/lib/constant"
+import { getEvenlySpacedPoints, getDateRange } from "@/lib/utils"
+
 export type TProos = {
   tabs: Record<string, string>,
   title: string
@@ -99,7 +102,7 @@ export default function Page({ tabs, title }: TProos) {
       <div className="flex justify-between">
         <div className="flex items-end">
           <h1 className="text-base font-medium">{title}</h1>
-          <div className="ml-2 text-[#BBB] text-xs ">{t("dataCenter.updateAt2AM")}</div>
+          <div className="ml-2 text-xs text-[#BBB] ">{t("dataCenter.updateAt2AM")}</div>
         </div>
         <InputWithLabel
           placeholder={t("dataCenter.dateRange")}
@@ -112,11 +115,11 @@ export default function Page({ tabs, title }: TProos) {
           value={dateType}
         />
       </div>
-      <div className="flex justify-between m-4">
+      <div className="m-4 flex justify-between">
         {Object.keys(tabs).map(v => (
-          <div onClick={() => { setActive(v) }} key={v} className={`w-32 h-16 flex justify-center flex-col items-center ${active === v && "border-theme bg-theme/20 border rounded-md "}`}>
+          <div onClick={() => { setActive(v) }} key={v} className={`flex h-16 w-32 flex-col items-center justify-center ${active === v && "border-theme bg-theme/20 rounded-md border "}`}>
             <span className="text-xl font-medium">{statistics[v] || "0"}</span>
-            <span className="text-xs text-text-subtitle">{tabs[v]}</span>
+            <span className="text-text-subtitle text-xs">{tabs[v]}</span>
           </div>
         ))}
 

@@ -1,12 +1,15 @@
 "use client"
-import FormDrawer from "@/components/common/form-drawer"
-import IconWithImage from "@/components/profile/icon"
 import { useState, useMemo, useEffect } from "react"
-import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
-import { useCommonMessageContext } from "@/components/common/common-message"
-import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import LoadingPage from "@/components/common/loading-page"
+
 import { useTranslations } from "next-intl"
+
+import { useCommonMessageContext } from "@/components/common/common-message"
+import FormDrawer from "@/components/common/form-drawer"
+import LoadingPage from "@/components/common/loading-page"
+import IconWithImage from "@/components/profile/icon"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
+
 
 interface SubscribedDrawerProps {
   userId: number
@@ -122,9 +125,9 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
       <FormDrawer
         isAutoHeight
         title={
-          <div className={"w-[150px] flex justify-center items-center flex-nowrap gap-1.5"}>
-            <span className="text-lg font-semibold text-nowrap">{t("Subscribe")}</span>
-            <span className="text-text-theme truncate font-normal text-[15px]">{name}</span>
+          <div className={"flex w-[150px] flex-nowrap items-center justify-center gap-1.5"}>
+            <span className="text-nowrap text-lg font-semibold">{t("Subscribe")}</span>
+            <span className="text-text-theme truncate text-[15px] font-normal">{name}</span>
           </div>
         }
         headerLeft={(close) => {
@@ -151,41 +154,41 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
         outerControl
       >
         <input hidden={true} name="user_id" defaultValue={userId} />
-        <div className="flex flex-col items-center text-black text-2xl bg-slate-50">
+        <div className="flex flex-col items-center bg-slate-50 text-2xl text-black">
           {loading ? <LoadingPage height={"h-18"} /> : (
-            <div className={"w-full mt-[20px] px-4 grid grid-cols-3 gap-x-3 gap-y-5"}>
+            <div className={"mt-[20px] grid w-full grid-cols-3 gap-x-3 gap-y-5 px-4"}>
               {items.map((item,i) => {
                 return (
                   <button
                     key={i}
                     type={"button"}
-                    className={`relative w-full h-[140px] rounded-lg ${active === item.id ? "bg-background-secondary" : "bg-white"}`}
+                    className={`relative h-[140px] w-full rounded-lg ${active === item.id ? "bg-background-secondary" : "bg-white"}`}
                     onTouchEnd={() => {
                       setActive(item.id)
                       setAmount(item.discount_price)
                       setDiscount(item)
                     }}
                   >
-                    <div className="h-full flex flex-col justify-center items-center text-black">
+                    <div className="flex h-full flex-col items-center justify-center text-black">
                       <span className={`text-nowrap text-xs ${item.id === active ? "text-text-title": "text-text-desc"}`}>
                         {item.month_count} {t("Month")}
                       </span>
                       <span
-                        className={`text-nowrap text-xl my-4 ${item.id === active ? "text-text-theme" : "text-text-title"}`}
+                        className={`my-4 text-nowrap text-xl ${item.id === active ? "text-text-theme" : "text-text-title"}`}
                       >
                         ${item.discount_price}
                       </span>
-                      <span className="text-nowrap text-xs block">
+                      <span className="block text-nowrap text-xs">
                         {showDiscount(item) ? (
-                          <s className="text-xs text-text-desc">${item.price}</s>
+                          <s className="text-text-desc text-xs">${item.price}</s>
                         ) : (
                           <span>&nbsp;</span>
                         )}
                       </span>
                     </div>
                     {showDiscount(item) && (
-                      <div className="absolute bg-orange h-4 w-16 -top-1 left-0 rounded-t-full rounded-br-full flex justify-center items-center">
-                        <span className="text-white text-xs text-center">
+                      <div className="bg-orange absolute -top-1 left-0 flex h-4 w-16 items-center justify-center rounded-t-full rounded-br-full">
+                        <span className="text-center text-xs text-white">
                           {item.discount_per}% off
                         </span>
                       </div>
@@ -199,7 +202,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
               <button
                 type={"button"}
                 disabled={amount === 0}
-                className={`w-[295px] h-[49px] p-2 bg-background-theme text-white text-base font-medium rounded-full
+                className={`bg-background-theme h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white
                  ${amount === 0 ? "bg-[#dddddd]" : "bg-background-theme"}`}
                 onTouchEnd={async () => {
                   await handleSubmit()
@@ -208,8 +211,8 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
                 {t("ConfirmPayment")} {amount} USDT
               </button>
               {showDiscount(discount) && (
-                <div className="absolute bg-orange h-4 px-2 -top-2 right-5 rounded-full flex justify-center items-center">
-                  <span className="text-white text-xs text-center text-nowrap">
+                <div className="bg-orange absolute -top-2 right-5 flex h-4 items-center justify-center rounded-full px-2">
+                  <span className="text-nowrap text-center text-xs text-white">
                     {t("Saved")} ${diff}
                   </span>
                 </div>

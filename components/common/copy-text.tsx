@@ -1,4 +1,5 @@
 import { useState } from "react"
+
 import IconWithImage from "../profile/icon"
 
 export default function Page({ text }: { text: string }) {

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useCallback, useState } from "react"
+
 import * as cryptoModule from "@/lib/crypto"
 
 export default function VideoCryptoPage() {
@@ -200,23 +201,23 @@ export default function VideoCryptoPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Encrypted Video Player</h1>
+      <h1 className="mb-4 text-2xl font-bold">Encrypted Video Player</h1>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">
+        <label className="mb-2 block text-sm font-medium">
           Encrypted Video URL:
-          <div className="flex mt-2">
+          <div className="mt-2 flex">
             <input
               type="text"
               value={customUrl}
               onChange={handleUrlChange}
-              className="flex-grow px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+              className="grow rounded-l-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none focus:ring-blue-500"
               placeholder="Enter URL to encrypted video"
             />
             <button
               onClick={handleLoadUrl}
               disabled={isLoading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+              className="rounded-r-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
             >
               {isLoading ? "Loading..." : "Load"}
             </button>
@@ -225,17 +226,17 @@ export default function VideoCryptoPage() {
       </div>
 
       <div className="mb-4">
-        <label className="block text-sm font-medium mb-2">
+        <label className="mb-2 block text-sm font-medium">
           Upload encrypted MP4 file:
           <input
             type="file"
             accept="video/mp4,video/*"
             onChange={handleFileChange}
             className="mt-2 block w-full text-sm text-gray-500
-              file:mr-4 file:py-2 file:px-4
-              file:rounded-md file:border-0
-              file:text-sm file:font-semibold
-              file:bg-blue-50 file:text-blue-700
+              file:mr-4 file:rounded-md file:border-0
+              file:bg-blue-50 file:px-4
+              file:py-2 file:text-sm
+              file:font-semibold file:text-blue-700
               hover:file:bg-blue-100"
           />
         </label>
@@ -248,13 +249,13 @@ export default function VideoCryptoPage() {
 
       {isLoading && (
         <div className="mb-4">
-          <div className="w-full bg-gray-200 rounded-full h-2.5">
+          <div className="h-2.5 w-full rounded-full bg-gray-200">
             <div
-              className="bg-blue-600 h-2.5 rounded-full"
+              className="h-2.5 rounded-full bg-blue-600"
               style={{ width: `${progressStats.percentComplete}%` }}
             ></div>
           </div>
-          <p className="text-sm text-gray-600 mt-1">
+          <p className="mt-1 text-sm text-gray-600">
             {progressStats.bytesLoaded.toLocaleString()} / {progressStats.totalBytes.toLocaleString()} bytes
             ({progressStats.percentComplete}%)
           </p>
@@ -264,7 +265,7 @@ export default function VideoCryptoPage() {
       <div className="video-container">
         <video
           ref={videoRef}
-          className="w-full max-w-3xl mx-auto border border-gray-300"
+          className="mx-auto w-full max-w-3xl border border-gray-300"
           controls
           width="640"
           height="360"

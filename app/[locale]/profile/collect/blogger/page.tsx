@@ -1,7 +1,14 @@
 "use client"
+import { Fragment, useEffect, useState } from "react"
+
+import { useTranslations } from "next-intl"
+
 import Empty from "@/components/common/empty"
 import InfiniteScroll from "@/components/common/infinite-scroll"
+import LoadingMask from "@/components/common/loading-mask"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
+import DelItem from "@/components/profile/del-item"
+import UserCard from "@/components/user/user-card"
 import {
   collecTionUser,
   PageResponse,
@@ -9,11 +16,8 @@ import {
   userCollectionUsers
 } from "@/lib"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import { Fragment, useEffect, useState } from "react"
-import { useTranslations } from "next-intl"
-import UserCard from "@/components/user/user-card"
-import DelItem from "@/components/profile/del-item"
-import LoadingMask from "@/components/common/loading-mask"
+
+
 export default function Page() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [initData, setInitData] = useState<PageResponse<User> | null>()
@@ -53,7 +57,7 @@ export default function Page() {
       <LoadingMask isLoading={isLoading} />
       {initData && (
         <InfiniteScroll<User>
-          className={"h-full overflow-x-hidden mx-auto"}
+          className={"mx-auto h-full overflow-x-hidden"}
           initialItems={initData.list || []}
           initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}
           fetcherFn={infiniteFetchPosts}

@@ -1,19 +1,21 @@
 "use client"
 
-import TabTitle, { iTabTitleOption } from "@/components/profile/tab-title"
 import React, { Fragment, SyntheticEvent, useEffect, useState } from "react"
-import IconWithImage from "@/components/profile/icon"
-import ManuscriptItem from "@/components/profile/manuscript/manuscript-item"
+
+import { useTranslations } from "next-intl"
+
 import Header from "@/components/common/header"
+import InfiniteScroll from "@/components/common/infinite-scroll"
+import { LazyImageWithFileId } from "@/components/common/lazy-img"
+import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
+import IconWithImage from "@/components/profile/icon"
+import { ImageCarouselPreview } from "@/components/profile/manuscript/image-carousel-preview"
+import ManuscriptItem from "@/components/profile/manuscript/manuscript-item"
+import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
+import TabTitle, { iTabTitleOption } from "@/components/profile/tab-title"
 import { Link } from "@/i18n/routing"
 import { Attachment, FileType, myMediaPosts, myPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
-import InfiniteScroll from "@/components/common/infinite-scroll"
-import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import { LazyImageWithFileId } from "@/components/common/lazy-img"
-import { useTranslations } from "next-intl"
-import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
-import { ImageCarouselPreview } from "@/components/profile/manuscript/image-carousel-preview"
 
 enum ACTIVE_TYPE {
   POST = "POST",
@@ -61,16 +63,16 @@ const ManuscriptPost = () => {
   }
 
   return (
-    <section className="pl-4 pr-4 text-black">
+    <section className="px-4 text-black">
       <form onSubmit={handleFormSubmit}>
-        <section className="mt-5 flex gap-4 items-center">
-          <div className={"flex-1 pt-1.5 pb-1.5 pl-3 pr-3 bg-[#F4F5F5] rounded-full flex items-center"}>
+        <section className="mt-5 flex items-center gap-4">
+          <div className={"flex flex-1 items-center rounded-full bg-[#F4F5F5] px-3 py-1.5"}>
             <IconWithImage url={"/icons/profile/icon_search_s@3x.png"} width={18} height={18}
               color={"rgb(221, 221, 221)"}
             />
             <input value={title} onChange={(event) => {
               setTitle(event.target.value)
-            }} placeholder={t("searchPlaceHolder")} className="w-full bg-transparent flex pl-0.5"
+            }} placeholder={t("searchPlaceHolder")} className="flex w-full bg-transparent pl-0.5"
             />
           </div>
 
@@ -89,7 +91,7 @@ const ManuscriptPost = () => {
           </button>
         </section>
       </form>
-      <section className={"flex flex-col gap-2.5 h-[calc(100vh-145px)]"}>
+      <section className={"flex h-[calc(100vh-145px)] flex-col gap-2.5"}>
         {initData && (
           <InfiniteScroll<PostData> fetcherFn={infiniteFetchMyPosts} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
             {({ items, isLoading, hasMore, error }) => (
@@ -113,7 +115,7 @@ function MediaImagePreview({ attachment }: { attachment: Attachment[] }) {
   }
   const [firstMedia] = attachment
   const fileId = firstMedia?.file_type === FileType.Image ? firstMedia.file_id : firstMedia.thumb_id
-  return <LazyImageWithFileId containerAuto={true} fileId={fileId} alt={"post_attachment"} width={200} height={220} className="max-w-full max-h-full object-contain" />
+  return <LazyImageWithFileId containerAuto={true} fileId={fileId} alt={"post_attachment"} width={200} height={220} className="max-h-full max-w-full object-contain" />
 }
 
 const ManuscriptMedia = () => {
@@ -180,8 +182,8 @@ const ManuscriptMedia = () => {
         openState={openState}
         setOpenState={setOpenState}
       />
-      <section className="pl-4 pr-4 text-black">
-        <div className={"flex-1 flex justify-end mt-5"}>
+      <section className="px-4 text-black">
+        <div className={"mt-5 flex flex-1 justify-end"}>
           <button type={"button"} className="shrink-0" onTouchEnd={() => {
             setTimeSort(prevState => !prevState)
             initFetchData()
@@ -205,8 +207,8 @@ const ManuscriptMedia = () => {
                   <div className={"grid grid-cols-2 gap-3 "}>
                     {items?.map((item, index) => (
                       <section key={index}>
-                        <section className="rounded-xl relative overflow-hidden text-xs bg-black/20">
-                          <section className="pl-2 pr-2 text-white absolute w-full left-0 flex justify-between top-0.5 z-10">
+                        <section className="relative overflow-hidden rounded-xl bg-black/20 text-xs">
+                          <section className="absolute left-0 top-0.5 z-10 flex w-full justify-between px-2 text-white">
                             <section className="flex items-center gap-0.5">
                               <IconWithImage url={"/theme/icon_fans_view_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
@@ -220,20 +222,20 @@ const ManuscriptMedia = () => {
                               <span>{item.post_metric.tip_count}</span>
                             </section>
                           </section>
-                          <section className="pl-2 pr-2 text-white absolute w-full left-0 flex bottom-0.5 justify-around z-10">
-                            <section className="flex items-center gap-0.5 flex-1">
+                          <section className="absolute bottom-0.5 left-0 z-10 flex w-full justify-around px-2 text-white">
+                            <section className="flex flex-1 items-center gap-0.5">
                               <IconWithImage url={"/theme/icon_fans_like_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
                               <span>{item.post_metric.thumbs_up_count}</span>
                             </section>
-                            <section className="flex items-center gap-0.5 flex-1 justify-center">
+                            <section className="flex flex-1 items-center justify-center gap-0.5">
                               <IconWithImage url={"/theme/icon_fans_comment_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
                               <span>{item.post_metric.comment_count}</span>
                             </section>
-                            <section className="flex items-center gap-0.5 flex-1 justify-end">
+                            <section className="flex flex-1 items-center justify-end gap-0.5">
                               <IconWithImage url={"/theme/icon_fans_reward_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
@@ -244,7 +246,7 @@ const ManuscriptMedia = () => {
                             onTouchEnd={() => {
                               openMediaPreview(item)
                             }}
-                            className="w-full h-[220px] rounded flex justify-center items-center overflow-hidden"
+                            className="flex h-[220px] w-full items-center justify-center overflow-hidden rounded"
                           >
                             <MediaImagePreview attachment={item.post_attachment ?? []} />
                             {/* <LazyImageWithFileId containerAuto={true} fileId={item.post_attachment?.[0]?.file_id} alt={"post_attachment"} width={200} height={220} className="max-w-full max-h-full object-contain" /> */}
@@ -254,7 +256,7 @@ const ManuscriptMedia = () => {
                         {
                           [0, 1, 3].includes(item.post.post_status) ? (
                             <Link href={`/profile/manuscript/draft/edit?id=${item.post.id}`}
-                              className="rounded-[10px] gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
+                              className="border-border-theme text-text-theme mt-2 flex w-full justify-center gap-2 rounded-[10px] border-2 py-2"
                             >
                               <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20}
                                 className={"bg-background-theme"}
@@ -264,7 +266,7 @@ const ManuscriptMedia = () => {
                           )
                             : (
                               <button type={"button"}
-                                className="rounded-[10px] grayscale gap-2 flex justify-center pt-2 pb-2 border-border-theme border-2 text-text-theme w-full mt-2"
+                                className="border-border-theme text-text-theme mt-2 flex w-full justify-center gap-2 rounded-[10px] border-2 py-2 grayscale"
                               >
                                 <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
                                 <span className={"text-[15px]"}>{t("itemActions.edit")}</span>

@@ -1,8 +1,10 @@
 "use client"
 
-import IconWithImage from "@/components/profile/icon"
-import { useTranslations } from "next-intl"
 import { useEffect } from "react"
+
+import { useTranslations } from "next-intl"
+
+import IconWithImage from "@/components/profile/icon"
 
 interface ErrorProps {
   error?: Error & { digest?: string }
@@ -22,9 +24,9 @@ export default function Error(props: ErrorProps) {
       className={`flex flex-col items-center ${center ? "h-screen justify-center" : ""}`}
       style={{ marginTop: center ? 0 : top ? `${top}px` : "60px" }}
     >
-      <p className="text-[#6D7781] mb-4 text-[15px]">{text || t("ContentLoadingFailed")}</p>
+      <p className="mb-4 text-[15px] text-[#6D7781]">{text || t("ContentLoadingFailed")}</p>
       <button
-        className="px-4 py-2 bg-background-theme text-white rounded-full hover:bg-opacity-90 flex items-center"
+        className="bg-background-theme flex items-center rounded-full px-4 py-2 text-white hover:bg-opacity-90"
         onClick={() => {
           reset()
         }}

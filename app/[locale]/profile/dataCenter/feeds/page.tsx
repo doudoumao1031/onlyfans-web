@@ -1,15 +1,18 @@
 "use client"
+import { Fragment, useEffect, useMemo, useState } from "react"
+
+import { useTranslations } from "next-intl"
+
 import Empty from "@/components/common/empty"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import FeedItem from "@/components/profile/dataCenter/feedItem"
 import InputWithLabel from "@/components/profile/input-with-label"
+import { Link } from "@/i18n/routing"
 import { PageResponse, PostData } from "@/lib"
 import { getMyFeeds } from "@/lib/actions/space"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import { useTranslations } from "next-intl"
-import { Link } from "@/i18n/routing"
-import { Fragment, useEffect, useMemo, useState } from "react"
+
 
 
 export default function Page() {
@@ -49,10 +52,10 @@ export default function Page() {
     }
   })
   return (
-    <div className="w-full h-[calc(100vh-148px)]">
+    <div className="h-[calc(100vh-148px)] w-full">
       {initData && (
         <InfiniteScroll<PostData>
-          className={"h-full w-full mx-auto"}
+          className={"mx-auto size-full"}
           initialItems={initData.list || []}
           initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}
           fetcherFn={infiniteFetchPosts}
@@ -60,10 +63,10 @@ export default function Page() {
           {({ items, isLoading, hasMore, error }) => (
             <Fragment>
               {Boolean(error) && <ListError />}
-              <div className="flex justify-between mb-4 px-4">
+              <div className="mb-4 flex justify-between px-4">
                 <div className="flex items-end">
                   <h1 className="text-base font-medium">{t("dataCenter.posts")}</h1>
-                  <div className="ml-2 text-[#BBB] text-xs ">{`${t("dataCenter.show")}${title}${t("dataCenter.recent")}`}</div>
+                  <div className="ml-2 text-xs text-[#BBB] ">{`${t("dataCenter.show")}${title}${t("dataCenter.recent")}`}</div>
                 </div>
                 <InputWithLabel
                   placeholder={t("dataCenter.dateRange")}

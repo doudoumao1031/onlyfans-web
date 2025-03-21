@@ -1,10 +1,11 @@
-import IconWithImage from "@/components/profile/icon"
-import { FansFollowItem, FansSubscribeItems } from "@/lib"
 import dayjs from "dayjs"
-import CommonAvatar from "@/components/common/common-avatar"
 import { useTranslations } from "next-intl"
-import { ZH_YYYY_MM_DD_HH_mm } from "@/lib/constant"
+
+import CommonAvatar from "@/components/common/common-avatar"
+import IconWithImage from "@/components/profile/icon"
 import { Link } from "@/i18n/routing"
+import { FansFollowItem, FansSubscribeItems } from "@/lib"
+import { ZH_YYYY_MM_DD_HH_mm } from "@/lib/constant"
 
 export function FansSubscribe({ data }: {
   data: FansSubscribeItems
@@ -18,13 +19,13 @@ export function FansSubscribe({ data }: {
     return `${diff}天`
   }
   return (
-    <div className={"flex gap-4 items-center"}>
+    <div className={"flex items-center gap-4"}>
       <Link href={`/space/${data.user.id}/feed`} className={"shrink-0"}>
         <CommonAvatar photoFileId={data.user.photo} size={40}/>
       </Link>
-      <div className={"flex-1 flex justify-between border-b border-[#ddd] py-3"}>
+      <div className={"flex flex-1 justify-between border-b border-[#ddd] py-3"}>
         <Link href={`/space/${data.user.id}/feed`} className={"text-left"}>
-          <div className={"text-base text-[#222] font-medium truncate"}>{data.user.first_name}</div>
+          <div className={"truncate text-base font-medium text-[#222]"}>{data.user.first_name}</div>
           <div className={"text-xs text-[#bbb]"}>{showTime(data.end_time)}</div>
         </Link>
         <button className={"shrink-0"}>
@@ -37,13 +38,13 @@ export function FansSubscribe({ data }: {
 
 export function FollowedListItem({ data }:{data:FansFollowItem}) {
   return (
-    <Link href={`/space/${data.user.id}/feed`} className={"flex gap-4 items-center"}>
+    <Link href={`/space/${data.user.id}/feed`} className={"flex items-center gap-4"}>
       <div className={"shrink-0"}>
         <CommonAvatar photoFileId={data.user.photo} size={40}/>
       </div>
-      <div className={"flex-1 flex justify-between border-b border-[#ddd] py-3 w-full"}>
-        <button className={"text-left w-[80%]"}>
-          <div className={"text-base text-[#222] font-medium truncate"}>{`${data.user.first_name} ${data.user.last_name}`}</div>
+      <div className={"flex w-full flex-1 justify-between border-b border-[#ddd] py-3"}>
+        <button className={"w-4/5 text-left"}>
+          <div className={"truncate text-base font-medium text-[#222]"}>{`${data.user.first_name} ${data.user.last_name}`}</div>
           <div
             className={"text-xs text-[#bbb]"}
           >{dayjs(data.following_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)}</div>

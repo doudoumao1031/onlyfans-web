@@ -2,6 +2,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+
 import * as cryptoModule from "@/lib/crypto"
 
 // Import crypto functions
@@ -415,19 +416,19 @@ export default function DataCryptoPage() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-4">
-      <div className="container mx-auto p-4 max-w-4xl">
-        <div className="bg-background-secondary p-6 rounded-lg shadow-md mb-6">
-          <h1 className="text-2xl font-bold mb-4 text-gray-primary">Data Crypto Testing</h1>
+      <div className="container mx-auto max-w-4xl p-4">
+        <div className="bg-background-secondary mb-6 rounded-lg p-6 shadow-md">
+          <h1 className="text-gray-primary mb-4 text-2xl font-bold">Data Crypto Testing</h1>
 
           {error && (
-            <div className="mb-4 p-4 bg-pink/10 border border-pink rounded-md">
+            <div className="bg-pink/10 border-pink mb-4 rounded-md border p-4">
               <p className="text-gray-primary">{error}</p>
             </div>
           )}
 
           <div className="mb-4 flex items-end gap-2">
-            <div className="flex-grow">
-              <label className="block text-sm font-medium mb-2">
+            <div className="grow">
+              <label className="mb-2 block text-sm font-medium">
                 Custom Encryption Key:
               </label>
               <div className="flex">
@@ -435,7 +436,7 @@ export default function DataCryptoPage() {
                   type="text"
                   value={customKey}
                   onChange={(e) => setCustomKey(e.target.value)}
-                  className="flex-grow p-2 border border-gray-quaternary rounded-md focus:outline-none focus:ring-1 focus:ring-theme"
+                  className="border-gray-quaternary focus:ring-theme grow rounded-md border p-2 focus:outline-none focus:ring-1"
                   placeholder="Enter custom encryption key"
                 />
               </div>
@@ -443,44 +444,44 @@ export default function DataCryptoPage() {
             <button
               onClick={resetKey}
               disabled={!isLoaded}
-              className="px-4 py-2 bg-orange text-white rounded-md hover:bg-orange/80"
+              className="bg-orange hover:bg-orange/80 rounded-md px-4 py-2 text-white"
             >
               Reset Key
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-gray-primary mb-2">
+              <label className="text-gray-primary mb-2 block text-sm font-medium">
                 Original Data (Text or Byte Array)
               </label>
               <textarea
-                className="w-full p-2 border border-gray-quaternary rounded-md focus:outline-none focus:ring-1 focus:ring-theme"
+                className="border-gray-quaternary focus:ring-theme w-full rounded-md border p-2 focus:outline-none focus:ring-1"
                 rows={5}
                 value={originalData}
                 onChange={(e) => setOriginalData(e.target.value)}
                 placeholder="Enter text or comma-separated byte values (0-255)"
               />
-              <div className="mt-2 text-sm text-gray-tertiary">
+              <div className="text-gray-tertiary mt-2 text-sm">
                 Current format: {isInputBytes ? "Byte Array" : "Text"}
               </div>
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="mt-2 flex flex-wrap gap-2">
                 <button
                   onClick={handleEncrypt}
-                  className="px-4 py-2 bg-theme text-white rounded-md hover:bg-theme/80"
+                  className="bg-theme hover:bg-theme/80 rounded-md px-4 py-2 text-white"
                 >
                   Encrypt
                 </button>
                 <button
                   onClick={removeQuotes}
-                  className="px-4 py-2 bg-orange text-white rounded-md hover:bg-orange/80"
+                  className="bg-orange hover:bg-orange/80 rounded-md px-4 py-2 text-white"
                 >
                   Remove Quotes
                 </button>
                 <div className="relative">
                   <button
                     onClick={() => document.getElementById("file-upload")?.click()}
-                    className="px-4 py-2 bg-green text-white rounded-md hover:bg-green/80"
+                    className="bg-green hover:bg-green/80 rounded-md px-4 py-2 text-white"
                   >
                     Upload File
                   </button>
@@ -492,7 +493,7 @@ export default function DataCryptoPage() {
                   />
                 </div>
                 {fileName && (
-                  <div className="mt-2 text-sm text-gray-tertiary">
+                  <div className="text-gray-tertiary mt-2 text-sm">
                     Loaded file: <span className="text-theme">{fileName}</span>
                   </div>
                 )}
@@ -500,28 +501,28 @@ export default function DataCryptoPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-primary mb-2">
+              <label className="text-gray-primary mb-2 block text-sm font-medium">
                 Encrypted Data (Byte Array)
               </label>
               <textarea
-                className="w-full p-2 border border-gray-quaternary rounded-md focus:outline-none focus:ring-1 focus:ring-theme"
+                className="border-gray-quaternary focus:ring-theme w-full rounded-md border p-2 focus:outline-none focus:ring-1"
                 rows={5}
                 value={encryptedData}
                 onChange={(e) => setEncryptedData(e.target.value)}
                 placeholder="Encrypted data will appear here"
                 readOnly
               />
-              <div className="flex flex-wrap gap-2 mt-2">
+              <div className="mt-2 flex flex-wrap gap-2">
                 <button
                   onClick={handleDecrypt}
-                  className="px-4 py-2 bg-theme text-white rounded-md hover:bg-theme/80"
+                  className="bg-theme hover:bg-theme/80 rounded-md px-4 py-2 text-white"
                   disabled={!encryptedData}
                 >
                   Decrypt
                 </button>
                 <button
                   onClick={downloadEncryptedFile}
-                  className="px-4 py-2 bg-purple text-white rounded-md hover:bg-purple/80"
+                  className="bg-purple hover:bg-purple/80 rounded-md px-4 py-2 text-white"
                   disabled={!encryptedData}
                 >
                   Download File
@@ -531,20 +532,20 @@ export default function DataCryptoPage() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-primary mb-2">
+            <label className="text-gray-primary mb-2 block text-sm font-medium">
               Decrypted Data
             </label>
             <textarea
-              className="w-full p-2 border border-gray-quaternary rounded-md focus:outline-none focus:ring-1 focus:ring-theme"
+              className="border-gray-quaternary focus:ring-theme w-full rounded-md border p-2 focus:outline-none focus:ring-1"
               rows={5}
               value={decryptedData}
               readOnly
               placeholder="Decrypted data will appear here"
             />
-            <div className="flex flex-wrap gap-2 mt-2">
+            <div className="mt-2 flex flex-wrap gap-2">
               <button
                 onClick={downloadDecryptedFile}
-                className="px-4 py-2 bg-purple text-white rounded-md hover:bg-purple/80"
+                className="bg-purple hover:bg-purple/80 rounded-md px-4 py-2 text-white"
                 disabled={!decryptedData}
               >
                 Download File
@@ -555,17 +556,17 @@ export default function DataCryptoPage() {
           <div className="mb-4 flex gap-2">
             <button
               onClick={loadTestCase}
-              className="px-4 py-2 bg-purple text-white rounded-md hover:bg-purple/80"
+              className="bg-purple hover:bg-purple/80 rounded-md px-4 py-2 text-white"
             >
               Load Test Case
             </button>
             <button
               onClick={clearAll}
-              className="px-4 py-2 bg-pink text-white rounded-md hover:bg-pink/80"
+              className="bg-pink hover:bg-pink/80 rounded-md px-4 py-2 text-white"
             >
               Clear All
             </button>
-            <p className="text-sm text-gray-tertiary mt-2 flex-grow">
+            <p className="text-gray-tertiary mt-2 grow text-sm">
               Loads a predefined test case with known input and expected output for testing and demonstration purposes.
             </p>
           </div>
@@ -573,15 +574,15 @@ export default function DataCryptoPage() {
           {(performanceStats.fileLoadTime !== undefined ||
             performanceStats.encryptionTime !== undefined ||
             performanceStats.decryptionTime !== undefined) && (
-            <div className="mb-4 p-4 bg-background-primary rounded-md border border-gray-quaternary">
-              <h2 className="text-lg font-semibold mb-2 text-gray-primary">Performance Statistics</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-background-primary border-gray-quaternary mb-4 rounded-md border p-4">
+              <h2 className="text-gray-primary mb-2 text-lg font-semibold">Performance Statistics</h2>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                 {performanceStats.fileLoadTime !== undefined && (
                   <div>
-                    <p className="text-sm font-medium text-gray-secondary">File Load Time</p>
-                    <p className="text-lg text-theme">{performanceStats.fileLoadTime.toFixed(2)} ms</p>
+                    <p className="text-gray-secondary text-sm font-medium">File Load Time</p>
+                    <p className="text-theme text-lg">{performanceStats.fileLoadTime.toFixed(2)} ms</p>
                     {performanceStats.fileSize && (
-                      <p className="text-xs text-gray-tertiary">
+                      <p className="text-gray-tertiary text-xs">
                         File size: {(performanceStats.fileSize / (1024 * 1024)).toFixed(2)} MB
                       </p>
                     )}
@@ -589,10 +590,10 @@ export default function DataCryptoPage() {
                 )}
                 {performanceStats.encryptionTime !== undefined && (
                   <div>
-                    <p className="text-sm font-medium text-gray-secondary">Encryption Time</p>
-                    <p className="text-lg text-theme">{performanceStats.encryptionTime.toFixed(2)} ms</p>
+                    <p className="text-gray-secondary text-sm font-medium">Encryption Time</p>
+                    <p className="text-theme text-lg">{performanceStats.encryptionTime.toFixed(2)} ms</p>
                     {originalBytes.length > 0 && (
-                      <p className="text-xs text-gray-tertiary">
+                      <p className="text-gray-tertiary text-xs">
                         {originalBytes.length.toLocaleString()} bytes processed
                       </p>
                     )}
@@ -600,10 +601,10 @@ export default function DataCryptoPage() {
                 )}
                 {performanceStats.decryptionTime !== undefined && (
                   <div>
-                    <p className="text-sm font-medium text-gray-secondary">Decryption Time</p>
-                    <p className="text-lg text-theme">{performanceStats.decryptionTime.toFixed(2)} ms</p>
+                    <p className="text-gray-secondary text-sm font-medium">Decryption Time</p>
+                    <p className="text-theme text-lg">{performanceStats.decryptionTime.toFixed(2)} ms</p>
                     {decryptedBytes.length > 0 && (
-                      <p className="text-xs text-gray-tertiary">
+                      <p className="text-gray-tertiary text-xs">
                         {decryptedBytes.length.toLocaleString()} bytes processed
                       </p>
                     )}
@@ -613,9 +614,9 @@ export default function DataCryptoPage() {
             </div>
           )}
 
-          <div className="bg-background-primary p-4 rounded-md border border-gray-quaternary">
-            <h2 className="text-lg font-semibold mb-2 text-gray-primary">How to use:</h2>
-            <ol className="list-decimal list-inside space-y-1 text-gray-secondary">
+          <div className="bg-background-primary border-gray-quaternary rounded-md border p-4">
+            <h2 className="text-gray-primary mb-2 text-lg font-semibold">How to use:</h2>
+            <ol className="text-gray-secondary list-inside list-decimal space-y-1">
               <li>Enter text or a comma-separated byte array in the Original Data field</li>
               <li>Click &quot;Encrypt&quot; to convert it to an encrypted byte array</li>
               <li>Or enter an encrypted byte array in the Encrypted Data field</li>
@@ -629,9 +630,9 @@ export default function DataCryptoPage() {
               <li>Use &quot;Download Encrypted File&quot; to save the encrypted data as a file</li>
               <li>Use &quot;Download Decrypted File&quot; to save the decrypted data as a file</li>
             </ol>
-            <div className="mt-4 p-3 bg-theme/10 rounded-md border border-theme/30">
-              <h3 className="text-sm font-semibold text-theme mb-1">Large File Support</h3>
-              <p className="text-xs text-gray-secondary">
+            <div className="bg-theme/10 border-theme/30 mt-4 rounded-md border p-3">
+              <h3 className="text-theme mb-1 text-sm font-semibold">Large File Support</h3>
+              <p className="text-gray-secondary text-xs">
                 This tool supports files up to 200MB. For large files, only the first 1000 bytes are displayed in the text areas,
                 but the entire file is processed during encryption and decryption. Performance statistics are shown to help assess
                 processing time for different file sizes.

@@ -1,10 +1,11 @@
-import { starPost } from "@/lib"
-import { useState } from "react"
-import Stats from "./stats"
-import { useMemo } from "react"
+import { useState , useMemo } from "react"
+
 import { useCommonMessageContext } from "@/components/common/common-message"
+import { starPost } from "@/lib"
 import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
+
 import LikeBtn from "./like-btn"
+import Stats from "./stats"
 
 export default function Like({
   count,

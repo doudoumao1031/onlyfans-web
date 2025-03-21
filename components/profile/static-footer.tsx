@@ -1,7 +1,10 @@
-import { Link } from "@/i18n/routing"
-import Image from "next/image"
 import { getTranslations } from "next-intl/server"
+
+import Image from "next/image"
+
+
 import IconWithImage from "@/components/profile/icon"
+import { Link } from "@/i18n/routing"
 
 const LINKS_CONFIG = [
   {
@@ -38,7 +41,7 @@ export default async function Page() {
       <div className="mt-5 ">
         <div className="">
           {LINKS_CONFIG.map((item) => (
-            <Link key={item.labelKey} href={item.href} className="flex justify-center items-center gap-2 text-[17px]">
+            <Link key={item.labelKey} href={item.href} className="flex items-center justify-center gap-2 text-[17px]">
               <div>
                 <Image
                   src={item.iconURL}
@@ -47,7 +50,7 @@ export default async function Page() {
                   height={40}
                 />
               </div>
-              <div className={"flex-1 py-5 flex justify-between font-medium border-b border-[#ddd] items-center"}>
+              <div className={"flex flex-1 items-center justify-between border-b border-[#ddd] py-5 font-medium"}>
                 <div>{t(item.labelKey)}</div>
                 <IconWithImage
                   url={"/theme/icon_arrow_right_gray@3x.png"}

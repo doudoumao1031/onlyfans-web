@@ -1,5 +1,4 @@
-import { PageInfo, ENDPOINTS } from "@/lib"
-import {
+import { PageInfo, ENDPOINTS ,
   PostInfoReq,
   DeletePostFileReq,
   DeleteVoteReq,

@@ -1,5 +1,15 @@
 "use client"
+import { useState } from "react"
+
+import dayjs from "dayjs"
+import localizedFormat from "dayjs/plugin/localizedFormat"
+import { useTranslations , useLocale } from "next-intl"
+import TextareaAutosize from "react-textarea-autosize"
+
 import Image from "next/image"
+
+import CommonAvatar from "@/components/common/common-avatar"
+import { TPost } from "@/components/post/types"
 import {
   addComment,
   CommentInfo,
@@ -10,20 +20,13 @@ import {
   replyComment,
   upComment
 } from "@/lib"
-import { useState } from "react"
-import CommonAvatar from "@/components/common/common-avatar"
-import CommentSkeleton from "./comment-skeleton"
-import SheetSelect from "../common/sheet-select"
-import { useTranslations } from "next-intl"
-import { useCommonMessageContext } from "../common/common-message"
-import dayjs from "dayjs"
-import TextareaAutosize from "react-textarea-autosize"
-import EmojiPicker from "./emoji-picker"
-import { TPost } from "@/components/post/types"
-import { useGlobal } from "@/lib/contexts/global-context"
-import localizedFormat from "dayjs/plugin/localizedFormat"
-import { useLocale } from "next-intl"
 import { EN_MMM_D_h_mm_A, LOCAL_ZH, ZH_M_D_HH_mm } from "@/lib/constant"
+import { useGlobal } from "@/lib/contexts/global-context"
+
+import CommentSkeleton from "./comment-skeleton"
+import EmojiPicker from "./emoji-picker"
+import { useCommonMessageContext } from "../common/common-message"
+import SheetSelect from "../common/sheet-select"
 
 interface CommentsProps {
   post_id: number
@@ -46,8 +49,8 @@ export default function Comments(props: CommentsProps) {
   return (
     <>
       <div className="flex flex-col gap-2.5 p-4">
-        <div className="flex gap-2 items-center">
-          <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
+        <div className="flex items-center gap-2">
+          <div className="flex grow items-center gap-2 rounded-[18px] bg-gray-50 p-2">
             <TextareaAutosize
               minRows={1}
               value={input}
@@ -67,7 +70,7 @@ export default function Comments(props: CommentsProps) {
           <div
             className={`p-1 ${
               !input || input === "" ? "bg-sky-500/50" : "bg-theme"
-            } rounded-[50%] size-[30px] bg-sky`}
+            } bg-sky size-[30px] rounded-[50%]`}
           >
             <Image
               // src="/theme/icon_fans_comment_send@3x.png"
@@ -164,8 +167,8 @@ function Comment({
                 <CommonAvatar photoFileId={photo} size={32} />
               </div>
               <div className="flex flex-col gap-2">
-                <div className="text-xs text-theme">{`${first_name} ${last_name}`}</div>
-                <div className="text-sm break-all">{content}</div>
+                <div className="text-theme text-xs">{`${first_name} ${last_name}`}</div>
+                <div className="break-all text-sm">{content}</div>
                 <div className="flex gap-4 text-xs text-[#6D7781]">
                   <div>{dayjs.unix(comment_time).format(datetimeFormat)}</div>
                   {reply_count > 0 && (
@@ -187,8 +190,8 @@ function Comment({
         )}
         {showReplyInput && (
           <>
-            <div className="flex gap-2 items-center">
-              <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
+            <div className="flex items-center gap-2">
+              <div className="flex grow items-center gap-2 rounded-[18px] bg-gray-50 p-2">
                 <TextareaAutosize
                   minRows={1}
                   value={replyInput}
@@ -208,7 +211,7 @@ function Comment({
               <div
                 className={`p-1 ${
                   !replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"
-                } rounded-[50%] size-[30px]`}
+                } size-[30px] rounded-[50%]`}
               >
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
@@ -229,7 +232,7 @@ function Comment({
           </>
         )}
         {showReplies && !!replies?.length && (
-          <div className="pl-10 flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5 pl-10">
             {replies.map((reply) => (
               <Reply
                 key={reply.id}
@@ -385,7 +388,7 @@ function Reply({
               <CommonAvatar photoFileId={photo} size={32} />
             </div>
             <div className="flex flex-col gap-2">
-              <div className="text-xs text-theme">
+              <div className="text-theme text-xs">
                 {first_name} {last_name}
               </div>
               <div className="text-sm">
@@ -410,8 +413,8 @@ function Reply({
         </div>
         {showReplyInput && (
           <>
-            <div className="flex gap-2 items-center">
-              <div className="grow flex items-center gap-2 bg-gray-50 rounded-[18px] p-2">
+            <div className="flex items-center gap-2">
+              <div className="flex grow items-center gap-2 rounded-[18px] bg-gray-50 p-2">
                 <TextareaAutosize
                   minRows={1}
                   value={replyInput}
@@ -431,7 +434,7 @@ function Reply({
               <div
                 className={`p-1 ${
                   !replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"
-                } rounded-[50%] size-[30px]`}
+                } size-[30px] rounded-[50%]`}
               >
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
@@ -519,7 +522,7 @@ function Thumbup({
   thumbup: () => void
 }) {
   return (
-    <div className="flex flex-col items-center ml-2" onClick={thumbup}>
+    <div className="ml-2 flex flex-col items-center" onClick={thumbup}>
       <Image
         src={`${isThumbupped ? "/theme/icon_info_good_red@3x.png" : "/icons/thumbup.png"}`}
         width={20}

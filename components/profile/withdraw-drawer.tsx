@@ -1,23 +1,25 @@
 "use client"
-import IconWithImage from "@/components/profile/icon"
 import React, { useEffect, useMemo } from "react"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { clsx } from "clsx"
+import { useTranslations } from "next-intl"
+import { Controller, useForm } from "react-hook-form"
+import { z } from "zod"
+
+import {
+  useCommonMessageContext
+} from "@/components/common/common-message"
 import FormDrawer from "@/components/common/form-drawer"
+import LoadingMask from "@/components/common/loading-mask"
+import IconWithImage from "@/components/profile/icon"
 import { Input } from "@/components/ui/input"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { Link, useRouter } from "@/i18n/routing"
 import {
   addWalletDownOrder,
   WalletInfo
 } from "@/lib"
-import { Controller, useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import {
-  useCommonMessageContext
-} from "@/components/common/common-message"
-import { clsx } from "clsx"
-import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import LoadingMask from "@/components/common/loading-mask"
-import { Link, useRouter } from "@/i18n/routing"
-import { useTranslations } from "next-intl"
 
 interface WithdrawDrawerProps {
   children: React.ReactNode
@@ -112,7 +114,7 @@ export default function WithdrawDrawer(props: WithdrawDrawerProps) {
           headerRight={() => {
             return (
               <Link href={"/profile/withdraw"}>
-                <button className={"text-base text-text-theme"}>{t("withdrawalAmountDetail")}</button>
+                <button className={"text-text-theme text-base"}>{t("withdrawalAmountDetail")}</button>
               </Link>
             )
           }}
@@ -122,19 +124,19 @@ export default function WithdrawDrawer(props: WithdrawDrawerProps) {
           }}
         >
           <div className="p-8">
-            <div className="grid grid-cols-2 mt-4">
+            <div className="mt-4 grid grid-cols-2">
               <div className="flex flex-col items-center">
-                <span className="text-xs mb-2">{t("withdrawalAmountAvailable")}</span>
+                <span className="mb-2 text-xs">{t("withdrawalAmountAvailable")}</span>
                 <span className="text-[20px]">{info.amount - (info?.freeze ?? 0)} USDT</span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-xs mb-2">{t("withdrawalAmountFreeze")}</span>
+                <span className="mb-2 text-xs">{t("withdrawalAmountFreeze")}</span>
                 <span className="text-[20px]">{info.freeze} USDT</span>
               </div>
             </div>
-            <div className="flex justify-between items-center mt-10 relative">
-              <span className="font-bold text-base">{t("withdrawal")}</span>
-              <span className="flex items-center flex-1 justify-end">
+            <div className="relative mt-10 flex items-center justify-between">
+              <span className="text-base font-bold">{t("withdrawal")}</span>
+              <span className="flex flex-1 items-center justify-end">
                 <Controller
                   control={withdrawalForm.control}
                   render={({ field }) => {
@@ -156,7 +158,7 @@ export default function WithdrawDrawer(props: WithdrawDrawerProps) {
                           }
                         }}
                         placeholder="0.00"
-                        className="border-0 w-16 flex-1 text-right"
+                        className="w-16 flex-1 border-0 text-right"
                       />
                     )
                   }}
@@ -168,7 +170,7 @@ export default function WithdrawDrawer(props: WithdrawDrawerProps) {
               {/*  {withdrawalForm.formState.errors?.amount?.message}*/}
               {/*</section>*/}
             </div>
-            <div className="flex justify-center mt-10">
+            <div className="mt-10 flex justify-center">
               <button
                 disabled={!!errorMessage}
                 type={"button"}
@@ -189,7 +191,7 @@ export default function WithdrawDrawer(props: WithdrawDrawerProps) {
                   })
                 }}
                 className={clsx(
-                  "w-full transition-all h-12 rounded-full text-white flex justify-center items-center ",
+                  "flex h-12 w-full items-center justify-center rounded-full text-white transition-all ",
                   !!errorMessage ? "bg-[#ddd]" : "bg-background-theme "
                 )}
               >

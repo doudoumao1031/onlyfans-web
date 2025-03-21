@@ -1,4 +1,5 @@
 import { buildImageUrl } from "@/lib/utils"
+
 import LazyImg from "../common/lazy-img"
 
 export default function Avatar({
@@ -15,7 +16,7 @@ export default function Avatar({
       <LazyImg
         src={buildImageUrl(fileId)}
         alt=""
-        className={`rounded-full border-2 border-white w-${width} h-${width}`}
+        className={`w- rounded-full border-2 border-white${width} h-${width}`}
         width={50}
         height={50}
       />

@@ -1,6 +1,8 @@
-import { PageResponse } from "@/lib"
 import { useCallback, useEffect, useRef, useState } from "react"
+
 import useSWR from "swr"
+
+import { PageResponse } from "@/lib"
 
 interface UseInfiniteScrollOptions<T> {
   initialItems: T[]

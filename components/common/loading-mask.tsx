@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState } from "react"
+
 import CommonLoading from "./common-loading"
 
 interface LoadingMaskProps {
@@ -18,8 +19,8 @@ export default function LoadingMask({ isLoading }: LoadingMaskProps) {
   if (!mounted || !isLoading) return null
 
   return (
-    <div id="loading-mask" className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-center justify-center">
-      <div className="rounded-lg relative w-[200px]">
+    <div id="loading-mask" className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="relative w-[200px] rounded-lg">
         <CommonLoading />
       </div>
     </div>

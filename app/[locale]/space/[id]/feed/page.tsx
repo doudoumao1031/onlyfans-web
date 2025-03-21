@@ -1,15 +1,18 @@
 "use client"
 
 import React, { Fragment, useEffect, useState } from "react"
-import Post from "@/components/post/post"
 
+import { useParams } from "next/navigation"
+
+import Empty from "@/components/common/empty"
+import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListError, ListLoading, ListEnd } from "@/components/explore/list-states"
+import Post from "@/components/post/post"
 import { PageResponse, PostData, PageInfo } from "@/lib"
 import { getUserPosts } from "@/lib/actions/space"
 import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import InfiniteScroll from "@/components/common/infinite-scroll"
-import { useParams } from "next/navigation"
-import Empty from "@/components/common/empty"
+
+
 
 type FeedParams = PageInfo & {
   user_id: number
@@ -41,10 +44,10 @@ export default function FeedList() {
     }
   })
   return (
-    <div className="w-full h-full">
+    <div className="size-full">
       {initData && (
         <InfiniteScroll<PostData>
-          className={"h-full w-full mx-auto"}
+          className={"mx-auto size-full"}
           initialItems={initData.list || []}
           initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}
           fetcherFn={infiniteFetchPosts}
@@ -52,7 +55,7 @@ export default function FeedList() {
           {({ items, isLoading, hasMore, error }) => (
             <Fragment>
               {Boolean(error) && <ListError />}
-              <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
+              <div className="mx-auto grid max-w-lg grid-cols-1 gap-4">
                 {items.map((item, index) => (
                   <Post
                     key={`${item.post.id}-${index}`}

@@ -1,12 +1,14 @@
 "use client"
 
-import { useSearchParams, useRouter } from "next/navigation"
 import { Suspense, useState, useEffect } from "react"
-import { login, users } from "@/lib/actions/auth/actions"
-import { TOKEN_KEY, USER_KEY } from "@/lib/utils"
+
+import { useSearchParams, useRouter } from "next/navigation"
+
 import LoadingMask from "@/components/common/loading-mask"
-import { useGlobal } from "@/lib/contexts/global-context"
 import { UserListResp } from "@/lib"
+import { login, users } from "@/lib/actions/auth/actions"
+import { useGlobal } from "@/lib/contexts/global-context"
+import { TOKEN_KEY, USER_KEY } from "@/lib/utils"
 
 function ErrorContent() {
   const search = useSearchParams()
@@ -77,17 +79,17 @@ function ErrorContent() {
     <div className="flex min-h-screen items-center justify-center">
       <div className="text-center">
         {errorMsg && <div className="text-theme mb-4">{errorMsg}</div>}
-        <h1 className="text-2xl font-bold mb-4 text-text-title">403 - Unauthorized / 未授权访问</h1>
+        <h1 className="text-text-title mb-4 text-2xl font-bold">403 - Unauthorized / 未授权访问</h1>
         <div className="space-y-4">
           <div>
             <input
               type="text"
               value={userId}
               onChange={(e) => setUserId(e.target.value)}
-              className="border rounded px-4 py-2 w-64"
+              className="w-64 rounded border px-4 py-2"
               placeholder="Enter User ID / 输入用户ID"
             />
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="mt-1 text-sm text-gray-500">
               Type #getself in Potato Chat to get your User ID
               <br />
               在Potato聊天中输入 #getself 获取用户ID
@@ -98,7 +100,7 @@ function ErrorContent() {
             <select
               value={token}
               onChange={(e) => setToken(e.target.value)}
-              className="border rounded px-4 py-2 w-64"
+              className="w-64 rounded border px-4 py-2"
             >
               <option value="">Select Token / 选择令牌</option>
               {useList.map((user) => (
@@ -107,7 +109,7 @@ function ErrorContent() {
                 </option>
               ))}
             </select>
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="mt-1 text-sm text-gray-500">
               For development env, you can select from the list
               <br />
               开发环境可以从列表中选择
@@ -115,7 +117,7 @@ function ErrorContent() {
           </div>
           <button
             onClick={handleClick}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
           >
             Login / 登录
           </button>

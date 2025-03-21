@@ -1,16 +1,24 @@
 "use client"
+import { useState } from "react"
+
+import { useTranslations } from "next-intl"
+
+import { useRouter } from "next/navigation"
+
+
+import SubscribedDrawer from "@/components/explore/subscribed-drawer"
+import CommonRecharge from "@/components/post/common-recharge"
 import Avatar from "@/components/profile/avatar"
 import IconWithImage from "@/components/profile/icon"
 import Directions from "@/components/space/directions"
 import { UserProfile } from "@/lib/actions/profile"
-import SpaceHeader from "./space-header"
-import Attention from "./attention"
-import { useState } from "react"
-import SubscribedDrawer from "@/components/explore/subscribed-drawer"
-import CommonRecharge from "@/components/post/common-recharge"
-import { useRouter } from "next/navigation"
 import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
-import { useTranslations } from "next-intl"
+
+import Attention from "./attention"
+import SpaceHeader from "./space-header"
+
+
+
 
 export default function UserInfo({
   data,
@@ -39,33 +47,33 @@ export default function UserInfo({
   return (
     <div className="w-full">
       <SpaceHeader data={data} />
-      <section className="mt-[-47px] rounded-t-3xl bg-white relative  pt-12 text-black " id="refEl">
-        <section className="pl-4 pr-4 pb-3 ">
+      <section className="relative mt-[-47px] rounded-t-3xl bg-white  pt-12 text-black " id="refEl">
+        <section className="px-4 pb-3 ">
           <Avatar showLive={data.live_certification} fileId={data.photo} />
 
-          <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
+          <h1 className="flex items-center justify-center text-center text-[18px] font-bold">
             <span>
               {data.first_name}
             </span>
           </h1>
           {!isSelf && <Attention data={data} />}
-          <div className="text-center text-gray-400 text-xs">
+          <div className="text-center text-xs text-gray-400">
             {data.username
               ? "@" + data.username
               : !data.first_name && !data.about ? t("noUserName") : ""}
           </div>
-          <div className="flex justify-center mt-1">
+          <div className="mt-1 flex justify-center">
             <IconWithImage
               url="/icons/icon_info_location.png"
               width={16}
               height={18}
               color="#222"
             />
-            <span className="text-xs ml-1 text-gray-400 max-w-[130px] truncate">{data.location || "北京"}</span>
+            <span className="ml-1 max-w-[130px] truncate text-xs text-gray-400">{data.location || "北京"}</span>
           </div>
-          <div className="flex justify-between mt-6 mb-6 px-1">
+          <div className="my-6 flex justify-between px-1">
             {tabs.map((v) => (
-              <div key={v.icon} className="flex justify-center items-center">
+              <div key={v.icon} className="flex items-center justify-center">
                 <IconWithImage url={v.icon} width={20} height={20} color="#222" />
                 <span className="ml-1 text-[#777]">{v.num}</span>
               </div>
@@ -85,7 +93,7 @@ export default function UserInfo({
                 })
               }}
             >
-              <div className="w-full h-12 rounded-lg  pl-4 mt-2 flex flex-col justify-center items-start text-white bg-[url('/theme/bg_space_subscription@3x.png')] bg-cover">
+              <div className="mt-2 flex h-12  w-full flex-col items-start justify-center rounded-lg bg-[url('/theme/bg_space_subscription@3x.png')] bg-cover pl-4 text-white">
                 <div>{t("subscribe")}</div>
                 <div className="text-xs">
                   {data.sub_price === 0 ? t("free") : `${data.sub_price} USDT/${t("month")}`}

@@ -1,12 +1,11 @@
 "use server"
 
-import { ENDPOINTS, UploadRes } from "@/lib"
 import type {
   UploadPartReq,
   CompleteFileReq,
   UploadPartResp
 } from "@/lib"
-import { fetchWithPost } from "@/lib"
+import { ENDPOINTS, UploadRes , fetchWithPost } from "@/lib"
 
 
 // file: File

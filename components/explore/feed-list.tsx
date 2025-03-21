@@ -1,12 +1,14 @@
 "use client"
 
 import React, { Fragment, useEffect, useRef } from "react"
+
 import Post from "@/components/post/post"
-import InfiniteScroll from "../common/infinite-scroll"
-import { ListError, ListLoading, ListEnd } from "./list-states"
 import { PostData } from "@/lib"
 import { recomActions } from "@/lib/actions"
 import { ActionTypes } from "@/lib/contexts/global-context"
+
+import { ListError, ListLoading, ListEnd } from "./list-states"
+import InfiniteScroll from "../common/infinite-scroll"
 
 interface FeedListProps {
   initialItems: PostData[]
@@ -42,7 +44,7 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
         return (
           <Fragment>
             {Boolean(error) && <ListError />}
-            <div className="max-w-lg mx-auto grid grid-cols-1 gap-4">
+            <div className="mx-auto grid max-w-lg grid-cols-1 gap-4">
               {items.map((item, index) => (
                 <Post key={`${item.post.id}-${index}`} data={item} hasSubscribe hasVote />
               ))}

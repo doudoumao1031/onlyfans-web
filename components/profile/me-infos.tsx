@@ -1,12 +1,15 @@
-import Avatar from "@/components/profile/avatar"
-import IconWithImage from "@/components/profile/icon"
-import { Link } from "@/i18n/routing"
-import { userProfile } from "@/lib/actions/profile"
-import { userWallet } from "@/lib"
-import FoldingDescription from "@/components/profile/folding-description"
-import RechargePanel from "@/components/profile/recharge-panel"
 import { getTranslations } from "next-intl/server"
+
+import Avatar from "@/components/profile/avatar"
+import FoldingDescription from "@/components/profile/folding-description"
+import IconWithImage from "@/components/profile/icon"
+import RechargePanel from "@/components/profile/recharge-panel"
+import { Link } from "@/i18n/routing"
+import { userWallet } from "@/lib"
+import { userProfile } from "@/lib/actions/profile"
+
 import ProfileHeader from "./profile-header"
+
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
     return data
@@ -33,12 +36,12 @@ export default async function Page() {
   return (
     <div>
       <ProfileHeader data={data} />
-      <section className="bg-white relative  text-black ">
-        <section className="pl-4 pr-4 pb-3">
+      <section className="relative bg-white  text-black ">
+        <section className="px-4 pb-3">
           <div className={"flex justify-between"}>
             <div className={"relative top-[-24px]"}>
               <Avatar showLive={data.live_certification} fileId={data.photo} />
-              <h1 className="text-[18px] font-bold items-center flex gap-2">
+              <h1 className="flex items-center gap-2 text-[18px] font-bold">
                 <span>
                   {data.first_name}
                 </span>
@@ -51,26 +54,26 @@ export default async function Page() {
                   />
                 </Link>
               </h1>
-              <div className="text-center text-text-desc text-xs">
+              <div className="text-text-desc text-center text-xs">
                 {data.username
                   ? "@" + data.username
                   : !data.first_name && !data.about ? t("noUserName") : ""}
               </div>
             </div>
             <Link href={`/space/${data.id}/feed`}>
-              <div className="flex justify-center mt-2.5">
-                <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-theme text-text-theme shrink-0">
+              <div className="mt-2.5 flex justify-center">
+                <button className=" border-border-theme text-text-theme shrink-0 rounded-2xl border px-8 py-1">
                   {t("actions.enter")}
                 </button>
               </div>
             </Link>
           </div>
-          <div className="text-[14px] mt-[-14px]">
+          <div className="mt-[-14px] text-[14px]">
             <FoldingDescription about={data.about} location={data.location} />
           </div>
         </section>
-        <div className="p-5 border-y border-[#ddd]">
-          <div className="grid-cols-4 grid text-center">
+        <div className="border-y border-[#ddd] p-5">
+          <div className="grid grid-cols-4 text-center">
             <div className="border-r border-b-[#ddd]">
               <div className="text-2xl">{displayNumber(data.post_count)}</div>
               <div className="text-xs text-[#333]">{t("moduleTypes.post")}</div>
@@ -91,8 +94,8 @@ export default async function Page() {
         </div>
         <RechargePanel walletInfo={walletInfo} />
 
-        <div className="pl-4 pr-4">
-          <div className="flex justify-between items-center pt-2.5 pb-2.5">
+        <div className="px-4">
+          <div className="flex items-center justify-between py-2.5">
             <h3 className="text-[15px] font-bold">{t("favorites.title")}</h3>
             <Link href={"/profile/collect/posts"} className="text-gray-300">
               <IconWithImage
@@ -107,19 +110,19 @@ export default async function Page() {
           <div className="grid grid-cols-2 gap-3">
             <Link
               href={"/profile/collect/blogger"}
-              className="rounded-xl pt-1.5 pl-4 bg-[url('/theme/bg_collect_blogger@3x.png')] bg-cover"
+              className="rounded-xl bg-[url('/theme/bg_collect_blogger@3x.png')] bg-cover pl-4 pt-1.5"
             >
               <div className="text-xs text-[rgba(34,34,34,0.70)]">{t("favorites.blogger")}</div>
-              <div className="font-medium text-[#2b2b2b] text-[34px] ">
+              <div className="text-[34px] font-medium text-[#2b2b2b] ">
                 {data.collection_user_count}
               </div>
             </Link>
             <Link
               href={"/profile/collect/posts"}
-              className="rounded-xl pt-1.5 pl-4 bg-[url('/theme/bg_collect_posts@3x.png')] bg-cover"
+              className="rounded-xl bg-[url('/theme/bg_collect_posts@3x.png')] bg-cover pl-4 pt-1.5"
             >
               <div className="text-xs text-[rgba(34,34,34,0.70)]">{t("favorites.posts")}</div>
-              <div className="font-medium text-[#2b2b2b] text-[34px] ">
+              <div className="text-[34px] font-medium text-[#2b2b2b] ">
                 {data.collection_post_count}
               </div>
             </Link>

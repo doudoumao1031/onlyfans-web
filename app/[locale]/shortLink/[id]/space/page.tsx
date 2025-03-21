@@ -1,5 +1,4 @@
 "use client"
-
 import { useParams } from "next/navigation"
 
 export default function Page() {
@@ -10,7 +9,7 @@ export default function Page() {
 
   }
   return (
-    <button className="w-full h-full" onTouchEnd={action}>
+    <button className="size-full" onTouchEnd={action}>
       <div>11</div>
     </button>
   )

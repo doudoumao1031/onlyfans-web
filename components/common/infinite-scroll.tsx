@@ -1,9 +1,11 @@
 "use client"
 
 import React, { useRef, useEffect } from "react"
-import { debounce } from "lodash"
-import { useInfiniteScroll } from "@/lib/hooks/use-infinite-scroll"
+
 import clsx from "clsx"
+import { debounce } from "lodash"
+
+import { useInfiniteScroll } from "@/lib/hooks/use-infinite-scroll"
 
 export interface InfiniteScrollProps<T> {
   initialItems: T[]
@@ -111,12 +113,12 @@ export default function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
   return (
     <div
       ref={containerRef}
-      className={clsx("w-full h-full overflow-y-auto relative list-scroll-box hide-scrollbar", className)}
+      className={clsx("list-scroll-box hide-scrollbar relative size-full overflow-y-auto", className)}
       style={{ transition: "transform 0.2s ease-out" }}
     >
       {isRefreshing && (
-        <div className="sticky top-0 left-0 right-0 flex justify-center py-2 bg-gray-100/80 z-10">
-          <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-900 border-t-transparent"></div>
+        <div className="sticky inset-x-0 top-0 z-10 flex justify-center bg-gray-100/80 py-2">
+          <div className="size-6 animate-spin rounded-full border-2 border-gray-900 border-t-transparent"></div>
         </div>
       )}
       {children({

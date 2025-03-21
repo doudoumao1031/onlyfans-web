@@ -1,5 +1,6 @@
-import DataViewItem from "@/components/profile/dataCenter/dataViewItem"
 import { getTranslations } from "next-intl/server"
+
+import DataViewItem from "@/components/profile/dataCenter/dataViewItem"
 
 export default async function Page() {
   const t = await getTranslations("Profile")

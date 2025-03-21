@@ -1,15 +1,19 @@
 "use client"
+import { useCallback, useEffect, useRef, useState } from "react"
+
+import { useTranslations } from "next-intl"
+
 import Header from "@/components/common/header"
 import IconWithImage from "@/components/profile/icon"
-import { UserProfile } from "@/lib/actions/profile"
-import { buildImageUrl } from "@/lib/utils"
 import { Link } from "@/i18n/routing"
-import { useCallback, useEffect, useRef, useState } from "react"
-import LazyImg from "../common/lazy-img"
-import { useTranslations } from "next-intl"
-import CommonAvatar from "../common/common-avatar"
+import { UserProfile } from "@/lib/actions/profile"
 import { getSelfId } from "@/lib/actions/server-actions"
+import { buildImageUrl } from "@/lib/utils"
+
+import CommonAvatar from "../common/common-avatar"
+import LazyImg from "../common/lazy-img"
 import { buildMention } from "../post/utils"
+
 export default function SpaceHeader({ data }: { data: UserProfile | undefined }) {
   if (!data) {
     throw new Error()
@@ -78,37 +82,37 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
   const renderTitle = () => {
     if (isSelf) return t("mySpace")
     return (
-      <div className="flex-1 flex items-center ">
-        <div className="w-8 h-8">
+      <div className="flex flex-1 items-center ">
+        <div className="size-8">
           <CommonAvatar photoFileId={data.photo} size={32} />
         </div>
         <div className="ml-2">
-          <div className="text-[14px] truncate max-w-[130px]">
+          <div className="max-w-[130px] truncate text-[14px]">
             {data.first_name}
           </div>
-          <div className="text-black/50 text-[12px]">{buildMention(data.username)}</div>
+          <div className="text-[12px] text-black/50">{buildMention(data.username)}</div>
         </div>
       </div>
     )
   }
   return (
     <div className=" relative h-[200px]">
-      <div className="absolute w-full h-full z-0" ref={bgRef}>
+      <div className="absolute z-0 size-full" ref={bgRef}>
         <LazyImg
           style={{ objectFit: "cover" }}
           width={200}
           height={400}
-          className="w-full h-full"
+          className="size-full"
           src={data.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"}
           alt={""}
         />
-        <div className="w-full h-full absolute top-0 left-0 bg-black/20"></div>
+        <div className="absolute left-0 top-0 size-full bg-black/20"></div>
       </div>
-      <div ref={divRef} className={`w-full fixed top-0 left-0 z-40 ${isTop ? "bg-[#fff]" : "auto"}`}>
+      <div ref={divRef} className={`fixed left-0 top-0 z-40 w-full ${isTop ? "bg-white" : "auto"}`}>
         <Header
           leftTitle={
             <span
-              className={` pt-[1px] shrink-0 text-[18px] font-semibold ml-4 ${isTop ? "text-[#222]" : "text-[#fff]"
+              className={` ml-4 shrink-0 pt-px text-[18px] font-semibold ${isTop ? "text-[#222]" : "text-white"
                 }`}
             >
               {isTop ? renderTitle() : ""}
@@ -145,7 +149,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           }
           backIconColor={isTop ? "#222" : "#fff"}
         />
-        <div className={`text-xs truncate pl-6 pr-6 pb-2 ${isTop ? "text-theme" : "text-white"}`}>
+        <div className={`truncate px-6 pb-2 text-xs ${isTop ? "text-theme" : "text-white"}`}>
           {data.top_info}
         </div>
       </div>

@@ -1,7 +1,9 @@
 "use client"
 
-import { useRouter } from "@/i18n/routing"
 import { useEffect } from "react"
+
+import { useRouter } from "@/i18n/routing"
+
 const { log } = console
 export const checkPlatform = () => {
   const isAndroid = !!window.Android

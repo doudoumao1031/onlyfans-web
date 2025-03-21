@@ -1,17 +1,19 @@
 "use client"
-import Header from "@/components/common/header"
-import Empty from "@/components/common/empty"
-import { PageResponse, StatementResp, userStatement } from "@/lib"
-import dayjs from "dayjs"
 import { useState, useEffect, Suspense, Fragment } from "react"
-import DatePicker from "@/components/common/date-picker"
-import InfiniteScroll from "@/components/common/infinite-scroll"
-import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
-import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+
+import dayjs from "dayjs"
 import { useTranslations } from "next-intl"
+
+import DatePicker from "@/components/common/date-picker"
+import Empty from "@/components/common/empty"
+import Header from "@/components/common/header"
+import InfiniteScroll from "@/components/common/infinite-scroll"
 import LazyImg from "@/components/common/lazy-img"
+import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { PageResponse, StatementResp, userStatement } from "@/lib"
 import { ZH_YYYY_MM, ZH_YYYY_MM_DD_HH_mm_ss } from "@/lib/constant"
+import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
 
 export default function Page() {
   const t = useTranslations("Profile.recharge")
@@ -55,7 +57,7 @@ export default function Page() {
       <Header title={t("title")} titleColor="#000" />
       <Suspense fallback={<div className="flex justify-center p-4">Loading...</div>}>
         {list && (
-          <div className="w-full h-[calc(100vh-49px)]">
+          <div className="h-[calc(100vh-49px)] w-full">
             <DatePicker
               defVal={date}
               confirm={(e) => {
@@ -63,7 +65,7 @@ export default function Page() {
               }}
             />
             <InfiniteScroll<StatementResp>
-              className={"h-full w-full mx-auto"}
+              className={"mx-auto size-full"}
               initialItems={list.list || []}
               initialHasMore={true}
               fetcherFn={infiniteFetchPosts}
@@ -79,23 +81,23 @@ export default function Page() {
                           { color: "text-[#FF3E3E]", value: t("failed") }
                         ]
                         return (
-                          <div key={i} className="py-3 border-b border-spacing-0.5 border-[#ddd]">
-                            <div className={"flex justify-between mb-2.5"}>
+                          <div key={i} className="border-spacing-0.5 border-b border-[#ddd] py-3">
+                            <div className={"mb-2.5 flex justify-between"}>
                               <span>{t("digitalWallet")}</span>
                               <span className={`${types[v.trade_status].color}`}>
                                 {types[v.trade_status].value}
                               </span>
                             </div>
-                            <div className={"flex justify-start items-center"}>
-                              <div className={"w-10 h-10 mr-2"}>
+                            <div className={"flex items-center justify-start"}>
+                              <div className={"mr-2 size-10"}>
                                 <LazyImg src={"/theme/icon_wallet_digital@3x.png"} height={40} width={40} alt={""} />
                               </div>
-                              <div className={"flex flex-col w-full"}>
-                                <div className="flex justify-between items-center">
+                              <div className={"flex w-full flex-col"}>
+                                <div className="flex items-center justify-between">
                                   <span className="text-[13px] text-[#777777]">{t("tradeNo")}: {v.trade_no}</span>
-                                  <span className="text-[#222222] text-base">{new Intl.NumberFormat().format(v.change_amount)}</span>
+                                  <span className="text-base text-[#222222]">{new Intl.NumberFormat().format(v.change_amount)}</span>
                                 </div>
-                                <div className="flex justify-between text-xs mt-1.5 text-[#979799]">
+                                <div className="mt-1.5 flex justify-between text-xs text-[#979799]">
                                   <span>{dayjs(v.trade_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</span>
                                   <span>{t("balance")}: {new Intl.NumberFormat().format(v.balance_snapshot)}</span>
                                 </div>

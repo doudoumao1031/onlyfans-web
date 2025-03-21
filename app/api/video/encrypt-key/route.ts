@@ -1,6 +1,8 @@
-import { NextRequest, NextResponse } from "next/server"
+
 import fs from "fs"
 import path from "path"
+
+import { NextRequest, NextResponse } from "next/server"
 
 // In a real application, you would want to:
 // 1. Authenticate the request

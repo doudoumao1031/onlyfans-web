@@ -1,34 +1,39 @@
 "use client"
 // 草稿
-import Header from "@/components/common/header"
 import React, { Fragment, useEffect, useState } from "react"
-import { Link } from "@/i18n/routing"
-import InfiniteScroll from "@/components/common/infinite-scroll"
-import { myDraftPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
-import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
-import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import { LazyImageWithFileId } from "@/components/common/lazy-img"
+
+
 import dayjs from "dayjs"
 import { useTranslations } from "next-intl"
+
 import Image from "next/image"
+
+import Header from "@/components/common/header"
+import InfiniteScroll from "@/components/common/infinite-scroll"
+import { LazyImageWithFileId } from "@/components/common/lazy-img"
+import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
+import { Link } from "@/i18n/routing"
+import { myDraftPosts, PageResponse, PostData, SearchPostReq } from "@/lib"
 import { ZH_YYYY_MM_DD_HH_mm_ss } from "@/lib/constant"
+import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
+
 
 const DraftItem = ({ data }:{data:PostData}) => {
   const t = useTranslations("Profile.manuscript")
   const attachmentId = data.post_attachment?.[0]?.file_id
   return (
-    <Link href={`./draft/edit?id=${data.post.id}`} className="pt-2.5 pb-2.5 border-b border-[#ddd] flex gap-2.5">
+    <Link href={`./draft/edit?id=${data.post.id}`} className="flex gap-2.5 border-b border-[#ddd] py-2.5">
       {/*<Image src={""} alt={"img"} width={100} height={100} className="rounded"/>*/}
-      <div className={"w-[100px] h-[100px] shrink-0 overflow-hidden"}>
+      <div className={"size-[100px] shrink-0 overflow-hidden"}>
         {attachmentId ? <LazyImageWithFileId fileId={attachmentId} alt={data.post.title} width={100} height={100} className={"rounded"}/> :  (
           <Image src={"/icons/image_draft.png"} alt={""} width={100} height={100}
-            className={"shrink-0 w-full h-full rounded"}
+            className={"size-full shrink-0 rounded"}
           />
         )}
       </div>
-      <div className="flex-col justify-between flex flex-1 w-0">
+      <div className="flex w-0 flex-1 flex-col justify-between">
         <div className="line-clamp-[2] text-[14px] font-medium">{data.post.title}</div>
-        <div className="pb-2.5 text-xs text-text-desc">{t("saveAt")}：{dayjs(data.post.last_update_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</div>
+        <div className="text-text-desc pb-2.5 text-xs">{t("saveAt")}：{dayjs(data.post.last_update_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</div>
       </div>
     </Link>
   )
@@ -60,7 +65,7 @@ export default function Page() {
   return (
     <div>
       <Header title={t("draft")} titleColor={"#000"}/>
-      <div className="pl-4 pr-4">
+      <div className="px-4">
         {initData && (
           <InfiniteScroll<PostData> fetcherFn={infiniteFetchMyPosts} initialItems={initData.list} initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}>
             {({ items, isLoading, hasMore, error }) => (

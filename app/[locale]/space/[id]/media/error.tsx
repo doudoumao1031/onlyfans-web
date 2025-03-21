@@ -1,7 +1,9 @@
 "use client"
 
-import ErrorPage from "@/components/common/error-page"
 import { useTranslations } from "next-intl"
+
+import ErrorPage from "@/components/common/error-page"
+
 export default function Error({
   error,
   reset

@@ -1,8 +1,10 @@
 "use client"
 import { useMemo, useState } from "react"
-import { buildImageUrl } from "@/lib/utils"
+
 import Image from "next/image"
+
 import { Skeleton } from "@/components/ui/skeleton"
+import { buildImageUrl } from "@/lib/utils"
 
 
 export type CommonAvatarProps = {
@@ -20,12 +22,12 @@ function LazyAvatar(props: LazyAvatarProps) {
   const { size, src } = props
   const [loading, setIsLoading] = useState<boolean>(true)
   return (
-    <div className="inline-flex relative" style={{
+    <div className="relative inline-flex" style={{
       width: size,
       height: size
     }}
     >
-      {loading && <Skeleton className={"w-full h-full absolute rounded-full"}></Skeleton>}
+      {loading && <Skeleton className={"absolute size-full rounded-full"}></Skeleton>}
       {src && (
         <Image src={src} width={size} height={size} onLoad={() => {
           setIsLoading(false)

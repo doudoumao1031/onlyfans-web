@@ -1,18 +1,22 @@
 "use client"
+import { Fragment, useEffect, useState } from "react"
+
+import { useTranslations } from "next-intl"
+
 import Empty from "@/components/common/empty"
 import InfiniteScroll from "@/components/common/infinite-scroll"
-import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
-import { PageResponse, PostData, userCollectionPost, userCollectionPosts } from "@/lib"
-import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import { Link } from "@/i18n/routing"
-import { Fragment, useEffect, useState } from "react"
-import { buildImageUrl } from "@/lib/utils"
-import CommonAvatar from "../../../../../components/common/common-avatar"
 import LazyImg from "@/components/common/lazy-img"
-import DelItem from "@/components/profile/del-item"
 import LoadingMask from "@/components/common/loading-mask"
-import { useTranslations } from "next-intl"
+import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
+import DelItem from "@/components/profile/del-item"
+import { Link } from "@/i18n/routing"
+import { PageResponse, PostData, userCollectionPost, userCollectionPosts } from "@/lib"
 import { useGlobal } from "@/lib/contexts/global-context"
+import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
+import { buildImageUrl } from "@/lib/utils"
+
+import CommonAvatar from "../../../../../components/common/common-avatar"
+
 
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<PostData> | null>()
@@ -54,7 +58,7 @@ export default function Page() {
       <LoadingMask isLoading={isLoading} />
       {initData && (
         <InfiniteScroll<PostData>
-          className={"h-full  overflow-x-hidden mx-auto"}
+          className={"mx-auto  h-full overflow-x-hidden"}
           initialItems={initData.list || []}
           initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}
           fetcherFn={infiniteFetchPosts}
@@ -62,7 +66,7 @@ export default function Page() {
           {({ items, isLoading, hasMore, error }) => (
             <Fragment>
               {Boolean(error) && <ListError />}
-              <div className="total-num p-4 pt-0 px-8">
+              <div className="total-num p-4 px-8 pt-0">
                 <span className="text-gray-400">{t("collect.total")}：</span>
                 {initData?.total ?? 0}
               </div>
@@ -74,8 +78,8 @@ export default function Page() {
                   key={v.post.id}
                 >
                   <Link href={`/postInfo/${v.post.id}`}>
-                    <div className={"  pt-3 pb-3 border-b border-[#e5e5e5] flex gap-2"}>
-                      <div className="w-[112px] h-[112px] shrink-0 relative">
+                    <div className={"  flex gap-2 border-b border-[#e5e5e5] py-3"}>
+                      <div className="relative size-[112px] shrink-0">
                         <LazyImg
                           src={
                             v.post_attachment?.[0]?.thumb_id || v.post_attachment?.[0]?.file_id
@@ -86,18 +90,18 @@ export default function Page() {
                           height={112}
                           alt={"post image"}
                           className={
-                            "h-28 w-28 bg-cover  shrink-0 rounded-md border border-slate-300"
+                            "size-28 shrink-0 rounded-md  border border-slate-300 bg-cover"
                           }
                         />
                         {(v.post.visibility !== 0 && v.user.id !== sid) && (
-                          <div className="w-full h-full bg-black bg-opacity-5 rounded-lg backdrop-blur absolute top-0 left-0 z-0"></div>
+                          <div className="absolute left-0 top-0 z-0 size-full rounded-lg bg-black bg-opacity-5 backdrop-blur"></div>
                         )}
                       </div>
-                      <div className="flex flex-col justify-between flex-1">
+                      <div className="flex flex-1 flex-col justify-between">
                         <div className="line-clamp-3">{v.post.title}</div>
                         <div className="flex items-center gap-2">
                           <CommonAvatar photoFileId={v.user.photo} size={24} />
-                          <span className="text-text-theme text-xs w-5/12 truncate ">{`${v.user.first_name} ${v.user.last_name}`}</span>
+                          <span className="text-text-theme w-5/12 truncate text-xs ">{`${v.user.first_name} ${v.user.last_name}`}</span>
                         </div>
                       </div>
                     </div>

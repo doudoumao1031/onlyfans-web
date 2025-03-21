@@ -1,6 +1,8 @@
-import Header from "@/components/common/header"
 import React from "react"
+
 import { useTranslations } from "next-intl"
+
+import Header from "@/components/common/header"
 import TabLinks from "@/components/common/tab-link"
 
 export default function Layout({ children }: {

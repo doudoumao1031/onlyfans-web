@@ -1,13 +1,11 @@
-import { ENDPOINTS } from "@/lib"
-import {
+import { ENDPOINTS ,
   PostTipReq,
   SubOrderReq,
   WalletDownOrderReq,
   WalletOrderReq,
   DeleteOrderReq,
   PayOrderResp, OrderCallBackReq
-} from "@/lib"
-import { fetchWithPost } from "@/lib"
+, fetchWithPost } from "@/lib"
 
 /**
  * 增加帖子付费记录

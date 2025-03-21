@@ -16,7 +16,7 @@ export default function Stats({
   const normalUrl = "/theme/" + icon + "_normal@3x.png"
   const url = disable ? disAbledUrl : highlight ? hightUrl : normalUrl
   return (
-    <div className={`flex gap-1 items-center  ${disable && "text-gray-400"}`}>
+    <div className={`flex items-center gap-1  ${disable && "text-gray-400"}`}>
       <Image
         src={url}
         width={15}

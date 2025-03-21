@@ -27,7 +27,7 @@ export default function MessageDemo() {
     <div className="min-h-screen p-8">
       {renderNode}
 
-      <h1 className="text-2xl font-bold mb-6">Message Component Demo</h1>
+      <h1 className="mb-6 text-2xl font-bold">Message Component Demo</h1>
 
       <div className="space-y-4">
         {messageTypes.map(({ type, label, content }) => (
@@ -36,13 +36,13 @@ export default function MessageDemo() {
             <div className="space-x-4">
               <button
                 onClick={() => showMessage(content, type)}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                className="rounded-lg bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600"
               >
                 Show for 3s
               </button>
               <button
                 onClick={() => showMessage(content, type, { duration: 5000 })}
-                className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                className="rounded-lg bg-green-500 px-4 py-2 text-white transition-colors hover:bg-green-600"
               >
                 Show for 5s
               </button>
@@ -51,7 +51,7 @@ export default function MessageDemo() {
                   duration: 2000,
                   afterDuration: () => console.log(`${type} message closed`)
                 })}
-                className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
+                className="rounded-lg bg-purple-500 px-4 py-2 text-white transition-colors hover:bg-purple-600"
               >
                 2s + Callback
               </button>
@@ -60,8 +60,8 @@ export default function MessageDemo() {
         ))}
       </div>
 
-      <div className="mt-8 p-4 bg-gray-100 rounded-lg">
-        <h2 className="text-lg font-semibold mb-2">Custom Content</h2>
+      <div className="mt-8 rounded-lg bg-gray-100 p-4">
+        <h2 className="mb-2 text-lg font-semibold">Custom Content</h2>
         <button
           onClick={() => showMessage(
             <div className="flex items-center space-x-2">
@@ -70,7 +70,7 @@ export default function MessageDemo() {
             </div>,
             "default"
           )}
-          className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+          className="rounded-lg bg-orange-500 px-4 py-2 text-white transition-colors hover:bg-orange-600"
         >
           Show Custom Content
         </button>

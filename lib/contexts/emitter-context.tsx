@@ -7,14 +7,22 @@ import React, {
   useEffect,
   useCallback
 } from "react"
+
+import { useTranslations } from "next-intl"
+
+import { useSearchParams } from "next/navigation"
+
+
+import { useCommonMessageContext } from "@/components/common/common-message"
+import { useRouter , locales } from "@/i18n/routing"
 import { emitter, useAppLoaded } from "@/lib/hooks/emitter"
-import { useRouter } from "@/i18n/routing"
+
 import { loginToken, LoginTokenResp } from "../actions/auth"
 import { TOKEN_KEY, USER_KEY } from "../utils"
-import { useSearchParams } from "next/navigation"
-import { locales } from "@/i18n/routing"
-import { useCommonMessageContext } from "@/components/common/common-message"
-import { useTranslations } from "next-intl"
+
+
+
+
 const emitterContext = createContext(undefined)
 
 export enum BRIDGE_EVENT_NAME {
@@ -85,20 +93,20 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
     }, 2000)
     emitter.on(
       BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
-      handleGetSystemBarsInfo,
+      handleGetSystemBarsInfo
     )
     emitter.on(
       BRIDGE_EVENT_NAME.responseOAuth,
-      handleResponseOAuth,
+      handleResponseOAuth
     )
     return () => {
       emitter.off(
         BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
-        handleGetSystemBarsInfo,
+        handleGetSystemBarsInfo
       )
       emitter.off(
         BRIDGE_EVENT_NAME.responseOAuth,
-        handleResponseOAuth,
+        handleResponseOAuth
       )
     }
   }, [

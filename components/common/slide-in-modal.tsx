@@ -1,8 +1,11 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+
 import { createPortal } from "react-dom"
+
 import { useRouter } from "next/navigation"
+
 
 export function SideInModal({
   children, portalId = "modal-root"
@@ -39,7 +42,7 @@ export function SideInModal({
       onClick={onDismiss}
     >
       <div
-        className={`bg-white h-full max-w-sm w-full shadow-lg transform transition-transform duration-300 ${
+        className={`size-full max-w-sm bg-white shadow-lg transition-transform duration-300${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
         ref={modalRef}
@@ -48,7 +51,7 @@ export function SideInModal({
         {children}
         <button
           onClick={onDismiss}
-          className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+          className="absolute right-4 top-4 text-gray-500 hover:text-gray-800"
         >
           Close
         </button>

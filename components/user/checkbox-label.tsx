@@ -1,5 +1,6 @@
-import Image from "next/image"
 import { useState } from "react"
+
+import Image from "next/image"
 
 export default function CheckboxLabel({ disabled = false, checked, label, change }: {
     disabled?: boolean,
@@ -29,7 +30,7 @@ export default function CheckboxLabel({ disabled = false, checked, label, change
         className="cursor-pointer"
         onTouchEnd={handleToggle}
       />
-      <span className="font-normal text-base ml-2">{label}</span>
+      <span className="ml-2 text-base font-normal">{label}</span>
     </div>
   )
 }

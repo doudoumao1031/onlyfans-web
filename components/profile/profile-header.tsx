@@ -1,12 +1,18 @@
 "use client"
+import { useCallback, useEffect, useRef, useState } from "react"
+
+import { useTranslations } from "next-intl"
+
 import Header from "@/components/common/header"
 import IconWithImage from "@/components/profile/icon"
+import { Link } from "@/i18n/routing"
 import { UserProfile } from "@/lib/actions/profile"
 import { buildImageUrl } from "@/lib/utils"
-import { useCallback, useEffect, useRef, useState } from "react"
+
 import LazyImg from "../common/lazy-img"
-import { useTranslations } from "next-intl"
-import { Link } from "@/i18n/routing"
+
+
+
 export default function ProfileHeader({ data }: { data: UserProfile | undefined }) {
   if (!data) {
     throw new Error()
@@ -65,22 +71,22 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
   }, [])
   return (
     <div className="relative h-[158px]">
-      <div className="absolute w-full h-full z-0" ref={bgRef}>
+      <div className="absolute z-0 size-full" ref={bgRef}>
         <LazyImg
           style={{ objectFit: "cover" }}
           width={200}
           height={400}
-          className="w-full h-full"
+          className="size-full"
           src={data.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"}
           alt={""}
         />
-        <div className="w-full h-full absolute top-0 left-0 bg-black/20"></div>
+        <div className="absolute left-0 top-0 size-full bg-black/20"></div>
       </div>
-      <div ref={divRef} className={`w-full fixed top-0 left-0 z-40 ${isTop ? "bg-[#fff]" : "auto"}`}>
+      <div ref={divRef} className={`fixed left-0 top-0 z-40 w-full ${isTop ? "bg-white" : "auto"}`}>
         <Header
           title={
             <span
-              className={`pt-[1px] shrink-0 text-[18px] font-semibold  ${isTop ? "text-[#222]" : "text-[#fff]"
+              className={`shrink-0 pt-px text-[18px] font-semibold  ${isTop ? "text-[#222]" : "text-white"
                 }`}
             >
               {t("mainTitle")}
@@ -108,7 +114,7 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
           }
           backIconColor={isTop ? "#222" : "#fff"}
         />
-        <div className={`text-xs truncate pl-6 pr-6 pb-2 ${isTop ? "text-theme" : "text-white"}`}>
+        <div className={`truncate px-6 pb-2 text-xs ${isTop ? "text-theme" : "text-white"}`}>
           {data.top_info}
         </div>
       </div>

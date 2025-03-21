@@ -1,9 +1,13 @@
+import createMiddleware from "next-intl/middleware"
+
+import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { TOKEN_KEY } from "@/lib/utils"
-import createMiddleware from "next-intl/middleware"
+
+
+
 import { defaultLocale, locales, routing } from "@/i18n/routing"
+import { TOKEN_KEY } from "@/lib/utils"
 
 const handleI18nRouting = createMiddleware(routing)
 

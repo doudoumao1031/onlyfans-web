@@ -1,9 +1,12 @@
 "use client"
+import { useEffect, useRef } from "react"
+
+import { useSearchParams } from "next/navigation"
+
 import { checkPlatform } from "@/components/common/init"
 import LoadingMask from "@/components/common/loading-mask"
 import { locales, useRouter } from "@/i18n/routing"
-import { useSearchParams } from "next/navigation"
-import { useEffect, useRef } from "react"
+
 export default function Page() {
   const search = useSearchParams()
   const router = useRouter()

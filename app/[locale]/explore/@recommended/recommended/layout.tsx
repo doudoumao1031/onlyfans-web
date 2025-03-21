@@ -3,9 +3,9 @@ import Header from "@/components/explore/recommended/header"
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <div className="flex max-w-lg mx-auto h-full flex-col w-full justify-start items-center">
+      <div className="mx-auto flex size-full max-w-lg flex-col items-center justify-start">
         <Header />
-        <div className="grow py-3 w-full h-3/4 overflow-y-auto hide-scrollbar">{children}</div>
+        <div className="hide-scrollbar h-3/4 w-full grow overflow-y-auto py-3">{children}</div>
       </div>
     </>
   )

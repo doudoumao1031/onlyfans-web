@@ -1,18 +1,31 @@
 "use client"
 import React, { HTMLAttributes, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react"
-import clsx from "clsx"
-import IconWithImage from "@/components/profile/icon"
-import { Switch } from "@/components/ui/switch"
-import { useRouter, useSearchParams } from "next/navigation"
-import FormDrawer from "@/components/common/form-drawer"
-import InputWithLabel from "@/components/profile/input-with-label"
-import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
-import ConfirmModal from "@/components/common/confirm-modal"
-import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from "react-hook-form"
+
 import { zodResolver } from "@hookform/resolvers/zod"
+import clsx from "clsx"
 import dayjs from "dayjs"
+import { isEmpty, isNumber } from "lodash"
+import { useTranslations } from "next-intl"
+import { Controller, FormProvider, useFieldArray, useForm, useFormContext } from "react-hook-form"
 import { z } from "zod"
+
 import Image from "next/image"
+import { useRouter, useSearchParams } from "next/navigation"
+
+
+import CommonAvatar from "@/components/common/common-avatar"
+import { useCommonMessageContext } from "@/components/common/common-message"
+import ConfirmModal from "@/components/common/confirm-modal"
+import DateTimePicker from "@/components/common/date-time-picker"
+import Empty from "@/components/common/empty"
+import FormDrawer from "@/components/common/form-drawer"
+import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
+import IconWithImage from "@/components/profile/icon"
+import InputWithLabel from "@/components/profile/input-with-label"
+import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
+import { Switch } from "@/components/ui/switch"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { FansFollowItem, FileType, getFollowedUsers } from "@/lib"
 import {
   addPost,
   iPost,
@@ -25,17 +38,8 @@ import {
   postVoteSchema,
   pubPost
 } from "@/lib/actions/profile"
-import { isEmpty, isNumber } from "lodash"
-import { buildImageUrl, getUploadMediaFileType, uploadFile } from "@/lib/utils"
-import DateTimePicker from "@/components/common/date-time-picker"
-import { FansFollowItem, FileType, getFollowedUsers } from "@/lib"
-import Empty from "@/components/common/empty"
-import { useCommonMessageContext } from "@/components/common/common-message"
-import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import { useTranslations } from "next-intl"
-import { MediaPreview, PreviewType } from "@/components/profile/manuscript/media-preview"
-import CommonAvatar from "@/components/common/common-avatar"
 import { ZH_YYYY_MM_DD_HH_mm } from "@/lib/constant"
+import { buildImageUrl, getUploadMediaFileType, uploadFile } from "@/lib/utils"
 
 const ItemEditTitle = ({
   title,
@@ -45,8 +49,8 @@ const ItemEditTitle = ({
   showIcon?: boolean
 }) => {
   return (
-    <div className="flex gap-2.5 items-center">
-      <div className="font-bold text-base">{title}</div>
+    <div className="flex items-center gap-2.5">
+      <div className="text-base font-bold">{title}</div>
       {showIcon && (
         <IconWithImage
           url={"/icons/profile/icon_edit@3x.png"}
@@ -73,7 +77,7 @@ const FormItemWithSelect = ({
 }) => {
   const showLabel = options.find((item) => item.value === value)?.label
   return (
-    <section className="flex justify-between items-center border-b border-[#ddd] py-4">
+    <section className="flex items-center justify-between border-b border-[#ddd] py-4">
       <div>{label}</div>
       <div className="flex-1">
         <SheetSelect outerControl={false} options={options} onInputChange={onValueChange}>
@@ -185,7 +189,7 @@ const AddVoteModal = ({
                   }
                 })
               }}
-              className={"text-base text-text-theme"}
+              className={"text-text-theme text-base"}
             >
               {commonTrans("confirm")}
             </button>
@@ -193,7 +197,7 @@ const AddVoteModal = ({
         }}
         trigger={children}
       >
-        <section className={"py-5 px-4 border-b border-[#ddd] relative"}>
+        <section className={"relative border-b border-[#ddd] px-4 py-5"}>
           <Controller
             control={control}
             render={({ field }) => {
@@ -208,18 +212,18 @@ const AddVoteModal = ({
             }}
             name="title"
           />
-          <div className=" absolute left-8 bottom-0 text-xs text-theme">
+          <div className=" text-theme absolute bottom-0 left-8 text-xs">
             {formState.errors.title?.message}
           </div>
         </section>
-        <section className={"py-5 px-4 border-b border-[#ddd]"}>
-          <h3 className="font-medium text-base mb-2">
+        <section className={"border-b border-[#ddd] px-4 py-5"}>
+          <h3 className="mb-2 text-base font-medium">
             {t("manuscript.itemActions.voteContent")}
             {watch("items")?.filter(item => !!item.content)?.length < 2 && (
-              <span className="text-xs text-theme ml-2 font-normal">{t("manuscript.itemActions.voteContentMin")}</span>
+              <span className="text-theme ml-2 text-xs font-normal">{t("manuscript.itemActions.voteContentMin")}</span>
             )}
           </h3>
-          <section className="flex flex-col gap-5 mt-2">
+          <section className="mt-2 flex flex-col gap-5">
             {itemsList.map((field, index) => {
               return (
                 <div className={"relative"} key={field.id}>
@@ -239,7 +243,7 @@ const AddVoteModal = ({
                     }}
                   />
                   {itemsList.length > 2 && (
-                    <button type={"button"} className={"p-1 absolute top-[-8px] right-[-8px] z-20"} onTouchEnd={() => {
+                    <button type={"button"} className={"absolute right-[-8px] top-[-8px] z-20 p-1"} onTouchEnd={() => {
                       remove(index)
                     }}
                     >
@@ -256,7 +260,7 @@ const AddVoteModal = ({
                 onTouchEnd={() => {
                   append({ content: "" })
                 }}
-                className="flex gap-1.5 w-full rounded-xl border border-border-theme justify-center items-center py-2.5 text-text-theme"
+                className="border-border-theme text-text-theme flex w-full items-center justify-center gap-1.5 rounded-xl border py-2.5"
               >
                 <IconWithImage
                   url={"/icons/profile/icon_add@3x.png"}
@@ -288,7 +292,7 @@ const AddVoteModal = ({
             }}
             name={"mu_select"}
           />
-          <section className="flex justify-between items-center border-b border-[#ddd] py-4">
+          <section className="flex items-center justify-between border-b border-[#ddd] py-4">
             <div>{t("manuscript.itemActions.voteEndTime")}</div>
             <div className={""}>
               <Controller
@@ -477,7 +481,7 @@ const ReadSettings = ({
                   }
                 })
               }}
-              className={"text-base text-text-theme"}
+              className={"text-text-theme text-base"}
             >
               {commonTrans("confirm")}
             </button>
@@ -488,7 +492,7 @@ const ReadSettings = ({
         {priceList.map((item, index) => {
           return (
             <section
-              className={clsx("px-4 mt-5", disableOption2 && index === 1 ? "opacity-40" : "")}
+              className={clsx("mt-5 px-4", disableOption2 && index === 1 ? "opacity-40" : "")}
               key={item.id}
             >
               <h3>
@@ -512,7 +516,7 @@ const ReadSettings = ({
               />
               {/*<FormItemWithSelect label={"付费金额"} value={"0"} options={[{label: "0", value: "0"}, {label: "2", value: "2"}]}/>*/}
               <section className={"relative"}>
-                <section className="flex justify-between items-center border-b border-[#ddd] py-4">
+                <section className="flex items-center justify-between border-b border-[#ddd] py-4">
                   <div className="shrink-0">{t("manuscript.payPrice")}</div>
                   <Controller
                     control={control}
@@ -542,16 +546,16 @@ const ReadSettings = ({
                     />
                   </div>
                 </section>
-                <section className="text-xs text-theme absolute right-4 bottom-0">
+                <section className="text-theme absolute bottom-0 right-4 text-xs">
                   {errors.priceList?.[index]?.price?.message}
                 </section>
               </section>
-              <section className={"text-xs text-[#777] mt-1.5"}>{t("manuscript.priceFree")}</section>
+              <section className={"mt-1.5 text-xs text-[#777]"}>{t("manuscript.priceFree")}</section>
             </section>
           )
         })}
 
-        <div className={"mt-10 text-center text-text-desc"}>
+        <div className={"text-text-desc mt-10 text-center"}>
           {t("manuscript.settingsEffective")}
         </div>
       </FormDrawer>
@@ -748,13 +752,13 @@ const UploadMedia = () => {
                 <div
                   key={item.file_id}
                   className={
-                    "relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "
+                    "relative flex size-[100px] items-center justify-center rounded bg-[#F4F5F5] "
                   }
                   onTouchEnd={() => {
                     openPreview(index, field.value)
                   }}
                 >
-                  <section className={"h-full w-full overflow-hidden flex items-center"}>
+                  <section className={"flex size-full items-center overflow-hidden"}>
                     {
                       field.value.file_type === FileType.Image && (
                         <Image
@@ -797,17 +801,17 @@ const UploadMedia = () => {
         )
       })}
       {uploading && (
-        <div className={"w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded "}>
+        <div className={"flex size-[100px] items-center justify-center rounded bg-[#F4F5F5] "}>
           {t("manuscript.uploading")}
         </div>
       )}
       {!uploading && itemsList.length < 9 && (
-        <div className="relative w-[100px] h-[100px] flex items-center justify-center bg-[#F4F5F5] rounded ">
+        <div className="relative flex size-[100px] items-center justify-center rounded bg-[#F4F5F5] ">
           <input
             ref={ref}
             type="file"
             multiple={false}
-            className="block w-full h-full absolute left-0 top-0 opacity-0 z-10"
+            className="absolute left-0 top-0 z-10 block size-full opacity-0"
             onChange={(event) => {
               if (event.target.files?.length) {
                 handleUpload(event.target.files[0])
@@ -820,7 +824,7 @@ const UploadMedia = () => {
             height={24}
             color={"#000"}
           />
-          <div className="text-[#bbb] text-xs text-center absolute bottom-2">{t("manuscript.videoImage")}</div>
+          <div className="absolute bottom-2 text-center text-xs text-[#bbb]">{t("manuscript.videoImage")}</div>
         </div>
       )}
     </>
@@ -891,9 +895,9 @@ function SelectMotionUser({
 
   return (
     <FormDrawer title={t("manuscript.motionUser")} outerControl trigger={<></>} isOpen={isOpen} setIsOpen={setIsOpen}>
-      <section className="h-full flex flex-col">
-        <section className={"flex-shrink-0 px-4 mb-2.5"}>
-          <input className={"block w-full rounded-full h-9 px-4 bg-[#f8f8f8]"} value={filterValue} onChange={event => {
+      <section className="flex h-full flex-col">
+        <section className={"mb-2.5 shrink-0 px-4"}>
+          <input className={"block h-9 w-full rounded-full bg-[#f8f8f8] px-4"} value={filterValue} onChange={event => {
             setFilterValue(event.target.value)
           }}
           />
@@ -902,14 +906,14 @@ function SelectMotionUser({
           <div className={"px-4"}>
             {filteredData.map(item => {
               return (
-                <div key={item.user.id} className={"flex gap-4 items-center"}>
+                <div key={item.user.id} className={"flex items-center gap-4"}>
                   <CommonAvatar photoFileId={item.user.photo} size={40} />
                   <button onTouchEnd={() => {
                     updateMentionUserIds(item.user.id)
-                  }} type={"button"} className={"flex-1 flex justify-between border-b border-[#ddd] py-3 "}
+                  }} type={"button"} className={"flex flex-1 justify-between border-b border-[#ddd] py-3 "}
                   >
                     <section className={"text-left"}>
-                      <div className={"text-base text-[#222] font-medium"}>{item.user.username}</div>
+                      <div className={"text-base font-medium text-[#222]"}>{item.user.username}</div>
                       <div
                         className={"text-xs text-[#bbb]"}
                       >{dayjs(item.following_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)}</div>
@@ -1116,7 +1120,7 @@ const EditPageContent = () => {
         updateMentionUserIds={updateMentionUserIds}
       />
       <form onSubmit={handleFormSubmit(onFormSubmit)}>
-        <section className="flex justify-between h-11 items-center pl-4 pr-4">
+        <section className="flex h-11 items-center justify-between px-4">
           {
             showSaveDraft ? (
               <ConfirmModal
@@ -1152,13 +1156,13 @@ const EditPageContent = () => {
         </section>
 
 
-        <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 flex gap-2.5 flex-wrap">
+        <section className="flex flex-wrap gap-2.5 border-b border-gray-200 px-4 py-5">
           <UploadMedia />
         </section>
-        <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200 relative">
+        <section className="relative border-b border-gray-200 px-4 py-5">
           <textarea
             {...register("post.title")}
-            className="resize-none block w-full"
+            className="block w-full resize-none"
             maxLength={999}
             placeholder={t("manuscript.shareMyFeelings")}
             rows={5}
@@ -1175,15 +1179,15 @@ const EditPageContent = () => {
               }
             }}
           />
-          <div className="absolute left-4 bottom-1.5 text-theme text-xs">
+          <div className="text-theme absolute bottom-1.5 left-4 text-xs">
             {formState?.errors?.post?.title?.message}
           </div>
         </section>
         {!isEmpty(watch("post_vote")) && (
-          <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
+          <section className="border-b border-gray-200 px-4 py-5">
             <section className="flex justify-between">
-              <div className="flex gap-2.5 items-center">
-                <div className="font-bold text-base">{t("manuscript.addedVote")}:</div>
+              <div className="flex items-center gap-2.5">
+                <div className="text-base font-bold">{t("manuscript.addedVote")}:</div>
                 <AddVoteModal
                   initFormData={formValues.post_vote}
                   updateVoteData={(data) => {
@@ -1213,18 +1217,18 @@ const EditPageContent = () => {
               </button>
             </section>
             <section className="mt-2.5 rounded-xl bg-[#F4F5F5] px-3 py-2">
-              <div className="flex gap-2.5 items-center">
+              <div className="flex items-center gap-2.5">
                 <IconWithImage
                   url={"/icons/profile/icon_fans_vote@3x.png"}
                   width={20}
                   height={20}
                   className={"bg-background-theme"}
                 />
-                <span className="font-bold text-text-theme text-base">
+                <span className="text-text-theme text-base font-bold">
                   {formValues.post_vote?.title}
                 </span>
               </div>
-              <div className="text-xs mt-1.5">
+              <div className="mt-1.5 text-xs">
                 截止：
                 {formValues.post_vote?.stop_time
                   ? dayjs(formValues.post_vote?.stop_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)
@@ -1234,10 +1238,10 @@ const EditPageContent = () => {
             </section>
           </section>
         )}
-        <section className="pt-5 pb-5 pl-4 pr-4 border-b border-gray-200">
+        <section className="border-b border-gray-200 px-4 py-5">
           {/*<ItemEditTitle title={"阅览设置："}/>*/}
-          <div className="flex gap-2.5 items-center">
-            <div className="font-bold text-base">{t("manuscript.itemActions.priceSetting")}：</div>
+          <div className="flex items-center gap-2.5">
+            <div className="text-base font-bold">{t("manuscript.itemActions.priceSetting")}：</div>
             <ReadSettings
               initFormData={formValues.post_price}
               updatePrice={(value) => {
@@ -1263,9 +1267,9 @@ const EditPageContent = () => {
             {/*</div>*/}
           </section>
         </section>
-        <section className="pt-5 pb-5 pl-4 pr-4 ">
+        <section className="px-4 py-5 ">
           <ItemEditTitle showIcon={false} title={t("manuscript.publishNotice")} />
-          <section className="border-b border-gray-200 flex justify-between items-center py-3">
+          <section className="flex items-center justify-between border-b border-gray-200 py-3">
             <div>{t("manuscript.subscriber")}</div>
             <Controller control={postForm.control} render={({ field }) => {
               return (
@@ -1281,7 +1285,7 @@ const EditPageContent = () => {
             />
           </section>
         </section>
-        <section className="text-center pb-5">
+        <section className="pb-5 text-center">
           <AddVoteModal
             updateVoteData={(data) => {
               setValue("post_vote", data, { shouldDirty: true, shouldTouch: true })
@@ -1289,7 +1293,7 @@ const EditPageContent = () => {
           >
             {!watch("post_vote") && (
               <span
-                className="inline-flex w-[165px] items-center justify-center rounded-xl gap-2 border border-theme py-2 text-theme text-base"
+                className="border-theme text-theme inline-flex w-[165px] items-center justify-center gap-2 rounded-xl border py-2 text-base"
               >
                 <IconWithImage
                   url={"/icons/profile/icon_fans_vote@3x.png"}

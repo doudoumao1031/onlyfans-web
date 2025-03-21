@@ -1,22 +1,27 @@
 "use client"
+import { useState, useMemo, useEffect } from "react"
+
+import dayjs from "dayjs"
+import { useTranslations } from "next-intl"
+
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+
+
+import CommonAvatar from "@/components/common/common-avatar"
 import { useCommonMessageContext } from "@/components/common/common-message"
 import SubscribedDrawer from "@/components/explore/subscribed-drawer"
+import CommonRecharge from "@/components/post/common-recharge"
 import Post from "@/components/post/post"
 import { buildMention } from "@/components/post/utils"
-import IconWithImage from "@/components/profile/icon"
-import { PostData } from "@/lib"
-import { userDelFollowing, userFollowing } from "@/lib/actions/space"
-import dayjs from "dayjs"
-import { useRouter } from "next/navigation"
-import { useState, useMemo, useEffect } from "react"
-import CommonAvatar from "@/components/common/common-avatar"
-import { postDetail } from "@/lib/actions/profile"
 import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
-import Link from "next/link"
-import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
-import CommonRecharge from "@/components/post/common-recharge"
+import IconWithImage from "@/components/profile/icon"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import { useTranslations } from "next-intl"
+import { PostData } from "@/lib"
+import { postDetail } from "@/lib/actions/profile"
+import { userDelFollowing, userFollowing } from "@/lib/actions/space"
+import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
+
 
 export default function Page({ postData }: { postData: PostData }) {
   const t = useTranslations("PostInfo")
@@ -112,7 +117,7 @@ export default function Page({ postData }: { postData: PostData }) {
   const Header = () => {
     const { photo, first_name, last_name, username, sub_end_time, id, sub } = postInfo.user
     return (
-      <div className="flex items-center fixed w-full h-[76px] top-0 left-0 px-4 py-4 bg-white z-[45]">
+      <div className="fixed left-0 top-0 z-[45] flex h-[76px] w-full items-center bg-white p-4">
         <div
           onClick={() => {
             router.back()
@@ -126,15 +131,15 @@ export default function Page({ postData }: { postData: PostData }) {
           />
         </div>
         <Link href={`/space/${id}/feed`} className="flex-1">
-          <div className="flex-1 flex items-center pl-4">
-            <div className="w-8 h-8">
+          <div className="flex flex-1 items-center pl-4">
+            <div className="size-8">
               <CommonAvatar photoFileId={photo} size={32} />
             </div>
             <div className="ml-2">
-              <div className="text-[14px] truncate max-w-[130px]">
+              <div className="max-w-[130px] truncate text-[14px]">
                 {first_name} {last_name}
               </div>
-              <div className="text-black/50 text-[12px]">{buildMention(username)}</div>
+              <div className="text-[12px] text-black/50">{buildMention(username)}</div>
             </div>
           </div>
         </Link>
@@ -144,8 +149,8 @@ export default function Page({ postData }: { postData: PostData }) {
               onClick={async () => {
                 await handleFollowing()
               }}
-              className={`h-[26px] min-w-[80px] px-2 flex justify-center items-center rounded-full ${isFocus
-                ? "bg-white border border-border-theme text-text-theme"
+              className={`flex h-[26px] min-w-[80px] items-center justify-center rounded-full px-2 ${isFocus
+                ? "border-border-theme text-text-theme border bg-white"
                 : " bg-background-theme text-white"
                 }`}
             >
@@ -159,7 +164,7 @@ export default function Page({ postData }: { postData: PostData }) {
               <span className="ml-1">{isFocus ? t("fllowed") : t("fllow")}</span>
             </div>
             {sub && (
-              <div className="text-[10px] text-text-theme mt-1">
+              <div className="text-text-theme mt-1 text-[10px]">
                 {t("subscribeRemaining", {
                   x: sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0
                 })}
@@ -183,7 +188,7 @@ export default function Page({ postData }: { postData: PostData }) {
         followConfirm={handleFollowing}
       />
       {btnText !== "" && (
-        <div className="flex justify-center items-center mt-2">
+        <div className="mt-2 flex items-center justify-center">
           <div
             onClick={async (e) => {
               e.preventDefault()
@@ -195,7 +200,7 @@ export default function Page({ postData }: { postData: PostData }) {
                 setDrawer(true)
               }
             }}
-            className="w-[295px] h-[50px] bg-background-theme  text-white rounded-full text-[15px] flex justify-center items-center"
+            className="bg-background-theme flex h-[50px]  w-[295px] items-center justify-center rounded-full text-[15px] text-white"
           >
             {btnText}
           </div>

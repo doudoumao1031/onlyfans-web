@@ -8,7 +8,7 @@ type LoadingHandlerOptions = {
 export const useLoadingHandler = (options: LoadingHandlerOptions = {}) => {
   const { isLoading,setIsLoading } = useCommonLoadingContext()
   const withLoading = async <T>(
-    asyncFn: () => Promise<T>,
+    asyncFn: () => Promise<T>
   ): Promise<T | undefined> => {
     setIsLoading(true)
     try {

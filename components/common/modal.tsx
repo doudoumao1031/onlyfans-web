@@ -1,8 +1,11 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import { useRouter } from "next/navigation"
+
 import { createPortal } from "react-dom"
+
+import { useRouter } from "next/navigation"
+
 
 export function Modal({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -20,11 +23,11 @@ export function Modal({ children }: { children: React.ReactNode }) {
 
   return createPortal(
     <div className="modal-backdrop">
-      <dialog ref={dialogRef} className="modal w-[100vw] max-w-[100vw] max-h-[100vh]" onClose={onDismiss}>
+      <dialog ref={dialogRef} className="modal max-h-screen w-screen max-w-[100vw]" onClose={onDismiss}>
         {children}
         <button
           onClick={onDismiss}
-          className="absolute top-4 right-4 text-white p-2 rounded-full bg-black/50 hover:bg-black/70"
+          className="absolute right-4 top-4 rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

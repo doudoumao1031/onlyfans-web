@@ -17,7 +17,7 @@ export function useLongPress(ref: RefObject<HTMLButtonElement>, onLongPress: () 
         }
       }, holdOn)
     },
-    [holdOn, onLongPress],
+    [holdOn, onLongPress]
   )
   const handlePressEnd = useCallback(
     (event: TouchEvent | MouseEvent) => {
@@ -31,7 +31,7 @@ export function useLongPress(ref: RefObject<HTMLButtonElement>, onLongPress: () 
         onLongPress?.()
       }
     },
-    [onLongPress, timer, touchStart],
+    [onLongPress, timer, touchStart]
   )
 
   const handleRemoveLongPressEvent = useCallback(() => {

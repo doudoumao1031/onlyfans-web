@@ -1,6 +1,7 @@
 "use client"
-import IconWithImage from "@/components/profile/icon"
 import React from "react"
+
+import IconWithImage from "@/components/profile/icon"
 
 
 export default function TimeSort({ handleSortChange, sortDesc, children }: {
@@ -9,7 +10,7 @@ export default function TimeSort({ handleSortChange, sortDesc, children }: {
     children: React.ReactNode
 }) {
   return (
-    <button className="shrink-0 flex items-center gap-1.5" onTouchEnd={() => {
+    <button className="flex shrink-0 items-center gap-1.5" onTouchEnd={() => {
       handleSortChange?.(!sortDesc)
     }}
     >

@@ -1,10 +1,13 @@
 "use client"
+import { useTranslations } from "next-intl"
+
+import { useCommonMessageContext } from "@/components/common/common-message"
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
-import { addPostPayOrder } from "@/lib"
-import { useCommonMessageContext } from "@/components/common/common-message"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import { useTranslations } from "next-intl"
+import { addPostPayOrder } from "@/lib"
+
+
 interface PostPayDrawerProps {
   post_id: number
   amount: number
@@ -75,10 +78,10 @@ export default function PostPayDrawer(props: PostPayDrawerProps) {
         isOpen={isOpen}
         outerControl
       >
-        <div className="w-full flex flex-col items-center text-black text-base bg-slate-50">
-          <div className={"w-full px-4 mt-[20px]"}>
+        <div className="flex w-full flex-col items-center bg-slate-50 text-base text-black">
+          <div className={"mt-[20px] w-full px-4"}>
             <div
-              className={"h-[49px] bg-white flex justify-between items-center py-2 px-4 rounded-xl"}
+              className={"flex h-[49px] items-center justify-between rounded-xl bg-white px-4 py-2"}
             >
               <span>$ &nbsp; {amount}</span>
               <span className={"text-gray-500"}>USDT</span>
@@ -88,7 +91,7 @@ export default function PostPayDrawer(props: PostPayDrawerProps) {
             <div className="relative">
               <button
                 disabled={amount === 0}
-                className="w-[295px] h-[49px] p-2 bg-background-theme text-white text-base font-medium rounded-full"
+                className="bg-background-theme h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white"
                 onTouchEnd={(e) => {
                   e.preventDefault()
                   handleSubmit()

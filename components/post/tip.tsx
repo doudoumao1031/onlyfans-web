@@ -1,6 +1,9 @@
-import Stats from "./stats"
-import TipDrawer from "@/components/post/tip-drawer"
 import { useState } from "react"
+
+import TipDrawer from "@/components/post/tip-drawer"
+
+import Stats from "./stats"
+
 interface TipProps {
   count: number
   postId: number

@@ -1,8 +1,9 @@
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import React, { useMemo } from "react"
+
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { VideoPlayer } from "@/components/video/video-player"
 import { FileType } from "@/lib"
 import { buildImageUrl, buildVideoUrl } from "@/lib/utils"
-import { VideoPlayer } from "@/components/video/video-player"
 
 export enum PreviewType {
   LOCAL = 0,
@@ -52,13 +53,13 @@ export function MediaPreview (props:MediaPreviewProps) {
   return (
     <Dialog open={openState} onOpenChange={setOpenState}>
       <DialogContent className={"hide-modal-close border-none bg-transparent"}>
-        <div className={"w-10/12 ml-auto mr-auto"}>
+        <div className={"mx-auto w-10/12"}>
           {mediaUrl && mediaType === FileType.Image && (<img className={"w-full"} src={mediaUrl} alt="" width={100} height={100}/>)}
           {
             previewType === PreviewType.ONLINE && mediaUrl && mediaType === FileType.Video && (
               <VideoPlayer
                 sources={videoSources}
-                className="max-h-[100vh]"
+                className="max-h-screen"
               />
             )
           }

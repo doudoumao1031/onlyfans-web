@@ -1,13 +1,17 @@
 "use client"
+import { Fragment, useEffect, useState } from "react"
+
+import { useParams } from "next/navigation"
+
 import Empty from "@/components/common/empty"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import MediaItem from "@/components/space/mediaItem"
 import { PageInfo, PageResponse, PostData } from "@/lib"
-import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import { Fragment, useEffect, useState } from "react"
-import { useParams } from "next/navigation"
 import { userMediaPosts } from "@/lib/actions/space"
+import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
+
+
 type FeedParams = PageInfo & {
   user_id: number
   post_status?: number
@@ -38,10 +42,10 @@ export default function Page() {
     }
   })
   return (
-    <div className="w-full h-full">
+    <div className="size-full">
       {initData && (
         <InfiniteScroll<PostData>
-          className={"h-full w-full mx-auto"}
+          className={"mx-auto size-full"}
           fetcherFn={infiniteFetchMedia}
           initialItems={initData.list}
           initialHasMore={Number(initData?.total) > Number(initData?.list?.length)}
@@ -49,7 +53,7 @@ export default function Page() {
           {({ items, isLoading, hasMore, error }) => (
             <Fragment>
               {Boolean(error) && <ListError />}
-              <div className="w-full flex justify-between flex-wrap">
+              <div className="flex w-full flex-wrap justify-between">
                 {items?.map((item, index) => (
                   <MediaItem item={item} key={index} />
                 ))}

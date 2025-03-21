@@ -1,8 +1,11 @@
 "use client"
+import { useMemo, useState } from "react"
+
+import { useTranslations } from "next-intl"
+
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
-import { useTranslations } from "next-intl"
-import { useMemo, useState } from "react"
+
 interface DatePickerProps {
   defVal: string //YYYY-MM
   trigger?: React.ReactNode
@@ -39,7 +42,7 @@ export default function DatePicker(props: DatePickerProps) {
     <div>
       {!trigger && (
         <div
-          className="flex px-4 py-3 bg-[#F8F8F8]  "
+          className="flex bg-[#F8F8F8] px-4 py-3  "
           onClick={() => {
             setDrawerOpen(true)
 
@@ -77,7 +80,7 @@ export default function DatePicker(props: DatePickerProps) {
           )
         }}
         title={
-          <div className="w-full flex justify-between text-[#222]">
+          <div className="flex w-full justify-between text-[#222]">
             <span className="mr-3 flex-1">
               {year}
               {pikerT("Year1")}
@@ -106,16 +109,16 @@ export default function DatePicker(props: DatePickerProps) {
         trigger={trigger || null}
         outerControl={!trigger}
       >
-        <div className="pb-10  bg-[#F8F8F8]">
-          <div className="w-full p-6 pt-2 flex justify-between flex-wrap">
+        <div className="bg-[#F8F8F8]  pb-10">
+          <div className="flex w-full flex-wrap justify-between p-6 pt-2">
             {months.map((v) => (
               <div
                 key={v.value}
                 onClick={() => {
                   setMonth(v.value)
                 }}
-                className={`mt-4 w-[22%] h-[50px] flex justify-center items-center rounded-lg  ${
-                  month === v.value ? "bg-theme text-[#fff]" : "bg-white"
+                className={`mt-4 flex h-[50px] w-[22%] items-center justify-center rounded-lg  ${
+                  month === v.value ? "bg-theme text-white" : "bg-white"
                 }`}
               >
                 {v.label}
@@ -129,7 +132,7 @@ export default function DatePicker(props: DatePickerProps) {
                 setDate(year + "-" + month)
                 confirm(year + "-" + month)
               }}
-              className="w-[78%] h-[50px] bg-theme text-white rounded-full flex justify-center items-center"
+              className="bg-theme flex h-[50px] w-[78%] items-center justify-center rounded-full text-white"
             >
               {t("confirm")}
             </div>

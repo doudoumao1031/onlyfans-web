@@ -1,8 +1,9 @@
 "use server"
 
+import { cookies } from "next/headers"
+
 import { ApiResponse, FetchOptions } from "@/lib"
 import { TOKEN_KEY, USER_KEY } from "@/lib/utils"
-import { cookies } from "next/headers"
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL
 

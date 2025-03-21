@@ -1,26 +1,34 @@
 "use client"
 
 import React, { useEffect, useMemo, useState } from "react"
-import Image from "next/image"
-import { CommentInfo, fetchPostComments, PostData } from "@/lib"
-import Comments from "./comment"
-import Vote from "./vote"
-import UserTitle from "./user-title"
-import Description from "./description"
-import Media from "./media"
-import Like from "./like"
-import CommentStats from "./comment-stats"
-import Tip from "./tip"
-import Share from "./share"
-import Save from "./save"
-import { Link } from "@/i18n/routing"
-import CommentSkeleton from "./comment-skeleton"
-import { useGlobal } from "@/lib/contexts/global-context"
-import useCommonMessage, { CommonMessageContext } from "@/components/common/common-message"
+
 import { useTranslations } from "next-intl"
-import { buildUserHomePagePath } from "./utils"
+
+import Image from "next/image"
 import { usePathname } from "next/navigation"
+
+
+import useCommonMessage, { CommonMessageContext } from "@/components/common/common-message"
 import UserCard from "@/components/user/user-card"
+import { Link } from "@/i18n/routing"
+import { CommentInfo, fetchPostComments, PostData } from "@/lib"
+import { useGlobal } from "@/lib/contexts/global-context"
+
+import Comments from "./comment"
+import CommentSkeleton from "./comment-skeleton"
+import CommentStats from "./comment-stats"
+import Description from "./description"
+import Like from "./like"
+import Media from "./media"
+import Save from "./save"
+import Share from "./share"
+import Tip from "./tip"
+import UserTitle from "./user-title"
+import { buildUserHomePagePath } from "./utils"
+import Vote from "./vote"
+
+
+
 export default function Post({
   data,
   hasVote,
@@ -79,7 +87,7 @@ export default function Post({
   return (
     <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
       {renderNode}
-      <div className="w-full flex flex-col gap-2 mb-2">
+      <div className="mb-2 flex w-full flex-col gap-2">
         {!isInfoPage && (
           <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} space={space} />
         )}
@@ -90,7 +98,7 @@ export default function Post({
           linkRender={!isInfoPage ? linkRender : undefined}
         />
         {!isSpace() && (
-          <Link href={buildUserHomePagePath(user.id)} className="px-3 text-theme">
+          <Link href={buildUserHomePagePath(user.id)} className="text-theme px-3">
             {t("moreInfoText")}
           </Link>
         )}
@@ -112,7 +120,7 @@ export default function Post({
         )}
         {hasSubscribe && user && !user?.sub && !mention_user && <UserCard user={user} />}
         {hasVote && post_vote && (
-          <div className="flex gap-2 items-end" onClick={() => setShowVote((pre) => !pre)}>
+          <div className="flex items-end gap-2" onClick={() => setShowVote((pre) => !pre)}>
             <Image src="/theme/icon_fans_vote_red@3x.png" alt="" width={20} height={20} />
             <div className="text-theme text-sm">{t("vote")}</div>
             {showVote ? (
@@ -123,7 +131,7 @@ export default function Post({
           </div>
         )}
         {hasVote && showVote && <Vote postId={post.id} />}
-        <div className="flex items-center gap-4 justify-between border-b border-black/5 pr-[10px]">
+        <div className="flex items-center justify-between gap-4 border-b border-black/5 pr-[10px]">
           <Like
             count={thumbs_up_count}
             liked={star}

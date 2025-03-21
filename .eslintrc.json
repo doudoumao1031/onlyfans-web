@@ -58,17 +58,27 @@
             "position": "before"
           },
           {
+            "pattern": "next/font/**",
+            "group": "external",
+            "position": "after"
+          },
+          {
             "pattern": "next/**",
-            "group": "builtin",
-            "position": "before" 
+            "group": "external", 
+            "position": "after"
           },
           {
             "pattern": "@/**",
             "group": "internal",
             "position": "after"
+          },
+          {
+            "pattern": "next",
+            "group": "type",
+            "position": "after"
           }
         ],
-        "pathGroupsExcludedImportTypes": ["react", "next"],
+        "pathGroupsExcludedImportTypes": [],
         "newlines-between": "always",
         "alphabetize": {
           "order": "asc",

@@ -1,6 +1,7 @@
 "use client"
 
 import React, { createContext, useContext, useState, ReactNode } from "react"
+
 import LoadingMask, { CommonLoadingContext as LoadingContext } from "@/components/common/loading-mask"
 
 interface LoadingProviderProps {
@@ -13,7 +14,8 @@ export function LoadingProvider({ children }: LoadingProviderProps) {
     <LoadingContext.Provider value={{
       isLoading,
       setIsLoading
-    }}>
+    }}
+    >
       <LoadingMask isLoading={isLoading} />
       {children}
     </LoadingContext.Provider>

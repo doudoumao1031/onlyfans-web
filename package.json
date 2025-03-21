@@ -8,6 +8,7 @@
     "build:test": "NODE_OPTIONS='--inspect' NODE_ENV=test next build",
     "start": "next start",
     "lint": "next lint",
+    "lint:fix": "eslint --fix \"**/*.{js,jsx,ts,tsx}\"",
     "push-all": "./push-all.sh",
     "type-check": "tsc --noEmit",
     "check-all": "npm run type-check && npm run lint",

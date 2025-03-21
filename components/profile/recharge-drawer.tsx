@@ -1,13 +1,16 @@
 "use client"
+import React, { useState, useEffect } from "react"
+
+import { useTranslations } from "next-intl"
+
+import { useCommonMessageContext } from "@/components/common/common-message"
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
-import { useState, useEffect } from "react"
-import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib"
-import { useCommonMessageContext } from "@/components/common/common-message"
-import { Link } from "@/i18n/routing"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import React from "react"
-import { useTranslations } from "next-intl"
+import { Link } from "@/i18n/routing"
+import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib"
+
+
 
 interface RechargeProps {
   children: React.ReactNode
@@ -105,7 +108,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         headerRight={() => {
           return (
             <Link href={"/profile/recharge"} prefetch={false}>
-              <button className={"text-base text-text-theme"}>{t("details")}</button>
+              <button className={"text-text-theme text-base"}>{t("details")}</button>
             </Link>
           )
         }}
@@ -115,27 +118,27 @@ export default function RechargeDrawer(props: RechargeProps) {
         isOpen={isOpen}
         outerControl={true}
       >
-        <div className="w-full flex flex-col items-center text-black text-2xl bg-[#F8F8F8]">
-          <div className={"rounded-xl p-4 w-full text-base"}>
+        <div className="flex w-full flex-col items-center bg-[#F8F8F8] text-2xl text-black">
+          <div className={"w-full rounded-xl p-4 text-base"}>
             {columns.map((item, index) => (
               <div
                 key={index}
-                className={`flex justify-between px-4 py-[13px] items-center bg-white 
+                className={`flex items-center justify-between bg-white px-4 py-[13px] 
               ${index < columns.length - 1 && "border-b border-gray-200"}
               ${index == 0 && "rounded-t-xl"} 
               ${index == columns.length - 1 && "rounded-b-xl"} 
               `}
               >
                 <span className={"font-medium"}>{item.title}</span>
-                <span className={"text-gray-400 font-normal"}>{item.desc}</span>
+                <span className={"font-normal text-gray-400"}>{item.desc}</span>
               </div>
             ))}
           </div>
-          <div className="w-full flex items-center px-4 relative">
+          <div className="relative flex w-full items-center px-4">
             <input
               id="amount"
               type="number"
-              className="w-full py-2 pl-4 pr-16 border-0 bg-white rounded-lg text-left h-[49px] placeholder:text-gray-400 text-base"
+              className="h-[49px] w-full rounded-lg border-0 bg-white py-2 pl-4 pr-16 text-left text-base placeholder:text-gray-400"
               placeholder={t("rechargeValuePlaceholder")}
               value={amount == 0 ? "" : amount.toString()}
               onChange={(event) => {
@@ -149,7 +152,7 @@ export default function RechargeDrawer(props: RechargeProps) {
             />
             {ptBalance > 0 && (
               <button
-                className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal text-text-theme text-base"
+                className="text-text-theme absolute right-6 top-1/2 -translate-y-1/2 text-base font-normal"
                 onTouchEnd={(e) => {
                   e.preventDefault()
                   setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
@@ -163,7 +166,7 @@ export default function RechargeDrawer(props: RechargeProps) {
             <button
               type="button"
               disabled={amount === 0 || amount > ptBalance}
-              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${
+              className={`h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white ${
                 amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-theme"
               }`}
               onClick={async () => {

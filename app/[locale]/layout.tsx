@@ -1,11 +1,16 @@
-import type { Metadata, Viewport } from "next"
+
+import React from "react"
+
 import localFont from "next/font/local"
+
 import "./globals.css"
 import "./profile.scss"
-import React from "react"
-import Providers from "@/lib/providers/providers"
-import Script from "next/script"
+
 import AppAdapter from "@/components/common/init"
+import Providers from "@/lib/providers/providers"
+
+import type { Metadata, Viewport } from "next"
+
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -43,7 +48,7 @@ export default function RootLayout({
       <head>
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen flex flex-col max-w-lg mx-auto`}
+        className={`${geistSans.variable} ${geistMono.variable} mx-auto flex h-screen max-w-lg flex-col antialiased`}
         suppressHydrationWarning
       >
         <div className="h-full overflow-y-auto" style={{ paddingTop: "var(--top-bar)" }}>

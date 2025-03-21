@@ -1,14 +1,19 @@
 "use client"
+import { useState } from "react"
+
+
+import dayjs from "dayjs"
+import { useTranslations } from "next-intl"
+
+import { useParams } from "next/navigation"
+
 import IconWithImage from "@/components/profile/icon"
 import Modal, { TModalProps } from "@/components/space/modal"
-import { useState } from "react"
-import dayjs from "dayjs"
-import { useParams } from "next/navigation"
-import { userDelFollowing, userFollowing } from "@/lib/actions/space/actions"
 import { UserProfile } from "@/lib/actions/profile"
+import { userDelFollowing, userFollowing } from "@/lib/actions/space/actions"
 import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
 
-import { useTranslations } from "next-intl"
+
 export default function Page({ data }: { data: UserProfile | undefined }) {
   const { addToActionQueue } = useGlobal()
   const [isFocus, setIsFocus] = useState<boolean>(data?.following || false)
@@ -80,12 +85,12 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
   }
 
   return (
-    <div className="absolute top-4 right-4 flex flex-col items-end ">
+    <div className="absolute right-4 top-4 flex flex-col items-end ">
       <div
         onClick={async () => {
           await handleFollowing()
         }}
-        className={`min-w-20 px-2 h-8 rounded-full border border-theme flex justify-center items-center  ${isFocus ? "" : "bg-theme"
+        className={`border-theme flex h-8 min-w-20 items-center justify-center rounded-full border px-2  ${isFocus ? "" : "bg-theme"
           }`}
       >
         <IconWithImage
@@ -101,7 +106,7 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
         </span>
       </div>
       {data?.sub && (
-        <div className="flex text-text-theme text-xs mt-3 items-center">
+        <div className="text-text-theme mt-3 flex items-center text-xs">
           <span className="pr-1">
             {t("subscribe")}：
             {dayjs((data && data?.sub_end_time * 1000) || 0).diff(dayjs(), "days")}

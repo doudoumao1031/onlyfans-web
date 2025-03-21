@@ -1,8 +1,11 @@
 "use client"
 
-import ErrorPage from "@/components/common/error-page"
 import { useTranslations } from "next-intl"
+
 import { useRouter } from "next/navigation"
+
+
+import ErrorPage from "@/components/common/error-page"
 
 export default function Error({
   error,
@@ -16,10 +19,10 @@ export default function Error({
   const reg = new RegExp("POST_NOT_FOUND")
   if (reg.test(error.toString())) {
     return (
-      <div className="flex flex-col items-center mt-[60px]">
-        <p className="text-[#6D7781] mb-4 text-[15px]">{t("delText")}</p>
+      <div className="mt-[60px] flex flex-col items-center">
+        <p className="mb-4 text-[15px] text-[#6D7781]">{t("delText")}</p>
         <button
-          className="px-4 py-2 bg-background-theme text-white rounded-full hover:bg-opacity-90 flex items-center"
+          className="bg-background-theme flex items-center rounded-full px-4 py-2 text-white hover:bg-opacity-90"
           onClick={() => {
             router.back()
           }}

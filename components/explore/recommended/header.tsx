@@ -1,8 +1,12 @@
 "use client"
-import { useTranslations } from "next-intl"
-import { Link } from "@/i18n/routing"
-import { usePathname } from "next/navigation"
 import { useEffect, useRef } from "react"
+
+import { useTranslations } from "next-intl"
+
+import { usePathname } from "next/navigation"
+
+
+import { Link } from "@/i18n/routing"
 
 export default function Header() {
   const pathname = usePathname()
@@ -22,13 +26,13 @@ export default function Header() {
   }, [pathname])
 
   return (
-    <div className="flex gap-5 w-full mb-2 overflow-x-auto hide-scrollbar">
+    <div className="hide-scrollbar mb-2 flex w-full gap-5 overflow-x-auto">
       {tabs.map((tab) => (
         <Link
           key={tab.path}
           href={tab.path}
           ref={pathname.endsWith(tab.path) ? activeTabRef : null}
-          className={`flex flex-shrink-0 whitespace-nowrap items-center justify-center text-[15px] ${pathname.endsWith(tab.path)
+          className={`flex shrink-0 items-center justify-center whitespace-nowrap text-[15px] ${pathname.endsWith(tab.path)
               ? "font-medium"
               : "font-normal"
             }`}

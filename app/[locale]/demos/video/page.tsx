@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+
 import Hls from "hls.js"
 
 export default function VideoPage() {
@@ -119,23 +120,23 @@ export default function VideoPage() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-100">
-      <div className="w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden">
-        <h1 className="text-2xl font-bold p-4 bg-gray-800 text-white">HLS Video Player with Encryption</h1>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-100 p-4">
+      <div className="w-full max-w-4xl overflow-hidden rounded-lg bg-white shadow-lg">
+        <h1 className="bg-gray-800 p-4 text-2xl font-bold text-white">HLS Video Player with Encryption</h1>
 
         <div className="relative aspect-video bg-black">
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+              <div className="size-12 animate-spin rounded-full border-y-2 border-blue-500"></div>
             </div>
           )}
 
           {error && (
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-70">
-              <div className="text-white text-center p-4">
-                <p className="text-red-400 font-semibold">{error}</p>
+              <div className="p-4 text-center text-white">
+                <p className="font-semibold text-red-400">{error}</p>
                 <button
-                  className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  className="mt-4 rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
                   onClick={() => window.location.reload()}
                 >
                   Retry
@@ -152,7 +153,7 @@ export default function VideoPage() {
 
           <video
             ref={videoRef}
-            className="w-full h-full"
+            className="size-full"
             controls
             playsInline
           />
@@ -160,9 +161,9 @@ export default function VideoPage() {
 
         <div className="p-4">
           <form onSubmit={handleUrlSubmit} className="mb-4">
-            <div className="flex flex-col md:flex-row gap-2">
-              <div className="flex-grow">
-                <label htmlFor="hlsUrlInput" className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="flex flex-col gap-2 md:flex-row">
+              <div className="grow">
+                <label htmlFor="hlsUrlInput" className="mb-1 block text-sm font-medium text-gray-700">
                   HLS Stream URL
                 </label>
                 <input
@@ -170,14 +171,14 @@ export default function VideoPage() {
                   type="text"
                   value={inputUrl}
                   onChange={(e) => setInputUrl(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
                   placeholder="Enter HLS stream URL"
                 />
               </div>
               <div className="self-end">
                 <button
                   type="submit"
-                  className="w-full md:w-auto px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="w-full rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 md:w-auto"
                 >
                   Load Stream
                 </button>
@@ -189,10 +190,10 @@ export default function VideoPage() {
             This demo shows an HLS video stream with AES-128 encryption. The encryption key is served
             through a secure API route that reads the key from the public directory.
           </p>
-          <p className="text-gray-700 mt-2">
+          <p className="mt-2 text-gray-700">
             Key location: <code>/public/keys/encrypt.key</code>
           </p>
-          <p className="text-gray-700 mt-2">
+          <p className="mt-2 text-gray-700">
             Current HLS Source: <code>{hlsUrl}</code>
           </p>
         </div>

@@ -1,6 +1,6 @@
 export default function EmojiPicker({ onClick }: { onClick: (emoji: string) => void }) {
   return (
-    <div className="p-2 h-[180px] overflow-y-auto flex gap-2 flex-wrap shadow-md">
+    <div className="flex h-[180px] flex-wrap gap-2 overflow-y-auto p-2 shadow-md">
       {emojis.map((emoji) => (
         <Emoji emoji={emoji} onClick={onClick} key={emoji} />
       ))}

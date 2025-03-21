@@ -1,12 +1,14 @@
+import React, { useState } from "react"
+
+import clsx from "clsx"
+
+import { Calendar } from "@/components/ui/calendar"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import {
   DrawerDescription,
   DrawerHeader,
   DrawerTitle
 } from "@/components/ui/drawer"
-import React, { useState } from "react"
-import clsx from "clsx"
-import { Calendar } from "@/components/ui/calendar"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 
 
 export default function DatePickerModal({ trigger, onValueChange }: {
@@ -19,8 +21,8 @@ export default function DatePickerModal({ trigger, onValueChange }: {
       <DialogTrigger asChild>
         {trigger}
       </DialogTrigger>
-      <DialogContent className={clsx("bg-white hide-modal-close border-none bg-transparent",)}>
-        <section className={"flex-1 bg-white rounded-xl w-[252px] ml-auto mr-auto"}>
+      <DialogContent className={clsx("hide-modal-close border-none bg-transparent")}>
+        <section className={"mx-auto w-[252px] flex-1 rounded-xl bg-white"}>
           <DrawerHeader className={"hidden"}>
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>

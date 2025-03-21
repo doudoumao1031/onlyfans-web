@@ -1,6 +1,8 @@
 import { postSharLog } from "@/lib"
+
 import Stats from "./stats"
 import { Attachment, FileType } from "./types"
+
 export type ShareParams = {
   postId: string,
   title: string,

@@ -1,11 +1,14 @@
 "use client"
-import IconWithImage from "../profile/icon"
-import { FileType, PostData } from "@/lib"
-import { buildImageUrl } from "@/lib/utils"
-import { Link } from "@/i18n/routing"
-import LazyImg from "../common/lazy-img"
 import { useTranslations } from "next-intl"
+
+import { Link } from "@/i18n/routing"
+import { FileType, PostData } from "@/lib"
 import { useGlobal } from "@/lib/contexts/global-context"
+import { buildImageUrl } from "@/lib/utils"
+
+import LazyImg from "../common/lazy-img"
+import IconWithImage from "../profile/icon"
+
 export default function MediaItem({ item }: { item: PostData }) {
   const { sid } = useGlobal()
   const t = useTranslations("Space")
@@ -18,14 +21,14 @@ export default function MediaItem({ item }: { item: PostData }) {
   /*（订阅需要付费 && 未关注博主 && 未订阅博主） || （订阅不需要付费 && 未订阅） => 跳转详情页 */
   const toDetail = user.id !== sid && ((user.sub_price > 0 && !user.following && !user.sub) || (user.sub_price === 0 && !user.sub) || lock)
   return (
-    <div className="w-[calc(50%_-_8px)] h-[220px] mt-4">
-      <div className="overflow-hidden relative rounded-lg text-xs  text-white flex flex-col justify-between w-full h-full mb-4 bg-cover  bg-gray-300">
-        <div className="absolute w-full h-full">
+    <div className="mt-4 h-[220px] w-[calc(50%_-_8px)]">
+      <div className="relative mb-4 flex size-full  flex-col justify-between overflow-hidden rounded-lg bg-gray-300 bg-cover text-xs text-white">
+        <div className="absolute size-full">
           <LazyImg
             style={{ objectFit: "cover" }}
             width={200}
             height={400}
-            className="w-full h-full"
+            className="size-full"
             src={
               post_attachment[0]?.thumb_id || post_attachment[0]?.file_id
                 ? buildImageUrl(post_attachment[0]?.thumb_id || post_attachment[0]?.file_id)
@@ -37,15 +40,15 @@ export default function MediaItem({ item }: { item: PostData }) {
         </div>
 
         {lock && (
-          <div className="w-full h-full bg-black bg-opacity-5 rounded-lg backdrop-blur absolute top-0 left-0 z-0"></div>
+          <div className="absolute left-0 top-0 z-0 size-full rounded-lg bg-black bg-opacity-5 backdrop-blur"></div>
         )}
 
         <Link href={toDetail ?
           `/postInfo/${post.id}` : `/media/${post_attachment[0]?.file_type === FileType.Video ? "video" : "image"}/${post_attachment[0]?.file_type === FileType.Video ?
             showIds + "_" + post.id : showIds + "_" + 0}`}
         >
-          <div className="z-10 w-full h-full flex flex-col justify-between absolute top-0 left-0">
-            <div className="p-2 truncate overflow-hidden text-ellipsis">
+          <div className="absolute left-0 top-0 z-10 flex size-full flex-col justify-between">
+            <div className="truncate p-2">
               {/* {!lock ? post.title : ""} */}
             </div>
             {lock && (

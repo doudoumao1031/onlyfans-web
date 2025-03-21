@@ -1,5 +1,5 @@
-import { buildVideoUrl } from "@/lib/utils"
 import { Modal } from "@/components/common/modal"
+import { buildVideoUrl } from "@/lib/utils"
 
 export default async function VideoBrowseModal({
   params
@@ -10,9 +10,9 @@ export default async function VideoBrowseModal({
 
   return (
     <Modal>
-      <div className="relative w-full max-w-[100vw] aspect-video">
+      <div className="relative aspect-video w-full max-w-[100vw]">
         <video
-          className="w-full h-full"
+          className="size-full"
           controls
           autoPlay
           src={buildVideoUrl(id, "1080p")}

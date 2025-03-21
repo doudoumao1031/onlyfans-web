@@ -1,11 +1,17 @@
 "use client"
-import Header from "@/components/common/header"
-import Link from "next/link"
-import Nav from "@/components/explore/nav"
-import { usePathname, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react"
-import { userProfile } from "@/lib/actions/profile"
+
 import { useTranslations } from "next-intl"
+
+import Link from "next/link"
+import { usePathname, useSearchParams } from "next/navigation"
+
+
+import Header from "@/components/common/header"
+import Nav from "@/components/explore/nav"
+import { userProfile } from "@/lib/actions/profile"
+
+
 export default function Layout({
   children,
   feed,
@@ -39,7 +45,7 @@ export default function Layout({
   return (
     <>
       {/* {props.modal} */}
-      <div className=" h-screen flex flex-col w-full">
+      <div className=" flex h-screen w-full flex-col">
         {!isFind && (
           <Header
             title="Fans"
@@ -58,27 +64,27 @@ export default function Layout({
           />
         )}
         <div
-          className={`flex flex-col w-full  justify-start items-center ${isFind ? "h-[calc(100vh-94px)]" : "h-[calc(100vh-49px)]"
+          className={`flex w-full flex-col  items-center justify-start ${isFind ? "h-[calc(100vh-94px)]" : "h-[calc(100vh-49px)]"
             }`}
         >
           <Nav isFind={!!isFind} />
-          <div className="grow px-4 py-3 w-full h-[calc(100%-60px)]">
-            <div className={`w-full h-full ${path.indexOf("/explore/feed") > -1 ? "" : "hidden"}`}>
+          <div className="h-[calc(100%-60px)] w-full grow px-4 py-3">
+            <div className={`size-full ${path.indexOf("/explore/feed") > -1 ? "" : "hidden"}`}>
               {feed}
             </div>
             <div
-              className={`w-full h-full ${path.indexOf("/explore/followed") > -1 ? "" : "hidden"}`}
+              className={`size-full ${path.indexOf("/explore/followed") > -1 ? "" : "hidden"}`}
             >
               {followed}
             </div>
             <div
-              className={`w-full h-full ${path.indexOf("/explore/recommended") > -1 ? "" : "hidden"
+              className={`size-full ${path.indexOf("/explore/recommended") > -1 ? "" : "hidden"
                 }`}
             >
               {recommended}
             </div>
             <div
-              className={`w-full h-full ${path.indexOf("/explore/subscribed") > -1 ? "" : "hidden"
+              className={`size-full ${path.indexOf("/explore/subscribed") > -1 ? "" : "hidden"
                 }`}
             >
               {subscribed}

@@ -63,7 +63,7 @@ const SwipeToDelete: React.FC<SwipeToDeleteProps> = ({ children, onDelete }) => 
           onDelete()
           setCurrentX(0) // 重置位置
         }}
-        className="absolute top-0 right-0 h-full flex items-center justify-center bg-rose-500 text-white"
+        className="absolute right-0 top-0 flex h-full items-center justify-center bg-rose-500 text-white"
         style={{
           width: "100px",
           transform: "translateX(100%)"

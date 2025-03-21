@@ -1,7 +1,8 @@
 "use client"
-import Modal from "@/components/space/modal"
-import RechargeDrawer from "@/components/profile/recharge-drawer"
 import { useTranslations } from "next-intl"
+
+import RechargeDrawer from "@/components/profile/recharge-drawer"
+import Modal from "@/components/space/modal"
 
 interface CommonRechargeProps {
   visible: boolean
@@ -31,7 +32,7 @@ export default function CommonRecharge(props: CommonRechargeProps) {
       {recharge && (
         <RechargeDrawer isOpen={recharge} setIsOpen={setRecharge} setWfAmount={() => {}}>
           <div
-            className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
+            className={"rounded-full border border-white p-[6px] px-[20px] text-center text-white"}
             onTouchEnd={() => {
               setRecharge(true)
             }}

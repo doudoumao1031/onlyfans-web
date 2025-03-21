@@ -2,8 +2,9 @@ import TabLink from "@/components/space/tab-link"
 import UserInfo from "@/components/space/userInfo"
 import { addSpaceLog } from "@/lib"
 import { userProfile } from "@/lib/actions/profile"
-import { getUserById } from "@/lib/actions/space"
 import { getSelfId } from "@/lib/actions/server-actions"
+import { getUserById } from "@/lib/actions/space"
+
 export default async function Layout(props: {
   children: React.ReactNode
   modal: React.ReactNode
@@ -28,10 +29,10 @@ export default async function Layout(props: {
   return (
     <>
       {props.modal}
-      <div className="flex flex-col w-full justify-start items-center">
+      <div className="flex w-full flex-col items-center justify-start">
         <UserInfo data={data} isSelf={isSelf} />
         <TabLink id={id} data={data} />
-        <div className="grow px-4 py-3 w-full h-[calc(100vh-132px)]">{props.children}</div>
+        <div className="h-[calc(100vh-132px)] w-full grow px-4 py-3">{props.children}</div>
       </div>
       <div id="modal-root" />
     </>

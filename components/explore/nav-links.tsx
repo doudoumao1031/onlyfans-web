@@ -1,9 +1,13 @@
 "use client"
-import { Link } from "@/i18n/routing"
-import { usePathname } from "next/navigation"
-import clsx from "clsx"
 import { useEffect, useMemo, useRef } from "react"
+
+
+import clsx from "clsx"
 import { useTranslations } from "next-intl"
+
+import { usePathname } from "next/navigation"
+
+import { Link } from "@/i18n/routing"
 import { ActionTypes } from "@/lib/contexts/global-context"
 
 export default function NavLinks({ isFind }: { isFind?: boolean }) {
@@ -52,7 +56,7 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
 
   return (
     <div
-      className={`w-full flex text-center  sticky z-30 bg-white overflow-x-auto gap-3 ${isFind ? "justify-start" : "justify-between"
+      className={`sticky z-30 flex  w-full gap-3 overflow-x-auto bg-white text-center ${isFind ? "justify-start" : "justify-between"
         }`}
     >
       {memoLink.map((link) => (
@@ -63,15 +67,15 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
           ref={link.active ? activeLinkRef : null}
           onClick={(e) => handleNavClick(e, link.href, link?.event)}
           className={clsx(
-            "pt-3.5 pb-3.5 text-[20px] relative whitespace-nowrap",
-            link.active ? "font-bold text-black" : "text-[#777] font-normal",
+            "relative whitespace-nowrap py-3.5 text-[20px]",
+            link.active ? "font-bold text-black" : "font-normal text-[#777]",
             isFind ? "mr-8" : ""
           )}
         >
           {link.name}
           <span
             className={clsx(
-              "absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-theme w-[40px] ml-[-20px]",
+              "bg-theme absolute bottom-0 left-[50%] ml-[-20px] h-[3px] w-[40px] rounded-t-lg",
               link.active ? "block" : "hidden"
             )}
           ></span>

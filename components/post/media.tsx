@@ -1,14 +1,18 @@
-import { Link } from "@/i18n/routing"
-import { Attachment, FileType, TPost } from "./types"
-import { buildImageUrl } from "@/lib/utils"
-import { VideoPreview } from "./video-preview"
-import LazyImg from "@/components/common/lazy-img"
-import IconWithImage from "../profile/icon"
-import { User } from "@/lib"
-import Modal from "@/components/space/modal"
 import { useState } from "react"
+
 import { useTranslations } from "next-intl"
+
+import LazyImg from "@/components/common/lazy-img"
+import Modal from "@/components/space/modal"
+import { Link } from "@/i18n/routing"
+import { User } from "@/lib"
 import { useGlobal } from "@/lib/contexts/global-context"
+import { buildImageUrl } from "@/lib/utils"
+
+import { Attachment, FileType, TPost } from "./types"
+import { VideoPreview } from "./video-preview"
+import IconWithImage from "../profile/icon"
+
 
 interface MediaProps {
   data: Attachment[]
@@ -27,14 +31,14 @@ export default function Media(props: MediaProps) {
   const hasThumbId = !!data[0].thumb_id
   const content = (
     <div>
-      <div className={`w-full h-full rounded-lg absolute top-0 left-0 z-20 flex flex-col items-center justify-center ${hasThumbId && "bg-black bg-opacity-[30%] backdrop-blur-md"}`}>
+      <div className={`absolute left-0 top-0 z-20 flex size-full flex-col items-center justify-center rounded-lg ${hasThumbId && "bg-black bg-opacity-[30%] backdrop-blur-md"}`}>
         <IconWithImage url="/icons/icon_info_lock_white.png" width={32} color="#fff" height={32} />
         <span className="mt-2 text-white">
           {post.visibility === 2 ? tSpace("tip1") : tSpace("tip2")}
         </span>
       </div>
       <LazyImg
-        className={"aspect-square rounded-md block"}
+        className={"block aspect-square rounded-md"}
         src={hasThumbId ? buildImageUrl(data[0]?.thumb_id) : "/icons/default/img_media_default_lj.png"}
         alt=""
         style={{
@@ -51,7 +55,7 @@ export default function Media(props: MediaProps) {
     <>
       {/*订阅查看并且未订阅 或者 付费观看*/}
       {((post.visibility === 1 && !user.sub) || post.visibility === 2) && (
-        <div className="w-full h-[200px] relative">
+        <div className="relative h-[200px] w-full">
           {/*帖子详情正常查看 ｜ 推荐/空间点击媒体到帖子详情*/}
           {isInfoPage ? content : <Link href={`/postInfo/${post.id}`}>{content}</Link>}
         </div>
@@ -59,7 +63,7 @@ export default function Media(props: MediaProps) {
       {(post.visibility === 0 || (post.visibility === 1 && user.sub)) && (
         <div
           className={
-            data.length > 1 ? "grid grid-cols-3  gap-2 relative " : "relative w-full h-full"
+            data.length > 1 ? "relative grid  grid-cols-3 gap-2 " : "relative size-full"
           }
         >
           {
@@ -75,17 +79,17 @@ export default function Media(props: MediaProps) {
                         setFollowModal(true)
                       }}
                       className={
-                        file_type === FileType.Video ? "col-span-3 w-full" : "block w-full h-full "
+                        file_type === FileType.Video ? "col-span-3 w-full" : "block size-full "
                       }
                     >
                       {file_type === FileType.Video ? (
                         <VideoPreview fileId={file_id} thumbId={thumb_id} />
                       ) : (
-                        <div className=" flex justify-center relative overflow-hidden">
+                        <div className=" relative flex justify-center overflow-hidden">
                           {data.length === 1 && (
-                            <div className="w-full h-full absolute top-0 left-0">
+                            <div className="absolute left-0 top-0 size-full">
                               <LazyImg
-                                className="aspect-square rounded-md w-full h-full  z-[-1] object-cover blur-[10px]"
+                                className="z-[-1] aspect-square size-full rounded-md  object-cover blur-[10px]"
                                 src={buildImageUrl(file_id)}
                                 alt=""
                                 width={200}
@@ -94,9 +98,9 @@ export default function Media(props: MediaProps) {
                             </div>
                           )}
                           <LazyImg
-                            className={`aspect-square  relative z-10 ${data.length === 1
-                              ? "object-contain max-h-[200px]"
-                              : "object-cover rounded-md"
+                            className={`relative  z-10 aspect-square ${data.length === 1
+                              ? "max-h-[200px] object-contain"
+                              : "rounded-md object-cover"
                               }`}
                             src={buildImageUrl(file_id)}
                             alt=""
@@ -127,18 +131,18 @@ export default function Media(props: MediaProps) {
                       }
                       className={
                         file_type === FileType.Video
-                          ? "col-span-3 w-full h-full"
-                          : "block w-full h-full relative"
+                          ? "col-span-3 size-full"
+                          : "relative block size-full"
                       }
                     >
                       {file_type === FileType.Video ? (
                         <VideoPreview fileId={file_id} thumbId={thumb_id} />
                       ) : (
-                        <div className=" flex justify-center relative overflow-hidden">
+                        <div className=" relative flex justify-center overflow-hidden">
                           {data.length === 1 && (
-                            <div className="w-full h-full absolute top-0 left-0">
+                            <div className="absolute left-0 top-0 size-full">
                               <LazyImg
-                                className="aspect-square rounded-md w-full h-full  z-[-1] object-cover blur-[10px]"
+                                className="z-[-1] aspect-square size-full rounded-md  object-cover blur-[10px]"
                                 src={buildImageUrl(file_id)}
                                 alt=""
                                 width={200}
@@ -147,7 +151,7 @@ export default function Media(props: MediaProps) {
                             </div>
                           )}
                           <LazyImg
-                            className={`aspect-square w-full relative z-10 ${data.length === 1 ? "object-contain " : "object-cover rounded-md"
+                            className={`relative z-10 aspect-square w-full ${data.length === 1 ? "object-contain " : "rounded-md object-cover"
                               }`}
                             src={buildImageUrl(file_id)}
                             alt=""

@@ -1,16 +1,17 @@
-import { Link } from "@/i18n/routing"
 import Image from "next/image"
+
 import NavLinks from "@/components/explore/nav-links"
+import { Link } from "@/i18n/routing"
 
 export default function Nav({ isFind }: { isFind?: boolean }) {
   return (
-    <div className="flex flex-row w-full h-14 border-b border-gray-100">
+    <div className="flex h-14 w-full flex-row border-b border-gray-100">
       <div className="flex flex-1 overflow-hidden px-3">
         <NavLinks isFind={isFind} />
       </div>
       {!isFind && (
         <Link
-          className="flex items-center justify-center flex-shrink-0 px-3 shadow-[-5px_0_4px_-1px_rgba(0,0,0,0.04)]"
+          className="flex shrink-0 items-center justify-center px-3 shadow-[-5px_0_4px_-1px_rgba(0,0,0,0.04)]"
           href="/search"
         >
           <Image

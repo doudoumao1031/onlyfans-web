@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react"
-import { buildImageUrl, buildVideoUrl } from "@/lib/utils"
-import { Skeleton } from "@/components/ui/skeleton"
+
 import Image from "next/image"
+
+import { Skeleton } from "@/components/ui/skeleton"
+import { buildImageUrl, buildVideoUrl } from "@/lib/utils"
 
 // Keep track of currently playing video
 let currentlyPlaying: HTMLVideoElement | null = null
@@ -62,30 +64,30 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
     }
   }
   return (
-    <div className="relative w-full rounded-xl aspect-square" >
+    <div className="relative aspect-square w-full rounded-xl" >
       {isLoading &&
         (thumbId ? (
           <Image
             src={buildImageUrl(thumbId)}
             alt="Video thumbnail"
-            className="absolute inset-0 w-full h-full object-cover rounded-xl"
+            className="absolute inset-0 size-full rounded-xl object-cover"
             width={343}
             height={200}
           />
         ) : (
-          <Skeleton className="absolute w-full h-full rounded-xl" />
+          <Skeleton className="absolute size-full rounded-xl" />
         ))}
-      <div className="w-full h-full relative overflow-hidden">
+      <div className="relative size-full overflow-hidden">
         <video
           ref={backgroundVideoRef}
           src={buildVideoUrl(fileId, "240p")}
-          className="w-full h-full absolute top-0 left-0 z-[-1] object-cover blur-[10px]"
+          className="absolute left-0 top-0 z-[-1] size-full object-cover blur-[10px]"
           muted
           loop
         />
         <video
           ref={videoRef}
-          className="w-full h-full object-contain rounded-xl"
+          className="size-full rounded-xl object-contain"
           poster={buildImageUrl(thumbId || fileId)}
           src={buildVideoUrl(fileId, "240p")}
           playsInline

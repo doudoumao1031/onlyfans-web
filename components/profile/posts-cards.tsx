@@ -1,7 +1,9 @@
-import { getSubscribeSetting, myPosts } from "@/lib"
-import PostsCard from "./posts-card"
 import { getTranslations } from "next-intl/server"
+
+import { getSubscribeSetting, myPosts } from "@/lib"
 import { userProfile } from "@/lib/actions/profile"
+
+import PostsCard from "./posts-card"
 
 export default async function Page() {
   const t = await getTranslations("Profile.postCard")

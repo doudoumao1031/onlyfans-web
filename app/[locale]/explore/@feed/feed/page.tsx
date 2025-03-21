@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic"
 export default async function Page() {
   const { items, hasMore } = await recomActions.fetchFeeds(1)
   return (
-    <div className="container h-full w-full mx-auto">
+    <div className="container mx-auto size-full">
       <FeedList initialItems={items} initialHasMore={hasMore} />
     </div>
   )

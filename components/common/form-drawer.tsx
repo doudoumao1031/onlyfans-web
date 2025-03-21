@@ -1,4 +1,9 @@
 "use client"
+import React, { FormEvent, useState } from "react"
+
+import { clsx } from "clsx"
+
+import ModalHeader from "@/components/common/modal-header"
 import {
   Drawer,
   DrawerContent,
@@ -8,9 +13,6 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from "@/components/ui/drawer"
-import ModalHeader from "@/components/common/modal-header"
-import React, { FormEvent, useState } from "react"
-import { clsx } from "clsx"
 
 export default function FormDrawer({
   children,
@@ -47,7 +49,7 @@ export default function FormDrawer({
       <DrawerContent
         className={clsx("bg-white", isAutoHeight ? "h-auto" : "h-[95vh]", className ?? "")}
       >
-        <form className={"flex-1 h-full flex flex-col"} onSubmit={handleSubmit}>
+        <form className={"flex h-full flex-1 flex-col"} onSubmit={handleSubmit}>
           <DrawerHeader className={"hidden"}>
             <DrawerTitle></DrawerTitle>
             <DrawerDescription></DrawerDescription>

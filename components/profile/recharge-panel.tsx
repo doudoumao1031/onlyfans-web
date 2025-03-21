@@ -1,11 +1,13 @@
 "use client"
-import RechargeDrawer from "@/components/profile/recharge-drawer"
 import { useMemo, useState } from "react"
+
 import { useTranslations } from "next-intl"
-import SheetSelect from "../common/sheet-select"
-// import WithdrawDrawer from "./withdraw-drawer"
-import { WalletInfo } from "@/lib"
+
+import RechargeDrawer from "@/components/profile/recharge-drawer"
 import { useRouter } from "@/i18n/routing"
+import { WalletInfo } from "@/lib"
+
+import SheetSelect from "../common/sheet-select"
 
 export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) {
   const router = useRouter()
@@ -24,13 +26,13 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
     <>
       <div className={"p-4"}>
         <div
-          className={"bg-[url('/theme/bg_wallet@3x.png')] gap-1.5 bg-cover rounded-xl text-white flex justify-between items-center px-[20px] pt-[10px] pb-[20px]"}
+          className={"flex items-center justify-between gap-1.5 rounded-xl bg-[url('/theme/bg_wallet@3x.png')] bg-cover px-[20px] pb-[20px] pt-[10px] text-white"}
         >
-          <div className={"flex flex-col flex-1 overflow-hidden"}>
+          <div className={"flex flex-1 flex-col overflow-hidden"}>
             <span className={"text-xs"}>{commonT("appName")}{t("balance")}</span>
             <div className={"flex items-baseline font-medium"}>
-              <span className={"text-[28px] text-ellipsis whitespace-nowrap overflow-hidden "}>{formattedAmount || 0.00}</span>
-              <span className={"text-[15px] shrink-0"}>&nbsp;&nbsp;USDT</span>
+              <span className={"truncate text-[28px] "}>{formattedAmount || 0.00}</span>
+              <span className={"shrink-0 text-[15px]"}>&nbsp;&nbsp;USDT</span>
             </div>
           </div>
           <div className={"shrink-0"}>
@@ -56,7 +58,7 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
                 }
               ]}
             >
-              <div className={"rounded-full border border-white text-center px-[18px] p-[6px] text-white"}>{t("actions.wallet")}
+              <div className={"rounded-full border border-white p-[6px] px-[18px] text-center text-white"}>{t("actions.wallet")}
               </div>
             </SheetSelect>
           </div>

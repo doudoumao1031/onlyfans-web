@@ -1,6 +1,7 @@
-import { useTimeout } from "@/lib/hooks/useTimeout"
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react"
+
 import IconWithImage from "@/components/profile/icon"
+import { useTimeout } from "@/lib/hooks/useTimeout"
 
 export default function useCommonMessage() {
   const [content, setContent] = useState<React.ReactNode>()
@@ -47,15 +48,15 @@ export default function useCommonMessage() {
     if (content && openState) {
       return (
         <div
-          className={`absolute z-[9999] left-1/2 -translate-x-1/2 top-[50vh] rounded-full px-4 py-2 text-white transition-all duration-300 ease-in-out transform ${
-            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
+          className={`absolute left-1/2 top-[50vh] z-[9999] -translate-x-1/2 rounded-full px-4 py-2 text-white transition-all duration-300 ease-in-out${
+            isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
           } ${type === "love" ? "bg-theme" : "bg-black/80"}`}
         >
           {type === "default" && <div className="whitespace-nowrap">{content}</div>}
           {type === "success" && (
             <div className="flex items-center gap-2 whitespace-nowrap">
               <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20} />
-              <span className="text-white font-medium text-base">{content}</span>
+              <span className="text-base font-medium text-white">{content}</span>
             </div>
           )}
           {type === "love" && (
@@ -65,7 +66,7 @@ export default function useCommonMessage() {
                 height={20}
                 width={20}
               />
-              <span className="text-white font-medium text-base">{content}</span>
+              <span className="text-base font-medium text-white">{content}</span>
             </div>
           )}
         </div>

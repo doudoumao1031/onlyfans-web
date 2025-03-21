@@ -1,7 +1,8 @@
+import { getTranslations } from "next-intl/server"
+
+import Empty from "@/components/explore/empty"
 import UserCard from "@/components/user/user-card"
 import { getSubscribeUsers } from "@/lib"
-import Empty from "@/components/explore/empty"
-import { getTranslations } from "next-intl/server"
 
 export const dynamic = "force-dynamic"
 
@@ -14,7 +15,7 @@ export default async function Page() {
       {bloggers &&
         bloggers?.total > 0 &&
         bloggers?.list.map((info) => (
-          <div key={info.user.id} className="w-full mb-[10px] max-w-lg mx-auto">
+          <div key={info.user.id} className="mx-auto mb-[10px] w-full max-w-lg">
             <UserCard user={info.user} />
           </div>
         ))}

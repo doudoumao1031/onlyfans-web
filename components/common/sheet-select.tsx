@@ -1,3 +1,8 @@
+import React, { useState } from "react"
+
+import clsx from "clsx"
+import { useTranslations } from "next-intl"
+
 import {
   Sheet,
   SheetClose,
@@ -7,9 +12,6 @@ import {
   SheetTitle,
   SheetTrigger
 } from "@/components/ui/sheet"
-import React, { useState } from "react"
-import clsx from "clsx"
-import { useTranslations } from "next-intl"
 
 export interface ISelectOption {
   label: React.ReactNode
@@ -54,15 +56,15 @@ export default function SheetSelect({
             </button>
           </SheetTrigger>
         )}
-        <SheetContent side={"bottom"} className={"px-2.5 py-0 pb-2.5 border-none hide-modal-close"}>
+        <SheetContent side={"bottom"} className={"hide-modal-close border-none px-2.5 py-0 pb-2.5"}>
           <SheetTitle className={"hidden"}></SheetTitle>
           <SheetDescription className={"hidden"}></SheetDescription>
-          <div className="bg-white rounded-2xl overflow-hidden">
+          <div className="overflow-hidden rounded-2xl bg-white">
             {options.map((item, index, arr) => {
               return (
                 <button
                   className={clsx(
-                    "pl-8 pr-8 pt-4 pb-4 text-[20px] block w-full",
+                    "block w-full px-8 py-4 text-[20px]",
                     index !== arr.length - 1 ? "border-b border-b-gray-100" : ""
                   )}
                   key={index}
@@ -89,7 +91,7 @@ export default function SheetSelect({
               {/*<Button type="submit">Save changes</Button>*/}
               <button
                 className={
-                  "block font-bold bg-white rounded-2xl w-full pl-8 pr-8 pt-4 pb-4 text-text-theme text-[20px]"
+                  "text-text-theme block w-full rounded-2xl bg-white px-8 py-4 text-[20px] font-bold"
                 }
               >
                 {commonTrans("cancel")}

@@ -1,5 +1,6 @@
 import "./like-animation.css"
 import Image from "next/image"
+
 export default function Page({ value, highlight = false }: {
   value: number
   highlight?: boolean

@@ -1,17 +1,22 @@
 "use client"
-import Header from "@/components/profile/header"
-import Avatar from "@/components/profile/avatar"
-import InputWithLabel from "@/components/profile/input-with-label"
-import { Controller, useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
 import React, { useEffect, useMemo } from "react"
-import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/profile"
-import { useRouter } from "next/navigation"
-import { useCommonMessageContext } from "@/components/common/common-message"
-import { buildImageUrl, commonUploadFile } from "@/lib/utils"
-import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+
+
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useTranslations } from "next-intl"
+import { Controller, useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { useRouter } from "next/navigation"
+
+import { useCommonMessageContext } from "@/components/common/common-message"
+import Avatar from "@/components/profile/avatar"
+import Header from "@/components/profile/header"
+import InputWithLabel from "@/components/profile/input-with-label"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/profile"
+import { buildImageUrl, commonUploadFile } from "@/lib/utils"
+
 
 type EditUserProfile = Pick<
   UserProfile,
@@ -94,17 +99,17 @@ export default function Page() {
           })
         })}
       >
-        <div className={"w-full left-0 top-0 absolute z-20 text-white bg-black/20"}>
+        <div className={"absolute left-0 top-0 z-20 w-full bg-black/20 text-white"}>
           <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"} />
         </div>
-        <div className="profile-content bg-[url('/icons/image_fans_normal_05.png')] relative bg-cover"
+        <div className="profile-content relative bg-[url('/icons/image_fans_normal_05.png')] bg-cover"
           style={backImageStyle}
         >
           <input
             type="file"
             accept="image/*"
             multiple={false}
-            className="w-full h-full opacity-0 z-10 absolute"
+            className="absolute z-10 size-full opacity-0"
             onChange={(event) => {
               if (event.target.files?.length) {
                 handleUploadFile(event.target.files[0])
@@ -112,11 +117,11 @@ export default function Page() {
               }
             }}
           />
-          <div className={"text-xs text-white absolute right-4 bottom-0"}>{t("changeBackgroundImage")}</div>
-          <div className="w-full h-full absolute top-0 left-0 bg-black/20"></div>
+          <div className={"absolute bottom-0 right-4 text-xs text-white"}>{t("changeBackgroundImage")}</div>
+          <div className="absolute left-0 top-0 size-full bg-black/20"></div>
         </div>
-        <section className="bg-white relative pb-8">
-          <section className="pl-4 pr-4 pb-3 ">
+        <section className="relative bg-white pb-8">
+          <section className="px-4 pb-3 ">
             <div className={"relative top-[-24px] inline-block"}>
               <Avatar
                 showEdit
@@ -128,7 +133,7 @@ export default function Page() {
             </div>
           </section>
           <section className="mt-[-12px]">
-            <section className="pl-4 pr-4 flex flex-col gap-5 ">
+            <section className="flex flex-col gap-5 px-4 ">
               <section>
                 <Controller control={control} render={({ field }) => {
                   return (

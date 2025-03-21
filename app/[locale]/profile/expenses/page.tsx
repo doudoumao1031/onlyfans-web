@@ -1,16 +1,20 @@
 "use client"
+import { Fragment, useEffect, useState } from "react"
+
+import dayjs from "dayjs"
+import { useTranslations } from "next-intl"
+
 import DatePicker from "@/components/common/date-picker"
 import Empty from "@/components/common/empty"
+import Header from "@/components/common/header"
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import LoadingMask from "@/components/common/loading-mask"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
 import { ChangeType, ChangeTypeDesc, getExpenses, PageResponse, StatementResp } from "@/lib"
-import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
-import dayjs from "dayjs"
-import { useTranslations } from "next-intl"
-import { Fragment, useEffect, useState } from "react"
 import { ZH_YYYY_MM, ZH_YYYY_MM_DD_HH_mm_ss } from "@/lib/constant"
-import Header from "@/components/common/header"
+import { useInfiniteFetch } from "@/lib/hooks/use-infinite-scroll"
+
+
 
 export default function Page() {
   const [initData, setInitData] = useState<PageResponse<StatementResp> | null>()
@@ -52,13 +56,13 @@ export default function Page() {
     { type: ChangeType.WITHDRAW, desc: t("withdrawal") }
   ]
   return (
-    <div className="flex h-screen flex-col w-full justify-start items-center overflow-auto">
+    <div className="flex h-screen w-full flex-col items-center justify-start overflow-auto">
       <div className="w-full">
         <Header title={t("expensesRecord")} titleColor="#222" />
-        <div className="w-full h-[calc(100vh-153px)]">
+        <div className="h-[calc(100vh-153px)] w-full">
           {initData && (
           <InfiniteScroll<StatementResp>
-            className={"h-full w-full mx-auto"}
+            className={"mx-auto size-full"}
             initialItems={initData.list || []}
             initialHasMore={true}
             fetcherFn={infiniteFetchPosts}
@@ -74,18 +78,18 @@ export default function Page() {
                 />
                 <div className="p-4 pt-0">
                   {items.map((v, i) => (
-                    <div key={i} className="py-3 border-b border-spacing-0.5 border-[#ddd]">
+                    <div key={i} className="border-spacing-0.5 border-b border-[#ddd] py-3">
                       <div className="flex justify-between">
                         <span>{dayjs(v.trade_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss)}</span>
                         <span className="text-xs text-[#323232]">{v.change_amount} USDT</span>
                       </div>
-                      <div className="flex justify-between text-xs mt-1">
+                      <div className="mt-1 flex justify-between text-xs">
                         <span className="text-[#979799]">
                           {" "}
                           {t("balance")}:{v.balance_snapshot}
                         </span>
                         {v.from_user && (
-                        <span className="text-orange truncate max-w-[160px]">{StatementTypeList[v.change_type - 1].desc} {v.from_user}</span>
+                        <span className="text-orange max-w-[160px] truncate">{StatementTypeList[v.change_type - 1].desc} {v.from_user}</span>
                       )}
                       </div>
                     </div>

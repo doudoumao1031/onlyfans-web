@@ -1,8 +1,10 @@
 "use client"
 
 import { useState, useRef, useCallback } from "react"
-import { Button } from "@/components/ui/button"
+
 import Image from "next/image"
+
+import { Button } from "@/components/ui/button"
 
 export default function VideoUploadDemo() {
   const [videoFile, setVideoFile] = useState<File | null>(null)
@@ -106,9 +108,9 @@ export default function VideoUploadDemo() {
 
   return (
     <div className="container mx-auto py-10">
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
+      <div className="mx-auto w-full max-w-2xl rounded-lg bg-white p-6 shadow-md">
         <div className="mb-6">
-          <h2 className="text-2xl font-bold mb-2">Video Upload Demo</h2>
+          <h2 className="mb-2 text-2xl font-bold">Video Upload Demo</h2>
           <p className="text-gray-600">Upload a video file and see the first frame preview</p>
         </div>
         <div className="space-y-6">
@@ -123,23 +125,23 @@ export default function VideoUploadDemo() {
 
           {/* Upload area */}
           <div
-            className="border-2 border-dashed border-gray-300 rounded-lg p-12 text-center cursor-pointer hover:bg-gray-50 transition-colors"
+            className="cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-12 text-center transition-colors hover:bg-gray-50"
             onClick={handleSelectClick}
           >
             {previewUrl ? (
-              <div className="relative w-full aspect-video mx-auto">
+              <div className="relative mx-auto aspect-video w-full">
                 <Image
                   src={previewUrl}
                   alt="Video preview"
                   fill
-                  className="object-contain rounded-md"
+                  className="rounded-md object-contain"
                 />
               </div>
             ) : (
               <div className="text-gray-500">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-12 w-12 mx-auto mb-4"
+                  className="mx-auto mb-4 size-12"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -152,14 +154,14 @@ export default function VideoUploadDemo() {
                   />
                 </svg>
                 <p className="text-lg font-medium">Click to select a video file</p>
-                <p className="text-sm mt-2">or drag and drop</p>
+                <p className="mt-2 text-sm">or drag and drop</p>
               </div>
             )}
           </div>
 
           {/* File info */}
           {videoFile && (
-            <div className="bg-gray-50 p-4 rounded-md">
+            <div className="rounded-md bg-gray-50 p-4">
               <p className="font-medium">Selected file:</p>
               <p className="text-sm text-gray-600">{videoFile.name}</p>
               <p className="text-sm text-gray-600">{(videoFile.size / (1024 * 1024)).toFixed(2)} MB</p>
@@ -168,12 +170,12 @@ export default function VideoUploadDemo() {
 
           {/* Upload progress */}
           {isUploading && (
-            <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div className="h-2.5 w-full rounded-full bg-gray-200">
               <div
-                className="bg-blue-600 h-2.5 rounded-full"
+                className="h-2.5 rounded-full bg-blue-600"
                 style={{ width: `${uploadProgress}%` }}
               />
-              <p className="text-sm text-gray-600 mt-2 text-right">{uploadProgress}%</p>
+              <p className="mt-2 text-right text-sm text-gray-600">{uploadProgress}%</p>
             </div>
           )}
         </div>

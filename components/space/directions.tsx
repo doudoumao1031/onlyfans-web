@@ -1,12 +1,13 @@
 "use client"
-import { useTranslations } from "next-intl"
 import { useState } from "react"
+
+import { useTranslations } from "next-intl"
 
 export default function Page({ about }: { about: string }) {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const t = useTranslations("Space")
   return (
-    <div className="text-xs mt-2.5">
+    <div className="mt-2.5 text-xs">
       <section
         className={!isOpen && about?.length > 100 ? "line-clamp-3" : "whitespace-pre-wrap"}
         dangerouslySetInnerHTML={{ __html: about }}

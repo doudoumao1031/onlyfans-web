@@ -1,12 +1,14 @@
 "use client"
 import React, { SyntheticEvent, useCallback, useEffect, useState } from "react"
-import TimeSort from "@/components/profile/time-sort"
-import { FansSubscribeItems, getSubscribedUsers, PageResponse  } from "@/lib"
+
+import { useTranslations } from "next-intl"
+
 import InfiniteScroll from "@/components/common/infinite-scroll"
 import { ListEnd, ListError, ListLoading } from "@/components/explore/list-states"
-import { useTranslations } from "next-intl"
 import { FansSubscribe } from "@/components/profile/fans/fans-list-item"
 import IconWithImage from "@/components/profile/icon"
+import TimeSort from "@/components/profile/time-sort"
+import { FansSubscribeItems, getSubscribedUsers, PageResponse  } from "@/lib"
 
 interface SubscribeUsersProps {
   initialHasMore: boolean;
@@ -62,14 +64,14 @@ export default function Page() {
   return (
     <div className={"px-4"}>
       <form onSubmit={handleFormSubmit}>
-        <div className="flex justify-between py-2 items-center gap-2.5">
-          <div className={"flex-1 pt-2 pb-2 pl-3 pr-3 bg-[#F4F5F5] rounded-full flex items-center"}>
+        <div className="flex items-center justify-between gap-2.5 py-2">
+          <div className={"flex flex-1 items-center rounded-full bg-[#F4F5F5] px-3 py-2"}>
             <IconWithImage url={"/theme/icon_search_s@3x.png"} width={18} height={18}
               color={"rgb(221, 221, 221)"}
             />
             <input value={name} placeholder={t("searchPlaceHolder")} onChange={(event) => {
               setName(event.target.value)
-            }} className="w-full bg-transparent flex pl-0.5"
+            }} className="flex w-full bg-transparent pl-0.5"
             />
           </div>
         </div>

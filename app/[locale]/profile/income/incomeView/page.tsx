@@ -1,10 +1,25 @@
 "use client"
-import IconWithImage from "@/components/profile/icon"
 import React, { useEffect, useMemo, useState } from "react"
-import { options } from "@/components/profile/chart-line"
-import FormDrawer from "@/components/common/form-drawer"
-import { Input } from "@/components/ui/input"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import { clsx } from "clsx"
+import dayjs from "dayjs"
+import { useTranslations } from "next-intl"
 import { Line } from "react-chartjs-2"
+import { Controller, useForm } from "react-hook-form"
+import { z } from "zod"
+
+import useCommonMessage, {
+  CommonMessageContext,
+  useCommonMessageContext
+} from "@/components/common/common-message"
+import FormDrawer from "@/components/common/form-drawer"
+import LoadingMask from "@/components/common/loading-mask"
+import { options } from "@/components/profile/chart-line"
+import IconWithImage from "@/components/profile/icon"
+import { Input } from "@/components/ui/input"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { Link, useRouter } from "@/i18n/routing"
 import {
   addWalletDownOrder,
   getUserMetricDay,
@@ -13,21 +28,8 @@ import {
   userWallet,
   WalletInfo
 } from "@/lib"
-import dayjs from "dayjs"
-import { Controller, useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import useCommonMessage, {
-  CommonMessageContext,
-  useCommonMessageContext
-} from "@/components/common/common-message"
-import { getDateRange, getEvenlySpacedPoints } from "@/lib/utils"
-import { clsx } from "clsx"
-import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import LoadingMask from "@/components/common/loading-mask"
-import { Link, useRouter } from "@/i18n/routing"
-import { useTranslations } from "next-intl"
 import { ZH_YYYY_MM_DD } from "@/lib/constant"
+import { getDateRange, getEvenlySpacedPoints } from "@/lib/utils"
 
 const Withdrawal = ({
   children,
@@ -121,7 +123,7 @@ const Withdrawal = ({
         headerRight={() => {
           return (
             <Link href={"/profile/withdraw"}>
-              <button className={"text-base text-text-theme"}>{t("withdrawalAmountDetail")}</button>
+              <button className={"text-text-theme text-base"}>{t("withdrawalAmountDetail")}</button>
             </Link>
           )
         }}
@@ -131,19 +133,19 @@ const Withdrawal = ({
         }}
       >
         <div className="p-8">
-          <div className="grid grid-cols-2 mt-4">
+          <div className="mt-4 grid grid-cols-2">
             <div className="flex flex-col items-center">
-              <span className="text-xs mb-2">{t("withdrawalAmountAvailable")}</span>
+              <span className="mb-2 text-xs">{t("withdrawalAmountAvailable")}</span>
               <span className="text-[20px]">{info.amount - (info?.freeze ?? 0)} USDT</span>
             </div>
             <div className="flex flex-col items-center">
-              <span className="text-xs mb-2">{t("withdrawalAmountFreeze")}</span>
+              <span className="mb-2 text-xs">{t("withdrawalAmountFreeze")}</span>
               <span className="text-[20px]">{info.freeze} USDT</span>
             </div>
           </div>
-          <div className="flex justify-between items-center mt-10 relative">
-            <span className="font-bold text-base">{t("withdrawal")}</span>
-            <span className="flex items-center flex-1 justify-end">
+          <div className="relative mt-10 flex items-center justify-between">
+            <span className="text-base font-bold">{t("withdrawal")}</span>
+            <span className="flex flex-1 items-center justify-end">
               <Controller
                 control={withdrawalForm.control}
                 render={({ field }) => {
@@ -165,7 +167,7 @@ const Withdrawal = ({
                         }
                       }}
                       placeholder="0.00"
-                      className="border-0 w-16 flex-1 text-right"
+                      className="w-16 flex-1 border-0 text-right"
                     />
                   )
                 }}
@@ -177,7 +179,7 @@ const Withdrawal = ({
             {/*  {withdrawalForm.formState.errors?.amount?.message}*/}
             {/*</section>*/}
           </div>
-          <div className="flex justify-center mt-10">
+          <div className="mt-10 flex justify-center">
             <button
               disabled={!!errorMessage}
               type={"button"}
@@ -198,7 +200,7 @@ const Withdrawal = ({
                 })
               }}
               className={clsx(
-                "w-full transition-all h-12 rounded-full text-white flex justify-center items-center ",
+                "flex h-12 w-full items-center justify-center rounded-full text-white transition-all ",
                 !!errorMessage ? "bg-[#ddd]" : "bg-background-theme "
               )}
             >
@@ -342,27 +344,27 @@ export default function Page() {
                 setActiveKey(v.key)
               }}
               key={v.value.start}
-              className={`h-8 px-4 flex justify-center items-center border border-theme rounded-full mr-3 ${active.start === v.value.start ? "bg-theme text-white" : "text-text-theme "
+              className={`border-theme mr-3 flex h-8 items-center justify-center rounded-full border px-4 ${active.start === v.value.start ? "bg-theme text-white" : "text-text-theme "
                 }`}
             >
               {v.label}
             </button>
           ))}
         </div>
-        <div className="p-6 pt-0 flex justify-center items-end">
+        <div className="flex items-end justify-center p-6 pt-0">
           <span className="text-[32px] font-medium">{walletInfo?.amount}</span>
-          <span className="text-[18px] text-[#777] ml-2 pb-1">USDT</span>
+          <span className="ml-2 pb-1 text-[18px] text-[#777]">USDT</span>
         </div>
-        <div className="pl-4 pr-4 flex justify-between items-center mt-2 mb-5">
+        <div className="mb-5 mt-2 flex items-center justify-between px-4">
           <span className="text-xs">
             <span className="text-[#777] ">{currentLabel}</span>
             <span className="text-text-theme ml-2">+{inCome}</span>
           </span>
           {walletInfo && (
             <Withdrawal info={walletInfo} >
-              <span className="text-xs flex">
+              <span className="flex text-xs">
                 <span className="text-[#777] ">{t("withdrawalAmountAvailable")}</span>
-                <span className="ml-2 mr-2">
+                <span className="mx-2">
                   {Number(walletInfo?.amount) - (walletInfo?.freeze ?? 0)}
                 </span>
                 <span>
@@ -377,10 +379,10 @@ export default function Page() {
             </Withdrawal>
           )}
         </div>
-        <div className="px-4 pt-5 border-t border-[#DDDDDD]  text-base flex justify-between items-center">
+        <div className="flex items-center justify-between border-t  border-[#DDDDDD] px-4 pt-5 text-base">
           <span className="font-bold">{t("incomeTrend")}</span>
           <Link href={"/profile/revenue"} className="flex items-center">
-            <span className="ml-2 mr-2 text-theme text-[12px]">
+            <span className="text-theme mx-2 text-[12px]">
               收益明细
             </span>
             <IconWithImage
@@ -391,7 +393,7 @@ export default function Page() {
             />
           </Link>
         </div>
-        <div className="p-4 flex">
+        <div className="flex p-4">
           <span className="mr-8">{t("incomeTime")}</span>
           {dateTabs.map((v, index) => (
             <button

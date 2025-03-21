@@ -1,34 +1,21 @@
 "use client"
-import InputWithLabel from "@/components/profile/input-with-label"
 import React, { useEffect, useMemo, useRef, useState } from "react"
+
+import { zodResolver } from "@hookform/resolvers/zod"
+import clsx from "clsx"
+import dayjs from "dayjs"
+import { omit } from "lodash"
+import { useTranslations } from "next-intl"
+import { Controller, useFieldArray, useForm } from "react-hook-form"
+import { z } from "zod"
+
+import { useCommonMessageContext } from "@/components/common/common-message"
+import DateTimePicker from "@/components/common/date-time-picker"
 import Header from "@/components/common/header"
-import { useRouter } from "@/i18n/routing"
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle
-} from "@/components/ui/drawer"
 import ModalHeader from "@/components/common/modal-header"
 import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
-import {
-  AddBundleDiscount,
-  addSubscribeSetting,
-  DiscountInfo,
-  getSubscribeSetting,
-  SubscribeSetting, updateSubscribeSettingItem, userApplyBlogger
-} from "@/lib"
-import { Switch } from "@/components/ui/switch"
-import { Controller, useFieldArray, useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { addDiscount, baseSubscribe, bundlePriceSchema, bundleSubscribe } from "@/lib/actions/users/schemas"
-import { useCommonMessageContext } from "@/components/common/common-message"
-import dayjs from "dayjs"
-import DateTimePicker from "@/components/common/date-time-picker"
-import { UserProfile, userProfile } from "@/lib/actions/profile"
-import clsx from "clsx"
 import IconWithImage from "@/components/profile/icon"
+import InputWithLabel from "@/components/profile/input-with-label"
 import {
   Dialog,
   DialogContent,
@@ -36,10 +23,25 @@ import {
   DialogHeader,
   DialogTitle
 } from "@/components/ui/dialog"
-import { z } from "zod"
-import { omit } from "lodash"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle
+} from "@/components/ui/drawer"
+import { Switch } from "@/components/ui/switch"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import { useTranslations } from "next-intl"
+import { useRouter } from "@/i18n/routing"
+import {
+  AddBundleDiscount,
+  addSubscribeSetting,
+  DiscountInfo,
+  getSubscribeSetting,
+  SubscribeSetting, updateSubscribeSettingItem, userApplyBlogger
+} from "@/lib"
+import { UserProfile, userProfile } from "@/lib/actions/profile"
+import { addDiscount, baseSubscribe, bundlePriceSchema, bundleSubscribe } from "@/lib/actions/users/schemas"
 import { ZH_YYYY_MM_DD_HH_mm } from "@/lib/constant"
 
 const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, openState, setOpenState, basePrice }: {
@@ -126,7 +128,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
                     >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
-                  className={"text-base text-text-theme"}
+                  className={"text-text-theme text-base"}
                 >{commonTrans("save")}</button>
               )}
             ></ModalHeader>
@@ -275,7 +277,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
                     >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
-                  className={"text-base text-text-theme"}
+                  className={"text-text-theme text-base"}
                 >{commonTrans("save")}</button>
               )}
             ></ModalHeader>
@@ -385,16 +387,16 @@ function TopLabelWrapper({ label, children, errorMessage }: {
   errorMessage?: React.ReactNode
 }) {
   return (
-    <section className="mt-6 relative rounded-xl">
-      <div className={"absolute top-[-10px] left-4 bg-white text-[#6D7781]"}>
+    <section className="relative mt-6 rounded-xl">
+      <div className={"absolute left-4 top-[-10px] bg-white text-[#6D7781]"}>
         {label}
       </div>
       <section
-        className={"flex items-center pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)]"}
+        className={"flex items-center rounded-xl border border-[rgb(221,221,221)] px-4 py-[12px]"}
       >
         {children}
       </section>
-      {errorMessage && <div className="text-theme text-xs px-4 mt-1.5">{errorMessage}</div>}
+      {errorMessage && <div className="text-theme mt-1.5 px-4 text-xs">{errorMessage}</div>}
     </section>
   )
 }
@@ -453,7 +455,7 @@ function SubscribeBundle({ items, userId, updateItems, basePrice }: {
   }, [items])
 
   return (
-    <section className={"pt-5 pb-5 border-b border-gray-100"}>
+    <section className={"border-b border-gray-100 py-5"}>
       <EditSubscriptionModal
         setOpenState={setEditModalOpenState}
         openState={editModalOpenState}
@@ -464,15 +466,15 @@ function SubscribeBundle({ items, userId, updateItems, basePrice }: {
         basePrice={basePrice}
       />
       <form>
-        <section className="pl-4 pr-4">
-          <section className="flex justify-between items-center">
+        <section className="px-4">
+          <section className="flex items-center justify-between">
             <h1 className="text-base font-medium">{t("bundleSub")}</h1>
             {fields.length < 5 && (
               <button
                 onTouchEnd={() => {
                   openEditModal()
                 }}
-                className="rounded-full border border-border-theme text-text-theme pl-4 pr-4 pt-0.5 pb-0.5"
+                className="border-border-theme text-text-theme rounded-full border px-4 py-0.5"
               >{commonTrans("add")}
               </button>
             )}
@@ -487,7 +489,7 @@ function SubscribeBundle({ items, userId, updateItems, basePrice }: {
             <Controller key={index} control={bundleForm.control} render={({ field }) => {
               return (
                 <TopLabelWrapper label={`${t("price")}${index + 1}`}>
-                  <section className={"flex items-center justify-between w-full"}>
+                  <section className={"flex w-full items-center justify-between"}>
                     <button type={"button"} onTouchEnd={() => {
                       openEditModal(discount)
                     }} className={"flex-1 text-left"}
@@ -520,10 +522,10 @@ function SubscribeBundle({ items, userId, updateItems, basePrice }: {
 function DiscountPercentLabel({ index, percent }: { index: number, percent: number }) {
   const t = useTranslations("Profile.order")
   return (
-    <div className={"flex gap-1 items-center"}>
+    <div className={"flex items-center gap-1"}>
       <div>{t("discount")}{index}</div>
       <div
-        className={"rounded-tl-full rounded-tr-full rounded-br-full bg-[#F7B500] text-white px-1.5 py-0.5 text-xs"}
+        className={"rounded-t-full rounded-br-full bg-[#F7B500] px-1.5 py-0.5 text-xs text-white"}
       >{percent}%
         off
       </div>
@@ -555,7 +557,7 @@ function PromotionalActivities({ updateItems, items }: {
   const { showMessage } = useCommonMessageContext()
 
   return (
-    <section ref={contentRef} className={"pt-5 pb-5 border-b border-gray-100"}>
+    <section ref={contentRef} className={"border-b border-gray-100 py-5"}>
       <EditPromotionalActivities
         initData={editData}
         items={items}
@@ -568,15 +570,15 @@ function PromotionalActivities({ updateItems, items }: {
         openState={openState}
         setOpenState={setOpenState}
       />
-      <section className="pl-4 pr-4">
-        <section className="flex justify-between items-center">
+      <section className="px-4">
+        <section className="flex items-center justify-between">
           <h1 className="text-base font-medium">{t("discountActivities")}</h1>
           {noDiscountList.length > 0 && (
             <button
               onTouchEnd={() => {
                 openEditModal()
               }}
-              className="rounded-full border border-border-theme text-text-theme pl-4 pr-4 pt-0.5 pb-0.5"
+              className="border-border-theme text-text-theme rounded-full border px-4 py-0.5"
             >{commonTrans("add")}
             </button>
           )}
@@ -680,8 +682,8 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
             setDrawerIsOpen(false)
           }))}
           >
-            <div className={"bg-white rounded-xl w-[270px] ml-auto mr-auto"}>
-              <div className="py-4 px-4">
+            <div className={"mx-auto w-[270px] rounded-xl bg-white"}>
+              <div className="p-4">
                 <div className="text-center text-xs">
                   自定义金额
                 </div>
@@ -703,22 +705,22 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
                           targetValueNumber = 1.99
                         }
                         field.onChange(`${targetValueNumber}`)
-                      }} className="w-full block bg-[#F8F8F8] rounded-full px-5 py-2"
+                      }} className="block w-full rounded-full bg-[#F8F8F8] px-5 py-2"
                       />
                     )
                   }} name={"price"}
                   />
                   {formState.errors.price?.message &&
-                    <div className={"text-xs text-theme mt-1.5 px-1"}>{formState.errors.price.message}</div>}
+                    <div className={"text-theme mt-1.5 px-1 text-xs"}>{formState.errors.price.message}</div>}
                 </div>
               </div>
-              <div className="grid grid-cols-2 text-base border-t border-[#ddd]">
+              <div className="grid grid-cols-2 border-t border-[#ddd] text-base">
                 <button onTouchEnd={() => {
                   setDrawerIsOpen(false)
-                }} className={"py-3.5 border-r border-[#ddd]"}
+                }} className={"border-r border-[#ddd] py-3.5"}
                 >取消
                 </button>
-                <button type={"submit"} className={"py-3.5 text-text-theme font-medium"}>确定
+                <button type={"submit"} className={"text-text-theme py-3.5 font-medium"}>确定
                 </button>
               </div>
             </div>
@@ -848,7 +850,7 @@ export default function Page() {
                >{t("complete")}</button>}
       />
       <section className="mt-5 text-black">
-        <section className="pl-4 pr-4 pb-5 border-b border-gray-100">
+        <section className="border-b border-gray-100 px-4 pb-5">
           <h1 className="text-base font-medium">{t("baseSub")}</h1>
           <form>
             <section className="mt-2.5">
@@ -856,7 +858,7 @@ export default function Page() {
                 return (
                   <section>
                     <section className={clsx(
-                      "relative rounded-xl",
+                      "relative rounded-xl"
                     )}
                     >
                       <label
@@ -864,19 +866,19 @@ export default function Page() {
                           transition: "top .1s",
                           top: -7
                         }} className={clsx(
-                          "absolute bg-white left-4 leading-none font-normal z-30 transition text-[#6D7781]",
+                          "absolute left-4 z-30 bg-white font-normal leading-none text-[#6D7781] transition"
                         )}
                       >
                         {t("monthlyPrice")}
                       </label>
                       <section
                         className={
-                          clsx("h-[46px] flex pt-[12px] pb-[12px] pl-4 pr-4 rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center",
+                          clsx("relative z-20 flex h-[46px] items-center rounded-xl border border-[rgb(221,221,221)] px-4 py-[12px]"
                           )
                         }
                       >
                         <div>{showBaseValue}</div>
-                        <div className="flex-1 flex items-center justify-end">
+                        <div className="flex flex-1 items-center justify-end">
                           <BasePriceSettings valueChange={value => {
                             field.onChange(value)
                             if (Number(value) ===0 ) {
@@ -887,7 +889,7 @@ export default function Page() {
                         </div>
                       </section>
                     </section>
-                    <section className="text-[#6D7781] text-xs px-4 mt-1.5">
+                    <section className="mt-1.5 px-4 text-xs text-[#6D7781]">
                       <div>{t("baseSubLimit")}</div>
                       <div>{t("shouldBe1")} <span
                         className="text-text-theme"

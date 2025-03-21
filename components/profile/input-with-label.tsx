@@ -7,9 +7,12 @@ import {
   useCallback,
   useRef
 } from "react"
+
 import clsx from "clsx"
-import IconWithImage from "@/components/profile/icon"
+
 import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
+import IconWithImage from "@/components/profile/icon"
+
 import CopyText from "../common/copy-text"
 
 type InputValueType = string | number | readonly string[] | undefined
@@ -103,7 +106,7 @@ export default function InputWithLabel(props: InputProps) {
           transition: "top .1s",
           top: positionInCenter ? 16 : -7
         }} onTouchEnd={labelTouch} className={clsx(
-          "absolute bg-white left-4 leading-none font-normal z-30 transition text-[#6D7781]",
+          "absolute left-4 z-30 bg-white font-normal leading-none text-[#6D7781] transition"
         )}
         htmlFor={name}
       >
@@ -111,8 +114,8 @@ export default function InputWithLabel(props: InputProps) {
       </label>
       <section
         className={
-          clsx(`flex ${props.labelClass ? props.labelClass : "pt-[12px] pb-[12px] pl-4 pr-4"} rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center`,
-            disabled ? "bg-[#F7F7F7]" : "",)
+          clsx(`flex ${props.labelClass ? props.labelClass : "px-4 py-[12px]"} relative z-20 items-center rounded-xl border border-[rgb(221,221,221)]`,
+            disabled ? "bg-[#F7F7F7]" : "")
         }
       >
         {!isSelectInput && !isTextArea && (
@@ -122,7 +125,7 @@ export default function InputWithLabel(props: InputProps) {
               // setVal(eventValue)
               onInputChange?.(eventValue)
             }} type={type ?? "text"} disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
-              "flex-1 w-full font-medium",
+              "w-full flex-1 font-medium"
 
             )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
           />
@@ -134,7 +137,7 @@ export default function InputWithLabel(props: InputProps) {
               // setVal(eventValue)
               onInputChange?.(eventValue)
             }} disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
-              "flex-1 w-full font-medium",
+              "w-full flex-1 font-medium"
             )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
           />
         )}
@@ -149,7 +152,7 @@ export default function InputWithLabel(props: InputProps) {
               })} options={options ?? []}
             >
               <div className={"flex w-full items-center"}>
-                <div className={clsx("flex-1 font-medium text-left", !optionShowLabel ? "text-gray-300" : "")}>{optionShowLabel || props?.placeholder}</div>
+                <div className={clsx("flex-1 text-left font-medium", !optionShowLabel ? "text-gray-300" : "")}>{optionShowLabel || props?.placeholder}</div>
                 <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={iconSize || 24}
                   height={iconSize || 24} color={"#bbb"}
                 />
@@ -158,9 +161,9 @@ export default function InputWithLabel(props: InputProps) {
           </>
         )}
       </section>
-      {errorMessage && <div className="text-theme text-xs px-4 mt-1.5">{errorMessage}</div>}
+      {errorMessage && <div className="text-theme mt-1.5 px-4 text-xs">{errorMessage}</div>}
       {description && !errorMessage && (
-        <section className="text-[#6D7781] text-xs px-4 mt-1.5 flex items-center">{description}
+        <section className="mt-1.5 flex items-center px-4 text-xs text-[#6D7781]">{description}
           {
             copy && <CopyText text={description.toString()} />
           }

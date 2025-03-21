@@ -1,14 +1,17 @@
 "use client"
-import { Label } from "@/components/ui/label"
 import React, { useState } from "react"
-import CheckboxLabel from "@/components/user/checkbox-label"
-import { addPostTip, starPost } from "@/lib"
-import FormDrawer from "@/components/common/form-drawer"
-import { useCommonMessageContext } from "@/components/common/common-message"
-import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import CommonRecharge from "@/components/post/common-recharge"
-import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
+
 import { useTranslations } from "next-intl"
+
+import { useCommonMessageContext } from "@/components/common/common-message"
+import FormDrawer from "@/components/common/form-drawer"
+import CommonRecharge from "@/components/post/common-recharge"
+import { Label } from "@/components/ui/label"
+import CheckboxLabel from "@/components/user/checkbox-label"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { addPostTip, starPost } from "@/lib"
+import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
+
 
 interface TipDrawerProps {
   postId: number
@@ -105,7 +108,7 @@ export default function TipDrawer(props: TipDrawerProps) {
         trigger={children}
         isAutoHeight
         headerLeft={() => {
-          return <span className="font-semibold text-lg">{t("tipAmount")}</span>
+          return <span className="text-lg font-semibold">{t("tipAmount")}</span>
         }}
         headerRight={() => {
           return (
@@ -125,14 +128,14 @@ export default function TipDrawer(props: TipDrawerProps) {
         isOpen={drawerOpen}
         outerControl={true}
       >
-        <div className="flex flex-col items-center text-black text-base bg-slate-50 rounded-t-lg">
-          <div className={"w-full mt-[20px] px-4 grid grid-cols-3 gap-3.5"}>
+        <div className="flex flex-col items-center rounded-t-lg bg-slate-50 text-base text-black">
+          <div className={"mt-[20px] grid w-full grid-cols-3 gap-3.5 px-4"}>
             {toggleList.map((item, i) => {
               return (
                 <button
                   key={i}
                   type={"button"}
-                  className={`w-full h-16 text-base font-medium rounded-xl ${
+                  className={`h-16 w-full rounded-xl text-base font-medium ${
                     amount === item.val ? "bg-theme text-white" : "bg-white"
                   }`}
                   onTouchEnd={() => {
@@ -144,11 +147,11 @@ export default function TipDrawer(props: TipDrawerProps) {
               )
             })}
           </div>
-          <div className="w-full flex items-center mt-[20px] px-4 relative">
+          <div className="relative mt-[20px] flex w-full items-center px-4">
             <input
               id="amount"
               type="number"
-              className="w-full py-2 px-16 border-0 bg-white rounded-lg text-right h-[49px] placeholder:text-gray-400"
+              className="h-[49px] w-full rounded-lg border-0 bg-white px-16 py-2 text-right placeholder:text-gray-400"
               placeholder="0.00"
               // max={999}
               // min={0.01}
@@ -171,11 +174,11 @@ export default function TipDrawer(props: TipDrawerProps) {
             />
             <Label
               htmlFor="amount"
-              className="absolute left-6 top-1/2 transform -translate-y-1/2 text-left font-medium pointer-events-none pr-12"
+              className="pointer-events-none absolute left-6 top-1/2 -translate-y-1/2 pr-12 text-left font-medium"
             >
               {t("custom")}
             </Label>
-            <span className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal pointer-events-none z-0">
+            <span className="pointer-events-none absolute right-6 top-1/2 z-0 -translate-y-1/2 font-normal">
               USDT
             </span>
           </div>
@@ -184,7 +187,7 @@ export default function TipDrawer(props: TipDrawerProps) {
             <button
               type={"button"}
               disabled={!amount || amount < 0.1}
-              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${
+              className={`h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white ${
                 !amount || amount < 0.1 ? "bg-gray-quaternary" : "bg-theme"
               }`}
               onTouchEnd={async () => {

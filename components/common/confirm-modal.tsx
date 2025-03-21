@@ -1,4 +1,8 @@
 "use client"
+import React, { useState } from "react"
+
+import { useTranslations } from "next-intl"
+
 import {
   Dialog,
   DialogHeader,
@@ -7,8 +11,6 @@ import {
   DialogDescription,
   DialogTrigger
 } from "@/components/ui/dialog"
-import { useTranslations } from "next-intl"
-import React, { useState } from "react"
 
 export default function ConfirmModal({
   confirm,
@@ -27,15 +29,15 @@ export default function ConfirmModal({
     <Dialog open={openState} onOpenChange={setOpenState}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className={"hide-modal-close border-none bg-transparent"}>
-        <div className={"bg-white rounded-xl w-[270px] ml-auto mr-auto"}>
-          <div className="py-7 px-4 text-center">{content}</div>
-          <div className="grid grid-cols-2 text-base border-t border-[#ddd]">
+        <div className={"mx-auto w-[270px] rounded-xl bg-white"}>
+          <div className="px-4 py-7 text-center">{content}</div>
+          <div className="grid grid-cols-2 border-t border-[#ddd] text-base">
             <button
               onTouchEnd={() => {
                 cancel?.()
                 setOpenState(false)
               }}
-              className={"py-3.5 border-r border-[#ddd]"}
+              className={"border-r border-[#ddd] py-3.5"}
             >
               {t("cancel")}
             </button>
@@ -44,7 +46,7 @@ export default function ConfirmModal({
                 confirm?.()
                 setOpenState(false)
               }}
-              className={"py-3.5 text-text-theme font-medium"}
+              className={"text-text-theme py-3.5 font-medium"}
             >
               {t("confirm")}
             </button>

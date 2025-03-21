@@ -1,7 +1,9 @@
 "use client"
 import { useState } from "react"
-import IconWithImage from "@/components/profile/icon"
+
 import { useTranslations } from "next-intl"
+
+import IconWithImage from "@/components/profile/icon"
 
 export default function FoldingDescription({
   about,
@@ -21,7 +23,7 @@ export default function FoldingDescription({
       {(!hideState || about?.length < 100) && (
         <>
           {location ? (
-            <div className={"flex text-xs gap-1 mt-1.5 text-[#6D7781] break-all whitespace-normal"}>
+            <div className={"mt-1.5 flex gap-1 whitespace-normal break-all text-xs text-[#6D7781]"}>
               <div className={"shrink-0"}>
                 <IconWithImage
                   url={"/icons/profile/icon-address.png"}

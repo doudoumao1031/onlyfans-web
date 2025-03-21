@@ -1,6 +1,7 @@
 import { Link } from "@/i18n/routing"
-import { buildUserHomePagePath, getUserIdFromMention, isMention } from "./utils"
 import { User } from "@/lib"
+
+import { buildUserHomePagePath, getUserIdFromMention, isMention } from "./utils"
 
 export default function Description({
   mentionUser,

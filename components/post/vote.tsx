@@ -1,10 +1,16 @@
 "use client"
 import { useCallback, useEffect, useState } from "react"
-import Image from "next/image"
-import { Vote as VoteData, VoteParams } from "./types"
-import { ApiResponse, fetchWithPost } from "@/lib"
-import VoteSkeleton from "./vote-skeleton"
+
 import { useTranslations } from "next-intl"
+
+import Image from "next/image"
+
+
+import { ApiResponse, fetchWithPost } from "@/lib"
+
+import { Vote as VoteData, VoteParams } from "./types"
+import VoteSkeleton from "./vote-skeleton"
+
 
 export default function Vote({ postId }: { postId: number }) {
   const t = useTranslations("Common.post")
@@ -42,7 +48,7 @@ export default function Vote({ postId }: { postId: number }) {
           votedByMe ? (
             <div
               key={id}
-              className="w-full h-11 border rounded-md px-2 flex justify-between items-center bg-no-repeat gap-2"
+              className="flex h-11 w-full items-center justify-between gap-2 rounded-md border bg-no-repeat px-2"
               style={{
                 backgroundImage: `${select ? "url(/theme/blue.png)" : "url(/theme/silver.png)"}`,
                 backgroundSize: `${(totalVotes ? vote_count / totalVotes : 0) * 100}% 100%`,
@@ -50,7 +56,7 @@ export default function Vote({ postId }: { postId: number }) {
               }}
               onClick={() => handleClickOption(id)}
             >
-              <div className="flex gap-1 h-full items-center truncate">
+              <div className="flex h-full items-center gap-1 truncate">
                 {select && (
                   <Image src="/theme/checkbox_select@3x.png" alt="" width={20} height={20} />
                 )}
@@ -63,7 +69,7 @@ export default function Vote({ postId }: { postId: number }) {
           ) : (
             <div
               key={id}
-              className="w-full h-11 border rounded-md px-2 flex justify-center items-center"
+              className="flex h-11 w-full items-center justify-center rounded-md border px-2"
               onClick={() => handleClickOption(id)}
             >
               <div className="truncate">{content}</div>
@@ -72,7 +78,7 @@ export default function Vote({ postId }: { postId: number }) {
         )}
         {showOptionAmount < items.length && (
           <div
-            className="w-full h-11 border border-[#DDDDDD] rounded-md flex justify-center items-center"
+            className="flex h-11 w-full items-center justify-center rounded-md border border-[#DDDDDD]"
             onClick={() => setShowOptionAmount(items.length)}
           >
             <div>{t("viewAllOptions")}</div>

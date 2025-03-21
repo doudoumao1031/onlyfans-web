@@ -1,4 +1,5 @@
 import { UserProfile } from "@/lib/actions/profile"
+
 import { User } from "../users"
 
 /**
