@@ -1,5 +1,6 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"],
+  "extends": ["next/core-web-vitals", "next/typescript", "plugin:tailwindcss/recommended", "plugin:import/recommended", "plugin:import/typescript"],
+  "plugins": ["tailwindcss", "import"],
   "rules": {
     "indent": "off",
     "semi": ["error", "never"],
@@ -32,6 +33,66 @@
         "logical": "parens-new-line",
         "prop": false
       }
-    ]
+    ],
+    "tailwindcss/classnames-order": "error",
+    "tailwindcss/enforces-negative-arbitrary-values": "error",
+    "tailwindcss/enforces-shorthand": "error",
+    "tailwindcss/no-custom-classname": "off",
+    "tailwindcss/no-contradicting-classname": "error",
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling"],
+          "object",
+          "type",
+          "index"
+        ],
+        "pathGroups": [
+          {
+            "pattern": "react",
+            "group": "builtin",
+            "position": "before"
+          },
+          {
+            "pattern": "next/**",
+            "group": "builtin",
+            "position": "before" 
+          },
+          {
+            "pattern": "@/**",
+            "group": "internal",
+            "position": "after"
+          }
+        ],
+        "pathGroupsExcludedImportTypes": ["react", "next"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "import/first": "error",
+    "import/no-duplicates": "error",
+    "import/newline-after-import": "error"
+  },
+  "settings": {
+    "tailwindcss": {
+      "callees": ["clsx", "cva", "cn"],
+      "config": "tailwind.config.js",
+      "classRegex": "^(class(Name)?|tw)$"
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true
+      },
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
   }
 }

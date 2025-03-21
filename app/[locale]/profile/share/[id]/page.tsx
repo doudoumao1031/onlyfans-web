@@ -1,8 +1,9 @@
-import ShareItem from "@/components/share/share-item"
-import PostInfoSkeleton from "@/components/postInfo/postInfo-skeleton"
 import { Suspense } from "react"
-import { getSelfId } from "@/lib/actions/server-actions"
+
+import PostInfoSkeleton from "@/components/postInfo/postInfo-skeleton"
+import ShareItem from "@/components/share/share-item"
 import { userProfile } from "@/lib/actions/profile"
+import { getSelfId } from "@/lib/actions/server-actions"
 import { getUserById } from "@/lib/actions/space"
 
 export const dynamic = "force-dynamic"
@@ -20,7 +21,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     throw new Error()
   }
   return (
-    <div className="fixed top-0 left-0 w-full h-screen bg-white z-[45] overflow-auto">
+    <div className="fixed left-0 top-0 z-[45] h-screen w-full overflow-auto bg-white">
       <Suspense fallback={<PostInfoSkeleton />}>
         <ShareItem data={data}></ShareItem>
       </Suspense>

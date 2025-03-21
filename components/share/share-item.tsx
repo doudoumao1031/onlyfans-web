@@ -1,19 +1,19 @@
 "use client"
-import Avatar from "@/components/profile/avatar"
+import { useCallback, useEffect, useRef } from "react"
+
 import html2canvas from "html2canvas"
+import { useTranslations } from "next-intl"
+
 import Header from "@/components/common/header"
 import IconWithImage from "@/components/profile/icon"
 import { UserProfile } from "@/lib/actions/profile"
-import { useCallback, useEffect, useRef } from "react"
-import { useTranslations } from "next-intl"
-import LazyImg from "@/components/common/lazy-img"
 import { buildImageUrl } from "@/lib/utils"
 
 export default function Page({ data }: { data: UserProfile }) {
   const t = useTranslations("Profile")
   const pageRef = useRef<HTMLDivElement>(null)
   const divRef = useRef<HTMLDivElement>(null)
-
+  const headerRef = useRef<HTMLDivElement>(null)
   const handleDownload = async () => {
     if (pageRef.current) {
       const canvas = await html2canvas(pageRef.current, {
@@ -54,6 +54,9 @@ export default function Page({ data }: { data: UserProfile }) {
   }, [data])
   useEffect(() => {
     if (divRef.current) {
+      if (headerRef.current) {
+        headerRef.current.style.height = divRef.current?.offsetHeight + "px"
+      }
       // 获取 CSS 变量 --top-bar 的值
       const topBarValue = getComputedStyle(document.documentElement).getPropertyValue("--top-bar").trim()
       // 检查 --top-bar 的值，并根据其值修改样式
@@ -65,9 +68,9 @@ export default function Page({ data }: { data: UserProfile }) {
   }, [])
 
   return (
-    <div >
+    <div ref={pageRef}>
       <div className="relative">
-        <div ref={divRef} className={"w-full fixed top-0 left-0 z-40 auto ignore-canvas bg-white"}>
+        <div ref={divRef} className={"auto ignore-canvas fixed left-0 top-0 z-40 w-full bg-white"}>
           <Header
             right={
               <>
@@ -93,36 +96,28 @@ export default function Page({ data }: { data: UserProfile }) {
           />
 
         </div>
-
       </div>
-      <div className="w-full h-[44px]"></div>
-      <section className="rounded-t-3xl bg-white relative text-black ">
-        <section ref={pageRef} className="pl-4 pr-4 pb-3">
+      <div ref={headerRef} className="h-[44px] w-full"></div>
+      <section className="relative rounded-t-3xl bg-white text-black">
+        <section id="share-page" className="px-4 pb-3">
           <div className="flex justify-center">
-            <Avatar showLive={data?.live_certification} fileId={data?.photo || ""} />
-
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="rounded-full" src={data?.photo ? buildImageUrl(data.photo) : "/icons/icon_fansX_head.png"} width={90} height={90} alt="" />
           </div>
-          <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
+          <h1 className="flex flex-col items-center justify-center text-center text-[18px] font-bold">
             <span>
               {data?.first_name} {data?.last_name}
             </span>
-          </h1>
-          <div className="text-center text-text-desc text-xs">
-            {data?.username
+            <span className="text-text-desc text-xs font-normal">{data?.username
               ? "@" + data?.username
-              : t("noUserName")}
-          </div>
+              : t("noUserName")}</span>
+          </h1>
           <div className="mt-[30px]">二维码占位</div>
-          <div className="w-full h-[100px] mt-[30px]">
-            <LazyImg
-              style={{ objectFit: "cover" }}
-              width={200}
-              height={100}
-              className="w-full h-full"
-              src={data?.back_img ? buildImageUrl(data?.back_img) : "/icons/base-header.png"}
-              alt={""}
-            />
+          <div className="mt-[30px] w-full">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="h-[100px] w-full object-cover" src={data?.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"} alt="" />
           </div>
+          <div className="mt-[30px] opacity-0">.</div>
         </section>
       </section>
 
