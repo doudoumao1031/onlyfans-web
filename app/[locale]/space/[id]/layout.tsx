@@ -11,9 +11,9 @@ export default async function Layout(props: {
   params: Promise<{ id: string }>
 }) {
   const { id } = await props.params
-  const userId = id.trim()
+  const userId = id.trim() as string
   console.log("space param userId", userId)
-  const selfId = await getSelfId()
+  const selfId = await getSelfId() as string
   console.log("space selfId", selfId)
   const isSelf = userId === selfId
   console.log("space isSelf", isSelf)
