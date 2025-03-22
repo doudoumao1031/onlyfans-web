@@ -271,7 +271,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
           })}
           >
             <ModalHeader title={t("discountActivities")}
-              left={<button onTouchEnd={() => {
+              left={<button type={"button"} onTouchEnd={() => {
                 setOpenState(false)
               }} className={"text-base text-[#777]"}
                     >{commonTrans("cancel")}</button>}
