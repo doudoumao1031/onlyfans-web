@@ -134,14 +134,14 @@ const Withdrawal = ({
         }}
       >
         <div className="p-8">
-          <div className="mt-4 grid grid-cols-2">
-            <div className="flex flex-col items-center">
+          <div className="mt-4 grid grid-cols-2 gap-1.5">
+            <div className="flex flex-col items-center break-all">
               <span className="mb-2 text-xs">{t("withdrawalAmountAvailable")}</span>
-              <span className="text-[20px]">{info.amount - (info?.freeze ?? 0)} USDT</span>
+              <span className="line-clamp-2 text-[20px]">{info.amount - (info?.freeze ?? 0)} USDT</span>
             </div>
-            <div className="flex flex-col items-center">
+            <div className="line-clamp-2 flex flex-col items-center break-all">
               <span className="mb-2 text-xs">{t("withdrawalAmountFreeze")}</span>
-              <span className="text-[20px]">{info.freeze} USDT</span>
+              <span className="line-clamp-2 text-[20px]">{info.freeze} USDT</span>
             </div>
           </div>
           <div className="relative mt-10 flex items-center justify-between">
