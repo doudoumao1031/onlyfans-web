@@ -219,7 +219,8 @@ const ManuscriptMedia = () => {
                               <IconWithImage url={"/theme/icon_fans_money_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
-                              <span>{item.post_metric.tip_count}</span>
+                              {/*付费*/}
+                              <span>{item.post_metric.pay_count}</span>
                             </section>
                           </section>
                           <section className="absolute bottom-0.5 left-0 z-10 flex w-full justify-around px-2 text-white">
@@ -227,19 +228,22 @@ const ManuscriptMedia = () => {
                               <IconWithImage url={"/theme/icon_fans_like_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
+                              {/*点赞*/}
                               <span>{item.post_metric.thumbs_up_count}</span>
                             </section>
                             <section className="flex flex-1 items-center justify-center gap-0.5">
                               <IconWithImage url={"/theme/icon_fans_comment_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
+                              {/*评论*/}
                               <span>{item.post_metric.comment_count}</span>
                             </section>
                             <section className="flex flex-1 items-center justify-end gap-0.5">
                               <IconWithImage url={"/theme/icon_fans_reward_s_white@3x.png"} width={12} height={12}
                                 color={"#fff"}
                               />
-                              <span>{item.post_metric.pay_count}</span>
+                              {/*打赏*/}
+                              <span>{item.post_metric.tip_count}</span>
                             </section>
                           </section>
                           <section

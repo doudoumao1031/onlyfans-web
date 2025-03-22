@@ -1,12 +1,12 @@
 "use client"
 import React, { useEffect, useMemo } from "react"
 
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTranslations } from "next-intl"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
 
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 
 import { useCommonMessageContext } from "@/components/common/common-message"
@@ -72,15 +72,6 @@ export default function Page() {
     }
   })
 
-  const backImageStyle = useMemo(() => {
-    if (formValues.back_img) {
-      return {
-        backgroundImage: `url(${buildImageUrl(formValues.back_img)})`
-      }
-    }
-    return {}
-  }, [formValues.back_img])
-
   return (
     <>
       <form
@@ -102,9 +93,12 @@ export default function Page() {
         <div className={"absolute left-0 top-0 z-20 w-full bg-black/20 text-white"}>
           <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"} />
         </div>
-        <div className="profile-content relative bg-[url('/icons/image_fans_normal_05.png')] bg-cover"
-          style={backImageStyle}
-        >
+        <div className="profile-content relative bg-[url('/icons/image_fans_normal_05.png')] bg-cover">
+          {formValues.back_img && (
+          <Image src={buildImageUrl(formValues.back_img)} alt={""} width={100} height={100}
+            className={"absolute size-full object-cover"}
+          />
+)}
           <input
             type="file"
             accept="image/*"
