@@ -1,14 +1,14 @@
 import EmojiPickerComp from "emoji-picker-react"
-import {  CategoryConfig } from "emoji-picker-react/dist/config/categoryConfig"
+import { CategoryConfig } from "emoji-picker-react/dist/config/categoryConfig"
 import { useTranslations } from "next-intl"
 
 export default function EmojiPicker({ onClick }: { onClick: (emoji: string) => void }) {
   const t = useTranslations("Common")
   const categories = [
-    {
-      category:"suggested",
-      name: t("emoji.SUGGESTED")
-    },
+    // {
+    //   category:"suggested",
+    //   name: t("emoji.SUGGESTED")
+    // },
     {
       category: "custom",
       name: t("emoji.CUSTOM")
