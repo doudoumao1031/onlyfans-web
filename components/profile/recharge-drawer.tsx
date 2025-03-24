@@ -22,10 +22,20 @@ interface RechargeProps {
 export default function RechargeDrawer(props: RechargeProps) {
   const { children, isOpen, setIsOpen, setWfAmount } = props
   const { showMessage } = useCommonMessageContext()
+  const getDeviceType = () => {
+    if (typeof window === "undefined") return "android"
+    const userAgent = window.navigator.userAgent.toLowerCase()
+    if (userAgent.includes("iphone") || userAgent.includes("ipad") || userAgent.includes("ipod") || userAgent.includes("ios")) {
+      return "ios"
+    }
+    return "android"
+  }
+  const type = getDeviceType()
   const [amount, setAmount] = useState<number>(0)
   const [ptBalance, setPtBalance] = useState<number>(0)
   const [wfBalance, setWfBalance] = useState<number>(0)
   const [rate, setRate] = useState<string>("1:1")
+  const [active, setActive] = useState<number>(0)
   const t = useTranslations("Profile.recharge")
   const { withLoading } = useLoadingHandler({
     onError: () => {
@@ -47,6 +57,7 @@ export default function RechargeDrawer(props: RechargeProps) {
       }
     })
   }
+  const iosAmounts = [{index: 0, amount: 10}, {index: 1, amount: 20}, {index: 2, amount: 50}, {index: 3, amount: 100}, {index: 4, amount: 200}, {index: 5, amount: 500}]
   const columns: { title: string; desc: string }[] = [
     { title: t("service"), desc: t("fansRecharge") },
     { title: t("walletBalance"), desc: ptBalance.toFixed(2).toString() + " USDT" },
@@ -118,23 +129,28 @@ export default function RechargeDrawer(props: RechargeProps) {
         isOpen={isOpen}
         outerControl={true}
       >
-        <div className="flex w-full flex-col items-center bg-[#F8F8F8] text-2xl text-black">
+        <div className="flex w-full flex-col items-center bg-[#F8F8F8] text-black">
           <div className={"w-full rounded-xl p-4 text-base"}>
-            {columns.map((item, index) => (
-              <div
-                key={index}
-                className={`flex items-center justify-between bg-white px-4 py-[13px] 
-              ${index < columns.length - 1 && "border-b border-gray-200"}
-              ${index == 0 && "rounded-t-xl"} 
-              ${index == columns.length - 1 && "rounded-b-xl"} 
-              `}
-              >
-                <span className={"font-medium"}>{item.title}</span>
-                <span className={"font-normal text-gray-400"}>{item.desc}</span>
-              </div>
-            ))}
+            {columns.map((item, index) => {
+              if (type === "ios" && index !== 1) {
+                return (
+                  <div
+                    key={index}
+                    className={`flex items-center justify-between bg-white px-4 py-[13px] 
+                  ${index < columns.length - 1 && "border-b border-gray-200"}
+                  ${index == 0 && "rounded-t-xl"} 
+                  ${index == columns.length - 1 && "rounded-b-xl"} 
+                  `}
+                  >
+                    <span className={"font-medium"}>{item.title}</span>
+                    <span className={"font-normal text-gray-400"}>{item.desc}</span>
+                  </div>
+                )
+              }
+            })}
           </div>
-          <div className="relative flex w-full items-center px-4">
+          {type !== "ios" && (
+            <div className="relative flex w-full items-center px-4">
             <input
               id="amount"
               type="number"
@@ -162,6 +178,27 @@ export default function RechargeDrawer(props: RechargeProps) {
               </button>
             )}
           </div>
+          )}
+          {type === "ios" && (
+            <div className={"grid w-full grid-cols-3 gap-x-3 gap-y-5 px-4"}>
+              {iosAmounts.map((item, i) => {
+                return (
+                  <button
+                    key={i}
+                    type={"button"}
+                    className={`h-[49px] w-full border-0 rounded-lg ${active === item.index ? "bg-background-theme" : "bg-white"}`}
+                    onTouchEnd={() => {
+                      setActive(item.index)
+                      setAmount(item.amount)
+                    }}
+                  >
+                    <span className={`font-medium ${active === item.index ? "text-white" : ""}`}>{item.amount} USDT</span>
+                  </button>
+              )
+              })}
+            </div>
+          )}
+        
           <div className="my-[40px] self-center">
             <button
               type="button"
