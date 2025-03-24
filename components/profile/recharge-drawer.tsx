@@ -31,6 +31,7 @@ export default function RechargeDrawer(props: RechargeProps) {
     return "android"
   }
   const type = getDeviceType()
+  console.log("type ===>",type)
   const [amount, setAmount] = useState<number>(0)
   const [ptBalance, setPtBalance] = useState<number>(0)
   const [wfBalance, setWfBalance] = useState<number>(0)
@@ -132,7 +133,10 @@ export default function RechargeDrawer(props: RechargeProps) {
         <div className="flex w-full flex-col items-center bg-[#F8F8F8] text-black">
           <div className={"w-full rounded-xl p-4 text-base"}>
             {columns.map((item, index) => {
-              if (type === "ios" && index !== 1) {
+              // ios 隐藏钱包余额
+              if (type === "ios" && index === 1) {
+                return null
+              } else {
                 return (
                   <div
                     key={index}
@@ -149,7 +153,7 @@ export default function RechargeDrawer(props: RechargeProps) {
               }
             })}
           </div>
-          {type !== "ios" && (
+          {type === "android" && (
             <div className="relative flex w-full items-center px-4">
             <input
               id="amount"
@@ -168,9 +172,9 @@ export default function RechargeDrawer(props: RechargeProps) {
             />
             {ptBalance > 0 && (
               <button
+                type="button"
                 className="text-text-theme absolute right-6 top-1/2 -translate-y-1/2 text-base font-normal"
-                onTouchEnd={(e) => {
-                  e.preventDefault()
+                onTouchEnd={() => {
                   setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
                 }}
               >
@@ -186,13 +190,13 @@ export default function RechargeDrawer(props: RechargeProps) {
                   <button
                     key={i}
                     type={"button"}
-                    className={`h-[49px] w-full border-0 rounded-lg ${active === item.index ? "bg-background-theme" : "bg-white"}`}
+                    className={`h-[49px] w-full border-0 rounded-lg font-medium ${active === i ? "bg-background-theme text-white" : "bg-white"}`}
                     onTouchEnd={() => {
-                      setActive(item.index)
+                      setActive(i)
                       setAmount(item.amount)
                     }}
                   >
-                    <span className={`font-medium ${active === item.index ? "text-white" : ""}`}>{item.amount} USDT</span>
+                    <span>{item.amount} USDT</span>
                   </button>
               )
               })}
