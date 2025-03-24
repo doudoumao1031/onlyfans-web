@@ -460,11 +460,12 @@
     "followedView": "Follow us to watch this content"
   },
   "ShortLink": {
+    "Potato": "Potato",
     "downloadApp": "Download App",
     "description": "Description",
     "openApp": "Open App, dive into their space",
     "joinPotato": "Join Potato to unlock exclusive contact",
-    "deepInPotato": "——Deep in the exclusive fan community, let intimacy meet innovation",
+    "deepInPotato": "—— Deep in the exclusive fan community, let intimacy meet innovation",
     "joinPotatoChat": "Join Potato chat",
     "joinPotatoDescription": "Build connections with your favorite creators, interact, and immerse yourself in content tailored just for you"
   }

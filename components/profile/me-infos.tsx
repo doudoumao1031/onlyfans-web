@@ -36,7 +36,7 @@ export default async function Page() {
   return (
     <div>
       <ProfileHeader data={data} />
-      <section className="relative bg-white  text-black ">
+      <section className="relative bg-white text-black">
         <section className="px-4 pb-3">
           <div className={"flex justify-between"}>
             <div className={"relative top-[-24px]"}>

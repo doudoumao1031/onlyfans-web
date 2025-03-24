@@ -459,11 +459,12 @@
     "followedView": "关注后可观看此内容"
   },
   "ShortLink": {
+    "Potato": "Potato",
     "downloadApp": "下载App",
     "description": "简介",
     "openApp": "打开App, 深入Ta的空间",
     "joinPotato": "加入Potato 解锁专属联系",
-    "deepInPotato": "深入唯粉，让亲密遇见创新",
+    "deepInPotato": "—— 深入唯粉，让亲密遇见创新",
     "joinPotatoChat": "加入Potato chat",
     "joinPotatoDescription": "与您最喜爱的创作者建立联系，进行互动，并沉浸在专为您打造的内容中"
   }
