@@ -23,7 +23,7 @@ export async function getSelfId() {
   try {
     const cookiesStore = await cookies()
     const userId = cookiesStore.get(USER_KEY)?.value
-    return userId ?? ""
+    return userId ?? "" as string
   } catch (error) {
     console.error("Error getting auth userId:", error)
     return ""

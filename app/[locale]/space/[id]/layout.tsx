@@ -12,12 +12,8 @@ export default async function Layout(props: {
 }) {
   const { id } = await props.params
   const userId = id.trim()
-  console.log("space param userId", userId)
   const selfId = await getSelfId()
-  console.log("space selfId", selfId)
-  const isSelf = userId === selfId
-  console.log("space isSelf", isSelf)
-  // const isSelf = selfId === userId
+  const isSelf = (userId||"").toString() === (selfId||"").toString()
   const response = isSelf ? await userProfile() : await getUserById({ id: userId })
   if (!isSelf) {
     await addSpaceLog(Number(userId))

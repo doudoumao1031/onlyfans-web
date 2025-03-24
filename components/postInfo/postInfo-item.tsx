@@ -17,7 +17,7 @@ import { buildMention } from "@/components/post/utils"
 import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import { PostData } from "@/lib"
+import { addSubOrder, PostData } from "@/lib"
 import { postDetail } from "@/lib/actions/profile"
 import { userDelFollowing, userFollowing } from "@/lib/actions/space"
 import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
@@ -31,9 +31,10 @@ export default function Page({ postData }: { postData: PostData }) {
   const [isFocus, setIsFocus] = useState<boolean>(postInfo.user?.following as boolean)
   const [drawer, setDrawer] = useState<boolean>(false)
   const [payDrawer, setPayDrawer] = useState<boolean>(false)
-  const [pay, setPay] = useState<boolean>(false)
-  const [follow, setFollow] = useState<boolean>(false)
-  const [price, setPrice] = useState<number>(0)
+  const [pay, setPay] = useState<boolean>(false)  // 是否付费
+  const [follow, setFollow] = useState<boolean>(false)  // 是否关注
+  const [freeSub, setFreeSub] = useState<boolean>(false)  // 是否免费订阅
+  const [price, setPrice] = useState<number>(0)  // 价格
   const [visible, setVisible] = useState<boolean>(false)
   const [recharge, setRecharge] = useState<boolean>(false)
   const router = useRouter()
@@ -59,22 +60,32 @@ export default function Page({ postData }: { postData: PostData }) {
         return true
       }
     })
+    // 需要付费观看
     if (visibility === 2 && price > 0) {
       setPay(true)
       setBtnText(t("btnText1", { price: price || 0, currency: "USDT" }))
     } else if (visibility === 1 && !sub) {
+      // 订阅观看
       setPay(false)
+      setFreeSub(false)
       setBtnText(t("btnText2"))
     } else if (visibility === 0) {
       if (sub_price > 0 && !following) {
         setFollow(true)
         setBtnText(t("btnText3"))
       } else if (!sub) {
-        setPay(false)
-        setBtnText(t("btnText4"))
+        if (sub_price === 0) {
+          setFreeSub(true)
+          setBtnText(t("btnText5"))
+        } else {
+          setPay(false)
+          setFreeSub(false)
+          setBtnText(t("btnText4"))
+        }
       }
     } else {
       setPay(false)
+      setFreeSub(false)
       setBtnText("")
     }
   }, [postInfo.post, postInfo.post_price, postInfo.user, price, sid, t])
@@ -98,7 +109,7 @@ export default function Page({ postData }: { postData: PostData }) {
       showMessage(t("operationFailed"))
     }
   })
-
+  // 关注
   const handleFollowing = async () => {
     await withLoading(async () => {
       setIsFocus(!isFocus)
@@ -111,6 +122,27 @@ export default function Page({ postData }: { postData: PostData }) {
       }
       await refresh()
       showMessage(!isFocus ? t("followSuccess") : t("unfollowed"))
+    })
+  }
+
+  // 免费订阅
+  const handleSubscribe = async () => {
+    await withLoading(async () => {
+      const data = {
+        user_id: postInfo.user.id,
+        price: 0,
+        id: 0
+      }
+      await addSubOrder(data).then(async (result) => {
+        if (result && result.code === 0) {
+          console.log("订阅成功")
+          await refresh()
+          showMessage(t("subscribeSuccess"))
+        } else {
+          console.log("订阅失败:", result?.message)
+          showMessage(t("subscribeFailed"))
+        }
+      })
     })
   }
 
@@ -189,13 +221,15 @@ export default function Page({ postData }: { postData: PostData }) {
       />
       {btnText !== "" && (
         <div className="mt-2 flex items-center justify-center">
-          <div
-            onClick={async (e) => {
-              e.preventDefault()
+          <button
+            type={"button"}
+            onClick={async () => {
               if (pay) {
                 setPayDrawer(true)
               } else if (follow) {
                 await handleFollowing()
+              } else if (freeSub) {
+                await handleSubscribe()
               } else {
                 setDrawer(true)
               }
@@ -203,7 +237,7 @@ export default function Page({ postData }: { postData: PostData }) {
             className="bg-background-theme flex h-[50px]  w-[295px] items-center justify-center rounded-full text-[15px] text-white"
           >
             {btnText}
-          </div>
+          </button>
         </div>
       )}
       {drawer && (
