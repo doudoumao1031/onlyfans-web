@@ -601,7 +601,7 @@ function PromotionalActivities({ updateItems, items }: {
                   {discount.discount_price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;
                   <span
                     className="text-[#6D7781]"
-                  >({t("avg")} ${calcAvg(Number(discount.discount_price) * discount.discount_per / 100, discount.month_count)}/{t("month")})</span>
+                  >({t("avg")} ${calcAvg(Number(discount.discount_price), discount.month_count)}/{t("month")})</span>
                 </div>
                 <div className="text-[#6D7781]">
                   {dayjs(discount.discount_start_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)} {dayjs(discount.discount_end_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)}
