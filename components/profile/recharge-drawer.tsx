@@ -80,9 +80,10 @@ export default function RechargeDrawer(props: RechargeProps) {
       // 发起支付 （ios/android）
       const param = {
         currency: "USDT",
-        amount: amount,
+        amount: amount.toString,
         tradeNo: tradeNo
       }
+      console.log("recharge param ===>", param)
       window?.callAppApi("recharge", JSON.stringify(param))
       // 等待回调结果
       await handleRechargeOrderCallback({ trade_no: tradeNo }).then((result) => {
