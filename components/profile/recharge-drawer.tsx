@@ -8,7 +8,8 @@ import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { Link } from "@/i18n/routing"
-import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib"
+import { addWalletOrder, handleRechargeOrderCallback, IosPayArray, userPtWallet } from "@/lib"
+import { ANDROID, IOS } from "@/lib/constant"
 
 
 
@@ -26,16 +27,17 @@ export default function RechargeDrawer(props: RechargeProps) {
     if (typeof window === "undefined") return "android"
     const userAgent = window.navigator.userAgent.toLowerCase()
     if (userAgent.includes("iphone") || userAgent.includes("ipad") || userAgent.includes("ipod") || userAgent.includes("ios")) {
-      return "ios"
+      return IOS
     }
-    return "android"
+    return ANDROID
   }
   const type = getDeviceType()
   console.log("type ===>",type)
   const [amount, setAmount] = useState<number>(0)
   const [ptBalance, setPtBalance] = useState<number>(0)
   const [wfBalance, setWfBalance] = useState<number>(0)
-  const [rate, setRate] = useState<string>("1:1")
+  const [iosPayArray, setIosPayArray] = useState<IosPayArray[]>([])
+  const [proportion, setProportion] = useState<string>("")
   const [active, setActive] = useState<number>(0)
   const t = useTranslations("Profile.recharge")
   const { withLoading } = useLoadingHandler({
@@ -53,17 +55,17 @@ export default function RechargeDrawer(props: RechargeProps) {
       if (result && result.code === 0) {
         setPtBalance(Number(result.data.pt_wallet))
         setWfBalance(result.data.amount)
-        setRate(result.data.proportion)
+        setProportion(result.data.proportion)
         setWfAmount(result.data.amount)
+        setIosPayArray(result.data.ios_pay_arr)
       }
     })
   }
-  const iosAmounts = [{index: 0, amount: 10}, {index: 1, amount: 20}, {index: 2, amount: 50}, {index: 3, amount: 100}, {index: 4, amount: 200}, {index: 5, amount: 500}]
   const columns: { title: string; desc: string }[] = [
     { title: t("service"), desc: t("fansRecharge") },
     { title: t("walletBalance"), desc: ptBalance.toFixed(2).toString() + " USDT" },
     { title: t("fansxBalance"), desc: wfBalance.toFixed(2).toString() + " USDT" },
-    { title: t("rate"), desc: rate }
+    { title: t("rate"), desc: proportion }
   ]
 
   async function handleRecharge(amount: number) {
@@ -72,9 +74,17 @@ export default function RechargeDrawer(props: RechargeProps) {
         if (result && result.code === 0) {
           return result.data.trade_no
         }
+        console.log("addWalletOrder failed", result?.message)
         throw Error()
       })
-
+      // 发起支付 （ios/android）
+      const param = {
+        currency: "USDT",
+        amount: amount,
+        tradeNo: tradeNo
+      }
+      window?.callAppApi("recharge", JSON.stringify(param))
+      // 等待回调结果
       await handleRechargeOrderCallback({ trade_no: tradeNo }).then((result) => {
         if (result && result.code === 0) {
           showMessage(t("success"), "success")
@@ -134,7 +144,7 @@ export default function RechargeDrawer(props: RechargeProps) {
           <div className={"w-full rounded-xl p-4 text-base"}>
             {columns.map((item, index) => {
               // ios 隐藏钱包余额
-              if (type === "ios" && index === 1) {
+              if (type === IOS && index === 1) {
                 return null
               } else {
                 return (
@@ -153,7 +163,7 @@ export default function RechargeDrawer(props: RechargeProps) {
               }
             })}
           </div>
-          {type === "android" && (
+          {type === ANDROID && (
             <div className="relative flex w-full items-center px-4">
             <input
               id="amount"
@@ -183,9 +193,9 @@ export default function RechargeDrawer(props: RechargeProps) {
             )}
           </div>
           )}
-          {type === "ios" && (
+          {type === IOS && (
             <div className={"grid w-full grid-cols-3 gap-x-3 gap-y-5 px-4"}>
-              {iosAmounts.map((item, i) => {
+              {iosPayArray.map((item, i) => {
                 return (
                   <button
                     key={i}
@@ -193,10 +203,10 @@ export default function RechargeDrawer(props: RechargeProps) {
                     className={`h-[49px] w-full border-0 rounded-lg font-medium ${active === i ? "bg-background-theme text-white" : "bg-white"}`}
                     onTouchEnd={() => {
                       setActive(i)
-                      setAmount(item.amount)
+                      setAmount(Number(item.price))
                     }}
                   >
-                    <span>{item.amount} USDT</span>
+                    <span>{item.price} USDT</span>
                   </button>
               )
               })}
@@ -206,17 +216,17 @@ export default function RechargeDrawer(props: RechargeProps) {
           <div className="my-[40px] self-center">
             <button
               type="button"
-              disabled={amount === 0 || amount > ptBalance}
+              disabled={amount === 0 || (amount > ptBalance && type===ANDROID)}
               className={`h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white ${
-                amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-theme"
+                amount === 0 || (amount > ptBalance && type===ANDROID) ? "bg-[#dddddd]" : "bg-background-theme"
               }`}
               onClick={async () => {
-                if (!(amount === 0 || amount > ptBalance)) {
+                if (!(amount === 0 || (amount > ptBalance && type===ANDROID))) {
                   await handleRecharge(amount)
                 }
               }}
             >
-              {amount > ptBalance ? t("amountGreaterThanPtamount") : t("confirm")}
+              {amount > ptBalance && type===ANDROID ? t("amountGreaterThanPtamount") : t("confirm")}
             </button>
           </div>
         </div>

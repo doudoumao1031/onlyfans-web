@@ -36,6 +36,15 @@ export interface PayOrderResp {
   trade_status: boolean
 }
 
+/**
+ * 原生调用支付参数
+ */
+export interface RechargeParam {
+  currency: string | "USDT"
+  amount: number
+  tradeNo: string
+}
+
 export interface OrderCallBackReq {
   trade_no: string
 }
