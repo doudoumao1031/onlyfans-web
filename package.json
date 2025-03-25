@@ -58,6 +58,7 @@
     "use-long-press": "^3.2.0",
     "vaul": "^1.1.2",
     "video.js": "^8.22.0",
+    "videojs-resolution-switcher-v8": "^1.0.12",
     "zod": "^3.24.1"
   },
   "devDependencies": {

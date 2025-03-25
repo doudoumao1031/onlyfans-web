@@ -91,11 +91,16 @@ export interface WalletInfo {
   pt_wallet: string
 }
 
+export interface IosPayArray {
+  price: string
+  product_id: string
+}
 /**
  * pt钱包信息返回
  */
 export interface PtWalletInfo extends WalletInfo {
   proportion: string
+  ios_pay_arr: IosPayArray[]
 }
 
 /**
