@@ -39,6 +39,9 @@ export default function Page({ postData }: { postData: PostData }) {
   const [recharge, setRecharge] = useState<boolean>(false)
   const router = useRouter()
   const [btnText, setBtnText] = useState<string>("")
+  // Track if the post data has been modified
+  const [isPostModified, setIsPostModified] = useState<boolean>(false)
+
   useMemo(() => {
     if (postInfo.user.id === sid) {
       setBtnText("")
@@ -95,13 +98,38 @@ export default function Page({ postData }: { postData: PostData }) {
     const res = await postDetail(Number(postInfo.post.id))
     const result = res?.data as unknown as PostData
     setPostInfo(result)
-    addToActionQueue({
-      type: ActionTypes.EXPLORE.REFRESH
-    })
+    // Mark the post as modified when refreshed
+    setIsPostModified(true)
   }
+
   useEffect(() => {
     refresh()
   }, [])
+
+  // When navigating away, trigger the post update if the post was modified
+  useEffect(() => {
+    // Function to handle the cleanup and trigger post update
+    const triggerPostUpdate = () => {
+      if (isPostModified) {
+        console.log(`Triggering update for post ${postInfo.post.id} on navigation`)
+        // Add the post update action to the queue when unmounting
+        addToActionQueue({
+          type: ActionTypes.Feed.UPDATE_POST,
+          payload: postInfo.post.id
+        })
+      }
+    }
+
+    // Add a beforeunload event listener to handle page navigation
+    window.addEventListener("beforeunload", triggerPostUpdate)
+
+    // Return cleanup function
+    return () => {
+      window.removeEventListener("beforeunload", triggerPostUpdate)
+      // Also trigger the update when the component unmounts
+      triggerPostUpdate()
+    }
+  }, [isPostModified, postInfo.post.id, addToActionQueue])
 
   const { withLoading } = useLoadingHandler({
     onError: (error) => {
@@ -121,6 +149,8 @@ export default function Page({ postData }: { postData: PostData }) {
         setFollow(false)
       }
       await refresh()
+      // Mark the post as modified after following/unfollowing
+      setIsPostModified(true)
       showMessage(!isFocus ? t("followSuccess") : t("unfollowed"))
     })
   }
@@ -245,7 +275,10 @@ export default function Page({ postData }: { postData: PostData }) {
           userId={postInfo.user.id}
           name={`${postInfo.user.first_name} ${postInfo.user.last_name}`}
           free={postInfo.user.sub_price === 0}
-          flush={refresh}
+          flush={async () => {
+            await refresh()
+            setIsPostModified(true)
+          }}
           isOpen={drawer}
           setIsOpen={setDrawer}
           setRechargeModel={setVisible}
@@ -255,7 +288,10 @@ export default function Page({ postData }: { postData: PostData }) {
         <PostPayDrawer
           post_id={postInfo.post.id}
           amount={price}
-          flush={refresh}
+          flush={async () => {
+            await refresh()
+            setIsPostModified(true)
+          }}
           isOpen={payDrawer}
           setIsOpen={setPayDrawer}
           setRechargeModel={setVisible}

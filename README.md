@@ -44,3 +44,15 @@ Next.js 相关
 父目录和兄弟目录
 对象和类型
 当前文件目录下的导入
+
+## 交互
+```bash
+// 原生调我们
+window.fansX.call(type, data)  
+emitter.on(
+      BRIDGE_EVENT_NAME.xxx,
+      fn
+    )
+// 我们调原生
+ window.callAppApi("事件名", JSON)
+```

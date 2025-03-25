@@ -61,7 +61,8 @@ export default function Like({
     }
     if (notice) {
       addToActionQueue({
-        type: ActionTypes.EXPLORE.REFRESH
+        type: ActionTypes.Feed.UPDATE_POST,
+        payload: postId
       })
     }
   }
