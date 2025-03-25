@@ -91,7 +91,7 @@ export default function Page() {
         })}
       >
         <div className={"absolute left-0 top-0 z-20 w-full bg-black/20 text-white"}>
-          <Header right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"} />
+          <Header backPath={"/profile"} right={<button type={"submit"}>{commonTrans("save")}</button>} title={t("title")} backColor={"#fff"} />
         </div>
         <div className="profile-content relative bg-[url('/icons/image_fans_normal_05.png')] bg-cover">
           {formValues.back_img && (
