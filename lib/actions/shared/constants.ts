@@ -7,6 +7,10 @@ export const ENDPOINTS = {
     USERS: "/auth/users",
     LOGIN_TOKEN: "/auth/loginToken"
   },
+  COMMON: {
+    POST: "/common/post",
+    USER: "/common/user"
+  },
   RECOM: {
     FOLLOW_USER_POSTS: "/index/followUserPosts",
     FOLLOW_USER_UPDATE: "/index/followUserUpdate",

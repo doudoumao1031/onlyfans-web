@@ -1,10 +1,7 @@
 "use client"
-import { useEffect, useState } from "react"
-
 import { useTranslations } from "next-intl"
 
-import { BloggerType, getHotBloggers, User } from "@/lib"
-import { UserProfile } from "@/lib/actions/profile"
+import { PostData, User } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
 
 import { useCommonMessageContext } from "../common/common-message"
@@ -13,21 +10,14 @@ import Avatar from "../profile/avatar"
 import IconWithImage from "../profile/icon"
 import UserCard from "../user/user-card"
 
-export default function Page({ data }: { data: UserProfile | undefined }) {
+export default function Page({ data, bloggers }: { data: PostData | undefined, bloggers: User[] }) {
   if (!data) {
     throw new Error()
   }
+  const { user, post } = data
   const t = useTranslations("ShortLink")
-  const [bloggers, setBloggers] = useState<User[]>([])
   const { showMessage } = useCommonMessageContext()
-  useEffect(() => {
-    const getBloggers = async () => {
-      const res = await getHotBloggers({ from_id: 0, page: 1, pageSize: 3, type: BloggerType.Hot })
-      console.log("getBloggers", res)
-      setBloggers(res)
-    }
-    getBloggers()
-  }, [])
+
   return (
     <div onTouchEnd={() => { showMessage("暂未配置App下载地址") }}>
       <div className="relative h-[109px]">
@@ -37,7 +27,7 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
             width={200}
             height={400}
             className="size-full"
-            src={data.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"}
+            src={user.back_img ? buildImageUrl(user.back_img) : "/icons/base-header.png"}
             alt={""}
           />
           <div className="absolute left-0 top-0 size-full bg-black/20"></div>
@@ -59,10 +49,10 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
         <section className="px-5 pb-5">
           <div className={"flex justify-between"}>
             <div className={"relative top-[-24px]"}>
-              <Avatar showLive={data.live_certification} fileId={data.photo} />
+              <Avatar showLive={user.live_certification} fileId={user.photo} />
               <h1 className="flex items-center gap-2 text-[18px] font-bold">
                 <span>
-                  {data.first_name}
+                  {user.first_name}
                 </span>
               </h1>
               {/* <div className="text-text-desc text-center text-xs">
@@ -81,7 +71,7 @@ export default function Page({ data }: { data: UserProfile | undefined }) {
           </div>
           <div className="mt-[-7px] text-sm text-[#222]">
             <h3 className="text-xs font-medium">{t("description")}</h3>
-            <div className="mt-[5px] line-clamp-1 ">{data.about}</div>
+            <div className="mt-[5px] line-clamp-1 ">{user.about}</div>
           </div>
         </section>
         <section className="border-t border-[#ddd] px-4 pb-2.5 pt-5">

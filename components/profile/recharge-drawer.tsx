@@ -32,7 +32,7 @@ export default function RechargeDrawer(props: RechargeProps) {
     return ANDROID
   }
   const type = getDeviceType()
-  console.log("type ===>",type)
+  console.log("type ===>", type)
   const [amount, setAmount] = useState<number>(0)
   const [ptBalance, setPtBalance] = useState<number>(0)
   const [wfBalance, setWfBalance] = useState<number>(0)
@@ -173,25 +173,25 @@ export default function RechargeDrawer(props: RechargeProps) {
                 placeholder={t("rechargeValuePlaceholder")}
                 value={amount == 0 ? "" : amount.toString()}
                 onChange={(event) => {
-                const money = event.target.value.replace(/[^0-9.]/g, "")
-                setAmount(parseFloat(money) || 0)
-              }}
+                  const money = event.target.value.replace(/[^0-9.]/g, "")
+                  setAmount(parseFloat(money) || 0)
+                }}
                 onBlur={(event) => {
                   const formattedAmount = parseFloat(event.target.value).toFixed(2)
                   setAmount(parseFloat(formattedAmount) || 0)
                 }}
               />
               {ptBalance > 0 && (
-              <button
-                type="button"
-                className="text-text-theme absolute right-6 top-1/2 -translate-y-1/2 text-base font-normal"
-                onTouchEnd={() => {
-                  setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
-                }}
-              >
-                {t("all")}
-              </button>
-            )}
+                <button
+                  type="button"
+                  className="text-text-theme absolute right-6 top-1/2 -translate-y-1/2 text-base font-normal"
+                  onTouchEnd={() => {
+                    setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
+                  }}
+                >
+                  {t("all")}
+                </button>
+              )}
             </div>
           )}
           {type === IOS && (
@@ -217,17 +217,16 @@ export default function RechargeDrawer(props: RechargeProps) {
           <div className="my-[40px] self-center">
             <button
               type="button"
-              disabled={amount === 0 || (amount > ptBalance && type===ANDROID)}
-              className={`h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white ${
-                amount === 0 || (amount > ptBalance && type===ANDROID) ? "bg-[#dddddd]" : "bg-background-theme"
-              }`}
+              disabled={amount === 0 || (amount > ptBalance && type === ANDROID)}
+              className={`h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white ${amount === 0 || (amount > ptBalance && type === ANDROID) ? "bg-[#dddddd]" : "bg-background-theme"
+                }`}
               onClick={async () => {
-                if (!(amount === 0 || (amount > ptBalance && type===ANDROID))) {
+                if (!(amount === 0 || (amount > ptBalance && type === ANDROID))) {
                   await handleRecharge(amount)
                 }
               }}
             >
-              {amount > ptBalance && type===ANDROID ? t("amountGreaterThanPtamount") : t("confirm")}
+              {amount > ptBalance && type === ANDROID ? t("amountGreaterThanPtamount") : t("confirm")}
             </button>
           </div>
         </div>

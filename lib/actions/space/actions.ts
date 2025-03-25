@@ -1,6 +1,7 @@
 import { PageInfo, ENDPOINTS, fetchWithPost, PageResponse, PostData, fetchWithGet } from "@/lib"
 
 import { UserProfile } from "../profile"
+import { commonWithGet } from "../server-actions"
 
 //我的帖子
 export const getMyFeeds = (params: PageInfo & { sort_type?: number; post_status?: number }) =>
@@ -95,6 +96,12 @@ export async function getUserById(params: { id?: string; username?: string }) {
   )
 }
 
+export async function commonGetUserById(params: { id?: string; username?: string }) {
+  return commonWithGet<{ user_id?: string; username?: string }, UserProfile>(
+    `${ENDPOINTS.COMMON.USER}/${params.id}`,
+    params
+  )
+}
 /**
  * 用户的媒体
  * @param params

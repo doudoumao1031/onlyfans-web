@@ -33,10 +33,10 @@ export async function getSelfId() {
 async function fetchResultHandle<T>(method: string, response: Response, url: string) {
   if (response.ok) {
     const result: ApiResponse<T> = await response.json()
-    console.log(`%cSuccess-${method.toUpperCase()}-${url}-response:`, "color: green",result)
+    console.log(`%cSuccess-${method.toUpperCase()}-${url}-response:`, "color: green", result)
     return result
   }
-  console.error(`%cError-${method.toUpperCase()}-${url}-response:`+response, "color: red")
+  console.error(`%cError-${method.toUpperCase()}-${url}-response:` + response, "color: red")
   return null
 }
 
@@ -120,4 +120,22 @@ export async function uploadFetch<Req, Res = unknown>(
     console.error("Error-POST-catch:", error)
     return null
   }
+}
+
+export async function commonWithGet<Req, Res = unknown>(
+  url: string,
+  data: Req
+) {
+  try {
+    const qs = new URLSearchParams(data ?? {})
+    const urlWithParams = `${apiUrl}${url}?${qs.toString()}`
+    console.log("%cGET-url:", "color: orange", urlWithParams)
+    const response = await fetch(urlWithParams, {
+      method: "GET"
+    })
+    return fetchResultHandle<Res>("GET", response, url)
+  } catch (error) {
+    console.error("Error-GET-catch:", error)
+  }
+  return null
 }
