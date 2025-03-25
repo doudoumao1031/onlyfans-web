@@ -21,6 +21,8 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
 
   const t = useTranslations("Space")
   const bgRef = useRef<HTMLDivElement>(null)
+  const [count, setCount] = useState<number>(60)
+  const [isRunning, setIsRunning] = useState<boolean>(true)
   const [isTop, setIsTop] = useState<boolean>(false)
   const [isSelf, setIsSelf] = useState(false)
   const divRef = useRef<HTMLDivElement>(null)
@@ -42,6 +44,17 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
     }
   }, [data])
   useEffect(() => {
+    if (!isRunning) return // 如果倒计时已停止，不再执行
+    const timer = setInterval(() => {
+      setCount((prevCount) => {
+        if (prevCount <= 1) {
+          clearInterval(timer) // 当减到 0 时清除计时器
+          setIsRunning(false)  // 标记倒计时结束
+          return 0
+        }
+        return prevCount - 1
+      })
+    }, 1000) // 每秒执行一次
     if (divRef.current) {
       // 获取 CSS 变量 --top-bar 的值
       const topBarValue = getComputedStyle(document.documentElement).getPropertyValue("--top-bar").trim()
@@ -52,7 +65,8 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
         divRef.current.style.top = topBarValue !== "0vw" ? topBarValue : "0"
       }
     }
-  }, [])
+    return () => clearInterval(timer) // 组件卸载时清除计时器
+  }, [isRunning])
 
   useEffect(() => {
     getIsSelf(data.id.toString())
@@ -96,7 +110,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
     )
   }
   return (
-    <div className=" relative h-[200px]">
+    <div className=" relative h-[150px]">
       <div className="absolute z-0 size-full" ref={bgRef}>
         <LazyImg
           style={{ objectFit: "cover" }}
@@ -107,55 +121,62 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
           alt={""}
         />
         <div className="absolute left-0 top-0 size-full bg-black/20"></div>
+        {count>0&& (
+        <div className= " animate-marquee absolute bottom-0 left-0  inline-block w-full  text-nowrap px-6 pb-2 text-left text-xs text-white">
+          {data.top_info}
+        </div>
+)}
       </div>
       <div ref={divRef} className={`fixed left-0 top-0 z-40 w-full ${isTop ? "bg-white" : "auto"}`}>
-        <div className="flex w-full flex-col place-items-center">
-          <Header
-            leftTitle={
-              <span
-                className={` ml-4 shrink-0 pt-px text-[18px] font-semibold ${isTop ? "text-[#222]" : "text-white"
-                  }`}
-              >
-                {isTop ? renderTitle() : ""}
+        <Header
+          leftTitle={
+            <span
+              className={` ml-4 shrink-0 pt-px text-[18px] font-semibold ${isTop ? "text-[#222]" : "text-white"
+                }`}
+            >
+              {isTop ? renderTitle() : ""}
 
-              </span>
-            }
-            right={
-              <>
-                <Link className="flex items-center justify-center" href="/search">
-                  <IconWithImage
-                    url="/icons/space/icon_nav_search@3x.png"
-                    width={22}
-                    height={22}
-                    color={isTop ? "#222" : "#fff"}
-                  />
-                </Link>
-                <Link className="flex items-center justify-center" href={`/profile/share/${data.id}`}>
-                  <IconWithImage
-                    url="/icons/space/icon_nav_code_black@3x.png"
-                    width={22}
-                    height={22}
-                    color={isTop ? "#222" : "#fff"}
-                  />
-                </Link>
-                <button type="button" onTouchEnd={handleShare}>
-                  <IconWithImage
-                    url="/icons/space/icon_fans_share_normal@3x.png"
-                    width={22}
-                    height={22}
-                    color={isTop ? "#222" : "#fff"}
-                  />
-                </button>
-              </>
-            }
-            backIconColor={isTop ? "#222" : "#fff"}
-          />
-          <div className={`flex w-screen max-w-lg truncate px-6 pb-2 text-xs ${isTop ? "text-theme" : "text-white"}`} style={{ aspectRatio: "375/24" }}>
-            {data.top_info}
-          </div>
-        </div>
-
+            </span>
+          }
+          right={
+            <>
+              <Link className="flex items-center justify-center" href="/search">
+                <IconWithImage
+                  url="/icons/space/icon_nav_search@3x.png"
+                  width={22}
+                  height={22}
+                  color={isTop ? "#222" : "#fff"}
+                />
+              </Link>
+              <Link className="flex items-center justify-center" href={`/profile/share/${data.id}`}>
+                <IconWithImage
+                  url="/icons/space/icon_nav_code_black@3x.png"
+                  width={22}
+                  height={22}
+                  color={isTop ? "#222" : "#fff"}
+                />
+              </Link>
+              <button type="button" onTouchEnd={handleShare}>
+                <IconWithImage
+                  url="/icons/space/icon_fans_share_normal@3x.png"
+                  width={22}
+                  height={22}
+                  color={isTop ? "#222" : "#fff"}
+                />
+              </button>
+            </>
+          }
+          backIconColor={isTop ? "#222" : "#fff"}
+        />
+        {
+         isTop&& (
+         <div className={`truncate px-6 pb-2 text-xs ${isTop ? "text-theme" : "text-white"}`}>
+           {data.top_info}
+         </div>
+         )
+        }
       </div>
+
     </div>
   )
 }
