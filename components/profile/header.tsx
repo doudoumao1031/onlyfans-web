@@ -6,14 +6,19 @@ import { useRouter } from "next/navigation"
 import IconWithImage from "./icon"
 
 export default function Header({
-  right, title, backColor = "#222"
+  right, title, backColor = "#222",backPath
 }: {
   right?: React.ReactNode,
   title: React.ReactNode ,
   backColor?: string,
+  backPath?: string
 }) {
   const router = useRouter()
   const handleBack = () => {
+    if (backPath) {
+      router.push(backPath)
+      return
+    }
     if (!document.referrer) {
       router.back()
       return
