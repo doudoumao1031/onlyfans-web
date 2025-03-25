@@ -81,6 +81,8 @@ export type UserProfile = {
   username: string
   video_count: number //媒体数量
   top_info: string
+  birthday: string
+  join_time: string
 }
 
 export interface ReplyForm {

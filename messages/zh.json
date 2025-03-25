@@ -416,7 +416,9 @@
     "cancelled": "取消成功",
     "day": "天",
     "free": "免费",
-    "noUserName": "该博主还未填写任何数据，请填写个人信息,开启你的精彩之旅吧..."
+    "noUserName": "该博主还未填写任何数据，请填写个人信息,开启你的精彩之旅吧...",
+    "fansNum": "粉丝",
+    "subscribeNum": "订阅者"
   },
   "Search": {
     "inputPlaceholder": "搜索",
