@@ -94,13 +94,13 @@ export function GlobalProvider({ children }: { children: ReactNode }) {
       // For post updates, include the payload in the event detail
       const event = new CustomEvent(action.type, {
         detail: { postId: action.payload }
-      });
-      console.log(`Dispatching ${action.type} event with postId: ${action.payload}`);
-      window.dispatchEvent(event);
+      })
+      console.log(`Dispatching ${action.type} event with postId: ${action.payload}`)
+      window.dispatchEvent(event)
     } else {
       // For other events, use the standard Event
-      console.log(`Dispatching ${action.type} event`);
-      window.dispatchEvent(new Event(action.type));
+      console.log(`Dispatching ${action.type} event`)
+      window.dispatchEvent(new Event(action.type))
     }
   }, [])
 

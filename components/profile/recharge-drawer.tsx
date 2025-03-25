@@ -31,7 +31,7 @@ export default function RechargeDrawer(props: RechargeProps) {
     return "android"
   }
   const type = getDeviceType()
-  console.log("type ===>",type)
+  console.log("type ===>", type)
   const [amount, setAmount] = useState<number>(0)
   const [ptBalance, setPtBalance] = useState<number>(0)
   const [wfBalance, setWfBalance] = useState<number>(0)
@@ -58,7 +58,7 @@ export default function RechargeDrawer(props: RechargeProps) {
       }
     })
   }
-  const iosAmounts = [{index: 0, amount: 10}, {index: 1, amount: 20}, {index: 2, amount: 50}, {index: 3, amount: 100}, {index: 4, amount: 200}, {index: 5, amount: 500}]
+  const iosAmounts = [{ index: 0, amount: 10 }, { index: 1, amount: 20 }, { index: 2, amount: 50 }, { index: 3, amount: 100 }, { index: 4, amount: 200 }, { index: 5, amount: 500 }]
   const columns: { title: string; desc: string }[] = [
     { title: t("service"), desc: t("fansRecharge") },
     { title: t("walletBalance"), desc: ptBalance.toFixed(2).toString() + " USDT" },
@@ -155,33 +155,33 @@ export default function RechargeDrawer(props: RechargeProps) {
           </div>
           {type === "android" && (
             <div className="relative flex w-full items-center px-4">
-            <input
-              id="amount"
-              type="number"
-              className="h-[49px] w-full rounded-lg border-0 bg-white py-2 pl-4 pr-16 text-left text-base placeholder:text-gray-400"
-              placeholder={t("rechargeValuePlaceholder")}
-              value={amount == 0 ? "" : amount.toString()}
-              onChange={(event) => {
-                const money = event.target.value.replace(/[^0-9.]/g, "")
-                setAmount(parseFloat(money) || 0)
-              }}
-              onBlur={(event) => {
-                const formattedAmount = parseFloat(event.target.value).toFixed(2)
-                setAmount(parseFloat(formattedAmount) || 0)
-              }}
-            />
-            {ptBalance > 0 && (
-              <button
-                type="button"
-                className="text-text-theme absolute right-6 top-1/2 -translate-y-1/2 text-base font-normal"
-                onTouchEnd={() => {
-                  setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
+              <input
+                id="amount"
+                type="number"
+                className="h-[49px] w-full rounded-lg border-0 bg-white py-2 pl-4 pr-16 text-left text-base placeholder:text-gray-400"
+                placeholder={t("rechargeValuePlaceholder")}
+                value={amount == 0 ? "" : amount.toString()}
+                onChange={(event) => {
+                  const money = event.target.value.replace(/[^0-9.]/g, "")
+                  setAmount(parseFloat(money) || 0)
                 }}
-              >
-                {t("all")}
-              </button>
-            )}
-          </div>
+                onBlur={(event) => {
+                  const formattedAmount = parseFloat(event.target.value).toFixed(2)
+                  setAmount(parseFloat(formattedAmount) || 0)
+                }}
+              />
+              {ptBalance > 0 && (
+                <button
+                  type="button"
+                  className="text-text-theme absolute right-6 top-1/2 -translate-y-1/2 text-base font-normal"
+                  onTouchEnd={() => {
+                    setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
+                  }}
+                >
+                  {t("all")}
+                </button>
+              )}
+            </div>
           )}
           {type === "ios" && (
             <div className={"grid w-full grid-cols-3 gap-x-3 gap-y-5 px-4"}>
@@ -190,7 +190,7 @@ export default function RechargeDrawer(props: RechargeProps) {
                   <button
                     key={i}
                     type={"button"}
-                    className={`h-[49px] w-full border-0 rounded-lg font-medium ${active === i ? "bg-background-theme text-white" : "bg-white"}`}
+                    className={`h-[49px] w-full rounded-lg border-0 font-medium ${active === i ? "bg-background-theme text-white" : "bg-white"}`}
                     onTouchEnd={() => {
                       setActive(i)
                       setAmount(item.amount)
@@ -198,18 +198,17 @@ export default function RechargeDrawer(props: RechargeProps) {
                   >
                     <span>{item.amount} USDT</span>
                   </button>
-              )
+                )
               })}
             </div>
           )}
-        
+
           <div className="my-[40px] self-center">
             <button
               type="button"
               disabled={amount === 0 || amount > ptBalance}
-              className={`h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white ${
-                amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-theme"
-              }`}
+              className={`h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white ${amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-theme"
+                }`}
               onClick={async () => {
                 if (!(amount === 0 || amount > ptBalance)) {
                   await handleRecharge(amount)

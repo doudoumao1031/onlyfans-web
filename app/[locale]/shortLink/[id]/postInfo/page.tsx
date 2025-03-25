@@ -1,20 +1,18 @@
 import PostInfoItem from "@/components/shortLink/postInfoItem"
-import { userProfile } from "@/lib/actions/profile"
-import { getSelfId } from "@/lib/actions/server-actions"
-import { getUserById } from "@/lib/actions/space"
+import { BloggerType, getHotBloggers, PostData } from "@/lib"
+import { commonPostDetail } from "@/lib/actions/profile"
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  const userId = id.trim()
-  console.log("space param userId", userId)
-  const selfId = await getSelfId()
-  const isSelf = userId === selfId
-  const response = isSelf ? await userProfile() : await getUserById({ id: userId })
-  const data = response?.data
+  const trimId = id.trim()
+  // const response = await commonGetUserById({ id: userId })
+  const response = await commonPostDetail(Number(trimId))
+  const data = response?.data as unknown as PostData
   if (!data) {
     throw new Error()
   }
+  const bloggers = await getHotBloggers({ from_id: 0, page: 1, pageSize: 3, type: BloggerType.Hot }) ?? []
   return (
-    <PostInfoItem data={data} />
+    <PostInfoItem data={data} bloggers={bloggers} />
   )
 }
