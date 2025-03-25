@@ -9,11 +9,13 @@ export default function Avatar({
   showEdit,
   showLive,
   fileId,
+  size = 84,
   onAvatarChange
 }: {
   showEdit?: boolean
   showLive?: boolean
   fileId: string
+  size?: number
   onAvatarChange?: (fileId: string) => void
 }) {
   const handleUploadFile = (file: File) => {
@@ -24,7 +26,7 @@ export default function Avatar({
     })
   }
   return (
-    <div className="relative size-[84px] rounded-full border border-gray-100 bg-white p-0.5">
+    <div className="relative rounded-full border border-gray-100 bg-white p-0.5" style={{ width: size, height: size, boxSizing: "content-box" }}>
       {showEdit && (
         <input
           type="file"
@@ -44,8 +46,8 @@ export default function Avatar({
           src={fileId ? buildImageUrl(fileId) : "/icons/icon_fansX_head.png"}
           alt=""
           className="size-full rounded-full"
-          width={82}
-          height={82}
+          width={size}
+          height={size}
         />
         {showLive && (
           <div className="absolute bottom-2 right-0 rounded-full bg-white p-1.5">
