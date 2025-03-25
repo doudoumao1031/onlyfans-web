@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react"
 import videojs from "video.js"
 import Player from "video.js/dist/types/player"
 import "video.js/dist/video-js.css"
+// eslint-disable-next-line import/no-unresolved
 import "videojs-resolution-switcher-v8"
 
 import "./video-play.scss"
