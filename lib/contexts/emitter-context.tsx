@@ -18,7 +18,7 @@ import { useRouter , locales } from "@/i18n/routing"
 import { emitter, useAppLoaded } from "@/lib/hooks/emitter"
 
 import { loginToken, LoginTokenResp } from "../actions/auth"
-import { handleRechargeOrderCallback } from "../actions/orders"
+import { handleRechargeOrderCallback, RechargeResp } from "../actions/orders"
 import { TOKEN_KEY, USER_KEY } from "../utils"
 
 
@@ -94,7 +94,11 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
   const handleResponseRecharge = useCallback((data: unknown) => {
     console.log("data--handleResponseRecharge===>", data)
     if (!data) return
-    handleRechargeOrderCallback({ trade_no: data as string }).then((result) => {
+    if ((data as RechargeResp).result === "failed") {
+      console.log("===>支付失败")
+      showMessage(t("error"))
+    }
+    handleRechargeOrderCallback({ trade_no: (data as RechargeResp).tradeNo }).then((result) => {
       if (result && result.code === 0) {
         showMessage(t("success"), "success")
       } else {
@@ -102,7 +106,7 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
       }
     })
       .catch(() => {
-        showMessage(t("loginFailed"))
+        showMessage(t("error"))
       })
   }, [])
 

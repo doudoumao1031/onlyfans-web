@@ -45,6 +45,14 @@ export interface RechargeParam {
   tradeNo: string
 }
 
+/**
+ * 原生回调支付参数
+ */
+export interface RechargeResp {
+  result: "success" | "failed"
+  tradeNo: string
+}
+
 export interface OrderCallBackReq {
   trade_no: string
 }
