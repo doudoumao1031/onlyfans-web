@@ -81,7 +81,7 @@ const FormItemWithSelect = ({
       <div>{label}</div>
       <div className="flex-1">
         <SheetSelect outerControl={false} options={options} onInputChange={onValueChange}>
-          <div className={"flex items-center justify-end gap-1.5 text-[#bbb]"}>
+          <div className={"flex items-center justify-end gap-1.5"}>
             <span>{showLabel}</span>
             <IconWithImage
               url={"/icons/profile/icon_arrow_right@3x.png"}
@@ -303,7 +303,7 @@ const AddVoteModal = ({
                       field.onChange(Math.floor(value / 1000))
                     }}
                     >
-                      <div className={"flex items-center gap-1.5 text-[#bbb]"}>
+                      <div className={"flex items-center gap-1.5"}>
                         <div>{field.value ? dayjs(field.value * 1000).format(ZH_YYYY_MM_DD_HH_mm) : "请选择"}</div>
                         <IconWithImage
                           url={"/icons/profile/icon_arrow_right@3x.png"}
@@ -824,7 +824,7 @@ const UploadMedia = () => {
             height={24}
             color={"#000"}
           />
-          <div className="absolute bottom-2 text-center text-xs text-[#bbb]">{t("manuscript.videoImage")}</div>
+          <div className="absolute bottom-2 text-center text-xs">{t("manuscript.videoImage")}</div>
         </div>
       )}
     </>
