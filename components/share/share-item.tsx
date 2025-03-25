@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef } from "react"
 import html2canvas from "html2canvas"
 import { useTranslations } from "next-intl"
 
+import Image from "next/image"
+
 import Header from "@/components/common/header"
 import IconWithImage from "@/components/profile/icon"
 import { UserProfile } from "@/lib/actions/profile"
@@ -101,8 +103,7 @@ export default function Page({ data }: { data: UserProfile }) {
       <section className="relative rounded-t-3xl bg-white text-black">
         <section id="share-page" className="px-4 pb-3">
           <div className="flex justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="rounded-full" src={data?.photo ? buildImageUrl(data.photo) : "/icons/icon_fansX_head.png"} width={90} height={90} alt="" />
+            <Image className="rounded-full" src={data?.photo ? buildImageUrl(data.photo) : "/icons/icon_fansX_head.png"} width={90} height={90} alt="" />
           </div>
           <h1 className="flex flex-col items-center justify-center text-center text-[18px] font-bold">
             <span>
@@ -114,8 +115,9 @@ export default function Page({ data }: { data: UserProfile }) {
           </h1>
           <div className="mt-[30px]">二维码占位</div>
           <div className="mt-[30px] w-full">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="h-[100px] w-full object-cover" src={data?.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"} alt="" />
+            <div className="relative h-[100px] w-full">
+              <Image objectFit="cover" fill src={data?.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"} alt="" />
+            </div>
           </div>
           <div className="mt-[30px] opacity-0">.</div>
         </section>

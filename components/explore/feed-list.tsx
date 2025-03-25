@@ -34,6 +34,8 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
   const processedPostIds = useRef<Set<number>>(new Set())
   // Track the last action to prevent duplicate processing
   const lastProcessedActionRef = useRef<number>(-1)
+  // Store current items from InfiniteScroll
+  const [currentItems, setCurrentItems] = useState<PostData[]>(initialItems)
 
   // Initialize the map with initial items
   useEffect(() => {
@@ -136,6 +138,27 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
     }
   }, [actionQueue]) // Remove itemsMap from dependencies to prevent unnecessary re-runs
 
+  // Update the items map when new items are loaded
+  useEffect(() => {
+    const newMap = new Map<number, PostData>()
+    currentItems.forEach(item => {
+      // Preserve any updated items we already have in the map
+      if (itemsMap.has(item.post.id)) {
+        newMap.set(item.post.id, itemsMap.get(item.post.id)!)
+      } else {
+        newMap.set(item.post.id, item)
+      }
+    })
+    setItemsMap(newMap)
+  }, [currentItems, itemsMap])
+
+  // Log the updated posts for debugging
+  useEffect(() => {
+    if (updatedPostIds.size > 0) {
+      console.log("Updated posts in render:", Array.from(updatedPostIds))
+    }
+  }, [updatedPostIds])
+
   return (
     <InfiniteScroll<PostData>
       initialItems={initialItems}
@@ -146,32 +169,16 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
         scrollToTopFn.current = scrollToTop
         refreshFn.current = refresh
 
-        // Update the items map when new items are loaded
-        useEffect(() => {
-          const newMap = new Map<number, PostData>()
-          items.forEach(item => {
-            // Preserve any updated items we already have in the map
-            if (itemsMap.has(item.post.id)) {
-              newMap.set(item.post.id, itemsMap.get(item.post.id)!)
-            } else {
-              newMap.set(item.post.id, item)
-            }
-          })
-          setItemsMap(newMap)
-        }, [items])
+        // Update the current items state when the items from InfiniteScroll change
+        if (JSON.stringify(items.map(i => i.post.id)) !== JSON.stringify(currentItems.map(i => i.post.id))) {
+          setCurrentItems(items)
+        }
 
         // Convert the map back to an array for rendering
         const displayItems = items.map(item => {
           // Use the updated post data from the map if available
           return itemsMap.get(item.post.id) || item
         })
-
-        // Log the updated posts for debugging
-        useEffect(() => {
-          if (updatedPostIds.size > 0) {
-            console.log("Updated posts in render:", Array.from(updatedPostIds))
-          }
-        }, [updatedPostIds])
 
         return (
           <Fragment>

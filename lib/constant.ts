@@ -25,3 +25,6 @@ export const LOCAL_EN = "en"
 export const CHUNK_SIZE = 1024 * 1024 * 2
 // 批量上传文件数量
 export const BATCH_SIZE = 10
+
+export const ANDROID = "android"
+export const IOS = "ios"

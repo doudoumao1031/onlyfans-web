@@ -1,8 +1,9 @@
 "use server"
 
-import { ENDPOINTS, fetchWithGet , fetchWithPost , ApiResponse } from "@/lib"
+import { ENDPOINTS, fetchWithGet, fetchWithPost, ApiResponse } from "@/lib"
 
 import { iPost, ReplyForm, UpdateUserBaseReq, UserProfile } from "./types"
+import { commonWithGet } from "../server-actions"
 
 export async function addPost(params: iPost) {
   // Implementation
@@ -10,11 +11,14 @@ export async function addPost(params: iPost) {
 }
 
 export async function pubPost(id: number) {
-  return fetchWithPost<{post_id: number}>(ENDPOINTS.POST.PUBLISH,{ post_id: id })
+  return fetchWithPost<{ post_id: number }>(ENDPOINTS.POST.PUBLISH, { post_id: id })
 }
 
 export async function postDetail(id: number) {
-  return fetchWithGet<unknown,iPost>(`${ENDPOINTS.POST.VIEW}/${id}`,null)
+  return fetchWithGet<unknown, iPost>(`${ENDPOINTS.POST.VIEW}/${id}`, null)
+}
+export async function commonPostDetail(id: number) {
+  return commonWithGet<unknown, iPost>(`${ENDPOINTS.COMMON.POST}/${id}`, null)
 }
 
 export async function userProfile() {

@@ -9,7 +9,7 @@ export const dynamic = "force-dynamic"
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  await addPostLog(Number(id))
+   addPostLog(Number(id))
   const res = await postDetail(Number(id))
   const result = res?.data as unknown as PostData
   if (res?.message === "POST_NOT_FOUND") {
