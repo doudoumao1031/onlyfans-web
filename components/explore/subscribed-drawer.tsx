@@ -8,7 +8,9 @@ import FormDrawer from "@/components/common/form-drawer"
 import LoadingPage from "@/components/common/loading-page"
 import IconWithImage from "@/components/profile/icon"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
-import { addSubOrder, DiscountInfo, viewUserSubscribeSetting } from "@/lib"
+import { DiscountInfo, viewUserSubscribeSetting } from "@/lib"
+import { addSubOrder } from "@/lib/actions/orders/actions"
+import { revalidateProfileData } from "@/lib/actions/revalidate/actions"
 
 
 interface SubscribedDrawerProps {
@@ -96,6 +98,8 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
           console.log("订阅成功")
           setIsOpen?.(false)
           setDrawer(false)
+          // Revalidate profile data after successful subscription
+          revalidateProfileData()
           showMessage(t("SubscribeSuccess"), "success", { afterDuration: () => flush?.() })
         } else if (result?.message === "NOT_ENOUGH_BALANCE") {
           setDrawer(false)

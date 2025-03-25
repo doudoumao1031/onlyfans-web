@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTranslations } from "next-intl"
@@ -15,6 +15,7 @@ import Header from "@/components/profile/header"
 import InputWithLabel from "@/components/profile/input-with-label"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/profile"
+import { revalidateProfileData } from "@/lib/actions/revalidate/actions"
 import { buildImageUrl, commonUploadFile } from "@/lib/utils"
 
 
@@ -83,6 +84,8 @@ export default function Page() {
               flags: 31
             })
             if (response?.code === 0) {
+              // Revalidate profile data after successful update
+              await revalidateProfileData()
               return Promise.resolve()
             } else {
               return Promise.reject(response?.message)

@@ -22,7 +22,11 @@ export async function commonPostDetail(id: number) {
 }
 
 export async function userProfile() {
-  return fetchWithGet<undefined, UserProfile>(ENDPOINTS.USERS.ME, undefined)
+  return fetchWithGet<undefined, UserProfile>(ENDPOINTS.USERS.ME, undefined, {
+    headers: {
+      "Cache-Tag": "user-profile"
+    }
+  })
 }
 
 export async function getUserReply() {
@@ -47,8 +51,11 @@ export async function updateUserBaseInfo(params: UpdateUserBaseReq) {
     })
     .join("")
   const flags = parseInt(updateHexValue, 2)
-  return fetchWithPost<UpdateUserBaseReq, unknown>(ENDPOINTS.USERS.UPDATE_BASE, {
+  const result = await fetchWithPost<UpdateUserBaseReq, unknown>(ENDPOINTS.USERS.UPDATE_BASE, {
     ...params,
     flags
   })
+
+  // Removed revalidation logic to use the dedicated server action instead
+  return result
 }

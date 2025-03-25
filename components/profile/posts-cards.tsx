@@ -7,7 +7,15 @@ import PostsCard from "./posts-card"
 
 export default async function Page() {
   const t = await getTranslations("Profile.postCard")
+
+  // Define fetch options with cache tag for revalidation
+  // Note: We're not using fetchOptions directly since the API functions
+  // already have cache tags configured internally
+
+  // Get subscribe settings
   const subscribeSettings = await getSubscribeSetting()
+
+  // Get user posts with search parameters
   const posts = await myPosts({
     title: "",
     page: 1,
@@ -15,9 +23,12 @@ export default async function Page() {
     from_id: 0,
     post_status: 1
   })
+
   if (!subscribeSettings || !posts) {
     throw new Error()
   }
+
+  // Get user profile
   const response = await userProfile()
   const data = response?.data
   const totalPosts = posts.total

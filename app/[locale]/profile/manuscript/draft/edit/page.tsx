@@ -38,6 +38,7 @@ import {
   postVoteSchema,
   pubPost
 } from "@/lib/actions/profile"
+import { revalidateProfileData } from "@/lib/actions/revalidate/actions"
 import { ZH_YYYY_MM_DD_HH_mm } from "@/lib/constant"
 import { buildImageUrl, getUploadMediaFileType, uploadFile } from "@/lib/utils"
 
@@ -1005,6 +1006,7 @@ const EditPageContent = () => {
       if (addPostResponse?.code === 0 && addPostResponse?.data?.post?.id) {
         try {
           await pubPost(addPostResponse.data.post.id)
+          await revalidateProfileData()
           return t("manuscript.publishSuccess")
         } catch {
           throw t("manuscript.publishFail")
@@ -1045,7 +1047,10 @@ const EditPageContent = () => {
   const handleSaveDraft = async () => {
     await withLoading(async () => {
       try {
-        await addPost(getSubmitFormData(formValues))
+        const result = await addPost(getSubmitFormData(formValues))
+        if (result?.code === 0) {
+          await revalidateProfileData()
+        }
         return t("manuscript.saveDraftSuccess")
       } catch {
         throw t("manuscript.saveDraftFail")
