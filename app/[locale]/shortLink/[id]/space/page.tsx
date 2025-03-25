@@ -1,4 +1,5 @@
 import SpaceItem from "@/components/shortLink/spaceItem"
+import { BloggerType, getHotBloggers } from "@/lib"
 import { commonGetUserById } from "@/lib/actions/space"
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
@@ -9,7 +10,8 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
   if (!data) {
     throw new Error()
   }
+  const bloggers = await getHotBloggers({ from_id: 0, page: 1, pageSize: 3, type: BloggerType.Hot }) ?? []
   return (
-    <SpaceItem data={data} />
+    <SpaceItem data={data} bloggers={bloggers} />
   )
 }
