@@ -117,6 +117,7 @@ body {
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-text-title;
   }
@@ -153,6 +154,7 @@ textarea {
 .modal::backdrop {
   display: none;
 }
+
 .common-loading-heart-icon {
   animation: colorProgress 3s linear infinite;
 }
@@ -160,28 +162,41 @@ textarea {
 @keyframes colorProgress {
   0% {
     fill: #ffc0cb;
-  } /* 浅粉色 */
+  }
+
+  /* 浅粉色 */
   25% {
     fill: #ffffff;
-  } /* 白色 */
+  }
+
+  /* 白色 */
   50% {
     fill: #f29fa7;
-  } /* 调淡的深粉红 */
+  }
+
+  /* 调淡的深粉红 */
   75% {
     fill: #f0919a;
-  } /* 热粉色 */
+  }
+
+  /* 热粉色 */
   100% {
     fill: #ffc0cb;
-  } /* 浅粉色 */
+  }
+
+  /* 浅粉色 */
 }
 
 @layer utilities {
   .hide-scrollbar {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
   }
 
   .hide-scrollbar::-webkit-scrollbar {
-    display: none;  /* Safari and Chrome */
+    display: none;
+    /* Safari and Chrome */
   }
 }
