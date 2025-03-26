@@ -13,28 +13,29 @@ import Avatar from "../profile/avatar"
 import IconWithImage from "../profile/icon"
 import UserCard from "../user/user-card"
 
-function MomentTime(time: number) {
-  // i.  当日时间，一小时以内的，显示为："刚刚"；超过1小时的，显示为："X小时前"
-  // ii. 2.2.3 超过3日的，显示为具体的日期，格式为：中文 "X月X日"  英文： "12 Apr"
+function MomentTime(number: number) {
   const locale = useLocale()
-
   const t = useTranslations("ShortLink")
+  const time = number * 1000
   const now = new Date()
   const moment = new Date(time)
-  const diff = now.getTime() - moment.getTime()
-  const diffMinutes = Math.floor(diff / (1000 * 60))
+  const diffMinutes = Math.floor((now.getTime() - moment.getTime()) / (1000 * 60))
   if (diffMinutes < 60) {
     return t("justNow")
+  } else if (diffMinutes < 24 * 60) {
+    return t("hoursAgo", { hours: Math.floor(diffMinutes / 60) })
+  } else if (diffMinutes <= 3 * 24 * 60) {
+    return t("daysAgo", { days: Math.floor(diffMinutes / (24 * 60)) })
+  } else {
+    if (locale === "en") {
+      // 最后要显示“12 Apr” 这种格式
+      const day = moment.getDate()
+      const month = moment.toLocaleDateString("en", { month: "short" })
+      return `${day} ${month}`
+    } else {
+      return moment.toLocaleDateString(locale, { day: "numeric", month: "long" })
+    }
   }
-  if (diffMinutes < 3 * 24 * 60 * 60) {
-    return t("daysAgo", { days: Math.floor(diffMinutes / (24 * 60 * 60)) })
-  }
-  if (locale === "zh") {
-    return moment.toLocaleDateString(locale, { day: "numeric", month: "long" })
-  }
-  const day = moment.getDate()
-  const month = moment.toLocaleDateString("en", { month: "short" })
-  return `${day} ${month}`
 }
 export default function Page({ data, bloggers }: { data: PostData | undefined, bloggers: User[] }) {
   if (!data) {
@@ -95,7 +96,7 @@ export default function Page({ data, bloggers }: { data: PostData | undefined, b
             </div>
           </div>
           <div className="mt-[6px] text-sm text-[#222]">
-            <div className=" ">{user.about}</div>
+            <div>{user.about}</div>
             <div className=" mt-[6px] flex items-center text-xs">
               <span className="text-gray-secondary">
                 {t("translate")}
