@@ -263,7 +263,7 @@ const ManuscriptMedia = () => {
                               className="border-border-theme text-text-theme mt-2 flex w-full justify-center gap-2 rounded-[10px] border-2 py-2"
                             >
                               <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20}
-                                className={"bg-background-theme"}
+                                className={"bg-theme"}
                               />
                               <span className={"text-[15px]"}>{t("itemActions.edit")}</span>
                             </Link>
@@ -272,7 +272,7 @@ const ManuscriptMedia = () => {
                               <button type={"button"}
                                 className="border-border-theme text-text-theme mt-2 flex w-full justify-center gap-2 rounded-[10px] border-2 py-2 grayscale"
                               >
-                                <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-background-theme"} />
+                                <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20} className={"bg-theme"} />
                                 <span className={"text-[15px]"}>{t("itemActions.edit")}</span>
                               </button>
                             )

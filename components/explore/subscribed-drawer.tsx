@@ -161,7 +161,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
         <div className="flex flex-col items-center bg-slate-50 text-2xl text-black">
           {loading ? <LoadingPage height={"h-18"} /> : (
             <div className={"mt-[20px] grid w-full grid-cols-3 gap-x-3 gap-y-5 px-4"}>
-              {items.map((item,i) => {
+              {items.map((item, i) => {
                 return (
                   <button
                     key={i}
@@ -174,7 +174,7 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
                     }}
                   >
                     <div className="flex h-full flex-col items-center justify-center text-black">
-                      <span className={`text-nowrap text-xs ${item.id === active ? "text-text-title": "text-text-desc"}`}>
+                      <span className={`text-nowrap text-xs ${item.id === active ? "text-text-title" : "text-text-desc"}`}>
                         {item.month_count} {t("Month")}
                       </span>
                       <span
@@ -198,7 +198,8 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
                       </div>
                     )}
                   </button>
-                )})}
+                )
+              })}
             </div>
           )}
           <div className="my-[40px]  self-center">
@@ -206,8 +207,8 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
               <button
                 type={"button"}
                 disabled={amount === 0}
-                className={`bg-background-theme h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white
-                 ${amount === 0 ? "bg-[#dddddd]" : "bg-background-theme"}`}
+                className={`bg-theme h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white
+                 ${amount === 0 ? "bg-[#dddddd]" : "bg-theme"}`}
                 onTouchEnd={async () => {
                   await handleSubmit()
                 }}

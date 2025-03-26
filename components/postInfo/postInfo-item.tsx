@@ -213,7 +213,7 @@ export default function Page({ postData }: { postData: PostData }) {
               }}
               className={`flex h-[26px] min-w-[80px] items-center justify-center rounded-full px-2 ${isFocus
                 ? "border-border-theme text-text-theme border bg-white"
-                : " bg-background-theme text-white"
+                : " bg-theme text-white"
                 }`}
             >
               <IconWithImage
@@ -264,7 +264,7 @@ export default function Page({ postData }: { postData: PostData }) {
                 setDrawer(true)
               }
             }}
-            className="bg-background-theme flex h-[50px]  w-[295px] items-center justify-center rounded-full text-[15px] text-white"
+            className="bg-theme flex h-[50px]  w-[295px] items-center justify-center rounded-full text-[15px] text-white"
           >
             {btnText}
           </button>

@@ -39,7 +39,7 @@ export default function Page({
           onClick={() => {
             cancel()
           }}
-          className="flex h-full flex-1 items-center justify-center border-r border-[#ebeced] text-center text-gray-secondary"
+          className="text-gray-secondary flex h-full flex-1 items-center justify-center border-r border-[#ebeced] text-center"
         >
           {cancelText || t("cancel")}
         </div>
@@ -77,7 +77,7 @@ export default function Page({
         </div>
       )}
       {type === "toast" && (
-        <div className="flex items-center rounded-full bg-black bg-opacity-50 p-6 py-4">
+        <div className="flex items-center rounded-full bg-black/50 p-6 py-4">
           <Image
             src="/icons/checkbox_select_white.png"
             alt="checkbox_select_white"

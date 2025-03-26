@@ -190,7 +190,7 @@ export default function RechargeDrawer(props: RechargeProps) {
                   <button
                     key={i}
                     type={"button"}
-                    className={`h-[49px] w-full rounded-lg border-0 font-medium ${active === i ? "bg-background-theme text-white" : "bg-white"}`}
+                    className={`h-[49px] w-full rounded-lg border-0 font-medium ${active === i ? "bg-theme text-white" : "bg-white"}`}
                     onTouchEnd={() => {
                       setActive(i)
                       setAmount(Number(item.price))
@@ -207,7 +207,7 @@ export default function RechargeDrawer(props: RechargeProps) {
             <button
               type="button"
               disabled={amount === 0 || (amount > ptBalance && type === ANDROID)}
-              className={`h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white ${amount === 0 || (amount > ptBalance && type === ANDROID) ? "bg-[#dddddd]" : "bg-background-theme"
+              className={`h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white ${amount === 0 || (amount > ptBalance && type === ANDROID) ? "bg-[#dddddd]" : "bg-theme"
                 }`}
               onClick={async () => {
                 if (!(amount === 0 || (amount > ptBalance && type === ANDROID))) {

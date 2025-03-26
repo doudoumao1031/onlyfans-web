@@ -868,7 +868,7 @@ const ReadingSettingsDisplay = ({ postPrice }: { postPrice: iPostPrice }) => {
         url={"/icons/profile/icon-reading.png"}
         width={20}
         height={20}
-        className={"bg-background-theme"}
+        className={"bg-theme"}
       />
       <label className={"text-text-theme"}>
         {option?.label}&nbsp;
@@ -1227,7 +1227,7 @@ const EditPageContent = () => {
                   url={"/icons/profile/icon_fans_vote@3x.png"}
                   width={20}
                   height={20}
-                  className={"bg-background-theme"}
+                  className={"bg-theme"}
                 />
                 <span className="text-text-theme text-base font-bold">
                   {formValues.post_vote?.title}

@@ -192,7 +192,7 @@ export default function WithdrawDrawer(props: WithdrawDrawerProps) {
               }}
               className={clsx(
                 "flex h-12 w-full items-center justify-center rounded-full text-white transition-all ",
-                !!errorMessage ? "bg-[#ddd]" : "bg-background-theme "
+                !!errorMessage ? "bg-[#ddd]" : "bg-theme "
               )}
             >
               {errorMessage ? errorMessage : t("withdrawal")}

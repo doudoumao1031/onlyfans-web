@@ -79,7 +79,7 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
       >
         <IconWithImage url={pinned ? "/theme/icon_fans_stick_highlight@3x.png" : "/theme/icon_fans_stick_dark@3x.png"}
           width={20} height={20} className={clsx(
-            pinned ? "bg-background-theme" : "bg-black"
+            pinned ? "bg-theme" : "bg-black"
           )}
         />
         <span className={clsx(
@@ -104,7 +104,7 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
           className="flex flex-1 items-center gap-2 py-2.5"
         >
           <IconWithImage url={"/icons/profile/icon_edit@3x.png"} width={20} height={20}
-            className={"bg-background-theme"}
+            className={"bg-theme"}
           />
           <span>{t("itemActions.edit")}</span>
         </Link>
@@ -128,7 +128,7 @@ const ManuscriptItemState = ({ state }: { state: number }) => {
   return (
     <span className={clsx(
       "absolute left-0 top-0 z-10 rounded-br rounded-tl px-1.5 py-0.5 text-xs leading-[15px] text-white",
-      state === 2 ? "bg-[#58bf8e]" : "bg-background-theme"
+      state === 2 ? "bg-[#58bf8e]" : "bg-theme"
     )}
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error

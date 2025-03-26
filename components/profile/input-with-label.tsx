@@ -106,7 +106,7 @@ export default function InputWithLabel(props: InputProps) {
           transition: "top .1s",
           top: positionInCenter ? 16 : -7
         }} onTouchEnd={labelTouch} className={clsx(
-          "absolute left-4 z-30 bg-white font-normal leading-none text-gray-secondary transition"
+          "text-gray-secondary absolute left-4 z-30 bg-white font-normal leading-none transition"
         )}
         htmlFor={name}
       >
@@ -163,7 +163,7 @@ export default function InputWithLabel(props: InputProps) {
       </section>
       {errorMessage && <div className="text-theme mt-1.5 px-4 text-xs">{errorMessage}</div>}
       {description && !errorMessage && (
-        <section className="mt-1.5 flex items-center px-4 text-xs text-gray-secondary">{description}
+        <section className="text-gray-secondary mt-1.5 flex items-center px-4 text-xs">{description}
           {
             copy && <CopyText text={description.toString()} />
           }
