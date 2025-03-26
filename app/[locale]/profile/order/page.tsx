@@ -490,7 +490,7 @@ function SubscribeBundle({ items, userId, updateItems, basePrice }: {
               return (
                 <TopLabelWrapper label={`${t("price")}${index + 1}`}>
                   <section className={"flex w-full items-center justify-between"}>
-                    <button type={"button"} onTouchEnd={() => {
+                    <button type={"button"} onClick={() => {
                       openEditModal(discount)
                     }} className={"flex-1 text-left"}
                     >
@@ -574,8 +574,7 @@ function PromotionalActivities({ updateItems, items }: {
         <section className="flex items-center justify-between">
           <h1 className="text-base font-medium">{t("discountActivities")}</h1>
           {noDiscountList.length > 0 && (
-            <button
-              onTouchEnd={() => {
+            <button onClick={() => {
                 openEditModal()
               }}
               className="border-border-theme text-text-theme rounded-full border px-4 py-0.5"
