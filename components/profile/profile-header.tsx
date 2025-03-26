@@ -81,6 +81,9 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
           alt={""}
         />
         <div className="absolute left-0 top-0 size-full bg-black/20"></div>
+        <div className={`absolute bottom-1 right-3 max-w-[70%] truncate text-xs ${isTop ? "text-theme" : "text-white"}`} >
+          {data.top_info}
+        </div>
       </div>
       <div ref={divRef} className={`fixed left-0 top-0 z-40  w-full ${isTop ? "bg-white" : "auto"}`}>
         <div className="flex w-full flex-col place-items-center">
@@ -115,9 +118,7 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
             }
             backIconColor={isTop ? "#222" : "#fff"}
           />
-          <div className={`flex w-screen max-w-lg truncate px-6 pb-2 text-xs ${isTop ? "text-theme" : "text-white"}`} style={{ aspectRatio: "375/24" }}>
-            {data.top_info}
-          </div>
+
         </div>
 
 

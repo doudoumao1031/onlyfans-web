@@ -54,7 +54,7 @@ export default async function Page() {
                   />
                 </Link>
               </h1>
-              <div className="text-text-desc text-center text-xs">
+              <div className="text-text-desc text-xs">
                 {data.username
                   ? "@" + data.username
                   : !data.first_name && !data.about ? t("noUserName") : ""}
@@ -72,23 +72,23 @@ export default async function Page() {
             <FoldingDescription about={data.about} location={data.location} />
           </div>
         </section>
-        <div className="border-y border-[#ddd] p-5">
+        <div className="border-y border-[#ddd] px-4 py-2.5">
           <div className="grid grid-cols-4 text-center">
             <div className="border-r border-b-[#ddd]">
-              <div className="text-2xl">{displayNumber(data.post_count)}</div>
-              <div className="text-xs text-[#333]">{t("moduleTypes.post")}</div>
+              <div className="text-[20px]">{displayNumber(data.post_count)}</div>
+              <div className="text-text-desc text-xs font-light">{t("moduleTypes.post")}</div>
             </div>
             <div className="border-r border-b-[#ddd]">
-              <div className="text-2xl">{displayNumber(data.media_count)}</div>
-              <div className="text-xs text-[#333]">{t("moduleTypes.media")}</div>
+              <div className="text-[20px]">{displayNumber(data.media_count)}</div>
+              <div className="text-text-desc text-xs font-light">{t("moduleTypes.media")}</div>
             </div>
             <div className="border-r border-b-[#ddd]">
-              <div className="text-2xl">{displayNumber(data.fans_count)}</div>
-              <div className="text-xs text-[#333]">{t("moduleTypes.fans")}</div>
+              <div className="text-[20px]">{displayNumber(data.fans_count)}</div>
+              <div className="text-text-desc text-xs font-light">{t("moduleTypes.fans")}</div>
             </div>
             <div>
-              <div className="text-2xl">{displayNumber(data.subscribe_count)}</div>
-              <div className="text-xs text-[#333]">{t("moduleTypes.subscribe")}</div>
+              <div className="text-[20px]">{displayNumber(data.subscribe_count)}</div>
+              <div className="text-text-desc text-xs font-light">{t("moduleTypes.subscribe")}</div>
             </div>
           </div>
         </div>
