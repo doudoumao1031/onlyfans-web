@@ -24,7 +24,7 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
 
   return (
     <>
-      <div className={"p-4"}>
+      <div className={"mt-2.5 px-4"}>
         <div
           className={"flex items-center justify-between gap-1.5 rounded-xl bg-[url('/theme/bg_wallet@3x.png')] bg-cover px-[20px] pb-[20px] pt-[10px] text-white"}
         >

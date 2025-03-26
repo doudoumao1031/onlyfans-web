@@ -90,6 +90,7 @@ export default function RechargeDrawer(props: RechargeProps) {
 
   return (
     <>
+      {children && (
       <button
         onClick={() => {
           setIsOpen(true)
@@ -97,6 +98,7 @@ export default function RechargeDrawer(props: RechargeProps) {
       >
         {children}
       </button>
+)}
       <FormDrawer
         title={<span className={"text-lg font-semibold"}>{t("title")}</span>}
         headerLeft={(close) => {
