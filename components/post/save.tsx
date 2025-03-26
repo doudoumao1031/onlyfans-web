@@ -6,11 +6,10 @@ import { useTranslations } from "next-intl"
 
 import { useCommonMessageContext } from "@/components/common/common-message"
 import { userCollectionPost } from "@/lib"
+import { revalidateProfileData } from "@/lib/actions/revalidate/actions"
 import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
 
 import Stats from "./stats"
-
-
 
 export default function Save({
   count,
@@ -41,6 +40,9 @@ export default function Save({
     }
     try {
       await userCollectionPost({ post_id: postId, collection: !isSaved })
+      // Trigger profile data revalidation using the server action
+      await revalidateProfileData()
+      // No need for additional action queue dispatch since revalidateProfileData handles cache invalidation
     } catch (error) {
       console.error("Error saved post:", error)
       setSaves((pre) => (isSaved ? pre + 1 : pre - 1))

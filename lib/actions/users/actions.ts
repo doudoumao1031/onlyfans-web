@@ -85,7 +85,7 @@ export const getSubscribeSetting = () =>
   )
 
 export const updateSubscribeSettingItem = (params: Partial<DiscountInfo>) =>
-  fetchWithPost<Partial<DiscountInfo>>(ENDPOINTS.USERS.ADD_SUBSCRIBE_SETTING_ITEM, {
+  fetchWithPost<Partial<DiscountInfo>, unknown>(ENDPOINTS.USERS.ADD_SUBSCRIBE_SETTING_ITEM, {
     ...params,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
@@ -108,16 +108,14 @@ export const addSubscribeSetting = (params: { price: number | string; id?: numbe
     return null
   })
 
-// export const add
-
 /**
  * 收藏文章/帖子
  * @param params
  */
-export const userCollectionPost = (params: CollectionPostReq) =>
-  fetchWithPost<CollectionPostReq, unknown>(ENDPOINTS.USERS.COLLECTION_POST, params).then((res) => {
-    return !!(res && res.code === 0)
-  })
+export const userCollectionPost = async (params: CollectionPostReq) => {
+  const result = await fetchWithPost<CollectionPostReq, unknown>(ENDPOINTS.USERS.COLLECTION_POST, params)
+  return !!(result && result.code === 0)
+}
 
 export const userCollectionPosts = (params: PageInfo) =>
   fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.USERS.COLLECTION_POSTS, params).then(
@@ -228,7 +226,7 @@ export const getExpenses = (params: PageInfo & { start_time?: number; end_time?:
     }
   )
 
-  //收益明细
+//收益明细
 export const getWalletStatement = (params: PageInfo & { start_time?: number; end_time?: number }) =>
   fetchWithPost<PageInfo, PageResponse<StatementResp>>(ENDPOINTS.USERS.WALLET_STATEMENT, params).then(
     (res) => {

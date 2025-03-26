@@ -49,7 +49,7 @@ export default function Page({ data, bloggers }: { data: PostData | undefined, b
         <section className="px-5 pb-5">
           <div className={"flex justify-between"}>
             <div className={"relative top-[-24px]"}>
-              <Avatar showLive={user.live_certification} fileId={user.photo} />
+              <Avatar size={44} showLive={user.live_certification} fileId={user.photo} />
               <h1 className="flex items-center gap-2 text-[18px] font-bold">
                 <span>
                   {user.first_name}
@@ -60,10 +60,6 @@ export default function Page({ data, bloggers }: { data: PostData | undefined, b
                   ? "@" + data.username
                   : !data.first_name && !data.about ? t("noUserName") : ""}
               </div> */}
-              <div className="flex items-center gap-[4px]">
-                <span className="text-xs text-[#222]">https://www.weifen.org/helloworld</span>
-                <IconWithImage url="/icons/icon_info_copy_gray@3x.png" width={16} height={16} color="#6D7781" />
-              </div>
               <div>
 
               </div>

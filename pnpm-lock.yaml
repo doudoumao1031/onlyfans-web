@@ -125,6 +125,9 @@ importers:
       video.js:
         specifier: ^8.22.0
         version: 8.22.0
+      videojs-resolution-switcher-v8:
+        specifier: ^1.0.12
+        version: 1.0.12(video.js@8.22.0)
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -2938,6 +2941,11 @@ packages:
 
   videojs-font@4.2.0:
     resolution: {integrity: sha512-YPq+wiKoGy2/M7ccjmlvwi58z2xsykkkfNMyIg4xb7EZQQNwB71hcSsB3o75CqQV7/y5lXkXhI/rsGAS7jfEmQ==}
+
+  videojs-resolution-switcher-v8@1.0.12:
+    resolution: {integrity: sha512-pvN7sKeplUGSubEjefFcc0Pj0epbzYy2QORIvGtpZY9njYUFzE108gdEfD5j9sfmi2Idcx1HlBRmR1uDGmvqtA==}
+    peerDependencies:
+      video.js: ^8.17.3
 
   videojs-vtt.js@0.15.5:
     resolution: {integrity: sha512-yZbBxvA7QMYn15Lr/ZfhhLPrNpI/RmCSCqgIff57GC2gIrV5YfyzLfLyZMj0NnZSAz8syB4N0nHXpZg9MyrMOQ==}
@@ -6016,6 +6024,10 @@ snapshots:
       video.js: 8.22.0
 
   videojs-font@4.2.0: {}
+
+  videojs-resolution-switcher-v8@1.0.12(video.js@8.22.0):
+    dependencies:
+      video.js: 8.22.0
 
   videojs-vtt.js@0.15.5:
     dependencies:

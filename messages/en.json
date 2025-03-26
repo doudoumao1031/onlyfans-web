@@ -429,7 +429,9 @@
     "cancelled": "Cancelled",
     "day": "Day",
     "free": "Free",
-    "noUserName": "The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey..."
+    "noUserName": "The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey...",
+    "fansNum": "fans",
+    "subscribeNum": "Subscribers"
   },
   "Search": {
     "inputPlaceholder": "Search",

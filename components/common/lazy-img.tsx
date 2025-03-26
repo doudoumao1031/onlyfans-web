@@ -1,5 +1,5 @@
 "use client"
-import { useState , ComponentProps } from "react"
+import { useState, ComponentProps } from "react"
 
 
 
@@ -16,15 +16,15 @@ type MyImageProps = ComponentProps<typeof Image> & {
 }
 export default function LazyImg(props: MyImageProps): React.ReactNode {
   const [isLoading, setIsLoading] = useState(true)
-  const restProps = omit(props,"containerAuto")
+  const restProps = omit(props, "containerAuto")
   return (
     <div className={clsx(
       "relative flex justify-center",
-      !props.containerAuto ? "size-full" :""
+      !props.containerAuto ? "size-full" : ""
     )}
     >
       {isLoading && <Skeleton className={`${props.className} absolute size-full `}></Skeleton>}
-      {props.src && <Image {...restProps} onLoad={() => setIsLoading(false)}/>}
+      {props.src && <Image {...restProps} onLoad={() => setIsLoading(false)} />}
     </div>
   )
 }
@@ -33,8 +33,8 @@ export function LazyImageWithFileId(props: Omit<MyImageProps, "src"> & { fileId:
   const { fileId } = props
   if (fileId) {
     const src = buildImageUrl(fileId)
-    const restProps = omit(props,"fileId")
-    return <LazyImg {...restProps} src={src}/>
+    const restProps = omit(props, "fileId")
+    return <LazyImg {...restProps} src={src} />
   }
   return (
     <Skeleton

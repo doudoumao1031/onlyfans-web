@@ -18,6 +18,7 @@ import { useRouter , locales } from "@/i18n/routing"
 import { emitter, useAppLoaded } from "@/lib/hooks/emitter"
 
 import { loginToken, LoginTokenResp } from "../actions/auth"
+import { handleRechargeOrderCallback, RechargeResp } from "../actions/orders"
 import { TOKEN_KEY, USER_KEY } from "../utils"
 
 
@@ -27,7 +28,8 @@ const emitterContext = createContext(undefined)
 
 export enum BRIDGE_EVENT_NAME {
   sendSystemtBarsInfo = "sendSystemtBarsInfo",
-  responseOAuth = "responseOAuth"
+  responseOAuth = "responseOAuth",
+  responseRecharge = "responseRecharge" // 充值回调
 }
 
 export function EmitterProvider({ children }: { children: ReactNode }) {
@@ -86,6 +88,28 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
       })
   }, [])
 
+  /**
+   * 原生充值回调
+   */
+  const handleResponseRecharge = useCallback((data: unknown) => {
+    console.log("data--handleResponseRecharge===>", data)
+    if (!data) return
+    if ((data as RechargeResp).result === "failed") {
+      console.log("===>支付失败")
+      showMessage(t("error"))
+    }
+    handleRechargeOrderCallback({ trade_no: (data as RechargeResp).tradeNo }).then((result) => {
+      if (result && result.code === 0) {
+        showMessage(t("success"), "success")
+      } else {
+        showMessage(t("error"))
+      }
+    })
+      .catch(() => {
+        showMessage(t("error"))
+      })
+  }, [])
+
   useEffect(() => {
     // 测试
     setTimeout(() => {
@@ -99,6 +123,10 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
       BRIDGE_EVENT_NAME.responseOAuth,
       handleResponseOAuth
     )
+    emitter.on(
+      BRIDGE_EVENT_NAME.responseRecharge,
+      handleResponseRecharge
+    )
     return () => {
       emitter.off(
         BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
@@ -108,10 +136,15 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
         BRIDGE_EVENT_NAME.responseOAuth,
         handleResponseOAuth
       )
+      emitter.off(
+        BRIDGE_EVENT_NAME.responseRecharge,
+        handleResponseRecharge
+      )
     }
   }, [
     handleGetSystemBarsInfo,
-    handleResponseOAuth
+    handleResponseOAuth,
+    handleResponseRecharge
   ])
   return (
     <emitterContext.Provider value={undefined}>

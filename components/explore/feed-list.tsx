@@ -140,17 +140,19 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
 
   // Update the items map when new items are loaded
   useEffect(() => {
-    const newMap = new Map<number, PostData>()
-    currentItems.forEach(item => {
-      // Preserve any updated items we already have in the map
-      if (itemsMap.has(item.post.id)) {
-        newMap.set(item.post.id, itemsMap.get(item.post.id)!)
-      } else {
-        newMap.set(item.post.id, item)
-      }
+    setItemsMap(prevMap => {
+      const newMap = new Map<number, PostData>()
+      currentItems.forEach(item => {
+        // Preserve any updated items we already have in the map
+        if (prevMap.has(item.post.id)) {
+          newMap.set(item.post.id, prevMap.get(item.post.id)!)
+        } else {
+          newMap.set(item.post.id, item)
+        }
+      })
+      return newMap
     })
-    setItemsMap(newMap)
-  }, [currentItems, itemsMap])
+  }, [currentItems]) // Only depend on currentItems
 
   // Log the updated posts for debugging
   useEffect(() => {

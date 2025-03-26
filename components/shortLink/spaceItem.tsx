@@ -1,9 +1,8 @@
 "use client"
-import { useEffect, useState } from "react"
 
 import { useTranslations } from "next-intl"
 
-import { BloggerType, getHotBloggers, User } from "@/lib"
+import { User } from "@/lib"
 import { UserProfile } from "@/lib/actions/profile"
 import { buildImageUrl } from "@/lib/utils"
 
@@ -13,21 +12,12 @@ import Avatar from "../profile/avatar"
 import IconWithImage from "../profile/icon"
 import UserCard from "../user/user-card"
 
-export default function Page({ data }: { data: UserProfile | undefined }) {
+export default function Page({ data, bloggers }: { data: UserProfile | undefined, bloggers: User[] }) {
   if (!data) {
     throw new Error()
   }
   const t = useTranslations("ShortLink")
-  const [bloggers, setBloggers] = useState<User[]>([])
   const { showMessage } = useCommonMessageContext()
-  useEffect(() => {
-    const getBloggers = async () => {
-      const res = await getHotBloggers({ from_id: 0, page: 1, pageSize: 3, type: BloggerType.Hot })
-      console.log("getBloggers", res)
-      setBloggers(res)
-    }
-    getBloggers()
-  }, [])
   return (
     <div onTouchEnd={() => { showMessage("暂未配置App下载地址") }}>
       <div className="relative h-[109px]">
