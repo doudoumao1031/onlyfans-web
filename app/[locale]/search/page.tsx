@@ -39,7 +39,7 @@ export default async function Page(props: {
         <span className="mt-16 text-center text-gray-500">{t("description")}</span>
       )}
       {query !== "" && users && !users.list && users.total === 0 && posts && posts.total === 0 && (
-        <div className="mt-40 flex flex-col place-items-center justify-center">
+        <div className="mt-40 flex flex-col items-center justify-center">
           <Image
             src="/icons/explore/icon_search_null@3x.png"
             alt="search is null"

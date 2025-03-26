@@ -91,7 +91,7 @@ export default function Page({ data, bloggers }: { data: PostData | undefined, b
                 </div>
               </div>
             </div>
-            <div className="text-gray-secondary flex place-items-center text-xs">
+            <div className="text-gray-secondary flex items-center justify-center text-xs">
               {MomentTime(post.pub_time)}
             </div>
           </div>
@@ -113,7 +113,7 @@ export default function Page({ data, bloggers }: { data: PostData | undefined, b
             post_attachment.length > 0 && (post_attachment[0].thumb_id || post_attachment[0].file_id) && (
               <div className="video-poster relative h-[210px]">
                 <Image src={buildImageUrl(post_attachment[0].thumb_id || post_attachment[0].file_id)} alt="video-poster" fill objectFit="cover" />
-                <div className="absolute left-1/2 top-1/2 flex size-[60px] -translate-x-1/2 -translate-y-1/2 place-items-center justify-center rounded-full bg-black/40">
+                <div className="absolute left-1/2 top-1/2 flex size-[60px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-black/40">
                   <IconWithImage url="/icons/play.png" width={24} height={24} />
                 </div>
               </div>

@@ -9,7 +9,7 @@ import { Link } from "@/i18n/routing"
 export default function Empty({ text }: { text: string }) {
   const t = useTranslations("Explore")
   return (
-    <div className="mt-40 flex flex-col place-items-center justify-center">
+    <div className="mt-40 flex flex-col items-center justify-center">
       <Image src="/icons/icon_detail_null@3x.png" alt="follow is null" width={200} height={150} />
       <span className="mt-6 text-center text-gray-500">
         {text}

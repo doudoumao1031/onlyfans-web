@@ -11,6 +11,8 @@ import IconWithImage from "@/components/profile/icon"
 import { UserProfile } from "@/lib/actions/profile"
 import { buildImageUrl } from "@/lib/utils"
 
+import CommonLoading from "../common/common-loading"
+
 export default function Page({ data }: { data: UserProfile }) {
   const t = useTranslations("Profile")
   const pageRef = useRef<HTMLDivElement>(null)
@@ -102,8 +104,8 @@ export default function Page({ data }: { data: UserProfile }) {
       <div ref={headerRef} className="h-[44px] w-full bg-white"></div>
       <section className="relative rounded-t-3xl bg-white text-black">
         <section id="share-page" className="px-4 pb-3">
-          <div className="flex justify-center">
-            <Image className="rounded-full" src={data?.photo ? buildImageUrl(data.photo) : "/icons/icon_fansX_head.png"} width={90} height={90} alt="" />
+          <div className="mx-auto size-[90px]">
+            <Image className="size-full rounded-full" src={data?.photo ? buildImageUrl(data.photo) : "/icons/icon_fansX_head.png"} width={90} height={90} alt="" />
           </div>
           <h1 className="flex flex-col items-center justify-center text-center text-lg font-bold">
             <span>
@@ -113,7 +115,11 @@ export default function Page({ data }: { data: UserProfile }) {
               ? "@" + data?.username
               : t("noUserName")}</span>
           </h1>
-          <div className="mt-[30px]">二维码占位</div>
+          <div className="mt-[30px]">
+            <div className="mx-auto flex size-[240px] items-center justify-center bg-black/50">
+              <CommonLoading />
+            </div>
+          </div>
           <div className="mt-[30px] w-full">
             <div className="relative h-[100px] w-full">
               <Image objectFit="cover" fill src={data?.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"} alt="" />

@@ -128,7 +128,7 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
         )}
       </div>
       <div ref={divRef} className={`fixed left-0 top-0 z-40 w-full ${isTop ? "bg-white" : "auto"}`}>
-        <div className="flex w-full flex-col place-items-center">
+        <div className="flex w-full flex-col items-center justify-center">
           <Header
             leftTitle={
               <span
