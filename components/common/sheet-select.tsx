@@ -64,7 +64,7 @@ export default function SheetSelect({
               return (
                 <button
                   className={clsx(
-                    "block w-full px-8 py-4 text-[20px]",
+                    "block w-full px-8 py-4 text-xl",
                     index !== arr.length - 1 ? "border-b border-b-gray-100" : ""
                   )}
                   key={index}
@@ -91,7 +91,7 @@ export default function SheetSelect({
               {/*<Button type="submit">Save changes</Button>*/}
               <button
                 className={
-                  "text-text-theme block w-full rounded-2xl bg-white px-8 py-4 text-[20px] font-bold"
+                  "text-text-theme block w-full rounded-2xl bg-white px-8 py-4 text-xl font-bold"
                 }
               >
                 {commonTrans("cancel")}

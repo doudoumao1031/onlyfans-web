@@ -125,7 +125,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
               left={<button type={"button"} onTouchEnd={() => {
                 setOpenState(false)
               }} className={"text-base"}
-                    >{commonTrans("cancel")}</button>}
+              >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-text-theme text-base"}
@@ -204,7 +204,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
         label: <div className={"text-left"}>
           ${item.price} {item.month_count}{t("monthUnit")}{t("month")} <span
             className={"text-[#bbb]"}
-                                                                       >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
+          >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
         value: item.id
       }
     })
@@ -274,7 +274,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
               left={<button type={"button"} onTouchEnd={() => {
                 setOpenState(false)
               }} className={"text-base text-[#777]"}
-                    >{commonTrans("cancel")}</button>}
+              >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-text-theme text-base"}
@@ -388,11 +388,11 @@ function TopLabelWrapper({ label, children, errorMessage }: {
 }) {
   return (
     <section className="relative mt-6 rounded-xl">
-      <div className={"absolute left-4 top-[-10px] bg-white text-[#6D7781]"}>
+      <div className={"text-text-desc absolute -top-2.5 left-4 bg-white"}>
         {label}
       </div>
       <section
-        className={"flex items-center rounded-xl border border-[rgb(221,221,221)] px-4 py-[12px]"}
+        className={"flex items-center rounded-xl border border-[rgb(221,221,221)] px-4 py-3"}
       >
         {children}
       </section>
@@ -495,8 +495,8 @@ function SubscribeBundle({ items, userId, updateItems, basePrice }: {
                     }} className={"flex-1 text-left"}
                     >
                       ${discount.price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;<span
-                        className="text-[#6D7781]"
-                                                                                                                 >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
+                        className="text-gray-secondary"
+                      >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
                     </button>
                     <Switch className={"custom-switch"} checked={!field.value.item_status} onCheckedChange={(value) => {
                       field.onChange({
@@ -600,10 +600,10 @@ function PromotionalActivities({ updateItems, items }: {
                 <div>
                   {discount.discount_price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;
                   <span
-                    className="text-[#6D7781]"
+                    className="text-gray-secondary"
                   >({t("avg")} ${calcAvg(Number(discount.discount_price), discount.month_count)}/{t("month")})</span>
                 </div>
-                <div className="text-[#6D7781]">
+                <div className="text-gray-secondary">
                   {dayjs(discount.discount_start_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)} {dayjs(discount.discount_end_time * 1000).format(ZH_YYYY_MM_DD_HH_mm)}
                 </div>
               </div>
@@ -847,7 +847,7 @@ export default function Page() {
             }
           })
         }} className="text-text-theme text-base"
-               >{t("complete")}</button>}
+        >{t("complete")}</button>}
       />
       <section className="mt-5 text-black">
         <section className="border-b border-gray-100 px-4 pb-5">
@@ -866,14 +866,14 @@ export default function Page() {
                           transition: "top .1s",
                           top: -7
                         }} className={clsx(
-                          "absolute left-4 z-30 bg-white font-normal leading-none text-[#6D7781] transition"
+                          "text-gray-secondary absolute left-4 z-30 bg-white font-normal leading-none transition"
                         )}
                       >
                         {t("monthlyPrice")}
                       </label>
                       <section
                         className={
-                          clsx("relative z-20 flex h-[46px] items-center rounded-xl border border-[rgb(221,221,221)] px-4 py-[12px]"
+                          clsx("relative z-20 flex h-[46px] items-center rounded-xl border border-[rgb(221,221,221)] px-4 py-3"
                           )
                         }
                       >
@@ -881,7 +881,7 @@ export default function Page() {
                         <div className="flex flex-1 items-center justify-end">
                           <BasePriceSettings valueChange={value => {
                             field.onChange(value)
-                            if (Number(value) ===0 ) {
+                            if (Number(value) === 0) {
                               closeAllItemsState()
                             }
                           }} value={field.value}
@@ -889,11 +889,11 @@ export default function Page() {
                         </div>
                       </section>
                     </section>
-                    <section className="mt-1.5 px-4 text-xs text-[#6D7781]">
+                    <section className="text-gray-secondary mt-1.5 px-4 text-xs">
                       <div>{t("baseSubLimit")}</div>
                       <div>{t("shouldBe1")} <span
                         className="text-text-theme"
-                                            >{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
+                      >{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
                       </div>
                     </section>
                   </section>

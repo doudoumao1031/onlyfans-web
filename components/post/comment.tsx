@@ -3,7 +3,7 @@ import { useState } from "react"
 
 import dayjs from "dayjs"
 import localizedFormat from "dayjs/plugin/localizedFormat"
-import { useTranslations , useLocale } from "next-intl"
+import { useTranslations, useLocale } from "next-intl"
 import TextareaAutosize from "react-textarea-autosize"
 
 import Image from "next/image"
@@ -44,7 +44,7 @@ export default function Comments(props: CommentsProps) {
   const t = useTranslations("Common.post")
   const [input, setInput] = useState("")
   const [showEmojiPicker, setShowEmojiPicker] = useState(false)
-  {/* 帖子不可见且非自己不可评论 */}
+  {/* 帖子不可见且非自己不可评论 */ }
   if (post.visibility !== 0 && sid != post.id) return null
   return (
     <>
@@ -68,9 +68,8 @@ export default function Comments(props: CommentsProps) {
             />
           </div>
           <div
-            className={`p-1 ${
-              !input || input === "" ? "bg-sky-500/50" : "bg-theme"
-            } bg-sky size-[30px] rounded-[50%]`}
+            className={`p-1 ${!input || input === "" ? "bg-sky-500/50" : "bg-theme"
+              } bg-sky size-[30px] rounded-[50%]`}
           >
             <Image
               // src="/theme/icon_fans_comment_send@3x.png"
@@ -169,7 +168,7 @@ function Comment({
               <div className="flex flex-col gap-2">
                 <div className="text-theme text-xs">{`${first_name} ${last_name}`}</div>
                 <div className="break-all text-sm">{content}</div>
-                <div className="flex gap-4 text-xs text-[#6D7781]">
+                <div className="text-gray-secondary flex gap-4 text-xs">
                   <div>{dayjs.unix(comment_time).format(datetimeFormat)}</div>
                   {reply_count > 0 && (
                     <div onClick={toggleReplies} className="text-theme">
@@ -209,9 +208,8 @@ function Comment({
                 />
               </div>
               <div
-                className={`p-1 ${
-                  !replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"
-                } size-[30px] rounded-[50%]`}
+                className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"
+                  } size-[30px] rounded-[50%]`}
               >
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
@@ -393,13 +391,13 @@ function Reply({
               </div>
               <div className="text-sm">
                 {reply_user && (
-                  <span className="text-[#6D7781]">
+                  <span className="text-gray-secondary">
                     {t("reply")} {`${reply_user.first_name} ${reply_user.last_name}`} :{" "}
                   </span>
                 )}
                 <span>{content}</span>
               </div>
-              <div className="flex gap-4 text-xs text-[#6D7781]">
+              <div className="text-gray-secondary flex gap-4 text-xs">
                 {" "}
                 <div>{dayjs.unix(comment_time).format(datetimeFormat)}</div>
                 <div onClick={() => setShowReplyInput(!showReplyInput)}>{t("reply")}</div>
@@ -432,9 +430,8 @@ function Reply({
                 />
               </div>
               <div
-                className={`p-1 ${
-                  !replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"
-                } size-[30px] rounded-[50%]`}
+                className={`p-1 ${!replyInput || replyInput === "" ? "bg-sky-500/50" : "bg-theme"
+                  } size-[30px] rounded-[50%]`}
               >
                 <Image
                   src="/theme/icon_fans_comment_send@3x.png"
@@ -530,7 +527,7 @@ function Thumbup({
         alt=""
         className="max-w-4"
       />
-      <div className={`text-[10px] ${isThumbupped ? "text-theme" : "text-[#6D7781]"}`}>
+      <div className={`text-[10px] ${isThumbupped ? "text-theme" : "text-gray-secondary"}`}>
         {thumbupCount}
       </div>
     </div>

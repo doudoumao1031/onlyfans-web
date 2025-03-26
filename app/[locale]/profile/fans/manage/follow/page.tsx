@@ -16,7 +16,7 @@ interface FollowedUsersProps {
   fetcherFn: (page: number) => Promise<{ items: FansFollowItem[]; hasMore: boolean; }>
 }
 
-function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsersProps) {
+function FollowedUsers({ initialItems, initialHasMore, fetcherFn }: FollowedUsersProps) {
   return (
     <InfiniteScroll<FansFollowItem>
       initialItems={initialItems}
@@ -25,10 +25,10 @@ function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsers
     >
       {({ items, isLoading, hasMore, error }) => (
         <Fragment>
-          {Boolean(error) && <ListError/>}
-          {items?.map(item => <FollowedListItem data={item} key={item.user.id}/>)}
-          {isLoading && <ListLoading/>}
-          {!hasMore && items.length > 0 && <ListEnd/>}
+          {Boolean(error) && <ListError />}
+          {items?.map(item => <FollowedListItem data={item} key={item.user.id} />)}
+          {isLoading && <ListLoading />}
+          {!hasMore && items.length > 0 && <ListEnd />}
         </Fragment>
       )}
     </InfiniteScroll>
@@ -36,25 +36,25 @@ function FollowedUsers({ initialItems, initialHasMore,fetcherFn }: FollowedUsers
 }
 
 export default function Page() {
-  const [data,setData] = useState<PageResponse<FansFollowItem> | null>(null)
-  const [sortDesc,setSortDesc] = useState<boolean>(true)
-  const [name,setName] = useState<string>("")
+  const [data, setData] = useState<PageResponse<FansFollowItem> | null>(null)
+  const [sortDesc, setSortDesc] = useState<boolean>(true)
+  const [name, setName] = useState<string>("")
   const t = useTranslations("Profile.fans")
-  const fetcherFn = useCallback(async(page:number) => {
-    const data = await getFollowedUsers({ page, pageSize: 10, from_id: 0,desc: sortDesc })
+  const fetcherFn = useCallback(async (page: number) => {
+    const data = await getFollowedUsers({ page, pageSize: 10, from_id: 0, desc: sortDesc })
     return {
       items: data?.list || [],
       hasMore: !data?.list ? false : page < Math.ceil(data.total / page)
     }
-  },[sortDesc])
+  }, [sortDesc])
   const fetchInitData = () => {
-    getFollowedUsers({ page: 1, pageSize: 10, from_id: 0 ,desc: sortDesc ,name }).then(setData)
+    getFollowedUsers({ page: 1, pageSize: 10, from_id: 0, desc: sortDesc, name }).then(setData)
   }
-  useEffect(fetchInitData,[])
+  useEffect(fetchInitData, [])
 
-  useEffect(fetchInitData,[sortDesc])
+  useEffect(fetchInitData, [sortDesc])
 
-  const handleFormSubmit = (event:SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
+  const handleFormSubmit = (event: SyntheticEvent<HTMLFormElement, SubmitEvent>) => {
     event.preventDefault()
     fetchInitData()
   }
@@ -74,7 +74,7 @@ export default function Page() {
             />
           </div>
         </div>
-        <div className="flex items-center justify-between py-4 text-[14px]">
+        <div className="flex items-center justify-between py-4 text-sm">
           <span>
             <span className={"text-[#777]"}>{t("followTotal")}：</span>
             {data?.total}
@@ -83,7 +83,7 @@ export default function Page() {
         </div>
       </form>
 
-      {data && <FollowedUsers initialHasMore={Number(data?.total) > Number(data?.list?.length)} initialItems={data?.list ?? []} fetcherFn={fetcherFn}/>}
+      {data && <FollowedUsers initialHasMore={Number(data?.total) > Number(data?.list?.length)} initialItems={data?.list ?? []} fetcherFn={fetcherFn} />}
     </div>
   )
 }

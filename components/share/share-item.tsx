@@ -99,13 +99,13 @@ export default function Page({ data }: { data: UserProfile }) {
 
         </div>
       </div>
-      <div ref={headerRef} className="h-[44px] w-full"></div>
+      <div ref={headerRef} className="h-[44px] w-full bg-white"></div>
       <section className="relative rounded-t-3xl bg-white text-black">
         <section id="share-page" className="px-4 pb-3">
           <div className="flex justify-center">
             <Image className="rounded-full" src={data?.photo ? buildImageUrl(data.photo) : "/icons/icon_fansX_head.png"} width={90} height={90} alt="" />
           </div>
-          <h1 className="flex flex-col items-center justify-center text-center text-[18px] font-bold">
+          <h1 className="flex flex-col items-center justify-center text-center text-lg font-bold">
             <span>
               {data?.first_name} {data?.last_name}
             </span>

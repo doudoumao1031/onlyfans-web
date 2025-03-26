@@ -23,7 +23,7 @@ export default function Stats({
         height={15}
         alt=""
       />
-      <span className="text-[14px]">{value}</span>
+      <span className="text-sm">{value}</span>
     </div>
   )
 }

@@ -136,11 +136,11 @@ const Withdrawal = ({
           <div className="mt-4 grid grid-cols-2">
             <div className="flex flex-col items-center">
               <span className="mb-2 text-xs">{t("withdrawalAmountAvailable")}</span>
-              <span className="text-[20px]">{info.amount - (info?.freeze ?? 0)} USDT</span>
+              <span className="text-xl">{info.amount - (info?.freeze ?? 0)} USDT</span>
             </div>
             <div className="flex flex-col items-center">
               <span className="mb-2 text-xs">{t("withdrawalAmountFreeze")}</span>
-              <span className="text-[20px]">{info.freeze} USDT</span>
+              <span className="text-xl">{info.freeze} USDT</span>
             </div>
           </div>
           <div className="relative mt-10 flex items-center justify-between">
@@ -353,7 +353,7 @@ export default function Page() {
         </div>
         <div className="flex items-end justify-center p-6 pt-0">
           <span className="text-[32px] font-medium">{walletInfo?.amount}</span>
-          <span className="ml-2 pb-1 text-[18px] text-[#777]">USDT</span>
+          <span className="ml-2 pb-1 text-lg text-[#777]">USDT</span>
         </div>
         <div className="mb-5 mt-2 flex items-center justify-between px-4">
           <span className="text-xs">
@@ -382,7 +382,7 @@ export default function Page() {
         <div className="flex items-center justify-between border-t  border-[#DDDDDD] px-4 pt-5 text-base">
           <span className="font-bold">{t("incomeTrend")}</span>
           <Link href={"/profile/revenue"} className="flex items-center">
-            <span className="text-theme mx-2 text-[12px]">
+            <span className="text-theme mx-2 text-xs">
               收益明细
             </span>
             <IconWithImage

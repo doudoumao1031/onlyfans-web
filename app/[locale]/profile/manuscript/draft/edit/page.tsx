@@ -107,7 +107,7 @@ const AddVoteModal = ({
   updateVoteData: (data: iPostVote) => void
 }) => {
   const [open, setIsOpen] = useState<boolean>(false)
-  const defaultStopTime = Math.floor(dayjs().add(1,"day").endOf("day").valueOf() / 1000)
+  const defaultStopTime = Math.floor(dayjs().add(1, "day").endOf("day").valueOf() / 1000)
   const voteForm = useForm<iPostVote>({
     mode: "all",
     resolver: zodResolver(postVoteSchema),
@@ -231,24 +231,24 @@ const AddVoteModal = ({
                   <Controller
                     name={`items.${index}.content`}
                     control={control}
-                    render={({ field ,fieldState }) => {
+                    render={({ field, fieldState }) => {
                       return (
                         <InputWithLabel
                           errorMessage={fieldState.error?.message}
                           value={field.value}
                           onInputChange={field.onChange}
                           maxLength={20}
-                          label={`${t("manuscript.itemActions.voteOption")}${index+1}`}
+                          label={`${t("manuscript.itemActions.voteOption")}${index + 1}`}
                         />
                       )
                     }}
                   />
                   {itemsList.length > 2 && (
-                    <button type={"button"} className={"absolute right-[-8px] top-[-8px] z-20 p-1"} onTouchEnd={() => {
+                    <button type={"button"} className={"absolute -right-2 -top-2 z-20 p-1"} onTouchEnd={() => {
                       remove(index)
                     }}
                     >
-                      <img alt={"delete"} src={"/theme/icon_fans_delete@3x.png"} width={16} height={16}/>
+                      <img alt={"delete"} src={"/theme/icon_fans_delete@3x.png"} width={16} height={16} />
                     </button>
                   )}
                 </div>
@@ -256,22 +256,22 @@ const AddVoteModal = ({
             })}
             {
               itemsList.length < 9 && (
-              <button
-                type={"button"}
-                onTouchEnd={() => {
-                  append({ content: "" })
-                }}
-                className="border-border-theme text-text-theme flex w-full items-center justify-center gap-1.5 rounded-xl border py-2.5"
-              >
-                <IconWithImage
-                  url={"/icons/profile/icon_add@3x.png"}
-                  className={"bg-theme"}
-                  width={20}
-                  height={20}
-                />
-                {t("manuscript.itemActions.addVoteOption")}
-              </button>
-)
+                <button
+                  type={"button"}
+                  onTouchEnd={() => {
+                    append({ content: "" })
+                  }}
+                  className="border-border-theme text-text-theme flex w-full items-center justify-center gap-1.5 rounded-xl border py-2.5"
+                >
+                  <IconWithImage
+                    url={"/icons/profile/icon_add@3x.png"}
+                    className={"bg-theme"}
+                    width={20}
+                    height={20}
+                  />
+                  {t("manuscript.itemActions.addVoteOption")}
+                </button>
+              )
             }
           </section>
         </section>
@@ -596,8 +596,8 @@ const FirstFrameImage = ({ file, fileId }: { file: File | undefined, fileId?: st
     }
   }, [file])
 
-  if ( fileId) {
-    return   (
+  if (fileId) {
+    return (
       <Image
         className={"max-h-full max-w-full object-contain"}
         src={buildImageUrl(fileId)}
@@ -605,7 +605,7 @@ const FirstFrameImage = ({ file, fileId }: { file: File | undefined, fileId?: st
         width={100}
         height={100}
       />
-)
+    )
   }
   if (!file) {
     return (
@@ -1024,7 +1024,7 @@ const EditPageContent = () => {
   })
   useEffect(() => {
     console.log(postForm.formState.errors)
-  },[postForm.formState])
+  }, [postForm.formState])
 
   const { register, watch, formState, setValue, handleSubmit: handleFormSubmit } = postForm
 

@@ -87,7 +87,7 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
           <Header
             title={
               <span
-                className={`shrink-0 pt-px text-[18px] font-semibold  ${isTop ? "text-[#222]" : "text-white"
+                className={`shrink-0 pt-px text-lg font-semibold  ${isTop ? "text-[#222]" : "text-white"
                   }`}
               >
                 {t("mainTitle")}

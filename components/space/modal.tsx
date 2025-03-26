@@ -27,19 +27,19 @@ export default function Page({
   title,
   content,
   footer,
-  cancel = () => {},
-  confirm = () => {}
+  cancel = () => { },
+  confirm = () => { }
 }: TModalProps) {
   const t = useTranslations("Common")
   if (!visible) return null
   const DefaultFooter = () => {
     return (
-      <div className="flex h-[44px] w-full items-center justify-center border-t border-[#ebeced] text-[16px]">
+      <div className="flex h-[44px] w-full items-center justify-center border-t border-[#ebeced] text-base">
         <div
           onClick={() => {
             cancel()
           }}
-          className="flex h-full flex-1 items-center justify-center border-r border-[#ebeced] text-center text-[#6D7781]"
+          className="flex h-full flex-1 items-center justify-center border-r border-[#ebeced] text-center text-gray-secondary"
         >
           {cancelText || t("cancel")}
         </div>
@@ -84,7 +84,7 @@ export default function Page({
             width={20}
             height={20}
           />
-          {content && <span className="ml-2 text-[16px] font-medium text-white">{content}</span>}
+          {content && <span className="ml-2 text-base font-medium text-white">{content}</span>}
         </div>
       )}
     </div>

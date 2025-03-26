@@ -469,6 +469,17 @@
     "joinPotato": "Join Potato to unlock exclusive contact",
     "deepInPotato": "—— Deep in the exclusive fan community, let intimacy meet innovation",
     "joinPotatoChat": "Join Potato chat",
-    "joinPotatoDescription": "Build connections with your favorite creators, interact, and immerse yourself in content tailored just for you"
+    "joinPotatoDescription": "Build connections with your favorite creators, interact, and immerse yourself in content tailored just for you",
+    "justNow": "Just now",
+    "hoursAgo": "{hours} hours ago",
+    "daysAgo": "{days} days ago",
+    "translate": "Translate",
+    "noUserName": "The blogger has not filled in any data yet. Please fill in your personal information to start your wonderful journey...",
+    "like": "Like",
+    "comment": "Comment",
+    "tip": "Tip",
+    "share": "Share",
+    "save": "Save",
+    "relatedRecommendations": "Related Recommendations"
   }
 }

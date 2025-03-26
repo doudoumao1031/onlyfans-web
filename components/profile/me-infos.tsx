@@ -41,7 +41,7 @@ export default async function Page() {
           <div className={"flex justify-between"}>
             <div className={"relative top-[-24px]"}>
               <Avatar showLive={data.live_certification} fileId={data.photo} />
-              <h1 className="flex items-center gap-2 text-[18px] font-bold">
+              <h1 className="flex items-center gap-2 text-lg font-bold">
                 <span>
                   {data.first_name}
                 </span>
@@ -68,7 +68,7 @@ export default async function Page() {
               </div>
             </Link>
           </div>
-          <div className="mt-[-14px] text-[14px]">
+          <div className="mt-[-14px] text-sm">
             <FoldingDescription about={data.about} location={data.location} />
           </div>
         </section>

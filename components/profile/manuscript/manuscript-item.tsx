@@ -55,7 +55,7 @@ const ManuscriptActions = ({ id, postStatus, refresh, pinned }: {
 
   const canShareAndPin = useMemo(() => {
     return [1].includes(postStatus)
-  },[postStatus])
+  }, [postStatus])
 
   return (
     <section className="flex text-xs">
@@ -137,14 +137,14 @@ const ManuscriptItemState = ({ state }: { state: number }) => {
 }
 
 
-function LinkButton({ status,id,children }: { status: number,children: React.ReactNode,id: string | number }) {
+function LinkButton({ status, id, children }: { status: number, children: React.ReactNode, id: string | number }) {
   const canEdit = useMemo(() => {
     return [0, 1, 3].includes(status)
   }, [status])
   if (canEdit) {
     return <Link href={`/profile/manuscript/draft/edit?id=${id}`} className={"flex h-full flex-1 flex-col justify-between "}>{children}</Link>
   }
-  return  <div className={"flex h-full flex-1 flex-col justify-between "}>{children}</div>
+  return <div className={"flex h-full flex-1 flex-col justify-between "}>{children}</div>
 }
 
 export default function ManuscriptItem({ data, refresh }: { data: PostData, refresh?: () => void }) {
@@ -217,7 +217,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
           {/*<ManuscriptItemState state={"REJECT"}/>*/}
           <ManuscriptItemState state={data.post.post_status} />
           <div onClick={() => {
-            if ( [0, 1, 3].includes(data.post.post_status)) {
+            if ([0, 1, 3].includes(data.post.post_status)) {
               router.push(`/profile/manuscript/draft/edit?id=${data.post.id}`)
             }
           }} className={"flex size-[100px] shrink-0 items-center overflow-hidden rounded"}
@@ -233,9 +233,9 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
           </div>
           {/*href={`/profile/manuscript/draft/edit?id=${data.post.id}`} className={"flex-1 h-full flex flex-col justify-between "}*/}
           <LinkButton id={data.post.id} status={data.post.post_status}>
-            <h3 className="line-clamp-[2] text-[14px] font-medium">{data.post.title}</h3>
+            <h3 className="line-clamp-[2] text-sm font-medium">{data.post.title}</h3>
             <section
-              className={"text-text-desc flex flex-1 text-[12px]"}
+              className={"text-text-desc flex flex-1 text-xs"}
             >{data.post.pub_time ? dayjs(data.post.pub_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss) : ""}</section>
             <section className="flex justify-around gap-4 text-xs">
               <ShowNumberWithIcon number={data.post_metric?.thumbs_up_count ?? 0}

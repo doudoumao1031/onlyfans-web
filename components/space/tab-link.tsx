@@ -38,7 +38,7 @@ export default function TabLinks({ id, data }: { id: string; data: UserProfile |
           prefetch={true}
           key={link.name}
           href={link.href}
-          className={clsx("relative py-3.5 text-[20px]", pathNameClass(link.href))}
+          className={clsx("relative py-3.5 text-xl", pathNameClass(link.href))}
         >
           {`${link.name}(${link.num})`}
           <span

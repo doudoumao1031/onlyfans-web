@@ -53,7 +53,7 @@ export default function UserInfo({
             <Avatar showLive={data.live_certification} fileId={data.photo} />
           </div>
 
-          <h1 className="mt-1 flex  items-center justify-start  text-center text-[18px] font-bold">
+          <h1 className="mt-1 flex  items-center justify-start  text-center text-lg font-bold">
             <span className="max-w-[80%] truncate">
               {data.first_name}
             </span>
@@ -83,7 +83,7 @@ export default function UserInfo({
           </div> */}
           <Directions about={data.about} />
           <div className="mt-2 flex">
-            {data.location&&(
+            {data.location && (
               <div className="mr-4 flex max-w-[30%] items-center truncate">
                 <span className=" shrink-0">
                   <IconWithImage
@@ -95,42 +95,42 @@ export default function UserInfo({
                 </span>
                 <span className="ml-1 max-w-[130px] truncate text-xs text-gray-400">{data.location || "北京"}</span>
               </div>
-              )}
-            {!!data.birthday&&(
-            <div className="mr-4 flex items-center">
-              <span className=" shrink-0">
-                <IconWithImage
-                  url="/theme/icon_info_birthday@3x.png"
-                  width={16}
-                  height={16}
-                  color="#6D7781"
-                />
-              </span>
-              <span className="ml-1 max-w-[130px] truncate text-xs text-gray-400">{data.birthday}</span>
-            </div>
-              )}
-            {!!data.join_time&&(
-            <div className="mr-4 flex items-center">
-              <span className=" shrink-0">
-                <IconWithImage
-                  url="/theme/icon_info_date@3x.png"
-                  width={16}
-                  height={16}
-                  color="#6D7781"
-                />
-              </span>
-              <span className="ml-2 max-w-[130px] truncate text-xs text-gray-400">{dayjs(data.join_time).format("YYYY-MM-DD")}</span>
-            </div>
-              )}
+            )}
+            {!!data.birthday && (
+              <div className="mr-4 flex items-center">
+                <span className=" shrink-0">
+                  <IconWithImage
+                    url="/theme/icon_info_birthday@3x.png"
+                    width={16}
+                    height={16}
+                    color="#6D7781"
+                  />
+                </span>
+                <span className="ml-1 max-w-[130px] truncate text-xs text-gray-400">{data.birthday}</span>
+              </div>
+            )}
+            {!!data.join_time && (
+              <div className="mr-4 flex items-center">
+                <span className=" shrink-0">
+                  <IconWithImage
+                    url="/theme/icon_info_date@3x.png"
+                    width={16}
+                    height={16}
+                    color="#6D7781"
+                  />
+                </span>
+                <span className="ml-2 max-w-[130px] truncate text-xs text-gray-400">{dayjs(data.join_time).format("YYYY-MM-DD")}</span>
+              </div>
+            )}
           </div>
           <div className="mt-2 flex text-xs">
             <div className="mr-4">
-              <span>{data.fans_count||0}</span>
-              <span className="ml-1 text-[#6D7781]">{t("fansNum") }</span>
+              <span>{data.fans_count || 0}</span>
+              <span className="ml-1 text-[#6D7781]">{t("fansNum")}</span>
             </div>
             <div className="mr-4">
-              <span>{data.subscribe_count||0}</span>
-              <span className="ml-1 text-[#6D7781]">{t("subscribeNum") }</span>
+              <span>{data.subscribe_count || 0}</span>
+              <span className="ml-1 text-[#6D7781]">{t("subscribeNum")}</span>
             </div>
           </div>
           {!isSelf && !data.sub && (

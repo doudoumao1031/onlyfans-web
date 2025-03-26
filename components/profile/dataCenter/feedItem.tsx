@@ -68,7 +68,7 @@ export default function Page({ item }: TProps) {
             <div className="my-3 flex flex-wrap overflow-hidden transition-all duration-1000">
               {Object.keys(countTypes).map(v => (
                 <div key={v} className="my-3 flex w-2/6 flex-col items-center justify-center">
-                  <span className="text-[20px] font-medium">{post_metric[v as keyof typeof post_metric]}</span>
+                  <span className="text-xl font-medium">{post_metric[v as keyof typeof post_metric]}</span>
                   <span className="text-xs text-[#959595]">{countTypes[v as keyof typeof countTypes]}</span>
                 </div>
               ))}

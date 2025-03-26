@@ -106,7 +106,7 @@ export default function Page({ tabs, title }: TProos) {
         </div>
         <InputWithLabel
           placeholder={t("dataCenter.dateRange")}
-          labelClass="border-0 pl-0 pr-0 pb-0 pt-[0px] text-[#6D7781]"
+          labelClass="border-0 pl-0 pr-0 pb-0 pt-[0px] text-gray-secondary"
           iconSize={16}
           onInputChange={(e) => {
             setDateType(e as number)

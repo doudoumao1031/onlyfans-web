@@ -98,7 +98,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         {children}
       </button>
       <FormDrawer
-        title={<span className={"text-[18px] font-semibold"}>{t("title")}</span>}
+        title={<span className={"text-lg font-semibold"}>{t("title")}</span>}
         headerLeft={(close) => {
           return (
             <button

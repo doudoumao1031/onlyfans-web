@@ -36,7 +36,7 @@ export default function Header({ handleBack, title, right, titleColor, backIconC
         </button>
         {leftTitle}
       </div>
-      <div className={"flex-1 text-center text-[18px] font-semibold"} style={{ color: titleColor ?? "#fff" }}>{title}</div>
+      <div className={"flex-1 text-center text-lg font-semibold"} style={{ color: titleColor ?? "#fff" }}>{title}</div>
       <div className="flex w-1/5 shrink-0 items-center justify-end gap-5">{right}</div>
     </section>
   )

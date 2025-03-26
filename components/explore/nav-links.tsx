@@ -67,7 +67,7 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
           ref={link.active ? activeLinkRef : null}
           onClick={(e) => handleNavClick(e, link.href, link?.event)}
           className={clsx(
-            "relative whitespace-nowrap py-3.5 text-[20px]",
+            "relative whitespace-nowrap py-3.5 text-xl",
             link.active ? "font-bold text-black" : "font-normal text-[#777]",
             isFind ? "mr-8" : ""
           )}

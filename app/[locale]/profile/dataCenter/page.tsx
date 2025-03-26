@@ -138,27 +138,27 @@ export default function Page() {
             </div>
             <div className={`my-3 flex flex-wrap overflow-hidden transition-all duration-1000 ${v.isOpen ? "h-auto" : "h-0"}`}>
               <div className="my-3 flex w-2/6 flex-col items-center justify-center">
-                <span className="text-[20px] font-medium">99999</span>
+                <span className="text-xl font-medium">99999</span>
                 <span className="text-xs text-[#959595]">播放</span>
               </div>
               <div className="my-3 flex w-2/6 flex-col items-center justify-center">
-                <span className="text-[20px] font-medium">99999</span>
+                <span className="text-xl font-medium">99999</span>
                 <span className="text-xs text-[#959595]">评论</span>
               </div>
               <div className="my-3 flex w-2/6 flex-col items-center justify-center">
-                <span className="text-[20px] font-medium">99999</span>
+                <span className="text-xl font-medium">99999</span>
                 <span className="text-xs text-[#959595]">点赞</span>
               </div>
               <div className="my-3 flex w-2/6 flex-col items-center justify-center">
-                <span className="text-[20px] font-medium">99999</span>
+                <span className="text-xl font-medium">99999</span>
                 <span className="text-xs text-[#959595]">分享</span>
               </div>
               <div className="my-3 flex w-2/6 flex-col items-center justify-center">
-                <span className="text-[20px] font-medium">99999</span>
+                <span className="text-xl font-medium">99999</span>
                 <span className="text-xs text-[#959595]">打赏</span>
               </div>
               <div className="my-3 flex w-2/6 flex-col items-center justify-center">
-                <span className="text-[20px] font-medium">99999</span>
+                <span className="text-xl font-medium">99999</span>
                 <span className="text-xs text-[#959595]">收藏</span>
               </div>
 

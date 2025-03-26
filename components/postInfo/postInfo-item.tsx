@@ -198,10 +198,10 @@ export default function Page({ postData }: { postData: PostData }) {
               <CommonAvatar photoFileId={photo} size={32} />
             </div>
             <div className="ml-2">
-              <div className="max-w-[130px] truncate text-[14px]">
+              <div className="max-w-[130px] truncate text-sm">
                 {first_name} {last_name}
               </div>
-              <div className="text-[12px] text-black/50">{buildMention(username)}</div>
+              <div className="text-xs text-black/50">{buildMention(username)}</div>
             </div>
           </div>
         </Link>

@@ -23,7 +23,7 @@ export default function FoldingDescription({
       {(!hideState || about?.length < 100) && (
         <>
           {location ? (
-            <div className={"mt-1.5 flex gap-1 whitespace-normal break-all text-xs text-[#6D7781]"}>
+            <div className={"mt-1.5 flex gap-1 whitespace-normal break-all text-xs text-gray-secondary"}>
               <div className={"shrink-0"}>
                 <IconWithImage
                   url={"/icons/profile/icon-address.png"}

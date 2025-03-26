@@ -468,6 +468,17 @@
     "joinPotato": "加入Potato 解锁专属联系",
     "deepInPotato": "—— 深入唯粉，让亲密遇见创新",
     "joinPotatoChat": "加入Potato chat",
-    "joinPotatoDescription": "与您最喜爱的创作者建立联系，进行互动，并沉浸在专为您打造的内容中"
+    "joinPotatoDescription": "与您最喜爱的创作者建立联系，进行互动，并沉浸在专为您打造的内容中",
+    "justNow": "刚刚",
+    "hoursAgo": "{hours}小时前",
+    "daysAgo": "{days}天前",
+    "translate": "翻译",
+    "noUserName": "该博主还未填写任何数据，请填写个人信息,开启你的精彩之旅吧...",
+    "like": "点赞",
+    "comment": "评论",
+    "tip": "打赏",
+    "share": "分享",
+    "save": "收藏",
+    "relatedRecommendations": "相关推荐"
   }
 }

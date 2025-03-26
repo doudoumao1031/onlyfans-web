@@ -9,7 +9,7 @@ export default async function Page() {
   return (
     <>
       {bloggers.map((item: User) => (
-        <div key={item.id} className="mb-[10px] w-full">
+        <div key={item.id} className="mb-2.5 w-full">
           <UserCard user={item} />
         </div>
       ))}

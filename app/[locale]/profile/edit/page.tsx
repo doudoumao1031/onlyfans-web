@@ -98,10 +98,10 @@ export default function Page() {
         </div>
         <div className="profile-content relative bg-[url('/icons/image_fans_normal_05.png')] bg-cover">
           {formValues.back_img && (
-          <Image src={buildImageUrl(formValues.back_img)} alt={""} width={100} height={100}
-            className={"absolute size-full object-cover"}
-          />
-)}
+            <Image src={buildImageUrl(formValues.back_img)} alt={""} width={100} height={100}
+              className={"absolute size-full object-cover"}
+            />
+          )}
           <input
             type="file"
             accept="image/*"
@@ -119,7 +119,7 @@ export default function Page() {
         </div>
         <section className="relative bg-white pb-8">
           <section className="px-4 pb-3 ">
-            <div className={"relative top-[-24px] inline-block"}>
+            <div className={"relative -top-6 inline-block"}>
               <Avatar
                 showEdit
                 fileId={formValues.photo}
@@ -129,7 +129,7 @@ export default function Page() {
               />
             </div>
           </section>
-          <section className="mt-[-12px]">
+          <section className="-mt-3">
             <section className="flex flex-col gap-5 px-4 ">
               <section>
                 <Controller control={control} render={({ field }) => {

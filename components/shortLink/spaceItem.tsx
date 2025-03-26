@@ -38,7 +38,7 @@ export default function Page({ data, bloggers }: { data: UserProfile | undefined
               <IconWithImage url="/icons/checkbox_normal@3x.png" width={32} height={32} />
               <span className="text-xl font-medium text-white">{t("Potato")}</span>
             </div>
-            <div className={"flex-1 text-center text-[18px] font-semibold"}></div>
+            <div className={"flex-1 text-center text-lg font-semibold"}></div>
             <div className="flex w-2/5 shrink-0 items-center justify-end gap-5">
               <span className="text-theme rounded-2xl bg-white px-[10px] py-[3px] text-sm font-normal">{t("downloadApp")}</span>
             </div>
@@ -47,10 +47,10 @@ export default function Page({ data, bloggers }: { data: UserProfile | undefined
       </div>
       <section className="relative bg-white">
         <section className="px-5 pb-5">
-          <div className={"flex justify-between"}>
-            <div className={"relative top-[-24px]"}>
+          <div className="flex justify-between">
+            <div className="relative top-[-24px]">
               <Avatar showLive={data.live_certification} fileId={data.photo} />
-              <h1 className="flex items-center gap-2 text-[18px] font-bold">
+              <h1 className="flex items-center gap-2 text-lg font-bold">
                 <span>
                   {data.first_name}
                 </span>
@@ -90,7 +90,7 @@ export default function Page({ data, bloggers }: { data: UserProfile | undefined
         </section>
         <section className="px-4">
           {bloggers?.length > 0 && bloggers.map((item: User) => (
-            <div key={item.id} className="pointer-events-none mb-[10px] w-full">
+            <div key={item.id} className="pointer-events-none mb-2.5 w-full">
               <UserCard user={item} />
             </div>
           ))}

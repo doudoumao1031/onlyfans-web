@@ -94,7 +94,7 @@ export default function Page() {
                           }
                         />
                         {(v.post.visibility !== 0 && v.user.id !== sid) && (
-                          <div className="absolute left-0 top-0 z-0 size-full rounded-lg bg-black bg-opacity-5 backdrop-blur"></div>
+                          <div className="absolute left-0 top-0 z-0 size-full rounded-lg bg-black/5 backdrop-blur"></div>
                         )}
                       </div>
                       <div className="flex flex-1 flex-col justify-between">

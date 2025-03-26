@@ -31,7 +31,7 @@ export default function TabLinks(props: { links: LinkProps[] }) {
           prefetch={true}
           key={link.name}
           href={link.href}
-          className={clsx("relative py-3.5 text-[20px]", pathNameClass(link.href))}
+          className={clsx("relative py-3.5 text-xl", pathNameClass(link.href))}
         >
           {`${link.name}`}
           <span className={clsx("bg-theme absolute bottom-0 left-[50%] ml-[-20px] h-[3px] w-[40px] rounded-t-lg", pathName.endsWith(link.href) ? "block" : "hidden")}></span>

@@ -50,13 +50,13 @@ export default async function Page(props: {
         </div>
       )}
       {query !== "" && users && users.total > 0 && users.list && (
-        <div className="flex flex-col justify-start px-4 pt-[20px]">
-          <span className="text-left font-medium text-[#6D7781]">{t("users")}</span>
-          <div className="mt-[10px] w-full overflow-x-auto">
+        <div className="flex flex-col justify-start px-4 pt-5">
+          <span className="text-gray-secondary text-left font-medium">{t("users")}</span>
+          <div className="mt-2.5 w-full overflow-x-auto">
             <div className="flex space-x-4">
               {users.list.map((item, index) => (
                 <div key={index} className="min-w-[343px]">
-                  <UserCard key={index} user={item}  />
+                  <UserCard key={index} user={item} />
                 </div>
               ))}
             </div>
@@ -69,9 +69,9 @@ export default async function Page(props: {
       {query !== "" && posts && posts.total > 0 && (
         <>
           <div className="flex flex-col justify-start px-4">
-            <span className="text-left font-medium text-[#6D7781]">{t("posts")}</span>
+            <span className="text-gray-secondary text-left font-medium">{t("posts")}</span>
           </div>
-          <div className="mt-[10px] w-full">
+          <div className="mt-2.5 w-full">
             {posts.list.map((item, index) => (
               <div key={index} className="mx-auto grid max-w-lg grid-cols-1 gap-4 px-4">
                 <Post data={item} hasSubscribe={false} hasVote={false} />

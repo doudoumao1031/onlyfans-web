@@ -21,7 +21,7 @@ export default function Page({ value, highlight = false }: {
           )
         }
       </label>
-      <span className="text-[14px]">{value}</span>
+      <span className="text-sm">{value}</span>
     </div>
   )
 }
