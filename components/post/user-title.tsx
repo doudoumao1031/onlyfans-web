@@ -7,6 +7,7 @@ import { ZH_MM_DD_HH_mm } from "@/lib/constant"
 
 import { buildMention } from "./utils"
 import IconWithImage from "../profile/icon"
+import { MomentTime } from "../shortLink/postInfoItem"
 
 export default function UserTitle({
   user,
@@ -44,7 +45,8 @@ export default function UserTitle({
             color={"#777"}
           />
         ) : (
-          <span className="text-nowrap">{dayjs(pub_time * 1000).format(ZH_MM_DD_HH_mm)}</span>
+          // <span className="text-nowrap">{dayjs(pub_time * 1000).format(ZH_MM_DD_HH_mm)}</span>
+          <span className="text-nowrap">{MomentTime(pub_time)}</span>
         )}
       </div>
     </div>

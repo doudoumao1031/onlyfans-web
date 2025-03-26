@@ -13,7 +13,7 @@ import Avatar from "../profile/avatar"
 import IconWithImage from "../profile/icon"
 import UserCard from "../user/user-card"
 
-function MomentTime(number: number) {
+export function MomentTime(number: number) {
   const locale = useLocale()
   const t = useTranslations("ShortLink")
   const time = number * 1000
