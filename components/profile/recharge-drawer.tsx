@@ -8,7 +8,7 @@ import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { Link } from "@/i18n/routing"
-import { addWalletOrder, handleRechargeOrderCallback, IosPayArray, userPtWallet } from "@/lib"
+import { addWalletOrder, IosPayArray, userPtWallet } from "@/lib"
 import { ANDROID, IOS } from "@/lib/constant"
 
 
@@ -24,7 +24,7 @@ export default function RechargeDrawer(props: RechargeProps) {
   const { children, isOpen, setIsOpen, setWfAmount } = props
   const { showMessage } = useCommonMessageContext()
   const getDeviceType = () => {
-    if (typeof window === "undefined") return "android"
+    if (typeof window === "undefined") return ANDROID
     const userAgent = window.navigator.userAgent.toLowerCase()
     if (userAgent.includes("iphone") || userAgent.includes("ipad") || userAgent.includes("ipod") || userAgent.includes("ios")) {
       return IOS
@@ -79,7 +79,7 @@ export default function RechargeDrawer(props: RechargeProps) {
       })
       // 发起支付 （ios/android）
       const param = {
-        currency: "USDT",
+        currency: "USDT-TRC20",
         amount: amount.toString(),
         tradeNo: tradeNo
       }
@@ -102,8 +102,8 @@ export default function RechargeDrawer(props: RechargeProps) {
         headerLeft={(close) => {
           return (
             <button
-              onTouchEnd={(e) => {
-                e.preventDefault()
+              type={"button"}
+              onTouchEnd={() => {
                 close()
               }}
               className={"text-base text-[#777]"}
