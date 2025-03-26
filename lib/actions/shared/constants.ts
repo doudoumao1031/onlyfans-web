@@ -25,7 +25,10 @@ export const ENDPOINTS = {
     UPLOAD: "/media/upload",
     UPLOAD_PART: "/media/uploadPart",
     VIDEO: "/media/video",
-    VIDEO_CUT: "/media/videocut"
+    VIDEO_CUT: "/media/videocut",
+    MEDIA_ENC: "/media/enc",
+    MEDIA_HLS: "/media/hls",
+    MEDIA_HLSDATA: "/media/hlsdata"
   },
   POST: {
     ADD: "/post/add",
