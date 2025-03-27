@@ -113,7 +113,7 @@ export default function Page({ data }: { data: UserProfile }) {
             </span>
             <span className="text-text-desc text-xs font-normal">{data?.username
               ? "@" + data?.username
-              : t("noUserName")}</span>
+              : ""}</span>
           </h1>
           <div className="mt-[30px]">
             <div className="mx-auto flex size-[240px] items-center justify-center bg-black/50">
@@ -122,7 +122,7 @@ export default function Page({ data }: { data: UserProfile }) {
           </div>
           <div className="mt-[30px] w-full">
             <div className="relative h-[100px] w-full">
-              <Image objectFit="cover" fill src={data?.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"} alt="" />
+              <Image className="rounded-sm" objectFit="cover" fill src={data?.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"} alt="" />
             </div>
           </div>
           <div className="mt-[30px] opacity-0">.</div>
