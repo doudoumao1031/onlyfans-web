@@ -50,7 +50,7 @@ const HLSPlayer = ({ src, encryptionKeyUrl }: HLSPlayerProps) => {
         }
 
         if (video.mediaKeys) {
-          hls.emeController.setMediaKeys(video, keySystems)
+          // hls.emeController.setMediaKeys(video, keySystems)
         }
       })
 
