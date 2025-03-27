@@ -26,6 +26,10 @@ if (typeof window !== "undefined") {
           emitter.emit(BRIDGE_EVENT_NAME.responseRecharge, data)
           return true
         }
+        case BRIDGE_EVENT_NAME.iosResponseRecharge: {
+          emitter.emit(BRIDGE_EVENT_NAME.iosResponseRecharge, data)
+          return true
+        }
         default:
           return Promise.resolve()
       }
