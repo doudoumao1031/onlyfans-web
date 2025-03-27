@@ -9,6 +9,7 @@ import { User } from "@/lib"
 import { useGlobal } from "@/lib/contexts/global-context"
 import { buildImageUrl } from "@/lib/utils"
 
+import ImgPreview from "./Img-preview"
 import { Attachment, FileType, TPost } from "./types"
 import { VideoPreview } from "./video-preview"
 import IconWithImage from "../profile/icon"
@@ -85,30 +86,7 @@ export default function Media(props: MediaProps) {
                       {file_type === FileType.Video ? (
                         <VideoPreview fileId={file_id} thumbId={thumb_id} />
                       ) : (
-                        <div className=" relative flex justify-center overflow-hidden">
-                          {data.length === 1 && (
-                            <div className="absolute left-0 top-0 size-full">
-                              <LazyImg
-                                className="z-[-1] aspect-square size-full object-cover blur-[10px]"
-                                src={buildImageUrl(file_id)}
-                                alt=""
-                                width={200}
-                                height={200}
-                              />
-                            </div>
-                          )}
-                          <LazyImg
-                            className={`relative  z-10 aspect-square ${data.length === 1
-                              ? "max-h-[200px] object-contain"
-                              : " object-cover"
-                              }`}
-                            src={buildImageUrl(file_id)}
-                            alt=""
-                            width={200}
-                            height={200}
-                            layout="responsive"
-                          />
-                        </div>
+                        <ImgPreview data={data} file_id={file_id}/>
                       )}
                     </button>
                   )
@@ -138,28 +116,7 @@ export default function Media(props: MediaProps) {
                       {file_type === FileType.Video ? (
                         <VideoPreview fileId={file_id} thumbId={thumb_id} />
                       ) : (
-                        <div className=" relative flex justify-center overflow-hidden">
-                          {data.length === 1 && (
-                            <div className="absolute left-0 top-0 size-full">
-                              <LazyImg
-                                className="z-[-1] aspect-square size-full   object-cover blur-[10px]"
-                                src={buildImageUrl(file_id)}
-                                alt=""
-                                width={200}
-                                height={200}
-                              />
-                            </div>
-                          )}
-                          <LazyImg
-                            className={`relative z-10 aspect-square w-full ${data.length === 1 ? "object-contain " : " object-cover"
-                              }`}
-                            src={buildImageUrl(file_id)}
-                            alt=""
-                            width={200}
-                            height={200}
-                            layout="intrinsic"
-                          />
-                        </div>
+                        <ImgPreview data={data} file_id={file_id}/>
                       )}
                     </Link>
                   )

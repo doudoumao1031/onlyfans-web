@@ -17,10 +17,17 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const backgroundVideoRef = useRef<HTMLVideoElement>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isVertical, setIsVertical] = useState(true)
 
   useEffect(() => {
     const video = videoRef.current
     if (!video) return
+
+    const handleLoadedMetadata = () => {
+      setIsVertical(video.videoHeight > video.videoWidth)
+    }
+
+    video.addEventListener("loadedmetadata", handleLoadedMetadata)
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -46,12 +53,11 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
         currentlyPlaying = null
       }
       observer.unobserve(video)
-      if (video) {
-        video.pause()
-      }
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata)
+      video.pause()
     }
   }, [])
-  // 同步播放状态
+
   const handlePlay = () => {
     if (backgroundVideoRef.current && videoRef.current) {
       backgroundVideoRef.current.play()
@@ -63,8 +69,9 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
       backgroundVideoRef.current.pause()
     }
   }
+
   return (
-    <div className="relative aspect-square w-full rounded-xl" >
+    <div className={`relative ${isVertical&&"aspect-square"} w-full rounded-xl `}>
       {isLoading &&
         (thumbId ? (
           <Image
@@ -78,16 +85,18 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
           <Skeleton className="absolute size-full rounded-xl" />
         ))}
       <div className="relative size-full overflow-hidden">
-        <video
-          ref={backgroundVideoRef}
-          src={buildVideoUrl(fileId, "240p")}
-          className="absolute left-0 top-0 z-[-1] size-full object-cover blur-[10px]"
-          muted
-          loop
-        />
+        {isVertical && (
+          <video
+            ref={backgroundVideoRef}
+            src={buildVideoUrl(fileId, "240p")}
+            className="absolute left-0 top-0 z-[-1] size-full object-cover blur-[10px]"
+            muted
+            loop
+          />
+        )}
         <video
           ref={videoRef}
-          className="size-full  object-contain"
+          className="size-full object-contain"
           poster={buildImageUrl(thumbId || fileId)}
           src={buildVideoUrl(fileId, "240p")}
           playsInline
@@ -98,6 +107,6 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
           onCanPlay={() => setIsLoading(false)}
         />
       </div>
-    </div >
+    </div>
   )
 }
