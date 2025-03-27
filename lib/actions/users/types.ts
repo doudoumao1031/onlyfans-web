@@ -100,7 +100,7 @@ export interface IosPayArray {
  */
 export interface PtWalletInfo extends WalletInfo {
   proportion: string
-  ios_pay_arr: IosPayArray[]
+  ios_PTFansX_Tierarr: IosPayArray[]
 }
 
 /**

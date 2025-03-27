@@ -58,7 +58,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         setWfBalance(result.data.amount)
         setProportion(result.data.proportion)
         setWfAmount(result.data.amount)
-        setIosPayArray(result.data.ios_pay_arr)
+        setIosPayArray(result.data.ios_PTFansX_Tierarr)
       }
     })
   }
@@ -194,7 +194,7 @@ export default function RechargeDrawer(props: RechargeProps) {
               )}
             </div>
           )}
-          {type === IOS && (
+          {type === IOS && iosPayArray && (
             <div className={"grid w-full grid-cols-3 gap-x-3 gap-y-5 px-4"}>
               {iosPayArray.map((item, i) => {
                 return (
