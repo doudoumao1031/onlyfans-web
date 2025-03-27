@@ -87,7 +87,7 @@ export function VideoPreview({ fileId, thumbId }: VideoPreviewProps) {
         />
         <video
           ref={videoRef}
-          className="size-full rounded-xl object-contain"
+          className="size-full  object-contain"
           poster={buildImageUrl(thumbId || fileId)}
           src={buildVideoUrl(fileId, "240p")}
           playsInline

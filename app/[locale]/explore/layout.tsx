@@ -68,7 +68,7 @@ export default function Layout({
             }`}
         >
           <Nav isFind={!!isFind} />
-          <div className="h-[calc(100%-60px)] w-full grow px-4 py-3">
+          <div className="h-[calc(100%-60px)] w-full grow  py-3">
             <div className={`size-full ${path.indexOf("/explore/feed") > -1 ? "" : "hidden"}`}>
               {feed}
             </div>
@@ -78,13 +78,13 @@ export default function Layout({
               {followed}
             </div>
             <div
-              className={`size-full ${path.indexOf("/explore/recommended") > -1 ? "" : "hidden"
+              className={`size-full ${path.indexOf("/explore/recommended") > -1 ? "px-4" : "hidden"
                 }`}
             >
               {recommended}
             </div>
             <div
-              className={`size-full ${path.indexOf("/explore/subscribed") > -1 ? "" : "hidden"
+              className={`size-full ${path.indexOf("/explore/subscribed") > -1 ? "px-4" : "hidden"
                 }`}
             >
               {subscribed}

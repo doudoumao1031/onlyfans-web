@@ -38,7 +38,7 @@ export default function Media(props: MediaProps) {
         </span>
       </div>
       <LazyImg
-        className={"block aspect-square rounded-md"}
+        className={"block aspect-square "}
         src={hasThumbId ? buildImageUrl(data[0]?.thumb_id) : "/icons/default/img_media_default_lj.png"}
         alt=""
         style={{
@@ -63,7 +63,7 @@ export default function Media(props: MediaProps) {
       {(post.visibility === 0 || (post.visibility === 1 && user.sub)) && (
         <div
           className={
-            data.length > 1 ? "relative grid  grid-cols-3 gap-2 " : "relative size-full"
+            data.length > 1 ? "relative grid  grid-cols-3 gap-1 " : "relative size-full"
           }
         >
           {
@@ -89,7 +89,7 @@ export default function Media(props: MediaProps) {
                           {data.length === 1 && (
                             <div className="absolute left-0 top-0 size-full">
                               <LazyImg
-                                className="z-[-1] aspect-square size-full rounded-md  object-cover blur-[10px]"
+                                className="z-[-1] aspect-square size-full object-cover blur-[10px]"
                                 src={buildImageUrl(file_id)}
                                 alt=""
                                 width={200}
@@ -100,7 +100,7 @@ export default function Media(props: MediaProps) {
                           <LazyImg
                             className={`relative  z-10 aspect-square ${data.length === 1
                               ? "max-h-[200px] object-contain"
-                              : "rounded-md object-cover"
+                              : " object-cover"
                               }`}
                             src={buildImageUrl(file_id)}
                             alt=""
@@ -142,7 +142,7 @@ export default function Media(props: MediaProps) {
                           {data.length === 1 && (
                             <div className="absolute left-0 top-0 size-full">
                               <LazyImg
-                                className="z-[-1] aspect-square size-full rounded-md  object-cover blur-[10px]"
+                                className="z-[-1] aspect-square size-full   object-cover blur-[10px]"
                                 src={buildImageUrl(file_id)}
                                 alt=""
                                 width={200}
@@ -151,7 +151,7 @@ export default function Media(props: MediaProps) {
                             </div>
                           )}
                           <LazyImg
-                            className={`relative z-10 aspect-square w-full ${data.length === 1 ? "object-contain " : "rounded-md object-cover"
+                            className={`relative z-10 aspect-square w-full ${data.length === 1 ? "object-contain " : " object-cover"
                               }`}
                             src={buildImageUrl(file_id)}
                             alt=""

@@ -240,7 +240,7 @@ export default function Page({ postData }: { postData: PostData }) {
   if (!postInfo) return null
 
   return (
-    <div className="p-4 pt-20">
+    <div className=" pt-20">
       <Header />
       <Post
         data={postInfo as unknown as PostData}
