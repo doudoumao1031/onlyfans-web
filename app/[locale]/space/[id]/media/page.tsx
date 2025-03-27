@@ -42,7 +42,7 @@ export default function Page() {
     }
   })
   return (
-    <div className="size-full">
+    <div className="size-full px-4">
       {initData && (
         <InfiniteScroll<PostData>
           className={"mx-auto size-full"}

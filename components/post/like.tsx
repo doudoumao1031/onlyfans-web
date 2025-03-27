@@ -10,10 +10,11 @@ interface LikeProps {
   count: number
   liked: boolean
   postId: number
+  notice?: boolean
   outLike?: boolean // External like (like when tipping)
 }
 
-export default function Like({ count, liked, postId, outLike }: LikeProps) {
+export default function Like({ count, liked, postId, notice, outLike }: LikeProps) {
   const [isLiked, setIsLiked] = useState<boolean>(liked)
   const [likes, setLikes] = useState<number>(count)
   const { showMessage } = useCommonMessageContext()

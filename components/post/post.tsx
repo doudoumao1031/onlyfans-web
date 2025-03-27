@@ -88,20 +88,22 @@ export default function Post({
     <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
       {renderNode}
       <div className="mb-2 flex w-full flex-col gap-2">
-        {!isInfoPage && (
+        <div className="px-4">
+          {!isInfoPage && (
           <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} space={space} />
         )}
 
-        <Description
-          mentionUser={mention_user}
-          content={post.title}
-          linkRender={!isInfoPage ? linkRender : undefined}
-        />
-        {!isSpace() && (
+          <Description
+            mentionUser={mention_user}
+            content={post.title}
+            linkRender={!isInfoPage ? linkRender : undefined}
+          />
+          {!isSpace() && (
           <Link href={buildUserHomePagePath(user.id)} className="text-theme px-3">
             {t("moreInfoText")}
           </Link>
         )}
+        </div>
         {post_attachment && post_attachment.length > 0 && (
           <Media
             data={post_attachment}
@@ -111,15 +113,16 @@ export default function Post({
             followConfirm={followConfirm}
           />
         )}
-        {hasSubscribe && mention_user && mention_user.length > 0 && (
+        <div className="px-4">
+          {hasSubscribe && mention_user && mention_user.length > 0 && (
           <div className={"grid gap-2"}>
             {mention_user.map((user) => (
               <UserCard key={user.id} user={user} />
             ))}
           </div>
         )}
-        {hasSubscribe && user && !user?.sub && !mention_user && <UserCard user={user} />}
-        {hasVote && post_vote && (
+          {hasSubscribe && user && !user?.sub && !mention_user && <UserCard user={user} />}
+          {hasVote && post_vote && (
           <div className="flex items-end gap-2" onClick={() => setShowVote((pre) => !pre)}>
             <Image src="/theme/icon_fans_vote_red@3x.png" alt="" width={20} height={20} />
             <div className="text-theme text-sm">{t("vote")}</div>
@@ -130,22 +133,23 @@ export default function Post({
             )}
           </div>
         )}
-        {hasVote && showVote && <Vote postId={post.id} />}
-        <div className="flex items-center justify-between gap-4 border-b border-black/5 pr-[10px]">
-          <Like
-            count={thumbs_up_count}
-            liked={star}
-            postId={post.id}
-            outLike={!star && tipStar}
-          />
-          {isInfoPage ? (
-            <CommentStats
-              count={comment_count + adjustCommentCount}
-              disable={post.visibility !== 0 && user.id !== sid}
-              onClick={async () => {
+          {hasVote && showVote && <Vote postId={post.id} />}
+          <div className="flex items-center justify-between gap-4 border-b border-black/5 pr-[10px]">
+            <Like
+              count={thumbs_up_count}
+              liked={star}
+              postId={post.id}
+              notice={isInfoPage}
+              outLike={!star && tipStar}
+            />
+            {isInfoPage ? (
+              <CommentStats
+                count={comment_count + adjustCommentCount}
+                disable={post.visibility !== 0 && user.id !== sid}
+                onClick={async () => {
                 if (post.visibility === 0) await toggleComments()
               }}
-            />
+              />
           ) : (
             <Link href={`/postInfo/${post.id}`} className="flex items-end">
               <CommentStats
@@ -154,17 +158,17 @@ export default function Post({
               />
             </Link>
           )}
-          <Tip
-            count={tip_count}
-            postId={post.id}
-            self={sid === user.id}
-            tipStar={setTipStar}
-            notice={isInfoPage}
-          />
-          <Share
-            count={share_count}
-            postId={post.id}
-            shareParams={{
+            <Tip
+              count={tip_count}
+              postId={post.id}
+              self={sid === user.id}
+              tipStar={setTipStar}
+              notice={isInfoPage}
+            />
+            <Share
+              count={share_count}
+              postId={post.id}
+              shareParams={{
               postId: post.id.toString(),
               title: post.title,
               firstName: user.first_name,
@@ -173,10 +177,10 @@ export default function Post({
               fansId: user.id.toString(),
               data: post_attachment
             }}
-          />
-          <Save count={collection_count} saved={collection} postId={post.id} notice={isInfoPage} />
-        </div>
-        {showComments &&
+            />
+            <Save count={collection_count} saved={collection} postId={post.id} notice={isInfoPage} />
+          </div>
+          {showComments &&
           (commentsLoading ? (
             <CommentSkeleton></CommentSkeleton>
           ) : (
@@ -189,6 +193,7 @@ export default function Post({
               increaseCommentCount={() => setAdjustCommentCount((c) => c + 1)}
             />
           ))}
+        </div>
       </div>
     </CommonMessageContext.Provider>
   )
