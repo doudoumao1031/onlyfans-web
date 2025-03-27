@@ -3,10 +3,10 @@
 import React, { Fragment, useEffect, useRef, useState } from "react"
 
 import Post from "@/components/post/post"
+import { usePostUpdates } from "@/hooks/usePostUpdates"
 import { PostData } from "@/lib"
 import { recomActions } from "@/lib/actions"
-import { postDetail } from "@/lib/actions/profile"
-import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
+import { ActionTypes } from "@/lib/contexts/global-context"
 
 import { ListError, ListLoading, ListEnd } from "./list-states"
 import InfiniteScroll from "../common/infinite-scroll"
@@ -27,15 +27,8 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
   const scrollToTopFn = useRef<(() => void) | null>(null)
   const refreshFn = useRef<(() => Promise<void>) | null>(null)
   const [itemsMap, setItemsMap] = useState<Map<number, PostData>>(new Map())
-  // Add a state to force re-render when a post is updated
-  const [updatedPostIds, setUpdatedPostIds] = useState<Set<number>>(new Set())
-  const { actionQueue } = useGlobal()
-  // Track processed post IDs to prevent duplicate API calls
-  const processedPostIds = useRef<Set<number>>(new Set())
-  // Track the last action to prevent duplicate processing
-  const lastProcessedActionRef = useRef<number>(-1)
   // Store current items from InfiniteScroll
-  const [currentItems, setCurrentItems] = useState<PostData[]>(initialItems)
+  const [currentItems, setCurrentItems] = useState<PostData[]>([])
 
   // Initialize the map with initial items
   useEffect(() => {
@@ -60,43 +53,8 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
     }
   }, [])
 
-  // Function to update a specific post
-  const updatePost = async (postId: number) => {
-    if (!postId || !itemsMap.has(postId)) return
-
-    // Skip if we've already processed this post ID recently
-    if (processedPostIds.current.has(postId)) return
-
-    // Add to processed set with a timeout to clear it after a while
-    processedPostIds.current.add(postId)
-    setTimeout(() => {
-      processedPostIds.current.delete(postId)
-    }, 2000) // Prevent duplicate calls within 2 seconds
-
-    try {
-      console.log(`Fetching updated data for post ${postId}`)
-      const res = await postDetail(postId)
-      if (res?.data) {
-        console.log(`Successfully updated post ${postId}`)
-
-        // Update the map with the new post data
-        setItemsMap(prevMap => {
-          const newMap = new Map(prevMap)
-          newMap.set(postId, res.data as unknown as PostData)
-          return newMap
-        })
-
-        // Add to updated post IDs to force re-render
-        setUpdatedPostIds(prev => {
-          const newSet = new Set(prev)
-          newSet.add(postId)
-          return newSet
-        })
-      }
-    } catch (error) {
-      console.error("Failed to update post:", error)
-    }
-  }
+  // Use the custom hook for post updates
+  const { updatePost } = usePostUpdates(itemsMap, setItemsMap)
 
   // Listen for individual post update events
   useEffect(() => {
@@ -113,53 +71,7 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
     return () => {
       window.removeEventListener(ActionTypes.Feed.UPDATE_POST, handlePostUpdate)
     }
-  }, []) // Keep empty dependency array to prevent re-registering
-
-  // Watch for post update actions in the global action queue
-  useEffect(() => {
-    if (actionQueue.length === 0) return
-
-    const currentActionIndex = actionQueue.length - 1
-    // Skip if we've already processed this action
-    if (lastProcessedActionRef.current === currentActionIndex) return
-
-    const latestAction = actionQueue[currentActionIndex]
-    if (latestAction?.type === ActionTypes.Feed.UPDATE_POST && latestAction.payload) {
-      const postId = Number(latestAction.payload)
-
-      // Update the last processed action index
-      lastProcessedActionRef.current = currentActionIndex
-
-      if (itemsMap.has(postId)) {
-        console.log(`Processing update action for post ${postId}`)
-        // Directly update the post instead of dispatching an event
-        updatePost(postId)
-      }
-    }
-  }, [actionQueue]) // Remove itemsMap from dependencies to prevent unnecessary re-runs
-
-  // Update the items map when new items are loaded
-  useEffect(() => {
-    setItemsMap(prevMap => {
-      const newMap = new Map<number, PostData>()
-      currentItems.forEach(item => {
-        // Preserve any updated items we already have in the map
-        if (prevMap.has(item.post.id)) {
-          newMap.set(item.post.id, prevMap.get(item.post.id)!)
-        } else {
-          newMap.set(item.post.id, item)
-        }
-      })
-      return newMap
-    })
-  }, [currentItems]) // Only depend on currentItems
-
-  // Log the updated posts for debugging
-  useEffect(() => {
-    if (updatedPostIds.size > 0) {
-      console.log("Updated posts in render:", Array.from(updatedPostIds))
-    }
-  }, [updatedPostIds])
+  }, [updatePost]) // Add updatePost to dependencies
 
   return (
     <InfiniteScroll<PostData>
@@ -174,6 +86,20 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
         // Update the current items state when the items from InfiniteScroll change
         if (JSON.stringify(items.map(i => i.post.id)) !== JSON.stringify(currentItems.map(i => i.post.id))) {
           setCurrentItems(items)
+
+          // Update itemsMap directly when currentItems changes
+          setItemsMap(prevMap => {
+            const newMap = new Map<number, PostData>()
+            items.forEach(item => {
+              // Preserve any updated items we already have in the map
+              if (prevMap.has(item.post.id)) {
+                newMap.set(item.post.id, prevMap.get(item.post.id)!)
+              } else {
+                newMap.set(item.post.id, item)
+              }
+            })
+            return newMap
+          })
         }
 
         // Convert the map back to an array for rendering
@@ -186,10 +112,9 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
           <Fragment>
             {Boolean(error) && <ListError />}
             <div className="mx-auto grid max-w-lg grid-cols-1 gap-4">
-              {displayItems.map((item, index) => (
+              {displayItems.map((item) => (
                 <Post
-                  // Update the key to include updatedPostIds size to force re-render when posts are updated
-                  key={`${item.post.id}-${index}-${item.post_metric.thumbs_up_count}-${item.post_metric.comment_count}-${item.post_metric.tip_count}-${item.post_metric.share_count}-${item.post_metric.collection_count}-${updatedPostIds.size}`}
+                  key={`${item.post.id}-${item.post_metric.thumbs_up_count}-${item.post_metric.comment_count}-${item.post_metric.tip_count}-${item.post_metric.share_count}-${item.post_metric.collection_count}`}
                   data={item}
                   hasSubscribe
                   hasVote

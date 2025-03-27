@@ -136,7 +136,6 @@ export default function Post({
             count={thumbs_up_count}
             liked={star}
             postId={post.id}
-            notice={isInfoPage}
             outLike={!star && tipStar}
           />
           {isInfoPage ? (
