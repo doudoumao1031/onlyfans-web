@@ -25,8 +25,14 @@ type FeedParams = PageInfo & {
 
 export default function FeedList({ initialItems, initialHasMore, isSelf, id }: FeedListProps) {
   // Add state for tracking posts and their updates
-  const [itemsMap, setItemsMap] = useState<Map<number, PostData>>(new Map())
-  const [currentItems, setCurrentItems] = useState<PostData[]>([])
+  const [itemsMap, setItemsMap] = useState<Map<number, PostData>>(() => {
+    // Initialize map with initial items
+    const map = new Map<number, PostData>()
+    initialItems.forEach(item => {
+      map.set(item.post.id, item)
+    })
+    return map
+  })
 
   // Use the custom hook for post updates
   const { updatePost } = usePostUpdates(itemsMap, setItemsMap)
@@ -63,30 +69,17 @@ export default function FeedList({ initialItems, initialHasMore, isSelf, id }: F
       fetcherFn={infiniteFetchPosts}
     >
       {({ items, isLoading, hasMore, error }) => {
-        // Update itemsMap when items change
-        if (JSON.stringify(items.map(i => i.post.id)) !== JSON.stringify(currentItems.map(i => i.post.id))) {
-          setCurrentItems(items)
-
-          // Update itemsMap directly when currentItems changes
-          setItemsMap(() => {
-            const newMap = new Map<number, PostData>()
-            items.forEach(item => {
-              newMap.set(item.post.id, item)
-            })
-            return newMap
-          })
-        }
 
         return (
           <Fragment>
             {Boolean(error) && <ListError />}
             <div className="mx-auto grid max-w-lg grid-cols-1 gap-4">
-              {items.map((item) => {
+              {items.map((item, index) => {
                 // Use the updated item from itemsMap if available
                 const updatedItem = itemsMap.get(item.post.id) || item
                 return (
                   <Post
-                    key={`space_${updatedItem.post.id}-${updatedItem.post_metric.thumbs_up_count}-${updatedItem.post_metric.comment_count}-${updatedItem.post_metric.tip_count}-${updatedItem.post_metric.share_count}-${updatedItem.post_metric.collection_count}`}
+                    key={`space_${index}_${updatedItem.post.id}-${updatedItem.post_metric.thumbs_up_count}-${updatedItem.post_metric.comment_count}-${updatedItem.post_metric.tip_count}-${updatedItem.post_metric.share_count}-${updatedItem.post_metric.collection_count}`}
                     data={updatedItem}
                     hasVote
                     hasSubscribe

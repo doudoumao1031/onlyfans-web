@@ -26,18 +26,14 @@ interface PostUpdateEvent extends CustomEvent {
 export default function FeedList({ initialItems, initialHasMore }: FeedListProps) {
   const scrollToTopFn = useRef<(() => void) | null>(null)
   const refreshFn = useRef<(() => Promise<void>) | null>(null)
-  const [itemsMap, setItemsMap] = useState<Map<number, PostData>>(new Map())
-  // Store current items from InfiniteScroll
-  const [currentItems, setCurrentItems] = useState<PostData[]>([])
-
-  // Initialize the map with initial items
-  useEffect(() => {
-    const newMap = new Map<number, PostData>()
+  const [itemsMap, setItemsMap] = useState<Map<number, PostData>>(() => {
+    // Initialize map with initial items
+    const map = new Map<number, PostData>()
     initialItems.forEach(item => {
-      newMap.set(item.post.id, item)
+      map.set(item.post.id, item)
     })
-    setItemsMap(newMap)
-  }, [initialItems])
+    return map
+  })
 
   // Handle global events
   useEffect(() => {
@@ -83,43 +79,22 @@ export default function FeedList({ initialItems, initialHasMore }: FeedListProps
         scrollToTopFn.current = scrollToTop
         refreshFn.current = refresh
 
-        // Update the current items state when the items from InfiniteScroll change
-        if (JSON.stringify(items.map(i => i.post.id)) !== JSON.stringify(currentItems.map(i => i.post.id))) {
-          setCurrentItems(items)
-
-          // Update itemsMap directly when currentItems changes
-          setItemsMap(prevMap => {
-            const newMap = new Map<number, PostData>()
-            items.forEach(item => {
-              // Preserve any updated items we already have in the map
-              if (prevMap.has(item.post.id)) {
-                newMap.set(item.post.id, prevMap.get(item.post.id)!)
-              } else {
-                newMap.set(item.post.id, item)
-              }
-            })
-            return newMap
-          })
-        }
-
-        // Convert the map back to an array for rendering
-        const displayItems = items.map(item => {
-          // Use the updated post data from the map if available
-          return itemsMap.get(item.post.id) || item
-        })
-
         return (
           <Fragment>
             {Boolean(error) && <ListError />}
             <div className="mx-auto grid max-w-lg grid-cols-1 gap-4">
-              {displayItems.map((item) => (
-                <Post
-                  key={`${item.post.id}-${item.post_metric.thumbs_up_count}-${item.post_metric.comment_count}-${item.post_metric.tip_count}-${item.post_metric.share_count}-${item.post_metric.collection_count}`}
-                  data={item}
-                  hasSubscribe
-                  hasVote
-                />
-              ))}
+              {items.map((item, index) => {
+                // Use the updated item from itemsMap if available
+                const updatedItem = itemsMap.get(item.post.id) || item
+                return (
+                  <Post
+                    key={`feed_${index}_${updatedItem.post.id}-${updatedItem.post_metric.thumbs_up_count}-${updatedItem.post_metric.comment_count}-${updatedItem.post_metric.tip_count}-${updatedItem.post_metric.share_count}-${updatedItem.post_metric.collection_count}`}
+                    data={updatedItem}
+                    hasSubscribe
+                    hasVote
+                  />
+                )
+              })}
             </div>
             {isLoading && <ListLoading />}
             {!hasMore && items.length > 0 && <ListEnd />}
