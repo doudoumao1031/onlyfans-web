@@ -58,7 +58,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         setWfBalance(result.data.amount)
         setProportion(result.data.proportion)
         setWfAmount(result.data.amount)
-        setIosPayArray(result.data.ios_PTFansX_Tierarr)
+        setIosPayArray(result.data.ios_pay_arr)
       }
     })
   }
