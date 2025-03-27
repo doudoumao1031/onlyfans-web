@@ -18,7 +18,7 @@ import { useRouter , locales } from "@/i18n/routing"
 import { emitter, useAppLoaded } from "@/lib/hooks/emitter"
 
 import { loginToken, LoginTokenResp } from "../actions/auth"
-import { handleRechargeOrderCallback, RechargeResp } from "../actions/orders"
+import { handleIosBackPayMoneyOrder, handleRechargeOrderCallback, IosRechargeResp, RechargeResp } from "../actions/orders"
 import { TOKEN_KEY, USER_KEY } from "../utils"
 
 
@@ -29,7 +29,8 @@ const emitterContext = createContext(undefined)
 export enum BRIDGE_EVENT_NAME {
   sendSystemtBarsInfo = "sendSystemtBarsInfo",
   responseOAuth = "responseOAuth",
-  responseRecharge = "responseRecharge" // 充值回调
+  responseRecharge = "responseRecharge", // 安卓充值回调
+  iosResponseRecharge = "inAppPurchasesSuccess" // ios充值回调
 }
 
 export function EmitterProvider({ children }: { children: ReactNode }) {
@@ -89,13 +90,13 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
   }, [])
 
   /**
-   * 原生充值回调
+   * 安卓原生充值回调
    */
   const handleResponseRecharge = useCallback((data: unknown) => {
     console.log("data--handleResponseRecharge===>", data)
     if (!data) return
     if ((data as RechargeResp).result === "failed") {
-      console.log("===>支付失败")
+      console.log("===>安卓支付通知结果=失败")
       showMessage(t("error"))
     }
     handleRechargeOrderCallback({ trade_no: (data as RechargeResp).tradeNo }).then((result) => {
@@ -108,6 +109,28 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
       .catch(() => {
         showMessage(t("error"))
       })
+  }, [])
+
+  /**
+   * ios原生充值回调
+   */
+  const handleIosResponseRecharge = useCallback((data: unknown) => {
+    console.log("handleIosResponseRecharge emitter response:", data)
+    if (!data) return
+    handleIosBackPayMoneyOrder({
+      receipt_data: (data as IosRechargeResp).receiptData,
+      pay_time: (data as IosRechargeResp).pay_time
+    }).then((res: boolean) => {
+      if (res) {
+        showMessage(t("success"), "success")
+      } else {
+        console.log("===>ios支付回调失败")
+        showMessage(t("error"))
+      }
+    })
+    .catch(() => {
+      showMessage(t("error"))
+    })
   }, [])
 
   useEffect(() => {
@@ -127,6 +150,10 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
       BRIDGE_EVENT_NAME.responseRecharge,
       handleResponseRecharge
     )
+    emitter.on(
+      BRIDGE_EVENT_NAME.iosResponseRecharge,
+      handleIosResponseRecharge
+    )
     return () => {
       emitter.off(
         BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
@@ -140,11 +167,16 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
         BRIDGE_EVENT_NAME.responseRecharge,
         handleResponseRecharge
       )
+      emitter.off(
+        BRIDGE_EVENT_NAME.iosResponseRecharge,
+        handleIosResponseRecharge
+      )
     }
   }, [
     handleGetSystemBarsInfo,
     handleResponseOAuth,
-    handleResponseRecharge
+    handleResponseRecharge,
+    handleIosResponseRecharge
   ])
   return (
     <emitterContext.Provider value={undefined}>
