@@ -36,44 +36,40 @@ export default function FoldingDescription({
           {!hideState ? t("foldInfo") : t("moreInfo")}
         </button>
       )}
-      {
-        !hideState && (
-          <div className={"text-gray-secondary mt-1.5 flex gap-2 text-xs"}>
-            <div className={"flex flex-1 gap-1 overflow-hidden"}>
-              {location ? (
-                <>
-                  <div className={"shrink-0"}>
-                    <IconWithImage
-                      url={"/icons/profile/icon-address.png"}
-                      width={16}
-                      height={16}
-                      color={"#222"}
-                    />
-                  </div>
-                  <span className={"flex-1 truncate whitespace-nowrap "}>{location}</span>
-                </>
+      <div className={"text-gray-secondary mt-1.5 flex gap-2 text-xs"}>
+        <div className={"flex flex-1 gap-1 overflow-hidden"}>
+          {location ? (
+            <>
+              <div className={"shrink-0"}>
+                <IconWithImage
+                  url={"/icons/profile/icon-address.png"}
+                  width={16}
+                  height={16}
+                  color={"#222"}
+                />
+              </div>
+              <span className={"flex-1 truncate whitespace-nowrap "}>{location}</span>
+            </>
               ) : null}
-            </div>
-            {birthday && (
-            <div className={"flex shrink-0 items-center gap-0.5"}>
-              <IconWithImage
-                url="/theme/icon_info_birthday@3x.png"
-                width={16}
-                height={16}
-                color="#6D7781"
-              />生日{dayjs(birthday * 1000).format("YYYY-MM-DD")}</div>
+        </div>
+        {birthday && (
+        <div className={"flex shrink-0 items-center gap-0.5"}>
+          <IconWithImage
+            url="/theme/icon_info_birthday@3x.png"
+            width={16}
+            height={16}
+            color="#6D7781"
+          />生日{dayjs(birthday * 1000).format("YYYY-MM-DD")}</div>
 )}
-            {joinTime && (
-            <div className={"flex shrink-0 items-center gap-0.5"}> <IconWithImage
-              url="/theme/icon_info_date@3x.png"
-              width={16}
-              height={16}
-              color="#6D7781"
-                                                                   />{dayjs(joinTime * 1000).format("YYYY-MM-DD")}加入</div>
+        {joinTime && (
+        <div className={"flex shrink-0 items-center gap-0.5"}> <IconWithImage
+          url="/theme/icon_info_date@3x.png"
+          width={16}
+          height={16}
+          color="#6D7781"
+                                                               />{dayjs(joinTime * 1000).format("YYYY-MM-DD")}加入</div>
 )}
-          </div>
-        )
-      }
+      </div>
     </>
   )
 }
