@@ -122,8 +122,8 @@ export default function SpaceHeader({ data }: { data: UserProfile | undefined })
         />
         <div className="absolute left-0 top-0 size-full bg-black/20"></div>
         {count > 0 && (
-          <div className=" animate-marquee absolute bottom-0 left-0  inline-block w-full  text-nowrap px-6 pb-2 text-left text-xs text-white">
-            {data.top_info}
+          <div className=" absolute bottom-0 right-3 inline-block w-[calc(100vw-120px)] overflow-hidden text-nowrap pb-2 text-left text-xs text-white">
+            <div className="animate-marquee">{data.top_info}</div>
           </div>
         )}
       </div>
