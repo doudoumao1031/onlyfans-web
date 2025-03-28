@@ -255,7 +255,7 @@ export default function HLSDemo() {
             )}
 
             {/* Video container with adaptive dimensions */}
-            <div className={`relative bg-black aspect-${videoDimensions && videoDimensions.width < videoDimensions.height ? "[9/16]" : "video"}`}>
+            <div className={`aspect- relative bg-black${videoDimensions && videoDimensions.width < videoDimensions.height ? "[9/16]" : "video"}`}>
               <video
                 ref={videoRef}
                 className="size-full object-cover"
