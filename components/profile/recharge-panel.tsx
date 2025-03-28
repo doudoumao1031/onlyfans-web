@@ -23,12 +23,6 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
     return new Intl.NumberFormat().format(initAmount)
   },[initAmount])
 
-  useEffect(() => {
-    if (walletInfo.amount !== initAmount) {
-      setInitAmount(walletInfo.amount)
-    }
-  },[walletInfo.amount])
-
   return (
     <>
       <div className={"mt-2.5 px-4"}>
