@@ -236,7 +236,7 @@ export default function ManuscriptItem({ data, refresh }: { data: PostData, refr
             <h3 className="line-clamp-[2] text-sm font-medium">{data.post.title}</h3>
             <section
               className={"text-text-desc flex flex-1 text-xs"}
-            >{data.post.pub_time ? dayjs(data.post.pub_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss) : ""}</section>
+            >{data.post.create_time ? dayjs(data.post.create_time * 1000).format(ZH_YYYY_MM_DD_HH_mm_ss) : ""}</section>
             <section className="flex justify-around gap-4 text-xs">
               <ShowNumberWithIcon number={data.post_metric?.thumbs_up_count ?? 0}
                 icon={"/icons/profile/icon_fans_like_normal@3x.png"}
