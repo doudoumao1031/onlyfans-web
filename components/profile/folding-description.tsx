@@ -54,8 +54,23 @@ export default function FoldingDescription({
                 </>
               ) : null}
             </div>
-            {birthday && (<div className={"shrink-0"}>生日{dayjs(birthday * 1000).format("YYYY-MM-DD")}</div>)}
-            {joinTime && (<div className={"shrink-0"}>{dayjs(joinTime * 1000).format("YYYY-MM-DD")}加入</div>)}
+            {birthday && (
+            <div className={"flex shrink-0 items-center gap-0.5"}>
+              <IconWithImage
+                url="/theme/icon_info_birthday@3x.png"
+                width={16}
+                height={16}
+                color="#6D7781"
+              />生日{dayjs(birthday * 1000).format("YYYY-MM-DD")}</div>
+)}
+            {joinTime && (
+            <div className={"flex shrink-0 items-center gap-0.5"}> <IconWithImage
+              url="/theme/icon_info_date@3x.png"
+              width={16}
+              height={16}
+              color="#6D7781"
+                                                                   />{dayjs(joinTime * 1000).format("YYYY-MM-DD")}加入</div>
+)}
           </div>
         )
       }
