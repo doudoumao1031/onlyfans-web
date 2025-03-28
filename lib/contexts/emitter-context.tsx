@@ -8,6 +8,7 @@ import React, {
   useCallback
 } from "react"
 
+import Emittery from "emittery"
 import { useTranslations } from "next-intl"
 
 import { useSearchParams } from "next/navigation"
@@ -18,14 +19,13 @@ import { useRouter, locales } from "@/i18n/routing"
 import { emitter, useAppLoaded } from "@/lib/hooks/emitter"
 
 import { loginToken, LoginTokenResp } from "../actions/auth"
-import { handleIosBackPayMoneyOrder, handleRechargeOrderCallback, IosRechargeResp, RechargeResp } from "../actions/orders"
 import { TOKEN_KEY, USER_KEY } from "../utils"
 
 
 
 
 interface EmitterContextType {
-  setIsOpen?: (isOpen: boolean) => void
+  emitter: Emittery
 }
 
 const emitterContext = createContext<EmitterContextType | undefined>(undefined)
@@ -37,7 +37,7 @@ export enum BRIDGE_EVENT_NAME {
   iosResponseRecharge = "inAppPurchasesSuccess" // ios充值回调
 }
 
-export function EmitterProvider({ children, setIsOpen }: { children: ReactNode, setIsOpen?: (isOpen: boolean) => void }) {
+export function EmitterProvider({ children }: { children: ReactNode }) {
   const { showMessage } = useCommonMessageContext()
   useAppLoaded()
   const search = useSearchParams()
@@ -93,58 +93,6 @@ export function EmitterProvider({ children, setIsOpen }: { children: ReactNode, 
       })
   }, [])
 
-  /**
-   * 安卓原生充值回调
-   */
-  const handleResponseRecharge = useCallback((data: unknown) => {
-    console.log("data--handleResponseRecharge===>", data)
-    if (!data) return
-    if ((data as RechargeResp).result === "failed") {
-      console.log("===>安卓支付通知结果=失败")
-      showMessage(t("error"))
-      setIsOpen?.(false)
-      return
-    }
-    handleRechargeOrderCallback({ trade_no: (data as RechargeResp).tradeNo }).then((result) => {
-      if (result && result.code === 0) {
-        showMessage(t("success"), "success")
-        setIsOpen?.(false)
-      } else {
-        showMessage(t("error"))
-        setIsOpen?.(false)
-      }
-    })
-      .catch(() => {
-        showMessage(t("error"))
-        setIsOpen?.(false)
-      })
-  }, [])
-
-  /**
-   * ios原生充值回调
-   */
-  const handleIosResponseRecharge = useCallback((data: unknown) => {
-    console.log("handleIosResponseRecharge emitter response:", data)
-    if (!data) return
-    handleIosBackPayMoneyOrder({
-      receipt_data: (data as IosRechargeResp).receiptData,
-      pay_time: (data as IosRechargeResp).pay_time
-    }).then((res: boolean) => {
-      if (res) {
-        showMessage(t("success"), "success")
-        setIsOpen?.(false)
-      } else {
-        console.log("===>ios支付回调失败")
-        showMessage(t("error"))
-        setIsOpen?.(false)
-      }
-    })
-      .catch(() => {
-        showMessage(t("error"))
-        setIsOpen?.(false)
-      })
-  }, [])
-
   useEffect(() => {
     emitter.on(
       BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
@@ -154,14 +102,7 @@ export function EmitterProvider({ children, setIsOpen }: { children: ReactNode, 
       BRIDGE_EVENT_NAME.responseOAuth,
       handleResponseOAuth
     )
-    emitter.on(
-      BRIDGE_EVENT_NAME.responseRecharge,
-      handleResponseRecharge
-    )
-    emitter.on(
-      BRIDGE_EVENT_NAME.iosResponseRecharge,
-      handleIosResponseRecharge
-    )
+
     return () => {
       emitter.off(
         BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
@@ -171,23 +112,13 @@ export function EmitterProvider({ children, setIsOpen }: { children: ReactNode, 
         BRIDGE_EVENT_NAME.responseOAuth,
         handleResponseOAuth
       )
-      emitter.off(
-        BRIDGE_EVENT_NAME.responseRecharge,
-        handleResponseRecharge
-      )
-      emitter.off(
-        BRIDGE_EVENT_NAME.iosResponseRecharge,
-        handleIosResponseRecharge
-      )
     }
   }, [
     handleGetSystemBarsInfo,
-    handleResponseOAuth,
-    handleResponseRecharge,
-    handleIosResponseRecharge
+    handleResponseOAuth
   ])
   return (
-    <emitterContext.Provider value={{ setIsOpen }}>
+    <emitterContext.Provider value={{ emitter }}>
       {children}
     </emitterContext.Provider>
   )
