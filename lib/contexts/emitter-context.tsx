@@ -14,7 +14,7 @@ import { useSearchParams } from "next/navigation"
 
 
 import { useCommonMessageContext } from "@/components/common/common-message"
-import { useRouter , locales } from "@/i18n/routing"
+import { useRouter, locales } from "@/i18n/routing"
 import { emitter, useAppLoaded } from "@/lib/hooks/emitter"
 
 import { loginToken, LoginTokenResp } from "../actions/auth"
@@ -139,17 +139,13 @@ export function EmitterProvider({ children, setIsOpen }: { children: ReactNode, 
         setIsOpen?.(false)
       }
     })
-    .catch(() => {
-      showMessage(t("error"))
-      setIsOpen?.(false)
-    })
+      .catch(() => {
+        showMessage(t("error"))
+        setIsOpen?.(false)
+      })
   }, [])
 
   useEffect(() => {
-    // 测试
-    setTimeout(() => {
-      window?.callAppApi("requestOAuth", "")
-    }, 2000)
     emitter.on(
       BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
       handleGetSystemBarsInfo
