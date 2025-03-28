@@ -68,7 +68,7 @@ export default async function Page(props: {
       )}
       {query !== "" && posts && posts.total > 0 && (
         <>
-          <div className="flex flex-col justify-start px-4">
+          <div className="flex flex-col justify-start px-4 pt-5">
             <span className="text-gray-secondary text-left font-medium">{t("posts")}</span>
           </div>
           <div className="mt-2.5 w-full">

@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl"
 import RechargeDrawer from "@/components/profile/recharge-drawer"
 import { useRouter } from "@/i18n/routing"
 import { WalletInfo } from "@/lib"
+import { EmitterProvider } from "@/lib/contexts/emitter-context"
 
 import SheetSelect from "../common/sheet-select"
 
@@ -64,7 +65,9 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
           </div>
         </div>
       </div>
-      <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen} setWfAmount={setInitAmount} />
+      <EmitterProvider setIsOpen={setIsOpen}>
+        <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen} setWfAmount={setInitAmount}></RechargeDrawer>
+      </EmitterProvider>
       {/* <WithdrawDrawer isOpen={withdrawOpen} setIsOpen={setWithdrawOpen} info={walletInfo}><></></WithdrawDrawer> */}
     </>
   )

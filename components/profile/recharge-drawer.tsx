@@ -39,6 +39,7 @@ export default function RechargeDrawer(props: RechargeProps) {
   const [iosPayArray, setIosPayArray] = useState<IosPayArray[]>([])
   const [proportion, setProportion] = useState<string>("")
   const [active, setActive] = useState<number>(0)
+  const [productId, setProductId] = useState<string>("")
   const t = useTranslations("Profile.recharge")
   const { withLoading } = useLoadingHandler({
     onError: () => {
@@ -78,13 +79,21 @@ export default function RechargeDrawer(props: RechargeProps) {
         throw Error()
       })
       // 发起支付 （ios/android）
-      const param = {
-        currency: "USDT-TRC20",
-        amount: amount.toString(),
-        tradeNo: tradeNo
+      if (type === ANDROID) {
+        const param = {
+          currency: "USDT-TRC20",
+          amount: amount.toString(),
+          tradeNo: tradeNo
+        }
+        console.log("recharge param ===>", param)
+        window?.callAppApi("recharge", JSON.stringify(param))
+      } else if (type === IOS) {
+        const param = {
+          productId: productId
+        }
+        console.log("inAppPurchases param ===>", param)
+        window?.callAppApi("inAppPurchases", JSON.stringify(param))
       }
-      console.log("recharge param ===>", param)
-      window?.callAppApi("recharge", JSON.stringify(param))
     })
   }
 
@@ -185,7 +194,7 @@ export default function RechargeDrawer(props: RechargeProps) {
               )}
             </div>
           )}
-          {type === IOS && (
+          {type === IOS && iosPayArray && (
             <div className={"grid w-full grid-cols-3 gap-x-3 gap-y-5 px-4"}>
               {iosPayArray.map((item, i) => {
                 return (
@@ -195,6 +204,7 @@ export default function RechargeDrawer(props: RechargeProps) {
                     className={`h-[49px] w-full rounded-lg border-0 font-medium ${active === i ? "bg-theme text-white" : "bg-white"}`}
                     onTouchEnd={() => {
                       setActive(i)
+                      setProductId(item.product_id)
                       setAmount(Number(item.price))
                     }}
                   >
