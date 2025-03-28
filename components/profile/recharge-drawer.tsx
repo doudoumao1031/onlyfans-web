@@ -1,15 +1,17 @@
 "use client"
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 
 import { useTranslations } from "next-intl"
 
 import { useCommonMessageContext } from "@/components/common/common-message"
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
+import { useAppEventHandle } from "@/hooks/appClient"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { Link } from "@/i18n/routing"
-import { addWalletOrder, IosPayArray, userPtWallet } from "@/lib"
+import { addWalletOrder, handleIosBackPayMoneyOrder, handleRechargeOrderCallback, IosPayArray, IosRechargeResp, RechargeResp, userPtWallet } from "@/lib"
 import { ANDROID, IOS } from "@/lib/constant"
+import { BRIDGE_EVENT_NAME, useEmitter } from "@/lib/contexts/emitter-context"
 
 
 
@@ -46,6 +48,61 @@ export default function RechargeDrawer(props: RechargeProps) {
       showMessage(t("error"))
     }
   })
+  const { emitter } = useEmitter()
+  /**
+ * 安卓原生充值回调
+ */
+  const handleResponseRecharge = useCallback((data: unknown) => {
+    console.log("data--handleResponseRecharge===>", data)
+    if (!data) return
+    if ((data as RechargeResp).result === "failed") {
+      console.log("===>安卓支付通知结果=失败")
+      showMessage(t("error"))
+      setIsOpen?.(false)
+      return
+    }
+    handleRechargeOrderCallback({ trade_no: (data as RechargeResp).tradeNo }).then((result) => {
+      if (result && result.code === 0) {
+        showMessage(t("success"), "success")
+        setIsOpen?.(false)
+      } else {
+        showMessage(t("error"))
+        setIsOpen?.(false)
+      }
+    })
+      .catch(() => {
+        showMessage(t("error"))
+        setIsOpen?.(false)
+      })
+  }, [])
+
+  /**
+   * ios原生充值回调
+   */
+  // const handleIosResponseRecharge = useCallback((data: unknown) => {
+  //   console.log("handleIosResponseRecharge emitter response:", data)
+  //   if (!data) return
+  //   handleIosBackPayMoneyOrder({
+  //     receipt_data: (data as IosRechargeResp).receiptData,
+  //     pay_time: (data as IosRechargeResp).pay_time
+  //   }).then((res: boolean) => {
+  //     if (res) {
+  //       showMessage(t("success"), "success")
+  //       setIsOpen?.(false)
+  //     } else {
+  //       console.log("===>ios支付回调失败")
+  //       showMessage(t("error"))
+  //       setIsOpen?.(false)
+  //     }
+  //   })
+  //     .catch(() => {
+  //       showMessage(t("error"))
+  //       setIsOpen?.(false)
+  //     })
+  // }, [])
+  useAppEventHandle(emitter, BRIDGE_EVENT_NAME.responseRecharge, handleResponseRecharge)
+  // useAppEventHandle(emitter, BRIDGE_EVENT_NAME.iosResponseRecharge, handleIosResponseRecharge)
+
   useEffect(() => {
     getSettingData()
   }, [])
@@ -100,14 +157,14 @@ export default function RechargeDrawer(props: RechargeProps) {
   return (
     <>
       {children && (
-      <button
-        onClick={() => {
-          setIsOpen(true)
-        }}
-      >
-        {children}
-      </button>
-)}
+        <button
+          onClick={() => {
+            setIsOpen(true)
+          }}
+        >
+          {children}
+        </button>
+      )}
       <FormDrawer
         title={<span className={"text-lg font-semibold"}>{t("title")}</span>}
         headerLeft={(close) => {
