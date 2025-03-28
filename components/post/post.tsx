@@ -99,9 +99,11 @@ export default function Post({
             linkRender={!isInfoPage ? linkRender : undefined}
           />
           {!isSpace() && (
-          <Link href={buildUserHomePagePath(user.id)} className="text-theme px-3">
-            {t("moreInfoText")}
-          </Link>
+          <div className="mt-1">
+            <Link href={buildUserHomePagePath(user.id)} className="text-theme  px-3">
+              {t("moreInfoText")}
+            </Link>
+          </div>
         )}
         </div>
         {post_attachment && post_attachment.length > 0 && (
@@ -123,7 +125,7 @@ export default function Post({
         )}
           {hasSubscribe && user && !user?.sub && !mention_user && <UserCard user={user} />}
           {hasVote && post_vote && (
-          <div className="flex items-end gap-2" onClick={() => setShowVote((pre) => !pre)}>
+          <div className="mt-2.5 flex items-end gap-2" onClick={() => setShowVote((pre) => !pre)}>
             <Image src="/theme/icon_fans_vote_red@3x.png" alt="" width={20} height={20} />
             <div className="text-theme text-sm">{t("vote")}</div>
             {showVote ? (
