@@ -16,7 +16,7 @@ export default function AvatarVlog({ user }: {
         <CommonAvatar photoFileId={user.photo} size={84} />
       </div>
       {!user.sub && (
-        <div className="absolute left-0 top-0 rounded-full bg-black bg-opacity-40 px-2.5 pb-[3px] text-white">
+        <div className="absolute left-0 top-0 rounded-full bg-black bg-opacity-40 px-2.5 leading-[18px] text-white">
           <span className="text-nowrap text-[10px] font-medium">{user.sub_price > 0 ? t("recommended.subscription") : t("recommended.free")}</span>
         </div>
       )}
