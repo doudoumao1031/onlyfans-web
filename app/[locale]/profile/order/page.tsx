@@ -125,7 +125,7 @@ const EditSubscriptionModal = ({ callback, userId, currentDiscounts, initData, o
               left={<button type={"button"} onTouchEnd={() => {
                 setOpenState(false)
               }} className={"text-base"}
-              >{commonTrans("cancel")}</button>}
+                    >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-text-theme text-base"}
@@ -204,7 +204,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
         label: <div className={"text-left"}>
           ${item.price} {item.month_count}{t("monthUnit")}{t("month")} <span
             className={"text-[#bbb]"}
-          >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
+                                                                       >（{t("avg")}${calcAvg(Number(item.price), item.month_count)}/{t("month")}）</span></div>,
         value: item.id
       }
     })
@@ -274,7 +274,7 @@ const EditPromotionalActivities = ({ items, updateItems, openState, setOpenState
               left={<button type={"button"} onTouchEnd={() => {
                 setOpenState(false)
               }} className={"text-base text-[#777]"}
-              >{commonTrans("cancel")}</button>}
+                    >{commonTrans("cancel")}</button>}
               right={(
                 <button type={"submit"}
                   className={"text-text-theme text-base"}
@@ -388,11 +388,11 @@ function TopLabelWrapper({ label, children, errorMessage }: {
 }) {
   return (
     <section className="relative mt-6 rounded-xl">
-      <div className={"text-text-desc absolute -top-2.5 left-4 bg-white"}>
+      <div className={"text-text-desc absolute -top-2.5 left-4 bg-white pl-1 pr-4"}>
         {label}
       </div>
       <section
-        className={"flex items-center rounded-xl border border-[rgb(221,221,221)] px-4 py-3"}
+        className={"flex h-[48px] items-center rounded-xl border border-[#ddd] px-4"}
       >
         {children}
       </section>
@@ -496,7 +496,7 @@ function SubscribeBundle({ items, userId, updateItems, basePrice }: {
                     >
                       ${discount.price}&nbsp;&nbsp;{discount.month_count}{t("monthUnit")}{t("month")}&nbsp;&nbsp;<span
                         className="text-gray-secondary"
-                      >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
+                                                                                                                 >({t("avg")} ${calcAvg(discount.price, discount.month_count)}/{t("month")})</span>
                     </button>
                     <Switch className={"custom-switch"} checked={!field.value.item_status} onCheckedChange={(value) => {
                       field.onChange({
@@ -525,7 +525,7 @@ function DiscountPercentLabel({ index, percent }: { index: number, percent: numb
     <div className={"flex items-center gap-1"}>
       <div>{t("discount")}{index}</div>
       <div
-        className={"rounded-t-full rounded-br-full bg-[#F7B500] px-1.5 py-0.5 text-xs text-white"}
+        className={"relative bottom-1 rounded-t-full rounded-br-full bg-[#F7B500] px-1.5 py-0.5 text-xs text-white"}
       >{percent}%
         off
       </div>
@@ -634,7 +634,7 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
   const customPriceForm = useForm<{ price: string }>({
     mode: "all",
     resolver: zodResolver(z.object({
-      price: bundlePriceSchema
+      price: z.string({ message: "请输入" }).refine(d => Number(d) >= 1.99, "您输入的价格有误").refine(d => Number(d) < 10000, "您输入的价格有误")
     }))
   })
   const handleChange = (v: unknown) => {
@@ -696,21 +696,20 @@ function BasePriceSettings({ valueChange, value }: { valueChange: (value: number
                         field.onChange(targetValue)
                       }} value={field.value} onChange={field.onChange} onBlur={(event) => {
                         // 两位小数
-                        let targetValue = event.target.value
-                        const dotIndex = targetValue.indexOf(".")
-                        targetValue = targetValue.substring(0, dotIndex + 3)
+                        const targetValue = event.target.value
                         let targetValueNumber = Number(targetValue)
                         if (isNaN(targetValueNumber)) {
                           targetValueNumber = 1.99
                         }
                         field.onChange(`${targetValueNumber}`)
-                      }} className="block w-full rounded-full bg-[#F8F8F8] px-5 py-2"
+                      }} className="block w-full rounded-full bg-[#F8F8F8] px-3 py-2"
                       />
                     )
                   }} name={"price"}
                   />
+                  {!formState.errors.price?.message && <div className={"text-text-desc"}>最小价格$1.99 USDT</div>}
                   {formState.errors.price?.message &&
-                    <div className={"text-theme mt-1.5 px-1 text-xs"}>{formState.errors.price.message}</div>}
+                    <div className={"mt-1.5 px-1 text-xs text-red-600"}>{formState.errors.price.message}</div>}
                 </div>
               </div>
               <div className="grid grid-cols-2 border-t border-[#ddd] text-base">
@@ -846,7 +845,7 @@ export default function Page() {
             }
           })
         }} className="text-text-theme text-base"
-        >{t("complete")}</button>}
+               >{t("complete")}</button>}
       />
       <section className="mt-5 text-black">
         <section className="border-b border-gray-100 px-4 pb-5">
@@ -892,7 +891,7 @@ export default function Page() {
                       <div>{t("baseSubLimit")}</div>
                       <div>{t("shouldBe1")} <span
                         className="text-text-theme"
-                      >{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
+                                            >{commonTrans("potatoWallet")}</span>，{t("shouldBe2")}
                       </div>
                     </section>
                   </section>

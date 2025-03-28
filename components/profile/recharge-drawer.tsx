@@ -14,7 +14,7 @@ import { ANDROID, IOS } from "@/lib/constant"
 
 
 interface RechargeProps {
-  children: React.ReactNode
+  children?: React.ReactNode
   isOpen: boolean
   setIsOpen: (val: boolean) => void
   setWfAmount: (val: number) => void
@@ -57,7 +57,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         setWfBalance(result.data.amount)
         setProportion(result.data.proportion)
         setWfAmount(result.data.amount)
-        setIosPayArray(result.data.ios_pay_arr)
+        setIosPayArray(result.data.ios_pay_arr ?? [])
       }
     })
   }

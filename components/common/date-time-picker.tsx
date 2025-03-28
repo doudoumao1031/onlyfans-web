@@ -12,6 +12,8 @@ import {
   DrawerTitle
 } from "@/components/ui/drawer"
 
+import type { Precision } from "antd-mobile/es/components/date-picker/date-picker-utils"
+
 export default function DateTimePicker(props: {
   className?: string
   value: number
@@ -20,9 +22,10 @@ export default function DateTimePicker(props: {
   children: ReactNode
   max?: Date
   min?: Date
+  precision? : Precision
 }) {
   const [visible, setVisible] = useState<boolean>(false)
-  const { value, dateChange, children, max, min } = props
+  const { value, dateChange, children, max, min, precision= "minute" } = props
   const [inputValue, setInputValue] = useState<Date>()
   const t = useTranslations("Common")
   useEffect(() => {
@@ -72,7 +75,7 @@ export default function DateTimePicker(props: {
               </button>
             </section>
             <DatePickerView
-              precision={"minute"}
+              precision={precision}
               value={inputValue}
               onChange={setInputValue}
               max={max}

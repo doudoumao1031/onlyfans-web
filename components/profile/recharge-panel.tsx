@@ -64,7 +64,7 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
           </div>
         </div>
       </div>
-      <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen} setWfAmount={setInitAmount}><></></RechargeDrawer>
+      <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen} setWfAmount={setInitAmount} />
       {/* <WithdrawDrawer isOpen={withdrawOpen} setIsOpen={setWithdrawOpen} info={walletInfo}><></></WithdrawDrawer> */}
     </>
   )

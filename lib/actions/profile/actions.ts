@@ -38,8 +38,9 @@ export async function setUserReply(params: ReplyForm) {
 }
 
 export async function updateUserBaseInfo(params: UpdateUserBaseReq) {
-  const { top_info, location, back_img, photo, about } = params
-  const arr = [top_info, location, back_img, photo, about]
+  const { top_info, location, back_img, photo, about,birthday } = params
+  // flag 顺序是反人类的从右往左数
+  const arr = [birthday, top_info, location, back_img, photo, about]
   const defaultHexValue = new Array(arr.length).fill(0)
   const updateHexValue = defaultHexValue
     .map((_, index) => {

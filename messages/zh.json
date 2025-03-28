@@ -166,7 +166,9 @@
       "form": {
         "nickname": "昵称",
         "username": "用户名",
+        "joinTime": "加入时间",
         "introduction": "介绍",
+        "birthday": "生日",
         "topInfo": "顶部信息",
         "location": "地理位置",
         "liveAuth": "直播认证",

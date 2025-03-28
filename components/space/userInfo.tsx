@@ -106,7 +106,7 @@ export default function UserInfo({
                     color="#6D7781"
                   />
                 </span>
-                <span className="ml-1 max-w-[130px] truncate text-xs text-gray-400">{data.birthday}</span>
+                <span className="ml-1 max-w-[130px] truncate text-xs text-gray-400">{dayjs(data.birthday * 1000).format("YYYY-MM-DD")}</span>
               </div>
             )}
             {!!data.join_time && (

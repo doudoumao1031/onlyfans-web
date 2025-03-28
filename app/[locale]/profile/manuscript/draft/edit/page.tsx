@@ -54,7 +54,7 @@ const ItemEditTitle = ({
       <div className="text-base font-bold">{title}</div>
       {showIcon && (
         <IconWithImage
-          url={"/icons/profile/icon_edit@3x.png"}
+          url={"/theme/icon_fans_edit_red@3x.png"}
           width={20}
           height={20}
           color={"#bbb"}
@@ -1254,7 +1254,7 @@ const EditPageContent = () => {
               }}
             >
               <IconWithImage
-                url={"/icons/profile/icon_edit@3x.png"}
+                url={"/theme/icon_fans_edit_red@3x.png"}
                 width={20}
                 height={20}
                 color={"#bbb"}
@@ -1301,7 +1301,7 @@ const EditPageContent = () => {
                 className="border-theme text-theme inline-flex w-[165px] items-center justify-center gap-2 rounded-xl border py-2 text-base"
               >
                 <IconWithImage
-                  url={"/icons/profile/icon_fans_vote@3x.png"}
+                  url={"/theme/icon_fans_vote_red@3x.png"}
                   width={20}
                   height={20}
                   color={"var(--theme)"}

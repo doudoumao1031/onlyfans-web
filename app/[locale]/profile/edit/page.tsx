@@ -2,6 +2,7 @@
 import React, { useEffect } from "react"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import dayjs from "dayjs"
 import { useTranslations } from "next-intl"
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
@@ -10,18 +11,21 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 
 import { useCommonMessageContext } from "@/components/common/common-message"
+import DateTimePicker from "@/components/common/date-time-picker"
 import Avatar from "@/components/profile/avatar"
 import Header from "@/components/profile/header"
+import IconWithImage from "@/components/profile/icon"
 import InputWithLabel from "@/components/profile/input-with-label"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { updateUserBaseInfo, userProfile, UserProfile } from "@/lib/actions/profile"
 import { revalidateProfileData } from "@/lib/actions/revalidate/actions"
+import { ZH_YYYY_MM_DD_HH_mm } from "@/lib/constant"
 import { buildImageUrl, commonUploadFile } from "@/lib/utils"
 
 
 type EditUserProfile = Pick<
   UserProfile,
-  "about" | "username" | "location" | "back_img" | "top_info" | "photo" | "first_name"
+  "about" | "username" | "location" | "back_img" | "top_info" | "photo" | "first_name" | "join_time"| "birthday"
 >
 
 export default function Page() {
@@ -38,7 +42,8 @@ export default function Page() {
         location: z.string().max(30, "最多30个字").optional(),
         photo: z.string().optional(),
         top_info: z.string().max(30, "最多30个字").optional(),
-        back_img: z.string().optional()
+        back_img: z.string().optional(),
+        birthday: z.number().optional()
       })
     ),
     defaultValues: {}
@@ -158,7 +163,55 @@ export default function Page() {
                   )}
                   name={"username"}
                 />
-
+              </section>
+              <section>
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <InputWithLabel
+                      value={field.value ? dayjs(Number(field.value) * 1000).format("YYYY-MM-DD") : " "}
+                      disabled
+                      label={t("form.joinTime")}
+                      maxLength={999}
+                    />
+                  )}
+                  name={"join_time"}
+                />
+              </section>
+              <section>
+                <Controller
+                  control={control}
+                  render={({ field }) => (
+                    <DateTimePicker min={new Date("1900-01-01")} max={new Date()} precision={"day"} value={field.value * 1000} dateChange={value => {
+                      field.onChange(Math.floor(value / 1000))
+                    }}
+                    >
+                      <InputWithLabel
+                        value={field.value ? dayjs(Number(field.value) * 1000).format("YYYY-MM-DD") : " "}
+                        label={t("form.birthday")}
+                        maxLength={999}
+                      />
+                    </DateTimePicker>
+                  )}
+                  name={"birthday"}
+                />
+              </section>
+              <section>
+                <Controller
+                  control={control}
+                  render={({ field, fieldState }) => (
+                    <InputWithLabel
+                      onInputChange={field.onChange}
+                      value={field.value}
+                      type={"textarea"}
+                      rows={5}
+                      maxLength={30}
+                      label={t("form.location")}
+                      errorMessage={fieldState.error?.message}
+                    />
+                  )}
+                  name={"location"}
+                />
               </section>
               <section>
                 <Controller
@@ -192,23 +245,6 @@ export default function Page() {
                     />
                   )}
                   name={"top_info"}
-                />
-              </section>
-              <section>
-                <Controller
-                  control={control}
-                  render={({ field, fieldState }) => (
-                    <InputWithLabel
-                      onInputChange={field.onChange}
-                      value={field.value}
-                      type={"textarea"}
-                      rows={5}
-                      maxLength={30}
-                      label={t("form.location")}
-                      errorMessage={fieldState.error?.message}
-                    />
-                  )}
-                  name={"location"}
                 />
               </section>
             </section>

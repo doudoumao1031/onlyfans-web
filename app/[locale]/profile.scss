@@ -30,13 +30,26 @@
 }
 
 .custom-switch{
+  width: 52px;
+  border: 2px solid transparent;
   & > span {
+    width: 28px;
+    height: 28px;
+    &.data-\[state\=checked\]\:translate-x-4[data-state="checked"]{
+      --tw-translate-x: 20px;
+    }
+    &.data-\[state\=unchecked\]\:translate-x-0[data-state="unchecked"]{
+      //--tw-translate-x: 1px;
+      box-shadow: 1px 0px 1px 0px #bbb;
+    }
     background: #fff;
   }
   &.data-\[state\=checked\]\:bg-primary[data-state="checked"]{
     background:  #4CD964;
+    border-color: #4CD964;
   }
   &.data-\[state\=unchecked\]\:bg-input[data-state="unchecked"]{
-    background: #999;
+    background: #fff;
+    border-color: #bbb;
   }
 }

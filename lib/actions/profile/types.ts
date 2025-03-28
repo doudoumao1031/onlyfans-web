@@ -45,7 +45,7 @@ export interface iPost {
 
 export type UpdateUserBaseReq = Pick<
   UserProfile,
-  "about" | "photo" | "back_img" | "location" | "top_info"
+  "about" | "photo" | "back_img" | "location" | "top_info" | "birthday"
 > & {
   flags: number
 }
@@ -82,8 +82,8 @@ export type UserProfile = {
   username: string
   video_count: number //媒体数量
   top_info: string
-  birthday: string
-  join_time: string
+  birthday: number
+  join_time: number
 }
 
 export interface ReplyForm {

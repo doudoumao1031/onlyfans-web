@@ -166,7 +166,9 @@
       "form": {
         "nickname": "Nick Name",
         "username": "User Name",
+        "joinTime": "Join Time",
         "introduction": "Introduction",
+        "birthday": "Birthday",
         "topInfo": "Top Info",
         "location": "Location",
         "liveAuth": "Live certification",

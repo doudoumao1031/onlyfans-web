@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl"
 
 import Header from "@/components/common/header"
 import IconWithImage from "@/components/profile/icon"
-import { Link } from "@/i18n/routing"
+import { Link, useRouter } from "@/i18n/routing"
 import { UserProfile } from "@/lib/actions/profile"
 import { buildImageUrl } from "@/lib/utils"
 
@@ -69,6 +69,8 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
       }
     }
   }, [])
+  const router = useRouter()
+
   return (
     <div className="relative h-[158px]">
       <div className="absolute z-0 size-full" ref={bgRef}>
@@ -81,13 +83,18 @@ export default function ProfileHeader({ data }: { data: UserProfile | undefined 
           alt={""}
         />
         <div className="absolute left-0 top-0 size-full bg-black/20"></div>
-        <div className={`absolute bottom-1 right-3 max-w-[70%] truncate text-xs ${isTop ? "text-theme" : "text-white"}`} >
-          {data.top_info}
+        <div className={`absolute bottom-1 right-3 w-[calc(100vw-120px)] text-xs ${isTop ? "text-theme" : "text-white"}`} >
+          {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+          {/* @ts-expect-error */}
+          <marquee>{data.top_info}</marquee>
         </div>
       </div>
       <div ref={divRef} className={`fixed left-0 top-0 z-40  w-full ${isTop ? "bg-white" : "auto"}`}>
         <div className="flex w-full flex-col items-center justify-center">
           <Header
+            handleBack={() => {
+              router.push("/explore/feed")
+            }}
             title={
               <span
                 className={`shrink-0 pt-px text-lg font-semibold  ${isTop ? "text-[#222]" : "text-white"

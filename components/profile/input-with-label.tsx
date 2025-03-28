@@ -104,9 +104,10 @@ export default function InputWithLabel(props: InputProps) {
       <label
         style={{
           transition: "top .1s",
-          top: positionInCenter ? 16 : -7
+          top: positionInCenter ? 16 : -7,
+          background: disabled ? "linear-gradient(to bottom, #fff 0%,#fff 50%,#F7F7F7 51%,#F7F7F7 100%)" : "#fff"
         }} onTouchEnd={labelTouch} className={clsx(
-          "text-gray-secondary absolute left-4 z-30 bg-white font-normal leading-none transition"
+          "text-gray-secondary absolute left-4 z-30 pr-2.5 font-normal leading-none transition"
         )}
         htmlFor={name}
       >
@@ -114,7 +115,7 @@ export default function InputWithLabel(props: InputProps) {
       </label>
       <section
         className={
-          clsx(`flex ${props.labelClass ? props.labelClass : "px-4 py-[12px]"} relative z-20 items-center rounded-xl border border-[rgb(221,221,221)]`,
+          clsx(`flex ${props.labelClass ? props.labelClass : ""} relative z-20 min-h-[48px] items-center rounded-xl border border-[rgb(221,221,221)]`,
             disabled ? "bg-[#F7F7F7]" : "")
         }
       >
@@ -125,7 +126,7 @@ export default function InputWithLabel(props: InputProps) {
               // setVal(eventValue)
               onInputChange?.(eventValue)
             }} type={type ?? "text"} disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
-              "w-full flex-1 font-medium"
+              "w-full flex-1 px-4 text-[15px] font-medium"
 
             )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
           />
@@ -137,7 +138,7 @@ export default function InputWithLabel(props: InputProps) {
               // setVal(eventValue)
               onInputChange?.(eventValue)
             }} disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
-              "w-full flex-1 font-medium"
+              "w-full flex-1 rounded-xl p-4 font-medium"
             )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
           />
         )}
@@ -151,7 +152,7 @@ export default function InputWithLabel(props: InputProps) {
                 onInputChange?.(v)
               })} options={options ?? []}
             >
-              <div className={"flex w-full items-center"}>
+              <div className={"flex w-full items-center px-4"}>
                 <div className={clsx("flex-1 text-left font-medium", !optionShowLabel ? "text-gray-300" : "")}>{optionShowLabel || props?.placeholder}</div>
                 <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={iconSize || 24}
                   height={iconSize || 24} color={"#bbb"}

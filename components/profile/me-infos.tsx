@@ -69,20 +69,20 @@ export default async function Page() {
             </Link>
           </div>
           <div className="mt-[-14px] text-sm">
-            <FoldingDescription about={data.about} location={data.location} />
+            <FoldingDescription about={data.about} location={data.location} birthday={data.birthday} joinTime={data.join_time}/>
           </div>
         </section>
         <div className="border-y border-[#ddd] px-4 py-2.5">
           <div className="grid grid-cols-4 text-center">
-            <div className="border-r border-b-[#ddd]">
+            <div className="border-r border-r-[#ddd]">
               <div className="text-[20px]">{displayNumber(data.post_count)}</div>
               <div className="text-text-desc text-xs font-light">{t("moduleTypes.post")}</div>
             </div>
-            <div className="border-r border-b-[#ddd]">
+            <div className="border-r border-r-[#ddd]">
               <div className="text-[20px]">{displayNumber(data.media_count)}</div>
               <div className="text-text-desc text-xs font-light">{t("moduleTypes.media")}</div>
             </div>
-            <div className="border-r border-b-[#ddd]">
+            <div className="border-r border-r-[#ddd]">
               <div className="text-[20px]">{displayNumber(data.fans_count)}</div>
               <div className="text-text-desc text-xs font-light">{t("moduleTypes.fans")}</div>
             </div>
