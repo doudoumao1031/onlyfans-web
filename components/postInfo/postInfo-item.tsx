@@ -19,6 +19,7 @@ import IconWithImage from "@/components/profile/icon"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { addSubOrder, PostData } from "@/lib"
 import { postDetail } from "@/lib/actions/profile"
+import { revalidateRecommendedPaths } from "@/lib/actions/revalidate/actions"
 import { userDelFollowing, userFollowing } from "@/lib/actions/space"
 import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
 
@@ -167,6 +168,8 @@ export default function Page({ postData }: { postData: PostData }) {
         if (result && result.code === 0) {
           console.log("订阅成功")
           await refresh()
+          // Revalidate recommended paths after successful subscription
+          await revalidateRecommendedPaths()
           showMessage(t("subscribeSuccess"))
         } else {
           console.log("订阅失败:", result?.message)

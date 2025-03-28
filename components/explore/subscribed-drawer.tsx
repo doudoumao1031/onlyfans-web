@@ -10,7 +10,7 @@ import IconWithImage from "@/components/profile/icon"
 import { useLoadingHandler } from "@/hooks/useLoadingHandler"
 import { DiscountInfo, viewUserSubscribeSetting } from "@/lib"
 import { addSubOrder } from "@/lib/actions/orders/actions"
-import { revalidateProfileData } from "@/lib/actions/revalidate/actions"
+import { revalidateProfileData, revalidateRecommendedPaths } from "@/lib/actions/revalidate/actions"
 
 
 interface SubscribedDrawerProps {
@@ -93,13 +93,15 @@ export default function SubscribedDrawer(props: SubscribedDrawerProps) {
         price: free ? 0 : Number(amount),
         id: free ? 0 : discount?.id ?? 0
       }
-      await addSubOrder(data).then((result) => {
+      await addSubOrder(data).then(async (result) => {
         if (result && result.code === 0) {
           console.log("订阅成功")
           setIsOpen?.(false)
           setDrawer(false)
           // Revalidate profile data after successful subscription
-          revalidateProfileData()
+          await revalidateProfileData()
+          // Revalidate recommended paths after successful subscription
+          await revalidateRecommendedPaths()
           showMessage(t("SubscribeSuccess"), "success", { afterDuration: () => flush?.() })
         } else if (result?.message === "NOT_ENOUGH_BALANCE") {
           setDrawer(false)
