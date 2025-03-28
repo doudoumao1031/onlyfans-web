@@ -31,10 +31,10 @@ interface EmitterContextType {
 const emitterContext = createContext<EmitterContextType | undefined>(undefined)
 
 export enum BRIDGE_EVENT_NAME {
-  sendSystemtBarsInfo = "sendSystemtBarsInfo",
+  sendSystemBarsInfo = "sendSystemBarsInfo",
   responseOAuth = "responseOAuth",
   responseRecharge = "responseRecharge", // 安卓充值回调
-  iosResponseRecharge = "inAppPurchasesSuccess" // ios充值回调
+  inAppPurchasesSuccess = "inAppPurchasesSuccess" // ios充值回调
 }
 
 export function EmitterProvider({ children }: { children: ReactNode }) {
@@ -95,7 +95,7 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     emitter.on(
-      BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
+      BRIDGE_EVENT_NAME.sendSystemBarsInfo,
       handleGetSystemBarsInfo
     )
     emitter.on(
@@ -105,7 +105,7 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
 
     return () => {
       emitter.off(
-        BRIDGE_EVENT_NAME.sendSystemtBarsInfo,
+        BRIDGE_EVENT_NAME.sendSystemBarsInfo,
         handleGetSystemBarsInfo
       )
       emitter.off(

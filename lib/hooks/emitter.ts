@@ -14,8 +14,8 @@ if (typeof window !== "undefined") {
   window.fansx = {
     call: (type: string, data: unknown) => {
       switch (type) {
-        case BRIDGE_EVENT_NAME.sendSystemtBarsInfo: {
-          emitter.emit(BRIDGE_EVENT_NAME.sendSystemtBarsInfo, data)
+        case BRIDGE_EVENT_NAME.sendSystemBarsInfo: {
+          emitter.emit(BRIDGE_EVENT_NAME.sendSystemBarsInfo, data)
           return true
         }
         case BRIDGE_EVENT_NAME.responseOAuth: {
@@ -26,8 +26,8 @@ if (typeof window !== "undefined") {
           emitter.emit(BRIDGE_EVENT_NAME.responseRecharge, data)
           return true
         }
-        case BRIDGE_EVENT_NAME.iosResponseRecharge: {
-          emitter.emit(BRIDGE_EVENT_NAME.iosResponseRecharge, data)
+        case BRIDGE_EVENT_NAME.inAppPurchasesSuccess: {
+          emitter.emit(BRIDGE_EVENT_NAME.inAppPurchasesSuccess, data)
           return true
         }
         default:

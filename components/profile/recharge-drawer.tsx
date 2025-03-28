@@ -13,8 +13,6 @@ import { addWalletOrder, handleIosBackPayMoneyOrder, handleRechargeOrderCallback
 import { ANDROID, IOS } from "@/lib/constant"
 import { BRIDGE_EVENT_NAME, useEmitter } from "@/lib/contexts/emitter-context"
 
-
-
 interface RechargeProps {
   children?: React.ReactNode
   isOpen: boolean
@@ -64,44 +62,49 @@ export default function RechargeDrawer(props: RechargeProps) {
     handleRechargeOrderCallback({ trade_no: (data as RechargeResp).tradeNo }).then((result) => {
       if (result && result.code === 0) {
         showMessage(t("success"), "success")
-        setIsOpen?.(false)
+        setIsOpen(false)
+        getSettingData()
+        setAmount(0)
       } else {
         showMessage(t("error"))
-        setIsOpen?.(false)
+        setIsOpen(false)
       }
     })
-      .catch(() => {
-        showMessage(t("error"))
-        setIsOpen?.(false)
-      })
+    .catch(() => {
+      showMessage(t("error"))
+      setIsOpen(false)
+    })
   }, [])
 
   /**
    * ios原生充值回调
    */
-  // const handleIosResponseRecharge = useCallback((data: unknown) => {
-  //   console.log("handleIosResponseRecharge emitter response:", data)
-  //   if (!data) return
-  //   handleIosBackPayMoneyOrder({
-  //     receipt_data: (data as IosRechargeResp).receiptData,
-  //     pay_time: (data as IosRechargeResp).pay_time
-  //   }).then((res: boolean) => {
-  //     if (res) {
-  //       showMessage(t("success"), "success")
-  //       setIsOpen?.(false)
-  //     } else {
-  //       console.log("===>ios支付回调失败")
-  //       showMessage(t("error"))
-  //       setIsOpen?.(false)
-  //     }
-  //   })
-  //     .catch(() => {
-  //       showMessage(t("error"))
-  //       setIsOpen?.(false)
-  //     })
-  // }, [])
+  const handleIosResponseRecharge = useCallback((data: unknown) => {
+    console.log("handleIosResponseRecharge emitter response:", data)
+    if (!data) return
+    handleIosBackPayMoneyOrder({
+      receipt_data: (data as IosRechargeResp).receiptData,
+      pay_time: (data as IosRechargeResp).pay_time
+    }).then((res: boolean) => {
+      if (res) {
+        showMessage(t("success"), "success")
+        setIsOpen(false)
+        getSettingData()
+        setAmount(0)
+      } else {
+        console.log("===>ios支付回调失败")
+        showMessage(t("error"))
+        setIsOpen(false)
+      }
+    })
+    .catch(() => {
+      showMessage(t("error"))
+      setIsOpen(false)
+    })
+  }, [])
+  useAppEventHandle(emitter, BRIDGE_EVENT_NAME.inAppPurchasesSuccess, handleIosResponseRecharge)
   useAppEventHandle(emitter, BRIDGE_EVENT_NAME.responseRecharge, handleResponseRecharge)
-  // useAppEventHandle(emitter, BRIDGE_EVENT_NAME.iosResponseRecharge, handleIosResponseRecharge)
+
 
   useEffect(() => {
     getSettingData()
