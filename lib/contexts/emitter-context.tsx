@@ -24,7 +24,11 @@ import { TOKEN_KEY, USER_KEY } from "../utils"
 
 
 
-const emitterContext = createContext(undefined)
+interface EmitterContextType {
+  setIsOpen?: (isOpen: boolean) => void
+}
+
+const emitterContext = createContext<EmitterContextType | undefined>(undefined)
 
 export enum BRIDGE_EVENT_NAME {
   sendSystemtBarsInfo = "sendSystemtBarsInfo",
@@ -33,7 +37,7 @@ export enum BRIDGE_EVENT_NAME {
   iosResponseRecharge = "inAppPurchasesSuccess" // ios充值回调
 }
 
-export function EmitterProvider({ children }: { children: ReactNode }) {
+export function EmitterProvider({ children, setIsOpen }: { children: ReactNode, setIsOpen?: (isOpen: boolean) => void }) {
   const { showMessage } = useCommonMessageContext()
   useAppLoaded()
   const search = useSearchParams()
@@ -98,16 +102,21 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
     if ((data as RechargeResp).result === "failed") {
       console.log("===>安卓支付通知结果=失败")
       showMessage(t("error"))
+      setIsOpen?.(false)
+      return
     }
     handleRechargeOrderCallback({ trade_no: (data as RechargeResp).tradeNo }).then((result) => {
       if (result && result.code === 0) {
         showMessage(t("success"), "success")
+        setIsOpen?.(false)
       } else {
         showMessage(t("error"))
+        setIsOpen?.(false)
       }
     })
       .catch(() => {
         showMessage(t("error"))
+        setIsOpen?.(false)
       })
   }, [])
 
@@ -123,13 +132,16 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
     }).then((res: boolean) => {
       if (res) {
         showMessage(t("success"), "success")
+        setIsOpen?.(false)
       } else {
         console.log("===>ios支付回调失败")
         showMessage(t("error"))
+        setIsOpen?.(false)
       }
     })
     .catch(() => {
       showMessage(t("error"))
+      setIsOpen?.(false)
     })
   }, [])
 
@@ -179,7 +191,7 @@ export function EmitterProvider({ children }: { children: ReactNode }) {
     handleIosResponseRecharge
   ])
   return (
-    <emitterContext.Provider value={undefined}>
+    <emitterContext.Provider value={{ setIsOpen }}>
       {children}
     </emitterContext.Provider>
   )

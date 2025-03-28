@@ -1,11 +1,12 @@
 "use client"
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
 import { useTranslations } from "next-intl"
 
 import RechargeDrawer from "@/components/profile/recharge-drawer"
 import { useRouter } from "@/i18n/routing"
 import { WalletInfo } from "@/lib"
+import { EmitterProvider } from "@/lib/contexts/emitter-context"
 
 import SheetSelect from "../common/sheet-select"
 
@@ -21,6 +22,12 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
   const formattedAmount = useMemo(() => {
     return new Intl.NumberFormat().format(initAmount)
   },[initAmount])
+
+  useEffect(() => {
+    if (walletInfo.amount !== initAmount) {
+      setInitAmount(walletInfo.amount)
+    }
+  },[walletInfo.amount])
 
   return (
     <>
@@ -64,7 +71,9 @@ export default function RechargePanel({ walletInfo }: {walletInfo: WalletInfo}) 
           </div>
         </div>
       </div>
-      <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen} setWfAmount={setInitAmount}><></></RechargeDrawer>
+      <EmitterProvider setIsOpen={setIsOpen}>
+        <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen} setWfAmount={setInitAmount}><></></RechargeDrawer>
+      </EmitterProvider>
       {/* <WithdrawDrawer isOpen={withdrawOpen} setIsOpen={setWithdrawOpen} info={walletInfo}><></></WithdrawDrawer> */}
     </>
   )
