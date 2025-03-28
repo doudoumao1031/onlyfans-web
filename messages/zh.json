@@ -436,8 +436,8 @@
     "inputPlaceholder": "搜索",
     "description": "输入博主的昵称或用户名进行搜索",
     "noResult": "没有搜到相关博主，请尝试别的搜索词",
-    "users": "博主",
-    "posts": "帖子"
+    "users": "用户",
+    "posts": "博文"
   },
   "PostInfo": {
     "btnText1": "支付{price} {currency} 浏览该帖子",
