@@ -66,6 +66,7 @@ export default function RechargeDrawer(props: RechargeProps) {
         getSettingData()
         setAmount(0)
       } else {
+        console.log("===>安卓支付回调失败:", result?.message)
         showMessage(t("error"))
         setIsOpen(false)
       }
@@ -85,14 +86,14 @@ export default function RechargeDrawer(props: RechargeProps) {
     handleIosBackPayMoneyOrder({
       receipt_data: (data as IosRechargeResp).receiptData,
       pay_time: (data as IosRechargeResp).pay_time
-    }).then((res: boolean) => {
-      if (res) {
+    }).then((result) => {
+      if (result && result.code === 0) {
         showMessage(t("success"), "success")
         setIsOpen(false)
         getSettingData()
         setAmount(0)
       } else {
-        console.log("===>ios支付回调失败")
+        console.log("===>ios支付回调失败:", result?.message)
         showMessage(t("error"))
         setIsOpen(false)
       }

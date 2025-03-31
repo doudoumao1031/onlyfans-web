@@ -54,12 +54,8 @@ export async function handleRechargeOrderCallback(params: OrderCallBackReq) {
  * @param params
  * @returns
  */
-export const handleIosBackPayMoneyOrder = async (params: IosPayMoneyOrderReq) => {
-  const res = await fetchWithPost<IosPayMoneyOrderReq, string>(ENDPOINTS.ORDERS.IOS_PAY_MONEY, params)
-  if (res && res.code === 0) {
-    return true
-  }
-  return false
+export async function handleIosBackPayMoneyOrder(params: IosPayMoneyOrderReq) {
+  return  fetchWithPost<IosPayMoneyOrderReq, string>(ENDPOINTS.ORDERS.IOS_PAY_MONEY, params)
 }
 
 export async function deleteOrder(params: DeleteOrderReq): Promise<void> {
