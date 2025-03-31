@@ -15,8 +15,8 @@
     "zip": "zip -r dist.zip .next public package.json package-lock.json next.config.ts .env",
     "zip-test": "zip -r dist.zip .next public package.json package-lock.json next.config.ts .env.test .env",
     "build:clear": "rimraf .next dist.zip && yarn build",
-    "build:cz": "rimraf .next dist.zip && yarn build && zip -r dist.zip .next public package.json package-lock.json next.config.ts .env",
-    "build:ctz": "rimraf .next dist.zip && yarn build:test && zip -r dist.zip .next public package.json package-lock.json next.config.ts .env.test .env"
+    "build:cz": "rimraf .next dist.zip public/uploads/hls && yarn build && zip -r dist.zip .next public package.json package-lock.json next.config.ts .env",
+    "build:ctz": "rimraf .next dist.zip public/uploads/hls && yarn build:test && zip -r dist.zip .next public package.json package-lock.json next.config.ts .env.test .env"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.1",
