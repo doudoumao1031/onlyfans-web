@@ -59,8 +59,11 @@ export default function RechargeDrawer(props: RechargeProps) {
       setIsOpen?.(false)
       return
     }
-    handleRechargeOrderCallback({ trade_no: (data as RechargeResp).tradeNo }).then((result) => {
+    const moneyParam = { trade_no: (data as RechargeResp).tradeNo }
+    console.log("call /wallet/backPayMoneyOrder param:", moneyParam)
+    handleRechargeOrderCallback(moneyParam).then((result) => {
       if (result && result.code === 0) {
+        console.log("===>安卓支付通知结果=成功", result)
         showMessage(t("success"), "success")
         setIsOpen(false)
         getSettingData()
@@ -83,11 +86,14 @@ export default function RechargeDrawer(props: RechargeProps) {
   const handleIosResponseRecharge = useCallback((data: unknown) => {
     console.log("handleIosResponseRecharge emitter response:", data)
     if (!data) return
-    handleIosBackPayMoneyOrder({
+    const moneyParam = {
       receipt_data: (data as IosRechargeResp).receiptData,
       pay_time: (data as IosRechargeResp).pay_time
-    }).then((result) => {
+    }
+    console.log("call /wallet/iosBackPayMoneyOrder param:", moneyParam)
+    handleIosBackPayMoneyOrder(moneyParam).then((result) => {
       if (result && result.code === 0) {
+        console.log("===>ios支付通知结果=成功", result)
         showMessage(t("success"), "success")
         setIsOpen(false)
         getSettingData()

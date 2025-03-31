@@ -113,7 +113,7 @@ export const ENDPOINTS = {
   },
   ORDERS: {
     ADD_POST_PAY: "/wallet/addPostPayOrder", //增加帖子付费记录
-    IOS_PAY_MONEY: "/wallet/IosBackPayMoneyOrder", //iso充值回调
+    IOS_PAY_MONEY: "/wallet/iosBackPayMoneyOrder", //iso充值回调
     ADD_POST_TIP: "/wallet/addPostTip",
     ADD_SUB: "/wallet/addSubOrder",
     ADD_WALLET_DOWN: "/wallet/addWalletDownOrder",
