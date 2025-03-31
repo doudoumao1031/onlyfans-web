@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 
-import Hls, { Events } from "hls.js"
+import Hls, { Events, ErrorTypes } from "hls.js"
 
 import { convertToHLS } from "./actions"
 
@@ -69,59 +69,124 @@ export default function HLSDemo() {
   }
 
   useEffect(() => {
+    // Ensure hlsUrl is valid and video element exists
     if (!hlsUrl || !videoRef.current) return
 
-    // Clean up previous HLS instance
+    const videoElement = videoRef.current // Cache the ref for cleanup
+
+    console.log("HLS useEffect triggered. URL:", hlsUrl)
+
+    // --- Cleanup previous instance ---
     if (hlsRef.current) {
+      console.log("Destroying previous HLS instance.")
       hlsRef.current.destroy()
       hlsRef.current = null
     }
+    // Ensure video src is cleared from previous runs or native playback
+    videoElement.removeAttribute("src")
+    videoElement.load() // Reset media element state
 
+    // --- Initialize HLS.js ---
     if (Hls.isSupported()) {
+      console.log("HLS.js is supported. Initializing...")
       const hls = new Hls({
-        capLevelToPlayerSize: true, // Enable adaptive quality based on player size
-        startLevel: -1 // Auto select initial level
+        capLevelToPlayerSize: true,
+        startLevel: -1,
+        debug: true // Keep debug enabled for detailed logs
       })
       hlsRef.current = hls
 
-      // Load the HLS stream
-      hls.loadSource(hlsUrl)
-      hls.attachMedia(videoRef.current)
+      // 1. Attach media element first
+      console.log("Attaching media element...")
+      hls.attachMedia(videoElement)
 
-      // Handle resolution switching
-      hls.on(Events.MANIFEST_PARSED, () => {
-        const availableLevels = hls.levels.map((level, index) => ({
-          index,
-          width: level.width,
-          height: level.height,
-          bitrate: level.bitrate
-        }))
+      // 2. Load source after media is attached
+      hls.on(Events.MEDIA_ATTACHED, () => {
+        console.log("HLS Media attached, loading source:", hlsUrl)
+        hls.loadSource(hlsUrl)
+      })
 
-        console.log("Available HLS levels:", availableLevels)
+      // --- Event Handlers ---
+      hls.on(Events.MANIFEST_PARSED, (event, data) => {
+        console.log("Manifest parsed. Levels:", data.levels)
+        // Set initial resolution if specified (you can re-add currentResolution dependency later if needed)
+        // if (currentResolution) { ... }
 
-        // Set initial resolution if specified
-        if (currentResolution) {
-          const levelIndex = getLevelIndexForResolution(hls, currentResolution)
-          if (levelIndex !== -1) {
-            hls.currentLevel = levelIndex
+        console.log("Attempting to play video...")
+        videoElement.play().catch((e) => {
+          console.error("Error auto-playing video:", e)
+          // Handle autoplay issues (e.g., browser restrictions)
+          if (e.name === "NotAllowedError") {
+            setError("Autoplay was blocked. Please click play.")
+          } else {
+            setError(`Error starting playback: ${e.message}`)
           }
+        })
+      })
+
+      hls.on(Events.ERROR, (event, data) => {
+        console.error("HLS Error:", event, data)
+        if (data.fatal) {
+          setError(`HLS playback error: ${data.details} (Type: ${data.type})`)
+          switch (data.type) {
+            case ErrorTypes.NETWORK_ERROR:
+              console.warn("Network error, attempting to recover...")
+              hls.startLoad() // Try restarting load
+              break
+            case ErrorTypes.MEDIA_ERROR:
+              console.warn("Media error, attempting to recover...")
+              hls.recoverMediaError() // Try recovering media error
+              break
+            default:
+              console.error("Unrecoverable HLS error. Destroying HLS instance.")
+              hls.destroy() // Destroy instance on unrecoverable error
+              break
+          }
+        } else {
+          // Log non-fatal errors
+          console.warn(`Non-fatal HLS error: ${data.details} (Type: ${data.type})`)
         }
       })
 
-      videoRef.current.play().catch(e => console.error("Error auto-playing video:", e))
-    } else if (videoRef.current.canPlayType("application/vnd.apple.mpegurl")) {
-      // For Safari
-      videoRef.current.src = hlsUrl
-      videoRef.current.play().catch(e => console.error("Error auto-playing video:", e))
+    // --- Native HLS Support (Safari) ---
+    } else if (videoElement.canPlayType("application/vnd.apple.mpegurl")) {
+      console.log("Using native HLS support (Safari).")
+      videoElement.src = hlsUrl
+      videoElement.addEventListener("loadedmetadata", () => {
+        console.log("Native HLS metadata loaded, attempting to play.")
+        videoElement.play().catch((e) => console.error("Error auto-playing native HLS:", e))
+      })
+      videoElement.addEventListener("error", (_e) => {
+        console.error("Native HLS playback error:", videoElement.error)
+        setError(`Native HLS Error: ${videoElement.error?.message || "Unknown error"}`)
+      })
+
+    // --- HLS Not Supported ---
+    } else {
+      setError("Your browser does not support HLS playback.")
+      console.error("HLS is not supported by this browser.")
     }
 
+    // --- Cleanup Function ---
     return () => {
+      console.log("Cleaning up HLS useEffect.")
       if (hlsRef.current) {
+        console.log("Destroying HLS instance on cleanup.")
         hlsRef.current.destroy()
         hlsRef.current = null
       }
+      // Reset video element state thoroughly
+      if (videoElement) {
+        console.log("Resetting video element state.")
+        videoElement.pause()
+        videoElement.removeAttribute("src")
+        videoElement.load()
+        // Remove specific event listeners added for native playback if necessary
+        // (Not strictly required here as the element might be unmounted, but good practice)
+      }
     }
-  }, [hlsUrl, currentResolution])
+    // Temporarily remove currentResolution from dependencies to isolate the issue
+  }, [hlsUrl])
 
   // Helper function to get the level index for a specific resolution
   const getLevelIndexForResolution = (hls: Hls, resolution: string): number => {
