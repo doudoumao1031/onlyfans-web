@@ -132,15 +132,15 @@ export default function RechargeDrawer(props: RechargeProps) {
 
   async function handleRecharge(amount: number) {
     await withLoading(async () => {
-      const tradeNo = await addWalletOrder({ amount: Number(amount) }).then((result) => {
-        if (result && result.code === 0) {
-          return result.data.trade_no
-        }
-        console.log("addWalletOrder failed", result?.message)
-        throw Error()
-      })
       // 发起支付 （ios/android）
       if (type === ANDROID) {
+        const tradeNo = await addWalletOrder({ amount: Number(amount) }).then((result) => {
+          if (result && result.code === 0) {
+            return result.data.trade_no
+          }
+          console.log("addWalletOrder failed", result?.message)
+          throw Error()
+        })
         const param = {
           currency: "USDT-TRC20",
           amount: amount.toString(),

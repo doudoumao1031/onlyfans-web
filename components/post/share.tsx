@@ -16,16 +16,17 @@ export type ShareParams = {
 
 export default function Share({ count, postId, shareParams }: { count: number; postId: number, shareParams: ShareParams }) {
   const handleShare = () => {
-    console.log("share")
     try {
       const { postId, title, firstName, lastName, username, fansId, data } = shareParams
       let isVideo = false
       let fileId = ""
+      let coverId = ""
       if (data.length > 0) {
         data?.some((item) => {
           if (item.file_type === FileType.Video) {
             isVideo = true
             fileId = item.file_id
+            coverId = item.thumb_id ? item.thumb_id : ""
           }
         })
       }
@@ -38,9 +39,10 @@ export default function Share({ count, postId, shareParams }: { count: number; p
         username,
         fansId,
         isVideo: isVideo,
-        fileId
+        fileId,
+        coverId
       }
-      console.log(postData)
+      console.log(postData, "postData")
 
       window.callAppApi("ShareText", JSON.stringify(postData))
     } catch (error) {
