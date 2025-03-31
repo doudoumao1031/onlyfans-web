@@ -20,8 +20,8 @@ export interface MediaPreviewProps {
 }
 
 
-export function MediaPreview (props:MediaPreviewProps) {
-  const { openState, setOpenState ,media,mediaType,previewType ,fileId } = props
+export function MediaPreview(props: MediaPreviewProps) {
+  const { openState, setOpenState, media, mediaType, previewType, fileId } = props
 
   const mediaUrl = useMemo(() => {
     if (previewType === PreviewType.LOCAL) {
@@ -33,12 +33,12 @@ export function MediaPreview (props:MediaPreviewProps) {
         return buildImageUrl(fileId)
       }
       if (mediaType === FileType.Video) {
-        return  buildVideoUrl(fileId,"480p")
+        return buildVideoUrl(fileId, "480p")
       }
       return null
     }
     return null
-  },[fileId, media, mediaType, previewType])
+  }, [fileId, media, mediaType, previewType])
   const videoSources = useMemo(() => {
     if (fileId) {
       return [
@@ -49,12 +49,12 @@ export function MediaPreview (props:MediaPreviewProps) {
       ]
     }
     return []
-  },[fileId])
+  }, [fileId])
   return (
     <Dialog open={openState} onOpenChange={setOpenState}>
       <DialogContent className={"hide-modal-close border-none bg-transparent"}>
         <div className={"mx-auto w-10/12"}>
-          {mediaUrl && mediaType === FileType.Image && (<img className={"w-full"} src={mediaUrl} alt="" width={100} height={100}/>)}
+          {mediaUrl && mediaType === FileType.Image && (<img className={"w-full"} src={mediaUrl} alt="" width={100} height={100} />)}
           {
             previewType === PreviewType.ONLINE && mediaUrl && mediaType === FileType.Video && (
               <VideoPlayer
@@ -66,7 +66,7 @@ export function MediaPreview (props:MediaPreviewProps) {
           {/*本地*/}
           {
             previewType === PreviewType.LOCAL && mediaUrl && mediaType === FileType.Video && (
-              <video className={"w-full"} src={mediaUrl} autoPlay width={100} height={100}></video>
+              <video className={"w-full"} src={mediaUrl} controls muted autoPlay width={100} height={100}></video>
             )
           }
         </div>
