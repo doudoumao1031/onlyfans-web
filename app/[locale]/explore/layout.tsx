@@ -68,7 +68,7 @@ export default function Layout({
             }`}
         >
           <Nav isFind={!!isFind} />
-          <div className="h-[calc(100%-60px)] w-full grow  py-3">
+          <div className="h-[calc(100%-60px)] w-full grow py-5">
             <div className={`size-full ${path.indexOf("/explore/feed") > -1 ? "" : "hidden"}`}>
               {feed}
             </div>

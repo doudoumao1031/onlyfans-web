@@ -5,8 +5,8 @@ import { Link } from "@/i18n/routing"
 
 export default function Nav({ isFind }: { isFind?: boolean }) {
   return (
-    <div className="flex h-14 w-full flex-row border-b border-gray-100">
-      <div className="flex flex-1 overflow-hidden px-3">
+    <div className="flex  w-full flex-row border-b border-gray-100">
+      <div className="flex flex-1 overflow-hidden px-4">
         <NavLinks isFind={isFind} />
       </div>
       {!isFind && (

@@ -56,7 +56,7 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
 
   return (
     <div
-      className={`sticky z-30 flex  w-full gap-3 overflow-x-auto bg-white text-center ${isFind ? "justify-start" : "justify-between"
+      className={`sticky z-30 flex  w-full  overflow-x-auto bg-white text-center ${isFind ? "justify-start gap-3" : "justify-start"
         }`}
     >
       {memoLink.map((link) => (
@@ -67,9 +67,9 @@ export default function NavLinks({ isFind }: { isFind?: boolean }) {
           ref={link.active ? activeLinkRef : null}
           onClick={(e) => handleNavClick(e, link.href, link?.event)}
           className={clsx(
-            "relative whitespace-nowrap py-3.5 text-xl",
+            "relative whitespace-nowrap py-2.5 ",
             link.active ? "font-bold text-black" : "font-normal text-[#777]",
-            isFind ? "mr-8" : ""
+            isFind ? "mr-8" : "mr-6"
           )}
         >
           {link.name}

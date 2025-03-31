@@ -88,7 +88,7 @@ export default function Post({
     <CommonMessageContext.Provider value={useMemo(() => ({ showMessage }), [showMessage])}>
       {renderNode}
       <div className="mb-2 flex w-full flex-col gap-2">
-        <div className="px-4">
+        <div className="px-4  text-[14px]">
           {!isInfoPage && (
           <UserTitle user={user} pinned={post.pinned} pub_time={post.pub_time} space={space} />
         )}
