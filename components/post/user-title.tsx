@@ -46,7 +46,7 @@ export default function UserTitle({
           />
         ) : (
           // <span className="text-nowrap">{dayjs(pub_time * 1000).format(ZH_MM_DD_HH_mm)}</span>
-          <span className="text-nowrap">{MomentTime(pub_time)}</span>
+          <span className="text-nowrap text-[12px]">{MomentTime(pub_time)}</span>
         )}
       </div>
     </div>
