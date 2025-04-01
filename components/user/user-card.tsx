@@ -1,74 +1,35 @@
-"use client"
-import Avatar from "@/components/user/avatar"
-import Image from "next/image"
-import { BloggerInfo } from "@/lib"
-import IconWithImage from "@/components/profile/icon"
+import { buildMention } from "@/components/post/utils"
+import AvatarVlog from "@/components/user/avatar-vlog"
+import { Link } from "@/i18n/routing"
+import { User } from "@/lib"
 import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
-import Link from "next/link"
+
+import LazyImg from "../common/lazy-img"
 /**
  * 博主名片
- * @param user 用户信息
- * @param subscribe 是否订阅
+ * @param user: User 用户信息
  * @constructor
  */
-export default function UserCard({ user, subscribe }: { user: BloggerInfo, subscribe: boolean }) {
-
+export default function UserCard({ user }: { user: User }) {
   const cardContent = (
     <>
-      <div className="flex justify-center w-full bg-black rounded-lg h-[100px]">
-        <Image
+      <div className="h-[116px] w-full rounded-lg bg-black">
+        <LazyImg
+          style={{ objectFit: "cover", width: "100%", height: "100%" }}
           src={user.back_img ? buildImageUrl(user.back_img) : getUserDefaultBackImg(user.username)}
-          width={280}
-          height={100}
+          width={1000}
+          height={116}
           alt=""
-          className="w-full rounded-lg opacity-50"
+          className="w-full rounded-lg"
         />
-        <div className="w-full absolute flex-col h-[100px] px-4 text-white">
-          <div className="h-4 text-xs text-nowrap px-1 pb-1 truncate">
-            {user.about}
+        <div className="absolute left-0 top-[58px] h-[58px] w-full rounded-b-lg bg-black bg-opacity-20">
+          <div className="ml-[115px] mt-2.5 flex flex-col justify-center text-white">
+            <div className="w-[85%] truncate text-nowrap text-sm font-medium">{`${user.first_name} ${user.last_name}`}</div>
+            <div className="w-[75%] truncate text-xs font-normal">{buildMention(user.username)}</div>
           </div>
-          <div className="w-full">
-            <div className="flex px-3 items-center justify-start">
-              <div className="w-1/4">
-                <Avatar src={user.photo} vlog={user.live_certification} />
-              </div>
-              <div className="flex-col w-3/4">
-                <div>
-                  <div className="font-medium">{user.first_name}</div>
-                  <div className="font-normal">{user.username ? `@${user.username}` : `@${user.first_name}`}</div>
-                </div>
-                {subscribe && (
-                  <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-4">
-                      <div className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-center">
-                        <IconWithImage
-                          url="/icons/explore/icon_fans_info_photo_white@3x.png"
-                          width={14}
-                          height={14}
-                        />
-                        <span className=" text-xs ml-1">{user.img_count}</span>
-                      </div>
-                      <div className="bg-black bg-opacity-40 px-2 py-1 rounded-full flex items-start">
-                        <IconWithImage
-                          url="/icons/explore/icon_fans_info_video_white@3x.png"
-                          width={14}
-                          height={14}
-                        />
-                        <span className="text-xs ml-1">{user.video_count}</span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-            {
-              !subscribe && (
-                <div className="text-white text-xs absolute right-7 bottom-3">
-                  今日新增: {user.today_add_count ?? 0}
-                </div>
-              )
-            }
-          </div>
+        </div>
+        <div className="absolute left-[15px] top-[14px]">
+          <AvatarVlog user={user} />
         </div>
       </div>
     </>
@@ -76,16 +37,8 @@ export default function UserCard({ user, subscribe }: { user: BloggerInfo, subsc
 
   return (
     <div className="relative">
-      <Link href={`/space/${user.id}/feed`}>
+      <Link href={`/space/${user.id}/feed`} className="">
         {cardContent}
-        {subscribe && !user.sub && (
-          <div className="absolute right-4 bottom-4 z-10">
-            {/*<SubscribedButton userId={user.id} name={user.first_name} subPrice={user.sub_price} type={"button"}/>*/}
-            <div className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white">
-              <span className="text-xs text-nowrap">免费/订阅</span>
-            </div>
-          </div>
-        )}
       </Link>
     </div>
   )

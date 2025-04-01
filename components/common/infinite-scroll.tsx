@@ -1,36 +1,43 @@
 "use client"
 
 import React, { useRef, useEffect } from "react"
-import { debounce } from "lodash"
-import { useInfiniteScroll } from "@/lib/hooks/use-infinite-scroll"
-import { PostData } from "@/lib"
+
 import clsx from "clsx"
+import { debounce } from "lodash"
+
+import { useInfiniteScroll } from "@/lib/hooks/use-infinite-scroll"
 
 export interface InfiniteScrollProps<T> {
   initialItems: T[]
   initialHasMore: boolean
-  fetcherFn: (page: number) => Promise<{ items: T[], hasMore: boolean }>
+  fetcherFn: (page: number) => Promise<{ items: T[]; hasMore: boolean }>
   children: (props: {
     items: T[]
     isLoading: boolean
     hasMore: boolean
     error: unknown
     isRefreshing: boolean
-  }) => React.ReactNode,
+    refresh: () => Promise<void>
+    scrollToTop: () => void
+  }) => React.ReactNode
   className?: string
 }
 
-export default function InfiniteScroll<T>({
-  initialItems,
-  initialHasMore,
-  fetcherFn,
-  children,
-  className
-}: InfiniteScrollProps<T>) {
+export default function InfiniteScroll<T>(props: InfiniteScrollProps<T>) {
+  const { initialItems, initialHasMore, fetcherFn, children, className } = props
   const containerRef = useRef<HTMLDivElement>(null)
   const touchStartY = useRef(0)
   const pullDistance = useRef(0)
   const isPulling = useRef(false)
+
+  const scrollToTop = () => {
+    if (containerRef.current) {
+      containerRef.current.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      })
+    }
+  }
 
   const { items, isLoading, hasMore, error, isRefreshing, loadMore, refresh } = useInfiniteScroll({
     initialItems,
@@ -101,20 +108,17 @@ export default function InfiniteScroll<T>({
       container.removeEventListener("touchmove", handleTouchMove)
       container.removeEventListener("touchend", handleTouchEnd)
     }
-  }, [handleScroll])
+  }, [handleScroll, handleTouchEnd])
 
   return (
     <div
       ref={containerRef}
-      className={clsx(
-        "w-full h-full overflow-y-auto relative",
-        className
-      )}
+      className={clsx("list-scroll-box hide-scrollbar relative size-full overflow-y-auto", className)}
       style={{ transition: "transform 0.2s ease-out" }}
     >
       {isRefreshing && (
-        <div className="sticky top-0 left-0 right-0 flex justify-center py-2 bg-gray-100/80 z-10">
-          <div className="animate-spin rounded-full h-6 w-6 border-2 border-gray-900 border-t-transparent"></div>
+        <div className="sticky inset-x-0 top-0 z-10 flex justify-center bg-gray-100/80 py-2">
+          <div className="size-6 animate-spin rounded-full border-2 border-gray-900 border-t-transparent"></div>
         </div>
       )}
       {children({
@@ -122,7 +126,9 @@ export default function InfiniteScroll<T>({
         isLoading,
         hasMore,
         error,
-        isRefreshing
+        isRefreshing,
+        refresh,
+        scrollToTop
       })}
     </div>
   )

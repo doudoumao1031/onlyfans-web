@@ -36,8 +36,41 @@ export interface PayOrderResp {
   trade_status: boolean
 }
 
+/**
+ * 原生调用支付参数
+ */
+export interface RechargeParam {
+  currency: string | "USDT"
+  amount: number
+  tradeNo: string
+}
+
+/**
+ * 安卓原生回调通知结果
+ */
+export interface RechargeResp {
+  result: "success" | "failed"
+  tradeNo: string
+}
+/**
+ * ios原生回调通知结果
+ */
+export interface IosRechargeResp {
+  receiptData: string
+  pay_time: number
+}
+
 export interface OrderCallBackReq {
   trade_no: string
+}
+
+/**
+ * 充值订单回调 （ios）请求参数
+ */
+export interface IosPayMoneyOrderReq {
+  receipt_data: string
+  trade_no?: string
+  pay_time: number
 }
 
 export interface DeleteOrderReq {

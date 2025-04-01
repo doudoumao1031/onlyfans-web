@@ -1,13 +1,12 @@
-import { ENDPOINTS } from "@/lib"
-import {
+import { ENDPOINTS ,
   PostTipReq,
   SubOrderReq,
   WalletDownOrderReq,
   WalletOrderReq,
   DeleteOrderReq,
   PayOrderResp, OrderCallBackReq
-} from "@/lib"
-import { fetchWithPost } from "@/lib"
+, fetchWithPost,
+IosPayMoneyOrderReq } from "@/lib"
 
 /**
  * 增加帖子付费记录
@@ -43,16 +42,20 @@ export async function addWalletOrder(params: WalletOrderReq) {
 }
 
 /**
- * 充值订单回调
+ * 充值订单回调 （安卓）
  * @param params
  */
 export async function handleRechargeOrderCallback(params: OrderCallBackReq) {
   return fetchWithPost<OrderCallBackReq>(ENDPOINTS.ORDERS.BACK_PAY_MONEY, params)
 }
 
-export async function handleDownOrderCallback(params: string): Promise<void> {
-  // Implementation
-  throw new Error("Not implemented")
+/**
+ * ios充值订单回调
+ * @param params
+ * @returns
+ */
+export async function handleIosBackPayMoneyOrder(params: IosPayMoneyOrderReq) {
+  return  fetchWithPost<IosPayMoneyOrderReq, string>(ENDPOINTS.ORDERS.IOS_PAY_MONEY, params)
 }
 
 export async function deleteOrder(params: DeleteOrderReq): Promise<void> {

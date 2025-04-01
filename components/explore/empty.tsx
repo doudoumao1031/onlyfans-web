@@ -1,17 +1,22 @@
-import Link from "next/link"
+"use client"
+import { useTranslations } from "next-intl"
+
 import Image from "next/image"
-export default function Empty({ text }: {text: string}) {
+
+
+import { Link } from "@/i18n/routing"
+
+export default function Empty({ text }: { text: string }) {
+  const t = useTranslations("Explore")
   return (
-    <div className="flex flex-col justify-center items-center justify-items-center mt-40">
-      <Image src="/icons/icon_detail_null@3x.png" alt="follow is null"
-        width={200}
-        height={150}
-      />
-      <span className="mt-6 text-gray-500 text-center">{text}
+    <div className="mt-40 flex flex-col items-center justify-center">
+      <Image src="/icons/icon_detail_null@3x.png" alt="follow is null" width={200} height={150} />
+      <span className="mt-6 text-center text-gray-500">
+        {text}
         <Link href="/explore/feed">
-          <span className="text-text-pink">精彩贴文</span>
+          <span className="text-text-theme">{t("Feed")}</span>
         </Link>
-        吧</span>
+      </span>
     </div>
   )
 }

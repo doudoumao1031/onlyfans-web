@@ -1,4 +1,4 @@
-import React from "react"
+import React, { createContext } from "react"
 
 interface CommonLoadingProps {
   count?: number
@@ -14,12 +14,12 @@ export default function CommonLoading({
   colors = ["#FFB6C1", "#FFB6C1", "#FFB6C1", "#FFB6C1", "#FFB6C1"]
 }: CommonLoadingProps): React.ReactNode {
   return (
-    <div className="loading-container flex justify-center items-center gap-2">
+    <div className="loading-container flex items-center justify-center gap-2">
       {[...Array(count)].map((_, index) => (
         <svg
           key={index}
           viewBox="0 0 24 24"
-          className="common-loading-heart-icon flex-shrink-0"
+          className="common-loading-heart-icon shrink-0"
           style={{
             width: `${size}vw`,
             height: `${size}vw`,

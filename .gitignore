@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/public/uploads
 
 # next.js
 /.next/
@@ -47,3 +48,5 @@ push-all.sh
 .idea
 
 .vscode
+/.clerk/.tmp/README.md
+/.clerk/.tmp/keyless.json

@@ -1,15 +1,20 @@
-import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
-import { User } from "@/lib/actions/users/types"
-import Avatar from "./avatar"
+import { useTranslations } from "next-intl"
+
 import Image from "next/image"
-import Link from "next/link"
+
+
+import AvatarVlog from "@/components/user/avatar-vlog"
+import { Link } from "@/i18n/routing"
+import { User } from "@/lib/actions/users/types"
+import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
+
 import { buildMention } from "./utils"
 
 export default function Subscribe({ user }: { user: User }) {
-  const { back_img, photo, id, first_name, last_name, username, sub } = user
-
+  const { back_img, photo, id, first_name, last_name, username, sub, sub_price } = user
+  const t = useTranslations("Explore")
   const content = (
-    <div className="flex justify-center w-full bg-black rounded-lg h-[100px]">
+    <div className="flex h-[100px] w-full justify-center rounded-lg bg-black">
       <Image
         src={back_img ? buildImageUrl(back_img) : getUserDefaultBackImg(username)}
         alt="Background"
@@ -17,16 +22,16 @@ export default function Subscribe({ user }: { user: User }) {
         height={100}
         className="w-full rounded-lg object-cover"
       />
-      <div className="w-full h-full absolute flex justify-between bg-black/50 p-3 rounded-lg">
-        <div className="flex gap-4 px-3 items-center">
+      <div className="absolute flex size-full justify-between rounded-lg bg-black/50 p-4">
+        <div className="flex items-center gap-3 px-0">
           <div>
-            <Avatar fileId={photo} width={16} />
+            <AvatarVlog user={user} />
           </div>
           <div className="text-white">
-            <div className="text-lg">
+            <div className="max-w-[160px] truncate text-sm">
               {first_name} {last_name}
             </div>
-            <div className="text-white/75 text-xs">{buildMention(username)}</div>
+            <div className="text-xs text-white/75">{buildMention(username)}</div>
           </div>
         </div>
       </div>
@@ -36,14 +41,12 @@ export default function Subscribe({ user }: { user: User }) {
     <div className="relative">
       <Link href={`/space/${id}/feed`}>
         {content}
-        {!sub && (
-          <div className="absolute right-4 top-4 z-10">
-            {/*<SubscribedButton name={first_name} userId={Number(id)} subPrice={sub_price} type={"button"}/>*/}
-            <div className="bg-black bg-opacity-40 self-start px-2 py-1 rounded-full text-white">
-              <span className="text-xs text-nowrap">免费/订阅</span>
-            </div>
+        <div className="absolute right-2.5 top-2 z-10">
+          {/*<SubscribedButton name={first_name} userId={Number(id)} subPrice={sub_price} type={"button"}/>*/}
+          <div className="self-start rounded-full bg-black bg-opacity-40 px-4 py-1 text-white">
+            <span className="text-nowrap text-xs">{sub ? t("recommended.subscribed") : sub_price > 0 ? t("recommended.freeAndSubscription") : t("recommended.free")}</span>
           </div>
-        )}
+        </div>
       </Link>
     </div>
   )

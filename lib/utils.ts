@@ -1,12 +1,12 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { completeFile, uploadMediaFile, uploadPart } from "./actions/media"
-import { ENDPOINTS, uploadFetch } from "@/lib/actions/shared"
+
+import { ENDPOINTS, FileType, uploadFetch } from "@/lib/actions/shared"
+import { BATCH_SIZE, CHUNK_SIZE } from "@/lib/constant"
 import { PromiseConcurrency } from "@/lib/promise-curr"
 
-// 文件分片大小2M
-const CHUNK_SIZE = 1024 * 1024 * 2
-const BATCH_SIZE = 10
+import { completeFile, uploadMediaFile, uploadPart } from "./actions/media"
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -21,21 +21,15 @@ export function convertImageToBase64(file: File) {
   })
 }
 
-export enum UPLOAD_MEDIA_TYPE {
-  PIC = "1", // 图片
-  VIDEO = "2", // 视频
-  OTHER = "3" // 其他附件
-}
-
 export const getUploadMediaFileType = (file: File) => {
   const type = file.type.toLowerCase()
   if (type.includes("video")) {
-    return UPLOAD_MEDIA_TYPE.VIDEO
+    return FileType.Video
   }
   if (type.includes("image")) {
-    return UPLOAD_MEDIA_TYPE.PIC
+    return FileType.Image
   }
-  return UPLOAD_MEDIA_TYPE.OTHER
+  return FileType.Other
 }
 
 export async function commonUploadFile(file: File) {
@@ -43,7 +37,7 @@ export async function commonUploadFile(file: File) {
   const fileType = getUploadMediaFileType(file)
   formData.append("file_count", "1")
   formData.append("file_size", String(file.size))
-  formData.append("file_type", fileType)
+  formData.append("file_type", String(fileType))
   formData.append("file", file)
   const response = await uploadMediaFile(formData)
   if (response?.data) {
@@ -100,7 +94,7 @@ export async function uploadFile(file: File) {
     const chunkResult = await uploadFirstChunk(
       String(file.size),
       firstChunk,
-      getUploadMediaFileType(file),
+      String(getUploadMediaFileType(file)),
       totalChunks.toString()
     )
     console.log("handleUploadFile totalChunks", totalChunks)
@@ -179,12 +173,27 @@ export function buildVideoUrl(fileId: string, quality: string) {
 }
 
 export const TOKEN_KEY = "X-Token"
+export const USER_KEY = "USER_ID"
 
 export function getEvenlySpacedPoints<T>(arr: T[], count = 12) {
   if (arr.length <= count) return arr // If array length is less than or equal to count, return it as is
   const step = (arr.length - 1) / (count - 1)
   return Array.from({ length: count }, (_, i) => arr[Math.round(i * step)])
 }
+export function getDateRange({ start, end }: { start: string, end: string }) {
+  const dateArray = [] // 用于存储日期的数组
+  const currentDate = new Date(start) // 将开始日期转换为 Date 对象
 
+  // 将结束日期转换为 Date 对象
+  const endDateObj = new Date(end)
 
-export const TIME_FORMAT = "YYYY-MM-DD HH:mm:ss"
+  // 循环生成日期范围内的每一天
+  while (currentDate <= endDateObj) {
+    // 格式化日期为 yyyy-mm-dd
+    const formattedDate = currentDate.toISOString().split("T")[0]
+    dateArray.push(formattedDate) // 将格式化后的日期添加到数组
+    currentDate.setDate(currentDate.getDate() + 1) // 增加一天
+  }
+
+  return getEvenlySpacedPoints(dateArray)
+}

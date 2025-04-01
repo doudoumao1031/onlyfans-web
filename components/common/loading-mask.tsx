@@ -1,7 +1,7 @@
 "use client"
 
-import { createPortal } from "react-dom"
-import { useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from "react"
+
 import CommonLoading from "./common-loading"
 
 interface LoadingMaskProps {
@@ -18,12 +18,22 @@ export default function LoadingMask({ isLoading }: LoadingMaskProps) {
 
   if (!mounted || !isLoading) return null
 
-  return createPortal(
-    <div className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm flex items-center justify-center">
-      <div className="rounded-lg relative w-[200px]">
+  return (
+    <div id="loading-mask" className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+      <div className="relative w-[200px] rounded-lg">
         <CommonLoading />
       </div>
-    </div>,
-    document.body
+    </div>
   )
 }
+
+export interface CommonLoadingContextValues {
+  isLoading: boolean
+  setIsLoading: (isLoading: boolean) => void
+  loadingText?: string
+  setLoadingText?: (text: string) => void
+}
+
+export const CommonLoadingContext = createContext({} as CommonLoadingContextValues)
+
+export const useCommonLoadingContext = () => useContext(CommonLoadingContext)

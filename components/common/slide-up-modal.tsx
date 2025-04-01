@@ -1,9 +1,12 @@
 "use client"
 
 import React, { useState, useEffect, useRef } from "react"
-import { createPortal } from "react-dom"
-import { useRouter } from "next/navigation"
+
+
 import clsx from "clsx"
+import { createPortal } from "react-dom"
+
+import { useRouter } from "next/navigation"
 
 export function SlideUpModal({
   children,
@@ -40,16 +43,16 @@ export function SlideUpModal({
   return createPortal(
     <div
       className={clsx(
-        "fixed inset-0 flex justify-center items-end bg-black bg-opacity-50 transition-opacity duration-300",
+        "fixed inset-0 flex items-end justify-center bg-black bg-opacity-50 transition-opacity duration-300",
         isOpen ? "opacity-100" : "opacity-0"
       )}
       onTouchEnd={onDismiss}
     >
       <div
         className={clsx(
-          "bg-white w-full max-w-lg rounded-t-lg shadow-lg transform transition-transform duration-300",
+          "w-full max-w-lg rounded-t-lg bg-white shadow-lg transition-transform duration-300",
           isOpen ? "translate-y-0" : "translate-y-full",
-          full ? "h-[100vh]" : ""
+          full ? "h-screen" : ""
         )}
         ref={sheetRef}
         onTouchEnd={(e) => e.stopPropagation()} // Prevent click propagation to the backdrop
@@ -57,7 +60,7 @@ export function SlideUpModal({
         {closeBtn && (
           <button
             onTouchEnd={onDismiss}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-800"
+            className="absolute right-4 top-4 text-gray-500 hover:text-gray-800"
           >
             Close
           </button>

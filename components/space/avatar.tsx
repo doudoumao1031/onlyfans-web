@@ -2,18 +2,18 @@ import Image from "next/image"
 
 export default function Avatar() {
   return (
-    <div className="absolute rounded-full p-0.5 bg-white w-[90px] h-[90px] top-[-47px] left-[50%] ml-[-45px]">
+    <div className="absolute left-[50%] top-[-47px] ml-[-45px] size-[90px] rounded-full bg-white p-0.5">
       <Image
         src="/demo/avtar1.jpeg"
         alt="User avatar"
         width={90}
         height={90}
-        className="rounded-full w-full h-full object-cover"
+        className="size-full rounded-full object-cover"
         priority
       />
-      <div className="absolute right-0 bottom-2 rounded-full p-1.5 bg-white">
+      <div className="absolute bottom-2 right-0 rounded-full bg-white p-1.5">
         <Image
-          src="/icons/profile/icon-game-live.png"
+          src="/theme/icon_sign_gamevlog@3x.png"
           width={20}
           height={20}
           alt="live"

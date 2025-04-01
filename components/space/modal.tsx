@@ -1,4 +1,8 @@
+"use client"
+import { useTranslations } from "next-intl"
+
 import Image from "next/image"
+
 
 export type TModalProps = {
   visible?: boolean
@@ -23,28 +27,29 @@ export default function Page({
   title,
   content,
   footer,
-  cancel = () => {},
-  confirm = () => {}
+  cancel = () => { },
+  confirm = () => { }
 }: TModalProps) {
+  const t = useTranslations("Common")
   if (!visible) return null
   const DefaultFooter = () => {
     return (
-      <div className="w-full flex items-center justify-center text-[16px] border-t border-[#ebeced] h-[44px]">
+      <div className="flex h-[44px] w-full items-center justify-center border-t border-[#ebeced] text-base">
         <div
           onClick={() => {
             cancel()
           }}
-          className="h-full flex justify-center items-center flex-1 text-center text-[#6D7781] border-r border-[#ebeced]"
+          className="text-gray-secondary flex h-full flex-1 items-center justify-center border-r border-[#ebeced] text-center"
         >
-          {cancelText || "取消"}
+          {cancelText || t("cancel")}
         </div>
         <div
           onClick={() => {
             confirm()
           }}
-          className="h-full flex justify-center items-center flex-1 text-center text-text-pink"
+          className="text-text-theme flex h-full flex-1 items-center justify-center text-center"
         >
-          {okText || "确定"}
+          {okText || t("confirm")}
         </div>
       </div>
     )
@@ -56,7 +61,7 @@ export default function Page({
           cancel()
         }
       }}
-      className="fixed top-0 left-0 w-screen h-screen bg-black/50 z-50 flex justify-center items-center"
+      className="fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center bg-black/50"
     >
       {children}
       {type === "modal" && (
@@ -66,20 +71,20 @@ export default function Page({
             e.stopPropagation()
           }}
         >
-          {title && <div className="p-4 font-bold flex justify-center">{title}</div>}
-          {content && <div className="p-4 min-h-16 flex justify-center">{content}</div>}
+          {title && <div className="flex justify-center p-4 font-bold">{title}</div>}
+          {content && <div className="flex min-h-16 justify-center p-4">{content}</div>}
           <div className="flex">{footer || DefaultFooter()}</div>
         </div>
       )}
       {type === "toast" && (
-        <div className="bg-black bg-opacity-50 p-6 pt-4 pb-4 rounded-full flex items-center">
+        <div className="flex items-center rounded-full bg-black/50 p-6 py-4">
           <Image
             src="/icons/checkbox_select_white.png"
             alt="checkbox_select_white"
             width={20}
             height={20}
           />
-          {content && <span className="text-white text-[16px] font-medium ml-2">{content}</span>}
+          {content && <span className="ml-2 text-base font-medium text-white">{content}</span>}
         </div>
       )}
     </div>

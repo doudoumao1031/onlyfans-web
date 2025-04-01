@@ -1,27 +1,43 @@
 "use client"
-import Link from "next/link"
+import { useEffect, useRef } from "react"
+
+import { useTranslations } from "next-intl"
+
 import { usePathname } from "next/navigation"
 
-interface HeaderProps {
-  type?: number;
-  setType?: (type: number) => void;
-}
+
+import { Link } from "@/i18n/routing"
 
 export default function Header() {
   const pathname = usePathname()
+  const t = useTranslations("Explore.recommended")
   const tabs = [
-    { path: "/explore/recommended/hot", label: "热门推荐" },
-    { path: "/explore/recommended/new", label: "新人推荐" },
-    { path: "/explore/recommended/popular", label: "🔥人气博主" }
+    { path: "/explore/recommended/hot", label: t("hot") },
+    { path: "/explore/recommended/new", label: t("new") },
+    { path: "/explore/recommended/popular", label: t("popular") }
   ]
 
+  const activeTabRef = useRef<HTMLAnchorElement | null>(null)
+
+  useEffect(() => {
+    if (activeTabRef.current) {
+      activeTabRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
+  }, [pathname])
+
   return (
-    <div className="gap-3 flex justify-around mb-4">
+    <div className="hide-scrollbar mb-2 flex w-full gap-5 overflow-x-auto">
       {tabs.map((tab) => (
-        <Link key={tab.path} href={tab.path}
-          className={`flex items-center justify-center ${pathname === tab.path ? "bg-background-pink text-white" : "bg-white text-text-pink"} border border-border-pink rounded-full px-5 py-1`}
+        <Link
+          key={tab.path}
+          href={tab.path}
+          ref={pathname.endsWith(tab.path) ? activeTabRef : null}
+          className={`flex shrink-0 items-center justify-center whitespace-nowrap text-[15px] ${pathname.endsWith(tab.path)
+              ? "font-medium"
+              : "font-normal"
+            }`}
         >
-          <span className="text-nowrap font-medium text-base">{tab.label}</span>
+          <span className="text-nowrap">{tab.label}</span>
         </Link>
       ))}
     </div>

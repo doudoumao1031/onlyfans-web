@@ -1,40 +1,48 @@
 import { useState } from "react"
-import IconWithImage from "../icon"
+
+import { useTranslations } from "next-intl"
+
 import { PostData } from "@/lib"
 import { buildImageUrl } from "@/lib/utils"
+
 import LazyImg from "../../common/lazy-img"
+import IconWithImage from "../icon"
+
+
 type TProps = {
   item: PostData
 }
 
-const countTypes = {
-  play_count: "播放",
-  comment_count: "评论",
-  thumbs_up_count: "点赞",
-  share_count: "分享",
-  tip_count: "打赏",
-  collection_count: "收藏"
-}
 
 export default function Page({ item }: TProps) {
+  const t = useTranslations("Profile")
+  const countTypes = {
+    play_count: t("dataCenter.playCount1"),
+    comment_count: t("dataCenter.commentCount"),
+    thumbs_up_count: t("dataCenter.thumbsUpCount"),
+    share_count: t("dataCenter.shareCount"),
+    tip_count: t("dataCenter.tipCount"),
+    collection_count: t("dataCenter.collectionCount")
+  }
+
   const { post_attachment, post, post_metric } = item
   const [isOpen, setIsOpen] = useState<boolean>(false)
   return (
-    <div className={`pl-4 ${isOpen ? "border-b-gray-100 border-b" : ""}`}>
-      <div className={` py-2 ${!isOpen ? "border-b-gray-100 border-b" : ""}`}>
-        <div className={"h-28 flex justify-between px-4 pl-0"}>
-          <div className="h-28 w-28 bg-cover mr-2 shrink-0 rounded-md bg-slate-200">
+    <div className={`pl-4 ${isOpen ? "border-b border-b-gray-100" : ""}`}>
+      <div className={` py-2 ${!isOpen ? "border-b border-b-gray-100" : ""}`}>
+        <div className={"flex h-28 justify-between px-4 pl-0"}>
+          <div className="mr-2 size-28 shrink-0 rounded-md bg-slate-200 bg-cover">
             <LazyImg
-              className="aspect-square rounded-md "
-              src={buildImageUrl(post_attachment ? post_attachment[0]?.thumb_id || post_attachment[0]?.file_id : "")}
+              className="aspect-square rounded-md object-cover"
+              src={post_attachment ? buildImageUrl(post_attachment[0]?.thumb_id || post_attachment[0]?.file_id) : "/icons/image_draft.png"}
               alt=""
               width={112}
               height={112}
             />
           </div>
-          <div className="flex flex-col justify-between flex-1">
-            <div className="fbreak-all text-ellipsis line-clamp-2">{post.title}</div>
-            <div className="flex justify-between items-center">
+          <div className="flex flex-1 flex-col justify-between">
+            <div className="line-clamp-2 text-ellipsis break-all">{post.title}</div>
+            <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <IconWithImage
                   url="/icons/space/icon_fans_play_s_gray@3x.png"
@@ -42,10 +50,14 @@ export default function Page({ item }: TProps) {
                   color="#6D7781"
                   height={12}
                 />
-                <span className="text-[#BBB] text-xs ml-2">{post_metric.play_count}</span>
+                <span className="ml-2 text-xs text-[#BBB]">{post_metric.play_count}</span>
               </div>
-              <div className="text-[#BBB] flex items-center" onClick={() => { setIsOpen(!isOpen) }}>
-                <span>{isOpen ? "收起" : "详细"}</span>
+              <div className="flex items-center text-[#BBB]" onClick={(e) => {
+                e.preventDefault()
+                setIsOpen(!isOpen)
+              }}
+              >
+                <span>{isOpen ? t("dataCenter.fold") : t("dataCenter.detail")}</span>
                 <IconWithImage url="/icons/profile/icon-bt.png" width={14} height={14} color={"#BBB"} />
               </div>
             </div>
@@ -53,10 +65,10 @@ export default function Page({ item }: TProps) {
         </div>
         {
           isOpen && (
-            <div className="flex flex-wrap mt-3 mb-3 overflow-hidden transition-all duration-1000">
+            <div className="my-3 flex flex-wrap overflow-hidden transition-all duration-1000">
               {Object.keys(countTypes).map(v => (
-                <div key={v} className="w-2/6 flex justify-center items-center flex-col mt-3 mb-3">
-                  <span className="text-[20px] font-medium">{post_metric[v as keyof typeof post_metric]}</span>
+                <div key={v} className="my-3 flex w-2/6 flex-col items-center justify-center">
+                  <span className="text-xl font-medium">{post_metric[v as keyof typeof post_metric]}</span>
                   <span className="text-xs text-[#959595]">{countTypes[v as keyof typeof countTypes]}</span>
                 </div>
               ))}

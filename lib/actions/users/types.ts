@@ -44,9 +44,8 @@ export type SubscribeSetting = {
  * 收藏文章/帖子请求
  */
 export interface CollectionPostReq {
-  collection: boolean // 0-取消收藏 1-收藏
+  collection: boolean
   post_id: number
-  user_id?: number
 }
 
 export interface User {
@@ -92,20 +91,37 @@ export interface WalletInfo {
   pt_wallet: string
 }
 
+export interface IosPayArray {
+  price: string
+  product_id: string
+}
 /**
  * pt钱包信息返回
  */
 export interface PtWalletInfo extends WalletInfo {
   proportion: string
+  ios_pay_arr: IosPayArray[]
 }
 
 /**
  * 收支明细请求
  */
-export interface StatementReq extends PageInfo {
+export type StatementReq = PageInfo & {
   change_type?: number // 1 充值 2购买会员 3 打赏 4 帖子付费 5 提现
   start_time?: number
   end_time?: number
+}
+export enum ChangeType {
+  RECHARGE = 1,
+  BUY_VIP = 2,
+  REWARD = 3,
+  PAY_POST = 4,
+  WITHDRAW = 5
+}
+
+export type ChangeTypeDesc = {
+  type: number
+  desc: string
 }
 
 /**
@@ -114,11 +130,37 @@ export interface StatementReq extends PageInfo {
 export interface StatementResp {
   balance_snapshot: number //资金快照
   change_amount: number // 变动金额
-  change_type: number // 1 充值 2购买会员 3 打赏 4 帖子付费 5 提现
+  change_type: number // 1 充值 2订阅 3 打赏 4 帖子付费 5 提现
   id: number
   reason: string // 变动原因
   user_id: number
   trade_time: number // 交易时间
+  trade_status: number // 0 成功 1 审核中 2 失败
+  from_user: string // 交易方
+  post_id?: number //帖子id
+  trade_no: string //订单号
+  user_base_vo?: {
+    first_name: string
+    id: number
+    last_name: number
+    photo: number
+    pt_user_id: number
+    username: string
+  }
+}
+
+/**
+ * 提现记录
+ */
+export interface WithdrawOrder {
+  trade_type: number
+  trade_no: string
+  result: string
+  amount: number // 金额
+  id: number
+  reason: string // 变动原因
+  audit_time: number  // 审核时间
+  create_time: number // 创建时间
   trade_status: number // 0 成功 1 审核中 2 失败
 }
 

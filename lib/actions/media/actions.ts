@@ -1,12 +1,11 @@
 "use server"
 
-import { ENDPOINTS, UploadRes } from "@/lib"
 import type {
   UploadPartReq,
   CompleteFileReq,
   UploadPartResp
 } from "@/lib"
-import { fetchWithPost } from "@/lib"
+import { ENDPOINTS, UploadRes, fetchWithGet, fetchWithPost } from "@/lib"
 
 
 // file: File
@@ -50,4 +49,15 @@ export async function getVideo(fileId: string, range?: string): Promise<Blob> {
 export async function getVideoCut(fileId: string, resRate: string, range?: string): Promise<Blob> {
   // Implementation
   throw new Error("Not implemented")
+}
+
+export async function mediaEnc() {
+  return fetchWithGet(`${ENDPOINTS.MEDIA.MEDIA_ENC}`, null)
+}
+
+export async function mediaHls(id: string) {
+  return fetchWithGet(`${ENDPOINTS.MEDIA.MEDIA_HLS}/${id}`, null)
+}
+export async function mediaHlsData(id: string) {
+  return fetchWithGet(`${ENDPOINTS.MEDIA.MEDIA_HLSDATA}/${id}`, null)
 }

@@ -1,0 +1,55 @@
+
+.profile-content{
+  background-position: center top;
+  background-repeat: no-repeat;
+  height: 158px;
+
+  .user-name{
+    :after{
+      content: '';
+    }
+  }
+
+}
+.subscription-item{
+  background-image:  linear-gradient(-39deg, #6BD5FF 0%, #D5F3FF 100%);
+}
+
+
+.message-box-tail{
+  position: absolute;
+  width: 18px;
+  height: 16px;
+  color: #fff;
+  border-width: 0 10px 0 0;
+  border-style: solid;
+  border-color: transparent currentcolor transparent transparent;
+  border-radius: 0 0 36px;
+  bottom: -2px;
+  left: -8px;
+}
+
+.custom-switch{
+  width: 52px;
+  border: 2px solid transparent;
+  & > span {
+    width: 28px;
+    height: 28px;
+    &.data-\[state\=checked\]\:translate-x-4[data-state="checked"]{
+      --tw-translate-x: 20px;
+    }
+    &.data-\[state\=unchecked\]\:translate-x-0[data-state="unchecked"]{
+      //--tw-translate-x: 1px;
+      box-shadow: 1px 0px 1px 0px #bbb;
+    }
+    background: #fff;
+  }
+  &.data-\[state\=checked\]\:bg-primary[data-state="checked"]{
+    background:  #4CD964;
+    border-color: #4CD964;
+  }
+  &.data-\[state\=unchecked\]\:bg-input[data-state="unchecked"]{
+    background: #fff;
+    border-color: #bbb;
+  }
+}

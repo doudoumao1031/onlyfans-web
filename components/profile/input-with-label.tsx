@@ -7,9 +7,13 @@ import {
   useCallback,
   useRef
 } from "react"
+
 import clsx from "clsx"
-import IconWithImage from "@/components/profile/icon"
+
 import SheetSelect, { ISelectOption } from "@/components/common/sheet-select"
+import IconWithImage from "@/components/profile/icon"
+
+import CopyText from "../common/copy-text"
 
 type InputValueType = string | number | readonly string[] | undefined
 
@@ -25,13 +29,17 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   labelClass?: string,
   iconSize?: number,
   onInputChange?: (value: InputValueType) => void,
+  type?: "text" | "textarea",
+  rows?: number
+  copy?: boolean
 }
 
+
 export default function InputWithLabel(props: InputProps) {
-  const { label, name, disabled, onInputChange, description, value, options, errorMessage, iconSize } = props
+  const { label, type = "text", rows = 3, name, disabled, onInputChange, description, value, options, errorMessage, iconSize, copy, maxLength } = props
   // const [val, setVal] = useState<InputValueType>(value ?? "")
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef(null)
   const isSelectInput = useMemo(() => {
     return options !== undefined && Array.isArray(options)
   }, [options])
@@ -54,6 +62,8 @@ export default function InputWithLabel(props: InputProps) {
     if (!positionInCenter) return
     setPositionInCenter(false)
     setTimeout(() => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       inputRef?.current?.focus?.()
     }, 100)
   }, [positionInCenter])
@@ -82,6 +92,8 @@ export default function InputWithLabel(props: InputProps) {
     return option?.label ?? ""
   }, [isSelectInput, value, options])
 
+  const isTextArea = type === "textarea"
+
   return (
     <section className={clsx(
       "relative rounded-xl",
@@ -92,9 +104,10 @@ export default function InputWithLabel(props: InputProps) {
       <label
         style={{
           transition: "top .1s",
-          top: positionInCenter ? 16 : -7
+          top: positionInCenter ? 16 : -7,
+          background: disabled ? "linear-gradient(to bottom, #fff 0%,#fff 50%,#F7F7F7 51%,#F7F7F7 100%)" : "#fff"
         }} onTouchEnd={labelTouch} className={clsx(
-          "absolute bg-white left-4 leading-none font-normal z-30 transition text-[#6D7781]",
+          "text-gray-secondary absolute left-4 z-30 pr-2.5 font-normal leading-none transition"
         )}
         htmlFor={name}
       >
@@ -102,25 +115,35 @@ export default function InputWithLabel(props: InputProps) {
       </label>
       <section
         className={
-          clsx(`flex ${props.labelClass ? props.labelClass : "pt-[12px] pb-[12px] pl-4 pr-4"} rounded-xl border border-[rgb(221,221,221)] relative z-20 items-center`,
-            disabled ? "bg-[#F7F7F7]" : "",)
+          clsx(`flex ${props.labelClass ? props.labelClass : ""} relative z-20 min-h-[48px] items-center rounded-xl border border-[rgb(221,221,221)]`,
+            disabled ? "bg-[#F7F7F7]" : "")
         }
       >
-        {!isSelectInput && (
-          <input ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
+        {!isSelectInput && !isTextArea && (
+          <input maxLength={maxLength} ref={inputRef} onBlur={inputBlur} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
             onChange={event => {
               const eventValue = (event.target as HTMLInputElement).value
               // setVal(eventValue)
               onInputChange?.(eventValue)
-            }} type="text" disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
-              "flex-1 w-full font-medium",
+            }} type={type ?? "text"} disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
+              "w-full flex-1 px-4 text-[15px] font-medium"
 
+            )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
+          />
+        )}
+        {!isSelectInput && isTextArea && (
+          <textarea maxLength={maxLength} ref={inputRef} onBlur={inputBlur} rows={rows} onFocus={inputFocus} name={name} value={value} onTouchEnd={handleInputTouch}
+            onChange={event => {
+              const eventValue = (event.target as HTMLTextAreaElement).value
+              // setVal(eventValue)
+              onInputChange?.(eventValue)
+            }} disabled={disabled} readOnly={disableInput || props.readOnly} className={clsx(
+              "w-full flex-1 rounded-xl p-4 font-medium"
             )} placeholder={(positionInCenter || value === "") ? props?.placeholder : ""}
           />
         )}
         {isSelectInput && (
           <>
-
             <SheetSelect
               isOpen={isOpen}
               setIsOpen={setIsOpen}
@@ -129,8 +152,8 @@ export default function InputWithLabel(props: InputProps) {
                 onInputChange?.(v)
               })} options={options ?? []}
             >
-              <div className={"flex w-full items-center"}>
-                <div className={clsx("flex-1 font-medium text-left", !optionShowLabel ? "text-gray-300" : "")}>{optionShowLabel || props?.placeholder}</div>
+              <div className={"flex w-full items-center px-4"}>
+                <div className={clsx("flex-1 text-left font-medium", !optionShowLabel ? "text-gray-300" : "")}>{optionShowLabel || props?.placeholder}</div>
                 <IconWithImage url={"/icons/profile/icon_arrow_down@3x.png"} width={iconSize || 24}
                   height={iconSize || 24} color={"#bbb"}
                 />
@@ -139,8 +162,14 @@ export default function InputWithLabel(props: InputProps) {
           </>
         )}
       </section>
-      {errorMessage && <div className="text-red-600 text-xs px-4 mt-1.5">{errorMessage}</div>}
-      {description && !errorMessage && <section className="text-[#6D7781] text-xs px-4 mt-1.5">{description}</section>}
+      {errorMessage && <div className="text-theme mt-1.5 px-4 text-xs">{errorMessage}</div>}
+      {description && !errorMessage && (
+        <section className="text-gray-secondary mt-1.5 flex items-center px-4 text-xs">{description}
+          {
+            copy && <CopyText text={description.toString()} />
+          }
+        </section>
+      )}
     </section>
   )
 }

@@ -1,28 +1,72 @@
 "use client"
+import { useMemo, useState } from "react"
+
+import { useTranslations } from "next-intl"
+
 import RechargeDrawer from "@/components/profile/recharge-drawer"
-import { useState } from "react"
-export default function RechargePanel({ amount }: {amount: number}) {
+import { useRouter } from "@/i18n/routing"
+import { WalletInfo } from "@/lib"
+
+import SheetSelect from "../common/sheet-select"
+
+export default function RechargePanel({ walletInfo }: { walletInfo: WalletInfo }) {
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const [initAmount, setInitAmount] = useState<number>(amount)
+  // const [withdrawOpen, setWithdrawOpen] = useState<boolean>(false)
+  const [openSheet, setOpenSheet] = useState<boolean>(false)
+  const [initAmount, setInitAmount] = useState<number>(walletInfo.amount)
+  const t = useTranslations("Profile")
+  const commonT = useTranslations("Common")
+
+  const formattedAmount = useMemo(() => {
+    return new Intl.NumberFormat().format(initAmount)
+  }, [initAmount])
+
+
   return (
-    <div className={"p-4"}>
-      <div
-        className={"bg-[url('/icons/profile/bg_wallet.png')] bg-cover rounded-xl text-white flex justify-between items-center w-full px-[20px] pt-[10px] pb-[20px]"}
-      >
-        <div className={"flx flex-col justify-start"}>
-          <span className={"text-xs"}>唯粉余额</span>
-          <div className={"flex items-baseline font-medium"}>
-            <span className={"text-[32px]"}>{initAmount || 0.00}</span>
-            <span className={"text-[15px]"}>&nbsp;&nbsp;USDT</span>
+    <>
+      <div className={"mt-2.5 px-4"}>
+        <div
+          className={"flex items-center justify-between gap-1.5 rounded-xl bg-[url('/theme/bg_wallet@3x.png')] bg-cover px-[20px] pb-[20px] pt-[10px] text-white"}
+        >
+          <div className={"flex flex-1 flex-col overflow-hidden"}>
+            <span className={"text-xs"}>{commonT("appName")}{t("balance")}</span>
+            <div className={"flex items-baseline font-medium"}>
+              <span className={"truncate text-[28px] "}>{formattedAmount || 0.00}</span>
+              <span className={"shrink-0 text-[15px]"}>&nbsp;&nbsp;USDT</span>
+            </div>
+          </div>
+          <div className={"shrink-0"}>
+            <SheetSelect
+              isOpen={openSheet}
+              setIsOpen={setOpenSheet}
+              onInputChange={(v) => {
+                if (v === 1) {
+                  setIsOpen(true)
+                } else if (v === 2) {
+                  setOpenSheet(false)
+                  router.push("/profile/expenses")
+                }
+              }}
+              options={[
+                {
+                  label: t("actions.recharge"),
+                  value: 1
+                },
+                {
+                  label: t("actions.expenseRecord"),
+                  value: 2
+                }
+              ]}
+            >
+              <div className={"rounded-full border border-white p-[6px] px-[18px] text-center text-white"}>{t("actions.wallet")}
+              </div>
+            </SheetSelect>
           </div>
         </div>
-        <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen} setWfAmount={setInitAmount}>
-          <div className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
-            onTouchEnd={() => {setIsOpen(true)}}
-          >充值
-          </div>
-        </RechargeDrawer>
       </div>
-    </div>
+      <RechargeDrawer isOpen={isOpen} setIsOpen={setIsOpen} setWfAmount={setInitAmount}></RechargeDrawer>
+      {/* <WithdrawDrawer isOpen={withdrawOpen} setIsOpen={setWithdrawOpen} info={walletInfo}><></></WithdrawDrawer> */}
+    </>
   )
 }

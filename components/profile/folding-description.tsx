@@ -1,33 +1,75 @@
 "use client"
 import { useState } from "react"
+
+import dayjs from "dayjs"
+import { useTranslations } from "next-intl"
+
 import IconWithImage from "@/components/profile/icon"
 
-export default function FoldingDescription ({ about,location }:{about:string,location: string}) {
-  const [hideState,setHideState] = useState(true)
+export default function FoldingDescription({
+  about,
+  location,
+  birthday,
+  joinTime
+}: {
+  about: string
+  location: string,
+  birthday: number,
+  joinTime: number
+}) {
+  const t = useTranslations("Profile")
+  const [hideState, setHideState] = useState(true)
   return (
     <>
-      <section className={"overflow-hidden"} style={{ height: hideState ? "2.5em" : "auto" }} dangerouslySetInnerHTML={{ __html:about }}></section>
-      {
-        !hideState && (
-          <>
-            <div className={"flex text-xs gap-1 mt-1.5 text-[#6D7781]"}>
-              <IconWithImage
-                url={"/icons/profile/icon-address.png"}
-                width={16}
-                height={16}
-                color={"#222"}
-              />
-              <span>{location}</span>
-            </div>
-          </>
-        )
-      }
-      {about && hideState && (
-        <button className="text-text-pink mt-1" type={"button"} onTouchEnd={() => {
-          setHideState(false)
-        }}
-        >更多信息</button>
+      <section
+        className={hideState && about?.length > 100 ? "line-clamp-3" : "whitespace-pre-wrap"}
+        dangerouslySetInnerHTML={{ __html: about }}
+      ></section>
+
+      {about?.length > 100 && (
+        <button
+          className="text-text-theme mt-1"
+          onTouchEnd={() => {
+            setHideState(!hideState)
+          }}
+        >
+          {!hideState ? t("foldInfo") : t("moreInfo")}
+        </button>
       )}
+      <div className={"text-gray-secondary mt-1.5 flex gap-2 text-xs"}>
+        <div className={"flex flex-1 gap-1 overflow-hidden"}>
+          {location ? (
+            <>
+              <div className={"shrink-0"}>
+                <IconWithImage
+                  url={"/icons/profile/icon-address.png"}
+                  width={16}
+                  height={16}
+                  color={"#222"}
+                />
+              </div>
+              <span className={"flex-1 truncate whitespace-nowrap "}>{location}</span>
+            </>
+              ) : null}
+        </div>
+        {birthday && (
+        <div className={"flex shrink-0 items-center gap-0.5"}>
+          <IconWithImage
+            url="/theme/icon_info_birthday@3x.png"
+            width={16}
+            height={16}
+            color="#6D7781"
+          />生日{dayjs(birthday * 1000).format("YYYY-MM-DD")}</div>
+)}
+        {joinTime && (
+        <div className={"flex shrink-0 items-center gap-0.5"}> <IconWithImage
+          url="/theme/icon_info_date@3x.png"
+          width={16}
+          height={16}
+          color="#6D7781"
+                                                               />{dayjs(joinTime * 1000).format("YYYY-MM-DD")}加入</div>
+)}
+      </div>
     </>
   )
 }

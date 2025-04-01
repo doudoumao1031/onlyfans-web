@@ -1,5 +1,4 @@
-import { PageInfo, ENDPOINTS } from "@/lib"
-import {
+import { PageInfo, ENDPOINTS ,
   PostInfoReq,
   DeletePostFileReq,
   DeleteVoteReq,
@@ -131,7 +130,7 @@ export const myPosts = (params: SearchPostReq) =>
     }
   )
 
-export const myDraftPosts = (params:SearchPostReq) => fetchWithPost<SearchPostReq,PageResponse<PostData>>(ENDPOINTS.POST.ME_DRAFT_POST,params)
+export const myDraftPosts = (params: SearchPostReq) => fetchWithPost<SearchPostReq, PageResponse<PostData>>(ENDPOINTS.POST.ME_DRAFT_POST, params)
   .then(res => {
     if (res && res.code === 0) {
       return res.data
@@ -147,6 +146,7 @@ export const myMediaPosts = (
   params: PageInfo & {
     user_id?: number
     post_status?: number
+    sort_asc?: boolean
   }
 ) =>
   fetchWithPost<PageInfo, PageResponse<PostData>>(ENDPOINTS.POST.ME_MEDIAS, params).then(
@@ -170,3 +170,16 @@ export const postPined = (post_id: number) =>
  * @param post_id
  */
 export const addPostLog = (post_id: number) => fetchWithPost(ENDPOINTS.POST.VIEW_LOG, { post_id })
+
+/**
+ * 删除帖子
+ * @param post_id
+ */
+export const deletePost = (post_id: number) => fetchWithPost(`${ENDPOINTS.POST.DELETE_POST}/${post_id}`, undefined)
+
+/**
+ * 帖子媒体播放记录
+ * @param post_id
+ * @param file_id
+ */
+export const addFilePlayLog = (post_id: number, file_id: string) => fetchWithPost(ENDPOINTS.POST.FILE_PLAY_LOG, { post_id, file_id })

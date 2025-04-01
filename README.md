@@ -34,3 +34,25 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## import分组顺序
+内置模块 (Node.js)
+React 相关 (放在最前面)
+Next.js 相关
+第三方外部库
+内部模块 (以 @/ 开头的导入)
+父目录和兄弟目录
+对象和类型
+当前文件目录下的导入
+
+## 交互
+```bash
+// 原生调我们
+window.fansX.call(type, data)  
+emitter.on(
+      BRIDGE_EVENT_NAME.xxx,
+      fn
+    )
+// 我们调原生
+ window.callAppApi("事件名", JSON)
+```

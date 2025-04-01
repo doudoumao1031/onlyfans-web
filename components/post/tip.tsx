@@ -1,12 +1,29 @@
-import Stats from "./stats"
+import { useState } from "react"
+
 import TipDrawer from "@/components/post/tip-drawer"
 
-export default function Tip({ count, postId }: { count: number; postId: number }) {
-  return (
-    <TipDrawer postId={postId}>
-      <div>
-        <Stats icon="icon_fans_reward" value={count} />
-      </div>
-    </TipDrawer>
+import Stats from "./stats"
+
+interface TipProps {
+  count: number
+  postId: number
+  self: boolean
+  tipStar: (star: boolean) => void
+  notice?: boolean
+}
+
+export default function Tip(props: TipProps) {
+  const { count, postId, self, tipStar, notice } = props
+  const [amount, setAmount] = useState<number>(parseFloat(count.toFixed(2)))
+  const content = (
+    <div>
+      <Stats icon="icon_fans_reward" value={amount} disable={self}/>
+    </div>
   )
+  return self ? content :
+    (
+      <TipDrawer postId={postId} refresh={(t) => setAmount(parseFloat((amount + t).toFixed(2)))} tipStar={tipStar} notice={notice}>
+        {content}
+      </TipDrawer>
+    )
 }

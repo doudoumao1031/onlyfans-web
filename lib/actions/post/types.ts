@@ -79,6 +79,7 @@ export interface PostData {
     thumbs_up_count: number
     tip_count: number
     play_count: number
+    pay_count: number
   }
   user: User
   post_vote: Vote
@@ -127,28 +128,4 @@ export type SearchPostReq = PageInfo & {
   sort_type?: number
   sort_asc?: boolean
   post_status?: number
-}
-
-export interface Comment {
-  content: string
-  id: number
-  reply_arr?: Comment[]
-  reply_count?: number
-  thumbs_up_count: number
-  user: User
-}
-export interface Vote {
-  items: VoteItem[]
-  title: string
-  stop_time: number
-}
-export interface VoteItem {
-  content: string
-  id: number
-  vote_count: number
-}
-export interface Attachment {
-  file_id: string
-  file_type: FileType
-  thumb_id: string
 }

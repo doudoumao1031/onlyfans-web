@@ -1,13 +1,25 @@
+"use client"
 import { useCallback, useEffect, useState } from "react"
+
+import { useTranslations } from "next-intl"
+
 import Image from "next/image"
-import { Vote as VoteData, VoteParams } from "./types"
+
+
 import { ApiResponse, fetchWithPost } from "@/lib"
+
+import { Vote as VoteData, VoteParams } from "./types"
 import VoteSkeleton from "./vote-skeleton"
 
+
 export default function Vote({ postId }: { postId: number }) {
+  const t = useTranslations("Common.post")
   const [vote, setVote] = useState<VoteData>()
   const [loading, setLoading] = useState<boolean>(false)
-  const { title, items, stop_time, mu_select } = vote || { items: [], stop_time: 0 }
+  const { title, items, stop_time, mu_select, vote_user_count } = vote || {
+    items: [],
+    stop_time: 0
+  }
   const [showOptionAmount, setShowOptionAmount] = useState(3)
   const selectedIds = items.filter((i) => i.select).map((i) => i.id)
   const votedByMe = items.reduce((voted, item) => item.select || voted, false)
@@ -36,41 +48,49 @@ export default function Vote({ postId }: { postId: number }) {
           votedByMe ? (
             <div
               key={id}
-              className="w-full h-11 border rounded-md px-2 flex justify-between items-center bg-no-repeat"
+              className="flex h-11 w-full items-center justify-between gap-2 rounded-md border bg-no-repeat px-2"
               style={{
-                backgroundImage: `${select ? "url(/icons/pink.png)" : "url(/icons/silver.png)"}`,
+                backgroundImage: `${select ? "url(/theme/blue.png)" : "url(/theme/silver.png)"}`,
                 backgroundSize: `${(totalVotes ? vote_count / totalVotes : 0) * 100}% 100%`,
-                borderColor: `${select ? "#FF8492" : "#DDDDDD"}`
+                borderColor: `${select ? "var(--theme)" : "var(--gray-quaternary)"}`
               }}
               onClick={() => handleClickOption(id)}
             >
-              <div className="flex gap-1 h-full items-center">
-                {select && <Image src="/icons/select.png" alt="" width={20} height={20} />}
-                <div>{content}</div>
+              <div className="flex h-full items-center gap-1 truncate">
+                {select && (
+                  <Image src="/theme/checkbox_select@3x.png" alt="" width={20} height={20} />
+                )}
+                <div className="truncate">{content}</div>
               </div>
-              <div className="pr-3">{vote_count}票</div>
+              <div className={`pr-3 ${select ? "text-theme" : ""} whitespace-nowrap`}>
+                {vote_count} {t("votes")}
+              </div>
             </div>
           ) : (
             <div
               key={id}
-              className="w-full h-11 border rounded-md px-2 flex justify-center items-center"
+              className="flex h-11 w-full items-center justify-center rounded-md border px-2"
               onClick={() => handleClickOption(id)}
             >
-              <div>{content}</div>
+              <div className="truncate">{content}</div>
             </div>
           )
         )}
         {showOptionAmount < items.length && (
           <div
-            className="w-full h-11 border border-[#DDDDDD] rounded-md flex justify-center items-center"
+            className="flex h-11 w-full items-center justify-center rounded-md border border-[#DDDDDD]"
             onClick={() => setShowOptionAmount(items.length)}
           >
-            <div>查看全部选项</div>
+            <div>{t("viewAllOptions")}</div>
           </div>
         )}
         <div className="mt-2 text-[#999999]">
-          {totalVotes}人参与{" "}
-          {canVote ? `还有${Math.floor(secondsToExpire / 3600)}小时结束` : "投票已结束"}
+          {t("voteCount", { count: vote_user_count })}{" "}
+          {canVote
+            ? secondsToExpire > 3600
+              ? t("voteEndTimeHours", { count: Math.floor(secondsToExpire / 3600) })
+              : t("voteEndTimeMinutes", { count: Math.floor(secondsToExpire / 60) })
+            : t("voteEnded")}
         </div>
       </div>
     </div>

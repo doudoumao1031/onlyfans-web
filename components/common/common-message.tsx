@@ -1,6 +1,7 @@
-import { useTimeout } from "@/lib/hooks/useTimeout"
 import React, { createContext, useContext, useEffect, useMemo, useRef, useState } from "react"
+
 import IconWithImage from "@/components/profile/icon"
+import { useTimeout } from "@/lib/hooks/useTimeout"
 
 export default function useCommonMessage() {
   const [content, setContent] = useState<React.ReactNode>()
@@ -8,8 +9,7 @@ export default function useCommonMessage() {
   const [openState, setOpenState] = useState<boolean>(false)
   const [isVisible, setIsVisible] = useState<boolean>(false)
   const [delay, setDelay] = useState<number>(3000)
-  const afterDelay = useRef<() => void | null
-    >(null)
+  const afterDelay = useRef<() => void | null>(null)
 
   const { start } = useTimeout(() => {
     setIsVisible(false)
@@ -28,11 +28,15 @@ export default function useCommonMessage() {
     }
   }, [openState, start])
 
-  const showMessage = (content: React.ReactNode, type?: string, options?: {
-    duration?: number,
-    afterDuration?: () => void
-  }) => {
-    const { duration,afterDuration } = options || {}
+  const showMessage = (
+    content: React.ReactNode,
+    type?: string,
+    options?: {
+      duration?: number
+      afterDuration?: () => void
+    }
+  ) => {
+    const { duration, afterDuration } = options || {}
     if (duration) setDelay(duration)
     setContent(content)
     setOpenState(true)
@@ -44,31 +48,27 @@ export default function useCommonMessage() {
     if (content && openState) {
       return (
         <div
-          className={`absolute z-[9999] left-1/2 -translate-x-1/2 top-[50vh] rounded-full px-4 py-2 text-white transition-all duration-300 ease-in-out transform ${
-            isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-          } ${type === "love" ? "bg-red" : "bg-black/80"}`}
+          className={`absolute left-1/2 top-[50vh] z-[9999] -translate-x-1/2 rounded-full px-4 py-2 text-white transition-all duration-300 ease-in-out${
+            isVisible ? "scale-100 opacity-100" : "scale-95 opacity-0"
+          } ${type === "love" ? "bg-theme" : "bg-black/80"}`}
         >
-          {
-            type === "default" && (
-              <div className="whitespace-nowrap">{content}</div>
-            )
-          }
-          {
-            type === "success" && (
-              <div className="flex items-center gap-2 whitespace-nowrap">
-                <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20}/>
-                <span className="text-white font-medium text-base">{content}</span>
-              </div>
-            )
-          }
-          {
-            type === "love" && (
-              <div className="flex items-center gap-2 whitespace-nowrap">
-                <IconWithImage url={"/icons/icon_fans_like_highlight@3x.png"} height={20} width={20}/>
-                <span className="text-white font-medium text-base">{content}</span>
-              </div>
-            )
-          }
+          {type === "default" && <div className="whitespace-nowrap">{content}</div>}
+          {type === "success" && (
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <IconWithImage url={"/icons/checkbox_select_white@3x.png"} height={20} width={20} />
+              <span className="text-base font-medium text-white">{content}</span>
+            </div>
+          )}
+          {type === "love" && (
+            <div className="flex items-center gap-2 whitespace-nowrap">
+              <IconWithImage
+                url={"/icons/icon_fans_like_highlight@3x.png"}
+                height={20}
+                width={20}
+              />
+              <span className="text-base font-medium text-white">{content}</span>
+            </div>
+          )}
         </div>
       )
     }
@@ -79,10 +79,14 @@ export default function useCommonMessage() {
 }
 
 export type CommonMessageContextValues = {
-  showMessage: (content: React.ReactNode, type?: string, options?: {
-    duration?: number,
-    afterDuration?: () => void
-  }) => void
+  showMessage: (
+    content: React.ReactNode,
+    type?: string,
+    options?: {
+      duration?: number
+      afterDuration?: () => void
+    }
+  ) => void
 }
 
 export const CommonMessageContext = createContext({} as CommonMessageContextValues)

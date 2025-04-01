@@ -1,32 +1,67 @@
+import createMiddleware from "next-intl/middleware"
+
+import { cookies } from "next/headers"
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
+
+
+
+import { defaultLocale, locales, routing } from "@/i18n/routing"
 import { TOKEN_KEY } from "@/lib/utils"
 
+const handleI18nRouting = createMiddleware(routing)
+
+const checkPathIsInLocale = (path: string) => {
+  return locales.some((item) => {
+    return path.startsWith(`/${item}`)
+  })
+}
+
+const isUnauthorizedPath = (locale: string, path: string) => {
+  return `/${locale}/auth` === path || `/${locale}/system/403` === path
+}
+
+const is403Path = (locale: string, path: string) => {
+  return `/${locale}/system/403` === path
+}
 
 
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+  const [, locale] = pathname.split("/")
   const cookieStore = await cookies()
   const xToken = cookieStore.get(TOKEN_KEY)?.value
 
-  const url = new URL(request.url)
-  if (url.pathname === "/system/403" || url.pathname.startsWith("/api")) {
-    return NextResponse.next()
+  const hasLocale = checkPathIsInLocale(pathname)
+  if (!hasLocale) {
+    const redirectUrl = request.nextUrl.clone()
+    redirectUrl.pathname = `/${defaultLocale}/${pathname}`
+    return NextResponse.redirect(redirectUrl)
   }
 
+  const pathValidation = isUnauthorizedPath(locale, pathname)
+  const is403 = is403Path(locale, pathname)
+  const url = new URL(request.url)
+
+  if (pathValidation || is403 || url.pathname.startsWith("/api")) {
+    return handleI18nRouting(request)
+  }
   if (xToken) {
-    return NextResponse.next()
+    return handleI18nRouting(request)
+    // return NextResponse.next()
   } else {
-    if (url.pathname !== "/system/403") {
-      const redirectUrl = new URL("/system/403", request.url)
+    if (!pathValidation) {
+      const redirectUrl = new URL(`/${locale}/auth`, request.url)
       redirectUrl.searchParams.set("redirect", url.pathname)
       return NextResponse.redirect(redirectUrl)
     }
-    return NextResponse.next()
+    return handleI18nRouting(request)
   }
 }
 
 export const config = {
-  // https://nextjs.org/docs/app/building-your-application/routing/middleware#matcher
-  matcher: ["/((?!_next/static|_next/image|.*\\.png$|api).*)"]
+  matcher: [
+    "/",
+    "/(zh|en)/:path*",
+    "/((?!_next|static|.*\\.\\w+$|api).*)"]
 }

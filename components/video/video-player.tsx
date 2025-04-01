@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+
 import { cn } from "@/lib/utils"
 
 interface VideoPlayerProps {
@@ -39,7 +40,7 @@ export function VideoPlayer({ sources, className }: VideoPlayerProps) {
   }
 
   return (
-    <div className="relative group">
+    <div className="group relative">
       <video
         ref={videoRef}
         src={currentSource}
@@ -48,23 +49,23 @@ export function VideoPlayer({ sources, className }: VideoPlayerProps) {
         preload="metadata"
       />
 
-      <div className="absolute bottom-14 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute bottom-14 right-4 opacity-0 transition-opacity group-hover:opacity-100">
         <div className="relative">
           <button
             onClick={() => setShowQualityMenu(!showQualityMenu)}
-            className="bg-black/70 text-white px-2 py-1 rounded hover:bg-black/80"
+            className="rounded bg-black/70 px-2 py-1 text-white hover:bg-black/80"
           >
             {currentQuality}
           </button>
 
           {showQualityMenu && (
-            <div className="absolute bottom-full right-0 mb-1 bg-black/70 rounded overflow-hidden">
+            <div className="absolute bottom-full right-0 mb-1 overflow-hidden rounded bg-black/70">
               {sources.map((source) => (
                 <button
                   key={source.quality}
                   onClick={() => handleQualityChange(source.quality)}
                   className={cn(
-                    "block w-full px-4 py-2 text-white text-left hover:bg-white/10",
+                    "block w-full px-4 py-2 text-left text-white hover:bg-white/10",
                     currentQuality === source.quality && "bg-white/20"
                   )}
                 >

@@ -1,59 +1,82 @@
 "use client"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { useEffect, useMemo, useRef } from "react"
+
+
 import clsx from "clsx"
-import { useCallback } from "react"
+import { useTranslations } from "next-intl"
 
-export default function NavLinks() {
-  const links = [
-    { name: "已订阅", href: "/explore/subscribed" },
-    { name: "关注", href: "/explore/followed" },
-    { name: "精彩贴文", href: "/explore/feed" },
-    { name: "推荐博主", href: "/explore/recommended/hot" }
-  ]
+import { usePathname } from "next/navigation"
+
+import { Link } from "@/i18n/routing"
+import { ActionTypes } from "@/lib/contexts/global-context"
+
+export default function NavLinks({ isFind }: { isFind?: boolean }) {
+  const t = useTranslations("Explore")
   const pathName = usePathname()
-  const pathNameClass = useCallback(
-    (href: string) => {
-      if (pathName === href) {
-        return "font-bold text-black "
-      }
-      return "text-[#777] font-normal"
-    },
-    [pathName]
+  const activeLinkRef = useRef<HTMLAnchorElement>(null)
+  const links = useMemo(
+    () => [
+      { name: t("Subscribed"), href: "/explore/subscribed" },
+      { name: t("Followed"), href: "/explore/followed", event: ActionTypes.Followed.SCROLL_TO_TOP },
+      {
+        name: isFind ? t("hot") : t("Feed"),
+        href: "/explore/feed",
+        event: ActionTypes.Feed.SCROLL_TO_TOP
+      },
+      { name: t("Recommended"), href: "/explore/recommended/hot" }
+    ],
+    [isFind, t]
   )
-  return (
-  /*<div className="flex w-full border-b border-gray-300">
-      {links.map((link) => (
-        <Link
-          prefetch={true}
-          key={link.name}
-          href={link.href}
-          className={clsx(
-            "flex grow items-center justify-center text-sm font-medium py-2 hover:text-blue-600",
-            {
-              "border-b-2 border-black text-black": pathname === link.href,
-              "text-gray-400": pathname !== link.href
-            }
-          )}
-        >
-          {link.name}
-        </Link>
-      ))}
-    </div>*/
+  const memoLink = useMemo(() => {
+    return (isFind ? links.slice(1) : links).map((link) => {
+      return {
+        ...link,
+        active:
+          pathName.endsWith(link.href) ||
+          (link.href.includes("/explore/recommended") && pathName.includes("/explore/recommended"))
+      }
+    })
+  }, [pathName, isFind, links])
+  useEffect(() => {
+    if (activeLinkRef.current) {
+      activeLinkRef.current.scrollIntoView({ behavior: "smooth", block: "center" })
+    }
+  }, [memoLink])
 
-    <div className="w-full text-center grid grid-cols-4 border-b border-gray-100 sticky z-30 bg-white">
-      {links.map((link) => (
+  const handleNavClick = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+    event: string | undefined
+  ) => {
+    if (pathName.indexOf(href) > -1 && event) {
+      e.preventDefault()
+      window.dispatchEvent(new Event(event))
+    }
+  }
+
+  return (
+    <div
+      className={`sticky z-30 flex  w-full  overflow-x-auto bg-white text-center ${isFind ? "justify-start gap-3" : "justify-start"
+        }`}
+    >
+      {memoLink.map((link) => (
         <Link
           prefetch={true}
           key={link.name}
           href={link.href}
-          className={clsx("pt-3.5 pb-3.5 text-[20px] relative", pathNameClass(link.href))}
+          ref={link.active ? activeLinkRef : null}
+          onClick={(e) => handleNavClick(e, link.href, link?.event)}
+          className={clsx(
+            "relative whitespace-nowrap py-2.5 ",
+            link.active ? "font-bold text-black" : "font-normal text-[#777]",
+            isFind ? "mr-8" : "mr-6"
+          )}
         >
           {link.name}
           <span
             className={clsx(
-              "absolute left-[50%] bottom-0 h-[3px] rounded-tl-lg rounded-tr-lg bg-black w-[40px] ml-[-20px]",
-              pathName === link.href ? "block" : "hidden"
+              "bg-theme absolute bottom-0 left-[50%] ml-[-20px] h-[3px] w-[40px] rounded-t-lg",
+              link.active ? "block" : "hidden"
             )}
           ></span>
         </Link>

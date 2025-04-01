@@ -1,34 +1,118 @@
 "use client"
+import React, { useState, useEffect, useCallback } from "react"
+
+import { useTranslations } from "next-intl"
+
+import { useCommonMessageContext } from "@/components/common/common-message"
 import FormDrawer from "@/components/common/form-drawer"
 import IconWithImage from "@/components/profile/icon"
-import { useState, useMemo, useEffect } from "react"
-import { addWalletOrder, handleRechargeOrderCallback, userPtWallet } from "@/lib"
-import useCommonMessage from "@/components/common/common-message"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import LoadingMask from "@/components/common/loading-mask"
+import { useAppEventHandle } from "@/hooks/appClient"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { Link } from "@/i18n/routing"
+import { addWalletOrder, handleIosBackPayMoneyOrder, handleRechargeOrderCallback, IosPayArray, IosRechargeResp, RechargeResp, userPtWallet } from "@/lib"
+import { ANDROID, IOS } from "@/lib/constant"
+import { BRIDGE_EVENT_NAME, useEmitter } from "@/lib/contexts/emitter-context"
+
 interface RechargeProps {
-  children: React.ReactNode,
-  isOpen: boolean,
-  setIsOpen: (val: boolean) => void,
+  children?: React.ReactNode
+  isOpen: boolean
+  setIsOpen: (val: boolean) => void
   setWfAmount: (val: number) => void
 }
 
-export default function RechargeDrawer (props: RechargeProps) {
+export default function RechargeDrawer(props: RechargeProps) {
   const { children, isOpen, setIsOpen, setWfAmount } = props
-  const pathname = usePathname()
-  const { showMessage, renderNode } = useCommonMessage()
+  const { showMessage } = useCommonMessageContext()
+  const getDeviceType = () => {
+    if (typeof window === "undefined") return ANDROID
+    const userAgent = window.navigator.userAgent.toLowerCase()
+    if (userAgent.includes("iphone") || userAgent.includes("ipad") || userAgent.includes("ipod") || userAgent.includes("ios")) {
+      return IOS
+    }
+    return ANDROID
+  }
+  const type = getDeviceType()
+  console.log("type ===>", type)
   const [amount, setAmount] = useState<number>(0)
   const [ptBalance, setPtBalance] = useState<number>(0)
   const [wfBalance, setWfBalance] = useState<number>(0)
-  const [rate, setRate] = useState<string>("1:1")
-  const [errorMessage, setErrorMessage] = useState<string>("")
-  const [isLoading, setIsLoading] = useState(false)
-  useMemo(() => {
-    if (amount && amount > 0) {
-      setErrorMessage("")
+  const [iosPayArray, setIosPayArray] = useState<IosPayArray[]>([])
+  const [proportion, setProportion] = useState<string>("")
+  const [active, setActive] = useState<number>(0)
+  const [productId, setProductId] = useState<string>("")
+  const t = useTranslations("Profile.recharge")
+  const { withLoading } = useLoadingHandler({
+    onError: () => {
+      showMessage(t("error"))
     }
-  },  [amount])
+  })
+  const { emitter } = useEmitter()
+  /**
+ * 安卓原生充值回调
+ */
+  const handleResponseRecharge = useCallback((data: unknown) => {
+    console.log("data--handleResponseRecharge===>", data)
+    if (!data) return
+    if ((data as RechargeResp).result === "failed") {
+      console.log("===>安卓支付通知结果=失败")
+      showMessage(t("error"))
+      setIsOpen?.(false)
+      return
+    }
+    const moneyParam = { trade_no: (data as RechargeResp).tradeNo }
+    console.log("call /wallet/backPayMoneyOrder param:", moneyParam)
+    handleRechargeOrderCallback(moneyParam).then((result) => {
+      if (result && result.code === 0) {
+        console.log("===>安卓支付通知结果=成功", result)
+        showMessage(t("success"), "success")
+        setIsOpen(false)
+        getSettingData()
+        setAmount(0)
+      } else {
+        console.log("===>安卓支付回调失败:", result?.message)
+        showMessage(t("error"))
+        setIsOpen(false)
+      }
+    })
+    .catch(() => {
+      showMessage(t("error"))
+      setIsOpen(false)
+    })
+  }, [])
+
+  /**
+   * ios原生充值回调
+   */
+  const handleIosResponseRecharge = useCallback((data: unknown) => {
+    console.log("handleIosResponseRecharge emitter response:", data)
+    if (!data) return
+    const moneyParam = {
+      receipt_data: (data as IosRechargeResp).receiptData,
+      pay_time: (data as IosRechargeResp).pay_time
+    }
+    console.log("call /wallet/iosBackPayMoneyOrder param:", moneyParam)
+    handleIosBackPayMoneyOrder(moneyParam).then((result) => {
+      if (result && result.code === 0) {
+        console.log("===>ios支付通知结果=成功", result)
+        showMessage(t("success"), "success")
+        setIsOpen(false)
+        getSettingData()
+        setAmount(0)
+      } else {
+        console.log("===>ios支付回调失败:", result?.message)
+        showMessage(t("error"))
+        setIsOpen(false)
+      }
+    })
+    .catch(() => {
+      showMessage(t("error"))
+      setIsOpen(false)
+    })
+  }, [])
+  useAppEventHandle(emitter, BRIDGE_EVENT_NAME.inAppPurchasesSuccess, handleIosResponseRecharge)
+  useAppEventHandle(emitter, BRIDGE_EVENT_NAME.responseRecharge, handleResponseRecharge)
+
+
   useEffect(() => {
     getSettingData()
   }, [])
@@ -39,149 +123,178 @@ export default function RechargeDrawer (props: RechargeProps) {
       if (result && result.code === 0) {
         setPtBalance(Number(result.data.pt_wallet))
         setWfBalance(result.data.amount)
-        setRate(result.data.proportion)
+        setProportion(result.data.proportion)
         setWfAmount(result.data.amount)
+        setIosPayArray(result.data.ios_pay_arr ?? [])
       }
     })
   }
-  // const [drawerOpen, setDrawerOpen] = useState<boolean>(false)
-  const columns: { title: string, desc: string }[] = [
-    { title: "服务", desc: "唯粉充值" },
-    { title: "钱包余额", desc: ptBalance.toFixed(2).toString() + " USDT" },
-    { title: "唯粉余额", desc: wfBalance.toFixed(2).toString() + " USDT" },
-    { title: "总的比例", desc: rate }
+  const columns: { title: string; desc: string }[] = [
+    { title: t("service"), desc: t("fansRecharge") },
+    { title: t("walletBalance"), desc: ptBalance.toFixed(2).toString() + " USDT" },
+    { title: t("fansxBalance"), desc: wfBalance.toFixed(2).toString() + " USDT" },
+    { title: t("rate"), desc: proportion }
   ]
 
   async function handleRecharge(amount: number) {
-    if (!amount || amount <= 0) {
-      setErrorMessage("充值金额必须大于0")
-      return
-    }
-
-    setIsLoading(true)
-    try {
-      const tradeNo = await addWalletOrder({ amount: Number(amount) })
-        .then((result) => {
+    await withLoading(async () => {
+      // 发起支付 （ios/android）
+      if (type === ANDROID) {
+        const tradeNo = await addWalletOrder({ amount: Number(amount) }).then((result) => {
           if (result && result.code === 0) {
             return result.data.trade_no
           }
+          console.log("addWalletOrder failed", result?.message)
           throw Error()
         })
-      // todo: 调用pt钱包支付
-      await handleRechargeOrderCallback({ trade_no: tradeNo })
-        .then((result) => {
-          if (result && result.code === 0) {
-            showMessage("充值成功", "success")
-            getSettingData()
-            setAmount(0)
-            setIsOpen(false)
-          } else {
-            console.log("充值失败:")
-            showMessage("充值失败")
-          }
-        })
-    } catch (error) {
-      console.error("Recharge error:", error)
-      showMessage("充值失败")
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  if (isLoading) {
-    return <LoadingMask isLoading={isLoading} />
+        const param = {
+          currency: "USDT-TRC20",
+          amount: amount.toString(),
+          tradeNo: tradeNo
+        }
+        console.log("recharge param ===>", param)
+        window?.callAppApi("recharge", JSON.stringify(param))
+      } else if (type === IOS) {
+        const param = {
+          productId: productId
+        }
+        console.log("inAppPurchases param ===>", param)
+        window?.callAppApi("inAppPurchases", JSON.stringify(param))
+      }
+    })
   }
 
   return (
     <>
-      {renderNode}
-      <LoadingMask isLoading={isLoading} />
-      <button
-        onClick={() => {
-          // getSettingData()
-          setIsOpen(true)
-        }}
-      >
-        {children}
-      </button>
+      {children && (
+        <button
+          onClick={() => {
+            setIsOpen(true)
+          }}
+        >
+          {children}
+        </button>
+      )}
       <FormDrawer
-        title={<span className={"text-[18px] font-semibold"}>充值</span>}
+        title={<span className={"text-lg font-semibold"}>{t("title")}</span>}
         headerLeft={(close) => {
           return (
-            <button onTouchEnd={(e) => {
-              e.preventDefault()
-              close()
-            }} className={"text-base text-[#777]"}
+            <button
+              type={"button"}
+              onTouchEnd={() => {
+                close()
+              }}
+              className={"text-base text-[#777]"}
             >
-              <IconWithImage url={"/icons/profile/icon_close@3x.png"} width={24} height={24} color={"#000"}/>
+              <IconWithImage
+                url={"/icons/profile/icon_close@3x.png"}
+                width={24}
+                height={24}
+                color={"#000"}
+              />
             </button>
           )
         }}
-        headerRight={(() => {
+        headerRight={() => {
           return (
-            <Link href={`${pathname}/income/withdrawalInfo?changeType=1`} prefetch={false}>
-              <button className={"text-base text-text-pink"}>明细</button>
+            <Link href={"/profile/recharge"} prefetch={false}>
+              <button className={"text-text-theme text-base"}>{t("details")}</button>
             </Link>
           )
-        })}
-        className="h-[50vh] border-0"
+        }}
+        className="border-0"
+        isAutoHeight
         setIsOpen={setIsOpen}
         isOpen={isOpen}
         outerControl={true}
       >
-        <div className="h-[50vh] w-full flex flex-col items-center text-black text-2xl bg-[#F8F8F8]">
-          <div className={"rounded-xl p-4 w-full text-base"}>
-            {columns.map((item, index) => (
-              <div key={index} className={`flex justify-between px-4 py-[13px] items-center bg-white 
-              ${index < columns.length - 1 && "border-b border-gray-200"}
-              ${index == 0 && "rounded-t-xl"} 
-              ${index == columns.length - 1 && "rounded-b-xl"} 
-              `}
-              >
-                <span className={"font-medium"}>{item.title}</span>
-                <span className={"text-gray-400 font-normal"}>{item.desc}</span>
-              </div>
-            )
-            )}
+        <div className="flex w-full flex-col items-center bg-[#F8F8F8] text-black">
+          <div className={"w-full rounded-xl p-4 text-base"}>
+            {columns.map((item, index) => {
+              // ios 隐藏钱包余额
+              if (type === IOS && index === 1) {
+                return null
+              } else {
+                return (
+                  <div
+                    key={index}
+                    className={`flex items-center justify-between bg-white px-4 py-[13px] 
+                  ${index < columns.length - 1 && "border-b border-gray-200"}
+                  ${index == 0 && "rounded-t-xl"} 
+                  ${index == columns.length - 1 && "rounded-b-xl"} 
+                  `}
+                  >
+                    <span className={"font-medium"}>{item.title}</span>
+                    <span className={"font-normal text-gray-400"}>{item.desc}</span>
+                  </div>
+                )
+              }
+            })}
           </div>
-          <div className="w-full flex items-center px-4 relative">
-            <input id="amount"
-              type="number"
-              className="w-full py-2 pl-4 pr-16 border-0 bg-white rounded-lg text-left h-[49px] placeholder:text-gray-400 text-base"
-              placeholder="请输入充值金额"
-              value={amount == 0 ? "" : amount.toString()}
-              onChange={(event) => {
-                const money = event.target.value.replace(/[^0-9.]/g, "")
-                setAmount(parseFloat(money) || 0)
-              }}
-              onBlur={(event) => {
-                const formattedAmount = parseFloat(event.target.value).toFixed(2)
-                setAmount(parseFloat(formattedAmount) || 0)
-              }}
-            />
-            <button
-              className="absolute right-6 top-1/2 transform -translate-y-1/2 font-normal text-text-pink text-base"
-              onTouchEnd={(e) => {
-                e.preventDefault()
-                setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
-              }}
-            >
-              全部
-            </button>
-            <section className={"absolute bottom-[-12px] text-red-600 text-xs ml-1"}>
-              {errorMessage}
-            </section>
-          </div>
+          {type === ANDROID && (
+            <div className="relative flex w-full items-center px-4">
+              <input
+                id="amount"
+                type="number"
+                className="h-[49px] w-full rounded-lg border-0 bg-white py-2 pl-4 pr-16 text-left text-base placeholder:text-gray-400"
+                placeholder={t("rechargeValuePlaceholder")}
+                value={amount == 0 ? "" : amount.toString()}
+                onChange={(event) => {
+                  const money = event.target.value.replace(/[^0-9.]/g, "")
+                  setAmount(parseFloat(money) || 0)
+                }}
+                onBlur={(event) => {
+                  const formattedAmount = parseFloat(event.target.value).toFixed(2)
+                  setAmount(parseFloat(formattedAmount) || 0)
+                }}
+              />
+              {ptBalance > 0 && (
+                <button
+                  type="button"
+                  className="text-text-theme absolute right-6 top-1/2 -translate-y-1/2 text-base font-normal"
+                  onTouchEnd={() => {
+                    setAmount(parseFloat(ptBalance.toFixed(2)) || 0)
+                  }}
+                >
+                  {t("all")}
+                </button>
+              )}
+            </div>
+          )}
+          {type === IOS && iosPayArray && (
+            <div className={"grid w-full grid-cols-3 gap-x-3 gap-y-5 px-4"}>
+              {iosPayArray.map((item, i) => {
+                return (
+                  <button
+                    key={i}
+                    type={"button"}
+                    className={`h-[49px] w-full rounded-lg border-0 font-medium ${active === i ? "bg-theme text-white" : "bg-white"}`}
+                    onTouchEnd={() => {
+                      setActive(i)
+                      setProductId(item.product_id)
+                      setAmount(Number(item.price))
+                    }}
+                  >
+                    <span>{item.price} USDT</span>
+                  </button>
+                )
+              })}
+            </div>
+          )}
+
           <div className="my-[40px] self-center">
             <button
-              disabled={amount === 0 || amount > ptBalance}
-              className={`w-[295px] h-[49px] p-2 text-white text-base font-medium rounded-full ${amount === 0 || amount > ptBalance ? "bg-[#dddddd]" : "bg-background-pink"}`}
-              onClick={() => {
-                if (!(amount === 0 || amount > ptBalance)) {
-                  handleRecharge(amount)
+              type="button"
+              disabled={amount === 0 || (amount > ptBalance && type === ANDROID)}
+              className={`h-[49px] w-[295px] rounded-full p-2 text-base font-medium text-white ${amount === 0 || (amount > ptBalance && type === ANDROID) ? "bg-[#dddddd]" : "bg-theme"
+                }`}
+              onClick={async () => {
+                if (!(amount === 0 || (amount > ptBalance && type === ANDROID))) {
+                  await handleRecharge(amount)
                 }
               }}
-            >{amount > ptBalance ? "充值金额不能大于钱包余额" : "确认充值"}
+            >
+              {amount > ptBalance && type === ANDROID ? t("amountGreaterThanPtamount") : t("confirm")}
             </button>
           </div>
         </div>

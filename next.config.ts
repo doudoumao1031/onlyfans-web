@@ -1,4 +1,8 @@
+import createNextIntlPlugin from "next-intl/plugin"
+
 import type { NextConfig } from "next"
+
+const withNextIntl = createNextIntlPlugin()
 
 const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
@@ -37,7 +41,13 @@ const nextConfig: NextConfig = {
     ],
     dangerouslyAllowSVG: true,
     formats: ["image/avif", "image/webp"]
-  }
+  },
+  /*i18n: {
+    locales: ["en", "zh"],
+    defaultLocale: "zh",
+    localeDetection: false
+  },*/
+  trailingSlash: true
 }
 
-export default nextConfig
+export default withNextIntl(nextConfig)

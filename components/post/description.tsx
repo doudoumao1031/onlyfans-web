@@ -1,24 +1,44 @@
-import Link from "next/link"
+import { Link } from "@/i18n/routing"
+import { User } from "@/lib"
+
 import { buildUserHomePagePath, getUserIdFromMention, isMention } from "./utils"
 
-export default function Description({ content, linkRender }: { content: string, linkRender?: (content: string) => React.ReactNode }) {
+export default function Description({
+  mentionUser,
+  content,
+  linkRender
+}: {
+  mentionUser: User[]
+  content: string
+  linkRender?: (content: string) => React.ReactNode
+}) {
   const mentionRegex = /(\B@\w+)/g
   const segments = content.split(mentionRegex)
   return (
-    <div className="px-3">
+    <div className="mt-2.5 whitespace-pre-wrap">
       {segments.map((s, i) => (
-        <DescriptionSegment key={i} content={s} linkRender={linkRender} />
+        <DescriptionSegment mentionUser={mentionUser} key={i} content={s} linkRender={linkRender} />
       ))}
     </div>
   )
 }
 
-function DescriptionSegment({ content, linkRender }: { content: string, linkRender?: (content: string) => React.ReactNode }) {
+function DescriptionSegment({
+  mentionUser,
+  content,
+  linkRender
+}: {
+  mentionUser: User[]
+  content: string
+  linkRender?: (content: string) => React.ReactNode
+}) {
   return isMention(content) ? (
-    <Link href={buildUserHomePagePath(getUserIdFromMention(content))} className="text-[#FF8492]">
-      {content}{" "}
+    <Link href={buildUserHomePagePath(getUserIdFromMention(content, mentionUser))} className="text-theme">
+      {content}
     </Link>
+  ) : linkRender ? (
+    linkRender(content)
   ) : (
-    linkRender ? linkRender(content) : <span>{content} </span>
+    <span>{content} </span>
   )
 }

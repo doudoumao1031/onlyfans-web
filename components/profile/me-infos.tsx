@@ -1,13 +1,15 @@
-import Header from "@/components/common/header"
+import { getTranslations } from "next-intl/server"
+
 import Avatar from "@/components/profile/avatar"
-import IconWithImage from "@/components/profile/icon"
-import Link from "next/link"
-import { userProfile } from "@/lib/actions/profile"
-import { userWallet } from "@/lib"
-import { buildImageUrl, getUserDefaultBackImg } from "@/lib/utils"
 import FoldingDescription from "@/components/profile/folding-description"
+import IconWithImage from "@/components/profile/icon"
 import RechargePanel from "@/components/profile/recharge-panel"
-import LazyImg from "../common/lazy-img"
+import { Link } from "@/i18n/routing"
+import { userWallet } from "@/lib"
+import { userProfile } from "@/lib/actions/profile"
+
+import ProfileHeader from "./profile-header"
+
 const displayNumber = (data: number) => {
   if (data > -1 && data < 10000) {
     return data
@@ -19,6 +21,7 @@ const displayNumber = (data: number) => {
 }
 
 export default async function Page() {
+  const t = await getTranslations("Profile")
   const response = await userProfile()
   const data = response?.data
   if (!data) {
@@ -32,100 +35,71 @@ export default async function Page() {
 
   return (
     <div>
-      <div
-        className={"profile-content bg-slate-300 bg-cover"}
-        // style={{
-        //   backgroundImage: data.back_img
-        //     ? `url(${buildImageUrl(data.back_img)})`
-        //     : "url(/icons/base-header.png)"
-        // }}
-      >
-        <LazyImg
-          style={{ objectFit: "cover" }}
-          width={200}
-          height={400}
-          className="w-full h-full"
-          src={data.back_img ? buildImageUrl(data.back_img) : "/icons/base-header.png"}
-          alt={""}
-        />
-        <div className=" absolute top-0 left-0 w-full">
-          <Header
-            right={
-              <>
-                <IconWithImage
-                  url="/icons/profile/icon_nav_code_white@3x.png"
-                  width={22}
-                  height={22}
-                />
-                <IconWithImage
-                  url="/icons/profile/icon_nav_share_white@3x.png"
-                  width={22}
-                  height={22}
-                />
-              </>
-            }
-            title="My"
-            backIconColor={"#fff"}
-          />
-          <div className="text-xs pl-6 pr-6 text-white ">{data.top_info}</div>
-        </div>
-      </div>
-      <section className="mt-[-47px] rounded-t-3xl bg-white relative  pt-12 text-black ">
-        <section className="pl-4 pr-4 pb-3 border-b border-b-gray-100">
-          <Avatar showLive={data.live_certification} fileId={data.photo} />
-          <h1 className="text-[18px] font-bold text-center justify-center items-center flex">
-            <span>
-              {data.first_name} {data.last_name}
-            </span>
-            <Link href={"/profile/edit"}>
-              <IconWithImage
-                url={"/icons/profile/icon_edit_gray@3x.png"}
-                width={20}
-                height={20}
-                color={"#bbb"}
-              />
-            </Link>
-          </h1>
-          <div className="text-center text-[#6D7781] text-xs">@{data.username}</div>
-          <Link href={`/space/${data.id}_1/feed`}>
-            <div className="flex justify-center mt-2">
-              <button className=" py-1 rounded-2xl pl-8 pr-8 border border-border-pink text-text-pink">
-                进入空间
-              </button>
+      <ProfileHeader data={data} />
+      <section className="relative bg-white text-black">
+        <section className="px-4 pb-3">
+          <div className={"flex justify-between"}>
+            <div className={"relative top-[-24px]"}>
+              <Avatar showLive={data.live_certification} fileId={data.photo} />
+              <h1 className="flex items-center gap-2 text-lg font-bold">
+                <span>
+                  {data.first_name}
+                </span>
+                <Link href={"/profile/edit"}>
+                  <IconWithImage
+                    url={"/theme/icon_edit_gray@3x.png"}
+                    width={20}
+                    height={20}
+                    color={"#6D7781"}
+                  />
+                </Link>
+              </h1>
+              <div className="text-text-desc text-xs">
+                {data.username
+                  ? "@" + data.username
+                  : !data.first_name && !data.about ? t("noUserName") : ""}
+              </div>
             </div>
-          </Link>
-          <div className="text-xs mt-2.5">
-            <FoldingDescription about={data.about} location={data.location} />
+            <Link href={`/space/${data.id}/feed`}>
+              <div className="mt-2.5 flex justify-center">
+                <button className=" border-border-theme text-text-theme shrink-0 rounded-2xl border px-8 py-1">
+                  {t("actions.enter")}
+                </button>
+              </div>
+            </Link>
+          </div>
+          <div className="mt-[-14px] text-sm">
+            <FoldingDescription about={data.about} location={data.location} birthday={data.birthday} joinTime={data.join_time}/>
           </div>
         </section>
-        <div className="p-5 border-b border-b-gray-100">
-          <div className="grid-cols-4 grid text-center">
-            <div className="border-r border-gray-100">
-              <div className="text-2xl">{displayNumber(data.post_count)}</div>
-              <div className="text-xs text-[#333]">帖子</div>
+        <div className="border-y border-[#ddd] px-4 py-2.5">
+          <div className="grid grid-cols-4 text-center">
+            <div className="border-r border-r-[#ddd]">
+              <div className="text-[20px]">{displayNumber(data.post_count)}</div>
+              <div className="text-text-desc text-xs font-light">{t("moduleTypes.post")}</div>
             </div>
-            <div className="border-r border-gray-100">
-              <div className="text-2xl">{displayNumber(data.video_count)}</div>
-              <div className="text-xs text-[#333]">媒体</div>
+            <div className="border-r border-r-[#ddd]">
+              <div className="text-[20px]">{displayNumber(data.media_count)}</div>
+              <div className="text-text-desc text-xs font-light">{t("moduleTypes.media")}</div>
             </div>
-            <div className="border-r border-gray-100">
-              <div className="text-2xl">{displayNumber(data.fans_count)}</div>
-              <div className="text-xs text-[#333]">粉丝</div>
+            <div className="border-r border-r-[#ddd]">
+              <div className="text-[20px]">{displayNumber(data.fans_count)}</div>
+              <div className="text-text-desc text-xs font-light">{t("moduleTypes.fans")}</div>
             </div>
             <div>
-              <div className="text-2xl">{displayNumber(data.subscribe_count)}</div>
-              <div className="text-xs text-[#333]">订阅</div>
+              <div className="text-[20px]">{displayNumber(data.subscribe_count)}</div>
+              <div className="text-text-desc text-xs font-light">{t("moduleTypes.subscribe")}</div>
             </div>
           </div>
         </div>
-        <RechargePanel amount={walletInfo.amount} />
+        <RechargePanel walletInfo={walletInfo} />
 
-        <div className="pl-4 pr-4">
-          <div className="flex justify-between items-center pt-2.5 pb-2.5">
-            <h3 className="text-[15px] font-bold">收藏夹</h3>
+        <div className="px-4">
+          <div className="flex items-center justify-between py-2.5">
+            <h3 className="text-[15px] font-bold">{t("favorites.title")}</h3>
             <Link href={"/profile/collect/posts"} className="text-gray-300">
               <IconWithImage
-                url={"/icons/profile/icon_arrow_right@3x.png"}
+                url={"/theme/icon_arrow_right_gray@3x.png"}
                 width={16}
                 height={16}
                 color={"#ddd"}
@@ -136,19 +110,19 @@ export default async function Page() {
           <div className="grid grid-cols-2 gap-3">
             <Link
               href={"/profile/collect/blogger"}
-              className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-blogger.png')] bg-cover"
+              className="rounded-xl bg-[url('/theme/bg_collect_blogger@3x.png')] bg-cover pl-4 pt-1.5"
             >
-              <div className="text-xs text-[rgba(34,34,34,0.70)]">博主</div>
-              <div className="font-medium text-[#2b2b2b] text-[34px] ">
+              <div className="text-xs text-[rgba(34,34,34,0.70)]">{t("favorites.blogger")}</div>
+              <div className="text-[34px] font-medium text-[#2b2b2b] ">
                 {data.collection_user_count}
               </div>
             </Link>
             <Link
               href={"/profile/collect/posts"}
-              className="rounded-xl pt-1.5 pl-4 bg-[url('/icons/profile/bg-collect-posts.png')] bg-cover"
+              className="rounded-xl bg-[url('/theme/bg_collect_posts@3x.png')] bg-cover pl-4 pt-1.5"
             >
-              <div className="text-xs text-[rgba(34,34,34,0.70)]">帖子</div>
-              <div className="font-medium text-[#2b2b2b] text-[34px] ">
+              <div className="text-xs text-[rgba(34,34,34,0.70)]">{t("favorites.posts")}</div>
+              <div className="text-[34px] font-medium text-[#2b2b2b] ">
                 {data.collection_post_count}
               </div>
             </Link>

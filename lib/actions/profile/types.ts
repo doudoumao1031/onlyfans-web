@@ -5,6 +5,7 @@ export interface iPostAttachment {
   file_id: string
   id?: string
   file_type: FileType
+  thumb_id?: string
 }
 
 //     ALL = "0", // 所有
@@ -39,11 +40,12 @@ export interface iPost {
   post_mention_user?: Array<{ user_id: number }> //提及的用户ID
   post_price?: iPostPrice[] // 帖子价格
   post_vote?: iPostVote
+  user?: UserProfile
 }
 
 export type UpdateUserBaseReq = Pick<
   UserProfile,
-  "about" | "photo" | "back_img" | "location" | "top_info"
+  "about" | "photo" | "back_img" | "location" | "top_info" | "birthday"
 > & {
   flags: number
 }
@@ -80,6 +82,8 @@ export type UserProfile = {
   username: string
   video_count: number //媒体数量
   top_info: string
+  birthday: number
+  join_time: number
 }
 
 export interface ReplyForm {

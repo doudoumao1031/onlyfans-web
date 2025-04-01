@@ -1,37 +1,56 @@
 "use client"
-import useCommonMessage from "@/components/common/common-message"
+import { useState, useMemo, useEffect } from "react"
+
+import dayjs from "dayjs"
+import { useTranslations } from "next-intl"
+
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+
+
+import CommonAvatar from "@/components/common/common-avatar"
+import { useCommonMessageContext } from "@/components/common/common-message"
 import SubscribedDrawer from "@/components/explore/subscribed-drawer"
+import CommonRecharge from "@/components/post/common-recharge"
 import Post from "@/components/post/post"
 import { buildMention } from "@/components/post/utils"
-import IconWithImage from "@/components/profile/icon"
-import { PostData } from "@/lib"
-import { userDelFollowing, userFollowing } from "@/lib/actions/space"
-import dayjs from "dayjs"
-import { useRouter } from "next/navigation"
-import { useState, useMemo } from "react"
-import CommonAvatar from "@/components/common/common-avatar"
-import { postDetail } from "@/lib/actions/profile"
 import PostPayDrawer from "@/components/postInfo/post-pay-drawer"
-import Modal from "@/components/space/modal"
-import RechargeDrawer from "@/components/profile/recharge-drawer"
+import IconWithImage from "@/components/profile/icon"
+import { useLoadingHandler } from "@/hooks/useLoadingHandler"
+import { addSubOrder, PostData } from "@/lib"
+import { postDetail } from "@/lib/actions/profile"
+import { revalidateRecommendedPaths } from "@/lib/actions/revalidate/actions"
+import { userDelFollowing, userFollowing } from "@/lib/actions/space"
+import { ActionTypes, useGlobal } from "@/lib/contexts/global-context"
+
 
 export default function Page({ postData }: { postData: PostData }) {
-  const [data, setData] = useState<PostData>(postData)
-  const { showMessage, renderNode } = useCommonMessage()
-  const [isFocus, setIsFocus] = useState<boolean>(postData.user?.following as boolean)
+  const t = useTranslations("PostInfo")
+  const [postInfo, setPostInfo] = useState<PostData>(postData)
+  const { sid, addToActionQueue } = useGlobal()
+  const { showMessage } = useCommonMessageContext()
+  const [isFocus, setIsFocus] = useState<boolean>(postInfo.user?.following as boolean)
   const [drawer, setDrawer] = useState<boolean>(false)
   const [payDrawer, setPayDrawer] = useState<boolean>(false)
-  const [pay, setPay] = useState<boolean>(false)
-  const [price, setPrice] = useState<number>(0)
+  const [pay, setPay] = useState<boolean>(false)  // 是否付费
+  const [follow, setFollow] = useState<boolean>(false)  // 是否关注
+  const [freeSub, setFreeSub] = useState<boolean>(false)  // 是否免费订阅
+  const [price, setPrice] = useState<number>(0)  // 价格
   const [visible, setVisible] = useState<boolean>(false)
   const [recharge, setRecharge] = useState<boolean>(false)
   const router = useRouter()
-
   const [btnText, setBtnText] = useState<string>("")
+  // Track if the post data has been modified
+  const [isPostModified, setIsPostModified] = useState<boolean>(false)
+
   useMemo(() => {
-    const { sub } = data.user
-    const { visibility } = data.post
-    data.post_price.some((item) => {
+    if (postInfo.user.id === sid) {
+      setBtnText("")
+      return
+    }
+    const { sub, following, sub_price } = postInfo.user
+    const { visibility } = postInfo.post
+    postInfo.post_price.some((item) => {
       if (item.user_type === 1 && sub) {
         setPrice(item.price)
         return true
@@ -45,41 +64,125 @@ export default function Page({ postData }: { postData: PostData }) {
         return true
       }
     })
+    // 需要付费观看
     if (visibility === 2 && price > 0) {
       setPay(true)
-      setBtnText(`支付${price || 0} USDT 浏览该帖子`)
+      setBtnText(t("btnText1", { price: price || 0, currency: "USDT" }))
     } else if (visibility === 1 && !sub) {
-      setBtnText("订阅后浏览博主的帖子")
-    } else if (visibility === 0 && !sub) {
-      setBtnText("订阅后解锁更多内容")
+      // 订阅观看
+      setPay(false)
+      setFreeSub(false)
+      setBtnText(t("btnText2"))
+    } else if (visibility === 0) {
+      if (sub_price > 0 && !following) {
+        setFollow(true)
+        setBtnText(t("btnText3"))
+      } else if (!sub) {
+        if (sub_price === 0) {
+          setFreeSub(true)
+          setBtnText(t("btnText5"))
+        } else {
+          setPay(false)
+          setFreeSub(false)
+          setBtnText(t("btnText4"))
+        }
+      }
     } else {
+      setPay(false)
+      setFreeSub(false)
       setBtnText("")
     }
-  }, [data.post, data.post_price, data.user, price])
+  }, [postInfo.post, postInfo.post_price, postInfo.user, price, sid, t])
 
-  const flush = async () => {
-    const res = await postDetail(Number(data.post.id))
+  /** 刷新当前页数据 */
+  const refresh = async () => {
+    const res = await postDetail(Number(postInfo.post.id))
     const result = res?.data as unknown as PostData
-    setData(result)
+    setPostInfo(result)
+    // Mark the post as modified when refreshed
+    setIsPostModified(true)
   }
 
-  const handleFollowing = async () => {
-    setIsFocus(!isFocus)
-    try {
-      const res = isFocus
-        ? await userDelFollowing({ follow_id: postData?.user.id as number, following_type: 0 })
-        : await userFollowing({ follow_id: postData?.user.id as number, following_type: 0 })
-      if (!res || res.code !== 0) return setIsFocus(!isFocus)
-      showMessage(!isFocus ? "关注成功" : "取消成功")
-    } catch (error) {
-      console.log("FETCH_ERROR,", error)
+  useEffect(() => {
+    refresh()
+  }, [])
+
+  // When navigating away, trigger the post update if the post was modified
+  useEffect(() => {
+    // Function to handle the cleanup and trigger post update
+    const triggerPostUpdate = () => {
+      if (isPostModified) {
+        console.log(`Triggering update for post ${postInfo.post.id} on navigation`)
+        // Add the post update action to the queue when unmounting
+        addToActionQueue({
+          type: ActionTypes.Feed.UPDATE_POST,
+          payload: postInfo.post.id
+        })
+      }
     }
+
+    // Add a beforeunload event listener to handle page navigation
+    window.addEventListener("beforeunload", triggerPostUpdate)
+
+    // Return cleanup function
+    return () => {
+      window.removeEventListener("beforeunload", triggerPostUpdate)
+      // Also trigger the update when the component unmounts
+      triggerPostUpdate()
+    }
+  }, [isPostModified, postInfo.post.id, addToActionQueue])
+
+  const { withLoading } = useLoadingHandler({
+    onError: (error) => {
+      console.error("follow error:", error)
+      showMessage(t("operationFailed"))
+    }
+  })
+  // 关注
+  const handleFollowing = async () => {
+    await withLoading(async () => {
+      setIsFocus(!isFocus)
+      const res = isFocus
+        ? await userDelFollowing({ follow_id: postInfo?.user.id as number, following_type: 0 })
+        : await userFollowing({ follow_id: postInfo?.user.id as number, following_type: 0 })
+      if (!res || res.code !== 0) return setIsFocus(!isFocus)
+      if (!isFocus) {
+        setFollow(false)
+      }
+      await refresh()
+      // Mark the post as modified after following/unfollowing
+      setIsPostModified(true)
+      showMessage(!isFocus ? t("followSuccess") : t("unfollowed"))
+    })
+  }
+
+  // 免费订阅
+  const handleSubscribe = async () => {
+    await withLoading(async () => {
+      const data = {
+        user_id: postInfo.user.id,
+        price: 0,
+        id: 0
+      }
+      await addSubOrder(data).then(async (result) => {
+        if (result && result.code === 0) {
+          console.log("订阅成功")
+          await refresh()
+          // Revalidate recommended paths after successful subscription
+          await revalidateRecommendedPaths()
+          showMessage(t("subscribeSuccess"))
+        } else {
+          console.log("订阅失败:", result?.message)
+          showMessage(t("subscribeFailed"))
+        }
+      })
+    })
   }
 
   const Header = () => {
-    const { photo, first_name, last_name, username, sub_end_time } = postData.user
+    const { photo, first_name, last_name, username, sub_end_time, id, sub } = postInfo.user
     return (
-      <div className="flex items-center fixed w-full h-[76px] top-0 left-0 px-4 py-4 bg-white z-[45]">
+      <div className="fixed left-0 top-0 z-[45] flex h-[76px] w-full items-center bg-white p-4">
         <div
           onClick={() => {
             router.back()
@@ -92,112 +195,117 @@ export default function Page({ postData }: { postData: PostData }) {
             color={"#222"}
           />
         </div>
-        <div className="flex-1 flex items-center pl-4">
-          <div className="w-8 h-8">
-            <CommonAvatar photoFileId={photo} size={32} />
-          </div>
-          <div className="ml-2">
-            <div className="text-[14px]">
-              {first_name} {last_name}
+        <Link href={`/space/${id}/feed`} className="flex-1">
+          <div className="flex flex-1 items-center pl-4">
+            <div className="size-8">
+              <CommonAvatar photoFileId={photo} size={32} />
             </div>
-            <div className="text-black/50 text-[12px]">{buildMention(username)}</div>
-          </div>
-        </div>
-
-        <div className="focus">
-          <div
-            onClick={() => {
-              handleFollowing()
-            }}
-            className={`h-[26px] w-[80px] flex justify-center items-center rounded-full ${
-              isFocus
-                ? "bg-white border border-border-pink text-text-pink"
-                : " bg-background-pink text-white"
-            }`}
-          >
-            <IconWithImage
-              url={`/icons/${
-                isFocus ? "icon_info_followed_white@3x.png" : "icon_info_follow_white@3x.png"
-              }`}
-              width={20}
-              height={20}
-              color={isFocus ? "#f08b94" : "#fff"}
-            />
-            <span className="ml-1">{isFocus ? "已关注" : "关注"}</span>
-          </div>
-          {isFocus && (
-            <div className="text-[10px] text-text-pink mt-1">
-              订阅剩余：{sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0}天
+            <div className="ml-2">
+              <div className="max-w-[130px] truncate text-sm">
+                {first_name} {last_name}
+              </div>
+              <div className="text-xs text-black/50">{buildMention(username)}</div>
             </div>
-          )}
-        </div>
+          </div>
+        </Link>
+        {sid !== id && (
+          <div className="focus flex flex-col items-end">
+            <div
+              onClick={async () => {
+                await handleFollowing()
+              }}
+              className={`flex h-[26px] min-w-[80px] items-center justify-center rounded-full px-2 ${isFocus
+                ? "border-border-theme text-text-theme border bg-white"
+                : " bg-theme text-white"
+                }`}
+            >
+              <IconWithImage
+                url={`/icons/${isFocus ? "icon_info_followed_white@3x.png" : "icon_info_follow_white@3x.png"
+                  }`}
+                width={20}
+                height={20}
+                color={isFocus ? "#00AEF3" : "#fff"}
+              />
+              <span className="ml-1">{isFocus ? t("fllowed") : t("fllow")}</span>
+            </div>
+            {sub && (
+              <div className="text-text-theme mt-1 text-[10px]">
+                {t("subscribeRemaining", {
+                  x: sub_end_time ? dayjs(sub_end_time * 1000 || 0).diff(dayjs(), "days") : 0
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     )
   }
-  if (!postData) return null
+  if (!postInfo) return null
 
   return (
-    <div className="p-4 pt-20">
-      {renderNode}
+    <div className=" pt-20">
       <Header />
-      <Post data={postData as unknown as PostData} hasSubscribe={false} hasVote isInfoPage={true} />
+      <Post
+        data={postInfo as unknown as PostData}
+        hasSubscribe={false}
+        hasVote
+        isInfoPage={true}
+        followConfirm={handleFollowing}
+      />
       {btnText !== "" && (
-        <div className="flex justify-center items-center mt-2">
-          <div
-            onClick={(e) => {
-              e.preventDefault()
+        <div className="mt-2 flex items-center justify-center">
+          <button
+            type={"button"}
+            onClick={async () => {
               if (pay) {
                 setPayDrawer(true)
+              } else if (follow) {
+                await handleFollowing()
+              } else if (freeSub) {
+                await handleSubscribe()
               } else {
                 setDrawer(true)
               }
             }}
-            className="w-[295px] h-[50px] bg-background-pink  text-white rounded-full text-[15px] flex justify-center items-center"
+            className="bg-theme flex h-[50px]  w-[295px] items-center justify-center rounded-full text-[15px] text-white"
           >
             {btnText}
-          </div>
+          </button>
         </div>
       )}
       {drawer && (
         <SubscribedDrawer
-          userId={postData.user.id}
-          name={postData.user.username}
+          userId={postInfo.user.id}
+          name={`${postInfo.user.first_name} ${postInfo.user.last_name}`}
+          free={postInfo.user.sub_price === 0}
+          flush={async () => {
+            await refresh()
+            setIsPostModified(true)
+          }}
           isOpen={drawer}
           setIsOpen={setDrawer}
+          setRechargeModel={setVisible}
         />
       )}
       {payDrawer && (
         <PostPayDrawer
-          post_id={postData.post.id}
+          post_id={postInfo.post.id}
           amount={price}
-          flush={flush}
+          flush={async () => {
+            await refresh()
+            setIsPostModified(true)
+          }}
           isOpen={payDrawer}
           setIsOpen={setPayDrawer}
           setRechargeModel={setVisible}
         />
       )}
-      <Modal
+      <CommonRecharge
         visible={visible}
-        cancel={() => {
-          setVisible(false)
-        }}
-        type={"modal"}
-        content={<div className="p-4 pb-6">余额不足</div>}
-        okText="充值"
-        confirm={() => {
-          setVisible(false)
-          setRecharge(true)
-        }}
+        setVisible={setVisible}
+        recharge={recharge}
+        setRecharge={setRecharge}
       />
-      {recharge && (
-        <RechargeDrawer isOpen={recharge} setIsOpen={setRecharge} setWfAmount={() => {}}>
-          <div className={"rounded-full border border-white text-center px-[20px] p-[6px] text-white"}
-            onTouchEnd={() => {setRecharge(true)}}
-          >充值
-          </div>
-        </RechargeDrawer>
-      )
-      }
     </div>
   )
 }

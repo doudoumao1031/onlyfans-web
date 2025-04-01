@@ -1,19 +1,44 @@
 "use client"
 import React from "react"
-import IconWithImage from "./icon"
+
 import { useRouter } from "next/navigation"
 
-export default function Header({ right, title }: { right?: React.ReactNode, title: React.ReactNode }) {
+import IconWithImage from "./icon"
+
+export default function Header({
+  right, title, backColor = "#222", backPath
+}: {
+  right?: React.ReactNode,
+  title: React.ReactNode,
+  backColor?: string,
+  backPath?: string
+}) {
   const router = useRouter()
+  const handleBack = () => {
+    if (backPath) {
+      router.push(backPath)
+      return
+    }
+    if (!document.referrer) {
+      router.back()
+      return
+    }
+    const url = new URL(document.referrer)
+    if (url.pathname) {
+      router.replace(url.pathname)
+    } else {
+      router.back()
+    }
+  }
   return (
-    <section className="flex align-middle justify-between items-center h-[44px] pl-4 pr-4">
-      <div className="flex justify-start shrink-0 w-[30%]">
-        <button onClick={router.back} type={"button"}>
-          <IconWithImage url="/icons/profile/icon_nav_back@3x.png" width={22} height={22} color={"#222"}/>
+    <section className="flex h-[44px] items-center justify-between px-4 align-middle">
+      <div className="flex w-[30%] shrink-0 justify-start">
+        <button onClick={handleBack} type={"button"}>
+          <IconWithImage url="/icons/profile/icon_nav_back@3x.png" width={22} height={22} color={backColor} />
         </button>
       </div>
-      <div className="text-center flex-1 text-[18px] font-medium">{title}</div>
-      <div className="flex justify-end shrink-0 w-[30%] gap-5 items-center">{right}</div>
+      <div className="flex-1 text-center text-lg font-medium">{title}</div>
+      <div className="flex w-[30%] shrink-0 items-center justify-end gap-5">{right}</div>
     </section>
   )
 }

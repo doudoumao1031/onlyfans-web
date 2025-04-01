@@ -1,7 +1,10 @@
+"use client"
 import { useMemo, useState } from "react"
-import { buildImageUrl } from "@/lib/utils"
+
 import Image from "next/image"
+
 import { Skeleton } from "@/components/ui/skeleton"
+import { buildImageUrl } from "@/lib/utils"
 
 
 export type CommonAvatarProps = {
@@ -15,16 +18,16 @@ type LazyAvatarProps = {
   src: string
 }
 
-function LazyAvatar (props:LazyAvatarProps) {
-  const { size,src } = props
-  const [loading,setIsLoading] = useState<boolean>(true)
+function LazyAvatar(props: LazyAvatarProps) {
+  const { size, src } = props
+  const [loading, setIsLoading] = useState<boolean>(true)
   return (
-    <div className="inline-flex relative" style={{
+    <div className="relative inline-flex" style={{
       width: size,
       height: size
     }}
     >
-      {loading && <Skeleton className={"w-full h-full absolute rounded-full"}></Skeleton>}
+      {loading && <Skeleton className={"absolute size-full rounded-full"}></Skeleton>}
       {src && (
         <Image src={src} width={size} height={size} onLoad={() => {
           setIsLoading(false)
@@ -41,12 +44,12 @@ function LazyAvatar (props:LazyAvatarProps) {
  * @constructor
  */
 export default function CommonAvatar(props: CommonAvatarProps) {
-  const { photoFileId, src ,size = 24 } = props
+  const { photoFileId, src, size = 24 } = props
   const lazyImageSrc = useMemo(() => {
     if (src) return src
     if (photoFileId)
       return buildImageUrl(photoFileId)
   }, [photoFileId, src])
 
-  return lazyImageSrc ? <LazyAvatar src={lazyImageSrc} size={size}/> : <img className="rounded-full" src={"/icons/icon_fansX_head.png"} alt={""} width={size} color={"#f00"}/>
+  return lazyImageSrc ? <LazyAvatar src={lazyImageSrc} size={size} /> : <Image className="rounded-full" src={"/icons/icon_fansX_head.png"} alt={""} width={size} height={size} color={"#f00"} />
 }

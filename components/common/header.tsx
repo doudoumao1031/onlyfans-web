@@ -1,7 +1,9 @@
 "use client"
-import IconWithImage from "@/components/profile/icon"
-import React from "react"
+import React, { useCallback } from "react"
+
 import { useRouter } from "next/navigation"
+
+import IconWithImage from "@/components/profile/icon"
 
 export default function Header({ handleBack, title, right, titleColor, backIconColor, leftTitle }: {
   handleBack?: () => void,
@@ -12,17 +14,30 @@ export default function Header({ handleBack, title, right, titleColor, backIconC
   leftTitle?: React.ReactNode
 }) {
   const router = useRouter()
-  const handleClickBack = handleBack ? handleBack : router.back
+  const myBack = useCallback(() => {
+    if (!document.referrer) {
+      router.back()
+      return
+    }
+    const url = new URL(document.referrer)
+    if (url.pathname) {
+      router.replace(url.pathname)
+    } else {
+      router.back()
+    }
+  }, [router])
+  const handleClickBack = handleBack ? handleBack : myBack
+
   return (
-    <section className="flex align-middle justify-between items-center w-screen px-4 text-black" style={{ aspectRatio: "375/44" }}>
-      <div className="flex justify-start shrink-0 w-[30%]">
+    <section className="flex w-screen max-w-lg items-center justify-between px-4 align-middle text-black" style={{ aspectRatio: "375/44" }}>
+      <div className="flex w-1/5 shrink-0 justify-start">
         <button onTouchEnd={handleClickBack}>
           <IconWithImage url="/icons/profile/icon_nav_back@3x.png" width={22} height={22} color={`${backIconColor ?? "#000"}`} />
         </button>
         {leftTitle}
       </div>
-      <div className={"text-center flex-1 text-[18px]"} style={{ color: titleColor ?? "#fff" }}>{title}</div>
-      <div className="flex justify-end shrink-0 w-[30%] gap-5 items-center">{right}</div>
+      <div className={"flex-1 text-center text-lg font-semibold"} style={{ color: titleColor ?? "#fff" }}>{title}</div>
+      <div className="flex w-1/5 shrink-0 items-center justify-end gap-5">{right}</div>
     </section>
   )
 }

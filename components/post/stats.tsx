@@ -3,23 +3,27 @@ import Image from "next/image"
 export default function Stats({
   icon,
   value,
-  highlight = false
+  highlight = false,
+  disable = false
 }: {
   icon: string
   value: number
   highlight?: boolean
+  disable?: boolean
 }) {
+  const disAbledUrl = "/theme/" + icon + "_disable@3x.png"
+  const hightUrl = "/theme/" + icon + "_highlight@3x.png"
+  const normalUrl = "/theme/" + icon + "_normal@3x.png"
+  const url = disable ? disAbledUrl : highlight ? hightUrl : normalUrl
   return (
-    <div className={`flex gap-1 items-center ${highlight && "text-[#FF8492]"}`}>
+    <div className={`flex items-center gap-1  ${disable && "text-gray-400"}`}>
       <Image
-        src={
-          highlight ? "/icons/" + icon + "_highlight@3x.png" : "/icons/" + icon + "_normal@3x.png"
-        }
-        width={20}
-        height={20}
+        src={url}
+        width={15}
+        height={15}
         alt=""
       />
-      <span className="text-xs">{value}</span>
+      <span className="text-sm">{value}</span>
     </div>
   )
 }
